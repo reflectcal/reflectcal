@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--NewPage-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Calendar
+  </title>
+  <link rel="stylesheet" href="../../styles/calendar.css" type="text/css"/>
+</head>
+<body>
+<button id="sender">Click to send request</button>
+<div id="response_container">Response should appear here</div>
+<script type="text/javascript" src="../base.js"></script>
+<script type="text/javascript">
+
+  goog.require("rflect.XMLHTTP");
+  goog.require("rflect.Debug");
+  goog.require("rflect.mime");
+
+</script>
+<script type="text/javascript">
+  rflect.Debug.activate();
+
+  rflect.XMLHTTP.request({
+    method: "POST",
+    url: "http://localhost/Calendar%202.0/engine/test/rflect.XMLHTTP.php",
+    onCompletion: function(request) {
+      //echo("completed: " + request, 1);
+      //echo("request.responseText: "
+      + request.responseText,1
+    )
+      ;
+    },
+    onFailure: function(request) {
+      //echo("failure: " + request, 1);
+    },
+    data: {key: "value"},
+    boundObject: null,
+    headers: {},
+    contentType: rflect.mime.URLENCODED
+  });
+
+  //echo()
+
+</script>
+</body>
+</html>
+

@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--NewPage-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Calendar
+  </title>
+  <link rel="stylesheet" href="../../styles/rflect.cal.css" type="text/css"/>
+</head>
+<body>
+<button id="sender1">for loop</button>
+<button id="sender2">for-in loop</button>
+<div id="response_container">Response should appear here</div>
+<script type="text/javascript" src="../base.js"></script>
+<script type="text/javascript">
+
+  goog.require("rflect.Debug");
+  goog.require("goog.object");
+  goog.require("goog.events");
+  goog.require("goog.dom");
+
+</script>
+<script type="text/javascript">
+  rflect.Debug.activate();
+
+  var iterable1 = [];
+  var iterable2 = {};
+
+  var counter = 0;
+  var length = 0;
+
+  var MAX_LENGTH = 10000;
+
+  var sum = 0;
+
+  for (counter = 0; counter < MAX_LENGTH; counter++) {
+    iterable1[counter] = 0;
+  }
+  for (counter = 0; counter < MAX_LENGTH; counter++) {
+    iterable2[counter] = 0;
+  }
+
+  goog.events.listen(goog.dom.$("sender1"), "click", function() {
+    perf("for loop");
+    for (counter = 0,length = iterable1.length; counter < length; ++counter) {
+      sum += iterable1[counter];
+    }
+    perf("for loop", 1);
+  });
+  goog.events.listen(goog.dom.$("sender2"), "click", function() {
+    perf("for-in loop");
+    for (counter in iterable2) {
+      sum += iterable2[counter];
+    }
+    perf("for-in loop", 1);
+  });
+
+
+</script>
+</body>
+</html>
+

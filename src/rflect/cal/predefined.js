@@ -1,0 +1,510 @@
+/*
+ * Copyright (c) 2012. Rflect, Alex K.
+ */
+
+/**
+ * @fileoverview Set of predefined constants for component. Corresponds to file.
+ * @see {../../../css/rflectcalendar.css}.
+ * @author alexeykofficial@gmail.com (Alex K.)
+ */
+
+goog.require('rflect.cal.i18n.predefined');
+
+goog.provide('rflect.cal.predefined');
+
+
+//TODO(alexk): much of this file will go to cfg
+/**
+ * Body margin top in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.BODY_MARGIN_TOP = 8;
+
+
+/**
+ * Body margin top in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.BODY_MARGIN_BOTTOM = 0;
+
+
+/**
+ * Body margin left in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.BODY_MARGIN_LEFT = 8;
+
+
+/**
+ * Body margin right in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.BODY_MARGIN_RIGHT = 8;
+
+
+/**
+ * Top pane height in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.TOP_PANE_HEIGHT = 48;
+
+
+/**
+ * Width of side pane, in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.SIDE_PANE_WIDTH = 150;
+
+
+/**
+ * Main pane header (a place where weekday names are placed) height in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MAIN_PANE_HEADER_HEIGHT = 20;
+
+
+/**
+ * Main pane header weekmode zippies table height in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MAIN_PANE_HEADER_ZIPPIES_WEEK_HEIGHT = 11;
+
+
+/**
+ * Default border width.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.DEFAULT_BORDER_WIDTH = 1;
+
+
+/**
+ * Main pane scrollable border width in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MAIN_PANE_BODY_SCROLLABLE_BORDER_WIDTH = 1;
+
+
+/**
+ * Month grid row border width which should be subtracted from height.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MONTHGRID_ROW_BORDER_WIDTH = 1;
+
+
+/**
+ * Difference between outer container and main scrollable heights in month mode,
+ * in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_HEIGHT_DIFFERENCE_MONTH =
+    rflect.cal.predefined.BODY_MARGIN_TOP +
+    rflect.cal.predefined.BODY_MARGIN_BOTTOM +
+    rflect.cal.predefined.TOP_PANE_HEIGHT +
+    rflect.cal.predefined.MAIN_PANE_HEADER_HEIGHT +
+    rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2;
+
+
+/**
+ * Width of month weeknumbers container.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.WEEK_NUMBERS_CONTAINER_WIDTH = 15;
+
+
+/**
+ * Width of month zippies.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MONTH_ZIPPIES_WIDTH = 12;
+
+
+/**
+ * Difference between outer container and main scrollable widths in month mode,
+ * in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_WIDTH_DIFFERENCE_MONTH =
+    rflect.cal.predefined.BODY_MARGIN_LEFT +
+    rflect.cal.predefined.BODY_MARGIN_RIGHT +
+    rflect.cal.predefined.SIDE_PANE_WIDTH +
+    rflect.cal.predefined.WEEK_NUMBERS_CONTAINER_WIDTH +
+    rflect.cal.predefined.DEFAULT_BORDER_WIDTH +
+    rflect.cal.predefined.MONTH_ZIPPIES_WIDTH +
+    // Scrollbar width for expanded mode should be taken into account, too.
+    rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2;
+
+
+/**
+ * Height of month event.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MN_EVENT_HEIGHT = 17;
+
+
+/**
+ * Minimal width of week event, lower boundary.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.WK_EVENT_MINIMAL_WIDTH_LOWER_BOUND = 11;
+
+
+/**
+ * Minimal width of week event, upper boundary.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.WK_EVENT_MINIMAL_WIDTH_UPPER_BOUND = 22;
+
+
+/**
+ * Optimal width of week event, lower boundary.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.WK_EVENT_OPTIMAL_WIDTH_LOWER_BOUND = 90;
+
+
+/**
+ * Optimal width of week event, upper boundary.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.WK_EVENT_OPTIMAL_WIDTH_UPPER_BOUND = 180;
+
+
+/**
+ * Optimal width of week event. Used when block is expanded.
+ * TODO(alexk): should this depend on screen size?
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.WK_EVENT_OPTIMAL_WIDTH = 25;
+
+
+/**
+ * Event layer top margin in month mode.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MN_EVENT_LAYER_MARGIN_TOP = 14;
+
+
+/**
+ * Event layer right margin in week mode.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.WK_EVENT_LAYER_MARGIN = 12;
+
+
+/**
+ * Horizontal expand sign height.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.HORIZONTAL_EXPAND_SIGN_HEIGHT = 12;
+
+
+/**
+ * Horizontal expand sign width.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.HORIZONTAL_EXPAND_SIGN_WIDTH = 13;
+
+
+/**
+ * Vertical expand sign height.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.VERTICAL_EXPAND_SIGN_HEIGHT =
+    rflect.cal.predefined.HORIZONTAL_EXPAND_SIGN_WIDTH;
+
+
+/**
+ * Vertical expand sign width.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.VERTICAL_EXPAND_SIGN_WIDTH =
+    rflect.cal.predefined.HORIZONTAL_EXPAND_SIGN_HEIGHT;
+
+
+/**
+ * Height of margin below allday scrollable scrollbar.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.ALLDAY_SCROLLABLE_MARGIN_BOTTOM_HEIGHT = 22;
+
+
+/**
+ * Default minimal height of allday scrollable.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.ALLDAY_SCROLLABLE_MINIMAL_HEIGHT =
+    rflect.cal.predefined.MN_EVENT_HEIGHT * 2 +
+    rflect.cal.predefined.VERTICAL_EXPAND_SIGN_HEIGHT;
+
+
+/**
+ * Default minimal height of week scrollable.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.WEEK_SCROLLABLE_MINIMAL_HEIGHT = 200;
+
+
+/**
+ * Default minimal width of week scrollable, not including hours container.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.WEEK_SCROLLABLE_WITHOUT_HOURS_CONTAINER_MINIMAL_WIDTH =
+    420;
+
+
+/**
+ * How many weeks could possibly eb in month.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MAXIMAL_NUMBER_OF_WEEKS_IN_MONTH = 6;
+
+
+/**
+ * Minimal height of month scrollable.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MONTH_SCROLLABLE_MINIMAL_HEIGHT = (
+    rflect.cal.predefined.MN_EVENT_LAYER_MARGIN_TOP +
+    rflect.cal.predefined.MN_EVENT_HEIGHT +
+    rflect.cal.predefined.DEFAULT_BORDER_WIDTH) *
+    rflect.cal.predefined.MAXIMAL_NUMBER_OF_WEEKS_IN_MONTH;
+
+
+/**
+ * Minimal width of month scrollable.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MONTH_SCROLLABLE_MINIMAL_WIDTH = 460;
+
+
+/**
+ * Minimal height of week and allday scrollables combined.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.WEEK_SCROLLABLES_COMBINED_MINIMAL_HEIGHT =
+    rflect.cal.predefined.MONTH_SCROLLABLE_MINIMAL_HEIGHT -
+    (rflect.cal.predefined.ALLDAY_SCROLLABLE_MARGIN_BOTTOM_HEIGHT +
+    rflect.cal.predefined.MAIN_PANE_HEADER_ZIPPIES_WEEK_HEIGHT +
+    2 * rflect.cal.predefined.DEFAULT_BORDER_WIDTH);
+
+
+/**
+ * Difference between outer container and main scrollable heights in week
+ * mode, in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_HEIGHT_DIFFERENCE_WEEK =
+    rflect.cal.predefined.BODY_MARGIN_TOP +
+    rflect.cal.predefined.BODY_MARGIN_BOTTOM +
+    rflect.cal.predefined.TOP_PANE_HEIGHT +
+    // Height of scrollbar of allday scrollable should be taken into account
+    // here, too.
+    rflect.cal.predefined.ALLDAY_SCROLLABLE_MARGIN_BOTTOM_HEIGHT +
+    rflect.cal.predefined.MAIN_PANE_HEADER_HEIGHT +
+    rflect.cal.predefined.MAIN_PANE_HEADER_ZIPPIES_WEEK_HEIGHT +
+    // Because of 4 borders
+    rflect.cal.predefined.MAIN_PANE_BODY_SCROLLABLE_BORDER_WIDTH * 4;
+
+
+/**
+ * Difference between outer container and main scrollable widths in week mode,
+ * in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_WIDTH_DIFFERENCE_WEEK =
+    rflect.cal.predefined.BODY_MARGIN_LEFT +
+    rflect.cal.predefined.BODY_MARGIN_RIGHT +
+    rflect.cal.predefined.SIDE_PANE_WIDTH +
+    // Locale dependent width of hours block.
+    rflect.cal.i18n.predefined.HOURS_CONTAINER_WIDTH +
+    // No need to take into account width of scrollbar of main scrollable
+    // because layout does it already. Grid width set to 100% will result in
+    // grid container width - scrollbar width.
+    rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 3;
+
+
+/**
+ * Difference between scrollable and grid widths in week mode,
+ * in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_WEEK =
+    // Locale dependent width of hours block.
+    rflect.cal.i18n.predefined.HOURS_CONTAINER_WIDTH +
+    rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2;
+
+
+/**
+ * Difference between scrollable and grid widths in month mode,
+ * in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_MONTH =
+    rflect.cal.predefined.WEEK_NUMBERS_CONTAINER_WIDTH +
+    rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2;
+
+
+/**
+ * Default hour row height.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.HOUR_ROW_HEIGHT = 24;
+
+
+/**
+ * Number of hour rows.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.HOUR_ROWS_NUMBER = 48;
+
+
+/**
+ * Default weekgrid height.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.WEEK_GRID_HEIGHT =
+    rflect.cal.predefined.HOUR_ROWS_NUMBER *
+    rflect.cal.predefined.HOUR_ROW_HEIGHT;
+
+
+/**
+ * Week expand sign height.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.WEEK_EXPAND_SIGN_HEIGHT = 192;
+
+
+/**
+ * Expand signs number in week mode.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.WEEK_EXPAND_SIGNS_NUMBER =
+    rflect.cal.predefined.WEEK_GRID_HEIGHT /
+    rflect.cal.predefined.WEEK_EXPAND_SIGN_HEIGHT;
+
+
+/**
+ * App minimal height.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.APP_MINIMAL_HEIGHT =
+    rflect.cal.predefined.MONTH_SCROLLABLE_MINIMAL_HEIGHT +
+    rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_HEIGHT_DIFFERENCE_MONTH;
+
+
+/**
+ * App minimal width.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.APP_MINIMAL_WIDTH = 516;
+
+
+/**
+ * 'Now' button id.
+ * @type {string}
+ * @const
+ */
+rflect.cal.predefined.BUTTON_NOW_ID = 'nb1';
+
+
+/**
+ * Previous button id.
+ * @type {string}
+ * @const
+ */
+rflect.cal.predefined.BUTTON_PREV_ID = 'nb2';
+
+
+/**
+ * Next button id.
+ * @type {string}
+ * @const
+ */
+rflect.cal.predefined.BUTTON_NEXT_ID = 'nb3';
+
+
+/**
+ * New event button id.
+ * @type {string}
+ * @const
+ */
+rflect.cal.predefined.BUTTON_NEW_EVENT_ID = 'nb7';
+
+
+/**
+ * Day button id.
+ * @type {string}
+ * @const
+ */
+rflect.cal.predefined.BUTTON_DAY_ID = 'nb4';
+
+
+/**
+ * Week button id.
+ * @type {string}
+ * @const
+ */
+rflect.cal.predefined.BUTTON_WEEK_ID = 'nb5';
+
+
+/**
+ * Month button id.
+ * @type {string}
+ * @const
+ */
+rflect.cal.predefined.BUTTON_MONTH_ID = 'nb6';
+
+
+/**
+ * Options button id.
+ * @type {string}
+ * @const
+ */
+rflect.cal.predefined.BUTTON_OPTIONS_ID = 'nb8';
+

@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--NewPage-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Calendar
+  </title>
+  <link rel="stylesheet" href="styles/calendar.css" type="text/css"/>
+</head>
+<body>
+<button id="sender">Click to send request</button>
+<div id="response_container">Response should appear here</div>
+<script type="text/javascript" src="../base.js"></script>
+<script type="text/javascript" src="../deps.js"></script>
+<script type="tetx/javascript" src="../calendarAlpha.js"></script>
+
+<script type="text/javascript">
+
+  goog.require("goog.events.EventTarget");
+  goog.require("goog.events");
+  goog.require("rflect.Root");
+  goog.require("rflect.Debug");
+  goog.require("goog.array");
+
+  goog.provide("rflect.events");
+</script>
+
+<!--<script type="text/javascript" src="../compiled_1213955126.2.js"></script>-->
+<script type="text/javascript">
+  rflect.Debug.activate();
+
+  var et = new goog.events.EventTarget();
+
+  /*  goog.events.listen(et, "custom", function(e) {
+     //echo("e.target: " + e.target);
+     //echo("e.la: " + e.la);
+     //echo("this: " + this);
+    }, false, document);
+
+    et.dispatchEvent({type: "custom",
+      la: 1});
+*/
+
+  var A = rflect.Root.__create(function() {
+    //echo("a");
+  }).__fuse({
+    hey: 1
+  }).__fuse(et);
+
+  var a = new A();
+
+  var listener = function(e, a, b) {
+    //echo("e.target: " + e.target);
+    //echo("e.la: " + e.la);
+    //echo("this: " + this);
+    //echo("e.target.hey: " + e.target.hey);
+    //echo("a: " + a);
+    //echo("b: " + b);
+  };
+
+  rflect.events.listen = function(src, type, listener, capt, object, var_args) {
+    var args = goog.array.clone(arguments);
+    var counter = 0;
+    for (counter = 0; counter < 5; counter++) {
+      args.shift();
+    }
+    goog.events.listen(src, type, function (e) {
+      return listener.apply(object, [e].concat(args));
+    }, capt);
+
+  }
+
+  goog.events.listen(a, "custom", listener, false, document);
+  rflect.events.listen(a, "custom", listener, false, document, "barr", "smile");
+
+  a.dispatchEvent({type: "custom",
+    la: 1});
+
+
+</script>
+</body>
+</html>
+

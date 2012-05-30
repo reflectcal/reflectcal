@@ -1,0 +1,83 @@
+//7. Fix gradient for webkit and opera.
+//3. Make Loader static with method main.
+//4. Fix bug with unload.
+//5. Organize ant task linter - involves writing of python script that scans for
+//js files and runs gjslint.py.
+//* week timed events should be used with position: relative, therefore we should
+//into account that top position of rect should be shifted by height of previous
+//event. Or (it's better) use  height: 70px; margin-bottom: -70px;
+//6. Fix options image.
+//2. Make mainpane build method dependent on view. Store buildImpl method in
+//*view.js.
+* about scrollbars, rely on condition document height > window height rather
+than guessed calculations
+* Think about very high screens, so week scrollable may show white space,
+prevent this.
+* choose one of decisions - reattach listener for scroll or simulate scroll with
+combination of mouseup, mousewheel, keyboard
+* When making Calendar API, enable to get size not only from window, but from
+arbitrary container in which cal component may be placed.
+* bug: IE7 wk-mask-cnt has non-zero size when empty.
+* bug: make hours labels unselectable.
+* Store in HTML_PARTS indexes of common subparts, like '</div>'.
+And this common parts could be stored at rflect.cal.Component.HTML_PARTS by
+theese indexes.
+* it seems that scrollbar appears when we reducing height of viewport. It
+disappears in a moment, but monitor sees that size with scroll.
+Firefox and Opera
+
+# Optimization
+* Concatenate strings in HTML_PARTS by +, not by , as compiler would join them.
+(see "<div id="weeknum-cont">" in mainpane.js)
+* As gss works fine with string being concatenated with goog.getCssName
+('lala' + goog.getCssName('lalal') -> lalalala), rename as much ids to classes
+as possible.
+* Expand signs should be moved to events layer. This will enable all dynamic
+layout to be on event layer and all static layout on decoration layer.
+* Consider not writing initializers of objects in prototype, do it in
+constructor, instead?
+8. Implement StringBuffer that only concatenates strings via join in IE7 or lower
+(test it)
+* Make HTML_PARTS as separate constants instead of Array.<string> for better
+inlining.
+* Make reusable goog.math.Size objects for better GC performance.
+* If click on zippy doesn't require redraw, just change zippy's class instead
+of redraw.
+* remove block unused methods
+* + add custom objects rather than Date to form month grid - native Date objects
+ are slow, this could be seen in firefox 2, maybe it'll affect IE7 too
+ override typedef goog.date.DateLike for this case
+* + redesign init method to disable event patching
+
+# Main
+1. Update toppane.js with decorated buttons, classes they use should take their
+names from css map.
+* Cache built strings - for example, when we changed event in allday grid, we
+could rebuild just allday grid and timed grid will be loaded from cache.
+* Make buttons appear in order when hitting Tab (needs relayout)
+* Store all API methods and classes in calapi.*, not in rflect.calapi, so there
+won't be a need to export rflect.
+* Consider to make allday grid expandable only vertically.
+* for rtl version float: right for new event button should be considered
+* -minor- make checked buttons do not respond to click at all
+* bug - 22-28 apr 2012 in week mode doesn't show as now
+* in month mode, block could be expanded when some rows are not shown. In week
+mode, cols are shown until they have width < minimal width and they could be
+expanded when cols have width < optimal width.
+* make horizontal scroll by shift + wheel
+* consider not allowing maximum block size in week mode to be greater than grid
+container
+* enable double-clicking on zippy for faster switch, this requires MainPane to
+be Control
+* decide whether alldaygrid would be expandable - make branch for it
+* make id generator to allow possibility of multiple app instances
+* now that position is present in Block, remove cumulative size calculation
+in builder.
+* bug: hollow expand signs are white, not transparent, this is visible with
+mask.
+* make mask more pixel-precise IE7, Webkit, Opera
+* IE7 bug - click in month mode, numbers are shifted. Prevent selection
+everywhere in grid
+ * check localization after changing Date
+
+

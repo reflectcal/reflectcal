@@ -1,0 +1,713 @@
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"-->
+<!--"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<!--NewPage-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Calendar
+  </title>
+  <!--<link rel="stylesheet" href="styles/calendar.css" type="text/css"/>-->
+  <link rel="stylesheet" href="../../styles/e0e03af5825c752884a3d23978e83cabdoozercompiled.css" type="text/css">
+</head>
+
+
+<BODY class="ru ie7 state-online" onkeypress="return _calKeyPress(event)" onkeydown="return _calKeyDown(event)"
+      style="MARGIN: 0px 1ex" closure_hashCode_="3">
+<TABLE id=mothertable cellSpacing=0 cellPadding=0 width="100%">
+<TBODY>
+<TR>
+<TD class=noprint id=nav>
+<TABLE class=sidebar cellSpacing=4>
+  <TBODY>
+    <TR>
+      <TD><SPAN class=lk onmousedown=_CreateNewEvent() id=comp><B>Ñîçäàòü ìåðîïðèÿòèå</B></SPAN></TD>
+    </TR>
+    <TR>
+      <TD>&nbsp;</TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<DIV class=t1 id=dp_0_t1 style="BACKGROUND: #c3d9ff; MARGIN-RIGHT: 0px">&nbsp;</DIV>
+<DIV class=t2 id=dp_0_t2 style="BACKGROUND: #c3d9ff; MARGIN-RIGHT: 0px">&nbsp;</DIV>
+<DIV class=datePickerDiv id=dp_0>
+<TABLE class=DP_monthtable id=dp_0_tbl style="CURSOR: pointer; -moz-user-select: none" cellSpacing=0 cols=7
+       cellPadding=3>
+<TBODY>
+<TR class=DP_heading id=dp_0_header>
+  <TD class=DP_prev onmousedown="TA('dp_0_')" id=dp_0_mhl unselectable="on">«</TD>
+  <TD class=DP_cur id=dp_0_mhc colSpan=5 unselectable="on"><SPAN onmousedown="CB('20080701')">Èþëü 2008</SPAN>
+  </TD>
+  <TD class=DP_next onmousedown="UA('dp_0_')" id=dp_0_mhr unselectable="on">»</TD>
+</TR>
+<TR class=DP_days id=dp_0_dow>
+  <TD class=DP_dayh id=dp_0_day_0 unselectable="on">Ïí</TD>
+  <TD class=DP_dayh id=dp_0_day_1 unselectable="on">Âò</TD>
+  <TD class=DP_dayh id=dp_0_day_2 unselectable="on">Ñð</TD>
+  <TD class=DP_dayh id=dp_0_day_3 unselectable="on">×ò</TD>
+  <TD class=DP_dayh id=dp_0_day_4 unselectable="on">Ïò</TD>
+  <TD class=DP_dayh id=dp_0_day_5 unselectable="on">Ñá</TD>
+  <TD class=DP_dayh id=dp_0_day_6 unselectable="on">Âñ</TD>
+</TR>
+<TR id=dp_0_week_0>
+  <TD class="DP_day_top DP_day_left DP_offmonth DP_weekday " id=dp_0_day_0_0 style="FONT-WEIGHT: bold! important"
+      onclick=WA(this) unselectable="on">23
+  </TD>
+  <TD class="DP_day_top DP_offmonth DP_weekday " id=dp_0_day_0_1 onclick=WA(this) unselectable="on">24</TD>
+  <TD class="DP_day_top DP_offmonth DP_weekday " id=dp_0_day_0_2 style="FONT-WEIGHT: bold! important"
+      onclick=WA(this) unselectable="on">25
+  </TD>
+  <TD class="DP_day_top DP_offmonth DP_weekday " id=dp_0_day_0_3 onclick=WA(this) unselectable="on">26</TD>
+  <TD class="DP_day_top DP_offmonth DP_weekday " id=dp_0_day_0_4 style="FONT-WEIGHT: bold! important"
+      onclick=WA(this) unselectable="on">27
+  </TD>
+  <TD class="DP_day_top DP_offmonth DP_weekend " id=dp_0_day_0_5 onclick=WA(this) unselectable="on">28</TD>
+  <TD class="DP_day_top DP_day_right DP_offmonth DP_weekend " id=dp_0_day_0_6 onclick=WA(this) unselectable="on">
+    29
+  </TD>
+</TR>
+<TR id=dp_0_week_1>
+  <TD class="DP_day_left DP_offmonth DP_weekday " id=dp_0_day_1_0 style="FONT-WEIGHT: bold! important"
+      onclick=WA(this) unselectable="on">30
+  </TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_1_1 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">1
+  </TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_1_2 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">2
+  </TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_1_3 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">3
+  </TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_1_4 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">4
+  </TD>
+  <TD class="DP_onmonth DP_weekend " id=dp_0_day_1_5 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">5
+  </TD>
+  <TD class="DP_day_right DP_onmonth DP_weekend " id=dp_0_day_1_6 style="FONT-WEIGHT: bold! important"
+      onclick=WA(this) unselectable="on">6
+  </TD>
+</TR>
+<TR id=dp_0_week_2>
+  <TD class="DP_day_left DP_onmonth DP_weekday " id=dp_0_day_2_0 style="FONT-WEIGHT: bold! important"
+      onclick=WA(this) unselectable="on">7
+  </TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_2_1 onclick=WA(this) unselectable="on">8</TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_2_2 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">9
+  </TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_2_3 onclick=WA(this) unselectable="on">10</TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_2_4 onclick=WA(this) unselectable="on">11</TD>
+  <TD class="DP_onmonth DP_weekend " id=dp_0_day_2_5 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">12
+  </TD>
+  <TD class="DP_day_right DP_onmonth DP_weekend " id=dp_0_day_2_6 onclick=WA(this) unselectable="on">13</TD>
+</TR>
+<TR id=dp_0_week_3>
+  <TD class="DP_day_left DP_onmonth DP_weekday " id=dp_0_day_3_0 style="FONT-WEIGHT: bold! important"
+      onclick=WA(this) unselectable="on">14
+  </TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_3_1 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">15
+  </TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_3_2 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">16
+  </TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_3_3 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">17
+  </TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_3_4 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">18
+  </TD>
+  <TD class="DP_onmonth DP_weekend " id=dp_0_day_3_5 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">19
+  </TD>
+  <TD class="DP_day_right DP_onmonth DP_weekend " id=dp_0_day_3_6 onclick=WA(this) unselectable="on">20</TD>
+</TR>
+<TR id=dp_0_week_4>
+  <TD class="DP_day_left DP_onmonth DP_weekday_selected DP_today_selected " id=dp_0_day_4_0 onclick=WA(this)
+      unselectable="on">21
+  </TD>
+  <TD class="DP_onmonth DP_weekday_selected " id=dp_0_day_4_1 style="FONT-WEIGHT: bold! important"
+      onclick=WA(this) unselectable="on">22
+  </TD>
+  <TD class="DP_onmonth DP_weekday_selected " id=dp_0_day_4_2 onclick=WA(this) unselectable="on">23</TD>
+  <TD class="DP_onmonth DP_weekday_selected " id=dp_0_day_4_3 onclick=WA(this) unselectable="on">24</TD>
+  <TD class="DP_onmonth DP_weekday_selected " id=dp_0_day_4_4 onclick=WA(this) unselectable="on">25</TD>
+  <TD class="DP_onmonth DP_weekend_selected " id=dp_0_day_4_5 style="FONT-WEIGHT: bold! important"
+      onclick=WA(this) unselectable="on">26
+  </TD>
+  <TD class="DP_day_right DP_onmonth DP_weekend_selected " id=dp_0_day_4_6 onclick=WA(this) unselectable="on">27
+  </TD>
+</TR>
+<TR id=dp_0_week_5>
+  <TD class="DP_day_left DP_onmonth DP_weekday " id=dp_0_day_5_0 style="FONT-WEIGHT: bold! important"
+      onclick=WA(this) unselectable="on">28
+  </TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_5_1 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">29
+  </TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_5_2 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">30
+  </TD>
+  <TD class="DP_onmonth DP_weekday " id=dp_0_day_5_3 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">31
+  </TD>
+  <TD class="DP_offmonth DP_weekday " id=dp_0_day_5_4 onclick=WA(this) unselectable="on">1</TD>
+  <TD class="DP_offmonth DP_weekend " id=dp_0_day_5_5 onclick=WA(this) unselectable="on">2</TD>
+  <TD class="DP_day_right DP_offmonth DP_weekend " id=dp_0_day_5_6 onclick=WA(this) unselectable="on">3</TD>
+</TR>
+<TR id=dp_0_week_6>
+  <TD class="DP_day_left DP_offmonth DP_weekday " id=dp_0_day_6_0 onclick=WA(this) unselectable="on">4</TD>
+  <TD class="DP_offmonth DP_weekday " id=dp_0_day_6_1 onclick=WA(this) unselectable="on">5</TD>
+  <TD class="DP_offmonth DP_weekday " id=dp_0_day_6_2 style="FONT-WEIGHT: bold! important" onclick=WA(this)
+      unselectable="on">6
+  </TD>
+  <TD class="DP_offmonth DP_weekday " id=dp_0_day_6_3 onclick=WA(this) unselectable="on">7</TD>
+  <TD class="DP_offmonth DP_weekday " id=dp_0_day_6_4 onclick=WA(this) unselectable="on">8</TD>
+  <TD class="DP_offmonth DP_weekend " id=dp_0_day_6_5 onclick=WA(this) unselectable="on">9</TD>
+  <TD class="DP_day_right DP_offmonth DP_weekend " id=dp_0_day_6_6 onclick=WA(this) unselectable="on">10</TD>
+</TR>
+</TBODY>
+</TABLE>
+</DIV>
+<DIV class=t2 id=dp_0_b2 style="BACKGROUND: #c3d9ff; MARGIN-RIGHT: 0px">&nbsp;</DIV>
+<DIV class=t1 id=dp_0_b1 style="BACKGROUND: #c3d9ff; MARGIN-RIGHT: 0px">&nbsp;</DIV>
+<DIV id=nb_0 style="PADDING-TOP: 8px">
+<DIV id=nt_0 style="BACKGROUND: #c3d9ff; HEIGHT: 21px">
+  <DIV style="BACKGROUND-POSITION: -16px -71px; FLOAT: left; BACKGROUND-IMAGE: url(//calendar.google.com/googlecalendar/images/combined_2_0.gif); WIDTH: 3px; HEIGHT: 21px"></DIV>
+  <DIV style="FLOAT: left; MARGIN: 0.3em 0px 0px 0.3em"><IMG class=h id=tri_fav
+                                                             style="BACKGROUND-POSITION: -37px -64px; BACKGROUND-IMAGE: url(//calendar.google.com/googlecalendar/images/combined_2_0.gif); -moz-user-select: none"
+                                                             height=11 alt=""
+                                                             src="//calendar.google.com/googlecalendar/images/blank.gif"
+                                                             width=11 unselectable="on" closure_hashCode_="5"></DIV>
+  <DIV onmousedown=_AP_show() id=addPT>
+    <DIV id=addMenu
+         style="BACKGROUND-POSITION: -19px -82px; FLOAT: left; BACKGROUND-IMAGE: url(//calendar.google.com/googlecalendar/images/combined_2_0.gif); WIDTH: 4px; HEIGHT: 21px">
+      &nbsp;</DIV>
+    <DIV style="FLOAT: left; BACKGROUND-IMAGE: url(//calendar.google.com/googlecalendar/images/card_button_m2.gif); HEIGHT: 21px">
+      <DIV style="MARGIN: 0.3em 0.3em 0px">Äîáàâèòü</DIV>
+    </DIV>
+    <DIV style="BACKGROUND-POSITION: -23px -82px; FLOAT: left; BACKGROUND-IMAGE: url(//calendar.google.com/googlecalendar/images/combined_2_0.gif); WIDTH: 23px; HEIGHT: 21px">
+      &nbsp;</DIV>
+  </DIV>
+</DIV>
+<DIV class=sidetable id=lhscalinner
+     style="CLEAR: both; PADDING-RIGHT: 3px; PADDING-LEFT: 3px; BACKGROUND: #c3d9ff 0px 50%; PADDING-BOTTOM: 1px; PADDING-TOP: 0px">
+  <DIV id=calendars style="OVERFLOW-Y: scroll; OVERFLOW-X: hidden; WIDTH: auto; POSITION: relative; HEIGHT: 40px">
+    <TABLE style="TABLE-LAYOUT: fixed; WIDTH: auto" cellSpacing=0 cellPadding=0>
+      <TBODY>
+        <TR>
+          <TD closure_hashCode_="6">
+            <DIV class=calList><FONT size=-1>Ìîè êàëåíäàðè</FONT><BR>
+
+              <DIV class=calListRow>
+                <DIV class=calListChip id=label-Y2FiYWx3cmF0aEBnbWFpbC5jb20 title="Àëåêñåé Êîìîâ">
+                  <DIV class=t2 style="BACKGROUND-COLOR: #d96666">&nbsp;</DIV>
+                  <DIV class=calListLabelOuter id="" style="BACKGROUND-COLOR: #d96666">
+                    <DIV class=calListLabel
+                         onmouseover=_CreateEventHandlerName$1216642167796(this.parentNode.parentNode,2)
+                         style="COLOR: white; TEXT-DECORATION: none"
+                         onmouseout=_CreateEventHandlerName$1216642167796(this.parentNode.parentNode,1)>Àëåêñåé Êîìîâ
+                    </DIV>
+                  </DIV>
+                  <DIV class=t2 style="BACKGROUND-COLOR: #d96666">&nbsp;</DIV>
+                </DIV>
+                <DIV class=calListImg id=popup-Y2FiYWx3cmF0aEBnbWFpbC5jb20
+                     style="BACKGROUND-POSITION: -26px -103px"></DIV>
+                <INPUT id=checkbox-Y2FiYWx3cmF0aEBnbWFpbC5jb20 style="DISPLAY: none" type=checkbox CHECKED></DIV>
+              <DIV class=calListRow>
+                <DIV class=calListChip id=label-NTZibnJ1MGpqc2Ewa2tibzFxcjdnM2Rhc2tAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ
+                     title="Äåéñòâèòåëüíûé êàëåíäàðü">
+                  <DIV class=t2 style="BACKGROUND-COLOR: white">&nbsp;</DIV>
+                  <DIV class=calListLabelOuter id="" style="BACKGROUND-COLOR: white">
+                    <DIV class=calListLabel
+                         onmouseover=_CreateEventHandlerName$1216642167796(this.parentNode.parentNode,2)
+                         style="COLOR: #e67399; TEXT-DECORATION: underline"
+                         onmouseout=_CreateEventHandlerName$1216642167796(this.parentNode.parentNode,1)>Äåéñòâèòåëüíûé
+                      êàëåíäàðü
+                    </DIV>
+                  </DIV>
+                  <DIV class=t2 style="BACKGROUND-COLOR: white">&nbsp;</DIV>
+                </DIV>
+                <DIV class=calListImg id=popup-NTZibnJ1MGpqc2Ewa2tibzFxcjdnM2Rhc2tAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ
+                     style="BACKGROUND-POSITION: -41px -103px"></DIV>
+                <INPUT id=checkbox-NTZibnJ1MGpqc2Ewa2tibzFxcjdnM2Rhc2tAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ
+                       style="DISPLAY: none" type=checkbox></DIV>
+              <DIV class=calListRow>
+                <DIV class=calListChip id=label-c2dqY3YxMjB2a3Vvc3Y2ZDdnam51dnI4YW9AZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ
+                     title="Êàëåíäàðü, ñëóæàùèé äëÿ ïðîâåðêè ñîâìåñòíîãî èñïîëüçîâàíèÿ êàëåíäàðÿ íåñêîëüêèìè ëþäüìè (èëè ñåðâèñàìè).">
+                  <DIV class=t2 style="BACKGROUND-COLOR: #e6804d">&nbsp;</DIV>
+                  <DIV class=calListLabelOuter id="" style="BACKGROUND-COLOR: #e6804d">
+                    <DIV class=calListLabel
+                         onmouseover=_CreateEventHandlerName$1216642167796(this.parentNode.parentNode,2)
+                         style="COLOR: white; TEXT-DECORATION: none"
+                         onmouseout=_CreateEventHandlerName$1216642167796(this.parentNode.parentNode,1)>Êàëåíäàðü,
+                      ñëóæàùèé äëÿ ïðîâåðêè ñîâìåñòíîãî èñïîëüçîâàíèÿ êàëåíäàðÿ íåñêîëüêèìè ëþäüìè (èëè ñåðâèñàìè).
+                    </DIV>
+                  </DIV>
+                  <DIV class=t2 style="BACKGROUND-COLOR: #e6804d">&nbsp;</DIV>
+                </DIV>
+                <DIV class=calListImg id=popup-c2dqY3YxMjB2a3Vvc3Y2ZDdnam51dnI4YW9AZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ
+                     style="BACKGROUND-POSITION: -221px -103px"></DIV>
+                <INPUT id=checkbox-c2dqY3YxMjB2a3Vvc3Y2ZDdnam51dnI4YW9AZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ
+                       style="DISPLAY: none" type=checkbox CHECKED></DIV>
+              <DIV style="PADDING-TOP: 10px"><FONT size=-1>Äðóãèå êàëåíäàðè</FONT></DIV>
+            </DIV>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </DIV>
+  <DIV id=calendarsBottomChrome>
+    <DIV style="MARGIN-TOP: 3px">
+      <FORM id=searchAddCalForm onsubmit="_SearchAddCal();return false;" action="" autocomplete="off"><INPUT
+              id=searchAddCal onblur=_RestoreSearchMessage(this) style="FONT-SIZE: 90%; WIDTH: 95%; COLOR: gray"
+              onfocus=_FocusSearchMessage(this) value="Äîáàâèòü êàëåíäàðü äðóãà" closure_hashCode_="8"></FORM>
+    </DIV>
+    <SPAN class=lk onmousedown=_GenSettings(1) id=manage_cals_link>Óïðàâëåíèå êàëåíäàðÿìè</SPAN></DIV>
+</DIV>
+<DIV style="WIDTH: 100%; HEIGHT: 2px">
+  <DIV class=t2 id=calendarsBottomChrome1
+       style="BORDER-LEFT-COLOR: #c3d9ff; BACKGROUND: #c3d9ff; BORDER-BOTTOM-COLOR: #c3d9ff; BORDER-TOP-COLOR: #c3d9ff; BORDER-RIGHT-COLOR: #c3d9ff">
+    &nbsp;</DIV>
+  <DIV class=t1 id=calendarsBottomChrome2
+       style="BORDER-LEFT-COLOR: #c3d9ff; BACKGROUND: #c3d9ff; BORDER-BOTTOM-COLOR: #c3d9ff; BORDER-TOP-COLOR: #c3d9ff; BORDER-RIGHT-COLOR: #c3d9ff">
+    &nbsp;</DIV>
+</DIV>
+</DIV>
+</TD>
+<TD id=maincell vAlign=top>
+<DIV id=mainbody>
+<DIV class=printAlignLeft id=co>
+<DIV id=tc_top>
+<TABLE id=chrome_main1
+       style="BORDER-LEFT-COLOR: #c3d9ff; BACKGROUND: #fff; BORDER-BOTTOM-COLOR: #c3d9ff; VERTICAL-ALIGN: bottom; WIDTH: 100%; BORDER-TOP-COLOR: #c3d9ff; BORDER-RIGHT-COLOR: #c3d9ff"
+       cellSpacing=0 cellPadding=0>
+  <TBODY>
+    <TR>
+      <TD>
+        <TABLE id=t1 cellSpacing=0 cellPadding=0>
+          <TBODY>
+            <TR>
+              <TD class=noprint><IMG class=navbutton onmousedown="Iv(-1);return false;"
+                                     ondblclick="Iv(-1);return false;"
+                                     style="BACKGROUND-POSITION: -148px -17px; PADDING-LEFT: 2px; BACKGROUND-IMAGE: url(//calendar.google.com/googlecalendar/images/combined_2_0.gif); VERTICAL-ALIGN: middle"
+                                     height=17 src="http://calendar.google.com/googlecalendar/images/blank.gif"
+                                     width=29></TD>
+              <TD class=noprint><IMG class=navbutton onmousedown="Iv(1);return false;"
+                                     ondblclick="Iv(1);return false;"
+                                     style="PADDING-RIGHT: 2px; BACKGROUND-POSITION: -148px 0px; PADDING-LEFT: 2px; BACKGROUND-IMAGE: url(//calendar.google.com/googlecalendar/images/combined_2_0.gif); VERTICAL-ALIGN: middle"
+                                     height=17 src="http://calendar.google.com/googlecalendar/images/blank.gif"
+                                     width=29></TD>
+              <TD class=noprint>
+                <BUTTON id=todayButton
+                        style="PADDING-RIGHT: 1px; PADDING-LEFT: 1px; FONT-SIZE: 85%; PADDING-BOTTOM: 0px; PADDING-TOP: 0px"
+                        disabled onclick="Iv(0);return false;">Ñåãîäíÿ
+                </BUTTON>
+              </TD>
+              <TD>
+                <NOBR>&nbsp;<SPAN id=dateunderlay>21 – 27 èþë 2008</SPAN>&nbsp;</NOBR>
+              </TD>
+            </TR>
+          </TBODY>
+        </TABLE>
+      </TD>
+      <TD style="FLOAT: right; TEXT-ALIGN: right">
+        <TABLE cellSpacing=0 cellPadding=0>
+          <TBODY>
+            <TR>
+              <TD id=printlink><IMG title="Íàïå÷àòàòü êàëåíäàðü (ñ ïðåäâàðèòåëüíûì ïðîñìîòðîì)"
+                                    style="BACKGROUND-POSITION: 0px -84px; BACKGROUND-IMAGE: url(//calendar.google.com/googlecalendar/images/combined_2_0.gif)"
+                                    onclick=fw() height=20
+                                    src="http://calendar.google.com/googlecalendar/images/blank.gif" width=16><SPAN
+                      class=lk onclick=fw()>Ïå÷àòü</SPAN>
+
+                <DIV class=printonly id=printmsg>Äëÿ ïðîñìîòðà áîëåå êðàòêîé âåðñèè êàëåíäàðÿ, îïòèìèçèðîâàííîé äëÿ
+                  ïå÷àòè, íàæìèòå çíà÷îê ïðèíòåðà ñëåâà (òðåáóåòñÿ Acrobat Reader)
+                </DIV>
+              </TD>
+              <TD class=noprint onmousedown="kw('search')" id=mode_link0>
+                <DIV class=t1 style="BACKGROUND: #e8eef7">&nbsp;</DIV>
+                <DIV class=t2 style="BACKGROUND: #e8eef7">&nbsp;</DIV>
+                <DIV class=modelinkOff>
+                  <NOBR id=mode-search>Ðåçóëüòàòû ïîèñêà</NOBR>
+                </DIV>
+              </TD>
+              <TD class=noprint>&nbsp;</TD>
+              <TD class=noprint onmousedown="kw('day')" id=mode_link1>
+                <DIV class=t1 style="BACKGROUND: #e8eef7">&nbsp;</DIV>
+                <DIV class=t2 style="BACKGROUND: #e8eef7">&nbsp;</DIV>
+                <DIV class=modelinkOff>
+                  <NOBR id=mode-day>Äåíü</NOBR>
+                </DIV>
+              </TD>
+              <TD class=noprint>&nbsp;</TD>
+              <TD class=noprint onmousedown="kw('week')" id=mode_link2>
+                <DIV class=t1 style="BACKGROUND: #c3d9ff">&nbsp;</DIV>
+                <DIV class=t2 style="BACKGROUND: #c3d9ff">&nbsp;</DIV>
+                <DIV class=modelinkOn>
+                  <NOBR id=mode-week>Íåäåëÿ</NOBR>
+                </DIV>
+              </TD>
+              <TD class=noprint>&nbsp;</TD>
+              <TD class=noprint onmousedown="kw('month')" id=mode_link3>
+                <DIV class=t1 style="BACKGROUND: #e8eef7">&nbsp;</DIV>
+                <DIV class=t2 style="BACKGROUND: #e8eef7">&nbsp;</DIV>
+                <DIV class=modelinkOff>
+                  <NOBR id=mode-month>Ìåñÿö</NOBR>
+                </DIV>
+              </TD>
+              <TD class=noprint>&nbsp;</TD>
+              <TD class=noprint onmousedown=Ev() id=mode_link4>
+                <DIV class=t1 style="BACKGROUND: #e8eef7">&nbsp;</DIV>
+                <DIV class=t2 style="BACKGROUND: #e8eef7">&nbsp;</DIV>
+                <DIV class=modelinkOff>
+                  <NOBR id=customModeLabel>4 äíÿ</NOBR>
+                </DIV>
+              </TD>
+              <TD class=noprint>&nbsp;</TD>
+              <TD class=noprint onmousedown="kw('list')" id=mode_link5>
+                <DIV class=t1 style="BACKGROUND: #e8eef7">&nbsp;</DIV>
+                <DIV class=t2 style="BACKGROUND: #e8eef7">&nbsp;</DIV>
+                <DIV class=modelinkOff>
+                  <NOBR id=mode-list>Ïîâåñòêà äíÿ</NOBR>
+                </DIV>
+              </TD>
+              <TD class=noprint>&nbsp;</TD>
+            </TR>
+          </TBODY>
+        </TABLE>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</DIV>
+<DIV style="WIDTH: 100%; HEIGHT: 2px">
+  <DIV class=t1 id=chrome_main4
+       style="BORDER-LEFT-COLOR: #c3d9ff; BACKGROUND: #c3d9ff; BORDER-BOTTOM-COLOR: #c3d9ff; BORDER-TOP-COLOR: #c3d9ff; BORDER-RIGHT-COLOR: #c3d9ff">
+    &nbsp;</DIV>
+  <DIV class=t2 id=chrome_main5
+       style="BORDER-LEFT-COLOR: #c3d9ff; BACKGROUND: #c3d9ff; BORDER-BOTTOM-COLOR: #c3d9ff; BORDER-TOP-COLOR: #c3d9ff; BORDER-RIGHT-COLOR: #c3d9ff">
+    &nbsp;</DIV>
+</DIV>
+<DIV class=printborder id=chrome_main2
+     style="BORDER-LEFT-COLOR: #c3d9ff; BACKGROUND: #c3d9ff 0% 50%; BORDER-BOTTOM-COLOR: #c3d9ff; BORDER-TOP-COLOR: #c3d9ff; BORDER-RIGHT-COLOR: #c3d9ff">
+<DIV class=" colheadersmiddle" id=colheaders>
+  <DIV class="chead cheadToday" style="LEFT: 0%; WIDTH: 14.28%"><SPAN id=chead0><A class=lkh
+                                                                                   href="javascript:void(hw(0))">Ïí,
+    7/21</A></SPAN><IMG class=more-no id=morearr0 title="ïîêàçàòü ìåðîïðèÿòèÿ âíå ýêðàíà"
+                        onclick=return(MD(this,event,0))
+                        src="http://calendar.google.com/googlecalendar/images/blank.gif"></DIV>
+  <DIV class="chead cheadNotToday" style="LEFT: 14.28%; WIDTH: 14.28%"><SPAN id=chead1><A class=lkh
+                                                                                          href="javascript:void(hw(1))">Âò,
+    7/22</A></SPAN><IMG class=more-d id=morearr1 title="ïîêàçàòü ìåðîïðèÿòèÿ âíå ýêðàíà"
+                        onclick=return(MD(this,event,1))
+                        src="http://calendar.google.com/googlecalendar/images/blank.gif"></DIV>
+  <DIV class="chead cheadNotToday" style="LEFT: 28.57%; WIDTH: 14.28%"><SPAN id=chead2><A class=lkh
+                                                                                          href="javascript:void(hw(2))">Ñð,
+    7/23</A></SPAN><IMG class=more-no id=morearr2 title="ïîêàçàòü ìåðîïðèÿòèÿ âíå ýêðàíà"
+                        onclick=return(MD(this,event,2))
+                        src="http://calendar.google.com/googlecalendar/images/blank.gif"></DIV>
+  <DIV class="chead cheadNotToday" style="LEFT: 42.85%; WIDTH: 14.28%"><SPAN id=chead3><A class=lkh
+                                                                                          href="javascript:void(hw(3))">×ò,
+    7/24</A></SPAN><IMG class=more-no id=morearr3 title="ïîêàçàòü ìåðîïðèÿòèÿ âíå ýêðàíà"
+                        onclick=return(MD(this,event,3))
+                        src="http://calendar.google.com/googlecalendar/images/blank.gif"></DIV>
+  <DIV class="chead cheadNotToday" style="LEFT: 57.14%; WIDTH: 14.28%"><SPAN id=chead4><A class=lkh
+                                                                                          href="javascript:void(hw(4))">Ïò,
+    7/25</A></SPAN><IMG class=more-no id=morearr4 title="ïîêàçàòü ìåðîïðèÿòèÿ âíå ýêðàíà"
+                        onclick=return(MD(this,event,4))
+                        src="http://calendar.google.com/googlecalendar/images/blank.gif"></DIV>
+  <DIV class="chead cheadNotToday" style="LEFT: 71.42%; WIDTH: 14.28%"><SPAN id=chead5><A class=lkh
+                                                                                          href="javascript:void(hw(5))">Ñá,
+    7/26</A></SPAN><IMG class=more-no id=morearr5 title="ïîêàçàòü ìåðîïðèÿòèÿ âíå ýêðàíà"
+                        onclick=return(MD(this,event,5))
+                        src="http://calendar.google.com/googlecalendar/images/blank.gif"></DIV>
+  <DIV class="chead cheadNotToday" style="LEFT: 85.71%; WIDTH: 14.28%"><SPAN id=chead6><A class=lkh
+                                                                                          href="javascript:void(hw(6))">Âñ,
+    7/27</A></SPAN><IMG class=more-no id=morearr6 title="ïîêàçàòü ìåðîïðèÿòèÿ âíå ýêðàíà"
+                        onclick=return(MD(this,event,6))
+                        src="http://calendar.google.com/googlecalendar/images/blank.gif"></DIV>
+</DIV>
+<DIV class="inset grid" id=allDayGrid style="MARGIN-BOTTOM: 7px; HEIGHT: 20px" onclick=VB(event)>
+  <DIV class=allDayCell id=allDay0 style="LEFT: 0px; HEIGHT: 20px"></DIV>
+  <DIV class=allDayCell id=allDay1 style="LEFT: 107px; HEIGHT: 20px"></DIV>
+  <DIV class=allDayCell id=allDay2 style="LEFT: 214px; HEIGHT: 20px"></DIV>
+  <DIV class=allDayCell id=allDay3 style="LEFT: 321px; HEIGHT: 20px"></DIV>
+  <DIV class=allDayCell id=allDay4 style="LEFT: 429px; HEIGHT: 20px"></DIV>
+  <DIV class=allDayCell id=allDay5 style="LEFT: 536px; HEIGHT: 20px"></DIV>
+  <DIV class=allDayCell id=allDay6 style="LEFT: 643px; HEIGHT: 20px"></DIV>
+  <DIV id=alldayeventowner>&nbsp;</DIV>
+</DIV>
+<DIV id=webContentGrid style="DISPLAY: none"></DIV>
+<DIV id=gridcontainer
+     style="PADDING-RIGHT: 16px; OVERFLOW-Y: scroll; OVERFLOW-X: hidden; OVERFLOW: scroll; HEIGHT: 250px">
+<DIV id=calowner>
+<TABLE style="TABLE-LAYOUT: fixed; WIDTH: 100%" cellSpacing=0 cellPadding=0 border=0>
+<TBODY>
+<TR>
+<TD id=rowheadcell style="WIDTH: 40px">
+  <DIV id=rowheaders style="LEFT: 0px; TOP: 0px; HEIGHT: 144ex">
+    <DIV class=rhead id=rhead0 style="TOP: 0ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>00:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead2 style="TOP: 6ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>01:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead4 style="TOP: 12ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>02:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead6 style="TOP: 18ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>03:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead8 style="TOP: 24ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>04:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead10 style="TOP: 30ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>05:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead12 style="TOP: 36ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>06:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead14 style="TOP: 42ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>07:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead16 style="TOP: 48ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>08:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead18 style="TOP: 54ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>09:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead20 style="TOP: 60ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>10:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead22 style="TOP: 66ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>11:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead24 style="TOP: 72ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>12:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead26 style="TOP: 78ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>13:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead28 style="TOP: 84ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>14:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead30 style="TOP: 90ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>15:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead32 style="TOP: 96ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>16:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead34 style="TOP: 102ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>17:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead36 style="TOP: 108ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>18:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead38 style="TOP: 114ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>19:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead40 style="TOP: 120ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>20:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead42 style="TOP: 126ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>21:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead44 style="TOP: 132ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>22:00</DIV>
+    </DIV>
+    <DIV class=rhead id=rhead46 style="TOP: 138ex; HEIGHT: 6ex">
+      <DIV class=rheadtext>23:00</DIV>
+    </DIV>
+  </DIV>
+</TD>
+<TD id=gridcontainercell style="WIDTH: auto">
+<DIV class=grid id=grid style="HEIGHT: 144ex" onclick=VB(event)>
+<DIV id=decowner>
+  <DIV style="LEFT: 0%; WIDTH: 14.4%; POSITION: absolute; TOP: 0px; HEIGHT: 961px">
+    <DIV class=currentDayDec></DIV>
+  </DIV>
+</DIV>
+<DIV class="hrule hruleodd" id=r1 style="Z-INDEX: 1; TOP: 3ex"></DIV>
+<DIV class="hrule hruleeven" id=r2 style="Z-INDEX: 1; TOP: 6ex"></DIV>
+<DIV class="hrule hruleodd" id=r3 style="Z-INDEX: 1; TOP: 9ex"></DIV>
+<DIV class="hrule hruleeven" id=r4 style="Z-INDEX: 1; TOP: 12ex"></DIV>
+<DIV class="hrule hruleodd" id=r5 style="Z-INDEX: 1; TOP: 15ex"></DIV>
+<DIV class="hrule hruleeven" id=r6 style="Z-INDEX: 1; TOP: 18ex"></DIV>
+<DIV class="hrule hruleodd" id=r7 style="Z-INDEX: 1; TOP: 21ex"></DIV>
+<DIV class="hrule hruleeven" id=r8 style="Z-INDEX: 1; TOP: 24ex"></DIV>
+<DIV class="hrule hruleodd" id=r9 style="Z-INDEX: 1; TOP: 27ex"></DIV>
+<DIV class="hrule hruleeven" id=r10 style="Z-INDEX: 1; TOP: 30ex"></DIV>
+<DIV class="hrule hruleodd" id=r11 style="Z-INDEX: 1; TOP: 33ex"></DIV>
+<DIV class="hrule hruleeven" id=r12 style="Z-INDEX: 1; TOP: 36ex"></DIV>
+<DIV class="hrule hruleodd" id=r13 style="Z-INDEX: 1; TOP: 39ex"></DIV>
+<DIV class="hrule hruleeven" id=r14 style="Z-INDEX: 1; TOP: 42ex"></DIV>
+<DIV class="hrule hruleodd" id=r15 style="Z-INDEX: 1; TOP: 45ex"></DIV>
+<DIV class="hrule hruleeven" id=r16 style="Z-INDEX: 1; TOP: 48ex"></DIV>
+<DIV class="hrule hruleodd" id=r17 style="Z-INDEX: 1; TOP: 51ex"></DIV>
+<DIV class="hrule hruleeven" id=r18 style="Z-INDEX: 1; TOP: 54ex"></DIV>
+<DIV class="hrule hruleodd" id=r19 style="Z-INDEX: 1; TOP: 57ex"></DIV>
+<DIV class="hrule hruleeven" id=r20 style="Z-INDEX: 1; TOP: 60ex"></DIV>
+<DIV class="hrule hruleodd" id=r21 style="Z-INDEX: 1; TOP: 63ex"></DIV>
+<DIV class="hrule hruleeven" id=r22 style="Z-INDEX: 1; TOP: 66ex"></DIV>
+<DIV class="hrule hruleodd" id=r23 style="Z-INDEX: 1; TOP: 69ex"></DIV>
+<DIV class="hrule hruleeven" id=r24 style="Z-INDEX: 1; TOP: 72ex"></DIV>
+<DIV class="hrule hruleodd" id=r25 style="Z-INDEX: 1; TOP: 75ex"></DIV>
+<DIV class="hrule hruleeven" id=r26 style="Z-INDEX: 1; TOP: 78ex"></DIV>
+<DIV class="hrule hruleodd" id=r27 style="Z-INDEX: 1; TOP: 81ex"></DIV>
+<DIV class="hrule hruleeven" id=r28 style="Z-INDEX: 1; TOP: 84ex"></DIV>
+<DIV class="hrule hruleodd" id=r29 style="Z-INDEX: 1; TOP: 87ex"></DIV>
+<DIV class="hrule hruleeven" id=r30 style="Z-INDEX: 1; TOP: 90ex"></DIV>
+<DIV class="hrule hruleodd" id=r31 style="Z-INDEX: 1; TOP: 93ex"></DIV>
+<DIV class="hrule hruleeven" id=r32 style="Z-INDEX: 1; TOP: 96ex"></DIV>
+<DIV class="hrule hruleodd" id=r33 style="Z-INDEX: 1; TOP: 99ex"></DIV>
+<DIV class="hrule hruleeven" id=r34 style="Z-INDEX: 1; TOP: 102ex"></DIV>
+<DIV class="hrule hruleodd" id=r35 style="Z-INDEX: 1; TOP: 105ex"></DIV>
+<DIV class="hrule hruleeven" id=r36 style="Z-INDEX: 1; TOP: 108ex"></DIV>
+<DIV class="hrule hruleodd" id=r37 style="Z-INDEX: 1; TOP: 111ex"></DIV>
+<DIV class="hrule hruleeven" id=r38 style="Z-INDEX: 1; TOP: 114ex"></DIV>
+<DIV class="hrule hruleodd" id=r39 style="Z-INDEX: 1; TOP: 117ex"></DIV>
+<DIV class="hrule hruleeven" id=r40 style="Z-INDEX: 1; TOP: 120ex"></DIV>
+<DIV class="hrule hruleodd" id=r41 style="Z-INDEX: 1; TOP: 123ex"></DIV>
+<DIV class="hrule hruleeven" id=r42 style="Z-INDEX: 1; TOP: 126ex"></DIV>
+<DIV class="hrule hruleodd" id=r43 style="Z-INDEX: 1; TOP: 129ex"></DIV>
+<DIV class="hrule hruleeven" id=r44 style="Z-INDEX: 1; TOP: 132ex"></DIV>
+<DIV class="hrule hruleodd" id=r45 style="Z-INDEX: 1; TOP: 135ex"></DIV>
+<DIV class="hrule hruleeven" id=r46 style="Z-INDEX: 1; TOP: 138ex"></DIV>
+<DIV class="hrule hruleodd" id=r47 style="Z-INDEX: 1; TOP: 141ex"></DIV>
+<DIV class="vrule gutter" id=c0 style="Z-INDEX: 1; LEFT: 0%; WIDTH: 1px; HEIGHT: 144ex"></DIV>
+<DIV class="vrule gutter" id=c1 style="Z-INDEX: 1; LEFT: 14.28%; WIDTH: 1px; HEIGHT: 144ex"></DIV>
+<DIV class="vrule gutter" id=c2 style="Z-INDEX: 1; LEFT: 28.57%; WIDTH: 1px; HEIGHT: 144ex"></DIV>
+<DIV class="vrule gutter" id=c3 style="Z-INDEX: 1; LEFT: 42.85%; WIDTH: 1px; HEIGHT: 144ex"></DIV>
+<DIV class="vrule gutter" id=c4 style="Z-INDEX: 1; LEFT: 57.14%; WIDTH: 1px; HEIGHT: 144ex"></DIV>
+<DIV class="vrule gutter" id=c5 style="Z-INDEX: 1; LEFT: 71.42%; WIDTH: 1px; HEIGHT: 144ex"></DIV>
+<DIV class="vrule gutter" id=c6 style="Z-INDEX: 1; LEFT: 85.71%; WIDTH: 1px; HEIGHT: 144ex"></DIV>
+<DIV id=eventowner style="Z-INDEX: 2">
+  <DIV class=chip id=reldiv8 ondblclick=QE(this) style="LEFT: 14.66%; WIDTH: 12.53%; POSITION: absolute; TOP: 560px"
+       onclick="return PE(this,event)">
+    <DIV class=t1 style="BACKGROUND-COLOR: #a32929">&nbsp;</DIV>
+    <DIV class=t2 style="BACKGROUND-COLOR: #a32929">&nbsp;</DIV>
+    <DIV class="chipbody edit" style="BACKGROUND-COLOR: #d96666">
+      <DL style="BORDER-LEFT-COLOR: #a32929; BORDER-BOTTOM-COLOR: #a32929; BORDER-TOP-COLOR: #a32929; HEIGHT: 156px; BORDER-RIGHT-COLOR: #a32929">
+        <DT style="BACKGROUND-COLOR: #a32929"><B unselectable="on"><SPAN class=timelabel>14:00 – 18:00</SPAN> <IMG
+                style="BACKGROUND-POSITION: -28px -57px; BACKGROUND-IMAGE: url(//calendar.google.com/googlecalendar/images/combined_2_0.gif)"
+                height=7 src="http://calendar.google.com/googlecalendar/images/blank.gif" width=9> </B></DT>
+        <DD>
+          <DIV><SPAN onmouseover=oE(this) style="CURSOR: pointer" onclick="uE('reldiv8',event)" onmouseout=pE(this)>(Áåç òåìû)</SPAN>
+          </DIV>
+        </DD>
+        <DD class=resize style="LEFT: 42px" unselectable="on"></DD>
+      </DL>
+    </DIV>
+    <DIV class=b2
+         style="BORDER-LEFT-COLOR: #a32929; BORDER-BOTTOM-COLOR: #a32929; CURSOR: s-resize; BORDER-TOP-COLOR: #a32929; BACKGROUND-COLOR: #d96666; BORDER-RIGHT-COLOR: #a32929">
+      &nbsp;</DIV>
+    <DIV class=b1 style="CURSOR: s-resize; BACKGROUND-COLOR: #a32929">&nbsp;</DIV>
+  </DIV>
+  <DIV class=chip id=reldiv9 ondblclick=QE(this) style="LEFT: 71.86%; WIDTH: 12.53%; POSITION: absolute; TOP: 400px"
+       onclick="return PE(this,event)">
+    <DIV class=t1 style="BACKGROUND-COLOR: #a32929">&nbsp;</DIV>
+    <DIV class=t2 style="BACKGROUND-COLOR: #a32929">&nbsp;</DIV>
+    <DIV class="chipbody edit" style="BACKGROUND-COLOR: #d96666">
+      <DL style="BORDER-LEFT-COLOR: #a32929; BORDER-BOTTOM-COLOR: #a32929; BORDER-TOP-COLOR: #a32929; HEIGHT: 36px; BORDER-RIGHT-COLOR: #a32929">
+        <DT style="BACKGROUND-COLOR: #a32929"><B unselectable="on"><SPAN class=timelabel>10:00 – 11:00</SPAN> <IMG
+                style="BACKGROUND-POSITION: -28px -57px; BACKGROUND-IMAGE: url(//calendar.google.com/googlecalendar/images/combined_2_0.gif)"
+                height=7 src="http://calendar.google.com/googlecalendar/images/blank.gif" width=9> <IMG
+                style="BACKGROUND-POSITION: -37px -57px; BACKGROUND-IMAGE: url(//calendar.google.com/googlecalendar/images/combined_2_0.gif)"
+                height=7 src="http://calendar.google.com/googlecalendar/images/blank.gif" width=9> </B></DT>
+        <DD>
+          <DIV><SPAN onmouseover=oE(this) style="CURSOR: pointer" onclick="uE('reldiv9',event)" onmouseout=pE(this)>Îòäûõ äëÿ ãëàç</SPAN>
+          </DIV>
+        </DD>
+        <DD class=resize style="LEFT: 42px" unselectable="on"></DD>
+      </DL>
+    </DIV>
+    <DIV class=b2
+         style="BORDER-LEFT-COLOR: #a32929; BORDER-BOTTOM-COLOR: #a32929; CURSOR: s-resize; BORDER-TOP-COLOR: #a32929; BACKGROUND-COLOR: #d96666; BORDER-RIGHT-COLOR: #a32929">
+      &nbsp;</DIV>
+    <DIV class=b1 style="CURSOR: s-resize; BACKGROUND-COLOR: #a32929">&nbsp;</DIV>
+  </DIV>
+</DIV>
+</DIV>
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+</DIV>
+</DIV>
+</DIV>
+<TABLE id=chrome_main3 style="BACKGROUND: #c3d9ff 0% 50%" cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+    <TR height=2>
+      <TD></TD>
+    </TR>
+    <TR>
+      <TD width=8></TD>
+      <TD></TD>
+    </TR>
+    <TR height=4>
+      <TD></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<DIV style="HEIGHT: 2px">
+  <DIV class=t2 id=chrome_main6
+       style="BORDER-LEFT-COLOR: #c3d9ff; BACKGROUND: #c3d9ff; BORDER-BOTTOM-COLOR: #c3d9ff; BORDER-TOP-COLOR: #c3d9ff; BORDER-RIGHT-COLOR: #c3d9ff">
+    &nbsp;</DIV>
+  <DIV class=t1 id=chrome_main7
+       style="BORDER-LEFT-COLOR: #c3d9ff; BACKGROUND: #c3d9ff; BORDER-BOTTOM-COLOR: #c3d9ff; BORDER-TOP-COLOR: #c3d9ff; BORDER-RIGHT-COLOR: #c3d9ff">
+    &nbsp;</DIV>
+</DIV>
+</DIV>
+</DIV>
+<DIV id=cover style="DISPLAY: none">
+  <DIV class=printAlignLeft id=co>
+    <DIV style="WIDTH: 100%; HEIGHT: 2px">
+      <DIV class=t1 id=chrome_cover4
+           style="BORDER-LEFT-COLOR: #c3d9ff; BACKGROUND: #c3d9ff; BORDER-BOTTOM-COLOR: #c3d9ff; BORDER-TOP-COLOR: #c3d9ff; BORDER-RIGHT-COLOR: #c3d9ff">
+        &nbsp;</DIV>
+      <DIV class=t2 id=chrome_cover5
+           style="BORDER-LEFT-COLOR: #c3d9ff; BACKGROUND: #c3d9ff; BORDER-BOTTOM-COLOR: #c3d9ff; BORDER-TOP-COLOR: #c3d9ff; BORDER-RIGHT-COLOR: #c3d9ff">
+        &nbsp;</DIV>
+    </DIV>
+    <DIV class=printborder id=chrome_cover2
+         style="BORDER-LEFT-COLOR: #c3d9ff; BACKGROUND: #c3d9ff 0% 50%; BORDER-BOTTOM-COLOR: #c3d9ff; BORDER-TOP-COLOR: #c3d9ff; BORDER-RIGHT-COLOR: #c3d9ff">
+      <DIV id=coverinner></DIV>
+    </DIV>
+    <TABLE id=chrome_cover3 style="BACKGROUND: #c3d9ff 0% 50%" cellSpacing=0 cellPadding=0 width="100%">
+      <TBODY>
+        <TR height=2>
+          <TD></TD>
+        </TR>
+        <TR>
+          <TD width=8></TD>
+          <TD></TD>
+        </TR>
+        <TR height=4>
+          <TD></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+    <DIV style="HEIGHT: 2px">
+      <DIV class=t2 id=chrome_cover6
+           style="BORDER-LEFT-COLOR: #c3d9ff; BACKGROUND: #c3d9ff; BORDER-BOTTOM-COLOR: #c3d9ff; BORDER-TOP-COLOR: #c3d9ff; BORDER-RIGHT-COLOR: #c3d9ff">
+        &nbsp;</DIV>
+      <DIV class=t1 id=chrome_cover7
+           style="BORDER-LEFT-COLOR: #c3d9ff; BACKGROUND: #c3d9ff; BORDER-BOTTOM-COLOR: #c3d9ff; BORDER-TOP-COLOR: #c3d9ff; BORDER-RIGHT-COLOR: #c3d9ff">
+        &nbsp;</DIV>
+    </DIV>
+  </DIV>
+</DIV>
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+
+</BODY>
+
+</html>
+

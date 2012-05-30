@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--NewPage-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Calendar
+  </title>
+  <link rel="stylesheet" href="../../styles/calendar.css" type="text/css"/>
+</head>
+<body>
+<button id="sender">Click to send request</button>
+<script type="text/javascript" src="../base.js"></script>
+<script type="text/javascript">
+
+  goog.require("goog.events");
+  goog.require("rflect.Debug");
+
+</script>
+<script type="text/javascript">
+
+  var button = document.getElementById("sender");
+
+  rflect.Debug.activate();
+
+  goog.events.listen(document, "click", function(aEvent) {
+    //echo("document click", 1);
+  }, false);
+
+  goog.events.listen(button, "click", function(aEvent) {
+    //echo("button click", 1);
+  }, false);
+
+</script>
+</body>
+</html>
+

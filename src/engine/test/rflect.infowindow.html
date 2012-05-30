@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--NewPage-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Calendar
+  </title>
+  <link rel="stylesheet" href="../../styles/rflect.cal.css" type="text/css"/>
+</head>
+<body>
+
+<!--<table cellspacing="4">
+
+  <tr>
+    <td colspan="2">
+      <font size="+1" id="subject_label"></font>
+
+      <p>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <font size="-1" id="datetime_label"></font>
+
+      <p>
+    </td>
+  </tr>
+
+  <table id="editor_table_coll">
+    <tr>
+      <td>
+        <div>[<a href="javascript:void(0)" id="cal_event_change_link"></a>]</div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div>[<a href="javascript:void(0)" id="cale_event_del_link"></a>]</div>
+      </td>
+    </tr>
+  </table>
+
+  <table id="editor_table_exp">
+
+    <tr>
+      <td id="name_label"></td>
+      <td colspan="2">
+        <input class="" id="cal_event_name_input" size="35"/>
+      </td>
+    </tr>
+
+    <tr>
+      <td id="start_label"></td>
+      <td>
+        <input class="" id="start_date" size="20" name="input_start_date"/>
+        <span>&nbsp;</span>
+        <input class="" id="start_hours" size="4" name="input_start_hours"/>
+        <span>:</span>
+        <input class="" id="start_mins" size="4" name="input_start_mins"/>
+      </td>
+    </tr>
+
+    <tr>
+      <td id="end_label"></td>
+      <td>
+        <input class="" id="end_date" size="20" name="input_end_date"/>
+        <span>&nbsp;</span>
+        <input class="" id="end_hours" size="4" name="input_end_hours"/>
+        <span>:</span>
+        <input class="" id="end_mins" size="4" name="input_end_mins"/>
+      </td>
+    </tr>
+
+    <tr>
+      <td><input type="button" value="" id="cal_event_changes_apply"/></td>
+      <td><input type="button" value="" id="cal_event_changes_cancel"/></td>
+    </tr>
+
+
+  </table>
+
+</table>-->
+
+
+<script type="text/javascript" src="../base.js"></script>
+<script type="text/javascript">
+
+  goog.require("rflect.XMLHTTP");
+  goog.require("rflect.Debug");
+  goog.require("rflect.mime");
+  goog.require("goog.math.Size");
+  goog.require("rflect.datetime.DateTime");
+  goog.require("goog.dom.classes");
+  goog.require("rflect.cal.InfoTipCreating");
+  goog.require("rflect.cal.InfoTipChanging");
+
+</script>
+<script type="text/javascript">
+
+  rflect.Debug.activate();
+
+
+  /*
+  var it = new rflect.cal.InfoTipCreating({
+    panel: document.body
+  });
+  */
+
+  var clicked = false;
+
+  var it = new rflect.cal.InfoTipChanging({
+    panel: document.body
+  });
+
+  it.setCalendarEvent({
+    name: "La!",
+    startDateTime: new rflect.datetime.DateTime(2008, 06, 15, 10, 30),
+    endDateTime: new rflect.datetime.DateTime(2008, 06, 15, 12, 0)
+  });
+
+  inspect("_changeOptions", it.getCalendarEvent());
+
+
+  var counter = 0;
+  goog.events.listen(document, "click", function(aEvent) {
+    if (!clicked) {
+      it.pointTo(aEvent);
+      clicked = true;
+    }
+  //it.enableBlocksPart(!((counter % 2) == 0));
+    //counter++;
+  });
+
+  goog.events.listen(it, "submit", function(aEvent) {
+    echo("submit");
+    inspect("_changeOptions", aEvent.changeOptions);
+  });
+
+  inspect("_it", it);
+
+
+  //it.enableEditMode(false);
+
+
+</script>
+</body>
+</html>
+

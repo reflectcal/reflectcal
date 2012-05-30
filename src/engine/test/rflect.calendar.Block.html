@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--NewPage-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Calendar
+  </title>
+  <link rel="stylesheet" href="../../styles/calendar.css" type="text/css"/>
+</head>
+<body>
+<button id="sender">Click to send request</button>
+<div id="response_container">Response should appear here</div>
+<script type="text/javascript" src="../base.js"></script>
+<script type="text/javascript">
+
+  goog.require("rflect.XMLHTTP");
+  goog.require("rflect.Debug");
+  goog.require("rflect.mime");
+  goog.require("rflect.datetime.DateTime");
+  goog.require("rflect.cal.TimeGrid");
+  goog.require("rflect.cal.CalendarEvent");
+  goog.require("rflect.cal.BlockHorizontal");
+
+
+</script>
+<script type="text/javascript">
+  rflect.Debug.activate();
+
+  var tgrid = new rflect.cal.TimeGrid({});
+
+  var calEvent1 = new rflect.cal.CalendarEvent({
+    startDateTime: new rflect.datetime.DateTime(2008, 06, 01, 0, 00),
+    endDateTime: new rflect.datetime.DateTime(2008, 06, 01, 4, 00),
+    name: "evt"
+  });
+  var calEvent2 = new rflect.cal.CalendarEvent({
+    startDateTime: new rflect.datetime.DateTime(2008, 06, 01, 1, 00),
+    endDateTime: new rflect.datetime.DateTime(2008, 06, 01, 5, 00),
+    name: "evt"
+  });
+  var calEvent3 = new rflect.cal.CalendarEvent({
+    startDateTime: new rflect.datetime.DateTime(2008, 06, 01, 2, 00),
+    endDateTime: new rflect.datetime.DateTime(2008, 06, 01, 6, 00),
+    name: "evt"
+  });
+  var calEvent4 = new rflect.cal.CalendarEvent({
+    startDateTime: new rflect.datetime.DateTime(2008, 06, 01, 4, 00),
+    endDateTime: new rflect.datetime.DateTime(2008, 06, 01, 7, 00),
+    name: "evt"
+  });
+  var calEvent5 = new rflect.cal.CalendarEvent({
+    startDateTime: new rflect.datetime.DateTime(2008, 06, 01, 4, 00),
+    endDateTime: new rflect.datetime.DateTime(2008, 06, 02, 4, 00),
+    name: "evt"
+  });
+
+  tgrid.recalculate({
+    recalculate: 0x4,
+    columnsQuantity: 7,
+    rowsQuantity: 5,
+    startDateTime: new rflect.datetime.DateTime(2008, 06, 01)
+
+  });
+
+
+  var items = tgrid.getItemsForCalendarEvent(calEvent5, true);
+
+  var block = new rflect.cal.BlockHorizontal({});
+  inspect("_block", block);
+
+  block.addItem(tgrid.getItemsForCalendarEvent(calEvent1, true)[0]);
+  block.addItem(tgrid.getItemsForCalendarEvent(calEvent2, true)[0]);
+  block.addItem(tgrid.getItemsForCalendarEvent(calEvent3, true)[0]);
+  block.addItem(tgrid.getItemsForCalendarEvent(calEvent4, true)[0]);
+  block.addItem(tgrid.getItemsForCalendarEvent(calEvent5, true)[0]);
+
+  var itemsByShift = block.computeEventMap();
+
+  inspect("_items", items);
+  inspect("_itemsByShift", itemsByShift);
+
+</script>
+</body>
+</html>
+

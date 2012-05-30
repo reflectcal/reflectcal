@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--NewPage-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Calendar
+  </title>
+  <link rel="stylesheet" href="../../styles/rflect.cal.css" type="text/css"/>
+</head>
+<body>
+<button id="sender">Click to send request</button>
+<div id="response_container">Response should appear here</div>
+<script type="text/javascript" src="../base.js"></script>
+<script type="text/javascript">
+
+  goog.require("rflect.Root");
+  goog.require("rflect.Debug");
+  goog.require("rflect.datetime.DateTime");
+  goog.require("goog.json");
+
+</script>
+<script type="text/javascript">
+
+
+rflect.Debug.activate();
+
+var date = new rflect.datetime.DateTime(2008, 7, 16, 23, 0, 0);
+var day = 0;
+var dateObject = date.getDateObject();
+
+date.cacheProperties();
+inspect("_date", date);
+
+/*perf("datetime", 1);
+  for (var counter = 0; counter < 10000; counter++) {
+    day = date.getDay();
+    // day = dateObject.getDay();
+    // day = date.day;
+  }
+  ;
+  perf("datetime", 1);
+*/
+echo("date: " + date.toJSONString());
+
+echo("date to json: " + goog.json.serialize({
+  date1: date,
+  date2: date
+}));
+
+function parseDateTime(aDateString, aHours, aMinutes) {
+  this.mLastDateParseIncludedTime = false;
+  var tempDate = null;
+  if (!this.probeSucceeded)
+    return null; // avoid errors accessing uninitialized data.
+
+  var year = Number.MIN_VALUE;
+  var month = -1;
+  var day = -1;
+  var timeString = null;
+  if (this.alphaMonths == null) {
+    // SHORT NUMERIC DATE, such as 2002-03-04, 4/3/2002, or CE2002Y03M04D.
+    // Made of digits & nonDigits.  (Nondigits may be unicode letters
+    // which do not match \w, esp. in CJK locales.)
+    // (.*)? binds to null if no suffix.
+    var parseNumShortDateRegex = /^\D*(\d+)\D+(\d+)\D+(\d+)(.*)?$/;
+    var dateNumbersArray = parseNumShortDateRegex.exec(aValue);
+    if (dateNumbersArray != null) {
+      year = Number(dateNumbersArray[this.yearIndex]);
+      month = Number(dateNumbersArray[this.monthIndex]) - 1; // 0-based
+      day = Number(dateNumbersArray[this.dayIndex]);
+      timeString = dateNumbersArray[4];
+    }
+  } else {
+    // SHORT DATE WITH ALPHABETIC MONTH, such as "dd MMM yy" or "MMMM dd, yyyy"
+    // (\d+|[^\d\W]) is digits or letters, not both together.
+    // Allows 31dec1999 (no delimiters between parts) if OS does (w2k does not).
+    // Allows Dec 31, 1999 (comma and space between parts)
+    // (Only accepts ASCII month names; JavaScript RegExp does not have an
+    // easy way to describe unicode letters short of a HUGE character range
+    // regexp derived from the Alphabetic ranges in
+    // http://www.unicode.org/Public/UNIDATA/DerivedCoreProperties.txt)
+    // (.*)? binds to null if no suffix.
+    var parseAlphShortDateRegex = /^\s*(\d+|[^\d\W]+)\W{0,2}(\d+|[^\d\W]+)\W{0,2}(\d+|[^\d\W]+)(.*)?$/;
+    var datePartsArray = parseAlphShortDateRegex.exec(aValue);
+    if (datePartsArray != null) {
+      year = Number(datePartsArray[this.yearIndex]);
+      var monthString = datePartsArray[this.monthIndex].toUpperCase();
+      for (var m = 0; m < this.alphaMonths.length; m++) {
+        if (monthString == this.alphaMonths[m]) {
+          month = m;
+          break;
+        }
+      }
+      day = Number(datePartsArray[this.dayIndex]);
+      timeString = datePartsArray[4];
+    }
+  }
+  if (year != Number.MIN_VALUE && month != -1 && day != -1) {
+    // year, month, day successfully parsed
+    if (0 <= year && year < 100) {
+      // If 0 <= year < 100, treat as 2-digit year (like formatDate):
+      //   parse year as up to 30 years in future or 69 years in past.
+      //   (Covers 30-year mortgage and most working people's birthdate.)
+      // otherwise will be treated as four digit year.
+      var currentYear = new Date().getFullYear();
+      var currentCentury = currentYear - currentYear % 100;
+      year = currentCentury + year;
+      if (year < currentYear - 69)
+        year += 100;
+      if (year > currentYear + 30)
+        year -= 100;
+    }
+                // if time is also present, parse it
+    var hours = 0;
+    var minutes = 0;
+    var seconds = 0;
+    if (timeString != null) {
+      var time = this.parseTime(dateNumbersArray[4]);
+      if (time != null) {
+        hours = time.getHours();
+        minutes = time.getMinutes();
+        seconds = time.getSeconds();
+        this.mLastDateParseIncludedTime = true;
+      }
+    }
+    tempDate = new Date(year, month, day, hours, minutes, seconds, 0);
+  } //else did not match regex, not a valid date
+  return tempDate;
+
+}
+
+
+</script>
+</body>
+</html>
+

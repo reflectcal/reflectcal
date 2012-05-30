@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--NewPage-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Calendar
+  </title>
+  <link rel="stylesheet" href="../../styles/calendar.css" type="text/css"/>
+</head>
+<body>
+<button id="sender">Click to send request</button>
+<div id="response_container">Response should appear here</div>
+<script type="text/javascript" src="../base.js"></script>
+<script type="text/javascript" src="../deps.js"></script>
+<script type="text/javascript">
+
+  goog.require("rflect.cal.TimeGrid");
+  goog.require("rflect.Debug");
+  goog.require("rflect.datetime.DateTime");
+  goog.require("rflect.cal.CalendarEvent");
+
+</script>
+<script type="text/javascript">
+
+  rflect.Debug.activate();
+
+  var tgrid = new rflect.cal.TimeGrid({
+
+    recalculate: 0x1 | 0x2,
+    columnsQuantity: 7,
+    rowsQuantity: 48,
+    startDateTime: new rflect.datetime.DateTime(2008, 06, 01)
+  });
+
+  inspect("_tgrid", tgrid);
+
+  var calEvent = new rflect.cal.CalendarEvent({
+    startDateTime: new rflect.datetime.DateTime(2008, 06, 01, 15, 00),
+    endDateTime: new rflect.datetime.DateTime(2008, 06, 01, 17, 00),
+    name: "evt"
+  });
+
+  tgrid.recalculate({
+
+    recalculate: 0x4,
+    columnsQuantity: 7,
+    rowsQuantity: 5,
+    startDateTime: new rflect.datetime.DateTime(2008, 06, 01)
+  });
+
+  var items = tgrid.getItemsForCalendarEvent(calEvent, true);
+
+
+</script>
+</body>
+</html>
+

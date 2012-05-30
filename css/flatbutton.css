@@ -1,0 +1,137 @@
+/*
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/*
+ * Styling for flat buttons created by goog.ui.FlatButtonRenderer.
+ *
+ * @author brianp@google.com (Brian Peterson)
+ */
+
+.goog-flat-button {
+  position: relative;
+  margin: 2px;
+  border: 1px solid #d5d5d5;
+  padding: 2px 6px;
+  color: #2c2c2c;
+  font: normal 13px/18px "Trebuchet MS", Tahoma, Arial, sans-serif;
+  background-color: #efefef;
+  background: -moz-linear-gradient(top, #ffffff 0, #efefef 100%);
+  background: -webkit-gradient(linear, center top, center top, from(#ffffff), to(#efefef));
+  background: -webkit-linear-gradient(top, #ffffff 0, #efefef 100%);
+  background: -ms-linear-gradient(top, #ffffff 0, #efefef 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = "#ffffff", endColorStr="#efefef");
+  background: -o-linear-gradient(top, #ffffff 0, #efefef 100%);
+  background: linear-gradient(top, #ffffff 0, #efefef 100%);
+  cursor: pointer;
+
+  outline: none;
+  -moz-outline: none;
+  vertical-align: top;
+
+  -moz-box-shadow: 1px 1px 1px #e9e9e9;
+  -webkit-box-shadow: 1px 1px 1px #e9e9e9;
+  box-shadow: 1px 1px 1px #e9e9e9;
+
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+
+/* State: disabled. */
+.goog-flat-button-disabled {
+  color: #979797;
+  cursor: default;
+}
+
+/* State: hover. */
+.goog-flat-button-hover {
+  border-color: #bbbbbb;
+  color: #202020;
+  z-index: 1;
+}
+
+/* State: active, selected, checked. */
+.goog-flat-button-active,
+.goog-flat-button-selected,
+.goog-flat-button-checked {
+  color: #0f0f0f;
+  background-color: #e0e0e0;
+  background: -moz-linear-gradient(top, #e9e9e9 0, #e0e0e0 100%);
+  background: -webkit-gradient(linear, center top, center top, from(#e9e9e9), to(#e0e0e0));
+  background: -webkit-linear-gradient(top, #e9e9e9 0, #e0e0e0 100%);
+  background: -ms-linear-gradient(top, #e9e9e9 0, #e0e0e0 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = "#e9e9e9", endColorStr="#e0e0e0");
+  background: -o-linear-gradient(top, #e9e9e9 0, #e0e0e0 100%);
+  background: linear-gradient(top, #e9e9e9 0, #e0e0e0 100%);
+
+  -moz-box-shadow: inset 2px 2px 2px #d0d0d0;
+  -webkit-box-shadow: inset 2px 2px 2px #d0d0d0;
+  box-shadow: inset 2px 2px 2px #d0d0d0;
+
+  -moz-animation-duration: 1s;
+  -moz-animation-timing-function: linear;
+  -moz-animation-iteration-count: 1;
+  -moz-animation-name: to-active-state;
+}
+
+
+@-moz-keyframes to-active-state {
+  from {
+    color: #2c2c2c;
+    background: -moz-linear-gradient(center top, #ffffff 0, #efefef 100%);
+    -moz-box-shadow: 1px 1px 1px #e9e9e9;
+  }
+
+  to {
+    color: #0f0f0f;
+    background: -moz-linear-gradient(center top, #e9e9e9 0, #e0e0e0 100%);
+    -moz-box-shadow: inset 2px 2px 2px #d0d0d0;
+  }
+}
+
+/* State: focused. */
+.goog-flat-button-focused {
+  border-color: #808080;
+  border-color: #9cf #69e #69e #7af;
+  border-color: #6699ee;
+
+  -moz-box-shadow: 0px 0px 1px #6699ee;
+  -webkit-box-shadow: 0px 0px 1px #6699ee;
+  box-shadow: 0px 0px 1px #6699ee;
+
+  /*border-color: #4d90fe;*/
+  z-index: 1;
+}
+
+/* Pill (collapsed border) styles. */
+.goog-flat-button-collapse-right {
+  margin-right: 0;
+}
+
+.goog-flat-button-collapse-left {
+  margin-left: -1px;
+}
+
+/* Border radi should be treated separately in collapsed cases. */
+.goog-flat-button-bord-rad-collapse-right {
+  -moz-border-radius: 3px 0 0 3px;
+  -webkit-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
+}
+
+.goog-flat-button-bord-rad-collapse-left {
+  -moz-border-radius: 0 3px 3px 0;
+  -webkit-border-radius: 0 3px 3px 0;
+  border-radius: 0 3px 3px 0;
+}
+
+.goog-flat-button-bord-rad-collapse-both {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+

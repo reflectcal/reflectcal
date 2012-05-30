@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--NewPage-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Calendar
+  </title>
+  <link rel="stylesheet" href="../../styles/calendar.css" type="text/css"/>
+</head>
+<body>
+<button id="sender">Click to send request</button>
+<div id="response_container">Response should appear here</div>
+<script type="text/javascript" src="../base.js"></script>
+<script type="text/javascript">
+
+  goog.require("rflect.Debug");
+  goog.require("goog.string");
+
+</script>
+<script type="text/javascript">
+rflect.Debug.activate();
+
+var standartIndent = "\s\s";
+
+var testArray = [];
+var testObject = {a: "lala", b: "lalal",c: {la: "tri"}};
+
+testArray.push("hi");
+testArray.push("boo");
+
+testObject["d"] = testArray;
+
+//echo("goog.string.getRandomString(): "
++ goog.string.getRandomString(),1
+)
+;
+
+var depthLevel = 0;
+
+objectToString = function(aObject, aDepthLevel) {
+
+  depthLevel = (aDepthLevel == undefined)
+          ? 0
+          : aDepthLevel;
+
+  return _objectToString(aObject, 0, 0);
+}
+
+_objectToString = function(o, aIndentLength, aDepthLevel) {
+
+  var indent = [];
+  var spaces = "  ";
+  var counter = 0;
+  var length = 0;
+  var indentLength = 0;
+  var keyStr = "";
+
+  if ((depthLevel == 0) || (aDepthLevel < depthLevel)) {
+
+    for (counter = 0; counter < aIndentLength; ++counter) {
+      indent.push(" ");
+    }
+    indent = indent.join("");
+
+    switch (goog.typeOf(o)) {
+
+      case "object": {
+        var s = "{";
+        for (var n in o) {
+          keyStr = spaces + n + ":";
+          indentLength = aIndentLength + keyStr.length;
+           //echo(" aDepthLevel: " + aDepthLevel);
+          s += "\n" + indent + keyStr +
+               _objectToString(o[n], indentLength, aDepthLevel + 1);
+        }
+        s += "\n" + indent + "}";
+        return s;
+      };
+
+      case "array": {
+        var s = "[";
+        for (counter = 0,length = o.length; counter < length; ++counter) {
+          keyStr = spaces + counter + ":";
+          indentLength = aIndentLength + keyStr.length;
+           //echo(" aDepthLevel: " + aDepthLevel);
+          s += "\n" + indent + keyStr +
+               _objectToString(o[counter], indentLength, aDepthLevel + 1);
+        }
+        s += "\n" + indent + "]";
+        return s;
+      };
+
+      /*case "number":
+      case "string": {
+        return o;
+      };
+
+      case "function": {
+        return o.toString();
+      };*/
+      default: {
+        return o;
+      }
+
+    }
+  }
+  ;
+
+  return "";
+
+}
+
+  /*echo("object: "
+          + objectToString(testObject, 2));
+  */
+  /*echo("\n" + "objectToString: "
++ objectToString({a: [1,1,1,[1,1,1,[1]]], b: "go", c: 1}) + "\n");*/
+  //echo("\n" + "objectToString: "
+        + objectToString(document.body, 5) + "\n"
+)
+;
+
+
+</script>
+</body>
+</html>
+

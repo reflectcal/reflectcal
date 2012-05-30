@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--NewPage-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Calendar
+  </title>
+  <link rel="stylesheet" href="../../styles/rflect.cal.css" type="text/css"/>
+  <script type="text/javascript">
+
+    alert(navigator.language);
+  </script>
+</head>
+<body>
+<button id="sender">Click to send request</button>
+<div id="response_container">Response should appear here</div>
+<script type="text/javascript" src="../base.js"></script>
+<script type="text/javascript">
+
+  goog.require("rflect.Root");
+  goog.require("rflect.Debug");
+  goog.require("rflect.datetime.DateTime");
+  goog.require("goog.json");
+
+</script>
+<script type="text/javascript">
+
+
+  rflect.Debug.activate();
+
+  echo("navigator.browserLanguage: " + navigator.browserLanguage, 1);
+  echo("navigator.userLanguage: " + navigator.userLanguage, 1);
+  echo("navigator.systemLanguage: " + navigator.systemLanguage, 1);
+  echo("navigator.language: " + navigator.language, 1);
+
+
+</script>
+</body>
+</html>
+

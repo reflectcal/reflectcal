@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--NewPage-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Calendar
+  </title>
+  <link rel="stylesheet" href="../../styles/calendar.css" type="text/css"/>
+</head>
+<body>
+<button id="sender">Click to send request</button>
+<div id="response_container">Response should appear here</div>
+<script type="text/javascript" src="../base.js"></script>
+<script type="text/javascript">
+
+  goog.require("rflect.XMLHTTP");
+  goog.require("rflect.Debug");
+  goog.require("rflect.mime");
+  goog.require("rflect.Root");
+
+</script>
+<script type="text/javascript">
+  rflect.Debug.activate();
+
+  var A = rflect.Root.__create(function() {
+  }).__fuse({
+    method: function() {
+      var a = 2;
+      for (var counter = 0; counter < 500; counter++) {
+        a *= 30;
+      }
+    }
+  });
+
+  var B = A.__create(function() {
+  });
+
+  console.time("method from A");
+  var a = new A;
+  for (var counter = 0; counter < 1000; counter++) {
+    a.method();
+  }
+  ;
+  console.timeEnd("method from A");
+  /*console.time("method from B");
+  var b = new B;
+  for (var counter = 0; counter < 1000; counter++) {
+    b.method();
+  }
+  ;
+  console.timeEnd("method from B");
+*/
+
+</script>
+</body>
+</html>
+

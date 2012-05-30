@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2012. Rflect, Alex K.
+  -->
+
+<!-- ======================================================================
+     05.01.2012 12:48:22                                                        
+     rflect events
+     description                  
+     Alex K                                                                
+     ====================================================================== -->
+<project name="rflectevents" default="gjslinter">
+    <description>
+        Linter check, fixing style, compilation tasks, js doc.
+    </description>
+
+    <!-- Linter. -->
+    <target name="gjslinter" description="linter">
+        <exec executable="python" dir="${basedir}">
+            <arg
+                    value="c:\work\research\closure linter\closure_linter-2.3\closure_linter\gjslint.py"/>
+            <!--Optional, but recommended-->
+            <arg value="--strict"/>
+            <arg value="-r"/>
+            <arg value="${basedir}\src\rflect"/>
+        </exec>
+    </target>
+
+    <!-- fixjsstyle.py -->
+    <target name="fixjsstyle" description="fixer">
+        <exec executable="python" dir="${basedir}">
+            <arg
+                    value="c:\work\research\closure linter\closure_linter-2.3\closure_linter\fixjsstyle.py"/>
+            <!--Optional, but recommended-->
+            <arg value="--strict"/>
+            <arg value="--r"/>
+            <arg value="${basedir}\src\rflect"/>
+        </exec>
+    </target>
+
+    <!--Compilation.-->
+    <target name="compile_debug" description="Compilation for debug."
+            depends="clearbuild">
+        <exec executable="python" dir="${basedir}">
+            <arg
+                    value="c:\Work\rflectevents\src\closure-library\closure\bin\build\closurebuilder.py"/>
+            <arg value="--root=${basedir}\src\closure-library"/>
+            <arg value="--root=${basedir}\src\rflect"/>
+            <arg value="--output_mode=compiled"/>
+            <arg line="--compiler_jar=&quot;${basedir}\bin\compiler.jar&quot;"/>
+            <arg line="--output_file=&quot;${basedir}\src\outputcompiled.js&quot;"/>
+            <arg line="--compiler_flags=&quot;--compilation_level=ADVANCED_OPTIMIZATIONS&quot;"/>
+            <arg line="--compiler_flags=&quot;--summary_detail_level=3&quot;"/>
+            <arg line="--compiler_flags=&quot;--warning_level=VERBOSE&quot;"/>
+            <!--To prevent warnings from compiler.-->
+            <arg line="--compiler_flags=&quot;--js=${basedir}\src\closure-library\closure\goog\deps.js&quot;"/>
+            <arg line="--compiler_flags=&quot;--js=${basedir}\src\deps.js&quot;"/>
+            <arg value="--namespace=rflect.cal.Loader"/>
+            <arg line="--compiler_flags=&quot;--define=&quot;goog.DEBUG=true&quot;&quot;"/>
+            <arg line="--compiler_flags=&quot;--debug&quot;"/>
+            <arg line="--compiler_flags=&quot;--source_map_format=V1&quot;"/>
+            <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\src\outputcompiled.js.map&quot;"/>
+            <arg line="--compiler_flags=&quot;--formatting=PRETTY_PRINT&quot;"/>
+        </exec>
+    </target>
+    <target name="compile_preprod" description="Compilation for pre-production,
+    goog.DEBUG statements are preserved."
+    depends="clearbuild">
+        <exec executable="python" dir="${basedir}">
+            <arg
+            value="c:\Work\rflectevents\src\closure-library\closure\bin\build\closurebuilder.py"/>
+            <arg value="--root=${basedir}\src\closure-library"/>
+            <arg value="--root=${basedir}\src\rflect"/>
+            <arg value="--output_mode=compiled"/>
+            <arg line="--compiler_jar=&quot;${basedir}\bin\compiler.jar&quot;"/>
+            <arg line="--output_file=&quot;${basedir}\src\outputcompiled.js&quot;"/>
+            <arg line="--compiler_flags=&quot;--compilation_level=ADVANCED_OPTIMIZATIONS&quot;"/>
+            <arg line="--compiler_flags=&quot;--summary_detail_level=3&quot;"/>
+            <arg line="--compiler_flags=&quot;--warning_level=VERBOSE&quot;"/>
+            <!--To prevent warnings from compiler.-->
+            <arg line="--compiler_flags=&quot;--js=${basedir}\src\closure-library\closure\goog\deps.js&quot;"/>
+            <arg line="--compiler_flags=&quot;--js=${basedir}\src\deps.js&quot;"/>
+            <arg value="--namespace=rflect.cal.Loader"/>
+            <arg line="--compiler_flags=&quot;--define=&quot;goog.DEBUG=true&quot;&quot;"/>
+            <arg line="--compiler_flags=&quot;--source_map_format=V1&quot;"/>
+            <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\src\outputcompiled.js.map&quot;"/>
+            <arg line="--compiler_flags=&quot;--formatting=PRETTY_PRINT&quot;"/>
+        </exec>
+    </target>
+    <target name="compile_prod"
+            description="Compilation for production."
+            depends="clearbuild">
+        <exec executable="python" dir="${basedir}">
+            <arg
+            value="c:\Work\rflectevents\src\closure-library\closure\bin\build\closurebuilder.py"/>
+            <arg value="--root=${basedir}\src\closure-library"/>
+            <arg value="--root=${basedir}\src\rflect"/>
+            <arg value="--output_mode=compiled"/>
+            <arg line="--compiler_jar=&quot;${basedir}\bin\compiler.jar&quot;"/>
+            <arg line="--output_file=&quot;${basedir}\src\outputcompiled.js&quot;"/>
+            <arg line="--compiler_flags=&quot;--compilation_level=ADVANCED_OPTIMIZATIONS&quot;"/>
+            <arg line="--compiler_flags=&quot;--summary_detail_level=3&quot;"/>
+            <arg line="--compiler_flags=&quot;--warning_level=VERBOSE&quot;"/>
+            <!--To prevent warnings from compiler.-->
+            <arg line="--compiler_flags=&quot;--js=${basedir}\src\closure-library\closure\goog\deps.js&quot;"/>
+            <arg line="--compiler_flags=&quot;--js=${basedir}\src\deps.js&quot;"/>
+            <arg value="--namespace=rflect.cal.Loader"/>
+            <arg line="--compiler_flags=&quot;--define=&quot;goog.DEBUG=false&quot;&quot;"/>
+        </exec>
+    </target>
+    <!--Dependency writer, creates deps.js-->
+    <target name="depswriter" description="dependencies writer">
+        <exec executable="python" dir="${basedir}">
+            <arg
+                    value="${basedir}\src\closure-library\closure\bin\build\depswriter.py"/>
+            <arg
+                    line="--root_with_prefix=&quot;${basedir}\src\rflect ../../../rflect&quot;"/>
+            <arg line="--output_file=&quot;${basedir}\src\deps.js&quot;"/>
+        </exec>
+    </target>
+
+    <!-- JS doc. -->
+    <target name="jsdoc" description="JS Doc">
+        <java jar="c:\Work\Research\jsdoc_toolkit-2.4.0\jsdoc-toolkit\jsrun.jar"
+              fork="true" dir="${basedir}">
+            <arg
+                    value="c:\Work\Research\jsdoc_toolkit-2.4.0\jsdoc-toolkit\app\run.js"/>
+            <arg value="-a"/>
+            <arg
+                    value="-t=c:\Work\Research\jsdoc_toolkit-2.4.0\jsdoc-toolkit\templates\jsdoc"/>
+            <arg value="${basedir}\src\rflect"/>
+            <arg value="-d=${basedir}\doc"/>
+        </java>
+    </target>
+
+    <!--Clears build directory.-->
+    <target name="clearbuild" description="Delete everything inside build dir">
+        <delete includeemptydirs="true">
+            <fileset dir="${basedir}\build" includes="**/*"
+                     defaultexcludes="true"/>
+        </delete>
+    </target>
+
+    <!--Compresses css.-->
+    <target name="gss" description="Closure stylesheets">
+
+    </target>
+
+    <!--Gzip test.-->
+    <target name="gziptest" description="Gzip example size test"
+            depends="compile_prod">
+        <gzip src="${basedir}/build/outputcompiled.js"
+              destfile="${basedir}/build/outputcompiled.js.gz"/>
+    </target>
+
+    <!--Builds whole application.-->
+    <target name="buildall" description="Build whole application"
+            depends="clearbuild, compile_prod, gss, jsdoc">
+    </target>
+</project>
