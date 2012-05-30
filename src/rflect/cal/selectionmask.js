@@ -585,7 +585,7 @@ rflect.cal.SelectionMask.prototype.calculateDates_ = function() {
   var endDate = null;
   var minutes = 0;
   var tempDate = null;
-  
+
   if (this.isWeek_()) {
     tempDate = this.timeManager_.daySeries[minCell.x];
     minutes = 30 * minCell.y;
@@ -614,7 +614,6 @@ rflect.cal.SelectionMask.prototype.calculateDates_ = function() {
     endDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
       tempDate.getDate());
   }
-
 
   this.startDate = startDate;
   this.endDate = endDate;
