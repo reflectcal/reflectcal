@@ -615,6 +615,7 @@ rflect.cal.SelectionMask.prototype.calculateDates_ = function() {
       tempDate.getDate());
   }
 
+
   this.startDate = startDate;
   this.endDate = endDate;
 }
