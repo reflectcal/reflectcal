@@ -10,9 +10,11 @@ goog.addDependency('../../../rflect/cal/eventmanager.js', ['rflect.cal.EventMana
 goog.addDependency('../../../rflect/cal/eventtype.js', ['rflect.cal.EventType'], []);
 goog.addDependency('../../../rflect/cal/loader.js', ['rflect.cal.Loader'], ['goog.events', 'rflect.Debug', 'rflect.cal.Main']);
 goog.addDependency('../../../rflect/cal/main.js', ['rflect.cal.Main'], ['goog.Disposable', 'rflect.cal.ViewManager']);
-goog.addDependency('../../../rflect/cal/mainbody.js', ['rflect.cal.MainBody'], ['rflect.cal.Component', 'rflect.cal.MainPane', 'rflect.cal.TopPane']);
-goog.addDependency('../../../rflect/cal/mainpane.js', ['rflect.cal.MainPane'], ['goog.array', 'goog.events', 'goog.events.EventType', 'goog.math.Size', 'rflect.cal.Component', 'rflect.cal.MainPaneBuilder', 'rflect.cal.SelectionMask', 'rflect.cal.ViewType', 'rflect.cal.predefined', 'rflect.string']);
+goog.addDependency('../../../rflect/cal/mainbody.js', ['rflect.cal.MainBody'], ['rflect.cal.Component', 'rflect.cal.MainPane', 'rflect.cal.MiniCal', 'rflect.cal.TopPane']);
+goog.addDependency('../../../rflect/cal/mainpane.js', ['rflect.cal.MainPane'], ['goog.array', 'goog.events', 'goog.events.EventType', 'goog.math.Size', 'rflect.cal.Component', 'rflect.cal.MainPaneBuilder', 'rflect.cal.SelectionMask', 'rflect.cal.predefined', 'rflect.string']);
 goog.addDependency('../../../rflect/cal/mainpanebuilder.js', ['rflect.cal.MainPaneBuilder'], ['goog.date.DateTime', 'goog.i18n.DateTimeFormat', 'goog.i18n.DateTimeSymbols', 'goog.string.StringBuffer', 'rflect.cal.i18n.predefined']);
+goog.addDependency('../../../rflect/cal/minical.js', ['rflect.cal.MiniCal'], ['goog.events.EventType', 'rflect.cal.Component', 'rflect.cal.MiniCalBuilder', 'rflect.cal.SelectionMask', 'rflect.cal.predefined', 'rflect.string']);
+goog.addDependency('../../../rflect/cal/minicalbuilder.js', ['rflect.cal.MiniCalBuilder'], ['goog.i18n.DateTimeSymbols', 'rflect.cal.MiniCal', 'rflect.cal.i18n.predefined']);
 goog.addDependency('../../../rflect/cal/predefined.js', ['rflect.cal.predefined'], ['rflect.cal.i18n.predefined']);
 goog.addDependency('../../../rflect/cal/selectionmask.js', ['rflect.cal.SelectionMask'], ['goog.array', 'goog.i18n.DateTimeFormat', 'goog.math.Coordinate', 'goog.math.Rect', 'goog.string.StringBuffer', 'goog.style', 'rflect.cal.predefined']);
 goog.addDependency('../../../rflect/cal/timemanager.js', ['rflect.cal.TimeManager'], ['goog.date', 'goog.date.Date', 'goog.date.Interval', 'goog.i18n.DateTimeFormat', 'goog.i18n.DateTimeSymbols', 'rflect.cal.ViewType', 'rflect.date', 'rflect.date.Date', 'rflect.math']);

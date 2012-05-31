@@ -11,6 +11,7 @@ goog.provide('rflect.cal.MainBody');
 
 goog.require('rflect.cal.Component');
 goog.require('rflect.cal.MainPane');
+goog.require('rflect.cal.MiniCal');
 goog.require('rflect.cal.TopPane');
 
 
@@ -61,12 +62,13 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager,
   // string building and updating.
   this.addChild(this.topPane_ = new rflect.cal.TopPane(this.viewManager_,
       this.timeManager_));
+  this.addChild(this.miniCal_ = new rflect.cal.MiniCal(this.viewManager_,
+      this.timeManager_));
   this.addChild(this.mainPane_ = new rflect.cal.MainPane(this.viewManager_,
       this.timeManager_, this.containerSizeMonitor_, this.blockManager_));
   if (goog.DEBUG) {
     _inspect('topPane_', this.topPane_);
-  }
-  if (goog.DEBUG) {
+    _inspect('miniCal_', this.miniCal_);
     _inspect('mainPane_', this.mainPane_);
   }
 };
@@ -152,6 +154,9 @@ rflect.cal.MainBody.prototype.buildBodyInternal = function(aSb) {
       case 2: {
         this.topPane_.buildBody(aSb);
       };break;
+      case 7: {
+        this.miniCal_.buildBody(aSb);
+      };break;
       // Include main pane in common buffer.
       case 17: {
         this.mainPane_.buildBody(aSb);
@@ -188,6 +193,7 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
   // but to preserve pattern (that if we want reliable presence of component in
   // DOM, we should address it in enterDocument), we do it here.
   this.topPane_.decorateInternal(this.dom_.getElement('top-pane'), true);
+  this.miniCal_.decorateInternal(this.dom_.getElement('month-selector'), true);
   this.mainPane_.decorateInternal(this.dom_.getElement('main-pane'), true);
   // Propagate call to children.
   rflect.cal.MainBody.superClass_.enterDocument.call(this);
@@ -203,6 +209,7 @@ rflect.cal.MainBody.prototype.disposeInternal = function() {
   rflect.cal.MainBody.superClass_.disposeInternal.call(this);
 
   this.topPane_ = null;
+  this.miniCal_ = null;
   this.mainPane_ = null;
   this.viewManager_ = null;
   this.timeManager_ = null;

@@ -40,6 +40,22 @@ rflect.cal.TimeManager = function(aViewManager, opt_date) {
 
 
 /**
+ * Configurations of time manager.
+ * @enum {number}
+ */
+rflect.cal.TimeManager.Configuration = {
+  NONE: 0,
+  DAY: 1,
+  WEEK: 2,
+  MONTH: 3,
+  YEAR: 4
+  MULTI_DAY: 5,
+  MULTI_WEEK: 6,
+  MINI_MONTH: 7
+};
+
+
+/**
  * Link to view manager.
  * @type {rflect.cal.ViewManager}
  * @private
@@ -56,27 +72,11 @@ rflect.cal.TimeManager.prototype.isOnStartup_ = false;
 
 
 /**
- * Day at the beginning of interval.
+ * Day within interval, on which latter is based.
  * @type {goog.date.DateLike}
  * @private
  */
 rflect.cal.TimeManager.prototype.basis = null;
-
-
-/**
- * Current month for month mode.
- * @type {goog.date.Date}
- * @private
- */
-rflect.cal.TimeManager.prototype.currentMonth_ = null;
-
-
-/**
- * Current year for year mode.
- * @type {goog.date.Date}
- * @private
- */
-rflect.cal.TimeManager.prototype.currentYear_ = null;
 
 
 /**
@@ -92,7 +92,7 @@ rflect.cal.TimeManager.prototype.daySeries = null;
 rflect.cal.TimeManager.prototype.calculatePeriodStart = function() {
 
   switch (this.viewManager_.currentView) {
-    case rflect.cal.ViewType.DAY: this.start_ = this.basis.clone(); break;
+    case rflect.cal.ViewType.DAY: this.start_ = this.basis.clone();break;
     case rflect.cal.ViewType.WEEK: {
       this.start_ = rflect.date.moveToDayOfWeekIfNeeded(this.basis,
           0, -1);
@@ -120,6 +120,7 @@ rflect.cal.TimeManager.prototype.generateDaySeries = function() {
   switch (this.viewManager_.currentView) {
     case rflect.cal.ViewType.DAY: daysNumber = 1; break;
     case rflect.cal.ViewType.WEEK: daysNumber = 7; break;
+    case rflect.cal.TimeManager.Configuration.MINI_MONTH:
     case rflect.cal.ViewType.MONTH: {
       var difference = 0;
       var firstDayOfMonth = this.basis.clone();

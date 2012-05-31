@@ -17,7 +17,6 @@ goog.require('goog.math.Size');
 goog.require('rflect.cal.Component');
 goog.require('rflect.cal.MainPaneBuilder');
 goog.require('rflect.cal.SelectionMask');
-goog.require('rflect.cal.ViewType');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.string');
 
