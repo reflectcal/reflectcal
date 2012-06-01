@@ -139,6 +139,19 @@ rflect.date.getYesterday = function(aGivenDate){
 
 
 /**
+ * @param {rflect.date.Date} aDateA First date to compare.
+ * @param {rflect.date.Date} aDateB First date to compare.
+ * @return {number|undefined} 1 if first arg is greater, 0 if equals, -1
+ * otherwise.
+ */
+rflect.date.compareByWeekAndYear = function(aDateA, aDateB){
+  aDateA.getYear() == aDateB.getYear() ? (aDateA.week == aDateB.week ? 0 :
+      (aDateA.week > aDateB.week : 1 : -1)) : (aDateA.getYear() >
+      aDateB.getYear() ? 1 : -1)
+}
+
+
+/**
  * Class that simulates Date, could be used instead it in simple calculations
  * for performance reasons (Firefox 2 has slow Date object).
  * @param {number|goog.date.DateLike=} opt_year Four digit year or a date-like

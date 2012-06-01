@@ -24,13 +24,10 @@ goog.require('rflect.math');
 
 /**
  * Time manager main class.
- * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {goog.date.DateLike=} opt_date Date to start application with.
  * @constructor
  */
-rflect.cal.TimeManager = function(aViewManager, opt_date) {
-
-  this.viewManager_ = aViewManager;
+rflect.cal.TimeManager = function(opt_date) {
 
   this.symbols_ = goog.i18n.DateTimeSymbols;
   this.daySeries = [];
@@ -46,21 +43,22 @@ rflect.cal.TimeManager = function(aViewManager, opt_date) {
 rflect.cal.TimeManager.Configuration = {
   NONE: 0,
   DAY: 1,
-  WEEK: 2,
-  MONTH: 3,
-  YEAR: 4
-  MULTI_DAY: 5,
-  MULTI_WEEK: 6,
+  MULTI_DAY: 2,
+  WEEK: 3,
+  MULTI_WEEK: 4,
+  MONTH: 5,
+  YEAR: 6,
   MINI_MONTH: 7
 };
 
 
 /**
- * Link to view manager.
- * @type {rflect.cal.ViewManager}
+ * Time manager configuration, shows by which this time manager is managed.
+ * @type {rflect.cal.TimeManager.Configuration}
  * @private
  */
-rflect.cal.TimeManager.prototype.viewManager_ = null;
+rflect.cal.TimeManager.prototype.configuration =
+    rflect.cal.TimeManager.Configuration.NONE;
 
 
 /**
@@ -91,13 +89,14 @@ rflect.cal.TimeManager.prototype.daySeries = null;
  */
 rflect.cal.TimeManager.prototype.calculatePeriodStart = function() {
 
-  switch (this.viewManager_.currentView) {
-    case rflect.cal.ViewType.DAY: this.start_ = this.basis.clone();break;
-    case rflect.cal.ViewType.WEEK: {
+  switch (this.configuration) {
+    case rflect.cal.TimeManager.Configuration.DAY: this.start_ =
+        this.basis.clone();break;
+    case rflect.cal.TimeManager.Configuration.WEEK: {
       this.start_ = rflect.date.moveToDayOfWeekIfNeeded(this.basis,
           0, -1);
     }; break;
-    case rflect.cal.ViewType.MONTH: {
+    case rflect.cal.TimeManager.Configuration.MONTH: {
       this.start_ = this.basis.clone();
       // Move to first day of month.
       this.start_.setDate(1);
@@ -106,7 +105,7 @@ rflect.cal.TimeManager.prototype.calculatePeriodStart = function() {
           -1);
     };
     break;
-    case rflect.cal.ViewType.YEAR: break;
+    case rflect.cal.TimeManager.Configuration.YEAR: break;
     default: break;
   }
 };
@@ -117,11 +116,11 @@ rflect.cal.TimeManager.prototype.calculatePeriodStart = function() {
  */
 rflect.cal.TimeManager.prototype.generateDaySeries = function() {
   var daysNumber = 0;
-  switch (this.viewManager_.currentView) {
-    case rflect.cal.ViewType.DAY: daysNumber = 1; break;
-    case rflect.cal.ViewType.WEEK: daysNumber = 7; break;
+  switch (this.configuration) {
+    case rflect.cal.TimeManager.Configuration.DAY: daysNumber = 1; break;
+    case rflect.cal.TimeManager.Configuration.WEEK: daysNumber = 7; break;
     case rflect.cal.TimeManager.Configuration.MINI_MONTH:
-    case rflect.cal.ViewType.MONTH: {
+    case rflect.cal.TimeManager.Configuration.MONTH: {
       var difference = 0;
       var firstDayOfMonth = this.basis.clone();
       firstDayOfMonth.setDate(1);
@@ -133,15 +132,19 @@ rflect.cal.TimeManager.prototype.generateDaySeries = function() {
         // it's safe to subtract former from the latter.
         difference = firstDayOfMonth.getWeekday() - this.start_.getWeekday();
       }
-      daysNumber = rflect.math.completeToDivisibleBy7(difference +
-          goog.date.getNumberOfDaysInMonth(this.basis.getFullYear(),
-              this.basis.getMonth()));
+      if (this.configuration ==
+          rflect.cal.TimeManager.Configuration.MINI_MONTH)
+        // For mini-month, extra week at the end.
+        daysNumber = 42;
+      else
+        daysNumber = rflect.math.completeToDivisibleBy7(difference +
+            goog.date.getNumberOfDaysInMonth(this.basis.getFullYear(),
+            this.basis.getMonth()));
     };
     break;
-    case rflect.cal.ViewType.YEAR: break;
+    case rflect.cal.TimeManager.Configuration.YEAR: break;
     default: break;
   }
-
 
 
   this.daySeries.length = 0;
@@ -155,10 +158,8 @@ rflect.cal.TimeManager.prototype.generateDaySeries = function() {
 
 /**
  * Runs time manager, main sequence method.
- * @param {number=} aDirection Direction of shift - 1 is forward, -1 is
- * backward.
  */
-rflect.cal.TimeManager.prototype.run = function(aDirection) {
+rflect.cal.TimeManager.prototype.run = function() {
   this.calculatePeriodStart();
   this.generateDaySeries();
 };
@@ -210,20 +211,21 @@ rflect.cal.TimeManager.prototype.shiftToNow = function() {
  */
 rflect.cal.TimeManager.prototype.shiftBasis = function(aForward) {
   var daysNumber = 0;
-  switch (this.viewManager_.currentView) {
-    case rflect.cal.ViewType.DAY: {
+  switch (this.configuration) {
+    case rflect.cal.TimeManager.Configuration.DAY: {
       daysNumber = 1 * (aForward ? 1 : -1);
       this.basis.add(new goog.date.Interval(0, 0, daysNumber));
     }; break;
-    case rflect.cal.ViewType.WEEK: {
+    case rflect.cal.TimeManager.Configuration.WEEK: {
       daysNumber = 7 * (aForward ? 1 : -1);
       this.basis.add(new goog.date.Interval(0, 0, daysNumber));
     }; break;
-    case rflect.cal.ViewType.MONTH: {
+    case rflect.cal.TimeManager.Configuration.MINI_MONTH:
+    case rflect.cal.TimeManager.Configuration.MONTH: {
       this.basis.add(new goog.date.Interval(0,
           1 * (aForward ? 1 : -1)));
     }; break;
-    case rflect.cal.ViewType.YEAR: {
+    case rflect.cal.TimeManager.Configuration.YEAR: {
       this.basis.add(new goog.date.Interval(1 * (aForward ? 1 : -1)));
     }; break;
     default: break;

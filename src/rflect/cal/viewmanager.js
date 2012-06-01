@@ -49,7 +49,7 @@ rflect.cal.ViewManager = function(aMainInstance) {
    * Time manager instance.
    * @type {rflect.cal.TimeManager}
    */
-  this.timeManager = new rflect.cal.TimeManager(this);
+  this.timeManager = new rflect.cal.TimeManager();
 
   /**
    * Container size monitor.
@@ -295,6 +295,8 @@ rflect.cal.ViewManager.prototype.showView = function(aType) {
 
   this.currentView = aType;
   // Run time manager.
+  this.timeManager.configuration =
+      /** @type {rflect.cal.TimeManager.Configuration} */ this.currentView;
   this.timeManager.run();
 
   if (this.isOnStartup_) {

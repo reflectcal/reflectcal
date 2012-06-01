@@ -12,6 +12,7 @@ goog.provide('rflect.cal.MiniCal');
 goog.require('goog.events.EventType');
 goog.require('rflect.cal.Component');
 goog.require('rflect.cal.MiniCalBuilder');
+goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.SelectionMask');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.string');
@@ -21,11 +22,12 @@ goog.require('rflect.string');
 /**
  * Mini cal main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
- * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
+ * @param {rflect.cal.TimeManager} aExternalTimeManager Link to external time
+ * manager.
  * @constructor
  * @extends {rflect.cal.Component}
  */
-rflect.cal.MiniCal = function(aViewManager, aTimeManager) {
+rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
   rflect.cal.Component.call(this);
 
   /**
@@ -36,21 +38,29 @@ rflect.cal.MiniCal = function(aViewManager, aTimeManager) {
   this.viewManager_ = aViewManager;
 
   /**
-   * Link to time manager.
+   * External time manager.
    * @type {rflect.cal.TimeManager}
    * @private
    */
-  this.timeManager_ = aTimeManager;
+  this.extTimeManager_ = aExternalTimeManager;
+
+  /**
+   * Internal time manager.
+   * @type {rflect.cal.TimeManager}
+   * @private
+   */
+  this.timeManager_ = new rflect.cal.TimeManager();
+  this.timeManager_.configuration =
+      rflect.cal.TimeManager.Configuration.MINI_MONTH;
 
   /**
    * Mini cal builder.
    * @type {rflect.cal.MiniCalBuilder}
    * @private
    */
-  this.miniCalBuilder_ = new rflect.cal.MiniCalBuilder(this, aTimeManager);
+  this.miniCalBuilder_ = new rflect.cal.MiniCalBuilder(this, aExternalTimeManager);
   if (goog.DEBUG)
     _inspect('miniCalBuilder', this.miniCalBuilder_);
-
 
   /**
    * Selection mask.
@@ -58,7 +68,7 @@ rflect.cal.MiniCal = function(aViewManager, aTimeManager) {
    * @private
    */
   this.selectionMask_ = new rflect.cal.SelectionMask(aViewManager, this,
-      aTimeManager);
+      aExternalTimeManager);
   if (goog.DEBUG)
     _inspect('selectionMask', this.selectionMask_);
 
@@ -68,9 +78,57 @@ goog.inherits(rflect.cal.MiniCal, rflect.cal.Component);
 
 /**
  * Updates mini cal with new data before redraw.
+ * If called parameterless, takes basis from external time manager, otherwise
+ * we should use internal one.
+ * @param {boolean=} opt_forward Direction where to shift basis when called
+ * internally.
  */
-rflect.cal.MiniCal.prototype.updateBeforeRedraw = function() {
+rflect.cal.MiniCal.prototype.updateBeforeRedraw = function(opt_forward) {
+  if (goog.isDef(opt_forward)){
+    this.timeManager_.shiftToPoint(this.extTimeManager_.basis);
+  } else {
+    this.timeManager_.shift(opt_forward);
+  }
+  this.findIndexesForSelection_();
 };
+
+
+/**
+ * Finds indexes of selection which is later to be used by
+ * <code>updateByRedraw</code>.
+ * @private
+ */
+rflect.cal.MiniCal.prototype.findIndexesForSelection_ = function() {
+  this.firstSelectionIndex = -1;
+  this.secondSelectionIndex = -1;
+
+  if (!this.timeManagersOverlap_())
+    return;
+
+  var extTmDaySeries = this.extTimeManager_.daySeries;
+  var tmDaySeries = this.timeManager_.daySeries;
+  var weeknums = {};
+  weeknums[extTmDaySeries[0].week] = 1;
+
+  for (var counter = 0, step = 1, length = extTmDaySeries.length;
+      counter < length; counter+=step){
+    if (!(extTmDaySeries[counter] in weeknums)){
+      weeknums[extTmDaySeries[counter].week] = 1;
+      step = 7;
+      counter += step;
+    }
+  }
+
+};
+
+
+rflect.cal.MiniCal.prototype.timeManagersOverlap_ = function() {
+  var extTmDaySeries = this.extTimeManager_.daySeries;
+  var tmDaySeries = this.timeManager_.daySeries;
+  return rflect.date.compareByWeekAndYear(goog.array.peek(extTmDaySeries),
+      tmDaySeries[0]) >= 0 && rflect.date.compareByWeekAndYear(
+      extTmDaySeries[0], goog.array.peek(tmDaySeries)) <= 0;
+}
 
 
 /**
@@ -111,20 +169,20 @@ rflect.cal.MiniCal.prototype.decorateInternal = function(aElement,
 rflect.cal.MiniCal.prototype.enterDocument = function() {
   rflect.cal.MiniCal.superClass_.enterDocument.call(this);
 
-  /*this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
+  this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
       this.onClick_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
       goog.nullFunction, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
       goog.nullFunction, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
-      this.onMouseDown_, false, this)
+      goog.nullFunction, false, this)
       .listen(this.getElement(), goog.events.EventType.SELECTSTART,
-      this.onSelectStart_, false, this)
+      goog.nullFunction, false, this)
       .listen(document, goog.events.EventType.MOUSEMOVE,
-      this.onMouseMove_, false, this)
+      goog.nullFunction, false, this)
       .listen(document, goog.events.EventType.MOUSEUP,
-      this.onMouseUp_, false, this);*/
+      goog.nullFUnction, false, this);
 };
 
 
@@ -135,11 +193,9 @@ rflect.cal.MiniCal.prototype.enterDocument = function() {
  */
 rflect.cal.MiniCal.prototype.onClick_ = function(aEvent) {
   var id = aEvent.target.id;
-  var zippyClicked = false;
-  var index = 0;
-  if (this.viewManager_.isInMonthMode()) {
-    // We clicked on zippy.
-    if (/mn\-zippy\-row\d{1}/.test(id)) {
+  var className = aEvent.target.className;
+  // We clicked on button.
+  if (/mn\-zippy\-row\d{1}/.test(id)) {
       index = /\d{1}/.exec(id)[0];
       this.blockManager_.blockPoolMonth.toggleBlock(index);
 
@@ -270,6 +326,46 @@ rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
     aEvent.preventDefault();
   }
 
+};
+
+
+/**
+ * Shows next period for time view.
+ */
+rflect.cal.MiniCal.prototype.showNext = function() {
+  this.showNext_(true);
+};
+
+
+/**
+ * Shows previous period for time view.
+ */
+rflect.cal.MiniCal.prototype.showPrev = function() {
+  this.showNext_(false);
+};
+
+
+/**
+ * Shows next period for time view.
+ * @param {boolean} aNext Whether to show next period.
+ * @private
+ */
+rflect.cal.MiniCal.prototype.showNext_ = function(aNext) {
+  //  if (goog.DEBUG) _perf('next interval');
+  this.timeManager.shift(aNext);
+  this.mainBody_.updateBeforeRedraw();
+  this.mainBody_.updateByRedraw();
+  //  if (goog.DEBUG) _perf('next interval');
+};
+
+
+/**
+ * Shows current moment for time view.
+ */
+rflect.cal.MiniCal.prototype.showNow = function() {
+  this.timeManager.shiftToNow();
+  this.mainBody_.updateBeforeRedraw();
+  this.mainBody_.updateByRedraw();
 };
 
 

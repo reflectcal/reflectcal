@@ -24,13 +24,13 @@ goog.require('rflect.cal.predefined');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.MainPane} aMainPane Link to main pane.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
- * @param {rflect.cal.BlockPool} aBlockPoolWeek Link to week block pool.
- * @param {rflect.cal.BlockPool} aBlockPoolAllday Link to allday block pool.
- * @param {rflect.cal.BlockPool} aBlockPoolMonth Link to month block pool.
+ * @param {rflect.cal.BlockPool=} opt_blockPoolWeek Link to week block pool.
+ * @param {rflect.cal.BlockPool=} opt_blockPoolAllday Link to allday block pool.
+ * @param {rflect.cal.BlockPool=} opt_blockPoolMonth Link to month block pool.
  * @constructor
  */
 rflect.cal.SelectionMask = function(aViewManager, aMainPane, aTimeManager,
-    aBlockPoolWeek, aBlockPoolAllday, aBlockPoolMonth) {
+    opt_blockPoolWeek, opt_blockPoolAllday, opt_blockPoolMonth) {
   /**
    * Link to view manager.
    * @type {rflect.cal.ViewManager}
@@ -57,21 +57,21 @@ rflect.cal.SelectionMask = function(aViewManager, aMainPane, aTimeManager,
    * @type {rflect.cal.BlockPool}
    * @private
    */
-  this.blockPoolWeek_ = aBlockPoolWeek;
+  this.blockPoolWeek_ = opt_blockPoolWeek;
 
   /**
    * Link to allday block pool.
    * @type {rflect.cal.BlockPool}
    * @private
    */
-  this.blockPoolAllday_ = aBlockPoolAllday;
+  this.blockPoolAllday_ = opt_blockPoolAllday;
 
   /**
    * Link to month block manager.
    * @type {rflect.cal.BlockPool}
    * @private
    */
-  this.blockPoolMonth_ = aBlockPoolMonth;
+  this.blockPoolMonth_ = opt_blockPoolMonth;
 
 };
 

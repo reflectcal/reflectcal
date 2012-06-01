@@ -135,7 +135,6 @@ rflect.cal.MiniCalBuilder.prototype.buildBodyInternal = function(aSb) {
 /**
  * Builds mini cal main class name.
  * @param {goog.string.StringBuffer} aSb Passed string buffer.
- * @param {number} aOffset Passed offset.
  * @private
  *
  * '<div class="' + goog.getCssName('goog-date-picker'),
