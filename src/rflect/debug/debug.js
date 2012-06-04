@@ -41,7 +41,8 @@ if (goog.DEBUG) {
    * @param {number|string|Object=} opt_arg2 Logged variable or expression.
    */
   rflect.Debug.printOneOrTwoArgs_ = function(aArg1, aNumber, opt_arg2){
-    return aArg1 + (aNumber == 2 ? ': ' + opt_arg2 : '')
+    return aArg1 + (aNumber == 2 ? ': ' + (goog.isObject(opt_arg2) ?
+        opt_arg2.toString() : opt_arg2) : '')
   }
 
   /**

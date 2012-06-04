@@ -18,6 +18,7 @@ goog.require('rflect.cal.EventManager');
 goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.MainBody');
 goog.require('rflect.cal.TimeManager');
+goog.require('rflect.cal.TimeManager.Direction');
 goog.require('rflect.cal.ViewType');
 goog.require('rflect.cal.predefined');
 
@@ -318,7 +319,7 @@ rflect.cal.ViewManager.prototype.showView = function(aType) {
  * Shows next period for time view.
  */
 rflect.cal.ViewManager.prototype.showNext = function() {
-  this.showNext_(true);
+  this.showNext_(rflect.cal.TimeManager.Direction.FORWARD);
 };
 
 
@@ -326,18 +327,19 @@ rflect.cal.ViewManager.prototype.showNext = function() {
  * Shows previous period for time view.
  */
 rflect.cal.ViewManager.prototype.showPrev = function() {
-  this.showNext_(false);
+  this.showNext_(rflect.cal.TimeManager.Direction.BACKWARD);
 };
 
 
 /**
  * Shows next period for time view.
- * @param {boolean} aNext Whether to show next period.
+ * @param {rflect.cal.TimeManager.Direction} aDirection In what direction to
+ * show view.
  * @private
  */
-rflect.cal.ViewManager.prototype.showNext_ = function(aNext) {
+rflect.cal.ViewManager.prototype.showNext_ = function(aDirection) {
   //  if (goog.DEBUG) _perf('next interval');
-  this.timeManager.shift(aNext);
+  this.timeManager.shift(aDirection);
   this.mainBody_.updateBeforeRedraw();
   this.mainBody_.updateByRedraw();
   //  if (goog.DEBUG) _perf('next interval');

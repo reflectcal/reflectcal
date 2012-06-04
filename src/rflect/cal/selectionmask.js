@@ -22,14 +22,15 @@ goog.require('rflect.cal.predefined');
 /**
  * Selection mask main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
- * @param {rflect.cal.MainPane} aMainPane Link to main pane.
+ * @param {rflect.cal.MainPane|rflect.cal.MiniCal} aComponent Link to component
+ * that owns selection mask.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.BlockPool=} opt_blockPoolWeek Link to week block pool.
  * @param {rflect.cal.BlockPool=} opt_blockPoolAllday Link to allday block pool.
  * @param {rflect.cal.BlockPool=} opt_blockPoolMonth Link to month block pool.
  * @constructor
  */
-rflect.cal.SelectionMask = function(aViewManager, aMainPane, aTimeManager,
+rflect.cal.SelectionMask = function(aViewManager, aComponent, aTimeManager,
     opt_blockPoolWeek, opt_blockPoolAllday, opt_blockPoolMonth) {
   /**
    * Link to view manager.
@@ -39,11 +40,11 @@ rflect.cal.SelectionMask = function(aViewManager, aMainPane, aTimeManager,
   this.viewManager_ = aViewManager;
 
   /**
-   * Link to main pane.
-   * @type {rflect.cal.MainPane}
+   * Link to component that owns selection mask.
+   * @type {rflect.cal.MainPane|rflect.cal.MiniCal}
    * @private
    */
-  this.mainPane_ = aMainPane;
+  this.component_ = aComponent;
 
   /**
    * Link to time manager.
@@ -54,21 +55,21 @@ rflect.cal.SelectionMask = function(aViewManager, aMainPane, aTimeManager,
 
   /**
    * Link to week block pool.
-   * @type {rflect.cal.BlockPool}
+   * @type {rflect.cal.BlockPool|undefined}
    * @private
    */
   this.blockPoolWeek_ = opt_blockPoolWeek;
 
   /**
    * Link to allday block pool.
-   * @type {rflect.cal.BlockPool}
+   * @type {rflect.cal.BlockPool|undefined}
    * @private
    */
   this.blockPoolAllday_ = opt_blockPoolAllday;
 
   /**
    * Link to month block manager.
-   * @type {rflect.cal.BlockPool}
+   * @type {rflect.cal.BlockPool|undefined}
    * @private
    */
   this.blockPoolMonth_ = opt_blockPoolMonth;
@@ -256,7 +257,7 @@ rflect.cal.SelectionMask.prototype.update = function(aEvent) {
 rflect.cal.SelectionMask.prototype.init = function(aConfiguration, aEvent) {
   //TODO(alexk): when in multiple scrollables goog.style.getOffsetPosition.
   var doc = this.document_ || (this.document_ =
-      goog.dom.getOwnerDocument(this.mainPane_.getElement()));
+      goog.dom.getOwnerDocument(this.component_.getElement()));
 
   var pageScroll = goog.dom.getDomHelper(doc).getDocumentScroll();
   var coordXWithoutScroll = 0;
@@ -376,7 +377,6 @@ rflect.cal.SelectionMask.prototype.getBlockIndexByCoordinate_ =
   var gridWidth = aBlockPool.gridSize.width;
   var counter = 0;
   var index = 0;
-  var scrollbarWidth = this.mainPane_.getScrollbarWidthNextToMain();
   // Compare percent position for week mode, otherwise compare pixels.
   var coord = aCoord;
 

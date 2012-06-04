@@ -13,6 +13,7 @@ goog.require('goog.events.EventType');
 goog.require('rflect.cal.Component');
 goog.require('rflect.cal.MiniCalBuilder');
 goog.require('rflect.cal.TimeManager');
+goog.require('rflect.cal.TimeManager.Direction');
 goog.require('rflect.cal.SelectionMask');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.string');
@@ -58,7 +59,8 @@ rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
    * @type {rflect.cal.MiniCalBuilder}
    * @private
    */
-  this.miniCalBuilder_ = new rflect.cal.MiniCalBuilder(this, aExternalTimeManager);
+  this.miniCalBuilder_ = new rflect.cal.MiniCalBuilder(this,
+      this.timeManager_);
   if (goog.DEBUG)
     _inspect('miniCalBuilder', this.miniCalBuilder_);
 
@@ -80,14 +82,17 @@ goog.inherits(rflect.cal.MiniCal, rflect.cal.Component);
  * Updates mini cal with new data before redraw.
  * If called parameterless, takes basis from external time manager, otherwise
  * we should use internal one.
- * @param {boolean=} opt_forward Direction where to shift basis when called
+ * @param {boolean=} opt_internal Whether method was called internally.
+ * @param {rflect.cal.TimeManager.Direction=} opt_direction Direction where to
+ * shift basis when called
  * internally.
  */
-rflect.cal.MiniCal.prototype.updateBeforeRedraw = function(opt_forward) {
-  if (goog.isDef(opt_forward)){
-    this.timeManager_.shiftToPoint(this.extTimeManager_.basis);
+rflect.cal.MiniCal.prototype.updateBeforeRedraw = function(opt_internal,
+    opt_direction) {
+  if (opt_internal && opt_direction){
+    this.timeManager_.shift(opt_direction);
   } else {
-    this.timeManager_.shift(opt_forward);
+    this.timeManager_.shiftToPoint(this.extTimeManager_.basis);
   }
   this.findIndexesForSelection_();
 };
@@ -99,36 +104,43 @@ rflect.cal.MiniCal.prototype.updateBeforeRedraw = function(opt_forward) {
  * @private
  */
 rflect.cal.MiniCal.prototype.findIndexesForSelection_ = function() {
-  this.firstSelectionIndex = -1;
-  this.secondSelectionIndex = -1;
+  this.startSelectionIndex = -1;
+  this.endSelectionIndex = -1;
 
-  if (!this.timeManagersOverlap_())
+  if (!this.timeManager_.interval.overlap(this.extTimeManager_.interval))
     return;
 
-  var extTmDaySeries = this.extTimeManager_.daySeries;
-  var tmDaySeries = this.timeManager_.daySeries;
-  var weeknums = {};
-  weeknums[extTmDaySeries[0].week] = 1;
-
-  for (var counter = 0, step = 1, length = extTmDaySeries.length;
-      counter < length; counter+=step){
-    if (!(extTmDaySeries[counter] in weeknums)){
-      weeknums[extTmDaySeries[counter].week] = 1;
-      step = 7;
-      counter += step;
-    }
+  var overlap = this.timeManager_.interval.overlap(
+      this.extTimeManager_.interval);
+  if (goog.DEBUG)
+    _log('overlap', overlap);
+  var startDate = new goog.date.Date();
+  var endDate = new goog.date.Date();
+  startDate.setTime(overlap.start);
+  endDate.setTime(overlap.end);
+  var startDateDay = startDate.getDate();
+  var startDateMonth = startDate.getMonth();
+  var endDateDay = endDate.getDate();
+  var endDateMonth = endDate.getMonth();
+  this.startSelectionIndex = goog.array.findIndex(this.timeManager_.daySeries,
+      function(aDate){
+    return startDateMonth == aDate.getMonth() &&
+        startDateDay == aDate.getDate();
+  });
+  this.endSelectionIndex = goog.array.findIndexRight(
+      this.timeManager_.daySeries, function(aDate){
+    return endDateMonth == aDate.getMonth() &&
+        endDateDay == aDate.getDate();
+  });
+  if (this.startSelectionIndex >= 0 && this.endSelectionIndex < 0)
+    // Overlap interval ends in day that is not in day series. Use latest day's
+    // tomorrow then.
+    this.endSelectionIndex = this.timeManager_.daySeries.length;
+  if (goog.DEBUG) {
+    _log('this.startSelectionIndex', this.startSelectionIndex);
+    _log('this.endSelectionIndex', this.endSelectionIndex);
   }
-
 };
-
-
-rflect.cal.MiniCal.prototype.timeManagersOverlap_ = function() {
-  var extTmDaySeries = this.extTimeManager_.daySeries;
-  var tmDaySeries = this.timeManager_.daySeries;
-  return rflect.date.compareByWeekAndYear(goog.array.peek(extTmDaySeries),
-      tmDaySeries[0]) >= 0 && rflect.date.compareByWeekAndYear(
-      extTmDaySeries[0], goog.array.peek(tmDaySeries)) <= 0;
-}
 
 
 /**
@@ -182,7 +194,7 @@ rflect.cal.MiniCal.prototype.enterDocument = function() {
       .listen(document, goog.events.EventType.MOUSEMOVE,
       goog.nullFunction, false, this)
       .listen(document, goog.events.EventType.MOUSEUP,
-      goog.nullFUnction, false, this);
+      goog.nullFunction, false, this);
 };
 
 
@@ -192,41 +204,19 @@ rflect.cal.MiniCal.prototype.enterDocument = function() {
  * @private
  */
 rflect.cal.MiniCal.prototype.onClick_ = function(aEvent) {
-  var id = aEvent.target.id;
   var className = aEvent.target.className;
+  var direction = rflect.cal.TimeManager.Direction.NONE;
   // We clicked on button.
-  if (/mn\-zippy\-row\d{1}/.test(id)) {
-      index = /\d{1}/.exec(id)[0];
-      this.blockManager_.blockPoolMonth.toggleBlock(index);
-
-      // If all blocks are collapsed, reset scrollTop.
-      if (!this.blockManager_.blockPoolMonth.expanded)
-        this.blockManager_.blockPoolMonth.scrollTop = 0;
-
-      zippyClicked = true;
-    }
-  } else if (this.viewManager_.isInWeekMode()) {
-    // We clicked on week zippy.
-    if (/wk\-zippy\-col\d{1}/.test(id)) {
-      index = /\d{1}/.exec(id)[0];
-      this.blockManager_.blockPoolWeek.toggleBlock(index);
-
-      // If all blocks are collapsed, reset scrollLeft.
-      if (!this.blockManager_.blockPoolWeek.expanded) {
-        this.blockManager_.blockPoolWeek.scrollLeft = 0;
-      }
-
-      zippyClicked = true;
-    } else if (/daynames\-zippy/.test(id)) {
-      // We clicked on allday zippy.
-      this.blockManager_.blockPoolAllday.toggleBlock(0);
-
-      zippyClicked = true;
-    }
+  if (rflect.string.buildClassNameRe(
+      goog.getCssName('month-sel-btn-forward')).test(className)) {
+    direction = rflect.cal.TimeManager.Direction.FORWARD;
+  } else if (rflect.string.buildClassNameRe(
+      goog.getCssName('month-sel-btn-back')).test(className)) {
+    direction = rflect.cal.TimeManager.Direction.BACKWARD;
   }
 
-  if (zippyClicked) {
-    this.updateBeforeRedraw();
+  if (direction) {
+    this.updateBeforeRedraw(true, direction);
     this.updateByRedraw();
   }
 };
@@ -330,46 +320,6 @@ rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
 
 
 /**
- * Shows next period for time view.
- */
-rflect.cal.MiniCal.prototype.showNext = function() {
-  this.showNext_(true);
-};
-
-
-/**
- * Shows previous period for time view.
- */
-rflect.cal.MiniCal.prototype.showPrev = function() {
-  this.showNext_(false);
-};
-
-
-/**
- * Shows next period for time view.
- * @param {boolean} aNext Whether to show next period.
- * @private
- */
-rflect.cal.MiniCal.prototype.showNext_ = function(aNext) {
-  //  if (goog.DEBUG) _perf('next interval');
-  this.timeManager.shift(aNext);
-  this.mainBody_.updateBeforeRedraw();
-  this.mainBody_.updateByRedraw();
-  //  if (goog.DEBUG) _perf('next interval');
-};
-
-
-/**
- * Shows current moment for time view.
- */
-rflect.cal.MiniCal.prototype.showNow = function() {
-  this.timeManager.shiftToNow();
-  this.mainBody_.updateBeforeRedraw();
-  this.mainBody_.updateByRedraw();
-};
-
-
-/**
  * Disposes of the Main Pane.
  * @override
  * @protected
@@ -377,9 +327,5 @@ rflect.cal.MiniCal.prototype.showNow = function() {
 rflect.cal.MiniCal.prototype.disposeInternal = function() {
   rflect.cal.MiniCal.superClass_.disposeInternal.call(this);
 
-  this.removeScrollListeners_();
-
   this.viewManager_ = null;
-  this.timeManager_ = null;
-  this.containerSizeMonitor_ = null;
 };

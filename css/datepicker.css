@@ -103,6 +103,9 @@
 
 .goog-date-picker-month {
   float: left;
+  width: 12ex;
+  text-align: left;
+  padding-left: 2px;
 }
 
 .goog-date-picker-buttons {
@@ -162,10 +165,6 @@ td.goog-date-picker-today-cont {
 /** Use td.className instead of !important */
 td.goog-date-picker-none-cont {
   text-align: center;
-}
-
-.goog-date-picker-month {
-  width: 12ex;
 }
 
 .goog-date-picker-year {

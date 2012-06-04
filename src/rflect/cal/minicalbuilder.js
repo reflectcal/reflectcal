@@ -110,13 +110,13 @@ rflect.cal.MiniCalBuilder.prototype.buildBodyInternal = function(aSb) {
     aSb.append(rflect.cal.MiniCalBuilder.HTML_PARTS_[offset]);
     switch (offset) {
       case 1: {
-        this.buildMainClassName_(aSb, offset);
+        this.buildMainClassName_(aSb);
       };break;
       case 2: {
-        this.buildHeader_(aSb, offset);
+        this.buildHeader_(aSb);
       };break;
       case 4: {
-        this.buildMonthName_(aSb, offset);
+        this.buildMonthName_(aSb);
       };break;
       case 7: {
         this.buildDayNames_(aSb, offset);
@@ -177,7 +177,8 @@ rflect.cal.MiniCalBuilder.prototype.buildHeader_ = function(aSb) {
 rflect.cal.MiniCalBuilder.prototype.buildMonthName_ = function(aSb) {
   aSb.append(this.timeManager_.basis.getYear());
   aSb.append('&nbsp;');
-  aSb.append(this.timeManager_.basis.getMonth());
+  aSb.append(goog.i18n.DateTimeSymbols.MONTHS[
+      this.timeManager_.basis.getMonth()]);
 };
 
 
@@ -276,6 +277,9 @@ rflect.cal.MiniCalBuilder.prototype.buildDayCells_ = function(aSb, aOffset,
     // Show days from another month differently.
     if (this.timeManager_.basis.getMonth() != (day = daySeries[id]).getMonth())
       aSb.append(goog.getCssName('dl-other-month'));
+    if (id >= this.miniCal_.startSelectionIndex &&
+        id < this.miniCal_.endSelectionIndex)
+      aSb.append(' ' + goog.getCssName('goog-date-picker-selected'));
     aSb.append(rflect.cal.MiniCalBuilder.HTML_PARTS_[aOffset + 2]);
     // Build daycell day number.
     aSb.append(day.getDate());

@@ -9,7 +9,6 @@
 
 
 goog.provide('rflect.date');
-goog.provide('rflect.date.DateLike');
 goog.provide('rflect.date.Date');
 
 goog.require('goog.date.Date');
@@ -69,8 +68,7 @@ rflect.date.moveToDayOfWeekIfNeeded = function(aDate, aDay, opt_orient) {
  * @return {number} Maximal or minimal day in this year and month.
  * @private
  */
-rflect.date.getDayLimit_ = function(aYear, aMonth,
-aDirection    ) {
+rflect.date.getDayLimit_ = function(aYear, aMonth, aDirection) {
   return aDirection > 0 ? goog.date.getNumberOfDaysInMonth(aYear, aMonth) : 1;
 };
 
@@ -145,8 +143,8 @@ rflect.date.getYesterday = function(aGivenDate){
  * otherwise.
  */
 rflect.date.compareByWeekAndYear = function(aDateA, aDateB){
-  aDateA.getYear() == aDateB.getYear() ? (aDateA.week == aDateB.week ? 0 :
-      (aDateA.week > aDateB.week : 1 : -1)) : (aDateA.getYear() >
+  return aDateA.getYear() == aDateB.getYear() ? (aDateA.week == aDateB.week
+      ? 0 : (aDateA.week > aDateB.week ? 1 : -1)) : (aDateA.getYear() >
       aDateB.getYear() ? 1 : -1)
 }
 
@@ -209,6 +207,13 @@ rflect.date.Date.prototype.year_ = 0;
  * @private
  */
 rflect.date.Date.prototype.month_ = goog.date.month.JAN;
+
+
+/**
+ * Week.
+ * @type {number}
+ */
+rflect.date.Date.prototype.week = 0;
 
 
 /**

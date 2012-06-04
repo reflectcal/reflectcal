@@ -9,7 +9,9 @@
  */
 
 goog.provide('rflect.cal.TimeManager');
+goog.provide('rflect.cal.TimeManager.Direction');
 
+goog.require('goog.array');
 goog.require('goog.date');
 goog.require('goog.date.Date');
 goog.require('goog.date.Interval');
@@ -18,6 +20,7 @@ goog.require('goog.i18n.DateTimeSymbols');
 goog.require('rflect.cal.ViewType');
 goog.require('rflect.date');
 goog.require('rflect.date.Date');
+goog.require('rflect.date.Interval');
 goog.require('rflect.math');
 
 
@@ -29,7 +32,19 @@ goog.require('rflect.math');
  */
 rflect.cal.TimeManager = function(opt_date) {
 
+  /**
+   * Date and time symbols for i18n.
+   * @type {goog.i18n.DateTimeSymbols}
+   * @private
+   */
   this.symbols_ = goog.i18n.DateTimeSymbols;
+
+  /**
+   * Interval for this time manager.
+   * @type {rflect.date.Interval}
+   */
+  this.interval = new rflect.date.Interval();
+
   this.daySeries = [];
 
   this.setBasis(opt_date);
@@ -53,7 +68,18 @@ rflect.cal.TimeManager.Configuration = {
 
 
 /**
- * Time manager configuration, shows by which this time manager is managed.
+ * Directions of time manager.
+ * @enum {number}
+ */
+rflect.cal.TimeManager.Direction = {
+  NONE: 0,
+  FORWARD: 1,
+  BACKWARD: -1
+};
+
+
+/**
+ * Time manager configuration.
  * @type {rflect.cal.TimeManager.Configuration}
  * @private
  */
@@ -72,9 +98,16 @@ rflect.cal.TimeManager.prototype.isOnStartup_ = false;
 /**
  * Day within interval, on which latter is based.
  * @type {goog.date.DateLike}
- * @private
  */
 rflect.cal.TimeManager.prototype.basis = null;
+
+
+/**
+ * Day at the start of interval.
+ * @type {goog.date.Date}
+ * @private
+ */
+rflect.cal.TimeManager.prototype.start_ = null;
 
 
 /**
@@ -96,13 +129,14 @@ rflect.cal.TimeManager.prototype.calculatePeriodStart = function() {
       this.start_ = rflect.date.moveToDayOfWeekIfNeeded(this.basis,
           0, -1);
     }; break;
+    case rflect.cal.TimeManager.Configuration.MINI_MONTH:
     case rflect.cal.TimeManager.Configuration.MONTH: {
       this.start_ = this.basis.clone();
       // Move to first day of month.
       this.start_.setDate(1);
       // Move to first day of week containing month.
-      this.start_ = rflect.date.moveToDayOfWeekIfNeeded(this.start_, 0,
-          -1);
+      this.start_ = rflect.date.moveToDayOfWeekIfNeeded(
+          this.start_, 0, -1);
     };
     break;
     case rflect.cal.TimeManager.Configuration.YEAR: break;
@@ -126,14 +160,13 @@ rflect.cal.TimeManager.prototype.generateDaySeries = function() {
       firstDayOfMonth.setDate(1);
       // We need to make number (days_before_first_day_of_month + days_in_month
       // + days_after_last_day_of_month) divisible by 7.
-      // TODO(alexk):  draw by week.
       if (!this.start_.equals(firstDayOfMonth)) {
         // Start always has lower weekday number than first day of month, so
         // it's safe to subtract former from the latter.
-        difference = firstDayOfMonth.getWeekday() - this.start_.getWeekday();
+        difference = firstDayOfMonth.getWeekday() -
+            this.start_.getWeekday();
       }
-      if (this.configuration ==
-          rflect.cal.TimeManager.Configuration.MINI_MONTH)
+      if (this.configuration == rflect.cal.TimeManager.Configuration.MINI_MONTH)
         // For mini-month, extra week at the end.
         daysNumber = 42;
       else
@@ -146,13 +179,20 @@ rflect.cal.TimeManager.prototype.generateDaySeries = function() {
     default: break;
   }
 
-
   this.daySeries.length = 0;
   var date = new rflect.date.Date(this.start_);
   for (var counter = 0; counter < daysNumber; counter++) {
     this.daySeries[counter] = date;
     date = rflect.date.getTomorrow(date);
   }
+
+  // Form intervals.
+  this.interval.start = this.start_.getTime();
+  this.interval.end = new goog.date.Date(date).getTime();
+  if (goog.DEBUG) {
+    _log('this.interval', this.interval);
+  }
+
 };
 
 
@@ -167,10 +207,10 @@ rflect.cal.TimeManager.prototype.run = function() {
 
 /**
  * Shifts time manager by one interval.
- * @param {boolean} aForward Whether to shift forward.
+ * @param {rflect.cal.TimeManager.Direction} aDirection Direction of shift.
  */
-rflect.cal.TimeManager.prototype.shift = function(aForward) {
-  this.shiftBasis(aForward);
+rflect.cal.TimeManager.prototype.shift = function(aDirection) {
+  this.shiftBasis(aDirection);
   this.run();
 };
 
@@ -189,12 +229,7 @@ rflect.cal.TimeManager.prototype.shiftToPoint = function(opt_date) {
  * @return {boolean} Whether interval we're in covers current moment.
  */
 rflect.cal.TimeManager.prototype.isInNowPoint = function() {
-  // TODO(alexk): Make this check using datetime?
-  var now = new goog.date.Date();
-  var daySeriesLength = this.daySeries.length;
-  return !!daySeriesLength && (this.daySeries[0] <= now &&
-      this.daySeries[daySeriesLength - 1] > now ||
-      this.daySeries[0].equals(now));
+  return this.interval.contains(goog.now());
 };
 
 
@@ -208,25 +243,26 @@ rflect.cal.TimeManager.prototype.shiftToNow = function() {
 
 /**
  * Shifts basis by one interval.
+ * @param {rflect.cal.TimeManager.Direction} aDirection Direction of shift.
  */
-rflect.cal.TimeManager.prototype.shiftBasis = function(aForward) {
+rflect.cal.TimeManager.prototype.shiftBasis = function(aDirection) {
   var daysNumber = 0;
   switch (this.configuration) {
     case rflect.cal.TimeManager.Configuration.DAY: {
-      daysNumber = 1 * (aForward ? 1 : -1);
+      daysNumber = 1 * aDirection;
       this.basis.add(new goog.date.Interval(0, 0, daysNumber));
     }; break;
     case rflect.cal.TimeManager.Configuration.WEEK: {
-      daysNumber = 7 * (aForward ? 1 : -1);
+      daysNumber = 7 * aDirection;
       this.basis.add(new goog.date.Interval(0, 0, daysNumber));
     }; break;
     case rflect.cal.TimeManager.Configuration.MINI_MONTH:
     case rflect.cal.TimeManager.Configuration.MONTH: {
       this.basis.add(new goog.date.Interval(0,
-          1 * (aForward ? 1 : -1)));
+          1 * aDirection));
     }; break;
     case rflect.cal.TimeManager.Configuration.YEAR: {
-      this.basis.add(new goog.date.Interval(1 * (aForward ? 1 : -1)));
+      this.basis.add(new goog.date.Interval(1 * aDirection));
     }; break;
     default: break;
   }
