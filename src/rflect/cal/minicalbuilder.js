@@ -49,7 +49,8 @@ rflect.cal.MiniCalBuilder.HTML_PARTS_ = [
   /*
   * Date picker classname ().
   */
-  '"><table cellspacing="0" cellpadding="0">' +
+  '"><div id="minical-mask-cnt"></div>' +
+      '<table class="minical-table" cellspacing="0" cellpadding="0">' +
       '<thead><tr class="' + goog.getCssName('goog-date-picker-head'),
   /*
   * Date picker head classname ().
@@ -69,7 +70,7 @@ rflect.cal.MiniCalBuilder.HTML_PARTS_ = [
   * Month and year name (2013&nbsp;August).
   */
   '</div></td></tr></thead>',
-  '<tbody role="grid"><tr>',
+  '<tbody id="minical-grid" role="grid"><tr>',
   // Individual dayname.
   '<th role="columnheader" class="' + goog.getCssName('goog-date-picker-wday') +
       '">',
@@ -205,7 +206,7 @@ rflect.cal.MiniCalBuilder.prototype.buildDayNames_ = function(aSb, aOffset) {
     // We need to shift position by 1 because array of weekdays starts from
     // sunday and WEEKDAY gives weekday number starting from monday.
     dayNameNumber = (dayNamesFirstNumber + counter + 1) % 7;
-    aSb.append(goog.i18n.DateTimeSymbols.WEEKDAYS[dayNameNumber][0]
+    aSb.append(goog.i18n.DateTimeSymbols.WEEKDAYS[dayNameNumber].charAt(0)
         .toUpperCase());
     aSb.append(rflect.cal.MiniCalBuilder.HTML_PARTS_[aOffset + 1]);
   }

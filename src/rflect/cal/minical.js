@@ -188,9 +188,9 @@ rflect.cal.MiniCal.prototype.enterDocument = function() {
       .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
       goog.nullFunction, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
-      goog.nullFunction, false, this)
+      this.onMouseDown_, false, this)
       .listen(this.getElement(), goog.events.EventType.SELECTSTART,
-      goog.nullFunction, false, this)
+      this.onSelectStart_, false, this)
       .listen(document, goog.events.EventType.MOUSEMOVE,
       goog.nullFunction, false, this)
       .listen(document, goog.events.EventType.MOUSEUP,
@@ -223,22 +223,34 @@ rflect.cal.MiniCal.prototype.onClick_ = function(aEvent) {
 
 
 /**
- * @param {string} aClassName Class name of element to test whether it indicates
- * of month grid.
+ * @param {string} aClassName Class name of element to test.
  * @private
- * @return {boolean} For month mode, whether class name indicates that this is a
- * month grid.
+ * @return {boolean} Whether it's selectable area.
  */
-rflect.cal.MiniCal.prototype.isMonthGrid_ = function(aClassName) {
-  var monthGridRe_ = this.monthGridRe_ || (this.monthGridRe_ =
-      rflect.string.buildClassNameRe(
-      goog.getCssName('mn-events-layer'),
-      goog.getCssName('expand-sign-mn'),
-      goog.getCssName('daynum-label'),
-      goog.getCssName('daynum-cont'),
-      goog.getCssName('monthgrid-row'),
-      goog.getCssName('daycell')));
-  return this.viewManager_.isInMonthMode() && monthGridRe_.test(aClassName);
+rflect.cal.MiniCal.prototype.isSelectableArea_ = function(aClassName) {
+  return this.isButton_(aClassName) || this.isField_(aClassName);
+};
+
+
+/**
+ * @param {string} aClassName Class name of element to test.
+ * @private
+ * @return {boolean} Whether it's button.
+ */
+rflect.cal.MiniCal.prototype.isButton_ = function(aClassName) {
+  return (this.buttonRe_ || (this.buttonRe_ = rflect.string.buildClassNameRe(
+    goog.getCssName('goog-date-picker-btn')))).test(aClassName);
+};
+
+
+/**
+ * @param {string} aClassName Class name of element to test.
+ * @private
+ * @return {boolean} Whether it's main field.
+ */
+rflect.cal.MiniCal.prototype.isField_ = function(aClassName) {
+  return (this.fieldRe_ || (this.fieldRe_ = rflect.string.buildClassNameRe(
+      goog.getCssName('goog-date-picker-date')))).test(aClassName);
 };
 
 
@@ -249,28 +261,17 @@ rflect.cal.MiniCal.prototype.isMonthGrid_ = function(aClassName) {
  */
 rflect.cal.MiniCal.prototype.onMouseDown_ = function(aEvent) {
   var className = aEvent.target.className;
-  var preventDefaultIsNeeded = false;
 
   if (goog.DEBUG){
     _log('aEvent.target.id', aEvent.target.id);
     _log('aEvent.target.className', aEvent.target.className);
   }
 
-  // Whether we clicked on hollow space
-  if (this.isWeekGrid_(className)) {
-    this.selectionMask_.init(rflect.cal.SelectionMask.Configuration.WEEK,
+  if (this.isField_(className))
+    this.selectionMask_.init(rflect.cal.SelectionMask.Configuration.MINI_MONTH,
         aEvent);
-    preventDefaultIsNeeded = true;
-  } else if (this.isAlldayGrid_(className)) {
-    this.selectionMask_.init(rflect.cal.SelectionMask.Configuration.ALLDAY,
-        aEvent);
-    preventDefaultIsNeeded = true;
-  } else if (this.isMonthGrid_(className)) {
-    this.selectionMask_.init(rflect.cal.SelectionMask.Configuration.MONTH,
-        aEvent);
-    preventDefaultIsNeeded = true;
-  }
-  if (preventDefaultIsNeeded)
+
+  if (this.isSelectableArea_(className))
     aEvent.preventDefault();
 
 };
@@ -284,9 +285,7 @@ rflect.cal.MiniCal.prototype.onMouseDown_ = function(aEvent) {
 rflect.cal.MiniCal.prototype.onSelectStart_ = function(aEvent) {
   var className = aEvent.target.className;
 
-  // Whether we clicked on grid space.
-  if (this.isWeekGrid_(className) || this.isAlldayGrid_(className) ||
-      this.isMonthGrid_(className))
+  if (this.isSelectableArea_(className))
     aEvent.preventDefault();
 };
 

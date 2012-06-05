@@ -74,6 +74,13 @@ rflect.cal.SelectionMask = function(aViewManager, aComponent, aTimeManager,
    */
   this.blockPoolMonth_ = opt_blockPoolMonth;
 
+  /**
+   * Size of minical.
+   * @type {goog.math.Size}
+   * @private
+   */
+  this.miniCalSize_ = new goog.math.Size(0, 0);
+
 };
 
 
@@ -108,11 +115,11 @@ rflect.cal.SelectionMask.prototype.document_;
 
 
 /**
- * Scrollable element offset.
+ * Mask owner element offset.
  * @type {goog.math.Coordinate}
  * @private
  */
-rflect.cal.SelectionMask.prototype.scrollableOffset_;
+rflect.cal.SelectionMask.prototype.elementOffset_;
 
 
 /**
@@ -238,8 +245,8 @@ rflect.cal.SelectionMask.prototype.clear = function() {
 rflect.cal.SelectionMask.prototype.update = function(aEvent) {
   var pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
   var currentCell = this.getCellByCoordinate_(aEvent.clientX + pageScroll.x -
-      this.scrollableOffset_.x + this.scrollableEl_.scrollLeft, aEvent.clientY +
-      pageScroll.y - this.scrollableOffset_.y + this.scrollableEl_.scrollTop);
+      this.elementOffset_.x + this.scrollableEl_.scrollLeft, aEvent.clientY +
+      pageScroll.y - this.elementOffset_.y + this.scrollableEl_.scrollTop);
 
   if (!goog.math.Coordinate.equals(this.currentCell_, currentCell)) {
     this.currentCell_ = currentCell;
@@ -267,47 +274,63 @@ rflect.cal.SelectionMask.prototype.init = function(aConfiguration, aEvent) {
 
   this.configuration_ = aConfiguration;
 
-  this.scrollableOffset_ = new goog.math.Coordinate(0, 0);
+  this.elementOffset_ = new goog.math.Coordinate(0, 0);
 
   if (this.isWeekOrAllday_()) {
 
     if (this.isAllday_()) {
+
       this.scrollableEl_ = goog.dom.getElement('main-pane-header-scrollable');
       this.maskEl_ = goog.dom.getElement('wk-ad-mask-cnt');
-      this.scrollableOffset_ = goog.style.getRelativePosition(
+      this.elementOffset_ = goog.style.getRelativePosition(
           this.scrollableEl_, document.documentElement);
-      this.scrollableOffset_.x += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+      this.elementOffset_.x += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+
     } else {
+
       this.scrollableEl_ = goog.dom.getElement('main-pane-body-scrollable-wk');
       this.maskEl_ = goog.dom.getElement('wk-mask-cnt');
-      this.scrollableOffset_ = goog.style.getRelativePosition(
+      this.elementOffset_ = goog.style.getRelativePosition(
           this.scrollableEl_, document.documentElement);
-      this.scrollableOffset_.x +=
+      this.elementOffset_.x +=
           rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_WEEK;
     }
-    this.scrollableOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+    this.elementOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+
   } else if (this.isMonth_()) {
+
     this.scrollableEl_ = goog.dom.getElement('main-pane-body-scrollable-mn');
     this.maskEl_ = goog.dom.getElement('mn-mask-cnt');
-    this.scrollableOffset_ = goog.style.getRelativePosition(
+    this.elementOffset_ = goog.style.getRelativePosition(
         this.scrollableEl_, document.documentElement);
-    this.scrollableOffset_.x +=
+    this.elementOffset_.x +=
         rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_MONTH;
-    this.scrollableOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+    this.elementOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+
+  } else if (this.isMiniMonth_()) {
+    var miniCalGrid = goog.dom.getElement('minical-grid');
+    this.miniCalSize_ = this.miniCalSize_ || new goog.math.Size(
+        miniCalGrid.offsetWidth,
+        miniCalGrid.offsetHeight);
+    this.maskEl_ = goog.dom.getElement('minical-mask-cnt');
+    this.elementOffset_ = goog.style.getRelativePosition(
+        this.maskEl_, document.documentElement);
   }
 
+
   coordXWithoutScroll = aEvent.clientX + pageScroll.x -
-      this.scrollableOffset_.x;
+      this.elementOffset_.x;
   coordYWithoutScroll = aEvent.clientY + pageScroll.y -
-      this.scrollableOffset_.y;
+      this.elementOffset_.y;
 
-  coordX = coordXWithoutScroll + this.scrollableEl_.scrollLeft;
-  coordY = coordYWithoutScroll + this.scrollableEl_.scrollTop;
-
-  // Safe check for IE7.
-  if (coordYWithoutScroll >= this.scrollableEl_.offsetHeight ||
+  if (this.scrollableEl_){
+    coordX = coordXWithoutScroll + this.scrollableEl_.scrollLeft;
+    coordY = coordYWithoutScroll + this.scrollableEl_.scrollTop;
+    // Safe check for IE7.
+    if (coordYWithoutScroll >= this.scrollableEl_.offsetHeight ||
       coordYWithoutScroll < 0)
-    return;
+      return;
+  }
 
   this.startCell_ = this.getCellByCoordinate_(coordX, coordY);
   this.currentCell_ = this.startCell_.clone();
@@ -353,6 +376,13 @@ rflect.cal.SelectionMask.prototype.getCellByCoordinate_ = function(aX, aY) {
     maxY = this.blockPoolMonth_.getBlocksNumber() - 1;
     cell.y = this.getBlockIndexByCoordinate_(aY, this.blockPoolMonth_);
     cell.x = Math.floor(aX / (this.blockPoolMonth_.gridSize.width / 7));
+  } else if (this.isMiniMonth_()) {
+
+    maxX = 6;
+    maxY = 5;
+    cell.x = Math.floor(aX / (this.blockPoolMonth_.gridSize.width / 7));
+    cell.y = Math.floor(aY / (this.blockPoolMonth_.gridSize.width / 7));
+
   }
 
   // Safe checks.

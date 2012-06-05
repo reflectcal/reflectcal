@@ -32,6 +32,18 @@
   border-radius: 2px;
 }
 
+#minical-mask-cnt {
+  position:relative;
+  top: 36px;
+  width: 100%;
+  height: 110px; /* +2px to hide margin. */
+}
+
+.minical-table {
+  position: relative;
+  top: -110px;
+}
+
 .goog-date-picker table {
   table-layout: fixed;
   width: 100%;
@@ -136,13 +148,14 @@
 }
 
 .goog-date-picker-date {
-  background: #fff;
+  background: transparent;
+  cursor: pointer;
 }
 
 .goog-date-picker-week,
 .goog-date-picker-wday {
   padding: 1px 3px;
-  border: 0 solid #d5d5d5;
+  border: 0 solid #f0f0f0;
 }
 
 .goog-date-picker-week {
@@ -186,7 +199,7 @@ td.goog-date-picker-none-cont {
 
 /** Use td.className instead of !important */
 td.goog-date-picker-selected {
-  background: #c3d9ff;
+  background: #e6e6e6;
 }
 
 .goog-date-picker-today {

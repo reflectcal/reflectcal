@@ -3248,20 +3248,20 @@ function $JSCompiler_StaticMethods_isAlldayGrid_$$($JSCompiler_StaticMethods_isA
   var $alldayGridRe_$$ = $JSCompiler_StaticMethods_isAlldayGrid_$self$$.$alldayGridRe_$ || ($JSCompiler_StaticMethods_isAlldayGrid_$self$$.$alldayGridRe_$ = $rflect$string$buildClassNameRe$$("wk-ad-events-layer", "expand-sign-wk-ad-cont", "expand-sign-wk-ad", "main-pane-header-container-wk"));
   return $JSCompiler_StaticMethods_isInWeekMode$$($JSCompiler_StaticMethods_isAlldayGrid_$self$$.$viewManager_$) && $alldayGridRe_$$.test($aClassName$$1$$)
 }
-$JSCompiler_prototypeAlias$$.$isMonthGrid_$ = function $$JSCompiler_prototypeAlias$$$$isMonthGrid_$$($aClassName$$2$$) {
-  var $monthGridRe_$$ = this.$monthGridRe_$ || (this.$monthGridRe_$ = $rflect$string$buildClassNameRe$$("mn-events-layer", "expand-sign-mn", "daynum-label", "daynum-cont", "monthgrid-row", "daycell"));
-  return $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && $monthGridRe_$$.test($aClassName$$2$$)
-};
+function $JSCompiler_StaticMethods_isMonthGrid_$$($JSCompiler_StaticMethods_isMonthGrid_$self$$, $aClassName$$2$$) {
+  var $monthGridRe_$$ = $JSCompiler_StaticMethods_isMonthGrid_$self$$.$monthGridRe_$ || ($JSCompiler_StaticMethods_isMonthGrid_$self$$.$monthGridRe_$ = $rflect$string$buildClassNameRe$$("mn-events-layer", "expand-sign-mn", "daynum-label", "daynum-cont", "monthgrid-row", "daycell"));
+  return $JSCompiler_StaticMethods_isInMonthMode$$($JSCompiler_StaticMethods_isMonthGrid_$self$$.$viewManager_$) && $monthGridRe_$$.test($aClassName$$2$$)
+}
 $JSCompiler_prototypeAlias$$.$onMouseDown_$ = function $$JSCompiler_prototypeAlias$$$$onMouseDown_$$($aEvent$$4$$) {
   var $className$$26$$ = $aEvent$$4$$.target.className, $preventDefaultIsNeeded$$ = $JSCompiler_alias_FALSE$$;
   $_log$$("aEvent.target.id", $aEvent$$4$$.target.id);
   $_log$$("aEvent.target.className", $aEvent$$4$$.target.className);
-  $JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$26$$) ? (this.$selectionMask_$.$init$(2, $aEvent$$4$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$26$$) ? (this.$selectionMask_$.$init$(1, $aEvent$$4$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$) : this.$isMonthGrid_$($className$$26$$) && (this.$selectionMask_$.$init$(3, $aEvent$$4$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$);
+  $JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$26$$) ? (this.$selectionMask_$.$init$(2, $aEvent$$4$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$26$$) ? (this.$selectionMask_$.$init$(1, $aEvent$$4$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isMonthGrid_$$(this, $className$$26$$) && (this.$selectionMask_$.$init$(3, $aEvent$$4$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$);
   $preventDefaultIsNeeded$$ && $aEvent$$4$$.preventDefault()
 };
 $JSCompiler_prototypeAlias$$.$onSelectStart_$ = function $$JSCompiler_prototypeAlias$$$$onSelectStart_$$($aEvent$$5$$) {
   var $className$$27$$ = $aEvent$$5$$.target.className;
-  ($JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$27$$) || $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$27$$) || this.$isMonthGrid_$($className$$27$$)) && $aEvent$$5$$.preventDefault()
+  ($JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$27$$) || $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$27$$) || $JSCompiler_StaticMethods_isMonthGrid_$$(this, $className$$27$$)) && $aEvent$$5$$.preventDefault()
 };
 $JSCompiler_prototypeAlias$$.$onMouseUp_$ = function $$JSCompiler_prototypeAlias$$$$onMouseUp_$$($aEvent$$6$$) {
   this.$selectionMask_$.visible && (this.$selectionMask_$.clear(), $aEvent$$6$$.preventDefault())
@@ -3283,7 +3283,7 @@ function $rflect$cal$MiniCalBuilder$$($aMiniCal$$, $aTimeManager$$5$$) {
   this.$miniCal_$ = $aMiniCal$$;
   this.$timeManager_$ = $aTimeManager$$5$$
 }
-var $rflect$cal$MiniCalBuilder$HTML_PARTS_$$ = '<div id="month-selector">,<div class="goog-date-picker,"><table cellspacing="0" cellpadding="0"><thead><tr class="goog-date-picker-head,"><td colspan="7"><div class="goog-date-picker-buttons"><div class="goog-date-picker-btn month-sel-btn month-sel-btn-back">&nbsp;</div><div class="goog-date-picker-btn month-sel-btn month-sel-btn-forward">&nbsp;</div></div>,<div class="goog-date-picker-month">,</div></td></tr></thead>,<tbody role="grid"><tr>,<th role="columnheader" class="goog-date-picker-wday">,</th>,</tr>,<tr>,<td id="goog-dp-," role="gridcell" class="goog-date-picker-date ,">,</td>,</tr>,</tbody></table></div>,</div>'.split(",");
+var $rflect$cal$MiniCalBuilder$HTML_PARTS_$$ = '<div id="month-selector">,<div class="goog-date-picker,"><div id="minical-mask-cnt"></div><table class="mini-cal-table" cellspacing="0" cellpadding="0"><thead><tr class="goog-date-picker-head,"><td colspan="7"><div class="goog-date-picker-buttons"><div class="goog-date-picker-btn month-sel-btn month-sel-btn-back">&nbsp;</div><div class="goog-date-picker-btn month-sel-btn month-sel-btn-forward">&nbsp;</div></div>,<div class="goog-date-picker-month">,</div></td></tr></thead>,<tbody role="grid"><tr>,<th role="columnheader" class="goog-date-picker-wday">,</th>,</tr>,<tr>,<td id="goog-dp-," role="gridcell" class="goog-date-picker-date ,">,</td>,</tr>,</tbody></table></div>,</div>'.split(",");
 $rflect$cal$MiniCalBuilder$$.prototype.$buildBodyInternal$ = function $$rflect$cal$MiniCalBuilder$$$$$buildBodyInternal$$($aSb$$31$$) {
   for(var $offset$$26$$ = 0, $length$$19$$ = $rflect$cal$MiniCalBuilder$HTML_PARTS_$$.length;++$offset$$26$$ < $length$$19$$ - 1;) {
     switch($aSb$$31$$.append($rflect$cal$MiniCalBuilder$HTML_PARTS_$$[$offset$$26$$]), $offset$$26$$) {
@@ -3301,7 +3301,7 @@ $rflect$cal$MiniCalBuilder$$.prototype.$buildBodyInternal$ = function $$rflect$c
         break;
       case 7:
         for(var $aSb$$inline_444_aSb$$inline_446$$ = $aSb$$31$$, $aOffset$$inline_447$$ = $offset$$26$$, $dayNamesFirstNumber$$inline_448$$ = $goog$i18n$DateTimeSymbols_en$$.$FIRSTDAYOFWEEK$, $dayNameNumber$$inline_449$$ = 0, $counter$$inline_450$$ = 0;7 > $counter$$inline_450$$;$counter$$inline_450$$++) {
-          0 < $counter$$inline_450$$ && $aSb$$inline_444_aSb$$inline_446$$.append($rflect$cal$MiniCalBuilder$HTML_PARTS_$$[$aOffset$$inline_447$$]), $dayNameNumber$$inline_449$$ = ($dayNamesFirstNumber$$inline_448$$ + $counter$$inline_450$$ + 1) % 7, $aSb$$inline_444_aSb$$inline_446$$.append($goog$i18n$DateTimeSymbols_en$$.$WEEKDAYS$[$dayNameNumber$$inline_449$$][0].toUpperCase()), $aSb$$inline_444_aSb$$inline_446$$.append($rflect$cal$MiniCalBuilder$HTML_PARTS_$$[$aOffset$$inline_447$$ + 1])
+          0 < $counter$$inline_450$$ && $aSb$$inline_444_aSb$$inline_446$$.append($rflect$cal$MiniCalBuilder$HTML_PARTS_$$[$aOffset$$inline_447$$]), $dayNameNumber$$inline_449$$ = ($dayNamesFirstNumber$$inline_448$$ + $counter$$inline_450$$ + 1) % 7, $aSb$$inline_444_aSb$$inline_446$$.append($goog$i18n$DateTimeSymbols_en$$.$WEEKDAYS$[$dayNameNumber$$inline_449$$].charAt(0).toUpperCase()), $aSb$$inline_444_aSb$$inline_446$$.append($rflect$cal$MiniCalBuilder$HTML_PARTS_$$[$aOffset$$inline_447$$ + 1])
         }
         $offset$$26$$++;
         break;
@@ -3561,27 +3561,24 @@ $JSCompiler_prototypeAlias$$.$decorateInternal$ = function $$JSCompiler_prototyp
 $JSCompiler_prototypeAlias$$.$enterDocument$ = function $$JSCompiler_prototypeAlias$$$$enterDocument$$() {
   $rflect$cal$MiniCal$$.$superClass_$.$enterDocument$.call(this);
   $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_getHandler$$(this), this.$getElement$(), "click", this.$onClick_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mouseover", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mouseout", $goog$nullFunction$$, 
-  $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mousedown", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "selectstart", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, this), document, "mousemove", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, this), document, "mouseup", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, this)
+  $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mousedown", this.$onMouseDown_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "selectstart", this.$onSelectStart_$, $JSCompiler_alias_FALSE$$, this), document, "mousemove", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, this), document, "mouseup", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, this)
 };
 $JSCompiler_prototypeAlias$$.$onClick_$ = function $$JSCompiler_prototypeAlias$$$$onClick_$$($aEvent$$9_className$$28$$) {
   var $aEvent$$9_className$$28$$ = $aEvent$$9_className$$28$$.target.className, $direction$$4$$ = 0;
   $rflect$string$buildClassNameRe$$("month-sel-btn-forward").test($aEvent$$9_className$$28$$) ? $direction$$4$$ = 1 : $rflect$string$buildClassNameRe$$("month-sel-btn-back").test($aEvent$$9_className$$28$$) && ($direction$$4$$ = -1);
   $direction$$4$$ && (this.$updateBeforeRedraw$($JSCompiler_alias_TRUE$$, $direction$$4$$), this.$updateByRedraw$())
 };
-$JSCompiler_prototypeAlias$$.$isMonthGrid_$ = function $$JSCompiler_prototypeAlias$$$$isMonthGrid_$$($aClassName$$3$$) {
-  var $monthGridRe_$$1$$ = this.$monthGridRe_$ || (this.$monthGridRe_$ = $rflect$string$buildClassNameRe$$("mn-events-layer", "expand-sign-mn", "daynum-label", "daynum-cont", "monthgrid-row", "daycell"));
-  return $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && $monthGridRe_$$1$$.test($aClassName$$3$$)
-};
+function $JSCompiler_StaticMethods_isSelectableArea_$$($JSCompiler_StaticMethods_isSelectableArea_$self$$, $aClassName$$3$$) {
+  return($JSCompiler_StaticMethods_isSelectableArea_$self$$.$selectableAreaRe_$ || ($JSCompiler_StaticMethods_isSelectableArea_$self$$.$selectableAreaRe_$ = $rflect$string$buildClassNameRe$$("goog-date-picker-btn", "goog-date-picker-date"))).test($aClassName$$3$$)
+}
 $JSCompiler_prototypeAlias$$.$onMouseDown_$ = function $$JSCompiler_prototypeAlias$$$$onMouseDown_$$($aEvent$$10$$) {
-  var $className$$29$$ = $aEvent$$10$$.target.className, $preventDefaultIsNeeded$$1$$ = $JSCompiler_alias_FALSE$$;
+  var $className$$29$$ = $aEvent$$10$$.target.className;
   $_log$$("aEvent.target.id", $aEvent$$10$$.target.id);
   $_log$$("aEvent.target.className", $aEvent$$10$$.target.className);
-  $JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$29$$) ? (this.$selectionMask_$.$init$(2, $aEvent$$10$$), $preventDefaultIsNeeded$$1$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$29$$) ? (this.$selectionMask_$.$init$(1, $aEvent$$10$$), $preventDefaultIsNeeded$$1$$ = $JSCompiler_alias_TRUE$$) : this.$isMonthGrid_$($className$$29$$) && (this.$selectionMask_$.$init$(3, $aEvent$$10$$), $preventDefaultIsNeeded$$1$$ = $JSCompiler_alias_TRUE$$);
-  $preventDefaultIsNeeded$$1$$ && $aEvent$$10$$.preventDefault()
+  $JSCompiler_StaticMethods_isSelectableArea_$$(this, $className$$29$$) && $aEvent$$10$$.preventDefault()
 };
 $JSCompiler_prototypeAlias$$.$onSelectStart_$ = function $$JSCompiler_prototypeAlias$$$$onSelectStart_$$($aEvent$$11$$) {
-  var $className$$30$$ = $aEvent$$11$$.target.className;
-  ($JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$30$$) || $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$30$$) || this.$isMonthGrid_$($className$$30$$)) && $aEvent$$11$$.preventDefault()
+  $JSCompiler_StaticMethods_isSelectableArea_$$(this, $aEvent$$11$$.target.className) && $aEvent$$11$$.preventDefault()
 };
 $JSCompiler_prototypeAlias$$.$onMouseUp_$ = function $$JSCompiler_prototypeAlias$$$$onMouseUp_$$($aEvent$$12$$) {
   this.$selectionMask_$.visible && (this.$selectionMask_$.clear(), $aEvent$$12$$.preventDefault())
