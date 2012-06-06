@@ -75,12 +75,11 @@ rflect.cal.SelectionMask = function(aViewManager, aComponent, aTimeManager,
   this.blockPoolMonth_ = opt_blockPoolMonth;
 
   /**
-   * Size of minical.
-   * @type {goog.math.Size}
+   * Mask rectangles.
+   * @type {Array.<goog.math.Rect>}
    * @private
    */
-  this.miniCalSize_ = new goog.math.Size(0, 0);
-
+  this.rects_ = [];
 };
 
 
@@ -93,7 +92,8 @@ rflect.cal.SelectionMask.Configuration = {
   ALLDAY: 1,
   WEEK: 2,
   MONTH: 3,
-  MINI_MONTH: 4
+  MINI_MONTH_INTERNAL: 4,
+  MINI_MONTH_EXTERNAL: 5
 };
 
 
@@ -220,12 +220,31 @@ rflect.cal.SelectionMask.prototype.isMonth_ = function() {
 
 
 /**
- * @return {boolean} Whether mask is mini-month.
+ * @return {boolean} Whether mask is created in mini-month internally.
+ * @private
+ */
+rflect.cal.SelectionMask.prototype.isMiniMonthInt_ = function() {
+  return this.configuration_ == rflect.cal.SelectionMask.Configuration.
+      MINI_MONTH_INTERNAL;
+};
+
+
+/**
+ * @return {boolean} Whether mask is created in mini-month externally.
+ * @private
+ */
+rflect.cal.SelectionMask.prototype.isMiniMonthExt_ = function() {
+  return this.configuration_ == rflect.cal.SelectionMask.Configuration.
+      MINI_MONTH_EXTERNAL;
+};
+
+
+/**
+ * @return {boolean} Whether mask is mini-month (all cases).
  * @private
  */
 rflect.cal.SelectionMask.prototype.isMiniMonth_ = function() {
-  return this.configuration_ == rflect.cal.SelectionMask.Configuration.
-      MINI_MONTH;
+  return this.isMiniMonthInt_() || this.isMiniMonthExt_();
 };
 
 
@@ -260,80 +279,90 @@ rflect.cal.SelectionMask.prototype.update = function(aEvent) {
  * @param {rflect.cal.SelectionMask.Configuration} aConfiguration Configuration
  * of mask.
  * @param {goog.events.Event} aEvent Event object.
+ * @param {number=} opt_startSelectionIndex Index where to start a mask.
+ * @param {number=} opt_endSelectionIndex Index where to end a mask.
  */
-rflect.cal.SelectionMask.prototype.init = function(aConfiguration, aEvent) {
-  //TODO(alexk): when in multiple scrollables goog.style.getOffsetPosition.
-  var doc = this.document_ || (this.document_ =
-      goog.dom.getOwnerDocument(this.component_.getElement()));
-
-  var pageScroll = goog.dom.getDomHelper(doc).getDocumentScroll();
-  var coordXWithoutScroll = 0;
-  var coordYWithoutScroll = 0;
-  var coordX = 0;
-  var coordY = 0;
-
+rflect.cal.SelectionMask.prototype.init = function(aConfiguration, aEvent,
+    opt_startSelectionIndex, opt_endSelectionIndex) {
   this.configuration_ = aConfiguration;
 
-  this.elementOffset_ = new goog.math.Coordinate(0, 0);
+  if (!this.isMiniMonthExt_()) {
 
-  if (this.isWeekOrAllday_()) {
+    //TODO(alexk): when in multiple scrollables goog.style.getOffsetPosition.
+    var doc = this.document_ || (this.document_ =
+        goog.dom.getOwnerDocument(this.component_.getElement()));
+    var pageScroll = goog.dom.getDomHelper(doc).getDocumentScroll();
+    var coordXWithoutScroll = 0;
+    var coordYWithoutScroll = 0;
+    var coordX = 0;
+    var coordY = 0;
 
-    if (this.isAllday_()) {
+    this.elementOffset_ = new goog.math.Coordinate(0, 0);
 
-      this.scrollableEl_ = goog.dom.getElement('main-pane-header-scrollable');
-      this.maskEl_ = goog.dom.getElement('wk-ad-mask-cnt');
-      this.elementOffset_ = goog.style.getRelativePosition(
-          this.scrollableEl_, document.documentElement);
-      this.elementOffset_.x += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+    if (this.isWeekOrAllday_()) {
 
-    } else {
+      if (this.isAllday_()) {
 
-      this.scrollableEl_ = goog.dom.getElement('main-pane-body-scrollable-wk');
-      this.maskEl_ = goog.dom.getElement('wk-mask-cnt');
+        this.scrollableEl_ = goog.dom.getElement('main-pane-header-scrollable');
+        this.maskEl_ = goog.dom.getElement('wk-ad-mask-cnt');
+        this.elementOffset_ = goog.style.getRelativePosition(
+            this.scrollableEl_, document.documentElement);
+        this.elementOffset_.x += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+
+      } else {
+
+        this.scrollableEl_ =
+            goog.dom.getElement('main-pane-body-scrollable-wk');
+        this.maskEl_ = goog.dom.getElement('wk-mask-cnt');
+        this.elementOffset_ = goog.style.getRelativePosition(
+            this.scrollableEl_, document.documentElement);
+        this.elementOffset_.x +=
+            rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_WEEK;
+      }
+        this.elementOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+
+    } else if (this.isMonth_()) {
+
+      this.scrollableEl_ = goog.dom.getElement('main-pane-body-scrollable-mn');
+      this.maskEl_ = goog.dom.getElement('mn-mask-cnt');
       this.elementOffset_ = goog.style.getRelativePosition(
           this.scrollableEl_, document.documentElement);
       this.elementOffset_.x +=
-          rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_WEEK;
+          rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_MONTH;
+      this.elementOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+
+    } else if (this.isMiniMonthInt_()) {
+      var miniCalGrid = goog.dom.getElement('minical-grid');
+      this.maskEl_ = goog.dom.getElement('minical-mask-cnt');
+      this.elementOffset_ = goog.style.getRelativePosition(
+          this.maskEl_, document.documentElement);
     }
-    this.elementOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
 
-  } else if (this.isMonth_()) {
+    coordXWithoutScroll = aEvent.clientX + pageScroll.x -
+        this.elementOffset_.x;
+    coordYWithoutScroll = aEvent.clientY + pageScroll.y -
+        this.elementOffset_.y;
 
-    this.scrollableEl_ = goog.dom.getElement('main-pane-body-scrollable-mn');
-    this.maskEl_ = goog.dom.getElement('mn-mask-cnt');
-    this.elementOffset_ = goog.style.getRelativePosition(
-        this.scrollableEl_, document.documentElement);
-    this.elementOffset_.x +=
-        rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_MONTH;
-    this.elementOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+    if (this.scrollableEl_){
+      coordX = coordXWithoutScroll + this.scrollableEl_.scrollLeft;
+      coordY = coordYWithoutScroll + this.scrollableEl_.scrollTop;
+      // Safe check for IE7.
+      if (coordYWithoutScroll >= this.scrollableEl_.offsetHeight ||
+          coordYWithoutScroll < 0)
+        return;
+    }
 
-  } else if (this.isMiniMonth_()) {
-    var miniCalGrid = goog.dom.getElement('minical-grid');
-    this.miniCalSize_ = this.miniCalSize_ || new goog.math.Size(
-        miniCalGrid.offsetWidth,
-        miniCalGrid.offsetHeight);
-    this.maskEl_ = goog.dom.getElement('minical-mask-cnt');
-    this.elementOffset_ = goog.style.getRelativePosition(
-        this.maskEl_, document.documentElement);
+    this.startCell_ = this.getCellByCoordinate_(coordX, coordY);
+    this.currentCell_ = this.startCell_.clone();
+
+    goog.style.showElement(this.maskEl_, true);
+
+  } else {
+
+    this.startCell_ = this.getCellBySelectionIndex_(opt_startSelectionIndex);
+    this.currentCell_ = this.getCellBySelectionIndex_(opt_endSelectionIndex);
+
   }
-
-
-  coordXWithoutScroll = aEvent.clientX + pageScroll.x -
-      this.elementOffset_.x;
-  coordYWithoutScroll = aEvent.clientY + pageScroll.y -
-      this.elementOffset_.y;
-
-  if (this.scrollableEl_){
-    coordX = coordXWithoutScroll + this.scrollableEl_.scrollLeft;
-    coordY = coordYWithoutScroll + this.scrollableEl_.scrollTop;
-    // Safe check for IE7.
-    if (coordYWithoutScroll >= this.scrollableEl_.offsetHeight ||
-      coordYWithoutScroll < 0)
-      return;
-  }
-
-  this.startCell_ = this.getCellByCoordinate_(coordX, coordY);
-  this.currentCell_ = this.startCell_.clone();
 
   if (goog.DEBUG) {
     _log('coordinate', new goog.math.Coordinate(coordX, coordY));
@@ -343,7 +372,6 @@ rflect.cal.SelectionMask.prototype.init = function(aConfiguration, aEvent) {
   this.visible = true;
 
   this.update_();
-  goog.style.showElement(this.maskEl_, true);
 };
 
 
@@ -380,8 +408,8 @@ rflect.cal.SelectionMask.prototype.getCellByCoordinate_ = function(aX, aY) {
 
     maxX = 6;
     maxY = 5;
-    cell.x = Math.floor(aX / (this.blockPoolMonth_.gridSize.width / 7));
-    cell.y = Math.floor(aY / (this.blockPoolMonth_.gridSize.width / 7));
+    cell.x = Math.floor(aX / (rflect.cal.predefined.MINICAL_MASK_WIDTH / 7));
+    cell.y = Math.floor(aY / (rflect.cal.predefined.MINICAL_MASK_HEIGHT / 7));
 
   }
 
@@ -392,6 +420,17 @@ rflect.cal.SelectionMask.prototype.getCellByCoordinate_ = function(aX, aY) {
   if (cell.y > maxY) cell.y = maxY;
 
   return cell;
+};
+
+
+/**
+ * @param {number} aSelectionIndex Index of whether selection start or end.
+ * @return {goog.math.Coordinate} Cell position for mini-month.
+ */
+rflect.cal.SelectionMask.prototype.getCellBySelectionIndex_ =
+    function(aSelectionIndex) {
+  return new goog.math.Coordinate(aSelectionIndex % 7,
+      Math.floor(aSelectionIndex / 7));
 };
 
 
@@ -545,7 +584,7 @@ rflect.cal.SelectionMask.prototype.getMaxSize_ = function() {
 
 
 /**
- * @return {goog.math.Rect|undefined} Rectangle, flipped if needed.
+ * @return {goog.math.Rect} Rectangle, flipped if needed.
  * @param {number} aX Left.
  * @param {number} aY Top.
  * @param {number} aDx Width.
@@ -555,12 +594,12 @@ rflect.cal.SelectionMask.prototype.getMaxSize_ = function() {
 rflect.cal.SelectionMask.prototype.getRect_ =
     function(aX, aY, aDx, aDy) {
   var rect;
-  if (this.isWeek_())
-    rect = new goog.math.Rect(aX, aY, aDx, aDy);
-  else if (this.isAllday_())
+  if (this.isAllday_())
     rect = new goog.math.Rect(aX, 0, aDx, 0);
   else if (this.isMonth_())
     rect = new goog.math.Rect(aY, aX, aDy, aDx);
+  else
+    rect = new goog.math.Rect(aX, aY, aDx, aDy);
   return rect;
 };
 
@@ -576,7 +615,7 @@ rflect.cal.SelectionMask.prototype.compareCells_ = function(aCellA, aCellB){
   if (this.isWeek_())
     return goog.math.Coordinate.equals(aCellA, aCellB) ? 0 : (aCellA.x >
         aCellB.x || (aCellA.x == aCellB.x && aCellA.y > aCellB.y) ? 1 : -1);
-  else if (this.isMonth_() || this.isAllday_())
+  else
     return goog.math.Coordinate.equals(aCellA, aCellB) ? 0 : (aCellA.y >
         aCellB.y || (aCellA.y == aCellB.y && aCellA.x > aCellB.x) ? 1 : -1);
 }
@@ -656,7 +695,7 @@ rflect.cal.SelectionMask.prototype.calculateDates_ = function() {
  */
 rflect.cal.SelectionMask.prototype.update_ = function() {
   // Rectangles to pass to builder.
-  var rects = [];
+  this.rects_.length = 0;
 
   if (!this.isMiniMonth_()) {
 
@@ -685,7 +724,7 @@ rflect.cal.SelectionMask.prototype.update_ = function() {
       maxIndex = Math.max(startCellSecondaryCoord,
           currentCellSecondaryCoord);
       // Single rect.
-      rects.push(this.getRect_(
+      this.rects_.push(this.getRect_(
           blockPositionForStartCell,
           minIndex * defaultStep,
           blockSizeForStartCell,
@@ -695,7 +734,7 @@ rflect.cal.SelectionMask.prototype.update_ = function() {
 
     } else {
       // Start cell rect.
-      rects.push(this.getRect_(
+      this.rects_.push(this.getRect_(
           blockPositionForStartCell,
           currentCellPrimaryCoord > startCellPrimaryCoord ?
           startCellSecondaryCoord * defaultStep : 0,
@@ -705,7 +744,7 @@ rflect.cal.SelectionMask.prototype.update_ = function() {
           (startCellSecondaryCoord + 1) * defaultStep
           ));
       // Current cell rect.
-      rects.push(this.getRect_(
+      this.rects_.push(this.getRect_(
           blockPositionForCurrentCell,
           currentCellPrimaryCoord > startCellPrimaryCoord ?
           0 : currentCellSecondaryCoord * defaultStep,
@@ -719,7 +758,7 @@ rflect.cal.SelectionMask.prototype.update_ = function() {
         minIndex = Math.min(startCellPrimaryCoord, currentCellPrimaryCoord);
         maxIndex = Math.max(startCellPrimaryCoord, currentCellPrimaryCoord);
         // Middle rect.
-        rects.push(this.getRect_(
+        this.rects_.push(this.getRect_(
             this.getBlockPositionOrSize_(minIndex + 1, true),
             0,
             this.getBlockPositionOrSize_(maxIndex, true) -
@@ -729,37 +768,59 @@ rflect.cal.SelectionMask.prototype.update_ = function() {
       }
     }
 
-  } else {
-
-  }
-
-  this.calculateDates_();
-
-  if (goog.DEBUG) {
-    var str = this.build_(rects);
-    //_log('str', str);
-    this.maskEl_.innerHTML = str;
-    _log('this.startDate', this.startDate);
-    _log('this.endDate', this.endDate);
+    this.calculateDates_();
+    this.maskEl_.innerHTML = this.build_();
 
   } else {
-    this.maskEl_.innerHTML = this.build_(rects);
+    // In mini-month, there's only one rect.
+    var defaultStepX = rflect.cal.predefined.MINICAL_MASK_WIDTH / 7;
+    var defaultStepY = rflect.cal.predefined.MINICAL_MASK_HEIGHT / 6;
+    var minCell = this.getMinCell_(this.startCell_, this.currentCell_);
+    var maxCell = this.getMaxCell_(this.startCell_, this.currentCell_);
+
+    if (minCell.y == maxCell.y || minCell.y == maxCell.y)
+      this.rects_.push(this.getRect_(
+          minCell.x * defaultStepX,
+          minCell.y * defaultStepY,
+          (maxCell.x - minCell.x) * defaultStepX,
+          defaultStepY
+      ));
+    else
+      this.rects_.push(this.getRect_(0,
+          minCell.y * defaultStepY,
+          7 * defaultStepX,
+          (maxCell.y - minCell.y) * defaultStepY
+      ));
+
   }
 };
 
 
 /**
  * Builds mask.
- * @param {Array.<goog.math.Rect>} aRects Sequence of rectangles that represent
- * mask.
- * @return {string} HTML of mask.
+ * @param {goog.string.StringBuffer=} aSb String buffer to append mask to.
+ * @return {string|undefined} HTML of mask.
  * @private
  */
-rflect.cal.SelectionMask.prototype.build_ = function(aRects) {
-  var sb = new goog.string.StringBuffer();
-  for (var counter = 0; counter < aRects.length; counter++)
-    this.buildUnit_(sb, aRects[counter]);
-  return sb.toString();
+rflect.cal.SelectionMask.prototype.build_ = function(aSb) {
+  var sb = aSb || new goog.string.StringBuffer();
+  for (var counter = 0, length = this.rects_.length; counter < length;
+      counter++)
+    this.buildUnit_(sb, this.rects_[counter]);
+  return aSb ? undefined : sb.toString();
+};
+
+
+/**
+ * Builds mask for mini-month external configuration.
+ * @param {goog.string.StringBuffer=} aSb String buffer to append mask to.
+ * @return {string} HTML of mask.
+ */
+rflect.cal.SelectionMask.prototype.build = function(aSb) {
+  var rv = '';
+  if (this.isMiniMonthExt_())
+    rv = this.build_(aSb);
+  return rv;
 };
 
 

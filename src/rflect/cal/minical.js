@@ -9,6 +9,7 @@
 
 goog.provide('rflect.cal.MiniCal');
 
+goog.require('goog.array');
 goog.require('goog.events.EventType');
 goog.require('rflect.cal.Component');
 goog.require('rflect.cal.MiniCalBuilder');
@@ -25,10 +26,12 @@ goog.require('rflect.string');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aExternalTimeManager Link to external time
  * manager.
+ * @param {rflect.cal.ContainerSizeMonitor} aViewManager Link to view manager.
  * @constructor
  * @extends {rflect.cal.Component}
  */
-rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
+rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager,
+    aContainersSizeMonitor) {
   rflect.cal.Component.call(this);
 
   /**
@@ -67,12 +70,11 @@ rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
   /**
    * Selection mask.
    * @type {rflect.cal.SelectionMask}
-   * @private
    */
-  this.selectionMask_ = new rflect.cal.SelectionMask(aViewManager, this,
+  this.selectionMask = new rflect.cal.SelectionMask(aViewManager, this,
       aExternalTimeManager);
   if (goog.DEBUG)
-    _inspect('selectionMask', this.selectionMask_);
+    _inspect('selectionMask', this.selectionMask);
 
 };
 goog.inherits(rflect.cal.MiniCal, rflect.cal.Component);
@@ -94,7 +96,7 @@ rflect.cal.MiniCal.prototype.updateBeforeRedraw = function(opt_internal,
   } else {
     this.timeManager_.shiftToPoint(this.extTimeManager_.basis);
   }
-  this.findIndexesForSelection_();
+  this.initMask_();
 };
 
 
@@ -103,9 +105,9 @@ rflect.cal.MiniCal.prototype.updateBeforeRedraw = function(opt_internal,
  * <code>updateByRedraw</code>.
  * @private
  */
-rflect.cal.MiniCal.prototype.findIndexesForSelection_ = function() {
-  this.startSelectionIndex = -1;
-  this.endSelectionIndex = -1;
+rflect.cal.MiniCal.prototype.initMask_ = function() {
+  var startSelectionIndex = -1;
+  var endSelectionIndex = -1;
 
   if (!this.timeManager_.interval.overlap(this.extTimeManager_.interval))
     return;
@@ -122,24 +124,28 @@ rflect.cal.MiniCal.prototype.findIndexesForSelection_ = function() {
   var startDateMonth = startDate.getMonth();
   var endDateDay = endDate.getDate();
   var endDateMonth = endDate.getMonth();
-  this.startSelectionIndex = goog.array.findIndex(this.timeManager_.daySeries,
+  startSelectionIndex = goog.array.findIndex(this.timeManager_.daySeries,
       function(aDate){
     return startDateMonth == aDate.getMonth() &&
         startDateDay == aDate.getDate();
   });
-  this.endSelectionIndex = goog.array.findIndexRight(
+  endSelectionIndex = goog.array.findIndexRight(
       this.timeManager_.daySeries, function(aDate){
     return endDateMonth == aDate.getMonth() &&
         endDateDay == aDate.getDate();
   });
-  if (this.startSelectionIndex >= 0 && this.endSelectionIndex < 0)
+  if (startSelectionIndex >= 0 && endSelectionIndex < 0)
     // Overlap interval ends in day that is not in day series. Use latest day's
     // tomorrow then.
-    this.endSelectionIndex = this.timeManager_.daySeries.length;
+    endSelectionIndex = this.timeManager_.daySeries.length;
   if (goog.DEBUG) {
-    _log('this.startSelectionIndex', this.startSelectionIndex);
-    _log('this.endSelectionIndex', this.endSelectionIndex);
+    _log('startSelectionIndex', startSelectionIndex);
+    _log('endSelectionIndex', endSelectionIndex);
   }
+  
+  this.selectionMask.init(
+      rflect.cal.SelectionMask.Configuration.MINI_MONTH_EXTERNAL, null, 
+      startSelectionIndex, endSelectionIndex);
 };
 
 
@@ -268,7 +274,7 @@ rflect.cal.MiniCal.prototype.onMouseDown_ = function(aEvent) {
   }
 
   if (this.isField_(className))
-    this.selectionMask_.init(rflect.cal.SelectionMask.Configuration.MINI_MONTH,
+    this.selectionMask.init(rflect.cal.SelectionMask.Configuration.MINI_MONTH_INTERNAL,
         aEvent);
 
   if (this.isSelectableArea_(className))
@@ -296,8 +302,8 @@ rflect.cal.MiniCal.prototype.onSelectStart_ = function(aEvent) {
  * @private
  */
 rflect.cal.MiniCal.prototype.onMouseUp_ = function(aEvent) {
-  if (this.selectionMask_.visible) {
-    this.selectionMask_.clear();
+  if (this.selectionMask.visible) {
+    this.selectionMask.clear();
     aEvent.preventDefault();
   }
 
@@ -310,8 +316,8 @@ rflect.cal.MiniCal.prototype.onMouseUp_ = function(aEvent) {
  * @private
  */
 rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
-  if (this.selectionMask_.visible) {
-    this.selectionMask_.update(aEvent);
+  if (this.selectionMask.visible) {
+    this.selectionMask.update(aEvent);
     aEvent.preventDefault();
   }
 

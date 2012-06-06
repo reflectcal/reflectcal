@@ -508,3 +508,19 @@ rflect.cal.predefined.BUTTON_MONTH_ID = 'nb6';
  */
 rflect.cal.predefined.BUTTON_OPTIONS_ID = 'nb8';
 
+
+/**
+ * Minical mask area width.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MINICAL_MASK_WIDTH = 134;
+
+
+/**
+ * Minical mask area height.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MINICAL_MASK_HEIGHT = 110;
+
