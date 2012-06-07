@@ -26,12 +26,9 @@ goog.require('rflect.string');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aExternalTimeManager Link to external time
  * manager.
- * @param {rflect.cal.ContainerSizeMonitor} aViewManager Link to view manager.
- * @constructor
  * @extends {rflect.cal.Component}
  */
-rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager,
-    aContainersSizeMonitor) {
+rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
   rflect.cal.Component.call(this);
 
   /**
@@ -109,42 +106,47 @@ rflect.cal.MiniCal.prototype.initMask_ = function() {
   var startSelectionIndex = -1;
   var endSelectionIndex = -1;
 
-  if (!this.timeManager_.interval.overlap(this.extTimeManager_.interval))
-    return;
+  if (this.timeManager_.interval.overlaps(this.extTimeManager_.interval)) {
 
-  var overlap = this.timeManager_.interval.overlap(
-      this.extTimeManager_.interval);
-  if (goog.DEBUG)
-    _log('overlap', overlap);
-  var startDate = new goog.date.Date();
-  var endDate = new goog.date.Date();
-  startDate.setTime(overlap.start);
-  endDate.setTime(overlap.end);
-  var startDateDay = startDate.getDate();
-  var startDateMonth = startDate.getMonth();
-  var endDateDay = endDate.getDate();
-  var endDateMonth = endDate.getMonth();
-  startSelectionIndex = goog.array.findIndex(this.timeManager_.daySeries,
-      function(aDate){
-    return startDateMonth == aDate.getMonth() &&
-        startDateDay == aDate.getDate();
-  });
-  endSelectionIndex = goog.array.findIndexRight(
-      this.timeManager_.daySeries, function(aDate){
-    return endDateMonth == aDate.getMonth() &&
-        endDateDay == aDate.getDate();
-  });
-  if (startSelectionIndex >= 0 && endSelectionIndex < 0)
-    // Overlap interval ends in day that is not in day series. Use latest day's
-    // tomorrow then.
-    endSelectionIndex = this.timeManager_.daySeries.length;
+    var overlap = this.timeManager_.interval.overlap(
+        this.extTimeManager_.interval);
+    if (goog.DEBUG)
+      _log('overlap', overlap);
+    var startDate = new goog.date.Date();
+    var endDate = new goog.date.Date();
+    startDate.setTime(overlap.start);
+    endDate.setTime(overlap.end);
+    var startDateDay = startDate.getDate();
+    var startDateMonth = startDate.getMonth();
+    var endDateDay = endDate.getDate();
+    var endDateMonth = endDate.getMonth();
+    startSelectionIndex = goog.array.findIndex(this.timeManager_.daySeries,
+        function(aDate){
+      return startDateMonth == aDate.getMonth() &&
+          startDateDay == aDate.getDate();
+    });
+    endSelectionIndex = goog.array.findIndexRight(
+        this.timeManager_.daySeries, function(aDate){
+      return endDateMonth == aDate.getMonth() &&
+          endDateDay == aDate.getDate();
+    });
+    if (startSelectionIndex >= 0) {
+      if(endSelectionIndex < 0)
+        // We haven't found end index, so use latest. Because time interval ends in
+        // tomorrow relative to latest selected cell, use index - 1.
+        endSelectionIndex = this.timeManager_.daySeries.length - 1;
+      else
+        endSelectionIndex--;
+    }
+
+  }
   if (goog.DEBUG) {
     _log('startSelectionIndex', startSelectionIndex);
     _log('endSelectionIndex', endSelectionIndex);
   }
-  
+
   this.selectionMask.init(
-      rflect.cal.SelectionMask.Configuration.MINI_MONTH_EXTERNAL, null, 
+      rflect.cal.SelectionMask.Configuration.MINI_MONTH_EXTERNAL, null,
       startSelectionIndex, endSelectionIndex);
 };
 

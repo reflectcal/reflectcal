@@ -357,19 +357,15 @@ rflect.cal.SelectionMask.prototype.init = function(aConfiguration, aEvent,
 
     goog.style.showElement(this.maskEl_, true);
 
-  } else {
+  } else if (opt_startSelectionIndex >= 0 && opt_endSelectionIndex >= 0) {
 
     this.startCell_ = this.getCellBySelectionIndex_(opt_startSelectionIndex);
     this.currentCell_ = this.getCellBySelectionIndex_(opt_endSelectionIndex);
 
   }
 
-  if (goog.DEBUG) {
-    _log('coordinate', new goog.math.Coordinate(coordX, coordY));
-    _log('this.point_', this.startCell_);
-  }
-
-  this.visible = true;
+  this.visible = !this.isMiniMonthExt_() || (opt_startSelectionIndex >= 0 &&
+      opt_endSelectionIndex >= 0);
 
   this.update_();
 };
@@ -697,6 +693,9 @@ rflect.cal.SelectionMask.prototype.update_ = function() {
   // Rectangles to pass to builder.
   this.rects_.length = 0;
 
+  if (!this.visible)
+    return;
+
   if (!this.isMiniMonth_()) {
 
     var startCellPrimaryCoord = this.getStartCellPrimaryCoord_();
@@ -778,18 +777,18 @@ rflect.cal.SelectionMask.prototype.update_ = function() {
     var minCell = this.getMinCell_(this.startCell_, this.currentCell_);
     var maxCell = this.getMaxCell_(this.startCell_, this.currentCell_);
 
-    if (minCell.y == maxCell.y || minCell.y == maxCell.y)
+    if (goog.math.Coordinate.equals(minCell, maxCell))
       this.rects_.push(this.getRect_(
           minCell.x * defaultStepX,
           minCell.y * defaultStepY,
-          (maxCell.x - minCell.x) * defaultStepX,
+          (maxCell.x - minCell.x +  1) * defaultStepX,
           defaultStepY
       ));
     else
       this.rects_.push(this.getRect_(0,
           minCell.y * defaultStepY,
           7 * defaultStepX,
-          (maxCell.y - minCell.y) * defaultStepY
+          (maxCell.y - minCell.y + 1) * defaultStepY
       ));
 
   }
@@ -817,10 +816,10 @@ rflect.cal.SelectionMask.prototype.build_ = function(aSb) {
  * @return {string} HTML of mask.
  */
 rflect.cal.SelectionMask.prototype.build = function(aSb) {
-  var rv = '';
+  var rv;
   if (this.isMiniMonthExt_())
     rv = this.build_(aSb);
-  return rv;
+  return rv || '';
 };
 
 
