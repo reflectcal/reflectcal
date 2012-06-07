@@ -177,10 +177,25 @@ rflect.cal.SelectionMask.prototype.endDate = null;
 
 
 /**
- * Whether mask is visible.
+ * Whether mask is initialized by control, through owner component.
  * @type {boolean}
  */
-rflect.cal.SelectionMask.prototype.visible = false;
+rflect.cal.SelectionMask.prototype.initializedByControl = false;
+
+
+/**
+ * Whether mask is moved by control, through owner component.
+ * @type {boolean}
+ */
+rflect.cal.SelectionMask.prototype.movedByControl = false;
+
+
+/**
+ * Whether mask was initialized.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.SelectionMask.prototype.initialized_ = false;
 
 
 /**
@@ -253,7 +268,7 @@ rflect.cal.SelectionMask.prototype.isMiniMonth_ = function() {
  */
 rflect.cal.SelectionMask.prototype.clear = function() {
   goog.style.showElement(this.maskEl_, false);
-  this.visible = false;
+  this.initializedByControl = false;
 };
 
 
@@ -263,12 +278,21 @@ rflect.cal.SelectionMask.prototype.clear = function() {
  */
 rflect.cal.SelectionMask.prototype.update = function(aEvent) {
   var pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
+
+  var scrollLeft = 0;
+  var scrollTop = 0;
+  if (this.scrollableEl_) {
+    scrollLeft = this.scrollableEl_.scrollLeft;
+    scrollTop = this.scrollableEl_.scrollTop;
+  }
+
   var currentCell = this.getCellByCoordinate_(aEvent.clientX + pageScroll.x -
-      this.elementOffset_.x + this.scrollableEl_.scrollLeft, aEvent.clientY +
-      pageScroll.y - this.elementOffset_.y + this.scrollableEl_.scrollTop);
+      this.elementOffset_.x + scrollLeft, aEvent.clientY +
+      pageScroll.y - this.elementOffset_.y + scrollTop);
 
   if (!goog.math.Coordinate.equals(this.currentCell_, currentCell)) {
     this.currentCell_ = currentCell;
+    this.movedByControl = true;
     this.update_();
   }
 };
@@ -332,15 +356,14 @@ rflect.cal.SelectionMask.prototype.init = function(aConfiguration, aEvent,
       this.elementOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
 
     } else if (this.isMiniMonthInt_()) {
-      var miniCalGrid = goog.dom.getElement('minical-grid');
       this.maskEl_ = goog.dom.getElement('minical-mask-cnt');
       this.elementOffset_ = goog.style.getRelativePosition(
           this.maskEl_, document.documentElement);
     }
 
-    coordXWithoutScroll = aEvent.clientX + pageScroll.x -
+    coordX = coordXWithoutScroll = aEvent.clientX + pageScroll.x -
         this.elementOffset_.x;
-    coordYWithoutScroll = aEvent.clientY + pageScroll.y -
+    coordY = coordYWithoutScroll = aEvent.clientY + pageScroll.y -
         this.elementOffset_.y;
 
     if (this.scrollableEl_){
@@ -355,6 +378,12 @@ rflect.cal.SelectionMask.prototype.init = function(aConfiguration, aEvent,
     this.startCell_ = this.getCellByCoordinate_(coordX, coordY);
     this.currentCell_ = this.startCell_.clone();
 
+    if (goog.DEBUG){
+      _log('coord: ', new goog.math.Coordinate(coordX, coordY));
+      _log('this.startCell_', this.startCell_);
+      _log('this.currentCell_', this.currentCell_);
+    }
+
     goog.style.showElement(this.maskEl_, true);
 
   } else if (opt_startSelectionIndex >= 0 && opt_endSelectionIndex >= 0) {
@@ -364,7 +393,8 @@ rflect.cal.SelectionMask.prototype.init = function(aConfiguration, aEvent,
 
   }
 
-  this.visible = !this.isMiniMonthExt_() || (opt_startSelectionIndex >= 0 &&
+  this.initializedByControl = !this.isMiniMonthExt_();
+  this.initialized_ = this.initializedByControl || (opt_startSelectionIndex >= 0 &&
       opt_endSelectionIndex >= 0);
 
   this.update_();
@@ -405,7 +435,7 @@ rflect.cal.SelectionMask.prototype.getCellByCoordinate_ = function(aX, aY) {
     maxX = 6;
     maxY = 5;
     cell.x = Math.floor(aX / (rflect.cal.predefined.MINICAL_MASK_WIDTH / 7));
-    cell.y = Math.floor(aY / (rflect.cal.predefined.MINICAL_MASK_HEIGHT / 7));
+    cell.y = Math.floor(aY / (rflect.cal.predefined.MINICAL_MASK_HEIGHT / 6));
 
   }
 
@@ -641,47 +671,53 @@ rflect.cal.SelectionMask.prototype.getMinCell_ = function(aCellA, aCellB){
 
 /**
  * Calculates dates from cell selection.
+ * @param {goog.math.Coordinate} aMinCell Lesser of cells.
+ * @param {goog.math.Coordinate} aMaxCell Greater of cells.
  * @private
  */
-rflect.cal.SelectionMask.prototype.calculateDates_ = function() {
-  var minCell = this.getMinCell_(this.startCell_, this.currentCell_);
-  var maxCell = this.getMaxCell_(this.startCell_, this.currentCell_);
+rflect.cal.SelectionMask.prototype.calculateDates_ = function(aMinCell,
+    aMaxCell) {
   var startDate = null;
   var endDate = null;
   var minutes = 0;
   var tempDate = null;
 
   if (this.isWeek_()) {
-    tempDate = this.timeManager_.daySeries[minCell.x];
-    minutes = 30 * minCell.y;
+    tempDate = this.timeManager_.daySeries[aMinCell.x];
+    minutes = 30 * aMinCell.y;
     startDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
         tempDate.getDate(), minutes / 60, minutes % 60);
     // Special case when we're on last line.
-    if (maxCell.y == rflect.cal.predefined.HOUR_ROWS_NUMBER - 1){
+    if (aMaxCell.y == rflect.cal.predefined.HOUR_ROWS_NUMBER - 1){
       tempDate = rflect.date.getTomorrow(this.timeManager_.daySeries[
-          maxCell.x]);
+          aMaxCell.x]);
       endDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
           tempDate.getDate());
     }
     else {
-      tempDate = this.timeManager_.daySeries[maxCell.x];
-      minutes = 30 * (maxCell.y + 1);
+      tempDate = this.timeManager_.daySeries[aMaxCell.x];
+      minutes = 30 * (aMaxCell.y + 1);
       endDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
           tempDate.getDate(), minutes / 60, minutes % 60);
     }
 
-  } else if (this.isMonth_() || this.isAllday_()) {
-    tempDate = this.timeManager_.daySeries[minCell.x + minCell.y * 7];
+  } else {
+    tempDate = this.timeManager_.daySeries[aMinCell.x + aMinCell.y * 7];
     startDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
         tempDate.getDate());
-    tempDate = rflect.date.getTomorrow(this.timeManager_.daySeries[maxCell.x +
-        maxCell.y * 7]);
+    tempDate = rflect.date.getTomorrow(this.timeManager_.daySeries[aMaxCell.x +
+        aMaxCell.y * 7]);
     endDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
       tempDate.getDate());
   }
 
   this.startDate = startDate;
   this.endDate = endDate;
+
+  if (goog.DEBUG) {
+    _log('this.startDate', this.startDate);
+    _log('this.endDate', this.endDate);
+  }
 }
 
 
@@ -690,13 +726,19 @@ rflect.cal.SelectionMask.prototype.calculateDates_ = function() {
  * @private
  */
 rflect.cal.SelectionMask.prototype.update_ = function() {
+  var maxCell;
+  var minCell;
+  
   // Rectangles to pass to builder.
   this.rects_.length = 0;
 
-  if (!this.visible)
+  if (!this.initialized_)
     return;
 
   if (!this.isMiniMonth_()) {
+
+    minCell = this.getMinCell_(this.startCell_, this.currentCell_);
+    maxCell = this.getMaxCell_(this.startCell_, this.currentCell_);
 
     var startCellPrimaryCoord = this.getStartCellPrimaryCoord_();
     var startCellSecondaryCoord = this.getStartCellSecondaryCoord_();
@@ -767,30 +809,35 @@ rflect.cal.SelectionMask.prototype.update_ = function() {
       }
     }
 
-    this.calculateDates_();
-    this.maskEl_.innerHTML = this.build_();
-
   } else {
     // In mini-month, there's only one rect.
     var defaultStepX = rflect.cal.predefined.MINICAL_MASK_WIDTH / 7;
     var defaultStepY = rflect.cal.predefined.MINICAL_MASK_HEIGHT / 6;
-    var minCell = this.getMinCell_(this.startCell_, this.currentCell_);
-    var maxCell = this.getMaxCell_(this.startCell_, this.currentCell_);
+    
+    // We need real cells before modifying originals.
+    var startCellClone = this.startCell_.clone();
+    var currentCellClone = this.currentCell_.clone();
+    
+    minCell = this.getMinCell_(startCellClone, currentCellClone);
+    maxCell = this.getMaxCell_(startCellClone, currentCellClone);
 
-    if (goog.math.Coordinate.equals(minCell, maxCell))
-      this.rects_.push(this.getRect_(
-          minCell.x * defaultStepX,
-          minCell.y * defaultStepY,
-          (maxCell.x - minCell.x +  1) * defaultStepX,
-          defaultStepY
-      ));
-    else
-      this.rects_.push(this.getRect_(0,
-          minCell.y * defaultStepY,
-          7 * defaultStepX,
-          (maxCell.y - minCell.y + 1) * defaultStepY
-      ));
+    if (minCell.y != maxCell.y) {
+      minCell.x = 0;
+      maxCell.x = 6;
+    }
 
+    this.rects_.push(this.getRect_(
+        minCell.x * defaultStepX,
+        minCell.y * defaultStepY,
+        (maxCell.x - minCell.x + 1) * defaultStepX,
+        (maxCell.y - minCell.y + 1) * defaultStepY
+    ));
+
+  }
+
+  if (!this.isMiniMonthExt_()) {
+    this.calculateDates_(minCell, maxCell);
+    this.maskEl_.innerHTML = this.build_();
   }
 };
 

@@ -625,7 +625,7 @@ rflect.cal.MainPane.prototype.onSelectStart_ = function(aEvent) {
  * @private
  */
 rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
-  if (this.selectionMask_.visible) {
+  if (this.selectionMask_.initializedByControl) {
     this.selectionMask_.clear();
     aEvent.preventDefault();
   }
@@ -639,7 +639,7 @@ rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
  * @private
  */
 rflect.cal.MainPane.prototype.onMouseMove_ = function(aEvent) {
-  if (this.selectionMask_.visible) {
+  if (this.selectionMask_.initializedByControl) {
     this.selectionMask_.update(aEvent);
     aEvent.preventDefault();
   }

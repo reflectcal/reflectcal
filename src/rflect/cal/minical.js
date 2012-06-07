@@ -27,6 +27,7 @@ goog.require('rflect.string');
  * @param {rflect.cal.TimeManager} aExternalTimeManager Link to external time
  * manager.
  * @extends {rflect.cal.Component}
+ * @constructor
  */
 rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
   rflect.cal.Component.call(this);
@@ -69,7 +70,7 @@ rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
    * @type {rflect.cal.SelectionMask}
    */
   this.selectionMask = new rflect.cal.SelectionMask(aViewManager, this,
-      aExternalTimeManager);
+      this.timeManager_);
   if (goog.DEBUG)
     _inspect('selectionMask', this.selectionMask);
 
@@ -200,9 +201,9 @@ rflect.cal.MiniCal.prototype.enterDocument = function() {
       .listen(this.getElement(), goog.events.EventType.SELECTSTART,
       this.onSelectStart_, false, this)
       .listen(document, goog.events.EventType.MOUSEMOVE,
-      goog.nullFunction, false, this)
+      this.onMouseMove_, false, this)
       .listen(document, goog.events.EventType.MOUSEUP,
-      goog.nullFunction, false, this);
+      this.onMouseUp_, false, this);
 };
 
 
@@ -276,8 +277,8 @@ rflect.cal.MiniCal.prototype.onMouseDown_ = function(aEvent) {
   }
 
   if (this.isField_(className))
-    this.selectionMask.init(rflect.cal.SelectionMask.Configuration.MINI_MONTH_INTERNAL,
-        aEvent);
+    this.selectionMask.init(
+        rflect.cal.SelectionMask.Configuration.MINI_MONTH_INTERNAL, aEvent);
 
   if (this.isSelectableArea_(className))
     aEvent.preventDefault();
@@ -304,8 +305,9 @@ rflect.cal.MiniCal.prototype.onSelectStart_ = function(aEvent) {
  * @private
  */
 rflect.cal.MiniCal.prototype.onMouseUp_ = function(aEvent) {
-  if (this.selectionMask.visible) {
-    this.selectionMask.clear();
+  if (this.selectionMask.initializedByControl) {
+    this.selectionMask.movedByControl = false;
+    this.selectionMask.initializedByControl = false;
     aEvent.preventDefault();
   }
 
@@ -318,7 +320,7 @@ rflect.cal.MiniCal.prototype.onMouseUp_ = function(aEvent) {
  * @private
  */
 rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
-  if (this.selectionMask.visible) {
+  if (this.selectionMask.initializedByControl) {
     this.selectionMask.update(aEvent);
     aEvent.preventDefault();
   }
