@@ -50,3 +50,13 @@ rflect.string.buildClassNameRe = function(var_args) {
       buffer.join(rflect.string.END_OF_CLASS_RE + '|' +
       rflect.string.BEGINNING_OF_CLASS_RE) + rflect.string.END_OF_CLASS_RE);
 };
+
+
+/**
+ * @param {string} aId Id to find index in.
+ * @return {number} Index found in id.
+ */
+rflect.string.getNumericIndex = function(aId) {
+  var matches = /\d{1,2}/.exec(aEvent.target.id);
+  return matches ? matches[0] : NaN;
+}

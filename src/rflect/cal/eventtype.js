@@ -15,6 +15,7 @@ goog.provide('rflect.cal.EventType');
  * @enum {string}
  */
 rflect.cal.EventType = {
+  // Menu events.
   MENU_COMMAND_NOW: 'toppanenow',
   MENU_COMMAND_PREV: 'toppaneprev',
   MENU_COMMAND_NEXT: 'toppanenext',
@@ -23,5 +24,10 @@ rflect.cal.EventType = {
   MENU_COMMAND_WEEK: 'toppaneweek',
   MENU_COMMAND_MONTH: 'toppanemonth',
   MENU_COMMAND_YEAR: 'toppaneyear',
-  MENU_COMMAND_OPTIONS: 'toppaneoptions'
+  MENU_COMMAND_OPTIONS: 'toppaneoptions',
+
+  // Minical events.
+  DATE_SELECT: 'dateselect',
+  DATE_DRAG: 'datedrag',
+  DATE_DRAG_END, 'datedragend'
 };

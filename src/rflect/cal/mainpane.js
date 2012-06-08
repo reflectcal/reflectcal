@@ -16,7 +16,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('rflect.cal.Component');
 goog.require('rflect.cal.MainPaneBuilder');
-goog.require('rflect.cal.SelectionMask');
+goog.require('rflect.cal.MainPaneSelectionMask');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.string');
 
@@ -79,10 +79,10 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager,
 
   /**
    * Selection mask.
-   * @type {rflect.cal.SelectionMask}
+   * @type {rflect.cal.MainPaneSelectionMask}
    * @private
    */
-  this.selectionMask_ = new rflect.cal.SelectionMask(aViewManager, this,
+  this.selectionMask_ = new rflect.cal.MainPaneSelectionMask(aViewManager, this,
       aTimeManager, this.blockManager_.blockPoolWeek,
       this.blockManager_.blockPoolAllday, this.blockManager_.blockPoolMonth);
   if (goog.DEBUG)
@@ -586,15 +586,18 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
   // Whether we clicked on hollow space
   if (this.isWeekGrid_(className)) {
-    this.selectionMask_.init(rflect.cal.SelectionMask.Configuration.WEEK,
+    this.selectionMask_.init(
+        rflect.cal.MainPaneSelectionMask.Configuration.WEEK,
         aEvent);
     preventDefaultIsNeeded = true;
   } else if (this.isAlldayGrid_(className)) {
-    this.selectionMask_.init(rflect.cal.SelectionMask.Configuration.ALLDAY,
+    this.selectionMask_.init(
+        rflect.cal.MainPaneSelectionMask.Configuration.ALLDAY,
         aEvent);
     preventDefaultIsNeeded = true;
   } else if (this.isMonthGrid_(className)) {
-    this.selectionMask_.init(rflect.cal.SelectionMask.Configuration.MONTH,
+    this.selectionMask_.init(
+        rflect.cal.MainPaneSelectionMask.Configuration.MONTH,
         aEvent);
     preventDefaultIsNeeded = true;
   }

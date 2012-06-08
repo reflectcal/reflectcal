@@ -12,10 +12,11 @@ goog.provide('rflect.cal.MiniCal');
 goog.require('goog.array');
 goog.require('goog.events.EventType');
 goog.require('rflect.cal.Component');
+goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.MiniCalBuilder');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
-goog.require('rflect.cal.SelectionMask');
+goog.require('rflect.cal.MiniCalSelectionMask');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.string');
 
@@ -67,9 +68,9 @@ rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
 
   /**
    * Selection mask.
-   * @type {rflect.cal.SelectionMask}
+   * @type {rflect.cal.MiniCalSelectionMask}
    */
-  this.selectionMask = new rflect.cal.SelectionMask(aViewManager, this,
+  this.selectionMask = new rflect.cal.MiniCalSelectionMask(aViewManager, this,
       this.timeManager_);
   if (goog.DEBUG)
     _inspect('selectionMask', this.selectionMask);
@@ -147,7 +148,7 @@ rflect.cal.MiniCal.prototype.initMask_ = function() {
   }
 
   this.selectionMask.init(
-      rflect.cal.SelectionMask.Configuration.MINI_MONTH_EXTERNAL, null,
+      rflect.cal.MiniCalSelectionMask.Configuration.MINI_MONTH_EXTERNAL, null,
       startSelectionIndex, endSelectionIndex);
 };
 
@@ -270,7 +271,7 @@ rflect.cal.MiniCal.prototype.isField_ = function(aClassName) {
  */
 rflect.cal.MiniCal.prototype.onMouseDown_ = function(aEvent) {
   var className = aEvent.target.className;
-
+  var index = rflect.string.getNumericIndex(aEvent.target.id);
   if (goog.DEBUG){
     _log('aEvent.target.id', aEvent.target.id);
     _log('aEvent.target.className', aEvent.target.className);
@@ -278,7 +279,8 @@ rflect.cal.MiniCal.prototype.onMouseDown_ = function(aEvent) {
 
   if (this.isField_(className))
     this.selectionMask.init(
-        rflect.cal.SelectionMask.Configuration.MINI_MONTH_INTERNAL, aEvent);
+        rflect.cal.MiniCalSelectionMask.Configuration.MINI_MONTH_INTERNAL, 
+        index, index);
 
   if (this.isSelectableArea_(className))
     aEvent.preventDefault();
@@ -300,14 +302,21 @@ rflect.cal.MiniCal.prototype.onSelectStart_ = function(aEvent) {
 
 
 /**
- * Mini cal mouseup handler.
+ * Mini cal mousemove handler.
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
-rflect.cal.MiniCal.prototype.onMouseUp_ = function(aEvent) {
+rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
+  var index = rflect.string.getNumericIndex(aEvent.target.id);
   if (this.selectionMask.initializedByControl) {
-    this.selectionMask.movedByControl = false;
-    this.selectionMask.initializedByControl = false;
+    this.selectionMask.update(index);
+    if (this.selectionMask.movedByControl) {
+      goog.events.dispatchEvent(this, rflect.cal.EventType.DATE_DRAG, {
+        startDate: this.selectionMask.startDate,
+        endDate: this.selectionMask.endDate,
+      });
+      this.selectionMask.movedByControl = false;
+    }
     aEvent.preventDefault();
   }
 
@@ -315,15 +324,24 @@ rflect.cal.MiniCal.prototype.onMouseUp_ = function(aEvent) {
 
 
 /**
- * Mini cal mousemove handler.
+ * Mini cal mouseup handler.
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
-rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
-  if (this.selectionMask.initializedByControl) {
-    this.selectionMask.update(aEvent);
+rflect.cal.MiniCal.prototype.onMouseUp_ = function(aEvent) {
+  var index = rflect.string.getNumericIndex(aEvent.target.id);
+  if (this.selectionMask.movedByControl)
+      goog.events.dispatchEvent(this, rflect.cal.EventType.DATE_DRAG_END, {
+        startDate: this.selectionMask.startDate,
+        endDate: this.selectionMask.endDate
+      });
+    else if (this.selectionMask.indexIsInMask())
+      goog.events.dispatchEvent(this, rflect.cal.EventType.DATE_SELECT, {
+        date: this.selectionMask.startDate
+      });
+    this.selectionMask.movedByControl = false;
+    this.selectionMask.initializedByControl = false;
     aEvent.preventDefault();
-  }
 
 };
 

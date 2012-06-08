@@ -53,6 +53,7 @@ rflect.cal.TimeManager = function(opt_date) {
 
 /**
  * Configurations of time manager.
+ * Should correspond in numbers to @link {rflect.cal.ViewType}.
  * @enum {number}
  */
 rflect.cal.TimeManager.Configuration = {

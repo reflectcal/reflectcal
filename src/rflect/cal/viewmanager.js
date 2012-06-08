@@ -130,45 +130,14 @@ rflect.cal.ViewManager.prototype.assignEvents_ = function() {
 
   // Menu commands.
   this.listen(this.mainBody_, goog.ui.Component.EventType.ACTION,
-      function(aEvent) {
-        var id = aEvent.target.getId();
+      this.onMainBodyAction_, false, this);
 
-        switch (id) {
-          case rflect.cal.predefined.BUTTON_NOW_ID:
-            if (goog.events.dispatchEvent(this.mainBody_,
-                rflect.cal.EventType.MENU_COMMAND_NOW))
-              this.onMenuCommandNow_();break;
-          case rflect.cal.predefined.BUTTON_PREV_ID:
-            if (goog.events.dispatchEvent(this.mainBody_,
-                rflect.cal.EventType.MENU_COMMAND_PREV))
-              this.onMenuCommandPrev_();break;
-          case rflect.cal.predefined.BUTTON_NEXT_ID:
-            if (goog.events.dispatchEvent(this.mainBody_,
-                rflect.cal.EventType.MENU_COMMAND_NEXT))
-              this.onMenuCommandNext_();break;
-          case rflect.cal.predefined.BUTTON_NEW_EVENT_ID:
-            if (goog.events.dispatchEvent(this.mainBody_,
-                rflect.cal.EventType.MENU_COMMAND_NEW_EVENT))
-              this.onMenuCommandNewEvent_();break;
-          case rflect.cal.predefined.BUTTON_DAY_ID:
-            if (goog.events.dispatchEvent(this.mainBody_,
-                rflect.cal.EventType.MENU_COMMAND_DAY))
-              this.onMenuCommandDay_();break;
-          case rflect.cal.predefined.BUTTON_WEEK_ID:
-            if (goog.events.dispatchEvent(this.mainBody_,
-                rflect.cal.EventType.MENU_COMMAND_WEEK))
-              this.onMenuCommandWeek_();break;
-          case rflect.cal.predefined.BUTTON_MONTH_ID:
-            if (goog.events.dispatchEvent(this.mainBody_,
-                rflect.cal.EventType.MENU_COMMAND_MONTH))
-              this.onMenuCommandMonth_();break;
-          case rflect.cal.predefined.BUTTON_OPTIONS_ID:
-            if (goog.events.dispatchEvent(this.mainBody_,
-                rflect.cal.EventType.MENU_COMMAND_OPTIONS))
-              this.onMenuCommandOptions_();break;
-          default: break;
-        }
-      }, false, this);
+  this.listen(this.mainBody_, rflect.cal.EventType.DATE_SELECT,
+      this.onDateSelect_, false, this);
+  this.listen(this.mainBody_, rflect.cal.EventType.DATE_DRAG,
+      goog.nullFunction, false, this);
+  this.listen(this.mainBody_, rflect.cal.EventType.DATE_DRAG_END,
+      goog.nullFunction, false, this);
 
 };
 
@@ -200,6 +169,52 @@ rflect.cal.ViewManager.prototype.onViewportResize_ = function() {
   this.mainBody_.updateBeforeRedraw();
   this.mainBody_.updateByRedraw();
 };
+
+
+/**
+ * Main body action handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ViewManager.prototype.onMainBodyAction_ = function(aEvent){
+  var id = aEvent.target.getId();
+
+  switch (id) {
+    case rflect.cal.predefined.BUTTON_NOW_ID:
+      if (goog.events.dispatchEvent(this.mainBody_,
+          rflect.cal.EventType.MENU_COMMAND_NOW))
+        this.onMenuCommandNow_();break;
+    case rflect.cal.predefined.BUTTON_PREV_ID:
+      if (goog.events.dispatchEvent(this.mainBody_,
+          rflect.cal.EventType.MENU_COMMAND_PREV))
+        this.onMenuCommandPrev_();break;
+    case rflect.cal.predefined.BUTTON_NEXT_ID:
+      if (goog.events.dispatchEvent(this.mainBody_,
+          rflect.cal.EventType.MENU_COMMAND_NEXT))
+        this.onMenuCommandNext_();break;
+    case rflect.cal.predefined.BUTTON_NEW_EVENT_ID:
+      if (goog.events.dispatchEvent(this.mainBody_,
+          rflect.cal.EventType.MENU_COMMAND_NEW_EVENT))
+        this.onMenuCommandNewEvent_();break;
+    case rflect.cal.predefined.BUTTON_DAY_ID:
+      if (goog.events.dispatchEvent(this.mainBody_,
+          rflect.cal.EventType.MENU_COMMAND_DAY))
+        this.onMenuCommandDay_();break;
+    case rflect.cal.predefined.BUTTON_WEEK_ID:
+      if (goog.events.dispatchEvent(this.mainBody_,
+          rflect.cal.EventType.MENU_COMMAND_WEEK))
+        this.onMenuCommandWeek_();break;
+    case rflect.cal.predefined.BUTTON_MONTH_ID:
+      if (goog.events.dispatchEvent(this.mainBody_,
+          rflect.cal.EventType.MENU_COMMAND_MONTH))
+        this.onMenuCommandMonth_();break;
+    case rflect.cal.predefined.BUTTON_OPTIONS_ID:
+      if (goog.events.dispatchEvent(this.mainBody_,
+          rflect.cal.EventType.MENU_COMMAND_OPTIONS))
+        this.onMenuCommandOptions_();break;
+    default: break;
+  }
+}
 
 
 /**
@@ -284,6 +299,19 @@ rflect.cal.ViewManager.prototype.onMenuCommandYear_ = function() {
  */
 rflect.cal.ViewManager.prototype.onMenuCommandOptions_ = function() {
 };
+
+
+/**
+ * Date select handler. On this event we must preserve existing configuration
+ * and set new basis.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
+  this.timeManager.shiftToPoint(aEvent.date);
+  this.mainBody_.updateBeforeRedraw();
+  this.mainBody_.updateByRedraw();
+}
 
 
 /**
