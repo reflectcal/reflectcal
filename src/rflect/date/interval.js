@@ -165,6 +165,14 @@ rflect.date.Interval.prototype.overlap = function(aInterval) {
 
 
 /**
+ * @return {number} Length of this interval in milliseconds
+ */
+rflect.date.Interval.prototype.length = function() {
+  return this.end - this.start;
+}
+
+
+/**
  * @return {string} String representation.
  */
 rflect.date.Interval.prototype.toString = function() {
@@ -180,5 +188,5 @@ rflect.date.Interval.prototype.toString = function() {
  * @return {number} Value of interval in form of duration.
  */
 rflect.date.Interval.prototype.valueOf = function() {
-  return this.end - this.start;
+  return this.length();
 };

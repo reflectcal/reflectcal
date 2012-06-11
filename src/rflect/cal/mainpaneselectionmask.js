@@ -9,13 +9,13 @@
 
 goog.provide('rflect.cal.MainPaneSelectionMask');
 
+goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Rect');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.style');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.SelectionMask');
-goog.require('rflect.cal.SelectionMask.Configuration');
 
 
 
@@ -56,12 +56,6 @@ rflect.cal.MainPaneSelectionMask = function(aViewManager, aMainPane, aTimeManage
    */
   this.blockPoolMonth_ = opt_blockPoolMonth;
 
-  /**
-   * Mask rectangles.
-   * @type {Array.<goog.math.Rect>}
-   * @private
-   */
-  this.rects_ = [];
 };
 goog.inherits(rflect.cal.MainPaneSelectionMask, rflect.cal.SelectionMask);
 
@@ -73,7 +67,7 @@ goog.inherits(rflect.cal.MainPaneSelectionMask, rflect.cal.SelectionMask);
 rflect.cal.MainPaneSelectionMask.Configuration = {
   ALLDAY: 1,
   WEEK: 2,
-  MONTH: 3,
+  MONTH: 3
 };
 
 
@@ -110,19 +104,12 @@ rflect.cal.MainPaneSelectionMask.prototype.gridEl_;
 
 
 /**
- * Whether mask was initialized.
- * @type {boolean}
- * @private
- */
-rflect.cal.MainPaneSelectionMask.prototype.initialized_ = false;
-
-
-/**
  * @return {boolean} Whether mask is allday.
  * @private
  */
 rflect.cal.MainPaneSelectionMask.prototype.isAllday_ = function() {
-  return this.configuration_ == rflect.cal.MainPaneSelectionMask.Configuration.ALLDAY;
+  return this.configuration_ ==
+      rflect.cal.MainPaneSelectionMask.Configuration.ALLDAY;
 };
 
 
@@ -131,7 +118,8 @@ rflect.cal.MainPaneSelectionMask.prototype.isAllday_ = function() {
  * @private
  */
 rflect.cal.MainPaneSelectionMask.prototype.isWeek_ = function() {
-  return this.configuration_ == rflect.cal.MainPaneSelectionMask.Configuration.WEEK;
+  return this.configuration_ ==
+      rflect.cal.MainPaneSelectionMask.Configuration.WEEK;
 };
 
 
@@ -157,7 +145,8 @@ rflect.cal.MainPaneSelectionMask.prototype.isHorizontal =
  * @private
  */
 rflect.cal.MainPaneSelectionMask.prototype.isMonth_ = function() {
-  return this.configuration_ == rflect.cal.MainPaneSelectionMask.Configuration.MONTH;
+  return this.configuration_ ==
+      rflect.cal.MainPaneSelectionMask.Configuration.MONTH;
 };
 
 
@@ -166,7 +155,6 @@ rflect.cal.MainPaneSelectionMask.prototype.isMonth_ = function() {
  */
 rflect.cal.MainPaneSelectionMask.prototype.clear = function() {
   goog.style.showElement(this.maskEl_, false);
-  this.initializedByControl = false;
 };
 
 
@@ -201,7 +189,7 @@ rflect.cal.MainPaneSelectionMask.prototype.update = function(aEvent) {
  */
 rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
     aEvent) {
-  rflect.cal.MainPaneSelectionMask.prototype.init.call(this, aConfiguration);
+  rflect.cal.SelectionMask.prototype.init.call(this, aConfiguration);
 
     //TODO(alexk): when in multiple scrollables goog.style.getOffsetPosition.
     var doc = this.document_ || (this.document_ =
@@ -218,6 +206,7 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
 
       if (this.isAllday_()) {
 
+        //TODO(alexk): shorten this method, enclose repeating parts in function.
         this.scrollableEl_ = goog.dom.getElement('main-pane-header-scrollable');
         this.maskEl_ = goog.dom.getElement('wk-ad-mask-cnt');
         this.elementOffset_ = goog.style.getRelativePosition(
@@ -282,7 +271,8 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
  * @param {number} aY Y pixel position.
  * @return {goog.math.Coordinate} Cell position.
  */
-rflect.cal.MainPaneSelectionMask.prototype.getCellByCoordinate_ = function(aX, aY) {
+rflect.cal.MainPaneSelectionMask.prototype.getCellByCoordinate_ =
+    function(aX, aY) {
   var cell = new goog.math.Coordinate(0, 0);
   var maxX = 0;
   var maxY = 0;
@@ -346,7 +336,8 @@ rflect.cal.MainPaneSelectionMask.prototype.getBlockIndexByCoordinate_ =
  * @return {number} Block-dependent coordinate for start cell.
  * @private
  */
-rflect.cal.MainPaneSelectionMask.prototype.getStartCellPrimaryCoord_ = function() {
+rflect.cal.MainPaneSelectionMask.prototype.getStartCellPrimaryCoord_ =
+    function() {
   return this.getCellCoord_(this.startCell_, true);
 };
 
@@ -355,7 +346,8 @@ rflect.cal.MainPaneSelectionMask.prototype.getStartCellPrimaryCoord_ = function(
  * @return {number} Block-independent coordinate for start cell.
  * @private
  */
-rflect.cal.MainPaneSelectionMask.prototype.getStartCellSecondaryCoord_ = function() {
+rflect.cal.MainPaneSelectionMask.prototype.getStartCellSecondaryCoord_ =
+    function() {
   return this.getCellCoord_(this.startCell_, false);
 };
 
@@ -364,7 +356,8 @@ rflect.cal.MainPaneSelectionMask.prototype.getStartCellSecondaryCoord_ = functio
  * @return {number} Block-dependent coordinate for current cell.
  * @private
  */
-rflect.cal.MainPaneSelectionMask.prototype.getCurrentCellPrimaryCoord_ = function() {
+rflect.cal.MainPaneSelectionMask.prototype.getCurrentCellPrimaryCoord_ =
+    function() {
   return this.getCellCoord_(this.currentCell_, true);
 };
 
@@ -373,15 +366,16 @@ rflect.cal.MainPaneSelectionMask.prototype.getCurrentCellPrimaryCoord_ = functio
  * @return {number} Block-independent coordinate for current cell.
  * @private
  */
-rflect.cal.MainPaneSelectionMask.prototype.getCurrentCellSecondaryCoord_ = function() {
+rflect.cal.MainPaneSelectionMask.prototype.getCurrentCellSecondaryCoord_ =
+    function() {
   return this.getCellCoord_(this.currentCell_, false);
 };
 
 
 /**
  * @param {goog.math.Coordinate} aCellOrIndex Cell to get coordinate for.
- * @param {boolean} aBlockDependent Whether to get block dependent coordinate or
- * block-independent.
+ * @param {boolean} aBlockDependent Whether to get block dependent or
+ * block-independent coordinate.
  * @return {number} Appropriate cell coordinate.
  * @private
  */
@@ -433,8 +427,8 @@ rflect.cal.MainPaneSelectionMask.prototype.getBlockPositionOrSizeForStartCell_ =
  * @return {number} Position or size for block.
  * @private
  */
-rflect.cal.MainPaneSelectionMask.prototype.getBlockPositionOrSizeForCurrentCell_ =
-    function(aPosition) {
+rflect.cal.MainPaneSelectionMask.prototype.
+    getBlockPositionOrSizeForCurrentCell_ = function(aPosition) {
   return this.getBlockPositionOrSize_(this.currentCell_, aPosition);
 };
 

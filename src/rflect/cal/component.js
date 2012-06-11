@@ -116,11 +116,14 @@ rflect.cal.Component.prototype.buildBodyInternal = function(aSb) {
  * component's update logic need to be separated from redraw. Propagates to
  * component's children by default. For custom behavior, should be overridden by
  * subclasses.
+ * @param {number=} opt_childIndexToExclude Index of component's child which
+ * should be excluded by update.
  */
 rflect.cal.Component.prototype.updateBeforeRedraw =
-    function() {
-  this.forEachChild(function(child) {
-    child.updateBeforeRedraw();
+    function(opt_childIndexToExclude) {
+  this.forEachChild(function(aChild, aIndex) {
+    if (aIndex != opt_childIndexToExclude)
+      aChild.updateBeforeRedraw();
   });
 };
 
@@ -128,13 +131,17 @@ rflect.cal.Component.prototype.updateBeforeRedraw =
 /**
  * Updates body of component by redraw. This is a second and final part of
  * component update sequence.
+ * @param {number=} opt_childIndexToExclude Index of component's child which
+ * should be excluded by update.
  * @see {rflect.cal.MainBody#updateBeforeRedraw}.
  */
-rflect.cal.Component.prototype.updateByRedraw = function() {
+rflect.cal.Component.prototype.updateByRedraw =
+    function(opt_childIndexToExclude) {
   // Propagate call to child components that have a DOM, if any.
-  this.forEachChild(function(child) {
-    if (child.isInDocument() && child.getElement()) {
-      child.updateByRedraw();
+  this.forEachChild(function(aChild, aIndex) {
+    if (aChild.isInDocument() && aChild.getElement() &&
+        aIndex != opt_childIndexToExclude) {
+      aChild.updateByRedraw();
     }
   });
 };

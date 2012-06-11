@@ -150,6 +150,21 @@ rflect.date.compareByWeekAndYear = function(aDateA, aDateB){
 
 
 /**
+ * Fields by which dates could be compared.
+ * @enum {number}
+ */
+rflect.date.fields = {
+  YEAR: 1,
+  MONTH: 2,
+  DATE: 4,
+  HOURS: 8,
+  MINUTES: 16,
+  SECONDS: 32,
+  ALL: 63
+}
+
+
+/**
  * Class that simulates Date, could be used instead it in simple calculations
  * for performance reasons (Firefox 2 has slow Date object).
  * @param {number|goog.date.DateLike=} opt_year Four digit year or a date-like
@@ -427,6 +442,32 @@ rflect.date.Date.prototype.setSeconds = function(aSeconds) {
  */
 rflect.date.Date.prototype.setMilliseconds = function(aMs) {
   this.milliseconds_ = aMs;
+};
+
+
+/**
+ * @param {goog.date.DateLike} aOther Date to test.
+ * @param {number} opt_bitmask Bitmask which shows what fields should
+ * participate in comparison.
+ * @return {boolean} Whether this date equals other.
+ */
+rflect.date.Date.prototype.equals = function(aOther, opt_bitmask) {
+  var equal = true;
+  var bitmask = opt_bitmask || rflect.date.fields.ALL;
+  if (bitmask & rflect.date.fields.YEAR)
+     equal = equal && this.getYear() == aOther.getYear();
+  if (bitmask & rflect.date.fields.MONTH)
+     equal = equal && this.getMonth() == aOther.getMonth();
+  if (bitmask & rflect.date.fields.DATE)
+     equal = equal && this.getDate() == aOther.getDate();
+  if (bitmask & rflect.date.fields.HOURS)
+     equal = equal && this.getHours() == aOther.getHours();
+  if (bitmask & rflect.date.fields.MINUTES)
+     equal = equal && this.getMinutes() == aOther.getMinutes();
+  if (bitmask & rflect.date.fields.SECONDS)
+     equal = equal && this.getSeconds() == aOther.getSeconds();
+
+  return equal;
 };
 
 

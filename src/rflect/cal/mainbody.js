@@ -131,7 +131,6 @@ rflect.cal.MainBody.prototype.decorateInternal = function(aElement,
     this.getElement().id = 'main-container';
     this.getElement().className = 'main-container';
   }
-
 };
 
 

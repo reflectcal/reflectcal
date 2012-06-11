@@ -135,7 +135,7 @@ rflect.cal.ViewManager.prototype.assignEvents_ = function() {
   this.listen(this.mainBody_, rflect.cal.EventType.DATE_SELECT,
       this.onDateSelect_, false, this);
   this.listen(this.mainBody_, rflect.cal.EventType.DATE_DRAG,
-      goog.nullFunction, false, this);
+      this.onDateDrag_, false, this);
   this.listen(this.mainBody_, rflect.cal.EventType.DATE_DRAG_END,
       goog.nullFunction, false, this);
 
@@ -304,13 +304,34 @@ rflect.cal.ViewManager.prototype.onMenuCommandOptions_ = function() {
 /**
  * Date select handler. On this event we must preserve existing configuration
  * and set new basis.
- * @param {goog.events.Event} aEvent Event object.
+ * @param {{type: string}} aEvent Event object.
  * @private
  */
 rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
   this.timeManager.shiftToPoint(aEvent.date);
-  this.mainBody_.updateBeforeRedraw();
-  this.mainBody_.updateByRedraw();
+
+  this.mainBody_.miniCal_.updateBeforeRedraw();
+  this.mainBody_.miniCal_.updateByRedraw();
+
+  this.mainBody_.updateBeforeRedraw(1);
+  this.mainBody_.updateByRedraw(1);
+}
+
+
+/**
+ * Date drag handler. On this event we must deduce configuration and set basis
+ * depending on number of days selected.
+ * @param {{type: string}} aEvent Event object.
+ * @private
+ */
+rflect.cal.ViewManager.prototype.onDateDrag_ = function(aEvent) {
+  var interval = new rflect.date.Interval(aEvent.startDate, aEvent.endDate);
+  var numberOfDays = interval.length() / 86400000;
+  if (numberOfDays > 7)
+  if (goog.DEBUG)
+    _log('days: ', interval.length() / 86400000);
+
+
 }
 
 

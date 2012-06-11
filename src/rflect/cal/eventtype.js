@@ -29,5 +29,5 @@ rflect.cal.EventType = {
   // Minical events.
   DATE_SELECT: 'dateselect',
   DATE_DRAG: 'datedrag',
-  DATE_DRAG_END, 'datedragend'
+  DATE_DRAG_END: 'datedragend'
 };

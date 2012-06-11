@@ -8,7 +8,6 @@
  */
 
 goog.provide('rflect.cal.SelectionMask');
-goog.provide('rflect.cal.SelectionMask.Configuration');
 
 goog.require('goog.functions');
 goog.require('goog.math.Coordinate');
@@ -58,20 +57,11 @@ rflect.cal.SelectionMask = function(aViewManager, aComponent, aTimeManager) {
 
 
 /**
- * Default configuration of selection mask.
- * @type {number}
- * @const
- */
-rflect.cal.SelectionMask.Configuration.NONE = 0;
-
-
-/**
  * Mask configuration.
  * @type {number}
  * @private
  */
-rflect.cal.SelectionMask.prototype.configuration_ =
-    /** @type {number} */(rflect.cal.SelectionMask.Configuration.NONE);
+rflect.cal.SelectionMask.prototype.configuration_ = 0;
 
 
 /**
@@ -198,11 +188,11 @@ rflect.cal.SelectionMask.prototype.getMinCell_ = function(aCellA, aCellB){
 /**
  * Calculates dates from cell selection.
  * @param {goog.math.Coordinate} aMinCell Lesser of cells.
- * @param {goog.math.Coordinate} aMaxCell Greater of cells.
+ * @param {goog.math.Coordinate=} opt_maxCell Greater of cells.
  * @private
  */
 rflect.cal.SelectionMask.prototype.calculateDates_ = function(aMinCell,
-    aMaxCell) {
+    opt_maxCell) {
   var startDate = null;
   var endDate = null;
   var minutes = 0;
@@ -213,28 +203,35 @@ rflect.cal.SelectionMask.prototype.calculateDates_ = function(aMinCell,
     minutes = 30 * aMinCell.y;
     startDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
         tempDate.getDate(), minutes / 60, minutes % 60);
-    // Special case when we're on last line.
-    if (aMaxCell.y == rflect.cal.predefined.HOUR_ROWS_NUMBER - 1){
-      tempDate = rflect.date.getTomorrow(this.timeManager_.daySeries[
-          aMaxCell.x]);
-      endDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
-          tempDate.getDate());
-    }
-    else {
-      tempDate = this.timeManager_.daySeries[aMaxCell.x];
-      minutes = 30 * (aMaxCell.y + 1);
-      endDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
-          tempDate.getDate(), minutes / 60, minutes % 60);
+
+    if (opt_maxCell) {
+      // Special case when we're on last line.
+      if (opt_maxCell.y == rflect.cal.predefined.HOUR_ROWS_NUMBER - 1){
+        tempDate = rflect.date.getTomorrow(this.timeManager_.daySeries[
+            opt_maxCell.x]);
+        endDate = new goog.date.DateTime(tempDate.getYear(),
+            tempDate.getMonth(), tempDate.getDate());
+      }
+      else {
+        tempDate = this.timeManager_.daySeries[opt_maxCell.x];
+        minutes = 30 * (opt_maxCell.y + 1);
+        endDate = new goog.date.DateTime(tempDate.getYear(),
+            tempDate.getMonth(), tempDate.getDate(), minutes / 60,
+            minutes % 60);
+      }
     }
 
   } else {
     tempDate = this.timeManager_.daySeries[aMinCell.x + aMinCell.y * 7];
     startDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
         tempDate.getDate());
-    tempDate = rflect.date.getTomorrow(this.timeManager_.daySeries[aMaxCell.x +
-        aMaxCell.y * 7]);
-    endDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
-      tempDate.getDate());
+
+    if (opt_maxCell) {
+      tempDate = rflect.date.getTomorrow(this.timeManager_.daySeries[
+          opt_maxCell.x + opt_maxCell.y * 7]);
+      endDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
+          tempDate.getDate());
+    }
   }
 
   this.startDate = startDate;

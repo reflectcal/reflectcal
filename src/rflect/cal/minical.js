@@ -148,7 +148,7 @@ rflect.cal.MiniCal.prototype.initMask_ = function() {
   }
 
   this.selectionMask.init(
-      rflect.cal.MiniCalSelectionMask.Configuration.MINI_MONTH_EXTERNAL, null,
+      rflect.cal.MiniCalSelectionMask.Configuration.MINI_MONTH_EXTERNAL,
       startSelectionIndex, endSelectionIndex);
 };
 
@@ -280,7 +280,7 @@ rflect.cal.MiniCal.prototype.onMouseDown_ = function(aEvent) {
   if (this.isField_(className))
     this.selectionMask.init(
         rflect.cal.MiniCalSelectionMask.Configuration.MINI_MONTH_INTERNAL, 
-        index, index);
+        index, 0);
 
   if (this.isSelectableArea_(className))
     aEvent.preventDefault();
@@ -308,17 +308,18 @@ rflect.cal.MiniCal.prototype.onSelectStart_ = function(aEvent) {
  */
 rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
   var index = rflect.string.getNumericIndex(aEvent.target.id);
-  if (this.selectionMask.initializedByControl) {
-    this.selectionMask.update(index);
-    if (this.selectionMask.movedByControl) {
-      goog.events.dispatchEvent(this, rflect.cal.EventType.DATE_DRAG, {
-        startDate: this.selectionMask.startDate,
-        endDate: this.selectionMask.endDate,
-      });
-      this.selectionMask.movedByControl = false;
-    }
-    aEvent.preventDefault();
+
+  this.selectionMask.update(index);
+  if (this.selectionMask.dragged) {
+    goog.events.dispatchEvent(this, {
+      type: rflect.cal.EventType.DATE_DRAG,
+      startDate: this.selectionMask.startDate,
+      endDate: this.selectionMask.endDate
+    });
+    this.selectionMask.dragged = false;
   }
+
+  aEvent.preventDefault();
 
 };
 
@@ -330,18 +331,23 @@ rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
  */
 rflect.cal.MiniCal.prototype.onMouseUp_ = function(aEvent) {
   var index = rflect.string.getNumericIndex(aEvent.target.id);
-  if (this.selectionMask.movedByControl)
-      goog.events.dispatchEvent(this, rflect.cal.EventType.DATE_DRAG_END, {
-        startDate: this.selectionMask.startDate,
-        endDate: this.selectionMask.endDate
-      });
-    else if (this.selectionMask.indexIsInMask())
-      goog.events.dispatchEvent(this, rflect.cal.EventType.DATE_SELECT, {
-        date: this.selectionMask.startDate
-      });
-    this.selectionMask.movedByControl = false;
-    this.selectionMask.initializedByControl = false;
-    aEvent.preventDefault();
+  if (this.selectionMask.draggedOnce) {
+    goog.events.dispatchEvent(this, {
+      type: rflect.cal.EventType.DATE_DRAG_END,
+      startDate: this.selectionMask.startDate,
+      endDate: this.selectionMask.endDate
+    });
+  } else if (this.selectionMask.dragStarted) {
+    goog.events.dispatchEvent(this, {
+      type: rflect.cal.EventType.DATE_SELECT,
+      date: this.selectionMask.startDate,
+      isInMask: this.selectionMask.indexIsInMask
+    });
+  }
+  this.selectionMask.draggedOnce = false;
+  this.selectionMask.dragStarted = false;
+  this.selectionMask.dragged = false;
+  aEvent.preventDefault();
 
 };
 

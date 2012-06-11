@@ -57,6 +57,6 @@ rflect.string.buildClassNameRe = function(var_args) {
  * @return {number} Index found in id.
  */
 rflect.string.getNumericIndex = function(aId) {
-  var matches = /\d{1,2}/.exec(aEvent.target.id);
-  return matches ? matches[0] : NaN;
+  var matches = /\d{1,2}/.exec(aId);
+  return matches ? +matches[0] : NaN;
 }
