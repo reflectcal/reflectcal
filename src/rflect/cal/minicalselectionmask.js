@@ -233,7 +233,7 @@ rflect.cal.MiniCalSelectionMask.prototype.update_ = function() {
   var range = this.getSelectionIndexByCell_(maxCell) -
       this.getSelectionIndexByCell_(minCell) + 1;
 
-  if (range <= 7 && range >= 2 && (minCell.y - maxCell.y == 1)) {
+  if (range <= 7 && range >= 2 && (maxCell.y - minCell.y) == 1) {
     // Situation where two rects are possible.
     this.rects_.push(this.getRect_(
         minCell.x * defaultStepX,
