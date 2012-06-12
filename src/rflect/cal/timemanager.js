@@ -82,10 +82,16 @@ rflect.cal.TimeManager.Direction = {
 /**
  * Time manager configuration.
  * @type {rflect.cal.TimeManager.Configuration}
- * @private
  */
 rflect.cal.TimeManager.prototype.configuration =
     rflect.cal.TimeManager.Configuration.NONE;
+
+
+/**
+ * Days number for multiday and multiweek modes.
+ * @type {number}
+ */
+rflect.cal.TimeManager.prototype.daysNumber = 0;
 
 
 /**
@@ -113,7 +119,7 @@ rflect.cal.TimeManager.prototype.start_ = null;
 
 /**
  * Sequence of dates to be used in grid.
- * @type {Array.<goog.date.Date>}
+ * @type {Array.<rflect.date.Date>}
  */
 rflect.cal.TimeManager.prototype.daySeries = null;
 
@@ -124,9 +130,11 @@ rflect.cal.TimeManager.prototype.daySeries = null;
 rflect.cal.TimeManager.prototype.calculatePeriodStart = function() {
 
   switch (this.configuration) {
-    case rflect.cal.TimeManager.Configuration.DAY: this.start_ =
-        this.basis.clone();break;
-    case rflect.cal.TimeManager.Configuration.WEEK: {
+    case rflect.cal.TimeManager.Configuration.DAY:
+    case rflect.cal.TimeManager.Configuration.MULTI_DAY:
+      this.start_ = this.basis.clone();break;
+    case rflect.cal.TimeManager.Configuration.WEEK:
+    case rflect.cal.TimeManager.Configuration.MULTI_WEEK: {
       this.start_ = rflect.date.moveToDayOfWeekIfNeeded(this.basis,
           0, -1);
     }; break;
@@ -153,7 +161,11 @@ rflect.cal.TimeManager.prototype.generateDaySeries = function() {
   var daysNumber = 0;
   switch (this.configuration) {
     case rflect.cal.TimeManager.Configuration.DAY: daysNumber = 1; break;
+    case rflect.cal.TimeManager.Configuration.MULTI_DAY: daysNumber =
+        this.daysNumber; break;
     case rflect.cal.TimeManager.Configuration.WEEK: daysNumber = 7; break;
+    case rflect.cal.TimeManager.Configuration.MULTI_WEEK: daysNumber =
+        this.daysNumber; break;
     case rflect.cal.TimeManager.Configuration.MINI_MONTH:
     case rflect.cal.TimeManager.Configuration.MONTH: {
       var difference = 0;
@@ -255,6 +267,11 @@ rflect.cal.TimeManager.prototype.shiftBasis = function(aDirection) {
     }; break;
     case rflect.cal.TimeManager.Configuration.WEEK: {
       daysNumber = 7 * aDirection;
+      this.basis.add(new goog.date.Interval(0, 0, daysNumber));
+    }; break;
+    case rflect.cal.TimeManager.Configuration.MULTI_DAY:
+    case rflect.cal.TimeManager.Configuration.MULTI_WEEK: {
+      daysNumber = this.daysNumber * aDirection;
       this.basis.add(new goog.date.Interval(0, 0, daysNumber));
     }; break;
     case rflect.cal.TimeManager.Configuration.MINI_MONTH:

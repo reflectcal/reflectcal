@@ -90,6 +90,8 @@ rflect.date.getDayFromGiven =
   var dayOfWeek = aDirection > 0 ?
       (aGivenDate.getDay() + aNumberOfDays) % 7 :
       (aGivenDate.getDay() + 1 - aNumberOfDays) % 7;
+  // TODO(alexk): calculate week number in similar fashion.
+  var week = 0;
 
   var monthLimit = aDirection > 0 ? 11 : 0;
   var nextBeginingMonth = aDirection > 0 ? 0 : 11;

@@ -325,22 +325,31 @@ rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
  * @private
  */
 rflect.cal.ViewManager.prototype.onDateDrag_ = function(aEvent) {
-  var interval = new rflect.date.Interval(aEvent.startDate, aEvent.endDate);
-  var numberOfDays = interval.length() / 86400000;
-  if (numberOfDays > 7)
-  if (goog.DEBUG)
-    _log('days: ', interval.length() / 86400000);
-
-
+  if (goog.DEBUG) {
+    _log('aEvent.startDate: ', aEvent.startDate);
+    _log('aEvent.duration', aEvent.duration);
+    _log('aEvent.selectionConfiguration', aEvent.selectionConfiguration);
+  }
+  if (aEvent.selectionConfiguration ==
+      rflect.cal.TimeManager.Configuration.MONTH)
+    this.timeManager.setBasis(aEvent.firstDayInMonth);
+  else
+    this.timeManager.setBasis(aEvent.startDate);
+  this.timeManager.daysNumber = aEvent.duration;
+  this.showView(aEvent.selectionConfiguration, true);
 }
 
 
 /**
  * Shows particular view, main sequence method.
  * @param {rflect.cal.ViewType} aType Type of view to show.
+ * @param {boolean=} opt_externally Whether this view changed externally,
+ * for example, by minical.
  */
-rflect.cal.ViewManager.prototype.showView = function(aType) {
-  if (this.currentView == aType && !this.isOnStartup_)
+rflect.cal.ViewManager.prototype.showView = function(aType, opt_externally) {
+  var viewHasChanged = this.currentView != aType;
+
+  if (!viewHasChanged && !opt_externally && !this.isOnStartup_)
     return;
 
   this.currentView = aType;
@@ -358,8 +367,8 @@ rflect.cal.ViewManager.prototype.showView = function(aType) {
     this.assignEvents_();
     this.isOnStartup_ = false;
   } else {
-    this.mainBody_.updateBeforeRedraw();
-    this.mainBody_.updateByRedraw();
+    this.mainBody_.updateBeforeRedraw(opt_externally ? 1 : -1);
+    this.mainBody_.updateByRedraw(opt_externally ? 1 : -1);
   }
 };
 

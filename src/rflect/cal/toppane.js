@@ -9,6 +9,7 @@
 
 goog.provide('rflect.cal.TopPane');
 
+goog.require('goog.array');
 goog.require('goog.events.EventType');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimePatterns');
@@ -226,8 +227,8 @@ rflect.cal.TopPane.prototype.enterDocument = function() {
  */
 rflect.cal.TopPane.prototype.getDateHeader = function() {
   var startDate = this.timeManager_.daySeries[0];
-  var endDate = this.timeManager_.daySeries[
-      this.timeManager_.daySeries.length - 1];
+  var endDate = /** @type {rflect.date.Date} */
+      (goog.array.peek(this.timeManager_.daySeries));
   var basis = this.timeManager_.basis;
   var header;
   var formatStart;

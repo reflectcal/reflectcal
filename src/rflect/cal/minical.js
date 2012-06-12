@@ -308,15 +308,21 @@ rflect.cal.MiniCal.prototype.onSelectStart_ = function(aEvent) {
  */
 rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
   var index = rflect.string.getNumericIndex(aEvent.target.id);
+  if (rflect.string.buildClassNameRe(goog.getCssName('goog-date-picker-date'))
+      .test(aEvent.target.className)){
 
-  this.selectionMask.update(index);
-  if (this.selectionMask.dragged) {
-    goog.events.dispatchEvent(this, {
-      type: rflect.cal.EventType.DATE_DRAG,
-      startDate: this.selectionMask.startDate,
-      endDate: this.selectionMask.endDate
-    });
-    this.selectionMask.dragged = false;
+    this.selectionMask.update(index);
+    if (this.selectionMask.dragged) {
+      goog.events.dispatchEvent(this, {
+        type: rflect.cal.EventType.DATE_DRAG,
+        startDate: this.selectionMask.startDate,
+        firstDayInMonth: this.selectionMask.firstDayInMonth,
+        duration: this.selectionMask.duration,
+        selectionConfiguration: this.selectionMask.selectionConfiguration
+      });
+      this.selectionMask.dragged = false;
+    }
+
   }
 
   aEvent.preventDefault();

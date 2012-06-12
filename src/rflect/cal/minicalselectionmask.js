@@ -195,6 +195,16 @@ rflect.cal.MiniCalSelectionMask.prototype.getCellBySelectionIndex_ =
 
 
 /**
+ * @param {goog.math.Coordinate} Cell.
+ * @return {number} Index of cell.
+ */
+rflect.cal.MiniCalSelectionMask.prototype.getSelectionIndexByCell_ =
+    function(aCell) {
+  return aCell.x + aCell.y * 7;
+};
+
+
+/**
  * Updates mask.
  * @private
  */
@@ -204,6 +214,10 @@ rflect.cal.MiniCalSelectionMask.prototype.update_ = function() {
   
   // Rectangles to pass to builder.
   this.rects_.length = 0;
+
+  if (this.startCell_.x < 0 || this.startCell_.y < 0 ||
+      this.currentCell_.x < 0 || this.currentCell_.y < 0)
+    return;
 
   // In mini-month, there's only one rect.
   var defaultStepX = rflect.cal.predefined.MINICAL_MASK_WIDTH / 7;
@@ -216,40 +230,109 @@ rflect.cal.MiniCalSelectionMask.prototype.update_ = function() {
   minCell = this.getMinCell_(startCellClone, currentCellClone);
   maxCell = this.getMaxCell_(startCellClone, currentCellClone);
 
-  if (minCell.y != maxCell.y) {
-    minCell.x = 0;
-    maxCell.x = 6;
+  var range = this.getSelectionIndexByCell_(maxCell) -
+      this.getSelectionIndexByCell_(minCell) + 1;
+
+  if (range <= 7 && range >= 2 && (minCell.y - maxCell.y == 1)) {
+    // Situation where two rects are possible.
+    this.rects_.push(this.getRect_(
+        minCell.x * defaultStepX,
+        minCell.y * defaultStepY,
+        (7 - minCell.x) * defaultStepX,
+        defaultStepY
+    ));
+    this.rects_.push(this.getRect_(
+        0,
+        maxCell.y * defaultStepY,
+        (maxCell.x + 1) * defaultStepX,
+        defaultStepY
+    ));
+  } else {
+
+    if (minCell.y != maxCell.y) {
+      minCell.x = 0;
+      maxCell.x = 6;
+    }
+
+    this.rects_.push(this.getRect_(
+        minCell.x * defaultStepX,
+        minCell.y * defaultStepY,
+        (maxCell.x - minCell.x + 1) * defaultStepX,
+        (maxCell.y - minCell.y + 1) * defaultStepY
+    ));
+
   }
 
-  this.rects_.push(this.getRect_(
-      minCell.x * defaultStepX,
-      minCell.y * defaultStepY,
-      (maxCell.x - minCell.x + 1) * defaultStepX,
-      (maxCell.y - minCell.y + 1) * defaultStepY
-  ));
-
-
   if (!this.isMiniMonthExt_()) {
-    this.calculateSelectionType_(minCall, maxCell);
-    this.calculateDates_(minCell, maxCell);
+    this.calculateDateAndSelectionType_(minCell, maxCell);
     this.maskEl_.innerHTML = this.build_();
   }
 };
 
 
 /**
- * @return {rflect.cal.TimeManager.Configuration} Type of selection interval.
+ * Calculates date and type of selection interval.
  */
-rflect.cal.MiniCal.prototype.calculateSelectionType_ = function(aMinCell,
-    aMaxCell) {
+rflect.cal.MiniCalSelectionMask.prototype.calculateDateAndSelectionType_ =
+    function(aMinCell, aMaxCell) {
+
+  var tempDate = this.timeManager_.daySeries[
+      this.getSelectionIndexByCell_(aMinCell)];
+  this.startDate = new goog.date.DateTime(tempDate.getYear(),
+      tempDate.getMonth(), tempDate.getDate());
+
+  var duration = this.duration = this.getSelectionIndexByCell_(aMaxCell) -
+      this.getSelectionIndexByCell_(aMinCell) + 1;
+
   var dayInMonth = this.timeManager_.daySeries[6];
   var year = dayInMonth.getYear();
   var month = dayInMonth.getMonth();
-  var daysNumber = rflect.math.completeToDivisibleBy7(
-      goog.date.getNumberOfDaysInMonth(year, month));
-  var type = 0;
+  var indexOfFirstDayOfMonth = goog.array.findIndex(this.timeManager_.daySeries,
+      function(aDate){
+    return aDate.getDate() == 1
+  });
+  var numberOfDaysInMonth = rflect.math.completeToDivisibleBy7(
+      indexOfFirstDayOfMonth + goog.date.getNumberOfDaysInMonth(year, month));
+  if (goog.DEBUG) {
+    _log('numberOfDaysInMonth', numberOfDaysInMonth);
+    _log('aMinCell', aMinCell);
+    _log('aMaxCell', aMaxCell);
+  }
 
-  if (aMinCell.x == 0 && aMinCell.y == 0 && aMaxCell.x == daysNumber % 7 &&
-      aMaxCell.y == Math.floor(daysNumber / 7))
-    type = rflect.cal.TimeManager.Configuration.MONTH;
+  // Configuration detection.
+  if (duration % 7 == 0 && aMinCell.x == 0) {
+    // Month mode is tested first.
+    if (aMinCell.y == 0 && duration == numberOfDaysInMonth) {
+      this.selectionConfiguration = rflect.cal.TimeManager.Configuration.MONTH;
+      tempDate = this.timeManager_.daySeries[indexOfFirstDayOfMonth];
+      this.firstDayInMonth = new goog.date.DateTime(tempDate.getYear(),
+          tempDate.getMonth(), tempDate.getDate());
+    } else if (duration == 7)
+    // Week mode.
+      this.selectionConfiguration =
+          rflect.cal.TimeManager.Configuration.WEEK;
+    else
+    // Multi week mode.
+      this.selectionConfiguration =
+          rflect.cal.TimeManager.Configuration.MULTI_WEEK;
+
+  } else if (duration == 1) {
+  // Day mode.
+    this.selectionConfiguration = rflect.cal.TimeManager.Configuration.DAY;
+  } else {
+  // Multiday mode.
+    this.selectionConfiguration =
+        rflect.cal.TimeManager.Configuration.MULTI_DAY;
+  }
+
 }
+
+
+/**
+ * Builds mask, for external usage.
+ * @param {goog.string.StringBuffer=} aSb String buffer to append mask to.
+ * @return {string} HTML of mask.
+ */
+rflect.cal.SelectionMask.prototype.build = function(aSb) {
+  return this.build_(aSb) || '';
+};

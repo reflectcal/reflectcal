@@ -482,6 +482,64 @@ rflect.cal.MainPaneSelectionMask.prototype.getRect_ =
 };
 
 
+/**
+ * Calculates dates from cell selection.
+ * @param {goog.math.Coordinate} aMinCell Lesser of cells.
+ * @param {goog.math.Coordinate=} opt_maxCell Greater of cells.
+ * @private
+ */
+rflect.cal.SelectionMask.prototype.calculateDates_ = function(aMinCell,
+    opt_maxCell) {
+  var startDate = null;
+  var endDate = null;
+  var minutes = 0;
+  var tempDate = null;
+
+  if (this.isHorizontal()) {
+    tempDate = this.timeManager_.daySeries[aMinCell.x];
+    minutes = 30 * aMinCell.y;
+    startDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
+        tempDate.getDate(), minutes / 60, minutes % 60);
+
+    if (opt_maxCell) {
+      // Special case when we're on last line.
+      if (opt_maxCell.y == rflect.cal.predefined.HOUR_ROWS_NUMBER - 1){
+        tempDate = rflect.date.getTomorrow(this.timeManager_.daySeries[
+            opt_maxCell.x]);
+        endDate = new goog.date.DateTime(tempDate.getYear(),
+            tempDate.getMonth(), tempDate.getDate());
+      }
+      else {
+        tempDate = this.timeManager_.daySeries[opt_maxCell.x];
+        minutes = 30 * (opt_maxCell.y + 1);
+        endDate = new goog.date.DateTime(tempDate.getYear(),
+            tempDate.getMonth(), tempDate.getDate(), minutes / 60,
+            minutes % 60);
+      }
+    }
+
+  } else {
+    tempDate = this.timeManager_.daySeries[aMinCell.x + aMinCell.y * 7];
+    startDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
+        tempDate.getDate());
+
+    if (opt_maxCell) {
+      tempDate = rflect.date.getTomorrow(this.timeManager_.daySeries[
+          opt_maxCell.x + opt_maxCell.y * 7]);
+      endDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
+          tempDate.getDate());
+    }
+  }
+
+  this.startDate = startDate;
+  this.endDate = endDate;
+
+  if (goog.DEBUG) {
+    _log('this.startDate', this.startDate);
+    _log('this.endDate', this.endDate);
+  }
+}
+
 
 /**
  * Builds mask.
