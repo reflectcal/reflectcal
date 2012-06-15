@@ -153,8 +153,9 @@ rflect.cal.MainPaneSelectionMask.prototype.isMonth_ = function() {
 /**
  * Clears mask state.
  */
-rflect.cal.MainPaneSelectionMask.prototype.clear = function() {
+rflect.cal.MainPaneSelectionMask.prototype.close = function() {
   goog.style.showElement(this.maskEl_, false);
+  this.initialized_ = false;
 };
 
 
@@ -165,18 +166,14 @@ rflect.cal.MainPaneSelectionMask.prototype.clear = function() {
 rflect.cal.MainPaneSelectionMask.prototype.update = function(aEvent) {
 
   var pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
+  var currentCell = this.getCellByCoordinate_(aEvent.clientX + pageScroll.x -
+      this.elementOffset_.x + this.scrollableEl_.scrollLeft, aEvent.clientY +
+      pageScroll.y - this.elementOffset_.y + this.scrollableEl_.scrollTop);
 
-  var scrollLeft = 0;
-  var scrollTop = 0;
-  if (this.scrollableEl_) {
-    scrollLeft = this.scrollableEl_.scrollLeft;
-    scrollTop = this.scrollableEl_.scrollTop;
+  if (!goog.math.Coordinate.equals(this.currentCell_, currentCell)) {
+    this.currentCell_ = currentCell;
+    this.update_();
   }
-
-  var currentCell = this.getCellByCoordinate_(aEvent.clientX +
-      pageScroll.x -
-      this.elementOffset_.x + scrollLeft, aEvent.clientY +
-      pageScroll.y - this.elementOffset_.y + scrollTop);
 
 };
 
@@ -192,6 +189,7 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
   rflect.cal.SelectionMask.prototype.init.call(this, aConfiguration);
 
     //TODO(alexk): when in multiple scrollables goog.style.getOffsetPosition.
+    // But may we be under multiple scrollables?
     var doc = this.document_ || (this.document_ =
         goog.dom.getOwnerDocument(this.component_.getElement()));
     var pageScroll = goog.dom.getDomHelper(doc).getDocumentScroll();
@@ -439,7 +437,9 @@ rflect.cal.MainPaneSelectionMask.prototype.
  */
 rflect.cal.MainPaneSelectionMask.prototype.getDefaultStep_ = function() {
   var step = 0;
-  if (this.isWeekOrAllday_())
+  if (this.isAllday_())
+    step = this.blockPoolAllday_.gridSize.height;
+  else if (this.isWeek_())
     step = rflect.cal.predefined.HOUR_ROW_HEIGHT;
   else
     step = this.blockPoolMonth_.gridSize.width / 7;
@@ -453,7 +453,9 @@ rflect.cal.MainPaneSelectionMask.prototype.getDefaultStep_ = function() {
  */
 rflect.cal.MainPaneSelectionMask.prototype.getMaxSize_ = function() {
   var size = 0;
-  if (this.isWeekOrAllday_())
+  if (this.isAllday_())
+    size = this.blockPoolAllday_.gridSize.height;
+  else if (this.isWeek_())
     size = rflect.cal.predefined.WEEK_GRID_HEIGHT;
   else
     size = this.blockPoolMonth_.gridSize.width;
@@ -473,7 +475,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getRect_ =
     function(aX, aY, aDx, aDy) {
   var rect;
   if (this.isAllday_())
-    rect = new goog.math.Rect(aX, 0, aDx, 0);
+    rect = new goog.math.Rect(aX, aY, aDx, aDy);
   else if (this.isMonth_())
     rect = new goog.math.Rect(aY, aX, aDy, aDx);
   else
@@ -534,10 +536,6 @@ rflect.cal.SelectionMask.prototype.calculateDates_ = function(aMinCell,
   this.startDate = startDate;
   this.endDate = endDate;
 
-  if (goog.DEBUG) {
-    _log('this.startDate', this.startDate);
-    _log('this.endDate', this.endDate);
-  }
 }
 
 
@@ -546,6 +544,10 @@ rflect.cal.SelectionMask.prototype.calculateDates_ = function(aMinCell,
  * @private
  */
 rflect.cal.MainPaneSelectionMask.prototype.update_ = function() {
+
+  if (goog.DEBUG)
+    _log('update_ is called');
+
   var maxCell;
   var minCell;
   

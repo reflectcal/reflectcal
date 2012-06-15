@@ -27,7 +27,7 @@ goog.require('rflect.math');
 
 /**
  * Time manager main class.
- * @param {goog.date.DateLike=} opt_date Date to start application with.
+ * @param {goog.date.DateTime=} opt_date Date to start application with.
  * @constructor
  */
 rflect.cal.TimeManager = function(opt_date) {
@@ -104,7 +104,7 @@ rflect.cal.TimeManager.prototype.isOnStartup_ = false;
 
 /**
  * Day within interval, on which latter is based.
- * @type {goog.date.DateLike}
+ * @type {goog.date.Date}
  */
 rflect.cal.TimeManager.prototype.basis = null;
 
@@ -202,9 +202,6 @@ rflect.cal.TimeManager.prototype.generateDaySeries = function() {
   // Form intervals.
   this.interval.start = this.start_.getTime();
   this.interval.end = new goog.date.Date(date).getTime();
-  if (goog.DEBUG) {
-    _log('this.interval', this.interval);
-  }
 
 };
 
@@ -230,7 +227,7 @@ rflect.cal.TimeManager.prototype.shift = function(aDirection) {
 
 /**
  * Shifts time manager to specific point.
- * @param {goog.date.DateLike=} opt_date Date to shift to.
+ * @param {goog.date.Date=} opt_date Date to shift to.
  */
 rflect.cal.TimeManager.prototype.shiftToPoint = function(opt_date) {
   this.setBasis(opt_date);
@@ -289,7 +286,7 @@ rflect.cal.TimeManager.prototype.shiftBasis = function(aDirection) {
 
 /**
  * Sets basis to specific date.
- * @param {goog.date.DateLike=} opt_date Date to set basis to.
+ * @param {goog.date.Date=} opt_date Date to set basis to.
  */
 rflect.cal.TimeManager.prototype.setBasis = function(opt_date) {
   this.basis = opt_date || new goog.date.Date();

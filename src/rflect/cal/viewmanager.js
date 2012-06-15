@@ -308,13 +308,20 @@ rflect.cal.ViewManager.prototype.onMenuCommandOptions_ = function() {
  * @private
  */
 rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
-  this.timeManager.shiftToPoint(aEvent.date);
+  if (goog.DEBUG)
+    _log('index is in mask', aEvent.isInMask);
 
-  this.mainBody_.miniCal_.updateBeforeRedraw();
-  this.mainBody_.miniCal_.updateByRedraw();
+  if (!aEvent.isInMask){
 
-  this.mainBody_.updateBeforeRedraw(1);
-  this.mainBody_.updateByRedraw(1);
+    this.timeManager.shiftToPoint(aEvent.date);
+
+    this.mainBody_.miniCal.updateBeforeRedraw();
+    this.mainBody_.miniCal.updateByRedraw();
+
+    this.mainBody_.updateBeforeRedraw(1);
+    this.mainBody_.updateByRedraw(1);
+
+  }
 }
 
 
@@ -336,20 +343,22 @@ rflect.cal.ViewManager.prototype.onDateDrag_ = function(aEvent) {
   else
     this.timeManager.setBasis(aEvent.startDate);
   this.timeManager.daysNumber = aEvent.duration;
-  this.showView(aEvent.selectionConfiguration, true);
+  this.showView(aEvent.selectionConfiguration, aEvent.target);
 }
 
 
 /**
  * Shows particular view, main sequence method.
  * @param {rflect.cal.ViewType} aType Type of view to show.
- * @param {boolean=} opt_externally Whether this view changed externally,
- * for example, by minical.
+ * @param {rflect.cal.Component=} opt_caller What component initiated view
+ * change.
  */
-rflect.cal.ViewManager.prototype.showView = function(aType, opt_externally) {
+rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
   var viewHasChanged = this.currentView != aType;
+  var calledExternally = opt_caller != undefined;
+  var calledByMiniCal = opt_caller == this.mainBody_.miniCal;
 
-  if (!viewHasChanged && !opt_externally && !this.isOnStartup_)
+  if (!viewHasChanged && !calledExternally && !this.isOnStartup_)
     return;
 
   this.currentView = aType;
@@ -367,8 +376,8 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_externally) {
     this.assignEvents_();
     this.isOnStartup_ = false;
   } else {
-    this.mainBody_.updateBeforeRedraw(opt_externally ? 1 : -1);
-    this.mainBody_.updateByRedraw(opt_externally ? 1 : -1);
+    this.mainBody_.updateBeforeRedraw(calledByMiniCal ? 1 : -1);
+    this.mainBody_.updateByRedraw(calledByMiniCal ? 1 : -1);
   }
 };
 

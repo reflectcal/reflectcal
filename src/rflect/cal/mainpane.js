@@ -69,8 +69,8 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager,
    * @type {rflect.cal.MainPaneBuilder}
    * @private
    */
-  this.mainPaneBuilder_ = new rflect.cal.MainPaneBuilder(this,
-      aTimeManager, this.blockManager_.blockPoolWeek,
+  this.mainPaneBuilder_ = new rflect.cal.MainPaneBuilder(this.viewManager_,
+      this, aTimeManager, this.blockManager_.blockPoolWeek,
       this.blockManager_.blockPoolAllday, this.blockManager_.blockPoolMonth,
       this.containerSizeMonitor_);
   if (goog.DEBUG)
@@ -470,6 +470,7 @@ rflect.cal.MainPane.prototype.enterDocument = function() {
  */
 rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
   var id = aEvent.target.id;
+  var className = aEvent.target.className;
   var zippyClicked = false;
   var index = 0;
   if (this.viewManager_.isInMonthMode()) {
@@ -483,7 +484,15 @@ rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
         this.blockManager_.blockPoolMonth.scrollTop = 0;
 
       zippyClicked = true;
+    } else if (this.isDaynumLabel_(className)) {
+      var id = aEvent.target.id;
+      var index = rflect.string.getNumericIndex(id);
+      var day = this.timeManager_.daySeries[index];
+      this.timeManager_.setBasis(new goog.date.DateTime(day.getYear(),
+          day.getMonth(), day.getDate()));
+      this.viewManager_.showView(rflect.cal.ViewType.DAY, this);
     }
+
   } else if (this.viewManager_.isInWeekMode()) {
     // We clicked on week zippy.
     if (/wk\-zippy\-col\d{1}/.test(id)) {
@@ -571,6 +580,21 @@ rflect.cal.MainPane.prototype.isMonthGrid_ = function(aClassName) {
 
 
 /**
+ * @param {string} aClassName Class name of element to test whether it indicates
+ * of daynum label.
+ * @private
+ * @return {boolean} Whether class name indicates that this is a
+ * daynum label.
+ */
+rflect.cal.MainPane.prototype.isDaynumLabel_ = function(aClassName) {
+  var monthGridRe_ = this.daynumLabelRe_ || (this.daynumLabelRe_ =
+      rflect.string.buildClassNameRe(
+      goog.getCssName('daynum-label')));
+  return this.daynumLabelRe_.test(aClassName);
+};
+
+
+/**
  * Main pane mousedown handler.
  * @param {goog.events.Event} aEvent Event object.
  * @private
@@ -579,12 +603,7 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
   var className = aEvent.target.className;
   var preventDefaultIsNeeded = false;
 
-  if (goog.DEBUG){
-    _log('aEvent.target.id', aEvent.target.id);
-    _log('aEvent.target.className', aEvent.target.className);
-  }
-
-  // Whether we clicked on hollow space
+  // Whether we clicked on hollow space.
   if (this.isWeekGrid_(className)) {
     this.selectionMask_.init(
         rflect.cal.MainPaneSelectionMask.Configuration.WEEK,
@@ -596,9 +615,10 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
         aEvent);
     preventDefaultIsNeeded = true;
   } else if (this.isMonthGrid_(className)) {
-    this.selectionMask_.init(
-        rflect.cal.MainPaneSelectionMask.Configuration.MONTH,
-        aEvent);
+
+    if (!this.isDaynumLabel_(className))
+      this.selectionMask_.init(
+          rflect.cal.MainPaneSelectionMask.Configuration.MONTH, aEvent);
     preventDefaultIsNeeded = true;
   }
   if (preventDefaultIsNeeded)
@@ -623,13 +643,13 @@ rflect.cal.MainPane.prototype.onSelectStart_ = function(aEvent) {
 
 
 /**
- * Main pane mouseup handler.
+ * Main pane mousemove handler.
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
-rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
-  if (this.selectionMask_.initializedByControl) {
-    this.selectionMask_.clear();
+rflect.cal.MainPane.prototype.onMouseMove_ = function(aEvent) {
+  if (this.selectionMask_.isInitialized()) {
+    this.selectionMask_.update(aEvent);
     aEvent.preventDefault();
   }
 
@@ -637,16 +657,15 @@ rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
 
 
 /**
- * Main pane mousemove handler.
+ * Main pane mouseup handler.
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
-rflect.cal.MainPane.prototype.onMouseMove_ = function(aEvent) {
-  if (this.selectionMask_.initializedByControl) {
-    this.selectionMask_.update(aEvent);
+rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
+  if (this.selectionMask_.isInitialized()){
+    this.selectionMask_.close();
     aEvent.preventDefault();
   }
-
 };
 
 

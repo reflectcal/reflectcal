@@ -112,8 +112,6 @@ rflect.cal.MiniCal.prototype.initMask_ = function() {
 
     var overlap = this.timeManager_.interval.overlap(
         this.extTimeManager_.interval);
-    if (goog.DEBUG)
-      _log('overlap', overlap);
     var startDate = new goog.date.Date();
     var endDate = new goog.date.Date();
     startDate.setTime(overlap.start);
@@ -142,10 +140,7 @@ rflect.cal.MiniCal.prototype.initMask_ = function() {
     }
 
   }
-  if (goog.DEBUG) {
-    _log('startSelectionIndex', startSelectionIndex);
-    _log('endSelectionIndex', endSelectionIndex);
-  }
+
 
   this.selectionMask.init(
       rflect.cal.MiniCalSelectionMask.Configuration.MINI_MONTH_EXTERNAL,
@@ -237,7 +232,7 @@ rflect.cal.MiniCal.prototype.onClick_ = function(aEvent) {
  * @private
  * @return {boolean} Whether it's selectable area.
  */
-rflect.cal.MiniCal.prototype.isSelectableArea_ = function(aClassName) {
+rflect.cal.MiniCal.prototype.isInteractiveArea_ = function(aClassName) {
   return this.isButton_(aClassName) || this.isField_(aClassName);
 };
 
@@ -272,17 +267,13 @@ rflect.cal.MiniCal.prototype.isField_ = function(aClassName) {
 rflect.cal.MiniCal.prototype.onMouseDown_ = function(aEvent) {
   var className = aEvent.target.className;
   var index = rflect.string.getNumericIndex(aEvent.target.id);
-  if (goog.DEBUG){
-    _log('aEvent.target.id', aEvent.target.id);
-    _log('aEvent.target.className', aEvent.target.className);
-  }
 
   if (this.isField_(className))
     this.selectionMask.init(
         rflect.cal.MiniCalSelectionMask.Configuration.MINI_MONTH_INTERNAL, 
         index, 0);
 
-  if (this.isSelectableArea_(className))
+  if (this.isInteractiveArea_(className))
     aEvent.preventDefault();
 
 };
@@ -296,7 +287,7 @@ rflect.cal.MiniCal.prototype.onMouseDown_ = function(aEvent) {
 rflect.cal.MiniCal.prototype.onSelectStart_ = function(aEvent) {
   var className = aEvent.target.className;
 
-  if (this.isSelectableArea_(className))
+  if (this.isInteractiveArea_(className))
     aEvent.preventDefault();
 };
 
@@ -308,25 +299,12 @@ rflect.cal.MiniCal.prototype.onSelectStart_ = function(aEvent) {
  */
 rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
   var index = rflect.string.getNumericIndex(aEvent.target.id);
-  if (rflect.string.buildClassNameRe(goog.getCssName('goog-date-picker-date'))
+  if (this.selectionMask.isInitialized() &&
+      rflect.string.buildClassNameRe(goog.getCssName('goog-date-picker-date'))
       .test(aEvent.target.className)){
-
     this.selectionMask.update(index);
-    if (this.selectionMask.dragged) {
-      goog.events.dispatchEvent(this, {
-        type: rflect.cal.EventType.DATE_DRAG,
-        startDate: this.selectionMask.startDate,
-        firstDayInMonth: this.selectionMask.firstDayInMonth,
-        duration: this.selectionMask.duration,
-        selectionConfiguration: this.selectionMask.selectionConfiguration
-      });
-      this.selectionMask.dragged = false;
-    }
-
+    aEvent.preventDefault();
   }
-
-  aEvent.preventDefault();
-
 };
 
 
@@ -336,25 +314,10 @@ rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
  * @private
  */
 rflect.cal.MiniCal.prototype.onMouseUp_ = function(aEvent) {
-  var index = rflect.string.getNumericIndex(aEvent.target.id);
-  if (this.selectionMask.draggedOnce) {
-    goog.events.dispatchEvent(this, {
-      type: rflect.cal.EventType.DATE_DRAG_END,
-      startDate: this.selectionMask.startDate,
-      endDate: this.selectionMask.endDate
-    });
-  } else if (this.selectionMask.dragStarted) {
-    goog.events.dispatchEvent(this, {
-      type: rflect.cal.EventType.DATE_SELECT,
-      date: this.selectionMask.startDate,
-      isInMask: this.selectionMask.indexIsInMask
-    });
+  if (this.selectionMask.isInitialized()){
+    this.selectionMask.close();
+    aEvent.preventDefault();
   }
-  this.selectionMask.draggedOnce = false;
-  this.selectionMask.dragStarted = false;
-  this.selectionMask.dragged = false;
-  aEvent.preventDefault();
-
 };
 
 

@@ -111,6 +111,14 @@ rflect.cal.SelectionMask.prototype.initialized_ = false;
 
 
 /**
+ * @return {boolean} Whether mask was initialized.
+ */
+rflect.cal.SelectionMask.prototype.isInitialized = function() {
+  return this.initialized_;
+}
+
+
+/**
  * @return {boolean} Whether mask is horizontal, like in week mode.
  * @protected
  */
@@ -227,3 +235,9 @@ rflect.cal.SelectionMask.prototype.buildUnit_ = function(aSb, aRect) {
   aSb.append('</div>');
 
 };
+
+
+/**
+ * Closes mask life cycle.
+ */
+rflect.cal.SelectionMask.prototype.close = goog.abstractMethod;

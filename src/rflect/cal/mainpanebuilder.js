@@ -19,6 +19,7 @@ goog.require('rflect.cal.i18n.predefined');
 
 /**
  * Main pane builder main class.
+ * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.MainPane} aMainPane Link to main pane.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.BlockPool} aBlockPoolWeek Link to week block pool.
@@ -28,8 +29,15 @@ goog.require('rflect.cal.i18n.predefined');
  * container size monitor.
  * @constructor
  */
-rflect.cal.MainPaneBuilder = function(aMainPane, aTimeManager, 
+rflect.cal.MainPaneBuilder = function(aViewManager, aMainPane, aTimeManager,
     aBlockPoolWeek, aBlockPoolAllday, aBlockPoolMonth, aContainerSizeMonitor) {
+  /**
+   * Link to view manager.
+   * @type {rflect.cal.ViewManager}
+   * @private
+   */
+  this.viewManager_ = aViewManager;
+
   /**
    * Link to main pane.
    * @type {rflect.cal.MainPane}
@@ -1408,8 +1416,7 @@ rflect.cal.MainPaneBuilder.prototype.buildMonthGridRows_ = function(aSb, aOffset
  * '"></div>'
  * '</div>',
  * '<div class="daynum-cont"><div id="daynum-',
- * Id of daynum row (0).
- * Id of daynum col (0).
+ * Id of daynum cell (0).
  * '" class="daynum-label '
  * Daynum state (dl-other-month).
  * '">'
@@ -1424,6 +1431,9 @@ rflect.cal.MainPaneBuilder.prototype.buildDayCells_ = function(aSb, aOffset,
   var daySeries = this.timeManager_.daySeries;
   var day;
   var block;
+  var currentMonth = this.timeManager_.basis.getMonth();
+  var isInMonthView = this.viewManager_.currentView ==
+      rflect.cal.ViewType.MONTH;
 
   for (var colCounter = 0; colCounter < 7; colCounter++) {
     block = this.blockPoolMonth_.blocks[aRowCounter];
@@ -1437,11 +1447,10 @@ rflect.cal.MainPaneBuilder.prototype.buildDayCells_ = function(aSb, aOffset,
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 2]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 3]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 4]);
-    aSb.append(aRowCounter);
-    aSb.append(colCounter);
+    aSb.append(aRowCounter * 7 + colCounter);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 5]);
     // Show days from another month differently.
-    if (this.timeManager_.basis.getMonth() !=
+    if (isInMonthView && currentMonth !=
         (day = daySeries[aRowCounter * 7 + colCounter]).getMonth())
       aSb.append(goog.getCssName('dl-other-month'));
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 6]);
