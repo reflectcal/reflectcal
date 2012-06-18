@@ -31,9 +31,9 @@ goog.date.DateLike;
  * @return {rflect.date.Date} Shifted date.
  */
 rflect.date.moveToDayOfWeek = function(aDate, aDay, opt_orient) {
-  // Locale-dependent first day of week.
-  var day = (goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK + aDay + 1) % 7;
-  var diff = (day - aDate.getDay() + 7 * (opt_orient || +1)) % 7;
+  // Locale-dependent first date of week.
+  var date = (goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK + aDay + 1) % 7;
+  var diff = (date - aDate.getDay() + 7 * (opt_orient || +1)) % 7;
   var date = aDate.clone();
   date.add(new goog.date.Interval(0, 0, (diff === 0) ? diff += 7 *
       (opt_orient || +1) : diff));
@@ -43,7 +43,7 @@ rflect.date.moveToDayOfWeek = function(aDate, aDay, opt_orient) {
 
 /**
  * Move to the next or last dayOfWeek based on the orient value,
- * if not already staying in this week day.
+ * if not already staying in this week date.
  * @param aDate {goog.date.DateLike} Date to shift.
  * @param aDay {number} The dayOfWeek to move to (0 is Monday).
  * @param opt_orient {number} Forward (+1) or Back (-1). Defaults to +1.
@@ -59,13 +59,13 @@ rflect.date.moveToDayOfWeekIfNeeded = function(aDate, aDay, opt_orient) {
 
 
 /**
- * Returns minimal or maximal day number in this day and month depending on
+ * Returns minimal or maximal date number in this date and month depending on
  * direction of search.
  * @param {number} aYear Year.
  * @param {number} aMonth Month.
  * @param {number} aDirection Direction in which we should move: 1 is forward,
  * -1 is backward.
- * @return {number} Maximal or minimal day in this year and month.
+ * @return {number} Maximal or minimal date in this year and month.
  * @private
  */
 rflect.date.getDayLimit_ = function(aYear, aMonth, aDirection) {
@@ -74,49 +74,45 @@ rflect.date.getDayLimit_ = function(aYear, aMonth, aDirection) {
 
 
 /**
- * Returns day standing some number of days from current.
+ * Returns date standing some number of days from current.
  * @param {goog.date.DateLike} aGivenDate Current date.
  * @param {number} aNumberOfDays Number of days from given.
  * @param {number} aDirection Direction in which we should move: 1 is forward,
  * -1 is backward.
+ * @param {boolean=} opt_calculateWeeks Whether to calculate week number.
  * @return {rflect.date.Date} Next date.
  */
 rflect.date.getDayFromGiven =
-    function(aGivenDate, aNumberOfDays, aDirection) {
-  var date = null;
+    function(aGivenDate, aNumberOfDays, aDirection, opt_calculateWeeks) {
+  var dateObject = null;
   var year = aGivenDate.getFullYear();
   var month = aGivenDate.getMonth();
-  var day = aGivenDate.getDate();
-  var dayOfWeek = aDirection > 0 ?
-      (aGivenDate.getDay() + aNumberOfDays) % 7 :
-      (aGivenDate.getDay() + 1 - aNumberOfDays) % 7;
-  // TODO(alexk): calculate week number in similar fashion.
-  var week = 0;
-
+  var date = aGivenDate.getDate();
+  var currentDayOfWeek = aGivenDate.getDay();
+  var dayOfWeek = (currentDayOfWeek + aNumberOfDays * aDirection + 7) % 7;
+  
   var monthLimit = aDirection > 0 ? 11 : 0;
   var nextBeginingMonth = aDirection > 0 ? 0 : 11;
 
   for (var counter = 0; counter < aNumberOfDays; counter++) {
-    if (day == rflect.date.getDayLimit_(year, month, aDirection)) {
+    if (date == rflect.date.getDayLimit_(year, month, aDirection)) {
       if (month == monthLimit) {
         year += aDirection;
         month = nextBeginingMonth;
         // Reverse limit in next month.
-        day = rflect.date.getDayLimit_(year, month, aDirection > 0 ? -1 :
-            1);
+        date = rflect.date.getDayLimit_(year, month, aDirection > 0 ? -1 : 1);
       } else {
         month += aDirection;
-        day = rflect.date.getDayLimit_(year, month, aDirection > 0 ? -1 :
-            1);
+        date = rflect.date.getDayLimit_(year, month, aDirection > 0 ? -1 : 1);
       }
     } else {
-      day += aDirection;
+      date += aDirection;
     }
   }
 
-  date = new rflect.date.Date(year, month, day);
+  dateObject = new rflect.date.Date(year, month, date);
   date.day = dayOfWeek;
-  return date;
+  return dateObject;
 };
 
 
@@ -200,7 +196,7 @@ rflect.date.Date = function(opt_year, opt_month, opt_date, opt_hours,
     this.setYear(date.getFullYear());
     this.setMonth(date.getMonth());
     this.setDate(date.getDate());
-    this.day = date.getDay();
+    this.date = date.getDay();
     this.setHours(date.getHours());
     this.setMinutes(date.getMinutes());
     this.setSeconds(date.getSeconds());
@@ -242,10 +238,18 @@ rflect.date.Date.prototype.dayOfMonth_ = 0;
 
 
 /**
+ * Week of year.
+ * @type {number}
+ * @private
+ */
+rflect.date.Date.prototype.weekNumber_ = 0;
+
+
+/**
  * Day of week in US style (0 - Sun, 6 - Sat).
  * @type {goog.date.weekDay}
  */
-rflect.date.Date.prototype.day = 0;
+rflect.date.Date.prototype.date = 0;
 
 
 /**
@@ -312,7 +316,7 @@ rflect.date.Date.prototype.setMonth = function(month) {
 
 
 /**
- * @param {number} date The day part.
+ * @param {number} date The date part.
  */
 rflect.date.Date.prototype.setDate = function(date) {
   this.dayOfMonth_ = date;
@@ -355,7 +359,7 @@ rflect.date.Date.prototype.getDate = function() {
  * @return {number} Day of week, US style - 0 - Sun, 6 - Sat.
  */
 rflect.date.Date.prototype.getDay = function() {
-  return this.day;
+  return this.date;
 };
 
 
@@ -448,6 +452,22 @@ rflect.date.Date.prototype.setMilliseconds = function(aMs) {
 
 
 /**
+ * @return {number} The week number.
+ */
+/*rflect.date.Date.prototype.getWeekNumber = function() {
+  return this.weekNumber_;
+};*/
+
+
+/**
+ * @param {number} aWeekNumber The week number.
+ */
+rflect.date.Date.prototype.setWeekNumber = function(aWeekNumber) {
+  this.weekNumber_ = aWeekNumber;
+};
+
+
+/**
  * @param {goog.date.DateLike} aOther Date to test.
  * @param {number} opt_bitmask Bitmask which shows what fields should
  * participate in comparison.
@@ -458,15 +478,15 @@ rflect.date.Date.prototype.equals = function(aOther, opt_bitmask) {
   var bitmask = opt_bitmask || rflect.date.fields.ALL;
   if (bitmask & rflect.date.fields.YEAR)
      equal = equal && this.getYear() == aOther.getYear();
-  if (bitmask & rflect.date.fields.MONTH)
+  if (equal && bitmask & rflect.date.fields.MONTH)
      equal = equal && this.getMonth() == aOther.getMonth();
-  if (bitmask & rflect.date.fields.DATE)
+  if (equal && bitmask & rflect.date.fields.DATE)
      equal = equal && this.getDate() == aOther.getDate();
-  if (bitmask & rflect.date.fields.HOURS)
+  if (equal && bitmask & rflect.date.fields.HOURS)
      equal = equal && this.getHours() == aOther.getHours();
-  if (bitmask & rflect.date.fields.MINUTES)
+  if (equal && bitmask & rflect.date.fields.MINUTES)
      equal = equal && this.getMinutes() == aOther.getMinutes();
-  if (bitmask & rflect.date.fields.SECONDS)
+  if (equal && bitmask & rflect.date.fields.SECONDS)
      equal = equal && this.getSeconds() == aOther.getSeconds();
 
   return equal;

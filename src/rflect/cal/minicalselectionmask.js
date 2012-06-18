@@ -87,29 +87,43 @@ rflect.cal.MiniCalSelectionMask.prototype.isMiniMonthExt_ = function() {
 
 
 /**
+ * @return {boolean} Whether mask was started to be dragged.
+ */
+rflect.cal.SelectionMask.prototype.isDragStarted = function() {
+  return this.dragStarted_;
+}
+
+
+
+/**
  * Clears mask state.
  */
 rflect.cal.MiniCalSelectionMask.prototype.close = function() {
+
+  if (goog.DEBUG)
+    _log('close called');
+
+
   if (this.draggedAtLeastOnce_) {
+    this.currentCell_ = this.visibleCurrentCell_;
+    this.startCell_ = this.visibleStartCell_;
+
+    this.draggedAtLeastOnce_ = this.dragStarted_ = false;
+
     goog.events.dispatchEvent(this.component_, {
       type: rflect.cal.EventType.DATE_DRAG_END,
       startDate: this.startDate,
       endDate: this.endDate
     });
   } else if (this.dragStarted_) {
+    this.dragStarted_ = false;
+
     goog.events.dispatchEvent(this.component_, {
       type: rflect.cal.EventType.DATE_SELECT,
       date: this.startDate,
       isInMask: this.indexIsInMask_
     });
   }
-
-  this.currentCell_ = this.visibleCurrentCell;
-  this.startCell_ = this.visibleStartCell;
-
-  this.dragStarted_ = false;
-  this.draggedAtLeastOnce_ = false;
-  this.indexIsInMask_ = false;
 };
 
 
@@ -147,16 +161,28 @@ rflect.cal.MiniCalSelectionMask.prototype.init = function(aConfiguration,
   rflect.cal.SelectionMask.prototype.init.call(this, aConfiguration);
 
   this.maskEl_ = goog.dom.getElement('minical-mask-cnt');
+  this.dragStarted_ = false;
+  this.draggedAtLeastOnce_ = false;
   this.indexIsInMask_ = false;
-  // If we're here in minical internal, we started drag.
-  this.dragStarted_ = this.isMiniMonthInt_();
-    
+
+  if (goog.DEBUG)
+    _log('this.configuration_', this.configuration_);
+
   if (this.isMiniMonthExt_()) {
+    // When in external configuration, we don't need to know whether mask was
+    // previously initialized.
+    this.initialized_ = false;
 
     this.startCell_ = this.getCellBySelectionIndex_(startSelectionIndex);
     this.currentCell_ = this.getCellBySelectionIndex_(endSelectionIndex);
 
+    // Update mask for external mode.
+    this.update_();
+    this.close();
+
   } else {
+    // If we're here in minical internal, we started drag.
+    this.dragStarted_ = true;
 
     // Whether mask was previously initialized.
     this.indexIsInMask_ = this.getIndexIsInMask_(startSelectionIndex);
@@ -164,13 +190,6 @@ rflect.cal.MiniCalSelectionMask.prototype.init = function(aConfiguration,
         startSelectionIndex));
     this.currentCell_ = this.startCell_.clone();
 
-  }
-
-  this.initialized_ = true;
-  // Update mask for external mode.
-  if (this.isMiniMonthExt_()){
-    this.update_();
-    this.close();
   }
 
 };
@@ -184,8 +203,13 @@ rflect.cal.MiniCalSelectionMask.prototype.getIndexIsInMask_ = function(aIndex) {
   if (!this.initialized_)
     return false;
   var cell = this.getCellBySelectionIndex_(aIndex);
-  var minCell = this.getMinCell_(this.startCell_, this.currentCell_);
-  var maxCell = this.getMaxCell_(this.startCell_, this.currentCell_);
+  var minCell = this.getMinCell_(this.visibleStartCell_, this.visibleCurrentCell_);
+  var maxCell = this.getMaxCell_(this.visibleStartCell_, this.visibleCurrentCell_);
+  if (goog.DEBUG) {
+    _log('cell', cell);
+    _log('minCell', minCell);
+    _log('maxCell', maxCell);
+  }
   return this.compareCells_(cell, minCell) >= 0 &&
       this.compareCells_(cell, maxCell) <= 0;
 }
@@ -228,16 +252,19 @@ rflect.cal.MiniCalSelectionMask.prototype.update_ = function() {
       this.currentCell_.x < 0 || this.currentCell_.y < 0)
     return;
 
+  // If cells are valid, we're initialized.
+  this.initialized_ = true;
+
   // In mini-month, there's only one rect.
   var defaultStepX = rflect.cal.predefined.MINICAL_MASK_WIDTH / 7;
   var defaultStepY = rflect.cal.predefined.MINICAL_MASK_HEIGHT / 6;
     
   // We need clone cells before modifying originals.
-  this.visibleStartCell = this.startCell_.clone();
-  this.visibleCurrentCell = this.currentCell_.clone();
+  this.visibleStartCell_ = this.startCell_.clone();
+  this.visibleCurrentCell_ = this.currentCell_.clone();
     
-  minCell = this.getMinCell_(this.visibleStartCell, this.visibleCurrentCell);
-  maxCell = this.getMaxCell_(this.visibleStartCell, this.visibleCurrentCell);
+  minCell = this.getMinCell_(this.visibleStartCell_, this.visibleCurrentCell_);
+  maxCell = this.getMaxCell_(this.visibleStartCell_, this.visibleCurrentCell_);
 
   var range = this.getSelectionIndexByCell_(maxCell) -
       this.getSelectionIndexByCell_(minCell) + 1;

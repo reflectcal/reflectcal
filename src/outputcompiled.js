@@ -2698,6 +2698,14 @@ $JSCompiler_prototypeAlias$$.$getRect_$ = function $$JSCompiler_prototypeAlias$$
 function $JSCompiler_StaticMethods_compareCells_$$($JSCompiler_StaticMethods_compareCells_$self$$, $aCellA$$, $aCellB$$) {
   return $JSCompiler_StaticMethods_compareCells_$self$$.$isHorizontal$() ? $goog$math$Coordinate$equals$$($aCellA$$, $aCellB$$) ? 0 : $aCellA$$.x > $aCellB$$.x || $aCellA$$.x == $aCellB$$.x && $aCellA$$.y > $aCellB$$.y ? 1 : -1 : $goog$math$Coordinate$equals$$($aCellA$$, $aCellB$$) ? 0 : $aCellA$$.y > $aCellB$$.y || $aCellA$$.y == $aCellB$$.y && $aCellA$$.x > $aCellB$$.x ? 1 : -1
 }
+function $JSCompiler_StaticMethods_calculateDates_$$($JSCompiler_StaticMethods_calculateDates_$self$$, $aMinCell$$, $opt_maxCell$$) {
+  var $startDate$$1$$ = $JSCompiler_alias_NULL$$, $endDate$$1$$ = $JSCompiler_alias_NULL$$, $minutes$$4$$ = 0, $tempDate$$ = $JSCompiler_alias_NULL$$;
+  $JSCompiler_StaticMethods_calculateDates_$self$$.$isHorizontal$() ? ($tempDate$$ = $JSCompiler_StaticMethods_calculateDates_$self$$.$timeManager_$.$daySeries$[$aMinCell$$.x], $minutes$$4$$ = 30 * $aMinCell$$.y, $startDate$$1$$ = new $goog$date$DateTime$$($tempDate$$.getYear(), $tempDate$$.getMonth(), $tempDate$$.getDate(), $minutes$$4$$ / 60, $minutes$$4$$ % 60), $opt_maxCell$$ && (47 == $opt_maxCell$$.y ? ($tempDate$$ = $rflect$date$getDayFromGiven$$($JSCompiler_StaticMethods_calculateDates_$self$$.$timeManager_$.$daySeries$[$opt_maxCell$$.x]), 
+  $endDate$$1$$ = new $goog$date$DateTime$$($tempDate$$.getYear(), $tempDate$$.getMonth(), $tempDate$$.getDate())) : ($tempDate$$ = $JSCompiler_StaticMethods_calculateDates_$self$$.$timeManager_$.$daySeries$[$opt_maxCell$$.x], $minutes$$4$$ = 30 * ($opt_maxCell$$.y + 1), $endDate$$1$$ = new $goog$date$DateTime$$($tempDate$$.getYear(), $tempDate$$.getMonth(), $tempDate$$.getDate(), $minutes$$4$$ / 60, $minutes$$4$$ % 60)))) : ($tempDate$$ = $JSCompiler_StaticMethods_calculateDates_$self$$.$timeManager_$.$daySeries$[$aMinCell$$.x + 
+  7 * $aMinCell$$.y], $startDate$$1$$ = new $goog$date$DateTime$$($tempDate$$.getYear(), $tempDate$$.getMonth(), $tempDate$$.getDate()), $opt_maxCell$$ && ($tempDate$$ = $rflect$date$getDayFromGiven$$($JSCompiler_StaticMethods_calculateDates_$self$$.$timeManager_$.$daySeries$[$opt_maxCell$$.x + 7 * $opt_maxCell$$.y]), $endDate$$1$$ = new $goog$date$DateTime$$($tempDate$$.getYear(), $tempDate$$.getMonth(), $tempDate$$.getDate())));
+  $JSCompiler_StaticMethods_calculateDates_$self$$.$startDate$ = $startDate$$1$$;
+  $JSCompiler_StaticMethods_calculateDates_$self$$.$endDate$ = $endDate$$1$$
+}
 function $JSCompiler_StaticMethods_build_$$($JSCompiler_StaticMethods_build_$self$$, $aSb$$29$$) {
   for(var $sb$$4$$ = $aSb$$29$$ || new $goog$string$StringBuffer$$, $counter$$6$$ = 0, $length$$23$$ = $JSCompiler_StaticMethods_build_$self$$.$rects_$.length;$counter$$6$$ < $length$$23$$;$counter$$6$$++) {
     var $aSb$$inline_387$$ = $sb$$4$$, $aRect$$inline_388$$ = $JSCompiler_StaticMethods_build_$self$$.$rects_$[$counter$$6$$];
@@ -2775,14 +2783,6 @@ function $JSCompiler_StaticMethods_getBlockPositionOrSize_$$($JSCompiler_StaticM
 $JSCompiler_prototypeAlias$$.$getRect_$ = function $$JSCompiler_prototypeAlias$$$$getRect_$$($aX$$2$$, $aY$$2$$, $aDx$$1$$, $aDy$$1$$) {
   return 1 == this.$configuration_$ ? new $goog$math$Rect$$($aX$$2$$, $aY$$2$$, $aDx$$1$$, $aDy$$1$$) : 3 == this.$configuration_$ ? new $goog$math$Rect$$($aY$$2$$, $aX$$2$$, $aDy$$1$$, $aDx$$1$$) : new $goog$math$Rect$$($aX$$2$$, $aY$$2$$, $aDx$$1$$, $aDy$$1$$)
 };
-function $JSCompiler_StaticMethods_calculateDates_$$($JSCompiler_StaticMethods_calculateDates_$self$$, $aMinCell$$, $opt_maxCell$$) {
-  var $startDate$$1$$ = $JSCompiler_alias_NULL$$, $endDate$$1$$ = $JSCompiler_alias_NULL$$, $minutes$$4$$ = 0, $tempDate$$ = $JSCompiler_alias_NULL$$;
-  $JSCompiler_StaticMethods_calculateDates_$self$$.$isHorizontal$() ? ($tempDate$$ = $JSCompiler_StaticMethods_calculateDates_$self$$.$timeManager_$.$daySeries$[$aMinCell$$.x], $minutes$$4$$ = 30 * $aMinCell$$.y, $startDate$$1$$ = new $goog$date$DateTime$$($tempDate$$.getYear(), $tempDate$$.getMonth(), $tempDate$$.getDate(), $minutes$$4$$ / 60, $minutes$$4$$ % 60), $opt_maxCell$$ && (47 == $opt_maxCell$$.y ? ($tempDate$$ = $rflect$date$getDayFromGiven$$($JSCompiler_StaticMethods_calculateDates_$self$$.$timeManager_$.$daySeries$[$opt_maxCell$$.x]), 
-  $endDate$$1$$ = new $goog$date$DateTime$$($tempDate$$.getYear(), $tempDate$$.getMonth(), $tempDate$$.getDate())) : ($tempDate$$ = $JSCompiler_StaticMethods_calculateDates_$self$$.$timeManager_$.$daySeries$[$opt_maxCell$$.x], $minutes$$4$$ = 30 * ($opt_maxCell$$.y + 1), $endDate$$1$$ = new $goog$date$DateTime$$($tempDate$$.getYear(), $tempDate$$.getMonth(), $tempDate$$.getDate(), $minutes$$4$$ / 60, $minutes$$4$$ % 60)))) : ($tempDate$$ = $JSCompiler_StaticMethods_calculateDates_$self$$.$timeManager_$.$daySeries$[$aMinCell$$.x + 
-  7 * $aMinCell$$.y], $startDate$$1$$ = new $goog$date$DateTime$$($tempDate$$.getYear(), $tempDate$$.getMonth(), $tempDate$$.getDate()), $opt_maxCell$$ && ($tempDate$$ = $rflect$date$getDayFromGiven$$($JSCompiler_StaticMethods_calculateDates_$self$$.$timeManager_$.$daySeries$[$opt_maxCell$$.x + 7 * $opt_maxCell$$.y]), $endDate$$1$$ = new $goog$date$DateTime$$($tempDate$$.getYear(), $tempDate$$.getMonth(), $tempDate$$.getDate())));
-  $JSCompiler_StaticMethods_calculateDates_$self$$.$startDate$ = $startDate$$1$$;
-  $JSCompiler_StaticMethods_calculateDates_$self$$.$endDate$ = $endDate$$1$$
-}
 $JSCompiler_prototypeAlias$$.$update_$ = function $$JSCompiler_prototypeAlias$$$$update_$$() {
   $_log$$("update_ is called");
   var $maxCell$$, $minCell$$;
@@ -2825,6 +2825,7 @@ $JSCompiler_prototypeAlias$$ = $rflect$cal$MainPane$$.prototype;
 $JSCompiler_prototypeAlias$$.$weekGridRe_$ = $JSCompiler_alias_NULL$$;
 $JSCompiler_prototypeAlias$$.$alldayGridRe_$ = $JSCompiler_alias_NULL$$;
 $JSCompiler_prototypeAlias$$.$monthGridRe_$ = $JSCompiler_alias_NULL$$;
+$JSCompiler_prototypeAlias$$.$daynumLabelRe_$ = $JSCompiler_alias_NULL$$;
 $JSCompiler_prototypeAlias$$.$updateBeforeRedraw$ = function $$JSCompiler_prototypeAlias$$$$updateBeforeRedraw$$() {
   var $JSCompiler_StaticMethods_setSizes$self$$inline_688_alldayBlockMaxHeight_containerSize$$ = this.$containerSizeMonitor_$.$getSize$();
   516 > $JSCompiler_StaticMethods_setSizes$self$$inline_688_alldayBlockMaxHeight_containerSize$$.width && ($JSCompiler_StaticMethods_setSizes$self$$inline_688_alldayBlockMaxHeight_containerSize$$.width = 516);
@@ -3241,16 +3242,26 @@ $JSCompiler_prototypeAlias$$.$enterDocument$ = function $$JSCompiler_prototypeAl
   $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_getHandler$$(this), this.$getElement$(), "click", this.$onClick_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mouseover", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mouseout", $goog$nullFunction$$, 
   $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mousedown", this.$onMouseDown_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "selectstart", this.$onSelectStart_$, $JSCompiler_alias_FALSE$$, this), document, "mousemove", this.$onMouseMove_$, $JSCompiler_alias_FALSE$$, this), document, "mouseup", this.$onMouseUp_$, $JSCompiler_alias_FALSE$$, this)
 };
-$JSCompiler_prototypeAlias$$.$onClick_$ = function $$JSCompiler_prototypeAlias$$$$onClick_$$($aEvent$$3$$) {
-  var $id$$7$$ = $aEvent$$3$$.target.id, $className$$26$$ = $aEvent$$3$$.target.className, $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_zippyClicked$$ = $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$ = 0;
-  $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) ? /mn\-zippy\-row\d{1}/.test($id$$7$$) ? ($JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$ = /\d{1}/.exec($id$$7$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_zippyClicked$$ = this.$blockManager_$.$blockPoolMonth$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_zippyClicked$$.$blocks$[$JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$].$expanded$ = 
-  !$JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_zippyClicked$$.$blocks$[$JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_zippyClicked$$), this.$blockManager_$.$blockPoolMonth$.$expanded$ || (this.$blockManager_$.$blockPoolMonth$.scrollTop = 0), 
-  $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$26$$) && ($id$$7$$ = $aEvent$$3$$.target.id, $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$ = $rflect$string$getNumericIndex$$($id$$7$$), $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$ = this.$timeManager_$.$daySeries$[$JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$], 
-  $JSCompiler_StaticMethods_setBasis$$(this.$timeManager_$, new $goog$date$DateTime$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$.getYear(), $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$.getMonth(), $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$.getDate())), $JSCompiler_StaticMethods_showView$$(this.$viewManager_$, 1, this)) : $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) && (/wk\-zippy\-col\d{1}/.test($id$$7$$) ? 
-  ($JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$ = /\d{1}/.exec($id$$7$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_zippyClicked$$ = this.$blockManager_$.$blockPoolWeek$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_zippyClicked$$.$blocks$[$JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$].$expanded$ = !$JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_zippyClicked$$.$blocks$[$JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$].$expanded$, 
-  $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_zippyClicked$$), this.$blockManager_$.$blockPoolWeek$.$expanded$ || (this.$blockManager_$.$blockPoolWeek$.scrollLeft = 0), $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : /daynames\-zippy/.test($id$$7$$) && ($JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$ = 
-  this.$blockManager_$.$blockPoolAllday$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$.$blocks$[0].$expanded$ = !$JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$.$blocks$[0].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_424_day$$3_index$$59$$), $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_zippyClicked$$ = $JSCompiler_alias_TRUE$$));
-  $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_zippyClicked$$ && (this.$updateBeforeRedraw$(), this.$updateByRedraw$())
+$JSCompiler_prototypeAlias$$.$onClick_$ = function $$JSCompiler_prototypeAlias$$$$onClick_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$) {
+  var $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$ = $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$.target.id, $className$$26$$ = $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$.target.className, $zippyClicked$$ = $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$ = 0;
+  if($JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$)) {
+    if(/mn\-zippy\-row\d{1}/.test($JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$)) {
+      $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$ = /\d{1}/.exec($JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$ = this.$blockManager_$.$blockPoolMonth$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$.$blocks$[$JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$].$expanded$ = 
+      !$JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$.$blocks$[$JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$), this.$blockManager_$.$blockPoolMonth$.$expanded$ || (this.$blockManager_$.$blockPoolMonth$.scrollTop = 0), 
+      $zippyClicked$$ = $JSCompiler_alias_TRUE$$
+    }else {
+      if($JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$26$$) && ($JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$ = $rflect$string$getNumericIndex$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$), $_log$$("index", $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$), $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$ = 
+      this.$timeManager_$.$daySeries$[$JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$])) {
+        $JSCompiler_StaticMethods_setBasis$$(this.$timeManager_$, new $goog$date$DateTime$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$.getYear(), $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$.getMonth(), $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$.getDate())), $JSCompiler_StaticMethods_showView$$(this.$viewManager_$, 1, this)
+      }
+    }
+  }else {
+    $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) && (/wk\-zippy\-col\d{1}/.test($JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$) ? ($JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$ = /\d{1}/.exec($JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$ = 
+    this.$blockManager_$.$blockPoolWeek$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$.$blocks$[$JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$].$expanded$ = !$JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$.$blocks$[$JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$), 
+    this.$blockManager_$.$blockPoolWeek$.$expanded$ || (this.$blockManager_$.$blockPoolWeek$.scrollLeft = 0), $zippyClicked$$ = $JSCompiler_alias_TRUE$$) : /daynames\-zippy/.test($JSCompiler_StaticMethods_toggleBlock$self$$inline_418_JSCompiler_StaticMethods_toggleBlock$self$$inline_421_id$$7$$) && ($JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$ = this.$blockManager_$.$blockPoolAllday$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$.$blocks$[0].$expanded$ = 
+    !$JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$.$blocks$[0].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_424_aEvent$$3_day$$3_index$$59$$), $zippyClicked$$ = $JSCompiler_alias_TRUE$$))
+  }
+  $zippyClicked$$ && (this.$updateBeforeRedraw$(), this.$updateByRedraw$())
 };
 function $JSCompiler_StaticMethods_isWeekGrid_$$($JSCompiler_StaticMethods_isWeekGrid_$self$$, $aClassName$$) {
   var $weekGridRe_$$ = $JSCompiler_StaticMethods_isWeekGrid_$self$$.$weekGridRe_$ || ($JSCompiler_StaticMethods_isWeekGrid_$self$$.$weekGridRe_$ = $rflect$string$buildClassNameRe$$("wk-events-layer", "expand-sign-wk-cont", "expand-sign-wk", "grid-table-row", "main-pane"));
@@ -3339,29 +3350,32 @@ $rflect$cal$MiniCalBuilder$$.prototype.$buildDayCells_$ = function $$rflect$cal$
     $aSb$$38$$.append($rflect$cal$MiniCalBuilder$HTML_PARTS_$$[$aOffset$$25$$ + 3])
   }
 };
-function $rflect$date$moveToDayOfWeekIfNeeded$$($aDate$$1_date$$inline_449$$) {
-  var $JSCompiler_temp$$17_diff$$inline_448$$;
-  0 != $JSCompiler_StaticMethods_getWeekday$$($aDate$$1_date$$inline_449$$) && ($JSCompiler_temp$$17_diff$$inline_448$$ = (($goog$i18n$DateTimeSymbols_en$$.$FIRSTDAYOFWEEK$ + 0 + 1) % 7 - $aDate$$1_date$$inline_449$$.getDay() + -7) % 7, $aDate$$1_date$$inline_449$$ = $aDate$$1_date$$inline_449$$.$clone$(), $aDate$$1_date$$inline_449$$.add(new $goog$date$Interval$$(0, 0, 0 === $JSCompiler_temp$$17_diff$$inline_448$$ ? $JSCompiler_temp$$17_diff$$inline_448$$ + -7 : $JSCompiler_temp$$17_diff$$inline_448$$)));
-  return $JSCompiler_temp$$17_diff$$inline_448$$ = $aDate$$1_date$$inline_449$$
+function $rflect$date$moveToDayOfWeekIfNeeded$$($JSCompiler_temp$$17_aDate$$1$$) {
+  if(0 != $JSCompiler_StaticMethods_getWeekday$$($JSCompiler_temp$$17_aDate$$1$$)) {
+    var $date$$inline_448$$ = ($goog$i18n$DateTimeSymbols_en$$.$FIRSTDAYOFWEEK$ + 0 + 1) % 7, $diff$$inline_449$$ = ($date$$inline_448$$ - $JSCompiler_temp$$17_aDate$$1$$.getDay() + -7) % 7, $date$$inline_448$$ = $JSCompiler_temp$$17_aDate$$1$$.$clone$();
+    $date$$inline_448$$.add(new $goog$date$Interval$$(0, 0, 0 === $diff$$inline_449$$ ? $diff$$inline_449$$ + -7 : $diff$$inline_449$$));
+    $JSCompiler_temp$$17_aDate$$1$$ = $date$$inline_448$$
+  }
+  return $JSCompiler_temp$$17_aDate$$1$$
 }
 function $rflect$date$getDayFromGiven$$($aGivenDate_dayOfWeek$$2$$) {
-  for(var $date$$42_year$$11$$ = $JSCompiler_alias_NULL$$, $date$$42_year$$11$$ = $aGivenDate_dayOfWeek$$2$$.getFullYear(), $month$$7$$ = $aGivenDate_dayOfWeek$$2$$.getMonth(), $day$$6$$ = $aGivenDate_dayOfWeek$$2$$.getDate(), $aGivenDate_dayOfWeek$$2$$ = ($aGivenDate_dayOfWeek$$2$$.getDay() + 1) % 7, $counter$$9$$ = 0;1 > $counter$$9$$;$counter$$9$$++) {
-    $day$$6$$ == $goog$date$getNumberOfDaysInMonth$$($date$$42_year$$11$$, $month$$7$$) ? (11 == $month$$7$$ ? ($date$$42_year$$11$$ += 1, $month$$7$$ = 0) : $month$$7$$ += 1, $day$$6$$ = 1) : $day$$6$$ += 1
+  for(var $dateObject_year$$11$$ = $JSCompiler_alias_NULL$$, $dateObject_year$$11$$ = $aGivenDate_dayOfWeek$$2$$.getFullYear(), $month$$7$$ = $aGivenDate_dayOfWeek$$2$$.getMonth(), $date$$42$$ = $aGivenDate_dayOfWeek$$2$$.getDate(), $aGivenDate_dayOfWeek$$2$$ = ($aGivenDate_dayOfWeek$$2$$.getDay() + 1 + 7) % 7, $counter$$9$$ = 0;1 > $counter$$9$$;$counter$$9$$++) {
+    $date$$42$$ == $goog$date$getNumberOfDaysInMonth$$($dateObject_year$$11$$, $month$$7$$) ? (11 == $month$$7$$ ? ($dateObject_year$$11$$ += 1, $month$$7$$ = 0) : $month$$7$$ += 1, $date$$42$$ = 1) : $date$$42$$ += 1
   }
-  $date$$42_year$$11$$ = new $rflect$date$Date$$($date$$42_year$$11$$, $month$$7$$, $day$$6$$);
-  $date$$42_year$$11$$.$day$ = $aGivenDate_dayOfWeek$$2$$;
-  return $date$$42_year$$11$$
+  $dateObject_year$$11$$ = new $rflect$date$Date$$($dateObject_year$$11$$, $month$$7$$, $date$$42$$);
+  $date$$42$$.$day$ = $aGivenDate_dayOfWeek$$2$$;
+  return $dateObject_year$$11$$
 }
 function $rflect$date$Date$$($date$$43_opt_year$$2$$, $opt_month$$2$$, $opt_date$$3$$, $opt_hours$$3$$, $opt_minutes$$2$$, $opt_seconds$$2$$, $opt_milliseconds$$1$$) {
   $goog$isNumber$$($date$$43_opt_year$$2$$) ? (this.setYear($date$$43_opt_year$$2$$ || 0), this.setMonth($opt_month$$2$$ || 0), this.setDate($opt_date$$3$$ || 0), this.setHours($opt_hours$$3$$ || 0), this.setMinutes($opt_minutes$$2$$ || 0), this.setSeconds($opt_seconds$$2$$ || 0), this.setMilliseconds($opt_milliseconds$$1$$ || 0)) : ($date$$43_opt_year$$2$$ = $goog$isObject$$($date$$43_opt_year$$2$$) ? new Date($date$$43_opt_year$$2$$) : new Date, this.setYear($date$$43_opt_year$$2$$.getFullYear()), 
-  this.setMonth($date$$43_opt_year$$2$$.getMonth()), this.setDate($date$$43_opt_year$$2$$.getDate()), this.$day$ = $date$$43_opt_year$$2$$.getDay(), this.setHours($date$$43_opt_year$$2$$.getHours()), this.setMinutes($date$$43_opt_year$$2$$.getMinutes()), this.setSeconds($date$$43_opt_year$$2$$.getSeconds()), this.setMilliseconds($date$$43_opt_year$$2$$.getMilliseconds()))
+  this.setMonth($date$$43_opt_year$$2$$.getMonth()), this.setDate($date$$43_opt_year$$2$$.getDate()), this.$date$ = $date$$43_opt_year$$2$$.getDay(), this.setHours($date$$43_opt_year$$2$$.getHours()), this.setMinutes($date$$43_opt_year$$2$$.getMinutes()), this.setSeconds($date$$43_opt_year$$2$$.getSeconds()), this.setMilliseconds($date$$43_opt_year$$2$$.getMilliseconds()))
 }
 $goog$inherits$$($rflect$date$Date$$, $goog$date$DateTime$$);
 $JSCompiler_prototypeAlias$$ = $rflect$date$Date$$.prototype;
 $JSCompiler_prototypeAlias$$.$year_$ = 0;
 $JSCompiler_prototypeAlias$$.$month_$ = 0;
 $JSCompiler_prototypeAlias$$.$dayOfMonth_$ = 0;
-$JSCompiler_prototypeAlias$$.$day$ = 0;
+$JSCompiler_prototypeAlias$$.$date$ = 0;
 $JSCompiler_prototypeAlias$$.time = 0;
 $JSCompiler_prototypeAlias$$.$hours_$ = 0;
 $JSCompiler_prototypeAlias$$.$minutes_$ = 0;
@@ -3375,7 +3389,7 @@ $JSCompiler_prototypeAlias$$.getFullYear = $JSCompiler_get$$("$year_$");
 $JSCompiler_prototypeAlias$$.getYear = $JSCompiler_get$$("$year_$");
 $JSCompiler_prototypeAlias$$.getMonth = $JSCompiler_get$$("$month_$");
 $JSCompiler_prototypeAlias$$.getDate = $JSCompiler_get$$("$dayOfMonth_$");
-$JSCompiler_prototypeAlias$$.getDay = $JSCompiler_get$$("$day$");
+$JSCompiler_prototypeAlias$$.getDay = $JSCompiler_get$$("$date$");
 $JSCompiler_prototypeAlias$$.getTime = $JSCompiler_get$$("time");
 $JSCompiler_prototypeAlias$$.getHours = $JSCompiler_get$$("$hours_$");
 $JSCompiler_prototypeAlias$$.getMinutes = $JSCompiler_get$$("$minutes_$");
@@ -3388,11 +3402,11 @@ $JSCompiler_prototypeAlias$$.setMilliseconds = $JSCompiler_set$$("$milliseconds_
 $JSCompiler_prototypeAlias$$.$equals$ = function $$JSCompiler_prototypeAlias$$$$equals$$($aOther$$, $opt_bitmask$$) {
   var $equal$$ = $JSCompiler_alias_TRUE$$, $bitmask$$ = $opt_bitmask$$ || 63;
   $bitmask$$ & 1 && ($equal$$ = $equal$$ && this.getYear() == $aOther$$.getYear());
-  $bitmask$$ & 2 && ($equal$$ = $equal$$ && this.getMonth() == $aOther$$.getMonth());
-  $bitmask$$ & 4 && ($equal$$ = $equal$$ && this.getDate() == $aOther$$.getDate());
-  $bitmask$$ & 8 && ($equal$$ = $equal$$ && this.getHours() == $aOther$$.getHours());
-  $bitmask$$ & 16 && ($equal$$ = $equal$$ && this.getMinutes() == $aOther$$.getMinutes());
-  $bitmask$$ & 32 && ($equal$$ = $equal$$ && this.getSeconds() == $aOther$$.getSeconds());
+  $equal$$ && $bitmask$$ & 2 && ($equal$$ = $equal$$ && this.getMonth() == $aOther$$.getMonth());
+  $equal$$ && $bitmask$$ & 4 && ($equal$$ = $equal$$ && this.getDate() == $aOther$$.getDate());
+  $equal$$ && $bitmask$$ & 8 && ($equal$$ = $equal$$ && this.getHours() == $aOther$$.getHours());
+  $equal$$ && $bitmask$$ & 16 && ($equal$$ = $equal$$ && this.getMinutes() == $aOther$$.getMinutes());
+  $equal$$ && $bitmask$$ & 32 && ($equal$$ = $equal$$ && this.getSeconds() == $aOther$$.getSeconds());
   return $equal$$
 };
 $JSCompiler_prototypeAlias$$.valueOf = function $$JSCompiler_prototypeAlias$$$valueOf$() {
@@ -3538,10 +3552,9 @@ $JSCompiler_prototypeAlias$$.$dragStarted_$ = $JSCompiler_alias_FALSE$$;
 $JSCompiler_prototypeAlias$$.$draggedAtLeastOnce_$ = $JSCompiler_alias_FALSE$$;
 $JSCompiler_prototypeAlias$$.$indexIsInMask_$ = $JSCompiler_alias_FALSE$$;
 $JSCompiler_prototypeAlias$$.close = function $$JSCompiler_prototypeAlias$$$close$() {
-  this.$draggedAtLeastOnce_$ ? $goog$events$dispatchEvent$$(this.$component_$, {type:"datedragend", $startDate$:this.$startDate$, $endDate$:this.$endDate$}) : this.$dragStarted_$ && $goog$events$dispatchEvent$$(this.$component_$, {type:"dateselect", $date$:this.$startDate$, $isInMask$:this.$indexIsInMask_$});
-  this.$currentCell_$ = this.$visibleCurrentCell$;
-  this.$startCell_$ = this.$visibleStartCell$;
-  this.$indexIsInMask_$ = this.$draggedAtLeastOnce_$ = this.$dragStarted_$ = $JSCompiler_alias_FALSE$$
+  $_log$$("close called");
+  this.$draggedAtLeastOnce_$ ? (this.$currentCell_$ = this.$visibleCurrentCell_$, this.$startCell_$ = this.$visibleStartCell_$, this.$draggedAtLeastOnce_$ = this.$dragStarted_$ = $JSCompiler_alias_FALSE$$, $goog$events$dispatchEvent$$(this.$component_$, {type:"datedragend", $startDate$:this.$startDate$, $endDate$:this.$endDate$})) : this.$dragStarted_$ && (this.$dragStarted_$ = $JSCompiler_alias_FALSE$$, $goog$events$dispatchEvent$$(this.$component_$, {type:"dateselect", $date$:this.$startDate$, 
+  $isInMask$:this.$indexIsInMask_$}))
 };
 $JSCompiler_prototypeAlias$$.update = function $$JSCompiler_prototypeAlias$$$update$($aIndex$$4_currentCell$$1$$) {
   $aIndex$$4_currentCell$$1$$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($aIndex$$4_currentCell$$1$$);
@@ -3550,14 +3563,19 @@ $JSCompiler_prototypeAlias$$.update = function $$JSCompiler_prototypeAlias$$$upd
 $JSCompiler_prototypeAlias$$.$init$ = function $$JSCompiler_prototypeAlias$$$$init$$($JSCompiler_inline_result$$461_aConfiguration$$2_cell$$inline_464$$, $startSelectionIndex$$, $endSelectionIndex_minCell$$inline_465$$) {
   $rflect$cal$SelectionMask$$.prototype.$init$.call(this, $JSCompiler_inline_result$$461_aConfiguration$$2_cell$$inline_464$$);
   this.$maskEl_$ = $goog$dom$getElement$$("minical-mask-cnt");
-  this.$indexIsInMask_$ = $JSCompiler_alias_FALSE$$;
-  this.$dragStarted_$ = 4 == this.$configuration_$;
+  this.$indexIsInMask_$ = this.$draggedAtLeastOnce_$ = this.$dragStarted_$ = $JSCompiler_alias_FALSE$$;
+  $_log$$("this.configuration_", this.$configuration_$);
   if(5 == this.$configuration_$) {
-    this.$startCell_$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($startSelectionIndex$$), this.$currentCell_$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($endSelectionIndex_minCell$$inline_465$$)
+    this.$startCell_$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($startSelectionIndex$$), this.$currentCell_$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($endSelectionIndex_minCell$$inline_465$$), this.$update_$(), this.close()
   }else {
+    this.$dragStarted_$ = $JSCompiler_alias_TRUE$$;
     if(this.$initialized_$) {
-      var $JSCompiler_inline_result$$461_aConfiguration$$2_cell$$inline_464$$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($startSelectionIndex$$), $endSelectionIndex_minCell$$inline_465$$ = -1 == $JSCompiler_StaticMethods_compareCells_$$(this, this.$startCell_$, this.$currentCell_$) ? this.$startCell_$ : this.$currentCell_$, $maxCell$$inline_466$$ = 1 == $JSCompiler_StaticMethods_compareCells_$$(this, this.$startCell_$, this.$currentCell_$) ? this.$startCell_$ : this.$currentCell_$, $JSCompiler_inline_result$$461_aConfiguration$$2_cell$$inline_464$$ = 
-      0 <= $JSCompiler_StaticMethods_compareCells_$$(this, $JSCompiler_inline_result$$461_aConfiguration$$2_cell$$inline_464$$, $endSelectionIndex_minCell$$inline_465$$) && 0 >= $JSCompiler_StaticMethods_compareCells_$$(this, $JSCompiler_inline_result$$461_aConfiguration$$2_cell$$inline_464$$, $maxCell$$inline_466$$)
+      var $JSCompiler_inline_result$$461_aConfiguration$$2_cell$$inline_464$$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($startSelectionIndex$$), $endSelectionIndex_minCell$$inline_465$$ = -1 == $JSCompiler_StaticMethods_compareCells_$$(this, this.$visibleStartCell_$, this.$visibleCurrentCell_$) ? this.$visibleStartCell_$ : this.$visibleCurrentCell_$, $maxCell$$inline_466$$ = 1 == $JSCompiler_StaticMethods_compareCells_$$(this, this.$visibleStartCell_$, this.$visibleCurrentCell_$) ? this.$visibleStartCell_$ : 
+      this.$visibleCurrentCell_$;
+      $_log$$("cell", $JSCompiler_inline_result$$461_aConfiguration$$2_cell$$inline_464$$);
+      $_log$$("minCell", $endSelectionIndex_minCell$$inline_465$$);
+      $_log$$("maxCell", $maxCell$$inline_466$$);
+      $JSCompiler_inline_result$$461_aConfiguration$$2_cell$$inline_464$$ = 0 <= $JSCompiler_StaticMethods_compareCells_$$(this, $JSCompiler_inline_result$$461_aConfiguration$$2_cell$$inline_464$$, $endSelectionIndex_minCell$$inline_465$$) && 0 >= $JSCompiler_StaticMethods_compareCells_$$(this, $JSCompiler_inline_result$$461_aConfiguration$$2_cell$$inline_464$$, $maxCell$$inline_466$$)
     }else {
       $JSCompiler_inline_result$$461_aConfiguration$$2_cell$$inline_464$$ = $JSCompiler_alias_FALSE$$
     }
@@ -3565,8 +3583,6 @@ $JSCompiler_prototypeAlias$$.$init$ = function $$JSCompiler_prototypeAlias$$$$in
     $JSCompiler_StaticMethods_calculateDates_$$(this, this.$startCell_$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($startSelectionIndex$$));
     this.$currentCell_$ = this.$startCell_$.$clone$()
   }
-  this.$initialized_$ = $JSCompiler_alias_TRUE$$;
-  5 == this.$configuration_$ && (this.$update_$(), this.close())
 };
 function $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($aSelectionIndex$$) {
   return new $goog$math$Coordinate$$($aSelectionIndex$$ % 7, Math.floor($aSelectionIndex$$ / 7))
@@ -3575,11 +3591,12 @@ $JSCompiler_prototypeAlias$$.$update_$ = function $$JSCompiler_prototypeAlias$$$
   var $duration$$inline_472_maxCell$$2$$, $minCell$$2$$;
   this.$rects_$.length = 0;
   if(!(0 > this.$startCell_$.x || 0 > this.$startCell_$.y || 0 > this.$currentCell_$.x || 0 > this.$currentCell_$.y)) {
+    this.$initialized_$ = $JSCompiler_alias_TRUE$$;
     var $defaultStepX_numberOfDaysInMonth$$inline_477_tempDate$$inline_471_year$$inline_474$$ = 134 / 7, $dayInMonth$$inline_473_defaultStepY_indexOfFirstDayOfMonth$$inline_476$$ = 110 / 6;
-    this.$visibleStartCell$ = this.$startCell_$.$clone$();
-    this.$visibleCurrentCell$ = this.$currentCell_$.$clone$();
-    $minCell$$2$$ = -1 == $JSCompiler_StaticMethods_compareCells_$$(this, this.$visibleStartCell$, this.$visibleCurrentCell$) ? this.$visibleStartCell$ : this.$visibleCurrentCell$;
-    $duration$$inline_472_maxCell$$2$$ = 1 == $JSCompiler_StaticMethods_compareCells_$$(this, this.$visibleStartCell$, this.$visibleCurrentCell$) ? this.$visibleStartCell$ : this.$visibleCurrentCell$;
+    this.$visibleStartCell_$ = this.$startCell_$.$clone$();
+    this.$visibleCurrentCell_$ = this.$currentCell_$.$clone$();
+    $minCell$$2$$ = -1 == $JSCompiler_StaticMethods_compareCells_$$(this, this.$visibleStartCell_$, this.$visibleCurrentCell_$) ? this.$visibleStartCell_$ : this.$visibleCurrentCell_$;
+    $duration$$inline_472_maxCell$$2$$ = 1 == $JSCompiler_StaticMethods_compareCells_$$(this, this.$visibleStartCell_$, this.$visibleCurrentCell_$) ? this.$visibleStartCell_$ : this.$visibleCurrentCell_$;
     var $month$$inline_475_range$$6$$ = $duration$$inline_472_maxCell$$2$$.x + 7 * $duration$$inline_472_maxCell$$2$$.y - ($minCell$$2$$.x + 7 * $minCell$$2$$.y) + 1;
     7 >= $month$$inline_475_range$$6$$ && 2 <= $month$$inline_475_range$$6$$ && 1 == $duration$$inline_472_maxCell$$2$$.y - $minCell$$2$$.y ? (this.$rects_$.push(this.$getRect_$($minCell$$2$$.x * $defaultStepX_numberOfDaysInMonth$$inline_477_tempDate$$inline_471_year$$inline_474$$, $minCell$$2$$.y * $dayInMonth$$inline_473_defaultStepY_indexOfFirstDayOfMonth$$inline_476$$, (7 - $minCell$$2$$.x) * $defaultStepX_numberOfDaysInMonth$$inline_477_tempDate$$inline_471_year$$inline_474$$, $dayInMonth$$inline_473_defaultStepY_indexOfFirstDayOfMonth$$inline_476$$)), 
     this.$rects_$.push(this.$getRect_$(0, $duration$$inline_472_maxCell$$2$$.y * $dayInMonth$$inline_473_defaultStepY_indexOfFirstDayOfMonth$$inline_476$$, ($duration$$inline_472_maxCell$$2$$.x + 1) * $defaultStepX_numberOfDaysInMonth$$inline_477_tempDate$$inline_471_year$$inline_474$$, $dayInMonth$$inline_473_defaultStepY_indexOfFirstDayOfMonth$$inline_476$$))) : ($minCell$$2$$.y != $duration$$inline_472_maxCell$$2$$.y && ($minCell$$2$$.x = 0, $duration$$inline_472_maxCell$$2$$.x = 6), this.$rects_$.push(this.$getRect_$($minCell$$2$$.x * 

@@ -141,7 +141,6 @@ rflect.cal.MiniCal.prototype.initMask_ = function() {
 
   }
 
-
   this.selectionMask.init(
       rflect.cal.MiniCalSelectionMask.Configuration.MINI_MONTH_EXTERNAL,
       startSelectionIndex, endSelectionIndex);
@@ -266,11 +265,11 @@ rflect.cal.MiniCal.prototype.isField_ = function(aClassName) {
  */
 rflect.cal.MiniCal.prototype.onMouseDown_ = function(aEvent) {
   var className = aEvent.target.className;
-  var index = rflect.string.getNumericIndex(aEvent.target.id);
+  var index = rflect.string.get2DigitIndex(aEvent.target.id);
 
   if (this.isField_(className))
     this.selectionMask.init(
-        rflect.cal.MiniCalSelectionMask.Configuration.MINI_MONTH_INTERNAL, 
+        rflect.cal.MiniCalSelectionMask.Configuration.MINI_MONTH_INTERNAL,
         index, 0);
 
   if (this.isInteractiveArea_(className))
@@ -298,8 +297,8 @@ rflect.cal.MiniCal.prototype.onSelectStart_ = function(aEvent) {
  * @private
  */
 rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
-  var index = rflect.string.getNumericIndex(aEvent.target.id);
-  if (this.selectionMask.isInitialized() &&
+  var index = rflect.string.get2DigitIndex(aEvent.target.id);
+  if (this.selectionMask.isDragStarted() &&
       rflect.string.buildClassNameRe(goog.getCssName('goog-date-picker-date'))
       .test(aEvent.target.className)){
     this.selectionMask.update(index);
@@ -314,7 +313,7 @@ rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
  * @private
  */
 rflect.cal.MiniCal.prototype.onMouseUp_ = function(aEvent) {
-  if (this.selectionMask.isInitialized()){
+  if (this.selectionMask.isDragStarted()){
     this.selectionMask.close();
     aEvent.preventDefault();
   }

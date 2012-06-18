@@ -54,9 +54,21 @@ rflect.string.buildClassNameRe = function(var_args) {
 
 /**
  * @param {string} aId Id to find index in.
+ * @param {number=} opt_base How many digits are in index.
  * @return {number} Index found in id.
  */
-rflect.string.getNumericIndex = function(aId) {
-  var matches = /\d{1,2}/.exec(aId);
+rflect.string.getNumericIndex = function(aId, opt_base) {
+  var base = goog.isDef(opt_base) ? opt_base : 1;
+  var re = new RegExp('\\d{1,' + base + '}');
+  var matches = re.exec(aId);
   return matches ? +matches[0] : NaN;
+}
+
+
+/**
+ * @param {string} aId Id to find index in.
+ * @return {number} Two-digit index found in id.
+ */
+rflect.string.get2DigitIndex = function(aId) {
+  return rflect.string.getNumericIndex(aId, 2);
 }

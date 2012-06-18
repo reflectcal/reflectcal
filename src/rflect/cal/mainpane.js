@@ -158,6 +158,14 @@ rflect.cal.MainPane.prototype.monthGridRe_ = null;
 
 
 /**
+ * Regexp for detection of daynum label.
+ * @type {RegExp}
+ * @private
+ */
+rflect.cal.MainPane.prototype.daynumLabelRe_ = null;
+
+
+/**
  * @return {number} Width of scrollbar below allday scrollable.
  */
 rflect.cal.MainPane.prototype.getScrollbarWidthBelowAllday = function() {
@@ -485,12 +493,15 @@ rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
 
       zippyClicked = true;
     } else if (this.isDaynumLabel_(className)) {
-      var id = aEvent.target.id;
-      var index = rflect.string.getNumericIndex(id);
+      index = rflect.string.get2DigitIndex(id);
+      if (goog.DEBUG)
+        _log('index', index);
       var day = this.timeManager_.daySeries[index];
-      this.timeManager_.setBasis(new goog.date.DateTime(day.getYear(),
-          day.getMonth(), day.getDate()));
-      this.viewManager_.showView(rflect.cal.ViewType.DAY, this);
+      if (day) {
+        this.timeManager_.setBasis(new goog.date.DateTime(day.getYear(),
+            day.getMonth(), day.getDate()));
+        this.viewManager_.showView(rflect.cal.ViewType.DAY, this);
+      }
     }
 
   } else if (this.viewManager_.isInWeekMode()) {
@@ -582,9 +593,9 @@ rflect.cal.MainPane.prototype.isMonthGrid_ = function(aClassName) {
 /**
  * @param {string} aClassName Class name of element to test whether it indicates
  * of daynum label.
- * @private
  * @return {boolean} Whether class name indicates that this is a
  * daynum label.
+ * @private
  */
 rflect.cal.MainPane.prototype.isDaynumLabel_ = function(aClassName) {
   var monthGridRe_ = this.daynumLabelRe_ || (this.daynumLabelRe_ =
