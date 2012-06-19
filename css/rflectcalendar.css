@@ -498,6 +498,14 @@ body {
   height: 100%;
 }
 
+.dayname-wk-inner {
+  cursor: pointer;
+}
+
+.label-underlined {
+  text-decoration: underline;
+}
+
 #main-pane-header-scrollable {
   border: 1px solid #d5d5d5;
   /*we need this for ie7 as nested relative positioned elements

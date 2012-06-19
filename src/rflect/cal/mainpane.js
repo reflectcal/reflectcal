@@ -162,7 +162,31 @@ rflect.cal.MainPane.prototype.monthGridRe_ = null;
  * @type {RegExp}
  * @private
  */
-rflect.cal.MainPane.prototype.daynumLabelRe_ = null;
+rflect.cal.MainPane.prototype.daynumLabelRe_;
+
+
+/**
+ * Regexp for detection of weeknum label.
+ * @type {RegExp}
+ * @private
+ */
+rflect.cal.MainPane.prototype.daynumLabelRe_;
+
+
+/**
+ * Element which get registered by mouseover.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.MainPane.prototype.registeredTarget_;
+
+
+/**
+ * Class of element registered on mouseover.
+ * @type {string}
+ * @private
+ */
+rflect.cal.MainPane.prototype.registeredTargetClass_;
 
 
 /**
@@ -457,9 +481,9 @@ rflect.cal.MainPane.prototype.enterDocument = function() {
   this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
       this.onClick_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
-      goog.nullFunction, false, this)
+      this.onMouseOver_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
-      goog.nullFunction, false, this)
+      this.onMouseOut_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
       this.onMouseDown_, false, this)
       .listen(this.getElement(), goog.events.EventType.SELECTSTART,
@@ -477,8 +501,9 @@ rflect.cal.MainPane.prototype.enterDocument = function() {
  * @private
  */
 rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
-  var id = aEvent.target.id;
-  var className = aEvent.target.className;
+  var target = aEvent.target;
+  var id = target.id;
+  var className = target.className;
   var zippyClicked = false;
   var index = 0;
   if (this.viewManager_.isInMonthMode()) {
@@ -492,17 +517,10 @@ rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
         this.blockManager_.blockPoolMonth.scrollTop = 0;
 
       zippyClicked = true;
-    } else if (this.isDaynumLabel_(className)) {
-      index = rflect.string.get2DigitIndex(id);
-      if (goog.DEBUG)
-        _log('index', index);
-      var day = this.timeManager_.daySeries[index];
-      if (day) {
-        this.timeManager_.setBasis(new goog.date.DateTime(day.getYear(),
-            day.getMonth(), day.getDate()));
-        this.viewManager_.showView(rflect.cal.ViewType.DAY, this);
-      }
-    }
+    } else if (this.isDaynumLabel_(className))
+      this.onDaynumLabelClick_(id);
+    else if (this.isWeeknumLabel_(className))
+      this.onWeeknumLabelClick_(target.parentNode.id);
 
   } else if (this.viewManager_.isInWeekMode()) {
     // We clicked on week zippy.
@@ -521,7 +539,8 @@ rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
       this.blockManager_.blockPoolAllday.toggleBlock(0);
 
       zippyClicked = true;
-    }
+    } else if (this.isDaynumLabel_(className))
+      this.onDaynumLabelClick_(target.parentNode.id);
   }
 
   if (zippyClicked) {
@@ -529,6 +548,91 @@ rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
     this.updateByRedraw();
   }
 };
+
+
+/**
+ * Main pane mouseout handler.
+ */
+rflect.cal.MainPane.prototype.onMouseOut_ = function(aEvent) {
+  var target = aEvent.target;
+  var id = target.id;
+  var className = target.className;
+}
+
+
+/**
+ * Main pane mouseover handler.
+ */
+rflect.cal.MainPane.prototype.onMouseOver_ = function(aEvent) {
+  var target = aEvent.target;
+  var id = target.id;
+  var className = target.className;
+  if (this.isDaynumLabel_(className) || this.isWeeknumLabel_(className))
+    this.registerMouseOverTarget_(target, goog.getCssName('label-underlined'));
+  else  
+    this.registerMouseOverTarget_(null);
+}
+
+
+/**
+ * Registers mouse over target and de-registers previous one.
+ * @param {Element} aTarget New element to register hover on.
+ * @param {string=} opt_hoverClassName Class which should be added to hovered
+ * target.
+ */
+rflect.cal.MainPane.prototype.registerMouseOverTarget_ = function(aTarget,
+    opt_hoverClassName) {
+  if (this.registeredTarget_)
+    goog.dom.classes.remove(this.registeredTarget_,
+      this.registeredTargetClass_);
+  if ((this.registeredTarget_ = aTarget) && opt_hoverClassName) {
+    goog.dom.classes.add(aTarget, opt_hoverClassName);
+    this.registeredTargetClass_ = opt_hoverClassName;
+  }
+}
+
+
+/**
+ * Weeknum label click handler.
+ * @param {string} aId Id of daynum label.
+ * @private
+ */
+rflect.cal.MainPane.prototype.onDaynumLabelClick_ = function(aId) {
+  var index = rflect.string.get2DigitIndex(aId);
+  if (goog.DEBUG)
+    _log('index', index);
+  var day = this.timeManager_.daySeries[index];
+  if (day)
+    this.switchView_(day, rflect.cal.ViewType.DAY);
+}
+
+
+/**
+ * Weeknum label click handler.
+ * @param {string} aId Id of weeknum label.
+ * @private
+ */
+rflect.cal.MainPane.prototype.onWeeknumLabelClick_ = function(aId) {
+  var index = rflect.string.get2DigitIndex(aId);
+  if (goog.DEBUG)
+    _log('index', index);
+  var day = this.timeManager_.daySeries[7 * index];
+  if (day)
+    this.switchView_(day, rflect.cal.ViewType.WEEK);
+}
+
+
+/**
+ * Switches view from main pane ui, like from daylabel click.
+ * @param {rflect.date.Date} aDate Date to set basis to.
+ * @param {rflect.cal.ViewType} aType Type to stitch to.
+ * @private
+ */
+rflect.cal.MainPane.prototype.switchView_ = function(aDate, aType) {
+  this.timeManager_.setBasis(new goog.date.DateTime(aDate.getYear(),
+    aDate.getMonth(), aDate.getDate()));
+  this.viewManager_.showView(aType, this);
+}
 
 
 /**
@@ -598,10 +702,24 @@ rflect.cal.MainPane.prototype.isMonthGrid_ = function(aClassName) {
  * @private
  */
 rflect.cal.MainPane.prototype.isDaynumLabel_ = function(aClassName) {
-  var monthGridRe_ = this.daynumLabelRe_ || (this.daynumLabelRe_ =
+  var daynumLabelRe_ = this.daynumLabelRe_ || (this.daynumLabelRe_ =
       rflect.string.buildClassNameRe(
-      goog.getCssName('daynum-label')));
-  return this.daynumLabelRe_.test(aClassName);
+      goog.getCssName('daynum-label'), goog.getCssName('dayname-wk-inner')));
+  return daynumLabelRe_.test(aClassName);
+};
+
+
+/**
+ * @param {string} aClassName Class name of element to test whether it indicates
+ * of weeknum label.
+ * @return {boolean} Whether class name indicates that this is a
+ * weeknum label.
+ * @private
+ */
+rflect.cal.MainPane.prototype.isWeeknumLabel_ = function(aClassName) {
+  var weeknumLabelRe_ = this.weeknumLabelRe_ || (this.weeknumLabelRe_ =
+      rflect.string.buildClassNameRe(goog.getCssName('weeknum-label-inner')));
+  return weeknumLabelRe_.test(aClassName);
 };
 
 

@@ -142,15 +142,17 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   // Individual dayname.
   '<div id="dayname',
   /*Dayname id is here (dayname0).*/
-  '" class="dayname-wk" style="margin-left:',
+  '" class="' + goog.getCssName('dayname-wk') + '" style="margin-left:',
   /*Dayname left margin in percents (0).*/
   '%;margin-right:',
   /*Dayname right margin in percents (85.7143).*/
   '%;top:',
   /*Dayname top position in percents (0).*/
-  '%">',
+  '%"><span class="',
+  /*Dayname label class (dayname-wk-inner).*/
+  '">',
   /*Dayname is here (Monday).*/
-  '</div>',
+  '</span></div>',
   '</div>',
   '</div>',
   // Scrollable in header.
@@ -496,40 +498,40 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb) {
       };break;
       case 8: {
         this.buildDayNamesWeek_(aSb, offset);
-        offset += 7;
+        offset += 8;
       };break;
-      case 18: {
+      case 19: {
         this.buildScrollableAllday_(aSb, offset);
         offset += 2;
       };break;
-      case 22: {
+      case 23: {
         this.buildAllDayGrid_(aSb, offset);
         offset += 2;
       };break;
-      case 25: {
+      case 26: {
         this.buildWeekGridAdCols_(aSb, offset);
         offset += 17;
       };break;
-      case 47: {
+      case 48: {
         this.buildWeekColZippies_(aSb, offset);
         offset += 9;
       };break;
-      case 61: {
+      case 62: {
         this.buildScrollableWeek_(aSb, offset);
         offset++;
       };break;
-      case 65: {
+      case 66: {
         this.buildTimeMarkerHeadPosition_(aSb, offset);
       };break;
-      case 67: {
+      case 68: {
         this.buildHoursAndGridRows_(aSb, offset);
         offset += 9;
       };break;
-      case 78: {
+      case 79: {
         this.buildGridTableWeek_(aSb, offset);
         offset++;
       };break;
-      case 80: {
+      case 81: {
         this.buildWeekGridCols_(aSb, offset);
         offset += 14;
       };break;
@@ -612,9 +614,12 @@ rflect.cal.MainPaneBuilder.prototype.buildDayNamesZippy_ =
  * margin in percents (0).
  *'%;margin-right:',/*Dayname right margin in percents
  * (85.7143).
- * '%;top:',Dayname top position in percents (0).
- * '%">',Dayname is here (Monday).
- * '</div>',
+ * '%;top:',
+ * Dayname top position in percents (0).
+ * '%"><span class="',
+ * Dayname label class (dayname-wk-inner).
+ * '">',
+ * Dayname is here (Monday).,
  */
 rflect.cal.MainPaneBuilder.prototype.buildDayNamesWeek_ =
     function(aSb, aOffset) {
@@ -648,9 +653,11 @@ rflect.cal.MainPaneBuilder.prototype.buildDayNamesWeek_ =
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 5]);
     aSb.append(-100 * colCounter);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 6]);
+    aSb.append(blocksNumber != 1 ? goog.getCssName('dayname-wk-inner') : '');
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
     // Day name formatted.
     aSb.append(this.weekDayNameFormatWeek_.format(daySeries[colCounter]));
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
   }
 };
 

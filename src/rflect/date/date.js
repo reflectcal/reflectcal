@@ -90,7 +90,7 @@ rflect.date.getDayFromGiven =
   var date = aGivenDate.getDate();
   var currentDayOfWeek = aGivenDate.getDay();
   var dayOfWeek = (currentDayOfWeek + aNumberOfDays * aDirection + 7) % 7;
-  
+
   var monthLimit = aDirection > 0 ? 11 : 0;
   var nextBeginingMonth = aDirection > 0 ? 0 : 11;
 
@@ -111,7 +111,7 @@ rflect.date.getDayFromGiven =
   }
 
   dateObject = new rflect.date.Date(year, month, date);
-  date.day = dayOfWeek;
+  dateObject.setDay(dayOfWeek);
   return dateObject;
 };
 
@@ -152,6 +152,7 @@ rflect.date.compareByWeekAndYear = function(aDateA, aDateB){
  * @enum {number}
  */
 rflect.date.fields = {
+  NONE: 0,
   YEAR: 1,
   MONTH: 2,
   DATE: 4,
@@ -196,7 +197,7 @@ rflect.date.Date = function(opt_year, opt_month, opt_date, opt_hours,
     this.setYear(date.getFullYear());
     this.setMonth(date.getMonth());
     this.setDate(date.getDate());
-    this.date = date.getDay();
+    this.setDay(date.getDay());
     this.setHours(date.getHours());
     this.setMinutes(date.getMinutes());
     this.setSeconds(date.getSeconds());
@@ -249,7 +250,7 @@ rflect.date.Date.prototype.weekNumber_ = 0;
  * Day of week in US style (0 - Sun, 6 - Sat).
  * @type {goog.date.weekDay}
  */
-rflect.date.Date.prototype.date = 0;
+rflect.date.Date.prototype.day_ = 0;
 
 
 /**
@@ -359,7 +360,15 @@ rflect.date.Date.prototype.getDate = function() {
  * @return {number} Day of week, US style - 0 - Sun, 6 - Sat.
  */
 rflect.date.Date.prototype.getDay = function() {
-  return this.date;
+  return this.day_;
+};
+
+
+/**
+ * @param {number} aDay Day of week, US style - 0 - Sun, 6 - Sat.
+ */
+rflect.date.Date.prototype.setDay = function(aDay) {
+  this.day_ = aDay;
 };
 
 
