@@ -75,6 +75,13 @@ rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
   if (goog.DEBUG)
     _inspect('selectionMask', this.selectionMask);
 
+  /**
+   * Mouse over registry.
+   * @type {rflect.cal.MouseOverRegistry}
+   * @private
+   */
+  this.moRegistry_ = new rflect.cal.MouseOverRegistry();
+
 };
 goog.inherits(rflect.cal.MiniCal, rflect.cal.Component);
 
@@ -188,7 +195,7 @@ rflect.cal.MiniCal.prototype.enterDocument = function() {
   this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
       this.onClick_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
-      goog.nullFunction, false, this)
+      this.onMouseOver_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
       goog.nullFunction, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
@@ -223,6 +230,31 @@ rflect.cal.MiniCal.prototype.onClick_ = function(aEvent) {
     this.updateBeforeRedraw(true, direction);
     this.updateByRedraw();
   }
+};
+
+
+/**
+ * Mini cal mouseover handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.MiniCal.prototype.onMouseOver_ = function(aEvent) {
+  var target = /** @type {Element} */ aEvent.target;
+  var className = target.className;
+  var deregister = false;
+
+  if (this.isField_(className)) {
+
+    var index = rflect.string.get2DigitIndex(target.id);
+    if (!this.selectionMask.getIndexIsInMask(index))
+      this.moRegistry_.registerTarget(target,
+          goog.getCssName('goog-date-picker-selected'));
+    else
+      deregister = true;
+  } else
+    deregister = true;
+  if (deregister)
+    this.moRegistry_.registerTarget(null);
 };
 
 

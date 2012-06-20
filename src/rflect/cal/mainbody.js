@@ -196,6 +196,8 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
   this.mainPane_.decorateInternal(this.dom_.getElement('main-pane'), true);
   // Propagate call to children.
   rflect.cal.MainBody.superClass_.enterDocument.call(this);
+
+
 };
 
 

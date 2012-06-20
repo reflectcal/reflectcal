@@ -860,6 +860,10 @@ body {
   cursor: pointer;
 }
 
+.zippy-highlighted {
+  background-color: #eee;
+}
+
 .goog-zippy-expanded, .wk-col-zippy-collapsed, .mn-row-zippy-expanded{
   background-position: 0 -11px;
 }

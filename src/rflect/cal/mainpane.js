@@ -17,6 +17,7 @@ goog.require('goog.math.Size');
 goog.require('rflect.cal.Component');
 goog.require('rflect.cal.MainPaneBuilder');
 goog.require('rflect.cal.MainPaneSelectionMask');
+goog.require('rflect.cal.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.string');
 
@@ -125,9 +126,17 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager,
   /**
    * Keys for scroll listeners for scrollables. Listeners are removed by these
    * keys on every update.
+   * @type {Array.<number>}
    * @private
    */
   this.scrollListenersKeys_ = [];
+  
+  /**
+   * Mouse over registry.
+   * @type {rflect.cal.MouseOverRegistry}
+   * @private
+   */
+   this.moRegistry_ = new rflect.cal.MouseOverRegistry();
 
 };
 goog.inherits(rflect.cal.MainPane, rflect.cal.Component);
@@ -171,22 +180,6 @@ rflect.cal.MainPane.prototype.daynumLabelRe_;
  * @private
  */
 rflect.cal.MainPane.prototype.daynumLabelRe_;
-
-
-/**
- * Element which get registered by mouseover.
- * @type {Element}
- * @private
- */
-rflect.cal.MainPane.prototype.registeredTarget_;
-
-
-/**
- * Class of element registered on mouseover.
- * @type {string}
- * @private
- */
-rflect.cal.MainPane.prototype.registeredTargetClass_;
 
 
 /**
@@ -568,27 +561,13 @@ rflect.cal.MainPane.prototype.onMouseOver_ = function(aEvent) {
   var id = target.id;
   var className = target.className;
   if (this.isDaynumLabel_(className) || this.isWeeknumLabel_(className))
-    this.registerMouseOverTarget_(target, goog.getCssName('label-underlined'));
-  else  
-    this.registerMouseOverTarget_(null);
-}
-
-
-/**
- * Registers mouse over target and de-registers previous one.
- * @param {Element} aTarget New element to register hover on.
- * @param {string=} opt_hoverClassName Class which should be added to hovered
- * target.
- */
-rflect.cal.MainPane.prototype.registerMouseOverTarget_ = function(aTarget,
-    opt_hoverClassName) {
-  if (this.registeredTarget_)
-    goog.dom.classes.remove(this.registeredTarget_,
-      this.registeredTargetClass_);
-  if ((this.registeredTarget_ = aTarget) && opt_hoverClassName) {
-    goog.dom.classes.add(aTarget, opt_hoverClassName);
-    this.registeredTargetClass_ = opt_hoverClassName;
-  }
+    this.moRegistry_.registerTarget(target,
+        goog.getCssName('label-underlined'));
+  else if (this.isZippy_(className))
+    this.moRegistry_.registerTarget(target,
+        goog.getCssName('zippy-highlighted'));
+  else
+    this.moRegistry_.registerTarget(null);
 }
 
 
@@ -675,11 +654,9 @@ rflect.cal.MainPane.prototype.isAlldayGrid_ = function(aClassName) {
 
 
 /**
- * @param {string} aClassName Class name of element to test whether it indicates
- * of month grid.
+ * @param {string} aClassName Class name of element.
  * @private
- * @return {boolean} For month mode, whether class name indicates that this is a
- * month grid.
+ * @return {boolean} Whether this is a month grid.
  */
 rflect.cal.MainPane.prototype.isMonthGrid_ = function(aClassName) {
   var monthGridRe_ = this.monthGridRe_ || (this.monthGridRe_ =
@@ -695,10 +672,19 @@ rflect.cal.MainPane.prototype.isMonthGrid_ = function(aClassName) {
 
 
 /**
- * @param {string} aClassName Class name of element to test whether it indicates
- * of daynum label.
- * @return {boolean} Whether class name indicates that this is a
- * daynum label.
+ * @param {string} aClassName Class name of element.
+ * @return {boolean} Whether this is a zippy.
+ * @private
+ */
+rflect.cal.MainPane.prototype.isZippy_ = function(aClassName) {
+  return rflect.string.buildClassNameRe(
+      goog.getCssName('zippy')).test(aClassName);
+};
+
+
+/**
+ * @param {string} aClassName Class name of element.
+ * @return {boolean} Whether this is a daynum label.
  * @private
  */
 rflect.cal.MainPane.prototype.isDaynumLabel_ = function(aClassName) {
@@ -710,10 +696,8 @@ rflect.cal.MainPane.prototype.isDaynumLabel_ = function(aClassName) {
 
 
 /**
- * @param {string} aClassName Class name of element to test whether it indicates
- * of weeknum label.
- * @return {boolean} Whether class name indicates that this is a
- * weeknum label.
+ * @param {string} aClassName Class name of element.
+ * @return {boolean} Whether this is a weeknum label.
  * @private
  */
 rflect.cal.MainPane.prototype.isWeeknumLabel_ = function(aClassName) {

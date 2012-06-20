@@ -185,7 +185,7 @@ rflect.cal.MiniCalSelectionMask.prototype.init = function(aConfiguration,
     this.dragStarted_ = true;
 
     // Whether mask was previously initialized.
-    this.indexIsInMask_ = this.getIndexIsInMask_(startSelectionIndex);
+    this.indexIsInMask_ = this.getIndexIsInMask(startSelectionIndex);
     this.calculateDates_(this.startCell_ = this.getCellBySelectionIndex_(
         startSelectionIndex));
     this.currentCell_ = this.startCell_.clone();
@@ -199,7 +199,7 @@ rflect.cal.MiniCalSelectionMask.prototype.init = function(aConfiguration,
  * @param {number} aIndex Index to test.
  * @return {boolean} Whether given index is in mask.
  */
-rflect.cal.MiniCalSelectionMask.prototype.getIndexIsInMask_ = function(aIndex) {
+rflect.cal.MiniCalSelectionMask.prototype.getIndexIsInMask = function(aIndex) {
   if (!this.initialized_)
     return false;
   var cell = this.getCellBySelectionIndex_(aIndex);
