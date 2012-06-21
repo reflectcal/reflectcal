@@ -27,10 +27,12 @@ goog.require('rflect.string');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aExternalTimeManager Link to external time
  * manager.
+ * @param {rflect.cal.MouseOverRegistry} aMORegistry Link to mouse over
+ * registry.
  * @extends {rflect.cal.Component}
  * @constructor
  */
-rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
+rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager, aMORegistry) {
   rflect.cal.Component.call(this);
 
   /**
@@ -80,7 +82,7 @@ rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
    * @type {rflect.cal.MouseOverRegistry}
    * @private
    */
-  this.moRegistry_ = new rflect.cal.MouseOverRegistry();
+  this.moRegistry_ = aMORegistry;
 
 };
 goog.inherits(rflect.cal.MiniCal, rflect.cal.Component);
@@ -243,17 +245,10 @@ rflect.cal.MiniCal.prototype.onMouseOver_ = function(aEvent) {
   var className = target.className;
   var deregister = false;
 
-  if (this.isField_(className)) {
-
-    var index = rflect.string.get2DigitIndex(target.id);
-    if (!this.selectionMask.getIndexIsInMask(index))
-      this.moRegistry_.registerTarget(target,
-          goog.getCssName('goog-date-picker-selected'));
-    else
-      deregister = true;
-  } else
-    deregister = true;
-  if (deregister)
+  if (this.isField_(className))
+    this.moRegistry_.registerTarget(target,
+        goog.getCssName('goog-date-picker-selected'));
+  else
     this.moRegistry_.registerTarget(null);
 };
 

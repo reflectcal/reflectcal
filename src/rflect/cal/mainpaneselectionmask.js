@@ -490,9 +490,6 @@ rflect.cal.MainPaneSelectionMask.prototype.getRect_ =
  */
 rflect.cal.MainPaneSelectionMask.prototype.update_ = function() {
 
-  if (goog.DEBUG)
-    _log('update_ is called');
-
   var maxCell;
   var minCell;
   

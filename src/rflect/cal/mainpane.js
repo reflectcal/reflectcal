@@ -30,11 +30,13 @@ goog.require('rflect.string');
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
  * @param {rflect.cal.BlockManager} aBlockManager Link to block manager.
+ * @param {rflect.cal.MouseOverRegistry} aMORegistry Link to mouse over
+ * registry.
  * @constructor
  * @extends {rflect.cal.Component}
  */
 rflect.cal.MainPane = function(aViewManager, aTimeManager,
-    aContainerSizeMonitor, aBlockManager) {
+    aContainerSizeMonitor, aBlockManager, aMORegistry) {
   rflect.cal.Component.call(this);
 
   /**
@@ -136,7 +138,8 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager,
    * @type {rflect.cal.MouseOverRegistry}
    * @private
    */
-   this.moRegistry_ = new rflect.cal.MouseOverRegistry();
+   this.moRegistry_ = aMORegistry;
+
 
 };
 goog.inherits(rflect.cal.MainPane, rflect.cal.Component);
