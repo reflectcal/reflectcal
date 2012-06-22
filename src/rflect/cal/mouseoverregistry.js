@@ -10,6 +10,8 @@
 
 goog.provide('rflect.cal.MouseOverRegistry');
 
+goog.require('rflect.cal.TargetDetector');
+
 
 
 /**
@@ -19,11 +21,11 @@ goog.provide('rflect.cal.MouseOverRegistry');
 rflect.cal.MouseOverRegistry = function() {
 
   /**
-   * RegExps that form condition which shows whether we hover on element.
-   * @type {Array.<RegExp>}
+   * Keys of hover targets.
+   * @type {Array.<number>}
    * @private
    */
-  this.conditionRes_ = [];
+  this.targetKeys_ = [];
 
   /**
    * Class that should be added/removed on hover.
@@ -32,6 +34,7 @@ rflect.cal.MouseOverRegistry = function() {
    */
   this.modifierClasses_ = [];
 };
+goog.inherits(rflect.cal.MouseOverRegistry, rflect.cal.TargetDetector);
 
 
 /**
@@ -51,33 +54,32 @@ rflect.cal.MouseOverRegistry.prototype.registeredTargetClass_;
 
 
 /**
- * Adds a pair of condition classes array and modifier class to registry.
- * @param {Array.<string>} aConditionClasses Array of classes that form
- * condition.
- * @param {string} aModifierClass Class for indicating hover state.
+ * Adds a pair of target id and modifier class to registry.
+ * @param {number} aKey Target id.
+* @param {string} aModifierClass Class for indicating hover state.
  */
-rflect.cal.MouseOverRegistry.prototype.addSequence = function(aConditionClasses,
+rflect.cal.MouseOverRegistry.prototype.addHoverTarget = function(aKey,
     aModifierClass) {
-  this.conditionRes_.push(
-      rflect.string.buildClassNameRe.apply(null, aConditionClasses));
+  this.targetKeys_.push(aKey);
   this.modifierClasses_.push(aModifierClass);
 }
 
 
 /**
  * Registers mouse over target and de-registers previous one.
- * @param {Element} aTarget New element to register hover on.
- * @param {string=} opt_hoverClassName Class which should be added to hovered
- * target.
+ * @param {Element} aTarget New element to register hover state on.
+ * @param {string=} opt_className Class which should be tested whether it
+ * belongs to target.
  */
 rflect.cal.MouseOverRegistry.prototype.registerTarget =
-    function(aTarget, aClassName) {
+    function(aTarget, opt_className) {
   var modifierClassName;
-  for (var counter = 0, length = this.conditionRes_.length; counter < length;
+  var testedClassName = opt_className || aTarget.className;
+  for (var counter = 0, length = this.targetKeys_.length; counter < length;
       counter++) {
-    if (this.conditionRes_.test(aClassName)){
+    if (this.isTarget(this.targetKeys_[counter], testedClassName)){
       modifierClassName = this.modifierClasses_[counter];
-      this.deregisterTarget_();
+      this.deregisterTarget();
       this.registeredTarget_ = aTarget;
       goog.dom.classes.add(aTarget, modifierClassName);
       this.registeredTargetClass_ = modifierClassName;
@@ -86,7 +88,7 @@ rflect.cal.MouseOverRegistry.prototype.registerTarget =
   }
   // We haven't found any target matching our conditions, so just
   // deregister previous one.
-  this.deregisterTarget_();
+  this.deregisterTarget();
 }
 
 

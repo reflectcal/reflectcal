@@ -27,12 +27,12 @@ goog.require('rflect.string');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aExternalTimeManager Link to external time
  * manager.
- * @param {rflect.cal.MouseOverRegistry} aMORegistry Link to mouse over
+ * @param {rflect.cal.MouseOverRegistry} aMoRegistry Link to mouse over
  * registry.
  * @extends {rflect.cal.Component}
  * @constructor
  */
-rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager, aMORegistry) {
+rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager, aMoRegistry) {
   rflect.cal.Component.call(this);
 
   /**
@@ -82,10 +82,36 @@ rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager, aMORegistry) {
    * @type {rflect.cal.MouseOverRegistry}
    * @private
    */
-  this.moRegistry_ = aMORegistry;
+  this.targetRegistry_ = aMoRegistry;
 
+  this.populateTargetRegistry_();
 };
 goog.inherits(rflect.cal.MiniCal, rflect.cal.Component);
+
+
+/**
+ * Component subelements identifiers.
+ * @enum {number}
+ */
+rflect.cal.MiniCal.Targets = {
+  BUTTON: 1,
+  FIELD: 2
+}
+
+
+/**
+ * Fills mouse over registry.
+ * @private
+ */
+rflect.cal.MiniCal.prototype.populateTargetRegistry_ = function(){
+  this.targetRegistry_.addTarget(rflect.cal.MiniCal.Targets.BUTTON,
+      goog.getCssName('goog-date-picker-btn'));
+  this.targetRegistry_.addTarget(rflect.cal.MiniCal.Targets.FIELD,
+      goog.getCssName('goog-date-picker-btn'));
+
+  this.targetRegistry_.addHoverTarget(rflect.cal.MiniCal.Targets.FIELD,
+      goog.getCssName('goog-date-picker-selected'));
+}
 
 
 /**
@@ -242,14 +268,8 @@ rflect.cal.MiniCal.prototype.onClick_ = function(aEvent) {
  */
 rflect.cal.MiniCal.prototype.onMouseOver_ = function(aEvent) {
   var target = /** @type {Element} */ aEvent.target;
-  var className = target.className;
-  var deregister = false;
 
-  if (this.isField_(className))
-    this.moRegistry_.registerTarget(target,
-        goog.getCssName('goog-date-picker-selected'));
-  else
-    this.moRegistry_.registerTarget(null);
+  this.targetRegistry_.registerTarget(target);
 };
 
 
@@ -269,8 +289,8 @@ rflect.cal.MiniCal.prototype.isInteractiveArea_ = function(aClassName) {
  * @return {boolean} Whether it's button.
  */
 rflect.cal.MiniCal.prototype.isButton_ = function(aClassName) {
-  return (this.buttonRe_ || (this.buttonRe_ = rflect.string.buildClassNameRe(
-    goog.getCssName('goog-date-picker-btn')))).test(aClassName);
+  return this.targetRegistry_.isTarget(rflect.cal.MiniCal.Targets.BUTTON,
+      aClassName);
 };
 
 
@@ -280,8 +300,8 @@ rflect.cal.MiniCal.prototype.isButton_ = function(aClassName) {
  * @return {boolean} Whether it's main field.
  */
 rflect.cal.MiniCal.prototype.isField_ = function(aClassName) {
-  return (this.fieldRe_ || (this.fieldRe_ = rflect.string.buildClassNameRe(
-      goog.getCssName('goog-date-picker-date')))).test(aClassName);
+  return this.targetRegistry_.isTarget(rflect.cal.MiniCal.Targets.FIELD,
+      aClassName);
 };
 
 

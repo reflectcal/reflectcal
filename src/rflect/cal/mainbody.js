@@ -58,22 +58,14 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager,
    */
   this.blockManager_ = aBlockManager;
 
-  /**
-   * Mouse over registry.
-   * @type {rflect.cal.MouseOverRegistry}
-   * @private
-   */
-  this.moRegistry_ = new rflect.cal.MouseOverRegistry();
-
   // Add child components in order for them to be included in propagation of
   // string building and updating.
   this.addChild(this.topPane_ = new rflect.cal.TopPane(this.viewManager_,
       this.timeManager_));
   this.addChild(this.miniCal = new rflect.cal.MiniCal(this.viewManager_,
-      this.timeManager_, this.moRegistry_));
+      this.timeManager_));
   this.addChild(this.mainPane_ = new rflect.cal.MainPane(this.viewManager_,
-      this.timeManager_, this.containerSizeMonitor_, this.blockManager_,
-      this.moRegistry_));
+      this.timeManager_, this.containerSizeMonitor_, this.blockManager_));
   if (goog.DEBUG) {
     _inspect('topPane_', this.topPane_);
     _inspect('miniCal', this.miniCal);
@@ -208,16 +200,6 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
   this.getHandler().listen(document, goog.events.EventType.MOUSEOVER,
       this.onMouseOver_, false, this);
 };
-
-
-/**
- * Main body mouse over handler.
- * @param {goog.events.Event} aEvent Event object.
- * @private
- */
-rflect.cal.MainPane.prototype.onMouseOver_ = function(aEvent){
-  this.moRegistry_.registerTarget(aEvent.target);
-}
 
 
 /**
