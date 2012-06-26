@@ -14,10 +14,11 @@ goog.require('goog.events.EventType');
 goog.require('rflect.cal.Component');
 goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.MiniCalBuilder');
+goog.require('rflect.cal.MiniCalSelectionMask');
+goog.require('rflect.cal.MouseOverRegistry');
+goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
-goog.require('rflect.cal.MiniCalSelectionMask');
-goog.require('rflect.cal.predefined');
 goog.require('rflect.string');
 
 
@@ -27,12 +28,10 @@ goog.require('rflect.string');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aExternalTimeManager Link to external time
  * manager.
- * @param {rflect.cal.MouseOverRegistry} aMoRegistry Link to mouse over
- * registry.
  * @extends {rflect.cal.Component}
  * @constructor
  */
-rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager, aMoRegistry) {
+rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
   rflect.cal.Component.call(this);
 
   /**
@@ -82,36 +81,26 @@ rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager, aMoRegistry) {
    * @type {rflect.cal.MouseOverRegistry}
    * @private
    */
-  this.targetRegistry_ = aMoRegistry;
+   this.moRegistry_ = new rflect.cal.MouseOverRegistry();
 
-  this.populateTargetRegistry_();
 };
 goog.inherits(rflect.cal.MiniCal, rflect.cal.Component);
 
 
 /**
- * Component subelements identifiers.
- * @enum {number}
+ * RegExp for detection of minical button.
+ * @type {RegExp}
+ * @private
  */
-rflect.cal.MiniCal.Targets = {
-  BUTTON: 1,
-  FIELD: 2
-}
+rflect.cal.MiniCal.prototype.buttonRe_;
 
 
 /**
- * Fills mouse over registry.
+ * RegExp for detection of minical datepicker area.
+ * @type {RegExp}
  * @private
  */
-rflect.cal.MiniCal.prototype.populateTargetRegistry_ = function(){
-  this.targetRegistry_.addTarget(rflect.cal.MiniCal.Targets.BUTTON,
-      goog.getCssName('goog-date-picker-btn'));
-  this.targetRegistry_.addTarget(rflect.cal.MiniCal.Targets.FIELD,
-      goog.getCssName('goog-date-picker-btn'));
-
-  this.targetRegistry_.addHoverTarget(rflect.cal.MiniCal.Targets.FIELD,
-      goog.getCssName('goog-date-picker-selected'));
-}
+rflect.cal.MiniCal.prototype.fieldRe_;
 
 
 /**
@@ -268,8 +257,13 @@ rflect.cal.MiniCal.prototype.onClick_ = function(aEvent) {
  */
 rflect.cal.MiniCal.prototype.onMouseOver_ = function(aEvent) {
   var target = /** @type {Element} */ aEvent.target;
+  var className = target.className;
 
-  this.targetRegistry_.registerTarget(target);
+  if (this.isField_(className))
+      this.moRegistry_.registerTarget(target,
+          goog.getCssName('goog-date-picker-selected'));
+    else
+      this.moRegistry_.deregisterTarget();
 };
 
 
@@ -289,8 +283,8 @@ rflect.cal.MiniCal.prototype.isInteractiveArea_ = function(aClassName) {
  * @return {boolean} Whether it's button.
  */
 rflect.cal.MiniCal.prototype.isButton_ = function(aClassName) {
-  return this.targetRegistry_.isTarget(rflect.cal.MiniCal.Targets.BUTTON,
-      aClassName);
+  return (this.buttonRe_ || (this.buttonRe_ = rflect.string.buildClassNameRe(
+      goog.getCssName('goog-date-picker-btn')))).test(aClassName);
 };
 
 
@@ -300,8 +294,8 @@ rflect.cal.MiniCal.prototype.isButton_ = function(aClassName) {
  * @return {boolean} Whether it's main field.
  */
 rflect.cal.MiniCal.prototype.isField_ = function(aClassName) {
-  return this.targetRegistry_.isTarget(rflect.cal.MiniCal.Targets.FIELD,
-      aClassName);
+  return (this.fieldRe_ || (this.fieldRe_ = rflect.string.buildClassNameRe(
+      goog.getCssName('goog-date-picker-date')))).test(aClassName);
 };
 
 
@@ -344,10 +338,11 @@ rflect.cal.MiniCal.prototype.onSelectStart_ = function(aEvent) {
  * @private
  */
 rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
-  var index = rflect.string.get2DigitIndex(aEvent.target.id);
-  if (this.selectionMask.isDragStarted() &&
-      rflect.string.buildClassNameRe(goog.getCssName('goog-date-picker-date'))
-      .test(aEvent.target.className)){
+  var target = aEvent.target;
+  var index = rflect.string.get2DigitIndex(target.id);
+  var className = target.className;
+
+  if (this.selectionMask.isDragStarted() && this.isField_(className)){
     this.selectionMask.update(index);
     aEvent.preventDefault();
   }

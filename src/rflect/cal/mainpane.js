@@ -30,13 +30,11 @@ goog.require('rflect.string');
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
  * @param {rflect.cal.BlockManager} aBlockManager Link to block manager.
- * @param {rflect.cal.MouseOverRegistry} aMoRegistry Link to mouse over
- * registry.
  * @constructor
  * @extends {rflect.cal.Component}
  */
 rflect.cal.MainPane = function(aViewManager, aTimeManager,
-    aContainerSizeMonitor, aBlockManager, aMoRegistry) {
+    aContainerSizeMonitor, aBlockManager) {
   rflect.cal.Component.call(this);
 
   /**
@@ -138,24 +136,10 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager,
    * @type {rflect.cal.MouseOverRegistry}
    * @private
    */
-   this.targetRegistry_ = aMoRegistry;
+   this.moRegistry_ = new rflect.cal.MouseOverRegistry();
 
-   this.populateTargetRegistry_();
 };
 goog.inherits(rflect.cal.MainPane, rflect.cal.Component);
-
-
-/**
- * Fills mouse over registry.
- * @private
- */
-rflect.cal.MiniCal.prototype.populateTargetRegistry_ = function(){
-  this.targetRegistry_.addTarget(rflect.cal.MiniCal.Targets.BUTTON,
-      goog.getCssName('goog-date-picker-btn'));
-
-  this.targetRegistry_.addHoverTarget(rflect.cal.MiniCal.Targets.FIELD,
-      goog.getCssName('goog-date-picker-selected'));
-}
 
 
 /**
@@ -163,7 +147,7 @@ rflect.cal.MiniCal.prototype.populateTargetRegistry_ = function(){
  * @type {RegExp}
  * @private
  */
-rflect.cal.MainPane.prototype.weekGridRe_ = null;
+rflect.cal.MainPane.prototype.weekGridRe_;
 
 
 /**
@@ -171,7 +155,7 @@ rflect.cal.MainPane.prototype.weekGridRe_ = null;
  * @type {RegExp}
  * @private
  */
-rflect.cal.MainPane.prototype.alldayGridRe_ = null;
+rflect.cal.MainPane.prototype.alldayGridRe_;
 
 
 /**
@@ -179,7 +163,7 @@ rflect.cal.MainPane.prototype.alldayGridRe_ = null;
  * @type {RegExp}
  * @private
  */
-rflect.cal.MainPane.prototype.monthGridRe_ = null;
+rflect.cal.MainPane.prototype.monthGridRe_;
 
 
 /**
@@ -580,13 +564,13 @@ rflect.cal.MainPane.prototype.onMouseOver_ = function(aEvent) {
   var id = target.id;
   var className = target.className;
   if (this.isDaynumLabel_(className) || this.isWeeknumLabel_(className))
-    this.targetRegistry_.registerTarget(target,
+    this.moRegistry_.registerTarget(target,
         goog.getCssName('label-underlined'));
   else if (this.isZippy_(className))
-    this.targetRegistry_.registerTarget(target,
+    this.moRegistry_.registerTarget(target,
         goog.getCssName('zippy-highlighted'));
   else
-    this.targetRegistry_.registerTarget(null);
+    this.moRegistry_.deregisterTarget();
 }
 
 

@@ -197,8 +197,6 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
   // Propagate call to children.
   rflect.cal.MainBody.superClass_.enterDocument.call(this);
 
-  this.getHandler().listen(document, goog.events.EventType.MOUSEOVER,
-      this.onMouseOver_, false, this);
 };
 
 

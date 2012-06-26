@@ -72,30 +72,11 @@ rflect.cal.Component.prototype.decorateInternal = function(aElement,
 
 
 /**
- * @return {rflect.cal.TargetDetector} Target detector, lazily created.
- */
-rflect.cal.Component.prototype.getTargetDetector = function() {
-  return this.targetDetector_ ||
-      (this.targetDetector = new rflect.cal.TargetDetector());
-}
-
-
-/**
- *
- */
-rflect.cal.Component.prototype.populateTargetDetector = function(targets,
-    hoverTargets) {
-  return this.targetDetector_ ||
-      (this.targetDetector = new rflect.cal.TargetDetector());
-}
-
-
-/**
  * @return {goog.string.StringBuffer} String buffer, which is created once for
  * component and is reused each time it's needed.
  */
 rflect.cal.Component.prototype.getStringBuffer = function() {
-  return this.sb_ ? this.sb_ : this.sb_ = new goog.string.StringBuffer();
+  return this.sb_ || (this.sb_ = new goog.string.StringBuffer());
 };
 
 
@@ -107,7 +88,7 @@ rflect.cal.Component.prototype.getStringBuffer = function() {
  * to.
  * @return {string|undefined} HTML of component or none.
  */
-// TODO: Is it really better for GC? Strings are allocated twice.
+// TODO(alexk): Is it really better for GC? Strings are allocated twice.
 rflect.cal.Component.prototype.buildBody = function(aSb) {
   var sb = aSb || this.getStringBuffer();
   this.buildBodyInternal(sb);
