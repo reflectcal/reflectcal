@@ -214,7 +214,7 @@ rflect.cal.MiniCal.prototype.enterDocument = function() {
       .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
       this.onMouseOver_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
-      goog.nullFunction, false, this)
+      this.onMouseOut_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
       this.onMouseDown_, false, this)
       .listen(this.getElement(), goog.events.EventType.SELECTSTART,
@@ -260,11 +260,25 @@ rflect.cal.MiniCal.prototype.onMouseOver_ = function(aEvent) {
   var className = target.className;
 
   if (this.isField_(className))
-      this.moRegistry_.registerTarget(target,
-          goog.getCssName('goog-date-picker-selected'));
+    this.moRegistry_.registerTarget(target,
+        goog.getCssName('goog-date-picker-selected'));
     else
       this.moRegistry_.deregisterTarget();
 };
+
+
+/**
+ * Mini cal mouse out handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.MiniCal.prototype.onMouseOut_ = function(aEvent) {
+  var target = aEvent.target;
+  var className = target.className;
+
+  if (this.isField_(className))
+    this.moRegistry_.deregisterTarget();
+}
 
 
 /**
