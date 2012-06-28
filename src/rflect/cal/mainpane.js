@@ -553,6 +553,9 @@ rflect.cal.MainPane.prototype.onMouseOut_ = function(aEvent) {
   var target = aEvent.target;
   var id = target.id;
   var className = target.className;
+  if (this.isDaynumLabel_(className) || this.isWeeknumLabel_(className) ||
+      this.isZippy_(className))
+    this.moRegistry_.deregisterTarget();
 }
 
 
