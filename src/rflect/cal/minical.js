@@ -262,8 +262,6 @@ rflect.cal.MiniCal.prototype.onMouseOver_ = function(aEvent) {
   if (this.isField_(className))
     this.moRegistry_.registerTarget(target,
         goog.getCssName('goog-date-picker-selected'));
-    else
-      this.moRegistry_.deregisterTarget();
 };
 
 

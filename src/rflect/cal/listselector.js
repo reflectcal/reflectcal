@@ -3,8 +3,8 @@
  */
 
 /**
- * @fileoverview Component used as a list of selectables, such as selection of
- * calendars or tasks.
+ * @fileoverview Component representing as a list of selectables, such as list
+ * of calendars or tasks.
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
