@@ -15,7 +15,6 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('rflect.cal.Component');
-goog.require('rflect.cal.ListSelectorBuilder');
 goog.require('rflect.cal.MainPaneSelectionMask');
 goog.require('rflect.cal.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
@@ -46,17 +45,6 @@ rflect.cal.ListSelector = function(aViewManager, aContainerSizeMonitor) {
    * @private
    */
   this.containerSizeMonitor_ = aContainerSizeMonitor;
-
-  /**
-   * List selector builder.
-   * @type {rflect.cal.ListSelectorBuilder}
-   * @private
-   */
-  this.builder_ = new rflect.cal.ListSelectorBuilder(this.viewManager_,
-      this, this.containerSizeMonitor_);
-  if (goog.DEBUG)
-    _inspect('mainPaneBuilder', this.builder_);
-
 
   /**
    * Selection mask.
@@ -95,15 +83,18 @@ goog.inherits(rflect.cal.ListSelector, rflect.cal.Component);
  * @const
  */
 rflect.cal.ListSelector.HTML_PARTS_ = [
-  <div id="calendars-selector" class="list-selector" style="height: 150px">
-          <div id="calendars-label-cont" class="list-label-cont">
-              <div id="calendars-label" class="list-label">Calendars</div>
-              <div id="calitem-opt" class="listitem-opt calitem-opt-right"></div>
-          </div>
-          <div id="calendars-body" class="list-body">
-
-          </div>
-      </div>
+  '<div id="calendars-selector" class="' + goog.getCssName('list-selector') + '">' +
+      '<div id="calendars-label-cont" class="' + goog.getCssName('list-label-cont') + '">' +
+      '<div id="calendars-label" class="' + goog.getCssName('list-label') + '">',
+  /* List selector label (calendars). */
+  '</div>',
+  /* List selector menu signs (<div class="listitem-opt"></div>)*/
+  '</div>',
+  '<div id="calendars-body" class="list-body" style="height:',
+  /* Height of list selector's body in pixels (150). */
+  'px">',
+  /* Content. */
+  '</div></div>'
 ];
 
 
@@ -113,6 +104,45 @@ rflect.cal.ListSelector.HTML_PARTS_ = [
  * @private
  */
 rflect.cal.ListSelector.prototype.weekGridRe_;
+
+
+/**
+ * Builds body of component.
+ * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
+ * to.
+ * @protected
+ * @see {rflect.cal.MainPaneBuilder#buildBodyInternalWeek_}
+ */
+rflect.cal.ListSelector.prototype.buildBodyInternal = function(aSb) {
+  var offset = 0;
+  var length = rflect.cal.ListSelector.HTML_PARTS_.length;
+  while (++offset < length - 1) {
+    aSb.append(rflect.cal.ListSelector.HTML_PARTS_[offset]);
+    switch (offset) {
+      case 1: {
+        this.buildMainClassName_(aSb);
+      };break;
+      case 2: {
+        this.miniCal_.selectionMask.build(aSb);
+      };break;
+      case 3: {
+        this.buildHeader_(aSb);
+      };break;
+      case 5: {
+        this.buildMonthName_(aSb);
+      };break;
+      case 8: {
+        this.buildDayNames_(aSb, offset);
+        offset++;
+      };break;
+      case 11: {
+        this.buildMonthGridRows_(aSb, offset);
+        offset += 5;
+      };break;
+      default: break;
+    }
+  }
+};
 
 
 /**
@@ -224,45 +254,6 @@ rflect.cal.ListSelector.prototype.updateByRedraw = function() {
 
 
 /**
- * Builds body of component.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
- * @protected
- * @see {rflect.cal.MainPaneBuilder#buildBodyInternalWeek_}
- */
-rflect.cal.ListSelector.prototype.buildBodyInternal = function(aSb) {
-  var offset = 0;
-  var length = rflect.cal.ListSelector.HTML_PARTS_.length;
-  while (++offset < length - 1) {
-    aSb.append(rflect.cal.ListSelector.HTML_PARTS_[offset]);
-    switch (offset) {
-      case 1: {
-        this.buildMainClassName_(aSb);
-      };break;
-      case 2: {
-        this.miniCal_.selectionMask.build(aSb);
-      };break;
-      case 3: {
-        this.buildHeader_(aSb);
-      };break;
-      case 5: {
-        this.buildMonthName_(aSb);
-      };break;
-      case 8: {
-        this.buildDayNames_(aSb, offset);
-        offset++;
-      };break;
-      case 11: {
-        this.buildMonthGridRows_(aSb, offset);
-        offset += 5;
-      };break;
-      default: break;
-    }
-  }
-};
-
-
-/**
  * Decorates an existing html div element as a Main Pane.
  * @override
  */
@@ -298,7 +289,7 @@ rflect.cal.ListSelector.prototype.enterDocument = function() {
 
 
 /**
- * Main pane click handler.
+ * List selector click handler.
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
@@ -353,7 +344,7 @@ rflect.cal.ListSelector.prototype.onClick_ = function(aEvent) {
 
 
 /**
- * Main pane mouseout handler.
+ * List selector mouseout handler.
  */
 rflect.cal.ListSelector.prototype.onMouseOut_ = function(aEvent) {
   var target = aEvent.target;
@@ -366,7 +357,7 @@ rflect.cal.ListSelector.prototype.onMouseOut_ = function(aEvent) {
 
 
 /**
- * Main pane mouseover handler.
+ * List selector mouseover handler.
  */
 rflect.cal.ListSelector.prototype.onMouseOver_ = function(aEvent) {
   var target = aEvent.target;
@@ -404,7 +395,7 @@ rflect.cal.ListSelector.prototype.isWeekGrid_ = function(aClassName) {
 
 
 /**
- * Main pane mousedown handler.
+ * List selector mousedown handler.
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
@@ -437,7 +428,7 @@ rflect.cal.ListSelector.prototype.onMouseDown_ = function(aEvent) {
 
 
 /**
- * Main pane selectstart handler.
+ * List selector selectstart handler.
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
@@ -452,7 +443,7 @@ rflect.cal.ListSelector.prototype.onSelectStart_ = function(aEvent) {
 
 
 /**
- * Main pane mousemove handler.
+ * List selector mousemove handler.
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
@@ -466,7 +457,7 @@ rflect.cal.ListSelector.prototype.onMouseMove_ = function(aEvent) {
 
 
 /**
- * Main pane mouseup handler.
+ * List selector mouseup handler.
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */

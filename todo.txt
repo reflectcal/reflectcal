@@ -79,5 +79,6 @@ mask.
 * IE7 bug - click in month mode, numbers are shifted. Prevent selection
 everywhere in grid
  * check localization after changing Date
+ * Maybe remove scroll from allday grid scrollable
 
 
