@@ -64,6 +64,10 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager,
       this.timeManager_));
   this.addChild(this.miniCal = new rflect.cal.MiniCal(this.viewManager_,
       this.timeManager_));
+  this.addChild(this.calSelector = new rflect.cal.CalSelector(this.viewManager_,
+      this.containerSizeMonitor_));
+  this.addChild(this.taskSelector = new rflect.cal.TaskSelector(
+      this.viewManager_, this.containerSizeMonitor_));
   this.addChild(this.mainPane_ = new rflect.cal.MainPane(this.viewManager_,
       this.timeManager_, this.containerSizeMonitor_, this.blockManager_));
   if (goog.DEBUG) {
@@ -156,10 +160,17 @@ rflect.cal.MainBody.prototype.buildBodyInternal = function(aSb) {
       case 7: {
         this.miniCal.buildBody(aSb);
       };break;
+      case 9: {
+        this.calSelector.buildBody(aSb);
+      };break;
+      case 11: {
+        this.taskSelector.buildBody(aSb);
+      };break;
       // Include main pane in common buffer.
       case 17: {
         this.mainPane_.buildBody(aSb);
       };break;
+
       default: break;
     }
   }

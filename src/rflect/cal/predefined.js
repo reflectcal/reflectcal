@@ -524,3 +524,11 @@ rflect.cal.predefined.MINICAL_MASK_WIDTH = 134;
  */
 rflect.cal.predefined.MINICAL_MASK_HEIGHT = 110;
 
+
+/**
+ * Default height of minical itself.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MINICAL_HEIGHT = 172;
+

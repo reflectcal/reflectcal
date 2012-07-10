@@ -23,7 +23,9 @@ rflect.cal.i18n.Symbols_en = {
   NEW_EVENT: 'New event',
   DAY: 'Day',
   WEEK: 'Week',
-  MONTH: 'Month'
+  MONTH: 'Month',
+  CALENDARS_LABEL: 'Calendars',
+  TASKS_LABEL: 'Tasks'
 };
 
 
@@ -35,7 +37,9 @@ rflect.cal.i18n.Symbols_ru = {
   NEW_EVENT: 'Новое событие',
   DAY: 'День',
   WEEK: 'Неделя',
-  MONTH: 'Месяц'
+  MONTH: 'Месяц',
+  CALENDARS_LABEL: 'Календари',
+  TASKS_LABEL: 'Задачи'
 };
 
 
@@ -47,7 +51,9 @@ rflect.cal.i18n.Symbols_by = {
   NEW_EVENT: 'Новая падзея',
   DAY: 'Дзень',
   WEEK: 'Тыдзень',
-  MONTH: 'Месяц'
+  MONTH: 'Месяц',
+  CALENDARS_LABEL: 'Каляндары',
+  TASKS_LABEL: 'Падзеi'
 };
 
 

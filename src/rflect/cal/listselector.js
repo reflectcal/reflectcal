@@ -3,19 +3,16 @@
  */
 
 /**
- * @fileoverview Component representing as a list of selectables, such as list
+ * @fileoverview Component representing list of items, such as list
  * of calendars or tasks.
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
 goog.provide('rflect.cal.ListSelector');
 
-goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
-goog.require('goog.math.Size');
 goog.require('rflect.cal.Component');
-goog.require('rflect.cal.MainPaneSelectionMask');
 goog.require('rflect.cal.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.string');
@@ -46,24 +43,12 @@ rflect.cal.ListSelector = function(aViewManager, aContainerSizeMonitor) {
    */
   this.containerSizeMonitor_ = aContainerSizeMonitor;
 
-  /**
-   * Selection mask.
-   * @type {rflect.cal.MainPaneSelectionMask}
-   * @private
-   */
-  this.selectionMask_ = new rflect.cal.MainPaneSelectionMask(aViewManager, this,
-      aTimeManager, this.blockManager_.blockPoolWeek,
-      this.blockManager_.blockPoolAllday, this.blockManager_.blockPoolMonth);
-  if (goog.DEBUG)
-    _inspect('selectionMask', this.selectionMask_);
-
-
   // Sizes.
   /**
-   * Size of list selector.
+   * Size of list selector scrollable, the only part that could vary in size.
    * @type {goog.math.Size}
    */
-  this.size_ = null;
+  this.scrollableSize_ = null;
 
   /**
    * Mouse over registry.
@@ -83,8 +68,8 @@ goog.inherits(rflect.cal.ListSelector, rflect.cal.Component);
  * @const
  */
 rflect.cal.ListSelector.HTML_PARTS_ = [
-  '<div id="calendars-selector" class="' + goog.getCssName('list-selector') + '">' +
-      '<div id="calendars-label-cont" class="' + goog.getCssName('list-label-cont') + '">' +
+  '<div id="calendars-selector" class="' + goog.getCssName('list-selector') + '">',
+  '<div id="calendars-label-cont" class="' + goog.getCssName('list-label-cont') + '">' +
       '<div id="calendars-label" class="' + goog.getCssName('list-label') + '">',
   /* List selector label (calendars). */
   '</div>',
@@ -94,8 +79,17 @@ rflect.cal.ListSelector.HTML_PARTS_ = [
   /* Height of list selector's body in pixels (150). */
   'px">',
   /* Content. */
-  '</div></div>'
+  '</div>',
+  '</div>'
 ];
+
+
+/**
+ * Label shown on top of selector.
+ * @type {string}
+ * @private
+ */
+rflect.cal.ListSelector.prototype.label_;
 
 
 /**
@@ -120,24 +114,16 @@ rflect.cal.ListSelector.prototype.buildBodyInternal = function(aSb) {
     aSb.append(rflect.cal.ListSelector.HTML_PARTS_[offset]);
     switch (offset) {
       case 1: {
-        this.buildMainClassName_(aSb);
+        this.buildLabel_(aSb);
       };break;
       case 2: {
-        this.miniCal_.selectionMask.build(aSb);
+        this.buildOptions_(aSb);
       };break;
-      case 3: {
-        this.buildHeader_(aSb);
+      case 4: {
+        this.buildScrollableHeight_(aSb);
       };break;
       case 5: {
-        this.buildMonthName_(aSb);
-      };break;
-      case 8: {
-        this.buildDayNames_(aSb, offset);
-        offset++;
-      };break;
-      case 11: {
-        this.buildMonthGridRows_(aSb, offset);
-        offset += 5;
+        this.buildContent_(aSb, offset);
       };break;
       default: break;
     }
@@ -146,102 +132,80 @@ rflect.cal.ListSelector.prototype.buildBodyInternal = function(aSb) {
 
 
 /**
+ * Builds list selector's label.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @private
+ *
+ *'<div id="calendars-selector" class="' + goog.getCssName('list-selector') + '">',
+ * '<div id="calendars-label-cont" class="' + goog.getCssName('list-label-cont') + '">' +
+ *     '<div id="calendars-label" class="' + goog.getCssName('list-label') + '">',
+ *  List selector label (calendars). 
+ *
+ */
+rflect.cal.MiniCalBuilder.prototype.buildLabel_ = function(aSb) {
+  aSb.append(this.label_);
+};
+
+
+/**
+ * Builds list selector's options controls. Should be overridden.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @private
+ *
+ * '</div>',
+ *  List selector menu signs (<div class="listitem-opt"></div>)
+ *
+ */
+rflect.cal.MiniCalBuilder.prototype.buildOptions_ = function(aSb) {
+  goog.abstractMethod();
+}
+
+
+/**
+ * Builds list selector scrollable's height.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @private
+ *
+ *'<div id="calendars-body" class="list-body" style="height:',
+ *  Height of list selector's body in pixels (150). 
+ *
+ */
+rflect.cal.MiniCalBuilder.prototype.buildScrollableHeight_ = function(aSb) {
+  aSb.append(this.scrollableSize_.height);
+}
+
+
+/**
+ * Builds list selector content.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @private
+ *
+ * 'px">',
+ *  Content. 
+ *
+ */
+rflect.cal.MiniCalBuilder.prototype.buildContent_ = function(aSb) {
+  goog.abstractMethod();
+}
+
+
+/**
  * Updates list selector with new data before redraw. Includes size adjustment.
  */
 rflect.cal.ListSelector.prototype.updateBeforeRedraw = function() {
   // Take current viewport size.
-  var containerSize = this.containerSizeMonitor_.getSize();
+  this.scrollableSize_ = this.containerSizeMonitor_.getSize();
 
   // Check if app is in size bounds.
-  if (containerSize.width < rflect.cal.predefined.APP_MINIMAL_WIDTH)
-    containerSize.width = rflect.cal.predefined.APP_MINIMAL_WIDTH;
-  if (containerSize.height < rflect.cal.predefined.APP_MINIMAL_HEIGHT)
-    containerSize.height = rflect.cal.predefined.APP_MINIMAL_HEIGHT;
+  if (this.scrollableSize_.height < rflect.cal.predefined.APP_MINIMAL_HEIGHT)
+    this.scrollableSize_.height = rflect.cal.predefined.APP_MINIMAL_HEIGHT;
 
-  // Begin size adjustment phase.
-  if (this.viewManager_.isInWeekMode()) {
+  this.scrollableSize_.height -= rflect.cal.predefined.TOP_PANE_HEIGHT;
+  this.scrollableSize_.height -= rflect.cal.predefined.MINICAL_HEIGHT;
 
-    this.scrollablesCombinedWkSize_ = containerSize.clone();
-    // We calculate combined height of two scrollables.
-    this.scrollablesCombinedWkSize_.height -=
-        rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_HEIGHT_DIFFERENCE_WEEK;
-    this.scrollablesCombinedWkSize_.width -=
-        rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_WIDTH_DIFFERENCE_WEEK;
-    this.scrollablesCombinedWkSize_.width -=
-        this.containerSizeMonitor_.scrollbarWidth;
-
-    this.alldayGridContainerSize = this.scrollablesCombinedWkSize_.clone();
-
-    this.size_ = this.scrollablesCombinedWkSize_.clone();
-
-    // By default, grid has the same size as scrollable but fixed height.
-    this.gridSize = this.size_.clone();
-    this.gridSize.height = rflect.cal.predefined.WEEK_GRID_HEIGHT;
-    // No need to subtract scrollbar width here because layout already takes
-    // it into account.
-
-    // Case when allday scrollable is collapsed.
-    if (!this.isAlldayScrollableExpandedVer()) {
-      this.alldayGridContainerSize.height =
-          rflect.cal.predefined.ALLDAY_SCROLLABLE_MINIMAL_HEIGHT;
-      this.alldayGridSize = this.alldayGridContainerSize.clone();
-    }
-
-    // ... else, in case when allday scrollable is expanded, we should
-    // calculate it's size depending on block capacity, so pass on for now.
-
-  } else if (this.viewManager_.isInMonthMode()) {
-
-    this.size_ = containerSize.clone();
-    this.size_.height -=
-        rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_HEIGHT_DIFFERENCE_MONTH;
-    this.size_.width -=
-        rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_WIDTH_DIFFERENCE_MONTH;
-
-    // By default, grid has the same size as scrollable.
-    this.gridSize = this.size_.clone();
-    this.gridSize.width -= this.getScrollbarWidthNextToMain();
-  }
-
-  // Update blocks, get their capacity and size.
-  this.updateBlockManager();
-
-  // Finish size adjustment phase.
-  if (this.viewManager_.isInWeekMode()) {
-
-    // Case when either allday scrollable is expanded.
-    if (this.isAlldayScrollableExpandedVer()) {
-      var alldayBlockMaxHeight = 0;
-
-      alldayBlockMaxHeight = Math.floor(
-          this.scrollablesCombinedWkSize_.height / 2);
-      //      alldayBlockMaxHeight -= this.getScrollbarWidthBelowAllday();
-
-      // Allday grid size is kept up to date by block manager.
-      if (this.alldayGridSize.height > alldayBlockMaxHeight) {
-        this.alldayGridContainerSize.height = alldayBlockMaxHeight;
-      } else {
-        this.alldayGridContainerSize.height = this.alldayGridSize.height;
-      }
-
-    }
-
-    this.size_.height = this.scrollablesCombinedWkSize_.height -
-            this.alldayGridContainerSize.height;
-
-    this.alldayGridContainerSize.height +=
-        this.getScrollbarWidthBelowAllday();
-
-    // Check if main scrollable size is greater than grid height.
-    if (this.size_.height >
-        rflect.cal.predefined.WEEK_GRID_HEIGHT)
-      this.size_.height =
-          rflect.cal.predefined.WEEK_GRID_HEIGHT +
-          this.getScrollbarWidthBelowMain();
-
-  }
-
-  this.removeScrollListeners_();
+  // Default behaviour is to have two selectors in a column, so divide height
+  // by 2.
+  this.scrollableSize_.height /= 2;
 };
 
 
@@ -272,19 +236,15 @@ rflect.cal.ListSelector.prototype.enterDocument = function() {
   rflect.cal.ListSelector.superClass_.enterDocument.call(this);
 
   this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
-      this.onClick_, false, this)
+      goog.nullFunction, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
       this.onMouseOver_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
       this.onMouseOut_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
-      this.onMouseDown_, false, this)
+      goog.nullFunction, false, this)
       .listen(this.getElement(), goog.events.EventType.SELECTSTART,
-      this.onSelectStart_, false, this)
-      .listen(document, goog.events.EventType.MOUSEMOVE,
-      this.onMouseMove_, false, this)
-      .listen(document, goog.events.EventType.MOUSEUP,
-      this.onMouseUp_, false, this);
+      goog.nullFunction, false, this);
 };
 
 
@@ -363,9 +323,8 @@ rflect.cal.ListSelector.prototype.onMouseOver_ = function(aEvent) {
   var target = aEvent.target;
   var id = target.id;
   var className = target.className;
-  if (this.isDaynumLabel_(className) || this.isWeeknumLabel_(className))
-    this.moRegistry_.registerTarget(target,
-        goog.getCssName('label-underlined'));
+  this.moRegistry_.registerTarget(this.getElement(),
+      goog.getCssName('label-underlined'));
   else if (this.isZippy_(className))
     this.moRegistry_.registerTarget(target,
         goog.getCssName('zippy-highlighted'));
@@ -439,33 +398,6 @@ rflect.cal.ListSelector.prototype.onSelectStart_ = function(aEvent) {
   if (this.isWeekGrid_(className) || this.isAlldayGrid_(className) ||
       this.isMonthGrid_(className))
     aEvent.preventDefault();
-};
-
-
-/**
- * List selector mousemove handler.
- * @param {goog.events.Event} aEvent Event object.
- * @private
- */
-rflect.cal.ListSelector.prototype.onMouseMove_ = function(aEvent) {
-  if (this.selectionMask_.isInitialized()) {
-    this.selectionMask_.update(aEvent);
-    aEvent.preventDefault();
-  }
-
-};
-
-
-/**
- * List selector mouseup handler.
- * @param {goog.events.Event} aEvent Event object.
- * @private
- */
-rflect.cal.ListSelector.prototype.onMouseUp_ = function(aEvent) {
-  if (this.selectionMask_.isInitialized()){
-    this.selectionMask_.close();
-    aEvent.preventDefault();
-  }
 };
 
 
