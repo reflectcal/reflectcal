@@ -31,7 +31,7 @@ Firefox and Opera
 (see "<div id="weeknum-cont">" in mainpane.js)
 * As gss works fine with string being concatenated with goog.getCssName
 ('lala' + goog.getCssName('lalal') -> lalalala), rename as much ids to classes
-as possible.
+as possible, starting from external components, like list selector and minical.
 * Expand signs should be moved to events layer. This will enable all dynamic
 layout to be on event layer and all static layout on decoration layer.
 * Consider not writing initializers of objects in prototype, do it in

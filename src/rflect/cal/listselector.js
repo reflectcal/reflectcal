@@ -10,6 +10,7 @@
 
 goog.provide('rflect.cal.ListSelector');
 
+goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('rflect.cal.Component');
@@ -51,11 +52,18 @@ rflect.cal.ListSelector = function(aViewManager, aContainerSizeMonitor) {
   this.scrollableSize_ = null;
 
   /**
-   * Mouse over registry.
+   * Mouse over registry for whole selector.
    * @type {rflect.cal.MouseOverRegistry}
    * @private
    */
-   this.moRegistry_ = new rflect.cal.MouseOverRegistry();
+   this.moRegistryWhole_ = new rflect.cal.MouseOverRegistry();
+
+   /**
+   * Mouse over registry for parts of selector.
+   * @type {rflect.cal.MouseOverRegistry}
+   * @private
+   */
+   this.moRegistryParts_ = new rflect.cal.MouseOverRegistry();
 
 };
 goog.inherits(rflect.cal.ListSelector, rflect.cal.Component);
@@ -149,16 +157,13 @@ rflect.cal.MiniCalBuilder.prototype.buildLabel_ = function(aSb) {
 
 /**
  * Builds list selector's options controls. Should be overridden.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @private
  *
  * '</div>',
  *  List selector menu signs (<div class="listitem-opt"></div>)
  *
  */
-rflect.cal.MiniCalBuilder.prototype.buildOptions_ = function(aSb) {
-  goog.abstractMethod();
-}
+rflect.cal.MiniCalBuilder.prototype.buildOptions_ = goog.abstractMethod;
 
 
 /**
@@ -177,16 +182,13 @@ rflect.cal.MiniCalBuilder.prototype.buildScrollableHeight_ = function(aSb) {
 
 /**
  * Builds list selector content.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @private
  *
  * 'px">',
  *  Content. 
  *
  */
-rflect.cal.MiniCalBuilder.prototype.buildContent_ = function(aSb) {
-  goog.abstractMethod();
-}
+rflect.cal.MiniCalBuilder.prototype.buildContent_ = goog.abstractMethod;
 
 
 /**
@@ -310,9 +312,10 @@ rflect.cal.ListSelector.prototype.onMouseOut_ = function(aEvent) {
   var target = aEvent.target;
   var id = target.id;
   var className = target.className;
-  if (this.isDaynumLabel_(className) || this.isWeeknumLabel_(className) ||
-      this.isZippy_(className))
-    this.moRegistry_.deregisterTarget();
+  if (!this.dom_.contains(this.getElement(), aEvent.relatedTarget))
+    this.moRegistryWhole_.deregisterTarget();
+    this.moRegistryParts_.deregisterTarget();
+  }
 }
 
 
@@ -323,24 +326,21 @@ rflect.cal.ListSelector.prototype.onMouseOver_ = function(aEvent) {
   var target = aEvent.target;
   var id = target.id;
   var className = target.className;
-  this.moRegistry_.registerTarget(this.getElement(),
-      goog.getCssName('label-underlined'));
-  else if (this.isZippy_(className))
-    this.moRegistry_.registerTarget(target,
-        goog.getCssName('zippy-highlighted'));
-  else
-    this.moRegistry_.deregisterTarget();
+  // Highlight of whole element.
+  this.moRegistryWhole_.registerTarget(this.dom_.getFirstElementChild(
+      this.getElement()),
+      goog.getCssName('list-label-cont-highlighted'));
+  // Highlight of element's parts.
 }
 
 
 /**
- * @param {string} aClassName Class name of element to test whether it indicates
- * of week grid.
+ * Tests whether class name indicates of list item. Should be overridden.
+ * @param {string} aClassName Class name of element.
  * @private
- * @return {boolean} For week mode, whether class name indicates that this is a
- * week grid.
+ * @return {boolean} Whether class name indicates that this is a list item.
  */
-rflect.cal.ListSelector.prototype.isWeekGrid_ = function(aClassName) {
+rflect.cal.ListSelector.prototype.isItem_ = function(aClassName) {
   var weekGridRe_ = this.weekGridRe_ || (this.weekGridRe_ =
       rflect.string.buildClassNameRe(goog.getCssName('wk-events-layer'),
       goog.getCssName('expand-sign-wk-cont'),
@@ -363,7 +363,7 @@ rflect.cal.ListSelector.prototype.onMouseDown_ = function(aEvent) {
   var preventDefaultIsNeeded = false;
 
   // Whether we clicked on hollow space.
-  if (this.isWeekGrid_(className)) {
+  if (this.isItem_(className)) {
     this.selectionMask_.init(
         rflect.cal.MainPaneSelectionMask.Configuration.WEEK,
         aEvent);
@@ -395,7 +395,7 @@ rflect.cal.ListSelector.prototype.onSelectStart_ = function(aEvent) {
   var className = aEvent.target.className;
 
   // Whether we clicked on grid space.
-  if (this.isWeekGrid_(className) || this.isAlldayGrid_(className) ||
+  if (this.isItem_(className) || this.isAlldayGrid_(className) ||
       this.isMonthGrid_(className))
     aEvent.preventDefault();
 };
