@@ -320,6 +320,22 @@ rflect.cal.ListSelector.prototype.onMouseOut_ = function(aEvent) {
 
 
 /**
+ * Highlights item, this can be done on hover and encapsulate different logic -
+ * add hover class or shows additional option elements. Should be overridden.
+ * @protected
+ */
+rflect.cal.ListSelector.prototype.highlightItem = goog.abstractMethod;
+
+
+/**
+ * Highlights list selector header, where label is situated, shows additional
+ * option elements. Should be overridden.
+ * @protected
+ */
+rflect.cal.ListSelector.prototype.highlightItem = goog.abstractMethod;
+
+
+/**
  * List selector mouseover handler.
  */
 rflect.cal.ListSelector.prototype.onMouseOver_ = function(aEvent) {
@@ -331,26 +347,25 @@ rflect.cal.ListSelector.prototype.onMouseOver_ = function(aEvent) {
       this.getElement()),
       goog.getCssName('list-label-cont-highlighted'));
   // Highlight of element's parts.
+  if (this.isHeader(className))
+    this.highlightHeader();
+  else if (this.isItem(className))
+    this.highlightItem();
 }
 
 
 /**
  * Tests whether class name indicates of list item. Should be overridden.
- * @param {string} aClassName Class name of element.
- * @private
- * @return {boolean} Whether class name indicates that this is a list item.
+ * @protected
  */
-rflect.cal.ListSelector.prototype.isItem_ = function(aClassName) {
-  var weekGridRe_ = this.weekGridRe_ || (this.weekGridRe_ =
-      rflect.string.buildClassNameRe(goog.getCssName('wk-events-layer'),
-      goog.getCssName('expand-sign-wk-cont'),
-      goog.getCssName('expand-sign-wk'),
-      goog.getCssName('grid-table-row'),
-      // In IE7, we could click on main-pane if we click near upper edge of
-      //scrollable
-      goog.getCssName('main-pane')));
-  return this.viewManager_.isInWeekMode() && weekGridRe_.test(aClassName);
-};
+rflect.cal.ListSelector.prototype.isItem = goog.abstractMethod;
+
+
+/**
+ * Tests whether class name indicates of header. Should be overridden.
+ * @protected
+ */
+rflect.cal.ListSelector.prototype.isHeader = goog.abstractMethod;
 
 
 /**
@@ -363,7 +378,7 @@ rflect.cal.ListSelector.prototype.onMouseDown_ = function(aEvent) {
   var preventDefaultIsNeeded = false;
 
   // Whether we clicked on hollow space.
-  if (this.isItem_(className)) {
+  if (this.isItem(className)) {
     this.selectionMask_.init(
         rflect.cal.MainPaneSelectionMask.Configuration.WEEK,
         aEvent);
@@ -395,7 +410,7 @@ rflect.cal.ListSelector.prototype.onSelectStart_ = function(aEvent) {
   var className = aEvent.target.className;
 
   // Whether we clicked on grid space.
-  if (this.isItem_(className) || this.isAlldayGrid_(className) ||
+  if (this.isItem(className) || this.isAlldayGrid_(className) ||
       this.isMonthGrid_(className))
     aEvent.preventDefault();
 };
