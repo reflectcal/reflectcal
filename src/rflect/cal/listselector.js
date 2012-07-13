@@ -52,18 +52,18 @@ rflect.cal.ListSelector = function(aViewManager, aContainerSizeMonitor) {
   this.scrollableSize_ = null;
 
   /**
-   * Mouse over registry for whole selector.
+   * Mouse over registry for whole component.
    * @type {rflect.cal.MouseOverRegistry}
    * @private
    */
-   this.moRegistryWhole_ = new rflect.cal.MouseOverRegistry();
+   this.moRegistryForWhole_ = new rflect.cal.MouseOverRegistry();
 
    /**
-   * Mouse over registry for parts of selector.
+   * Mouse over registry for parts of component.
    * @type {rflect.cal.MouseOverRegistry}
    * @private
    */
-   this.moRegistryParts_ = new rflect.cal.MouseOverRegistry();
+   this.moRegistryForParts_ = new rflect.cal.MouseOverRegistry();
 
 };
 goog.inherits(rflect.cal.ListSelector, rflect.cal.Component);
@@ -125,7 +125,7 @@ rflect.cal.ListSelector.prototype.buildBodyInternal = function(aSb) {
         this.buildLabel_(aSb);
       };break;
       case 2: {
-        this.buildOptions_(aSb);
+        this.buildOptions(aSb);
       };break;
       case 4: {
         this.buildScrollableHeight_(aSb);
@@ -157,13 +157,13 @@ rflect.cal.MiniCalBuilder.prototype.buildLabel_ = function(aSb) {
 
 /**
  * Builds list selector's options controls. Should be overridden.
- * @private
+ * @protected
  *
  * '</div>',
  *  List selector menu signs (<div class="listitem-opt"></div>)
  *
  */
-rflect.cal.MiniCalBuilder.prototype.buildOptions_ = goog.abstractMethod;
+rflect.cal.MiniCalBuilder.prototype.buildOptions = goog.abstractMethod;
 
 
 /**
@@ -251,61 +251,6 @@ rflect.cal.ListSelector.prototype.enterDocument = function() {
 
 
 /**
- * List selector click handler.
- * @param {goog.events.Event} aEvent Event object.
- * @private
- */
-rflect.cal.ListSelector.prototype.onClick_ = function(aEvent) {
-  var target = aEvent.target;
-  var id = target.id;
-  var className = target.className;
-  var zippyClicked = false;
-  var index = 0;
-  if (this.viewManager_.isInMonthMode()) {
-    // We clicked on zippy.
-    if (/mn\-zippy\-row\d{1}/.test(id)) {
-      index = /\d{1}/.exec(id)[0];
-      this.blockManager_.blockPoolMonth.toggleBlock(index);
-
-      // If all blocks are collapsed, reset scrollTop.
-      if (!this.blockManager_.blockPoolMonth.expanded)
-        this.blockManager_.blockPoolMonth.scrollTop = 0;
-
-      zippyClicked = true;
-    } else if (this.isDaynumLabel_(className))
-      this.onDaynumLabelClick_(id);
-    else if (this.isWeeknumLabel_(className))
-      this.onWeeknumLabelClick_(target.parentNode.id);
-
-  } else if (this.viewManager_.isInWeekMode()) {
-    // We clicked on week zippy.
-    if (/wk\-zippy\-col\d{1}/.test(id)) {
-      index = /\d{1}/.exec(id)[0];
-      this.blockManager_.blockPoolWeek.toggleBlock(index);
-
-      // If all blocks are collapsed, reset scrollLeft.
-      if (!this.blockManager_.blockPoolWeek.expanded) {
-        this.blockManager_.blockPoolWeek.scrollLeft = 0;
-      }
-
-      zippyClicked = true;
-    } else if (/daynames\-zippy/.test(id)) {
-      // We clicked on allday zippy.
-      this.blockManager_.blockPoolAllday.toggleBlock(0);
-
-      zippyClicked = true;
-    } else if (this.isDaynumLabel_(className))
-      this.onDaynumLabelClick_(target.parentNode.id);
-  }
-
-  if (zippyClicked) {
-    this.updateBeforeRedraw();
-    this.updateByRedraw();
-  }
-};
-
-
-/**
  * List selector mouseout handler.
  */
 rflect.cal.ListSelector.prototype.onMouseOut_ = function(aEvent) {
@@ -313,8 +258,8 @@ rflect.cal.ListSelector.prototype.onMouseOut_ = function(aEvent) {
   var id = target.id;
   var className = target.className;
   if (!this.dom_.contains(this.getElement(), aEvent.relatedTarget))
-    this.moRegistryWhole_.deregisterTarget();
-    this.moRegistryParts_.deregisterTarget();
+    this.moRegistryForWhole_.deregisterTarget();
+    this.moRegistryForParts_.deregisterTarget();
   }
 }
 
@@ -343,7 +288,7 @@ rflect.cal.ListSelector.prototype.onMouseOver_ = function(aEvent) {
   var id = target.id;
   var className = target.className;
   // Highlight of whole element.
-  this.moRegistryWhole_.registerTarget(this.dom_.getFirstElementChild(
+  this.moRegistryForWhole_.registerTarget(this.dom_.getFirstElementChild(
       this.getElement()),
       goog.getCssName('list-label-cont-highlighted'));
   // Highlight of element's parts.
@@ -366,54 +311,6 @@ rflect.cal.ListSelector.prototype.isItem = goog.abstractMethod;
  * @protected
  */
 rflect.cal.ListSelector.prototype.isHeader = goog.abstractMethod;
-
-
-/**
- * List selector mousedown handler.
- * @param {goog.events.Event} aEvent Event object.
- * @private
- */
-rflect.cal.ListSelector.prototype.onMouseDown_ = function(aEvent) {
-  var className = aEvent.target.className;
-  var preventDefaultIsNeeded = false;
-
-  // Whether we clicked on hollow space.
-  if (this.isItem(className)) {
-    this.selectionMask_.init(
-        rflect.cal.MainPaneSelectionMask.Configuration.WEEK,
-        aEvent);
-    preventDefaultIsNeeded = true;
-  } else if (this.isAlldayGrid_(className)) {
-    this.selectionMask_.init(
-        rflect.cal.MainPaneSelectionMask.Configuration.ALLDAY,
-        aEvent);
-    preventDefaultIsNeeded = true;
-  } else if (this.isMonthGrid_(className)) {
-
-    if (!this.isDaynumLabel_(className))
-      this.selectionMask_.init(
-          rflect.cal.MainPaneSelectionMask.Configuration.MONTH, aEvent);
-    preventDefaultIsNeeded = true;
-  }
-  if (preventDefaultIsNeeded)
-    aEvent.preventDefault();
-
-};
-
-
-/**
- * List selector selectstart handler.
- * @param {goog.events.Event} aEvent Event object.
- * @private
- */
-rflect.cal.ListSelector.prototype.onSelectStart_ = function(aEvent) {
-  var className = aEvent.target.className;
-
-  // Whether we clicked on grid space.
-  if (this.isItem(className) || this.isAlldayGrid_(className) ||
-      this.isMonthGrid_(className))
-    aEvent.preventDefault();
-};
 
 
 /**
