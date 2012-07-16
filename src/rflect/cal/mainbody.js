@@ -13,6 +13,8 @@ goog.require('rflect.cal.Component');
 goog.require('rflect.cal.MainPane');
 goog.require('rflect.cal.MiniCal');
 goog.require('rflect.cal.TopPane');
+goog.require('rflect.cal.CalSelector');
+goog.require('rflect.cal.TaskSelector');
 
 
 
@@ -74,6 +76,8 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager,
     _inspect('topPane_', this.topPane_);
     _inspect('miniCal', this.miniCal);
     _inspect('mainPane_', this.mainPane_);
+    _inspect('taskSelector_', this.taskSelector);
+    _inspect('calSelector_', this.calSelector);
   }
 };
 goog.inherits(rflect.cal.MainBody, rflect.cal.Component);
@@ -180,8 +184,8 @@ rflect.cal.MainBody.prototype.buildBodyInternal = function(aSb) {
 /**
  * Places dummy element in container, then gets container size as if app was
  * present in it. This helps in situations when initially container had
- * different size than after app is rendered, for example, because scrollbars
- * appeared.
+ * different size than it would have after app is rendered, for example, because
+ * scrollbars appear.
  * @param {Element} aContainer Container where component is to be placed.
  */
 rflect.cal.MainBody.prototype.preRender = function(aContainer) {

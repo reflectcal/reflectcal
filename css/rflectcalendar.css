@@ -213,8 +213,11 @@ body {
 }
 
 .list-body{
-  overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.list-body-overflown{
+  overflow-y: scroll;
 }
 
 .listitem-cont {

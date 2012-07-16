@@ -10,7 +10,6 @@
 
 goog.provide('rflect.cal.ListSelector');
 
-goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('rflect.cal.Component');
@@ -25,6 +24,7 @@ goog.require('rflect.string');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
+ * @constructor
  * @extends {rflect.cal.Component}
  */
 rflect.cal.ListSelector = function(aViewManager, aContainerSizeMonitor) {
@@ -83,7 +83,9 @@ rflect.cal.ListSelector.HTML_PARTS_ = [
   '</div>',
   /* List selector menu signs (<div class="listitem-opt"></div>)*/
   '</div>',
-  '<div id="calendars-body" class="list-body" style="height:',
+  '<div id="calendars-body" class="list-body ',
+  /* Class indicating whether list body is overflown (list-body-overflown). */
+  '" style="height:',
   /* Height of list selector's body in pixels (150). */
   'px">',
   /* Content. */
@@ -93,7 +95,15 @@ rflect.cal.ListSelector.HTML_PARTS_ = [
 
 
 /**
- * Label shown on top of selector.
+ * Header element.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ListSelector.prototype.header_;
+
+
+/**
+ * Label shown in header.
  * @type {string}
  * @private
  */
@@ -101,11 +111,27 @@ rflect.cal.ListSelector.prototype.label_;
 
 
 /**
- * Regexp for detection of week grid.
+ * Regexp for detection of item.
  * @type {RegExp}
  * @private
  */
-rflect.cal.ListSelector.prototype.weekGridRe_;
+rflect.cal.ListSelector.prototype.itemRe_;
+
+
+/**
+ * Regexp for detection of header.
+ * @type {RegExp}
+ * @private
+ */
+rflect.cal.ListSelector.prototype.headerRe_;
+
+
+/**
+ * Regexp for detection of options button.
+ * @type {RegExp}
+ * @private
+ */
+rflect.cal.ListSelector.prototype.buttonRe_;
 
 
 /**
@@ -128,10 +154,13 @@ rflect.cal.ListSelector.prototype.buildBodyInternal = function(aSb) {
         this.buildOptions(aSb);
       };break;
       case 4: {
-        this.buildScrollableHeight_(aSb);
+        this.buildListBodyClass_(aSb);
       };break;
       case 5: {
-        this.buildContent_(aSb, offset);
+        this.buildScrollableHeight_(aSb);
+      };break;
+      case 6: {
+        this.buildContent(aSb, offset);
       };break;
       default: break;
     }
@@ -150,8 +179,17 @@ rflect.cal.ListSelector.prototype.buildBodyInternal = function(aSb) {
  *  List selector label (calendars). 
  *
  */
-rflect.cal.MiniCalBuilder.prototype.buildLabel_ = function(aSb) {
+rflect.cal.ListSelector.prototype.buildLabel_ = function(aSb) {
   aSb.append(this.label_);
+};
+
+
+/**
+ * @return {Element} List selector's header element.
+ */
+rflect.cal.ListSelector.prototype.getHeader = function() {
+  return this.header_ ||
+      (this.header_ = this.dom_.getFirstElementChild(this.getElement()));
 };
 
 
@@ -163,7 +201,21 @@ rflect.cal.MiniCalBuilder.prototype.buildLabel_ = function(aSb) {
  *  List selector menu signs (<div class="listitem-opt"></div>)
  *
  */
-rflect.cal.MiniCalBuilder.prototype.buildOptions = goog.abstractMethod;
+rflect.cal.ListSelector.prototype.buildOptions = goog.abstractMethod;
+
+
+/**
+ * Builds list body class indicating whether scrollbars should appear.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @private
+ *
+ * '<div id="calendars-body" class="list-body ',
+ *  Class indicating whether list body is overflown (list-body-overflown). 
+ *
+ */
+rflect.cal.ListSelector.prototype.buildListBodyClass_ = function(aSb) {
+  aSb.append(goog.getCssName('list-body-overflown'));
+}
 
 
 /**
@@ -171,24 +223,24 @@ rflect.cal.MiniCalBuilder.prototype.buildOptions = goog.abstractMethod;
  * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @private
  *
- *'<div id="calendars-body" class="list-body" style="height:',
+ *'" style="height:',
  *  Height of list selector's body in pixels (150). 
  *
  */
-rflect.cal.MiniCalBuilder.prototype.buildScrollableHeight_ = function(aSb) {
+rflect.cal.ListSelector.prototype.buildScrollableHeight_ = function(aSb) {
   aSb.append(this.scrollableSize_.height);
 }
 
 
 /**
- * Builds list selector content.
- * @private
+ * Builds list selector content. Should be overridden.
+ * @protected
  *
  * 'px">',
  *  Content. 
  *
  */
-rflect.cal.MiniCalBuilder.prototype.buildContent_ = goog.abstractMethod;
+rflect.cal.ListSelector.prototype.buildContent = goog.abstractMethod;
 
 
 /**
@@ -202,12 +254,14 @@ rflect.cal.ListSelector.prototype.updateBeforeRedraw = function() {
   if (this.scrollableSize_.height < rflect.cal.predefined.APP_MINIMAL_HEIGHT)
     this.scrollableSize_.height = rflect.cal.predefined.APP_MINIMAL_HEIGHT;
 
-  this.scrollableSize_.height -= rflect.cal.predefined.TOP_PANE_HEIGHT;
-  this.scrollableSize_.height -= rflect.cal.predefined.MINICAL_HEIGHT;
+  this.scrollableSize_.height -=
+      rflect.cal.predefined.CONTAINER_AND_LIST_SELECTORS_HEIGHT_DIFFERENCE;
 
   // Default behaviour is to have two selectors in a column, so divide height
   // by 2.
   this.scrollableSize_.height /= 2;
+  this.scrollableSize_.height -=
+      rflect.cal.predefined.LIST_SELECTOR_AND_SCROLLABLE_HEIGHT_DIFEERENCE;
 };
 
 
@@ -220,7 +274,7 @@ rflect.cal.ListSelector.prototype.updateByRedraw = function() {
 
 
 /**
- * Decorates an existing html div element as a Main Pane.
+ * Decorates an existing html div element as a list selector.
  * @override
  */
 rflect.cal.ListSelector.prototype.decorateInternal = function(aElement,
@@ -237,21 +291,17 @@ rflect.cal.ListSelector.prototype.decorateInternal = function(aElement,
 rflect.cal.ListSelector.prototype.enterDocument = function() {
   rflect.cal.ListSelector.superClass_.enterDocument.call(this);
 
-  this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
-      goog.nullFunction, false, this)
-      .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
+  this.getHandler().listen(this.getElement(), goog.events.EventType.MOUSEOVER,
       this.onMouseOver_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
-      this.onMouseOut_, false, this)
-      .listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
-      goog.nullFunction, false, this)
-      .listen(this.getElement(), goog.events.EventType.SELECTSTART,
-      goog.nullFunction, false, this);
+      this.onMouseOut_, false, this);
 };
 
 
 /**
  * List selector mouseout handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private 
  */
 rflect.cal.ListSelector.prototype.onMouseOut_ = function(aEvent) {
   var target = aEvent.target;
@@ -259,17 +309,34 @@ rflect.cal.ListSelector.prototype.onMouseOut_ = function(aEvent) {
   var className = target.className;
   if (!this.dom_.contains(this.getElement(), aEvent.relatedTarget))
     this.moRegistryForWhole_.deregisterTarget();
+  if (!this.isItem(className) || !this.isHeader(className) ||
+      !this.isButton(className))
     this.moRegistryForParts_.deregisterTarget();
-  }
 }
 
 
 /**
- * Highlights item, this can be done on hover and encapsulate different logic -
- * add hover class or shows additional option elements. Should be overridden.
- * @protected
+ * List selector mouseover handler.
+ * @param {goog.events.Event} aEvent Event object. 
+ * @private 
  */
-rflect.cal.ListSelector.prototype.highlightItem = goog.abstractMethod;
+rflect.cal.ListSelector.prototype.onMouseOver_ = function(aEvent) {
+  var target = /**@type {Element}*/aEvent.target;
+  var id = target.id;
+  var className = target.className;
+  // Highlight of whole element.
+  this.moRegistryForWhole_.registerTarget(this.getHeader(),
+      goog.getCssName('list-label-cont-highlighted'));
+  // Highlight of element's parts.
+  if (this.isHeader(className))
+    this.highlightHeader();
+  else if (this.isButton(className))
+    this.moRegistryForParts_.registerTarget(target,
+        goog.getCssName('list-selector-options-button-highlighted'));
+  else if (this.isItem(className))
+    this.moRegistryForParts_.registerTarget(target,
+        goog.getCssName('list-selector-item-highlighted'));
+}
 
 
 /**
@@ -277,26 +344,7 @@ rflect.cal.ListSelector.prototype.highlightItem = goog.abstractMethod;
  * option elements. Should be overridden.
  * @protected
  */
-rflect.cal.ListSelector.prototype.highlightItem = goog.abstractMethod;
-
-
-/**
- * List selector mouseover handler.
- */
-rflect.cal.ListSelector.prototype.onMouseOver_ = function(aEvent) {
-  var target = aEvent.target;
-  var id = target.id;
-  var className = target.className;
-  // Highlight of whole element.
-  this.moRegistryForWhole_.registerTarget(this.dom_.getFirstElementChild(
-      this.getElement()),
-      goog.getCssName('list-label-cont-highlighted'));
-  // Highlight of element's parts.
-  if (this.isHeader(className))
-    this.highlightHeader();
-  else if (this.isItem(className))
-    this.highlightItem();
-}
+rflect.cal.ListSelector.prototype.highlightHeader = goog.abstractMethod;
 
 
 /**
@@ -314,7 +362,14 @@ rflect.cal.ListSelector.prototype.isHeader = goog.abstractMethod;
 
 
 /**
- * Disposes of the Main Pane.
+ * Tests whether class name indicates of options button. Should be overridden.
+ * @protected
+ */
+rflect.cal.ListSelector.prototype.isButton = goog.abstractMethod;
+
+
+/**
+ * Disposes of the list selector.
  * @override
  * @protected
  */

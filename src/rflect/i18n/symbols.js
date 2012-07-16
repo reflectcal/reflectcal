@@ -3,7 +3,7 @@
  */
 
 /**
- * @fileoverview Set of locale dependent strings for component.
+ * @fileoverview Set of locale-dependent strings for application.
  * @see {../../closure-library/closure/goog/i18n/datetimesymbols.js}.
  * @author alexeykofficial@gmail.com (Alex K.)
  */
@@ -52,8 +52,8 @@ rflect.cal.i18n.Symbols_by = {
   DAY: 'Дзень',
   WEEK: 'Тыдзень',
   MONTH: 'Месяц',
-  CALENDARS_LABEL: 'Каляндары',
-  TASKS_LABEL: 'Падзеi'
+  CALENDARS_LABEL: 'Календары',
+  TASKS_LABEL: 'Задачы'
 };
 
 

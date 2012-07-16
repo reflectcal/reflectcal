@@ -526,9 +526,38 @@ rflect.cal.predefined.MINICAL_MASK_HEIGHT = 110;
 
 
 /**
- * Default height of minical itself.
+ * Default height of minical.
  * @type {number}
  * @const
  */
 rflect.cal.predefined.MINICAL_HEIGHT = 172;
 
+
+/**
+ * Default height of cal/task selector label.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.LIST_SELECTOR_AND_SCROLLABLE_HEIGHT_DIFEERENCE = 39;
+
+
+/**
+ * Difference between outer container and main scrollable heights in week
+ * mode, in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.CONTAINER_AND_LIST_SELECTORS_HEIGHT_DIFFERENCE =
+    rflect.cal.predefined.BODY_MARGIN_TOP +
+    rflect.cal.predefined.BODY_MARGIN_BOTTOM +
+    rflect.cal.predefined.TOP_PANE_HEIGHT +
+    rflect.cal.predefined.MINICAL_HEIGHT;
+
+
+/**
+ * Minimal height of cal/task selector's body, 2*17px, to allow scrollbar
+ * buttons to appear.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MINIMAL_LIST_SELECTOR_BODY_HEIGHT = 34;
