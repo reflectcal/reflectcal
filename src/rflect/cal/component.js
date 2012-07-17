@@ -112,12 +112,20 @@ rflect.cal.Component.prototype.buildBodyInternal = function(aSb) {
 
 
 /**
+ *
+ */
+rflect.cal.Component.prototype.indexIsPresent = function(aIndex, aContainer) {
+
+}
+
+
+/**
  * Updates component before redraw. This is used when some part of
  * component's update logic need to be separated from redraw. Propagates to
  * component's children by default. For custom behavior, should be overridden by
  * subclasses.
- * @param {number=} opt_childIndexToExclude Index of component's child which
- * should be excluded by update.
+ * @param {number|Array.<number>=} opt_childIndexToExclude Index(es) of
+ * component's children which should be excluded by update.
  */
 rflect.cal.Component.prototype.updateBeforeRedraw =
     function(opt_childIndexToExclude) {
@@ -131,8 +139,8 @@ rflect.cal.Component.prototype.updateBeforeRedraw =
 /**
  * Updates body of component by redraw. This is a second and final part of
  * component update sequence.
- * @param {number=} opt_childIndexToExclude Index of component's child which
- * should be excluded by update.
+ * @param {number|Array.<number>=} opt_childIndexToExclude Index(es) of
+ * component's children which should be excluded by update.
  * @see {rflect.cal.MainBody#updateBeforeRedraw}.
  */
 rflect.cal.Component.prototype.updateByRedraw =

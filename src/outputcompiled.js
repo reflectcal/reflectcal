@@ -3146,7 +3146,7 @@ $JSCompiler_prototypeAlias$$.getHeader = function $$JSCompiler_prototypeAlias$$$
 };
 $JSCompiler_prototypeAlias$$.$updateBeforeRedraw$ = function $$JSCompiler_prototypeAlias$$$$updateBeforeRedraw$$() {
   this.$scrollableSize_$ = this.$containerSizeMonitor_$.$getSize$();
-  270 > this.$scrollableSize_$.height && (this.$scrollableSize_$.height = 270);
+  374 > this.$scrollableSize_$.height && (this.$scrollableSize_$.height = 374);
   this.$scrollableSize_$.height -= 228;
   this.$scrollableSize_$.height /= 2;
   this.$scrollableSize_$.height -= 39
@@ -3335,7 +3335,7 @@ $JSCompiler_prototypeAlias$$ = $rflect$cal$MainPane$$.prototype;
 $JSCompiler_prototypeAlias$$.$updateBeforeRedraw$ = function $$JSCompiler_prototypeAlias$$$$updateBeforeRedraw$$() {
   var $JSCompiler_StaticMethods_setSizes$self$$inline_652_alldayBlockMaxHeight_containerSize$$ = this.$containerSizeMonitor_$.$getSize$();
   516 > $JSCompiler_StaticMethods_setSizes$self$$inline_652_alldayBlockMaxHeight_containerSize$$.width && ($JSCompiler_StaticMethods_setSizes$self$$inline_652_alldayBlockMaxHeight_containerSize$$.width = 516);
-  270 > $JSCompiler_StaticMethods_setSizes$self$$inline_652_alldayBlockMaxHeight_containerSize$$.height && ($JSCompiler_StaticMethods_setSizes$self$$inline_652_alldayBlockMaxHeight_containerSize$$.height = 270);
+  374 > $JSCompiler_StaticMethods_setSizes$self$$inline_652_alldayBlockMaxHeight_containerSize$$.height && ($JSCompiler_StaticMethods_setSizes$self$$inline_652_alldayBlockMaxHeight_containerSize$$.height = 374);
   $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) ? (this.$scrollablesCombinedWkSize_$ = $JSCompiler_StaticMethods_setSizes$self$$inline_652_alldayBlockMaxHeight_containerSize$$.$clone$(), this.$scrollablesCombinedWkSize_$.height -= 113, this.$scrollablesCombinedWkSize_$.width -= 229, this.$scrollablesCombinedWkSize_$.width -= this.$containerSizeMonitor_$.$scrollbarWidth$, this.$alldayGridContainerSize$ = this.$scrollablesCombinedWkSize_$.$clone$(), this.$gridContainerSize$ = this.$scrollablesCombinedWkSize_$.$clone$(), 
   this.$gridSize$ = this.$gridContainerSize$.$clone$(), this.$gridSize$.height = 1152, this.$blockManager_$.$blockPoolAllday$.$expanded$ || (this.$alldayGridContainerSize$.height = 47, this.$alldayGridSize$ = this.$alldayGridContainerSize$.$clone$())) : $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && (this.$gridContainerSize$ = $JSCompiler_StaticMethods_setSizes$self$$inline_652_alldayBlockMaxHeight_containerSize$$.$clone$(), this.$gridContainerSize$.height -= 78, this.$gridContainerSize$.width -= 
   196, this.$gridSize$ = this.$gridContainerSize$.$clone$(), this.$gridSize$.width -= $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) || $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && this.$blockManager_$.$blockPoolMonth$.$expanded$ ? this.$containerSizeMonitor_$.$scrollbarWidth$ : 0);

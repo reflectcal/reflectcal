@@ -428,24 +428,6 @@ rflect.cal.predefined.WEEK_EXPAND_SIGNS_NUMBER =
 
 
 /**
- * App minimal height.
- * @type {number}
- * @const
- */
-rflect.cal.predefined.APP_MINIMAL_HEIGHT =
-    rflect.cal.predefined.MONTH_SCROLLABLE_MINIMAL_HEIGHT +
-    rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_HEIGHT_DIFFERENCE_MONTH;
-
-
-/**
- * App minimal width.
- * @type {number}
- * @const
- */
-rflect.cal.predefined.APP_MINIMAL_WIDTH = 516;
-
-
-/**
  * 'Now' button id.
  * @type {string}
  * @const
@@ -561,3 +543,22 @@ rflect.cal.predefined.CONTAINER_AND_LIST_SELECTORS_HEIGHT_DIFFERENCE =
  * @const
  */
 rflect.cal.predefined.MINIMAL_LIST_SELECTOR_BODY_HEIGHT = 34;
+
+
+/**
+ * App minimal height.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.APP_MINIMAL_HEIGHT =
+    (rflect.cal.predefined.MINIMAL_LIST_SELECTOR_BODY_HEIGHT +
+    rflect.cal.predefined.LIST_SELECTOR_AND_SCROLLABLE_HEIGHT_DIFEERENCE) * 2 +
+    rflect.cal.predefined.CONTAINER_AND_LIST_SELECTORS_HEIGHT_DIFFERENCE;
+
+
+/**
+ * App minimal width.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.APP_MINIMAL_WIDTH = 516;
