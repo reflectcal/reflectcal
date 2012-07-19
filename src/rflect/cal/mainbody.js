@@ -64,14 +64,15 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager,
   // string building and updating.
   this.addChild(this.topPane_ = new rflect.cal.TopPane(this.viewManager_,
       this.timeManager_));
+  this.addChild(this.mainPane_ = new rflect.cal.MainPane(this.viewManager_,
+        this.timeManager_, this.containerSizeMonitor_, this.blockManager_));
   this.addChild(this.miniCal = new rflect.cal.MiniCal(this.viewManager_,
       this.timeManager_));
   this.addChild(this.calSelector = new rflect.cal.CalSelector(this.viewManager_,
       this.containerSizeMonitor_));
   this.addChild(this.taskSelector = new rflect.cal.TaskSelector(
       this.viewManager_, this.containerSizeMonitor_));
-  this.addChild(this.mainPane_ = new rflect.cal.MainPane(this.viewManager_,
-      this.timeManager_, this.containerSizeMonitor_, this.blockManager_));
+
   if (goog.DEBUG) {
     _inspect('topPane_', this.topPane_);
     _inspect('miniCal', this.miniCal);
@@ -115,6 +116,20 @@ rflect.cal.MainBody.HTML_PARTS_ = [
 
   '</div>'
 ];
+
+
+/**
+ * Indexes of main body child components. These are useful when we try to tell
+ * update{...} methods which child shouldn't be updated.
+ * @enum {number}
+ */
+rflect.cal.MainBody.ComponentsIndexes = {
+  TOP_PANE: 0,
+  MAIN_PANE: 1,
+  MINI_CAL: 2,
+  CAL_SELECTOR: 3,
+  TASK_SELECTOR: 4
+}
 
 
 /**

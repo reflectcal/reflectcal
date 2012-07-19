@@ -31,12 +31,13 @@ goog.inherits(rflect.cal.Component, goog.ui.Component);
 
 
 /**
- * Generic html parts, used by renderer.
- * @type {Array.<string>}
- * @const
- * @private
+ * @param {Array.<number>|Arguments} aContainer Array to test index presence in.
+ * @param {number} aIndex Index to test.
+ * @return {boolean} Whether index is within array.
  */
-rflect.cal.Component.HTML_PARTS_ = [];
+rflect.cal.Component.indexIsPresent_ = function(aContainer, aIndex) {
+  return !aContainer.length || !goog.array.contains(aContainer, aIndex)
+}
 
 
 /**
@@ -112,25 +113,18 @@ rflect.cal.Component.prototype.buildBodyInternal = function(aSb) {
 
 
 /**
- *
- */
-rflect.cal.Component.prototype.indexIsPresent = function(aIndex, aContainer) {
-
-}
-
-
-/**
  * Updates component before redraw. This is used when some part of
  * component's update logic need to be separated from redraw. Propagates to
  * component's children by default. For custom behavior, should be overridden by
  * subclasses.
- * @param {number|Array.<number>=} opt_childIndexToExclude Index(es) of
+ * @param {...number} var_args Index(es) of
  * component's children which should be excluded by update.
  */
 rflect.cal.Component.prototype.updateBeforeRedraw =
-    function(opt_childIndexToExclude) {
+    function(var_args) {
+  var args = arguments;
   this.forEachChild(function(aChild, aIndex) {
-    if (aIndex != opt_childIndexToExclude)
+    if (rflect.cal.Component.indexIsPresent_(args, aIndex))
       aChild.updateBeforeRedraw();
   });
 };
@@ -139,16 +133,17 @@ rflect.cal.Component.prototype.updateBeforeRedraw =
 /**
  * Updates body of component by redraw. This is a second and final part of
  * component update sequence.
- * @param {number|Array.<number>=} opt_childIndexToExclude Index(es) of
+ * @param {...number} var_args Index(es) of
  * component's children which should be excluded by update.
  * @see {rflect.cal.MainBody#updateBeforeRedraw}.
  */
 rflect.cal.Component.prototype.updateByRedraw =
-    function(opt_childIndexToExclude) {
+    function(var_args) {
+  var args = arguments;
   // Propagate call to child components that have a DOM, if any.
   this.forEachChild(function(aChild, aIndex) {
     if (aChild.isInDocument() && aChild.getElement() &&
-        aIndex != opt_childIndexToExclude) {
+        rflect.cal.Component.indexIsPresent_(args, aIndex)) {
       aChild.updateByRedraw();
     }
   });

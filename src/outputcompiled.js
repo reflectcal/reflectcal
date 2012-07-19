@@ -2322,14 +2322,16 @@ function $JSCompiler_StaticMethods_buildBody$$($JSCompiler_StaticMethods_buildBo
 $JSCompiler_prototypeAlias$$.$buildBodyInternal$ = function $$JSCompiler_prototypeAlias$$$$buildBodyInternal$$() {
   $JSCompiler_alias_THROW$$(Error("unimplemented abstract method"))
 };
-$JSCompiler_prototypeAlias$$.$updateBeforeRedraw$ = function $$JSCompiler_prototypeAlias$$$$updateBeforeRedraw$$($opt_childIndexToExclude$$) {
-  $JSCompiler_StaticMethods_forEachChild$$(this, function($aChild$$, $aIndex$$) {
-    $aIndex$$ != $opt_childIndexToExclude$$ && $aChild$$.$updateBeforeRedraw$()
+$JSCompiler_prototypeAlias$$.$updateBeforeRedraw$ = function $$JSCompiler_prototypeAlias$$$$updateBeforeRedraw$$($var_args$$60$$) {
+  var $args$$8$$ = arguments;
+  $JSCompiler_StaticMethods_forEachChild$$(this, function($aChild$$, $aIndex$$1$$) {
+    (!$args$$8$$.length || !$goog$array$contains$$($args$$8$$, $aIndex$$1$$)) && $aChild$$.$updateBeforeRedraw$()
   })
 };
-$JSCompiler_prototypeAlias$$.$updateByRedraw$ = function $$JSCompiler_prototypeAlias$$$$updateByRedraw$$($opt_childIndexToExclude$$1$$) {
-  $JSCompiler_StaticMethods_forEachChild$$(this, function($aChild$$1$$, $aIndex$$1$$) {
-    $aChild$$1$$.$inDocument_$ && ($aChild$$1$$.$getElement$() && $aIndex$$1$$ != $opt_childIndexToExclude$$1$$) && $aChild$$1$$.$updateByRedraw$()
+$JSCompiler_prototypeAlias$$.$updateByRedraw$ = function $$JSCompiler_prototypeAlias$$$$updateByRedraw$$($var_args$$61$$) {
+  var $args$$9$$ = arguments;
+  $JSCompiler_StaticMethods_forEachChild$$(this, function($aChild$$1$$, $aIndex$$2$$) {
+    $aChild$$1$$.$inDocument_$ && ($aChild$$1$$.$getElement$() && (!$args$$9$$.length || !$goog$array$contains$$($args$$9$$, $aIndex$$2$$))) && $aChild$$1$$.$updateByRedraw$()
   })
 };
 $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototypeAlias$$$$disposeInternal$$() {
@@ -2895,10 +2897,10 @@ function $JSCompiler_StaticMethods_registerTarget$$($JSCompiler_StaticMethods_re
     $goog$dom$classes$add$$($aTarget$$, $opt_hoverClassName$$), $JSCompiler_StaticMethods_registerTarget$self$$.$registeredTargetClass_$ = $opt_hoverClassName$$
   }
 }
-;function $rflect$string$buildClassNameRe$$($var_args$$60$$) {
+;function $rflect$string$buildClassNameRe$$($var_args$$62$$) {
   var $buffer$$9$$ = [];
-  $goog$array$forEach$$(arguments, function($aVal$$, $aIndex$$2$$) {
-    $buffer$$9$$[$aIndex$$2$$] = ("" + $aVal$$).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1").replace(/\x08/g, "\\x08")
+  $goog$array$forEach$$(arguments, function($aVal$$, $aIndex$$3$$) {
+    $buffer$$9$$[$aIndex$$3$$] = ("" + $aVal$$).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1").replace(/\x08/g, "\\x08")
   });
   return RegExp("(\\s|^)" + $buffer$$9$$.join("(\\s|$)|(\\s|^)") + "(\\s|$)")
 }
@@ -2961,9 +2963,9 @@ $JSCompiler_prototypeAlias$$.close = function $$JSCompiler_prototypeAlias$$$clos
   this.$draggedAtLeastOnce_$ ? (this.$currentCell_$ = this.$visibleCurrentCell_$, this.$startCell_$ = this.$visibleStartCell_$, this.$draggedAtLeastOnce_$ = this.$dragStarted_$ = $JSCompiler_alias_FALSE$$, $goog$events$dispatchEvent$$(this.$component_$, {type:"datedragend", $startDate$:this.$startDate$, $endDate$:this.$endDate$})) : this.$dragStarted_$ && (this.$dragStarted_$ = $JSCompiler_alias_FALSE$$, $goog$events$dispatchEvent$$(this.$component_$, {type:"dateselect", $date$:this.$startDate$, 
   $isInMask$:this.$indexIsInMask_$}))
 };
-$JSCompiler_prototypeAlias$$.update = function $$JSCompiler_prototypeAlias$$$update$($aIndex$$4_currentCell$$) {
-  $aIndex$$4_currentCell$$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($aIndex$$4_currentCell$$);
-  this.$dragStarted_$ && !$goog$math$Coordinate$equals$$(this.$currentCell_$, $aIndex$$4_currentCell$$) && (this.$initialized_$ = this.$draggedAtLeastOnce_$ = $JSCompiler_alias_TRUE$$, this.$currentCell_$ = $aIndex$$4_currentCell$$, this.$update_$())
+$JSCompiler_prototypeAlias$$.update = function $$JSCompiler_prototypeAlias$$$update$($aIndex$$5_currentCell$$) {
+  $aIndex$$5_currentCell$$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($aIndex$$5_currentCell$$);
+  this.$dragStarted_$ && !$goog$math$Coordinate$equals$$(this.$currentCell_$, $aIndex$$5_currentCell$$) && (this.$initialized_$ = this.$draggedAtLeastOnce_$ = $JSCompiler_alias_TRUE$$, this.$currentCell_$ = $aIndex$$5_currentCell$$, this.$update_$())
 };
 $JSCompiler_prototypeAlias$$.$init$ = function $$JSCompiler_prototypeAlias$$$$init$$($JSCompiler_inline_result$$386_aConfiguration$$1_cell$$inline_389$$, $startSelectionIndex$$, $endSelectionIndex_minCell$$inline_390$$) {
   $rflect$cal$SelectionMask$$.prototype.$init$.call(this, $JSCompiler_inline_result$$386_aConfiguration$$1_cell$$inline_389$$);
@@ -3831,10 +3833,10 @@ function $rflect$cal$MainBody$$($aViewManager$$11$$, $aTimeManager$$8$$, $aConta
   this.$containerSizeMonitor_$ = $aContainerSizeMonitor$$5$$;
   this.$blockManager_$ = $aBlockManager$$1$$;
   $JSCompiler_StaticMethods_addChild$$(this, this.$topPane_$ = new $rflect$cal$TopPane$$(this.$viewManager_$, this.$timeManager_$));
+  $JSCompiler_StaticMethods_addChild$$(this, this.$mainPane_$ = new $rflect$cal$MainPane$$(this.$viewManager_$, this.$timeManager_$, this.$containerSizeMonitor_$, this.$blockManager_$));
   $JSCompiler_StaticMethods_addChild$$(this, this.$miniCal$ = new $rflect$cal$MiniCal$$(this.$viewManager_$, this.$timeManager_$));
   $JSCompiler_StaticMethods_addChild$$(this, this.$calSelector$ = new $rflect$cal$CalSelector$$(this.$viewManager_$, this.$containerSizeMonitor_$));
   $JSCompiler_StaticMethods_addChild$$(this, this.$taskSelector$ = new $rflect$cal$TaskSelector$$(this.$viewManager_$, this.$containerSizeMonitor_$));
-  $JSCompiler_StaticMethods_addChild$$(this, this.$mainPane_$ = new $rflect$cal$MainPane$$(this.$viewManager_$, this.$timeManager_$, this.$containerSizeMonitor_$, this.$blockManager_$));
   $_inspect$$("topPane_", this.$topPane_$);
   $_inspect$$("miniCal", this.$miniCal$);
   $_inspect$$("mainPane_", this.$mainPane_$);
@@ -4017,21 +4019,21 @@ $JSCompiler_prototypeAlias$$.$checkForSizeChange_$ = function $$JSCompiler_proto
   var $size$$14$$ = $goog$dom$getViewportSize_$$(this.$window_$ || window);
   $goog$math$Size$equals$$($size$$14$$, this.$size_$) || (this.$size_$ = $size$$14$$, this.dispatchEvent("resize"))
 };
-function $rflect$cal$ContainerSizeMonitor$$($aViewManager$$13_outerDiv$$inline_479$$, $aContainer$$1_innerDiv$$inline_480_width$$inline_481$$, $opt_window$$5_w$$inline_773$$) {
+function $rflect$cal$ContainerSizeMonitor$$($aViewManager$$13_outerDiv$$inline_479$$, $aContainer$$2_innerDiv$$inline_480_width$$inline_481$$, $opt_window$$5_w$$inline_773$$) {
   $goog$dom$ViewportSizeMonitor$$.call(this, $opt_window$$5_w$$inline_773$$);
-  this.$container_$ = $aContainer$$1_innerDiv$$inline_480_width$$inline_481$$;
+  this.$container_$ = $aContainer$$2_innerDiv$$inline_480_width$$inline_481$$;
   this.$containerSize_$ = new $goog$math$Size$$(this.$container_$.clientWidth, this.$container_$.clientHeight);
   $aViewManager$$13_outerDiv$$inline_479$$ = document.createElement("div");
   $aViewManager$$13_outerDiv$$inline_479$$.style.cssText = "visiblity:hidden;overflow:auto;position:absolute;top:0;width:100px;height:100px";
-  var $aContainer$$1_innerDiv$$inline_480_width$$inline_481$$ = document.createElement("div"), $opt_window$$5_w$$inline_773$$ = "200px", $h$$inline_774$$;
+  var $aContainer$$2_innerDiv$$inline_480_width$$inline_481$$ = document.createElement("div"), $opt_window$$5_w$$inline_773$$ = "200px", $h$$inline_774$$;
   $opt_window$$5_w$$inline_773$$ instanceof $goog$math$Size$$ ? ($h$$inline_774$$ = $opt_window$$5_w$$inline_773$$.height, $opt_window$$5_w$$inline_773$$ = $opt_window$$5_w$$inline_773$$.width) : $h$$inline_774$$ = "200px";
-  $aContainer$$1_innerDiv$$inline_480_width$$inline_481$$.style.width = $goog$style$getPixelStyleValue_$$($opt_window$$5_w$$inline_773$$);
-  $aContainer$$1_innerDiv$$inline_480_width$$inline_481$$.style.height = $goog$style$getPixelStyleValue_$$($h$$inline_774$$);
-  $aViewManager$$13_outerDiv$$inline_479$$.appendChild($aContainer$$1_innerDiv$$inline_480_width$$inline_481$$);
+  $aContainer$$2_innerDiv$$inline_480_width$$inline_481$$.style.width = $goog$style$getPixelStyleValue_$$($opt_window$$5_w$$inline_773$$);
+  $aContainer$$2_innerDiv$$inline_480_width$$inline_481$$.style.height = $goog$style$getPixelStyleValue_$$($h$$inline_774$$);
+  $aViewManager$$13_outerDiv$$inline_479$$.appendChild($aContainer$$2_innerDiv$$inline_480_width$$inline_481$$);
   document.body.appendChild($aViewManager$$13_outerDiv$$inline_479$$);
-  $aContainer$$1_innerDiv$$inline_480_width$$inline_481$$ = $aViewManager$$13_outerDiv$$inline_479$$.offsetWidth - $aViewManager$$13_outerDiv$$inline_479$$.clientWidth;
+  $aContainer$$2_innerDiv$$inline_480_width$$inline_481$$ = $aViewManager$$13_outerDiv$$inline_479$$.offsetWidth - $aViewManager$$13_outerDiv$$inline_479$$.clientWidth;
   $goog$dom$removeNode$$($aViewManager$$13_outerDiv$$inline_479$$);
-  this.$scrollbarWidth$ = $aContainer$$1_innerDiv$$inline_480_width$$inline_481$$
+  this.$scrollbarWidth$ = $aContainer$$2_innerDiv$$inline_480_width$$inline_481$$
 }
 $goog$inherits$$($rflect$cal$ContainerSizeMonitor$$, $goog$dom$ViewportSizeMonitor$$);
 $JSCompiler_prototypeAlias$$ = $rflect$cal$ContainerSizeMonitor$$.prototype;
@@ -4079,8 +4081,8 @@ function $JSCompiler_StaticMethods_isInMonthMode$$($JSCompiler_StaticMethods_isI
   return 4 == $JSCompiler_StaticMethods_isInMonthMode$self$$.$currentView$ || 5 == $JSCompiler_StaticMethods_isInMonthMode$self$$.$currentView$
 }
 $JSCompiler_prototypeAlias$$.$onViewportResize_$ = function $$JSCompiler_prototypeAlias$$$$onViewportResize_$$() {
-  this.$mainBody_$.$updateBeforeRedraw$();
-  this.$mainBody_$.$updateByRedraw$()
+  this.$mainBody_$.$updateBeforeRedraw$(0, 2);
+  this.$mainBody_$.$updateByRedraw$(0, 2)
 };
 $JSCompiler_prototypeAlias$$.$onMainBodyAction_$ = function $$JSCompiler_prototypeAlias$$$$onMainBodyAction_$$($JSCompiler_StaticMethods_shiftToPoint$self$$inline_850_aEvent$$20$$) {
   switch($JSCompiler_StaticMethods_getId$$($JSCompiler_StaticMethods_shiftToPoint$self$$inline_850_aEvent$$20$$.target)) {
@@ -4119,8 +4121,8 @@ $JSCompiler_prototypeAlias$$.$onDateSelect_$ = function $$JSCompiler_prototypeAl
     $JSCompiler_StaticMethods_generateDaySeries$$($JSCompiler_StaticMethods_shiftToPoint$self$$inline_859$$);
     this.$mainBody_$.$miniCal$.$updateBeforeRedraw$();
     this.$mainBody_$.$miniCal$.$updateByRedraw$();
-    this.$mainBody_$.$updateBeforeRedraw$(1);
-    this.$mainBody_$.$updateByRedraw$(1)
+    this.$mainBody_$.$updateBeforeRedraw$(2);
+    this.$mainBody_$.$updateByRedraw$(2)
   }
 };
 $JSCompiler_prototypeAlias$$.$onDateDrag_$ = function $$JSCompiler_prototypeAlias$$$$onDateDrag_$$($aEvent$$22$$) {
@@ -4141,8 +4143,8 @@ function $JSCompiler_StaticMethods_showView$$($JSCompiler_StaticMethods_showView
   (!$JSCompiler_StaticMethods_preRender$self$$inline_498_JSCompiler_StaticMethods_render_$self$$inline_789_calledByMiniCal$$.$parent_$ || $JSCompiler_StaticMethods_preRender$self$$inline_498_JSCompiler_StaticMethods_render_$self$$inline_789_calledByMiniCal$$.$parent_$.$inDocument_$) && $JSCompiler_StaticMethods_preRender$self$$inline_498_JSCompiler_StaticMethods_render_$self$$inline_789_calledByMiniCal$$.$enterDocument$(), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, 
   $JSCompiler_StaticMethods_showView$self$$.$containerSizeMonitor_$, "resize", $JSCompiler_StaticMethods_showView$self$$.$onViewportResize_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "action", $JSCompiler_StaticMethods_showView$self$$.$onMainBodyAction_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, 
   $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "dateselect", $JSCompiler_StaticMethods_showView$self$$.$onDateSelect_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "datedrag", $JSCompiler_StaticMethods_showView$self$$.$onDateDrag_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, 
-  $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "datedragend", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_showView$self$$.$isOnStartup_$ = $JSCompiler_alias_FALSE$$) : ($JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateBeforeRedraw$($JSCompiler_StaticMethods_preRender$self$$inline_498_JSCompiler_StaticMethods_render_$self$$inline_789_calledByMiniCal$$ ? 1 : -1), $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateByRedraw$($JSCompiler_StaticMethods_preRender$self$$inline_498_JSCompiler_StaticMethods_render_$self$$inline_789_calledByMiniCal$$ ? 
-  1 : -1)))
+  $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "datedragend", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_showView$self$$.$isOnStartup_$ = $JSCompiler_alias_FALSE$$) : ($JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateBeforeRedraw$($JSCompiler_StaticMethods_preRender$self$$inline_498_JSCompiler_StaticMethods_render_$self$$inline_789_calledByMiniCal$$ ? 2 : -1), $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateByRedraw$($JSCompiler_StaticMethods_preRender$self$$inline_498_JSCompiler_StaticMethods_render_$self$$inline_789_calledByMiniCal$$ ? 
+  2 : -1)))
 }
 $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototypeAlias$$$$disposeInternal$$() {
   $rflect$cal$ViewManager$$.$superClass_$.$disposeInternal$.call(this);
@@ -4234,10 +4236,10 @@ function $goog$debug$getStacktraceHelper_$$($fn$$7$$, $visited$$) {
   }else {
     if($fn$$7$$ && 50 > $visited$$.length) {
       $sb$$8$$.push($goog$debug$getFunctionName$$($fn$$7$$) + "(");
-      for(var $args$$9$$ = $fn$$7$$.arguments, $i$$105$$ = 0;$i$$105$$ < $args$$9$$.length;$i$$105$$++) {
+      for(var $args$$11$$ = $fn$$7$$.arguments, $i$$105$$ = 0;$i$$105$$ < $args$$11$$.length;$i$$105$$++) {
         0 < $i$$105$$ && $sb$$8$$.push(", ");
         var $arg$$6_argDesc$$;
-        $arg$$6_argDesc$$ = $args$$9$$[$i$$105$$];
+        $arg$$6_argDesc$$ = $args$$11$$[$i$$105$$];
         switch(typeof $arg$$6_argDesc$$) {
           case "object":
             $arg$$6_argDesc$$ = $arg$$6_argDesc$$ ? "object" : "null";

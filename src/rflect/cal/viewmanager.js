@@ -166,8 +166,14 @@ rflect.cal.ViewManager.prototype.isInMonthMode = function() {
  * @private
  */
 rflect.cal.ViewManager.prototype.onViewportResize_ = function() {
-  this.mainBody_.updateBeforeRedraw();
-  this.mainBody_.updateByRedraw();
+  this.mainBody_.updateBeforeRedraw(
+      rflect.cal.MainBody.ComponentsIndexes.TOP_PANE,
+      rflect.cal.MainBody.ComponentsIndexes.MINI_CAL
+  );
+  this.mainBody_.updateByRedraw(
+      rflect.cal.MainBody.ComponentsIndexes.TOP_PANE,
+      rflect.cal.MainBody.ComponentsIndexes.MINI_CAL
+  );
 };
 
 
@@ -318,8 +324,10 @@ rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
     this.mainBody_.miniCal.updateBeforeRedraw();
     this.mainBody_.miniCal.updateByRedraw();
 
-    this.mainBody_.updateBeforeRedraw(1);
-    this.mainBody_.updateByRedraw(1);
+    this.mainBody_.updateBeforeRedraw(
+        /**@type {number}*/rflect.cal.MainBody.ComponentsIndexes.MINI_CAL);
+    this.mainBody_.updateByRedraw(
+        /**@type {number}*/rflect.cal.MainBody.ComponentsIndexes.MINI_CAL);
 
   }
 }
@@ -376,8 +384,10 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
     this.assignEvents_();
     this.isOnStartup_ = false;
   } else {
-    this.mainBody_.updateBeforeRedraw(calledByMiniCal ? 1 : -1);
-    this.mainBody_.updateByRedraw(calledByMiniCal ? 1 : -1);
+    this.mainBody_.updateBeforeRedraw(calledByMiniCal ?
+        /**@type {number}*/rflect.cal.MainBody.ComponentsIndexes.MINI_CAL : -1);
+    this.mainBody_.updateByRedraw(calledByMiniCal ?
+        /*@type {number}*/rflect.cal.MainBody.ComponentsIndexes.MINI_CAL : -1);
   }
 };
 
