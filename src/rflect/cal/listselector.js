@@ -111,6 +111,14 @@ rflect.cal.ListSelector.prototype.label_;
 
 
 /**
+ * Scrollable element.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ListSelector.prototype.scrollableEl_;
+
+
+/**
  * Regexp for detection of item.
  * @type {RegExp}
  * @private
@@ -266,10 +274,11 @@ rflect.cal.ListSelector.prototype.updateBeforeRedraw = function() {
 
 
 /**
- * Redraws list selector with new data.
+ * Redraws list selector. This default version changes scrollable size.
+ * TODO(alexk): add/remove item case.
  */
 rflect.cal.ListSelector.prototype.updateByRedraw = function() {
-  this.getElement().innerHTML = this.buildBody();
+  this.scrollableEl_.style.height = this.scrollableSize_.height + 'px';
 };
 
 
@@ -295,6 +304,9 @@ rflect.cal.ListSelector.prototype.enterDocument = function() {
       this.onMouseOver_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
       this.onMouseOut_, false, this);
+
+  // Save reference to scrollable element.
+  this.scrollableEl_ = goog.dom.getChildren(this.getElement())[1];
 };
 
 

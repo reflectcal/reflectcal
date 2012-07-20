@@ -875,9 +875,7 @@ $goog$math$Rect$$.prototype.contains = function $$goog$math$Rect$$$$contains$($a
 $goog$math$Rect$$.prototype.$getSize$ = function $$goog$math$Rect$$$$$getSize$$() {
   return new $goog$math$Size$$(this.width, this.height)
 };
-var $goog$dom$BrowserFeature$CAN_ADD_NAME_OR_TYPE_ATTRIBUTES$$ = !$goog$userAgent$IE$$ || $goog$userAgent$isDocumentMode$$(9);
-!$goog$userAgent$GECKO$$ && !$goog$userAgent$IE$$ || $goog$userAgent$IE$$ && $goog$userAgent$isDocumentMode$$(9) || $goog$userAgent$GECKO$$ && $goog$userAgent$isVersion$$("1.9.1");
-var $goog$dom$BrowserFeature$CAN_USE_INNER_TEXT$$ = $goog$userAgent$IE$$ && !$goog$userAgent$isVersion$$("9");
+var $goog$dom$BrowserFeature$CAN_ADD_NAME_OR_TYPE_ATTRIBUTES$$ = !$goog$userAgent$IE$$ || $goog$userAgent$isDocumentMode$$(9), $goog$dom$BrowserFeature$CAN_USE_CHILDREN_ATTRIBUTE$$ = !$goog$userAgent$GECKO$$ && !$goog$userAgent$IE$$ || $goog$userAgent$IE$$ && $goog$userAgent$isDocumentMode$$(9) || $goog$userAgent$GECKO$$ && $goog$userAgent$isVersion$$("1.9.1"), $goog$dom$BrowserFeature$CAN_USE_INNER_TEXT$$ = $goog$userAgent$IE$$ && !$goog$userAgent$isVersion$$("9");
 function $goog$dom$getDomHelper$$($opt_element$$10$$) {
   return $opt_element$$10$$ ? new $goog$dom$DomHelper$$($goog$dom$getOwnerDocument$$($opt_element$$10$$)) : $goog$dom$defaultDomHelper_$$ || ($goog$dom$defaultDomHelper_$$ = new $goog$dom$DomHelper$$)
 }
@@ -912,6 +910,11 @@ function $goog$dom$append_$$($doc$$12$$, $parent$$8$$, $args$$7$$, $i$$64_startI
 }
 function $goog$dom$removeNode$$($node$$4$$) {
   $node$$4$$ && $node$$4$$.parentNode && $node$$4$$.parentNode.removeChild($node$$4$$)
+}
+function $goog$dom$getChildren$$($element$$18$$) {
+  return $goog$dom$BrowserFeature$CAN_USE_CHILDREN_ATTRIBUTE$$ && $element$$18$$.children != $JSCompiler_alias_VOID$$ ? $element$$18$$.children : $goog$array$filter$$($element$$18$$.childNodes, function($node$$5$$) {
+    return 1 == $node$$5$$.nodeType
+  })
 }
 function $goog$dom$contains$$($parent$$15$$, $descendant$$) {
   if($parent$$15$$.contains && 1 == $descendant$$.nodeType) {
@@ -2325,7 +2328,7 @@ $JSCompiler_prototypeAlias$$.$buildBodyInternal$ = function $$JSCompiler_prototy
 $JSCompiler_prototypeAlias$$.$updateBeforeRedraw$ = function $$JSCompiler_prototypeAlias$$$$updateBeforeRedraw$$($var_args$$60$$) {
   var $args$$8$$ = arguments;
   $JSCompiler_StaticMethods_forEachChild$$(this, function($aChild$$, $aIndex$$1$$) {
-    (!$args$$8$$.length || !$goog$array$contains$$($args$$8$$, $aIndex$$1$$)) && $aChild$$.$updateBeforeRedraw$()
+    $args$$8$$.length && $goog$array$contains$$($args$$8$$, $aIndex$$1$$) || $aChild$$.$updateBeforeRedraw$()
   })
 };
 $JSCompiler_prototypeAlias$$.$updateByRedraw$ = function $$JSCompiler_prototypeAlias$$$$updateByRedraw$$($var_args$$61$$) {
@@ -3154,14 +3157,16 @@ $JSCompiler_prototypeAlias$$.$updateBeforeRedraw$ = function $$JSCompiler_protot
   this.$scrollableSize_$.height -= 39
 };
 $JSCompiler_prototypeAlias$$.$updateByRedraw$ = function $$JSCompiler_prototypeAlias$$$$updateByRedraw$$() {
-  this.$getElement$().innerHTML = $JSCompiler_StaticMethods_buildBody$$(this)
+  $_log$$("updateByRedraw");
+  this.$scrollableEl_$.style.height = this.$scrollableSize_$.height + "px"
 };
 $JSCompiler_prototypeAlias$$.$decorateInternal$ = function $$JSCompiler_prototypeAlias$$$$decorateInternal$$($aElement$$3$$, $opt_doNotBuildBody$$3$$) {
   $rflect$cal$ListSelector$$.$superClass_$.$decorateInternal$.call(this, $aElement$$3$$, $opt_doNotBuildBody$$3$$)
 };
 $JSCompiler_prototypeAlias$$.$enterDocument$ = function $$JSCompiler_prototypeAlias$$$$enterDocument$$() {
   $rflect$cal$ListSelector$$.$superClass_$.$enterDocument$.call(this);
-  $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_getHandler$$(this), this.$getElement$(), "mouseover", this.$onMouseOver_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mouseout", this.$onMouseOut_$, $JSCompiler_alias_FALSE$$, this)
+  $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_getHandler$$(this), this.$getElement$(), "mouseover", this.$onMouseOver_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mouseout", this.$onMouseOut_$, $JSCompiler_alias_FALSE$$, this);
+  this.$scrollableEl_$ = $goog$dom$getChildren$$(this.$getElement$())[1]
 };
 $JSCompiler_prototypeAlias$$.$onMouseOut_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOut_$$($aEvent$$8$$) {
   this.$dom_$.contains(this.$getElement$(), $aEvent$$8$$.relatedTarget) || $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistryForWhole_$, $JSCompiler_alias_NULL$$);
@@ -3835,13 +3840,13 @@ function $rflect$cal$MainBody$$($aViewManager$$11$$, $aTimeManager$$8$$, $aConta
   $JSCompiler_StaticMethods_addChild$$(this, this.$topPane_$ = new $rflect$cal$TopPane$$(this.$viewManager_$, this.$timeManager_$));
   $JSCompiler_StaticMethods_addChild$$(this, this.$mainPane_$ = new $rflect$cal$MainPane$$(this.$viewManager_$, this.$timeManager_$, this.$containerSizeMonitor_$, this.$blockManager_$));
   $JSCompiler_StaticMethods_addChild$$(this, this.$miniCal$ = new $rflect$cal$MiniCal$$(this.$viewManager_$, this.$timeManager_$));
-  $JSCompiler_StaticMethods_addChild$$(this, this.$calSelector$ = new $rflect$cal$CalSelector$$(this.$viewManager_$, this.$containerSizeMonitor_$));
-  $JSCompiler_StaticMethods_addChild$$(this, this.$taskSelector$ = new $rflect$cal$TaskSelector$$(this.$viewManager_$, this.$containerSizeMonitor_$));
+  $JSCompiler_StaticMethods_addChild$$(this, this.$calSelector_$ = new $rflect$cal$CalSelector$$(this.$viewManager_$, this.$containerSizeMonitor_$));
+  $JSCompiler_StaticMethods_addChild$$(this, this.$taskSelector_$ = new $rflect$cal$TaskSelector$$(this.$viewManager_$, this.$containerSizeMonitor_$));
   $_inspect$$("topPane_", this.$topPane_$);
   $_inspect$$("miniCal", this.$miniCal$);
   $_inspect$$("mainPane_", this.$mainPane_$);
-  $_inspect$$("taskSelector_", this.$taskSelector$);
-  $_inspect$$("calSelector_", this.$calSelector$)
+  $_inspect$$("taskSelector_", this.$taskSelector_$);
+  $_inspect$$("calSelector_", this.$calSelector_$)
 }
 $goog$inherits$$($rflect$cal$MainBody$$, $rflect$cal$Component$$);
 var $rflect$cal$MainBody$HTML_PARTS_$$ = '<div id="main-container">;<div class="cal-container">;<div id="top-pane">;</div>;<div id="main-body">;<div id="left-pane">;<div id="left-main-pane">;<div id="month-selector">;</div>;<div id="calendars-selector" class="list-selector">;</div>;<div id="tasks-selector" class="list-selector">;</div>;</div>;<div id="left-aux-pane">;</div>;</div>;<div id="main-pane" class="main-pane">;</div>;</div>;</div>;</div>'.split(";");
@@ -3863,10 +3868,10 @@ $JSCompiler_prototypeAlias$$.$buildBodyInternal$ = function $$JSCompiler_prototy
         $JSCompiler_StaticMethods_buildBody$$(this.$miniCal$, $aSb$$49$$);
         break;
       case 9:
-        $JSCompiler_StaticMethods_buildBody$$(this.$calSelector$, $aSb$$49$$);
+        $JSCompiler_StaticMethods_buildBody$$(this.$calSelector_$, $aSb$$49$$);
         break;
       case 11:
-        $JSCompiler_StaticMethods_buildBody$$(this.$taskSelector$, $aSb$$49$$);
+        $JSCompiler_StaticMethods_buildBody$$(this.$taskSelector_$, $aSb$$49$$);
         break;
       case 17:
         $JSCompiler_StaticMethods_buildBody$$(this.$mainPane_$, $aSb$$49$$)
@@ -3877,6 +3882,8 @@ $JSCompiler_prototypeAlias$$.$enterDocument$ = function $$JSCompiler_prototypeAl
   this.$topPane_$.$decorateInternal$(this.$dom_$.$getElement$("top-pane"), $JSCompiler_alias_TRUE$$);
   this.$miniCal$.$decorateInternal$(this.$dom_$.$getElement$("month-selector"), $JSCompiler_alias_TRUE$$);
   this.$mainPane_$.$decorateInternal$(this.$dom_$.$getElement$("main-pane"), $JSCompiler_alias_TRUE$$);
+  this.$calSelector_$.$decorateInternal$(this.$dom_$.$getElement$("calendars-selector"), $JSCompiler_alias_TRUE$$);
+  this.$taskSelector_$.$decorateInternal$(this.$dom_$.$getElement$("tasks-selector"), $JSCompiler_alias_TRUE$$);
   $rflect$cal$MainBody$$.$superClass_$.$enterDocument$.call(this)
 };
 $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototypeAlias$$$$disposeInternal$$() {
@@ -4119,10 +4126,10 @@ $JSCompiler_prototypeAlias$$.$onDateSelect_$ = function $$JSCompiler_prototypeAl
     $JSCompiler_StaticMethods_setBasis$$($JSCompiler_StaticMethods_shiftToPoint$self$$inline_859$$, $aEvent$$21$$.$date$);
     $JSCompiler_StaticMethods_calculatePeriodStart$$($JSCompiler_StaticMethods_shiftToPoint$self$$inline_859$$);
     $JSCompiler_StaticMethods_generateDaySeries$$($JSCompiler_StaticMethods_shiftToPoint$self$$inline_859$$);
-    this.$mainBody_$.$miniCal$.$updateBeforeRedraw$();
-    this.$mainBody_$.$miniCal$.$updateByRedraw$();
-    this.$mainBody_$.$updateBeforeRedraw$(2);
-    this.$mainBody_$.$updateByRedraw$(2)
+    this.$mainBody_$.$miniCal$.$updateBeforeRedraw$(3, 4);
+    this.$mainBody_$.$miniCal$.$updateByRedraw$(3, 4);
+    this.$mainBody_$.$updateBeforeRedraw$(3, 4, 2);
+    this.$mainBody_$.$updateByRedraw$(3, 4, 2)
   }
 };
 $JSCompiler_prototypeAlias$$.$onDateDrag_$ = function $$JSCompiler_prototypeAlias$$$$onDateDrag_$$($aEvent$$22$$) {
@@ -4143,8 +4150,8 @@ function $JSCompiler_StaticMethods_showView$$($JSCompiler_StaticMethods_showView
   (!$JSCompiler_StaticMethods_preRender$self$$inline_498_JSCompiler_StaticMethods_render_$self$$inline_789_calledByMiniCal$$.$parent_$ || $JSCompiler_StaticMethods_preRender$self$$inline_498_JSCompiler_StaticMethods_render_$self$$inline_789_calledByMiniCal$$.$parent_$.$inDocument_$) && $JSCompiler_StaticMethods_preRender$self$$inline_498_JSCompiler_StaticMethods_render_$self$$inline_789_calledByMiniCal$$.$enterDocument$(), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, 
   $JSCompiler_StaticMethods_showView$self$$.$containerSizeMonitor_$, "resize", $JSCompiler_StaticMethods_showView$self$$.$onViewportResize_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "action", $JSCompiler_StaticMethods_showView$self$$.$onMainBodyAction_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, 
   $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "dateselect", $JSCompiler_StaticMethods_showView$self$$.$onDateSelect_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "datedrag", $JSCompiler_StaticMethods_showView$self$$.$onDateDrag_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, 
-  $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "datedragend", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_showView$self$$.$isOnStartup_$ = $JSCompiler_alias_FALSE$$) : ($JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateBeforeRedraw$($JSCompiler_StaticMethods_preRender$self$$inline_498_JSCompiler_StaticMethods_render_$self$$inline_789_calledByMiniCal$$ ? 2 : -1), $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateByRedraw$($JSCompiler_StaticMethods_preRender$self$$inline_498_JSCompiler_StaticMethods_render_$self$$inline_789_calledByMiniCal$$ ? 
-  2 : -1)))
+  $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "datedragend", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_showView$self$$.$isOnStartup_$ = $JSCompiler_alias_FALSE$$) : $JSCompiler_StaticMethods_preRender$self$$inline_498_JSCompiler_StaticMethods_render_$self$$inline_789_calledByMiniCal$$ ? ($JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateBeforeRedraw$(2, 3, 4), $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateByRedraw$(2, 
+  3, 4)) : ($JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateBeforeRedraw$(3, 4), $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateByRedraw$(3, 4)))
 }
 $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototypeAlias$$$$disposeInternal$$() {
   $rflect$cal$ViewManager$$.$superClass_$.$disposeInternal$.call(this);

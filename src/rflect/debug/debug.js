@@ -38,7 +38,7 @@ if (goog.DEBUG) {
    * Outputs one or two of given args.
    * @param {string} aArg1 Message that precedes logged variable.
    * @param {number} aNumber How many arguments to output.
-   * @param {number|string|Object=} opt_arg2 Logged variable or expression.
+   * @param {number|string|boolean|Object=} opt_arg2 Logged variable or expression.
    */
   rflect.Debug.printOneOrTwoArgs_ = function(aArg1, aNumber, opt_arg2){
     return aArg1 + (aNumber == 2 ? ': ' + (goog.isObject(opt_arg2) ?
@@ -48,7 +48,7 @@ if (goog.DEBUG) {
   /**
    * Logs message in console.
    * @param {string} str Message that precedes logged variable.
-   * @param {number|string|Object=} opt_var Logged
+   * @param {number|string|boolean|Object=} opt_var Logged
    * variable or expression.
    * NOTE(alexk): We could've use record type {toString:function():string}, but
    * JS Compiler has some issues with that

@@ -68,17 +68,17 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager,
         this.timeManager_, this.containerSizeMonitor_, this.blockManager_));
   this.addChild(this.miniCal = new rflect.cal.MiniCal(this.viewManager_,
       this.timeManager_));
-  this.addChild(this.calSelector = new rflect.cal.CalSelector(this.viewManager_,
+  this.addChild(this.calSelector_ = new rflect.cal.CalSelector(this.viewManager_,
       this.containerSizeMonitor_));
-  this.addChild(this.taskSelector = new rflect.cal.TaskSelector(
+  this.addChild(this.taskSelector_ = new rflect.cal.TaskSelector(
       this.viewManager_, this.containerSizeMonitor_));
 
   if (goog.DEBUG) {
     _inspect('topPane_', this.topPane_);
     _inspect('miniCal', this.miniCal);
     _inspect('mainPane_', this.mainPane_);
-    _inspect('taskSelector_', this.taskSelector);
-    _inspect('calSelector_', this.calSelector);
+    _inspect('taskSelector_', this.taskSelector_);
+    _inspect('calSelector_', this.calSelector_);
   }
 };
 goog.inherits(rflect.cal.MainBody, rflect.cal.Component);
@@ -119,8 +119,9 @@ rflect.cal.MainBody.HTML_PARTS_ = [
 
 
 /**
- * Indexes of main body child components. These are useful when we try to tell
- * update{...} methods which child shouldn't be updated.
+ * Indexes of main body child components, in order they were added. These are
+ * useful when we try to tell update{...} methods which child shouldn't be
+ * updated.
  * @enum {number}
  */
 rflect.cal.MainBody.ComponentsIndexes = {
@@ -180,10 +181,10 @@ rflect.cal.MainBody.prototype.buildBodyInternal = function(aSb) {
         this.miniCal.buildBody(aSb);
       };break;
       case 9: {
-        this.calSelector.buildBody(aSb);
+        this.calSelector_.buildBody(aSb);
       };break;
       case 11: {
-        this.taskSelector.buildBody(aSb);
+        this.taskSelector_.buildBody(aSb);
       };break;
       // Include main pane in common buffer.
       case 17: {
@@ -224,6 +225,10 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
   this.topPane_.decorateInternal(this.dom_.getElement('top-pane'), true);
   this.miniCal.decorateInternal(this.dom_.getElement('month-selector'), true);
   this.mainPane_.decorateInternal(this.dom_.getElement('main-pane'), true);
+  this.calSelector_.decorateInternal(this.dom_.getElement('calendars-selector'),
+      true);
+  this.taskSelector_.decorateInternal(this.dom_.getElement('tasks-selector'),
+      true);
   // Propagate call to children.
   rflect.cal.MainBody.superClass_.enterDocument.call(this);
 

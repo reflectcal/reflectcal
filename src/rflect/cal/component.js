@@ -33,10 +33,12 @@ goog.inherits(rflect.cal.Component, goog.ui.Component);
 /**
  * @param {Array.<number>|Arguments} aContainer Array to test index presence in.
  * @param {number} aIndex Index to test.
- * @return {boolean} Whether index is within array.
+ * @return {boolean} Whether index is within array of indexes to be excluded
+ * from update.
  */
-rflect.cal.Component.indexIsPresent_ = function(aContainer, aIndex) {
-  return !aContainer.length || !goog.array.contains(aContainer, aIndex)
+rflect.cal.Component.indexIsInExclusions_ = function(aContainer, aIndex) {
+  return /**@type {boolean}*/ (aContainer.length) &&
+      goog.array.contains(aContainer, aIndex)
 }
 
 
@@ -118,13 +120,13 @@ rflect.cal.Component.prototype.buildBodyInternal = function(aSb) {
  * component's children by default. For custom behavior, should be overridden by
  * subclasses.
  * @param {...number} var_args Index(es) of
- * component's children which should be excluded by update.
+ * component's children which should be excluded from update.
  */
 rflect.cal.Component.prototype.updateBeforeRedraw =
     function(var_args) {
   var args = arguments;
   this.forEachChild(function(aChild, aIndex) {
-    if (rflect.cal.Component.indexIsPresent_(args, aIndex))
+    if (!rflect.cal.Component.indexIsInExclusions_(args, aIndex))
       aChild.updateBeforeRedraw();
   });
 };
@@ -134,7 +136,7 @@ rflect.cal.Component.prototype.updateBeforeRedraw =
  * Updates body of component by redraw. This is a second and final part of
  * component update sequence.
  * @param {...number} var_args Index(es) of
- * component's children which should be excluded by update.
+ * component's children which should be excluded from update.
  * @see {rflect.cal.MainBody#updateBeforeRedraw}.
  */
 rflect.cal.Component.prototype.updateByRedraw =
@@ -143,7 +145,7 @@ rflect.cal.Component.prototype.updateByRedraw =
   // Propagate call to child components that have a DOM, if any.
   this.forEachChild(function(aChild, aIndex) {
     if (aChild.isInDocument() && aChild.getElement() &&
-        rflect.cal.Component.indexIsPresent_(args, aIndex)) {
+        !rflect.cal.Component.indexIsInExclusions_(args, aIndex)) {
       aChild.updateByRedraw();
     }
   });
