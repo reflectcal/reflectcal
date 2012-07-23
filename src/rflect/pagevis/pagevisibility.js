@@ -47,6 +47,16 @@ rflect.pagevis.pageIsVisible = function() {
 
 
 /**
+ * @return {boolean} Whether Page Visibility API is available. Should be called
+ * after <code>detect</code>.
+ */
+rflect.pagevis.isAvailable = function() {
+  return /**@type {boolean}*/(rflect.pagevis.nameOfHiddenProperty_ &&
+      rflect.pagevis.nameOfVisibilityChangeEvent);
+}
+
+
+/**
  * <code>document.hidden</code> vendor-specific name.
  * @type {string}
  * @private
@@ -62,17 +72,18 @@ rflect.pagevis.nameOfVisibilityChangeEvent;
 
 
 /**
- * @return {boolean} Whether Page Visibility API is available.
+ * Tests whether Page Visibility API is available and with which vendor prefix.
  */
-rflect.pagevis.detect = function() {
-  var vendorHiddenName;
-  var vendorCounter = 0;
-  while ((vendorHiddenName =
-      rflect.pagevis.VENDOR_HIDDEN_NAMES[vendorCounter++]) in document){
-    rflect.pagevis.nameOfHiddenProperty_ = vendorHiddenName;
-    rflect.pagevis.nameOfVisibilityChangeEvent =
-        rflect.pagevis.VENDOR_VISIBILITYCHANGE_NAMES[vendorCounter++];
-    break;
+rflect.pagevis.detect_ = function() {
+  var vendorHiddenNames = rflect.pagevis.VENDOR_HIDDEN_NAMES;
+  for (var vendorCounter = 0; vendorCounter <
+      vendorHiddenNames.length; vendorCounter++){
+    if (vendorHiddenNames[vendorCounter++] in document){
+      rflect.pagevis.nameOfHiddenProperty_ = vendorHiddenNames[vendorCounter++];
+      rflect.pagevis.nameOfVisibilityChangeEvent =
+          rflect.pagevis.VENDOR_VISIBILITYCHANGE_NAMES[vendorCounter++];
+      break;
+    }
   }
 }
-rflect.pagevis.detect();
+rflect.pagevis.detect_();

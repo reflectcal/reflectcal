@@ -103,6 +103,14 @@ rflect.cal.TimeManager.prototype.isOnStartup_ = false;
 
 
 /**
+ * Whether interval we're in contains now point.
+ * @type {boolean|null}
+ * @private
+ */
+rflect.cal.TimeManager.prototype.isInNowPoint_;
+
+
+/**
  * Day within interval, on which latter is based.
  * @type {goog.date.Date}
  */
@@ -222,6 +230,7 @@ rflect.cal.TimeManager.prototype.run = function() {
 rflect.cal.TimeManager.prototype.shift = function(aDirection) {
   this.shiftBasis(aDirection);
   this.run();
+  this.isInNowPoint_ = null;
 };
 
 
@@ -232,6 +241,7 @@ rflect.cal.TimeManager.prototype.shift = function(aDirection) {
 rflect.cal.TimeManager.prototype.shiftToPoint = function(opt_date) {
   this.setBasis(opt_date);
   this.run();
+  this.isInNowPoint_ = null;
 };
 
 
@@ -239,7 +249,8 @@ rflect.cal.TimeManager.prototype.shiftToPoint = function(opt_date) {
  * @return {boolean} Whether interval we're in covers current moment.
  */
 rflect.cal.TimeManager.prototype.isInNowPoint = function() {
-  return this.interval.contains(goog.now());
+  return this.isInNowPoint_ != null ? this.isInNowPoint_ :
+      this.isInNowPoint_ = this.interval.contains(goog.now());
 };
 
 

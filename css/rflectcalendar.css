@@ -763,7 +763,7 @@ body {
   /*color: #aaaaaa;*/
 }
 
-#time-marker-head {
+.time-marker-head {
   position: absolute;
   right: 0;
   height: 5px;
@@ -838,7 +838,7 @@ body {
   margin-right: 12px; /*12px is a width of expand sign + 2px of event-rect-wk borders*/
 }
 
-#today-mask-wk {
+.today-mask-wk {
   height: 100%;
   width: 100%;
   background-color: #cecece;

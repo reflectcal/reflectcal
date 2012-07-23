@@ -19,6 +19,7 @@ goog.require('rflect.cal.MainPaneBuilder');
 goog.require('rflect.cal.MainPaneSelectionMask');
 goog.require('rflect.cal.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
+goog.require('rflect.cal.TimeMarker');
 goog.require('rflect.string');
 
 
@@ -66,6 +67,13 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager,
   this.blockManager_ = aBlockManager;
 
   /**
+   * Time marker.
+   * @type {rflect.cal.TimeMarker}
+   * @private
+   */
+  this.timeMarker_ = new rflect.cal.TimeMarker(aViewManager, aTimeManager);
+
+  /**
    * Main pane builder.
    * @type {rflect.cal.MainPaneBuilder}
    * @private
@@ -73,7 +81,7 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager,
   this.mainPaneBuilder_ = new rflect.cal.MainPaneBuilder(this.viewManager_,
       this, aTimeManager, this.blockManager_.blockPoolWeek,
       this.blockManager_.blockPoolAllday, this.blockManager_.blockPoolMonth,
-      this.containerSizeMonitor_);
+      this.containerSizeMonitor_, this.timeMarker_);
   if (goog.DEBUG)
     _inspect('mainPaneBuilder', this.mainPaneBuilder_);
 
@@ -488,6 +496,8 @@ rflect.cal.MainPane.prototype.enterDocument = function() {
       this.onMouseMove_, false, this)
       .listen(document, goog.events.EventType.MOUSEUP,
       this.onMouseUp_, false, this);
+
+  this.timeMarker_.start();
 };
 
 

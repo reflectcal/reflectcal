@@ -1,3 +1,4 @@
+Done
 //7. Fix gradient for webkit and opera.
 //3. Make Loader static with method main.
 //4. Fix bug with unload.
@@ -25,6 +26,11 @@ theese indexes.
 * it seems that scrollbar appears when we reducing height of viewport. It
 disappears in a moment, but monitor sees that size with scroll.
 Firefox and Opera
+* Consider not writing initializers of objects in prototype, do it in
+constructor, instead?
+* + add custom objects rather than Date to form month grid - native Date objects
+ are slow, this could be seen in firefox 2, maybe it'll affect IE7 too
+ override typedef goog.date.DateLike for this case
 
 # Optimization
 * Concatenate strings in HTML_PARTS by +, not by , as compiler would join them.
@@ -34,8 +40,6 @@ Firefox and Opera
 as possible, starting from external components, like list selector and minical.
 * Expand signs should be moved to events layer. This will enable all dynamic
 layout to be on event layer and all static layout on decoration layer.
-* Consider not writing initializers of objects in prototype, do it in
-constructor, instead?
 8. Implement StringBuffer that only concatenates strings via join in IE7 or lower
 (test it)
 * Make HTML_PARTS as separate constants instead of Array.<string> for better
@@ -44,9 +48,6 @@ inlining.
 * If click on zippy doesn't require redraw, just change zippy's class instead
 of redraw.
 * remove block unused methods
-* + add custom objects rather than Date to form month grid - native Date objects
- are slow, this could be seen in firefox 2, maybe it'll affect IE7 too
- override typedef goog.date.DateLike for this case
 * + redesign init method to disable event patching
 
 # Main

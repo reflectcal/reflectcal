@@ -486,7 +486,7 @@ rflect.date.Date.prototype.equals = function(aOther, opt_bitmask) {
   var equal = true;
   var bitmask = opt_bitmask || rflect.date.fields.ALL;
   if (bitmask & rflect.date.fields.YEAR)
-     equal = equal && this.getYear() == aOther.getYear();
+     equal = equal && this.getYear() == aOther.getFullYear();
   if (equal && bitmask & rflect.date.fields.MONTH)
      equal = equal && this.getMonth() == aOther.getMonth();
   if (equal && bitmask & rflect.date.fields.DATE)

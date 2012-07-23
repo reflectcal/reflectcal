@@ -14,6 +14,7 @@ goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.string.StringBuffer');
 goog.require('rflect.cal.i18n.predefined');
+goog.require('rflect.date');
 
 
 
@@ -27,10 +28,12 @@ goog.require('rflect.cal.i18n.predefined');
  * @param {rflect.cal.BlockPool} aBlockPoolMonth Link to month block pool.
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
+ * @param {rflect.cal.TimeMarker} aTimeMarker Link to time marker.
  * @constructor
  */
 rflect.cal.MainPaneBuilder = function(aViewManager, aMainPane, aTimeManager,
-    aBlockPoolWeek, aBlockPoolAllday, aBlockPoolMonth, aContainerSizeMonitor) {
+    aBlockPoolWeek, aBlockPoolAllday, aBlockPoolMonth, aContainerSizeMonitor,
+    aTimeMarker) {
   /**
    * Link to view manager.
    * @type {rflect.cal.ViewManager}
@@ -79,6 +82,13 @@ rflect.cal.MainPaneBuilder = function(aViewManager, aMainPane, aTimeManager,
    * @private
    */
   this.containerSizeMonitor_ = aContainerSizeMonitor;
+
+  /**
+   * Link to time marker.
+   * @type {rflect.cal.TimeMarker}
+   * @private
+   */
+  this.timeMarker_ = aTimeMarker;
 
   /**
    * Reusable format for weekday names in week mode.
@@ -247,9 +257,8 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_ = [
       /*Hours container width in pixels (40).*/
       rflect.cal.i18n.predefined.HOURS_CONTAINER_WIDTH,
   // Time marker head.
-  'px"><div id="time-marker-head" style="top:',/*Position of marker head in
-  pixels (200).*/
-  'px;"></div>',
+  'px">',/*Time marker head 
+  (<div style="top: 200px;" class="time-marker-head"></div>).*/
   // Individual hour.
   '<div class="',/*Grid table row state (grid-table-row grid-table-row-odd,
   grid-table-row grid-table-row-even).*/
@@ -295,6 +304,8 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   // Individual decoration layer.
   '<div id="wk-dec-layer-in-col',/*Id of individual decoration layer (wk-dec-layer-in-col0).*/
   '" class="wk-decoration-layer">',
+  // Today mask.
+  '<div class="' + goog.getCssName('today-mask-wk') + '"></div>',
   // Expand sign.
   '<div class="expand-sign-wk-cont"><div class="expand-sign-wk ',
   /* Expand sign state (expand-sign-wk-collapsed, expand-sign-wk-expanded).*/
@@ -521,17 +532,17 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb) {
         offset++;
       };break;
       case 66: {
-        this.buildTimeMarkerHeadPosition_(aSb, offset);
+        this.timeMarker_.buildHead(aSb);
       };break;
-      case 68: {
+      case 67: {
         this.buildHoursAndGridRows_(aSb, offset);
         offset += 9;
       };break;
-      case 79: {
+      case 78: {
         this.buildGridTableWeek_(aSb, offset);
         offset++;
       };break;
-      case 81: {
+      case 80: {
         this.buildWeekGridCols_(aSb, offset);
         offset += 14;
       };break;
@@ -1050,17 +1061,6 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekNumbers_ =
 
 
 /**
- * Time marker head.
- *'<div id="time-marker-head" style="top:',Position of marker head in
- * pixels (200).
- */
-rflect.cal.MainPaneBuilder.prototype.buildTimeMarkerHeadPosition_ =
-    function(aSb, aOffset) {
-  aSb.append(200);
-};
-
-
-/**
  * Individual hour.
  * '<div class="',Grid table row state (grid-table-row grid-table-row-odd,
  *  grid-table-row grid-table-row-even).
@@ -1285,6 +1285,7 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridCols_ =
 
   var prevColsCumulativeSize = 0;
   var gridWidth = this.blockPoolWeek_.gridSize.width;
+  var todayDate;
 
   for (var colCounter = 0, blocksNumber = this.blockPoolWeek_.getBlocksNumber();
       colCounter < blocksNumber;
@@ -1314,12 +1315,19 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridCols_ =
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 6]);
     aSb.append(colCounter);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
+    // <- Decoration layer internals are here.
+    // Today mask.
+    if (this.timeManager_.isInNowPoint() &&
+        this.timeManager_.daySeries[colCounter].equals(todayDate ||
+        (todayDate = new Date()),
+        rflect.date.fields.DATE | rflect.date.fields.MONTH |
+        rflect.date.fields.YEAR))
+      this.timeMarker_.buildLine(aSb);
+
     // Expand signs build.
     this.buildWeekExpandSigns_(aSb, aOffset + 8, colCounter);
 
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 10]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 11]);
-    aSb.append(colCounter);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 12]);
     // Events are placed here.
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 13]);
