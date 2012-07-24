@@ -544,7 +544,7 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb) {
       };break;
       case 80: {
         this.buildWeekGridCols_(aSb, offset);
-        offset += 14;
+        offset += 15;
       };break;
       default: break;
     }
@@ -1321,17 +1321,19 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridCols_ =
         this.timeManager_.daySeries[colCounter].equals(todayDate ||
         (todayDate = new Date()),
         rflect.date.fields.DATE | rflect.date.fields.MONTH |
-        rflect.date.fields.YEAR))
+        rflect.date.fields.YEAR)){
+      aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
       this.timeMarker_.buildLine(aSb);
+    }
 
     // Expand signs build.
-    this.buildWeekExpandSigns_(aSb, aOffset + 8, colCounter);
+    this.buildWeekExpandSigns_(aSb, aOffset + 9, colCounter);
 
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 11]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 12]);
-    // Events are placed here.
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 13]);
+    // Events are placed here.
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 14]);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 15]);
   }
 };
 

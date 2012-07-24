@@ -82,11 +82,14 @@ rflect.cal.TimeMarker.prototype.onTick_ = function() {
   if (rflect.pagevis.pageIsVisible() && this.viewManager_.isInWeekMode()) {
     var today = new Date();
     var position = this.getPosition_(today) + 'px';
-    goog.dom.getElement('time-marker-head').style.height = position;
+    var headEl = goog.dom.getElement('time-marker-head');
+    if (headEl)
+      headEl.style.height = position;
     if (this.timeManager_.isInNowPoint()) {
       var index = this.getIndexOfTodayBlock_(today);
       var lineEl = this.getMarkerEl_();
-      lineEl.style.height = position;
+      if (lineEl)
+        lineEl.style.height = position;
       goog.dom.getElement('wk-dec-layer-in-col' + index).appendChild(lineEl);
     }
 
@@ -99,7 +102,7 @@ rflect.cal.TimeMarker.prototype.onTick_ = function() {
  */
 rflect.cal.TimeMarker.prototype.getPosition_ = function(opt_today) {
   var today = opt_today || new Date();
-  var timePos = today.getHours() * today.getMinutes();
+  var timePos = today.getHours() * today.getMinutes() + today.getMinutes();
   var pixelPos = timePos * rflect.cal.predefined.HOUR_ROW_HEIGHT / 30;
   return pixelPos;
 }
