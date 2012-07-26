@@ -438,7 +438,9 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '" class="mn-decoration-layer">',
   '<table cellspacing="0" cellpadding="0" class="daynums"><tbody><tr>',
   // Individual daycell.
-  '<td class="daycell"><div class="expand-sign-mn-cont">',
+  '<td class="daycell ',
+  /*Daycell class (today-mask-mn).*/
+  '"><div class="expand-sign-mn-cont">',
   '<div class="expand-sign-mn ',
   /*Individual expand sign state
   (expand-sign-mn-collapsed, expand-sign-mn-expanded).*/
@@ -595,7 +597,7 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalMonth_ = function(aSb) {
       };break;
       case 48: {
         this.buildMonthGridRows_(aSb, offset);
-        offset += 24;
+        offset += 25;
       };break;
       default: break;
     }
@@ -1118,17 +1120,17 @@ rflect.cal.MainPaneBuilder.prototype.buildHoursAndGridRows_ =
     if (counter > 0)
       sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
     //if (counter != 47)
-    sb.append('grid-table-row ');
+    sb.append(goog.getCssName('grid-table-row') + ' ');
     if (counter % 2 == 0) {
       if (counter != 47)
-        sb.append('grid-table-row-even');
+        sb.append(goog.getCssName('grid-table-row-even'));
       sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
-      sb.append('hl-even');
+      sb.append(goog.getCssName('hl-even'));
     } else {
       if (counter != 47)
-        sb.append('grid-table-row-odd');
+        sb.append(goog.getCssName('grid-table-row-odd'));
       sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
-      sb.append('hl-odd');
+      sb.append(goog.getCssName('hl-odd'));
     }
     sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
     // Formatted time string.
@@ -1317,11 +1319,8 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridCols_ =
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
     // <- Decoration layer internals are here.
     // Today mask.
-    if (this.timeManager_.isInNowPoint() &&
-        this.timeManager_.daySeries[colCounter].equals(todayDate ||
-        (todayDate = new Date()),
-        rflect.date.fields.DATE | rflect.date.fields.MONTH |
-        rflect.date.fields.YEAR)){
+    if (this.timeManager_.isCurrentDay(
+        this.timeManager_.daySeries[colCounter])){
       aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
       this.timeMarker_.buildLine(aSb);
     }
@@ -1329,9 +1328,10 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridCols_ =
     // Expand signs build.
     this.buildWeekExpandSigns_(aSb, aOffset + 9, colCounter);
 
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 11]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 12]);
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 13]);
     // Events are placed here.
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 13]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 14]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 15]);
   }
@@ -1411,32 +1411,35 @@ rflect.cal.MainPaneBuilder.prototype.buildMonthGridRows_ = function(aSb, aOffset
     // Build day cells containing expand signs and day numbers.
     this.buildDayCells_(aSb, aOffset + 8, rowCounter);
 
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 18]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 19]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 20]);
-    aSb.append(rowCounter);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 21]);
-    // Events are placed here.
+    aSb.append(rowCounter);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 22]);
+    // Events are placed here.
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 23]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 24]);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 25]);
   }
 };
 
 
 /**
  * Individual daycell.
- * '<td class="daycell"><div class="expand-sign-mn-cont">',
+ *'<td class="daycell ',
+ * Daycell class (today-mask-mn).
+ * '"><div class="expand-sign-mn-cont">',
  * '<div class="expand-sign-mn ',
  * Individual expand sign state
  * (expand-sign-mn-collapsed, expand-sign-mn-expanded).
- * '"></div>'
+ * '"></div>',
  * '</div>',
  * '<div class="daynum-cont"><div id="daynum-',
- * Id of daynum cell (0).
- * '" class="daynum-label '
+ * Id of daynum row (0).
+ * Id of daynum col (0).
+ * '" class="daynum-label ',
  * Daynum state (dl-other-month).
- * '">'
+ * '">',
  * Daynum name (26).
  * '</div>',
  * '</div>',
@@ -1456,26 +1459,30 @@ rflect.cal.MainPaneBuilder.prototype.buildDayCells_ = function(aSb, aOffset,
     block = this.blockPoolMonth_.blocks[aRowCounter];
 
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset]);
+    if (this.timeManager_.isCurrentDay(
+        this.timeManager_.daySeries[aRowCounter * 7 + colCounter]))
+      aSb.append(goog.getCssName('today-mask-mn'));
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 1]);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 2]);
     aSb.append(!block.expanded && block.couldBeExpanded ?
         goog.getCssName('expand-sign-mn-collapsed') :
         (block.expanded && block.couldBeCollapsed ?
         goog.getCssName('expand-sign-mn-expanded') : ''));
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 2]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 3]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 4]);
-    aSb.append(aRowCounter * 7 + colCounter);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 5]);
+    aSb.append(aRowCounter * 7 + colCounter);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 6]);
     // Show days from another month differently.
     if (isInMonthView && currentMonth !=
         (day = daySeries[aRowCounter * 7 + colCounter]).getMonth())
       aSb.append(goog.getCssName('dl-other-month'));
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 6]);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 7]);
     // Build daycell day number.
     aSb.append(daySeries[aRowCounter * 7 + colCounter].getDate());
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 7]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 8]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 9]);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 10]);
 
   }
 };

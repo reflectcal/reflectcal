@@ -350,11 +350,6 @@ rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
  * @private
  */
 rflect.cal.ViewManager.prototype.onDateDrag_ = function(aEvent) {
-  if (goog.DEBUG) {
-    _log('aEvent.startDate: ', aEvent.startDate);
-    _log('aEvent.duration', aEvent.duration);
-    _log('aEvent.selectionConfiguration', aEvent.selectionConfiguration);
-  }
   if (aEvent.selectionConfiguration ==
       rflect.cal.TimeManager.Configuration.MONTH)
     this.timeManager.setBasis(aEvent.firstDayInMonth);

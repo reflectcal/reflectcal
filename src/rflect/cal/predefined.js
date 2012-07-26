@@ -562,3 +562,19 @@ rflect.cal.predefined.APP_MINIMAL_HEIGHT =
  * @const
  */
 rflect.cal.predefined.APP_MINIMAL_WIDTH = 516;
+
+
+/**
+ * Time marker head height.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.TIME_MARKER_HEAD_HEIGHT = 5;
+
+
+/**
+ * Time marker line height.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.TIME_MARKER_LINE_HEIGHT = 1;

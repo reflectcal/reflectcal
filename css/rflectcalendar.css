@@ -737,12 +737,12 @@ body {
 }
 
 .grid-table-row-odd {
-  border-bottom: 1px dotted #d5d5d5;
+  border-bottom: 1px solid #d5d5d5;
   /*border-bottom: 1px dotted rgba(213,213,213,0.9);*/
 }
 
 .grid-table-row-even {
-  border-bottom: 1px solid #d5d5d5;
+  border-bottom: 1px dotted #d5d5d5;
 }
 
 .hour-label {
@@ -754,12 +754,12 @@ body {
 
 .hl-odd {
   /*color: #2c2c2c;*/
-  color: #aaaaaa;
+  color: #b4b4b4;
 }
 
 .hl-even {
+  color: #aaaaaa;
   /*color: #6b6b6b;*/
-  color: #b4b4b4;
   /*color: #aaaaaa;*/
 }
 
@@ -844,6 +844,10 @@ body {
   background-color: #cecece;
   opacity: 0.25;
   filter: alpha(opacity = 25);
+}
+
+.today-mask-mn {
+  background-color: #f2f2f2;
 }
 
 .mask {

@@ -76,34 +76,48 @@ rflect.cal.TimeMarker.prototype.timer_;
 
 /**
  * Timer tick callback.
+ * @param {goog.events.Event=} opt_event Event object.
  * @private
  */
-rflect.cal.TimeMarker.prototype.onTick_ = function() {
+rflect.cal.TimeMarker.prototype.onTick_ = function(opt_event) {
+  _log('onTick_ called');
   if (rflect.pagevis.pageIsVisible() && this.viewManager_.isInWeekMode()) {
+    _log('page is visible');
     var today = new Date();
-    var position = this.getPosition_(today) + 'px';
     var headEl = goog.dom.getElement('time-marker-head');
     if (headEl)
-      headEl.style.height = position;
-    if (this.timeManager_.isInNowPoint()) {
+      headEl.style.top = this.getPosition_(true, today) + 'px';
+    if (this.timeManager_.isInNowPoint) {
       var index = this.getIndexOfTodayBlock_(today);
       var lineEl = this.getMarkerEl_();
       if (lineEl)
-        lineEl.style.height = position;
+        lineEl.style.top = this.getPosition_(false, today) + 'px';
+
       goog.dom.getElement('wk-dec-layer-in-col' + index).appendChild(lineEl);
     }
 
   }
+  // If it's event callback, reset timer.
+  if (opt_event)
+    this.stop();
+  this.start();
 };
 
 /**
+ * @param {boolean} aHead Whether to calculate head position or line one.
  * @param {Date=} opt_today Today's date.
  * @return {number} Position of marker.
  */
-rflect.cal.TimeMarker.prototype.getPosition_ = function(opt_today) {
+rflect.cal.TimeMarker.prototype.getPosition_ = function(aHead, opt_today) {
   var today = opt_today || new Date();
-  var timePos = today.getHours() * today.getMinutes() + today.getMinutes();
+  var timePos = today.getHours() * 60 + today.getMinutes();
   var pixelPos = timePos * rflect.cal.predefined.HOUR_ROW_HEIGHT / 30;
+
+  if (aHead)
+    pixelPos -= rflect.cal.predefined.TIME_MARKER_HEAD_HEIGHT / 2;
+  else
+    pixelPos -= rflect.cal.predefined.TIME_MARKER_LINE_HEIGHT / 2;
+
   return pixelPos;
 }
 
@@ -137,7 +151,7 @@ rflect.cal.TimeMarker.prototype.getMarkerEl_ = function() {
  * Starts time marker cycle.
  */
 rflect.cal.TimeMarker.prototype.start = function() {
-  this.timer_ = setTimeout(goog.bind(this.onTick_, this), 60 * 60 * 1000);
+  this.timer_ = setTimeout(goog.bind(this.onTick_, this), 60 * 1000);
 }
 
 
@@ -159,7 +173,7 @@ rflect.cal.TimeMarker.prototype.stop = function() {
  */
 rflect.cal.TimeMarker.prototype.buildHead = function(aSb) {
   aSb.append(rflect.cal.TimeMarker.HEAD_PARTS_[0]);
-  aSb.append(this.getPosition_());
+  aSb.append(this.getPosition_(true));
   aSb.append(rflect.cal.TimeMarker.HEAD_PARTS_[1]);
 }
 
@@ -174,7 +188,7 @@ rflect.cal.TimeMarker.prototype.buildHead = function(aSb) {
  */
 rflect.cal.TimeMarker.prototype.buildLine = function(aSb) {
   aSb.append(rflect.cal.TimeMarker.HEAD_PARTS_[2]);
-  aSb.append(this.getPosition_());
+  aSb.append(this.getPosition_(false));
   aSb.append(rflect.cal.TimeMarker.HEAD_PARTS_[3]);
 }
 

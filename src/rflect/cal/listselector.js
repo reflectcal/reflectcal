@@ -319,7 +319,8 @@ rflect.cal.ListSelector.prototype.onMouseOut_ = function(aEvent) {
   var target = aEvent.target;
   var id = target.id;
   var className = target.className;
-  if (!this.dom_.contains(this.getElement(), aEvent.relatedTarget))
+  if (!aEvent.relatedTarget ||
+      !this.dom_.contains(this.getElement(), aEvent.relatedTarget))
     this.moRegistryForWhole_.deregisterTarget();
   if (!this.isItem(className) || !this.isHeader(className) ||
       !this.isButton(className))

@@ -41,8 +41,8 @@ rflect.pagevis.VENDOR_VISIBILITYCHANGE_NAMES = [
  * @return {boolean} Whether page is visible according to Page Visibility API.
  */
 rflect.pagevis.pageIsVisible = function() {
-  return !rflect.pagevis.nameOfHiddenProperty_ ||
-      document[rflect.pagevis.nameOfHiddenProperty_];
+  return !rflect.pagevis.isAvailable() ||
+      !document[rflect.pagevis.nameOfHiddenProperty_];
 }
 
 
@@ -78,10 +78,10 @@ rflect.pagevis.detect_ = function() {
   var vendorHiddenNames = rflect.pagevis.VENDOR_HIDDEN_NAMES;
   for (var vendorCounter = 0; vendorCounter <
       vendorHiddenNames.length; vendorCounter++){
-    if (vendorHiddenNames[vendorCounter++] in document){
-      rflect.pagevis.nameOfHiddenProperty_ = vendorHiddenNames[vendorCounter++];
+    if (vendorHiddenNames[vendorCounter] in document){
+      rflect.pagevis.nameOfHiddenProperty_ = vendorHiddenNames[vendorCounter];
       rflect.pagevis.nameOfVisibilityChangeEvent =
-          rflect.pagevis.VENDOR_VISIBILITYCHANGE_NAMES[vendorCounter++];
+          rflect.pagevis.VENDOR_VISIBILITYCHANGE_NAMES[vendorCounter];
       break;
     }
   }

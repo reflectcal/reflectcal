@@ -95,19 +95,19 @@ rflect.cal.TimeManager.prototype.daysNumber = 0;
 
 
 /**
- * Whether we're on startup.
- * @type {boolean}
+ * Current day, for later comparison with.
+ * @type {rflect.date.Date}
  * @private
  */
-rflect.cal.TimeManager.prototype.isOnStartup_ = false;
+rflect.cal.TimeManager.prototype.currentDay_;
 
 
 /**
  * Whether interval we're in contains now point.
- * @type {boolean|null}
+ * @type {boolean}
  * @private
  */
-rflect.cal.TimeManager.prototype.isInNowPoint_;
+rflect.cal.TimeManager.prototype.isInNowPoint = false;
 
 
 /**
@@ -211,6 +211,12 @@ rflect.cal.TimeManager.prototype.generateDaySeries = function() {
   this.interval.start = this.start_.getTime();
   this.interval.end = new goog.date.Date(date).getTime();
 
+  if (this.isInNowPoint = this.isInNowPoint_()){
+    var today = new Date();
+    this.currentDay_ = new rflect.date.Date(today.getFullYear(),
+        today.getMonth(), today.getDate());
+  }
+
 };
 
 
@@ -230,7 +236,6 @@ rflect.cal.TimeManager.prototype.run = function() {
 rflect.cal.TimeManager.prototype.shift = function(aDirection) {
   this.shiftBasis(aDirection);
   this.run();
-  this.isInNowPoint_ = null;
 };
 
 
@@ -241,17 +246,27 @@ rflect.cal.TimeManager.prototype.shift = function(aDirection) {
 rflect.cal.TimeManager.prototype.shiftToPoint = function(opt_date) {
   this.setBasis(opt_date);
   this.run();
-  this.isInNowPoint_ = null;
 };
 
 
 /**
  * @return {boolean} Whether interval we're in covers current moment.
+ * @private
  */
-rflect.cal.TimeManager.prototype.isInNowPoint = function() {
-  return this.isInNowPoint_ != null ? this.isInNowPoint_ :
-      this.isInNowPoint_ = this.interval.contains(goog.now());
+rflect.cal.TimeManager.prototype.isInNowPoint_ = function() {
+  return this.interval.contains(goog.now());
 };
+
+
+/**
+ * @param {rflect.date.Date} aDate Date to compare with.
+ * @return {boolean} Whether given day is current one.
+ */
+rflect.cal.TimeManager.prototype.isCurrentDay = function(aDate) {
+  return /**@type{boolean}*/(this.currentDay_ && this.currentDay_.equals(aDate,
+      rflect.date.fields.DATE | rflect.date.fields.MONTH |
+      rflect.date.fields.YEAR))
+}
 
 
 /**

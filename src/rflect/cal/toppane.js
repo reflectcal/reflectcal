@@ -315,7 +315,7 @@ rflect.cal.TopPane.prototype.updateButtons_ = function() {
       button.setAutoStates(goog.ui.Component.State.CHECKED, true);
     }
   }
-  if (this.timeManager_.isInNowPoint()) {
+  if (this.timeManager_.isInNowPoint) {
     this.buttonNow_.setChecked(true);
     this.buttonNow_.setFocused(false);
     this.buttonNow_.setAutoStates(goog.ui.Component.State.CHECKED, false);
