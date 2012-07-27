@@ -438,10 +438,10 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '" class="mn-decoration-layer">',
   '<table cellspacing="0" cellpadding="0" class="daynums"><tbody><tr>',
   // Individual daycell.
-  '<td class="daycell ',
-  /*Daycell class (today-mask-mn).*/
-  '"><div class="expand-sign-mn-cont">',
-  '<div class="expand-sign-mn ',
+  '<td class="daycell"><div class="daycell-decoration-cont">',
+  '<div class="today-mask-mn"></div>',
+  /*Decoration container content (<div class="today-mask-mn"></div>).*/
+  '</div><div class="daycell-daynum-outer-cont"><div class="expand-sign-mn-cont"><div class="expand-sign-mn ',
   /*Individual expand sign state
   (expand-sign-mn-collapsed, expand-sign-mn-expanded).*/
   '"></div>',
@@ -454,7 +454,7 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '">',
   /*Daynum name (26).*/
   '</div>',
-  '</div>',
+  '</div></div>',
   // End of individual daycell.
   '</td>',
   '</tr></tbody></table>',
@@ -1461,8 +1461,7 @@ rflect.cal.MainPaneBuilder.prototype.buildDayCells_ = function(aSb, aOffset,
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset]);
     if (this.timeManager_.isCurrentDay(
         this.timeManager_.daySeries[aRowCounter * 7 + colCounter]))
-      aSb.append(goog.getCssName('today-mask-mn'));
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 1]);
+      aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 1]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 2]);
     aSb.append(!block.expanded && block.couldBeExpanded ?
         goog.getCssName('expand-sign-mn-collapsed') :
