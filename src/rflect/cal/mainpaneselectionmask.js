@@ -56,6 +56,8 @@ rflect.cal.MainPaneSelectionMask = function(aViewManager, aMainPane, aTimeManage
    */
   this.blockPoolMonth_ = opt_blockPoolMonth;
 
+  this.additionalClassNames = goog.getCssName('mainpane-mask');
+
 };
 goog.inherits(rflect.cal.MainPaneSelectionMask, rflect.cal.SelectionMask);
 

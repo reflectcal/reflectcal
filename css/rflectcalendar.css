@@ -856,6 +856,9 @@ body {
   position: absolute;
   filter: alpha(opacity = 50);
   opacity: 0.5;
+}
+
+.mainpane-mask {
   z-index: 10;
 }
 
@@ -1298,6 +1301,7 @@ body {
 .daycell-decoration-cont {
   height:100%;
   padding-right:1px;
+  margin-bottom: -100%;
 }
 
 .daycell-daynum-outer-cont {

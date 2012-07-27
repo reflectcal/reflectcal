@@ -111,6 +111,14 @@ rflect.cal.SelectionMask.prototype.initialized_ = false;
 
 
 /**
+ * Additional class names to append to mask unit.
+ * @type {string}
+ * @protected
+ */
+rflect.cal.SelectionMask.prototype.additionalClassNames;
+
+
+/**
  * @return {boolean} Whether mask was initialized.
  */
 rflect.cal.SelectionMask.prototype.isInitialized = function() {
@@ -278,7 +286,12 @@ rflect.cal.SelectionMask.prototype.build_ = function(aSb) {
  */
 rflect.cal.SelectionMask.prototype.buildUnit_ = function(aSb, aRect) {
 
-  aSb.append('<div class="' + goog.getCssName('mask') + '" style="left:');
+  aSb.append('<div class="' + goog.getCssName('mask'));
+  if (this.additionalClassNames){
+    aSb.append(' ');
+    aSb.append(this.additionalClassNames);
+  }
+  aSb.append('" style="left:');
   aSb.append(Math.floor(aRect.left));
   aSb.append('px;top:');
   aSb.append(Math.floor(aRect.top));
