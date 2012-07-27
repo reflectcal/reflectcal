@@ -321,14 +321,8 @@ rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
 
     this.timeManager.shiftToPoint(aEvent.date);
 
-    this.mainBody_.miniCal.updateBeforeRedraw(
-        /**@type {number}*/rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR,
-        /**@type {number}*/rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR
-    );
-    this.mainBody_.miniCal.updateByRedraw(
-        /**@type {number}*/rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR,
-        /**@type {number}*/rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR
-    );
+    this.mainBody_.miniCal.updateBeforeRedraw();
+    this.mainBody_.miniCal.updateByRedraw();
 
     this.mainBody_.updateBeforeRedraw(
         /**@type {number}*/rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR,
