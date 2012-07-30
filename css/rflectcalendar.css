@@ -1294,14 +1294,17 @@ body {
   overflow: hidden;
 }
 
+.daynums tbody, .daynums tr, .daynums td {
+  height: 100%;
+}
+
 .daycell {
   height: 100%;
 }
 
 .daycell-decoration-cont {
-  height:100%;
-  padding-right:1px;
-  margin-bottom: -100%;
+  height: 100%;
+  padding-right: 1px;
 }
 
 .daycell-daynum-outer-cont {
@@ -1318,7 +1321,7 @@ body {
 }
 
 .expand-sign-mn-cont {
-  position: relative;
+
   float: left;
   width: 13px;
   height: 100%;
@@ -1339,7 +1342,7 @@ body {
   margin-left: 13px;
   width: auto;
   height: 100%;
-  position: relative;
+
 }
 
 .daynum-label {
