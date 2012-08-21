@@ -227,7 +227,7 @@ rflect.cal.TopPane.prototype.enterDocument = function() {
  */
 rflect.cal.TopPane.prototype.getDateHeader = function() {
   var startDate = this.timeManager_.daySeries[0];
-  var endDate = /** @type {rflect.date.Date} */
+  var endDate = /** @type {rflect.date.DateShim} */
       (goog.array.peek(this.timeManager_.daySeries));
   var basis = this.timeManager_.basis;
   var header;

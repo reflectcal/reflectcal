@@ -619,7 +619,7 @@ rflect.cal.MainPane.prototype.onWeeknumLabelClick_ = function(aId) {
 
 /**
  * Switches view from main pane ui, like from daylabel click.
- * @param {rflect.date.Date} aDate Date to set basis to.
+ * @param {rflect.date.DateShim} aDate Date to set basis to.
  * @param {rflect.cal.ViewType} aType Type to stitch to.
  * @private
  */

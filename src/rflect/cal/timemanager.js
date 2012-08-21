@@ -19,7 +19,7 @@ goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('rflect.cal.ViewType');
 goog.require('rflect.date');
-goog.require('rflect.date.Date');
+goog.require('rflect.date.DateShim');
 goog.require('rflect.date.Interval');
 goog.require('rflect.math');
 
@@ -96,7 +96,7 @@ rflect.cal.TimeManager.prototype.daysNumber = 0;
 
 /**
  * Current day, for later comparison with.
- * @type {rflect.date.Date}
+ * @type {rflect.date.DateShim}
  * @private
  */
 rflect.cal.TimeManager.prototype.currentDay_;
@@ -127,7 +127,7 @@ rflect.cal.TimeManager.prototype.start_ = null;
 
 /**
  * Sequence of dates to be used in grid.
- * @type {Array.<rflect.date.Date>}
+ * @type {Array.<rflect.date.DateShim>}
  */
 rflect.cal.TimeManager.prototype.daySeries = null;
 
@@ -201,7 +201,7 @@ rflect.cal.TimeManager.prototype.generateDaySeries = function() {
   }
 
   this.daySeries.length = 0;
-  var date = new rflect.date.Date(this.start_);
+  var date = new rflect.date.DateShim(this.start_);
   for (var counter = 0; counter < daysNumber; counter++) {
     this.daySeries[counter] = date;
     date = rflect.date.getTomorrow(date);
@@ -213,7 +213,7 @@ rflect.cal.TimeManager.prototype.generateDaySeries = function() {
 
   if (this.isInNowPoint = this.isInNowPoint_()){
     var today = new Date();
-    this.currentDay_ = new rflect.date.Date(today.getFullYear(),
+    this.currentDay_ = new rflect.date.DateShim(today.getFullYear(),
         today.getMonth(), today.getDate());
   }
 
@@ -259,7 +259,7 @@ rflect.cal.TimeManager.prototype.isInNowPoint_ = function() {
 
 
 /**
- * @param {rflect.date.Date} aDate Date to compare with.
+ * @param {rflect.date.DateShim} aDate Date to compare with.
  * @return {boolean} Whether given day is current one.
  */
 rflect.cal.TimeManager.prototype.isCurrentDay = function(aDate) {

@@ -9,7 +9,7 @@
 
 
 goog.provide('rflect.date');
-goog.provide('rflect.date.Date');
+goog.provide('rflect.date.DateShim');
 
 goog.require('goog.date.Date');
 goog.require('goog.date.DateTime');
@@ -18,7 +18,7 @@ goog.require('goog.i18n.DateTimeSymbols');
 
 
 /**
- * @typedef {(Date|goog.date.Date|rflect.date.Date)}
+ * @typedef {(Date|goog.date.Date|rflect.date.DateShim)}
  */
 goog.date.DateLike;
 
@@ -28,7 +28,7 @@ goog.date.DateLike;
  * @param aDate {goog.date.DateLike} Date to shift.
  * @param aDay {number} The dayOfWeek to move to (0 is Monday).
  * @param opt_orient {number=} Forward (+1) or Back (-1). Defaults to +1.
- * @return {rflect.date.Date} Shifted date.
+ * @return {rflect.date.DateShim} Shifted date.
  */
 rflect.date.moveToDayOfWeek = function(aDate, aDay, opt_orient) {
   // Locale-dependent first date of week.
@@ -47,7 +47,7 @@ rflect.date.moveToDayOfWeek = function(aDate, aDay, opt_orient) {
  * @param aDate {goog.date.DateLike} Date to shift.
  * @param aDay {number} The dayOfWeek to move to (0 is Monday).
  * @param opt_orient {number} Forward (+1) or Back (-1). Defaults to +1.
- * @return {rflect.date.Date} Shifted date.
+ * @return {rflect.date.DateShim} Shifted date.
  */
 rflect.date.moveToDayOfWeekIfNeeded = function(aDate, aDay, opt_orient) {
   if (aDate.getWeekday() != aDay) {
@@ -80,7 +80,7 @@ rflect.date.getDayLimit_ = function(aYear, aMonth, aDirection) {
  * @param {number} aDirection Direction in which we should move: 1 is forward,
  * -1 is backward.
  * @param {boolean=} opt_calculateWeeks Whether to calculate week number.
- * @return {rflect.date.Date} Next date.
+ * @return {rflect.date.DateShim} Next date.
  */
 rflect.date.getDayFromGiven =
     function(aGivenDate, aNumberOfDays, aDirection, opt_calculateWeeks) {
@@ -110,7 +110,7 @@ rflect.date.getDayFromGiven =
     }
   }
 
-  dateObject = new rflect.date.Date(year, month, date);
+  dateObject = new rflect.date.DateShim(year, month, date);
   dateObject.setDay(dayOfWeek);
   return dateObject;
 };
@@ -118,7 +118,7 @@ rflect.date.getDayFromGiven =
 
 /**
  * @param {goog.date.DateLike} aGivenDate Current date.
- * @return {rflect.date.Date} Tomorrow date.
+ * @return {rflect.date.DateShim} Tomorrow date.
  */
 rflect.date.getTomorrow = function(aGivenDate){
   return rflect.date.getDayFromGiven(aGivenDate, 1, 1);
@@ -127,7 +127,7 @@ rflect.date.getTomorrow = function(aGivenDate){
 
 /**
  * @param {goog.date.DateLike} aGivenDate Current date.
- * @return {rflect.date.Date} Yesterday date.
+ * @return {rflect.date.DateShim} Yesterday date.
  */
 rflect.date.getYesterday = function(aGivenDate){
   return rflect.date.getDayFromGiven(aGivenDate, 1, -1);
@@ -135,8 +135,8 @@ rflect.date.getYesterday = function(aGivenDate){
 
 
 /**
- * @param {rflect.date.Date} aDateA First date to compare.
- * @param {rflect.date.Date} aDateB First date to compare.
+ * @param {rflect.date.DateShim} aDateA First date to compare.
+ * @param {rflect.date.DateShim} aDateB First date to compare.
  * @return {number|undefined} 1 if first arg is greater, 0 if equals, -1
  * otherwise.
  */
@@ -178,7 +178,7 @@ rflect.date.fields = {
  * @constructor
  * @extends {goog.date.DateTime}
  */
-rflect.date.Date = function(opt_year, opt_month, opt_date, opt_hours,
+rflect.date.DateShim = function(opt_year, opt_month, opt_date, opt_hours,
     opt_minutes, opt_seconds, opt_milliseconds) {
   if (goog.isNumber(opt_year)) {
     this.setYear(opt_year || 0);
@@ -204,7 +204,7 @@ rflect.date.Date = function(opt_year, opt_month, opt_date, opt_hours,
     this.setMilliseconds(date.getMilliseconds());
   }
 };
-goog.inherits(rflect.date.Date, goog.date.DateTime);
+goog.inherits(rflect.date.DateShim, goog.date.DateTime);
 
 
 /**
@@ -212,7 +212,7 @@ goog.inherits(rflect.date.Date, goog.date.DateTime);
  * @type {number}
  * @private
  */
-rflect.date.Date.prototype.year_ = 0;
+rflect.date.DateShim.prototype.year_ = 0;
 
 
 /**
@@ -220,14 +220,14 @@ rflect.date.Date.prototype.year_ = 0;
  * @type {goog.date.month}
  * @private
  */
-rflect.date.Date.prototype.month_ = goog.date.month.JAN;
+rflect.date.DateShim.prototype.month_ = goog.date.month.JAN;
 
 
 /**
  * Week.
  * @type {number}
  */
-rflect.date.Date.prototype.week = 0;
+rflect.date.DateShim.prototype.week = 0;
 
 
 /**
@@ -235,7 +235,7 @@ rflect.date.Date.prototype.week = 0;
  * @type {number}
  * @private
  */
-rflect.date.Date.prototype.dayOfMonth_ = 0;
+rflect.date.DateShim.prototype.dayOfMonth_ = 0;
 
 
 /**
@@ -243,21 +243,21 @@ rflect.date.Date.prototype.dayOfMonth_ = 0;
  * @type {number}
  * @private
  */
-rflect.date.Date.prototype.weekNumber_ = 0;
+rflect.date.DateShim.prototype.weekNumber_ = 0;
 
 
 /**
  * Day of week in US style (0 - Sun, 6 - Sat).
  * @type {goog.date.weekDay}
  */
-rflect.date.Date.prototype.day_ = 0;
+rflect.date.DateShim.prototype.day_ = 0;
 
 
 /**
  * The number of milliseconds since 1 January 1970 00:00:00.
  * @type {number}
  */
-rflect.date.Date.prototype.time = 0;
+rflect.date.DateShim.prototype.time = 0;
 
 
 /**
@@ -265,7 +265,7 @@ rflect.date.Date.prototype.time = 0;
  * @type {number}
  * @private
  */
-rflect.date.Date.prototype.hours_ = 0;
+rflect.date.DateShim.prototype.hours_ = 0;
 
 
 /**
@@ -273,7 +273,7 @@ rflect.date.Date.prototype.hours_ = 0;
  * @type {number}
  * @private
  */
-rflect.date.Date.prototype.minutes_ = 0;
+rflect.date.DateShim.prototype.minutes_ = 0;
 
 
 /**
@@ -281,7 +281,7 @@ rflect.date.Date.prototype.minutes_ = 0;
  * @type {number}
  * @private
  */
-rflect.date.Date.prototype.seconds_ = 0;
+rflect.date.DateShim.prototype.seconds_ = 0;
 
 
 /**
@@ -289,13 +289,13 @@ rflect.date.Date.prototype.seconds_ = 0;
  * @type {number}
  * @private
  */
-rflect.date.Date.prototype.milliseconds_ = 0;
+rflect.date.DateShim.prototype.milliseconds_ = 0;
 
 
 /**
  * @param {number} year Four digit year.
  */
-rflect.date.Date.prototype.setFullYear = function(year) {
+rflect.date.DateShim.prototype.setFullYear = function(year) {
   this.year_ = year;
 };
 
@@ -303,7 +303,7 @@ rflect.date.Date.prototype.setFullYear = function(year) {
 /**
  * @param {number} year Four digit year.
  */
-rflect.date.Date.prototype.setYear = function(year) {
+rflect.date.DateShim.prototype.setYear = function(year) {
   this.year_ = year;
 };
 
@@ -311,7 +311,7 @@ rflect.date.Date.prototype.setYear = function(year) {
 /**
  * @param {goog.date.month} month The month, where 0 = Jan, 11 = Dec.
  */
-rflect.date.Date.prototype.setMonth = function(month) {
+rflect.date.DateShim.prototype.setMonth = function(month) {
   this.month_ = month;
 };
 
@@ -319,7 +319,7 @@ rflect.date.Date.prototype.setMonth = function(month) {
 /**
  * @param {number} date The date part.
  */
-rflect.date.Date.prototype.setDate = function(date) {
+rflect.date.DateShim.prototype.setDate = function(date) {
   this.dayOfMonth_ = date;
 };
 
@@ -327,7 +327,7 @@ rflect.date.Date.prototype.setDate = function(date) {
 /**
  * @return {number} Four digit year.
  */
-rflect.date.Date.prototype.getFullYear = function() {
+rflect.date.DateShim.prototype.getFullYear = function() {
   return this.year_;
 };
 
@@ -335,7 +335,7 @@ rflect.date.Date.prototype.getFullYear = function() {
 /**
  * @return {number} Four digit year.
  */
-rflect.date.Date.prototype.getYear = function() {
+rflect.date.DateShim.prototype.getYear = function() {
   return this.year_;
 };
 
@@ -343,7 +343,7 @@ rflect.date.Date.prototype.getYear = function() {
 /**
  * @return {goog.date.month} The month, where 0 = Jan, 11 = Dec.
  */
-rflect.date.Date.prototype.getMonth = function() {
+rflect.date.DateShim.prototype.getMonth = function() {
   return this.month_;
 };
 
@@ -351,7 +351,7 @@ rflect.date.Date.prototype.getMonth = function() {
 /**
  * @return {number} Day.
  */
-rflect.date.Date.prototype.getDate = function() {
+rflect.date.DateShim.prototype.getDate = function() {
   return this.dayOfMonth_;
 };
 
@@ -359,7 +359,7 @@ rflect.date.Date.prototype.getDate = function() {
 /**
  * @return {number} Day of week, US style - 0 - Sun, 6 - Sat.
  */
-rflect.date.Date.prototype.getDay = function() {
+rflect.date.DateShim.prototype.getDay = function() {
   return this.day_;
 };
 
@@ -367,7 +367,7 @@ rflect.date.Date.prototype.getDay = function() {
 /**
  * @param {number} aDay Day of week, US style - 0 - Sun, 6 - Sat.
  */
-rflect.date.Date.prototype.setDay = function(aDay) {
+rflect.date.DateShim.prototype.setDay = function(aDay) {
   this.day_ = aDay;
 };
 
@@ -375,7 +375,7 @@ rflect.date.Date.prototype.setDay = function(aDay) {
 /**
  * @return {number} The number of milliseconds since 1 January 1970 00:00:00.
  */
-rflect.date.Date.prototype.getTime = function() {
+rflect.date.DateShim.prototype.getTime = function() {
   return this.time;
 };
 
@@ -385,7 +385,7 @@ rflect.date.Date.prototype.getTime = function() {
  *
  * @return {number} An integer between 0 and 23, representing the hour.
  */
-rflect.date.Date.prototype.getHours = function() {
+rflect.date.DateShim.prototype.getHours = function() {
   return this.hours_;
 };
 
@@ -395,7 +395,7 @@ rflect.date.Date.prototype.getHours = function() {
  *
  * @return {number} An integer between 0 and 59, representing the minutes.
  */
-rflect.date.Date.prototype.getMinutes = function() {
+rflect.date.DateShim.prototype.getMinutes = function() {
   return this.minutes_;
 };
 
@@ -405,7 +405,7 @@ rflect.date.Date.prototype.getMinutes = function() {
  *
  * @return {number} An integer between 0 and 59, representing the seconds.
  */
-rflect.date.Date.prototype.getSeconds = function() {
+rflect.date.DateShim.prototype.getSeconds = function() {
   return this.seconds_;
 };
 
@@ -415,7 +415,7 @@ rflect.date.Date.prototype.getSeconds = function() {
  *
  * @return {number} An integer between 0 and 999, representing the milliseconds.
  */
-rflect.date.Date.prototype.getMilliseconds = function() {
+rflect.date.DateShim.prototype.getMilliseconds = function() {
   return this.milliseconds_;
 };
 
@@ -425,7 +425,7 @@ rflect.date.Date.prototype.getMilliseconds = function() {
  *
  * @param {number} aHours An integer between 0 and 23, representing the hour.
  */
-rflect.date.Date.prototype.setHours = function(aHours) {
+rflect.date.DateShim.prototype.setHours = function(aHours) {
   this.hours_ = aHours;
 };
 
@@ -435,7 +435,7 @@ rflect.date.Date.prototype.setHours = function(aHours) {
  *
  * @param {number} aMinutes Integer between 0 and 59, representing the minutes.
  */
-rflect.date.Date.prototype.setMinutes = function(aMinutes) {
+rflect.date.DateShim.prototype.setMinutes = function(aMinutes) {
   this.minutes_ = aMinutes;
 };
 
@@ -445,7 +445,7 @@ rflect.date.Date.prototype.setMinutes = function(aMinutes) {
  *
  * @param {number} aSeconds Integer between 0 and 59, representing the seconds.
  */
-rflect.date.Date.prototype.setSeconds = function(aSeconds) {
+rflect.date.DateShim.prototype.setSeconds = function(aSeconds) {
   this.seconds_ = aSeconds;
 };
 
@@ -455,7 +455,7 @@ rflect.date.Date.prototype.setSeconds = function(aSeconds) {
  *
  * @param {number} aMs Integer between 0 and 999, representing the milliseconds.
  */
-rflect.date.Date.prototype.setMilliseconds = function(aMs) {
+rflect.date.DateShim.prototype.setMilliseconds = function(aMs) {
   this.milliseconds_ = aMs;
 };
 
@@ -463,7 +463,7 @@ rflect.date.Date.prototype.setMilliseconds = function(aMs) {
 /**
  * @return {number} The week number.
  */
-/*rflect.date.Date.prototype.getWeekNumber = function() {
+/*rflect.date.DateShim.prototype.getWeekNumber = function() {
   return this.weekNumber_;
 };*/
 
@@ -471,7 +471,7 @@ rflect.date.Date.prototype.setMilliseconds = function(aMs) {
 /**
  * @param {number} aWeekNumber The week number.
  */
-rflect.date.Date.prototype.setWeekNumber = function(aWeekNumber) {
+rflect.date.DateShim.prototype.setWeekNumber = function(aWeekNumber) {
   this.weekNumber_ = aWeekNumber;
 };
 
@@ -482,7 +482,7 @@ rflect.date.Date.prototype.setWeekNumber = function(aWeekNumber) {
  * participate in comparison.
  * @return {boolean} Whether this date equals other.
  */
-rflect.date.Date.prototype.equals = function(aOther, opt_bitmask) {
+rflect.date.DateShim.prototype.equals = function(aOther, opt_bitmask) {
   var equal = true;
   var bitmask = opt_bitmask || rflect.date.fields.ALL;
   if (bitmask & rflect.date.fields.YEAR)
@@ -505,7 +505,7 @@ rflect.date.Date.prototype.equals = function(aOther, opt_bitmask) {
 /**
  * @return {number} Value of wrapped date.
  */
-rflect.date.Date.prototype.valueOf = function() {
+rflect.date.DateShim.prototype.valueOf = function() {
   return +[this.year_, this.month_, this.dayOfMonth_, this.hours_,
       this.minutes_, this.seconds_, this.milliseconds_].join('');
 };

@@ -3,7 +3,7 @@
  */
 
 /**
- * @fileoverview Rflect date utilities, interval class.
+ * @fileoverview Rflect date utilities, interval class, inspired by Joda Time.
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
