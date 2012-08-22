@@ -74,7 +74,7 @@ rflect.pagevis.nameOfVisibilityChangeEvent;
 /**
  * Tests whether Page Visibility API is available and with which vendor prefix.
  */
-rflect.pagevis.detect_ = function() {
+(function() {
   var vendorHiddenNames = rflect.pagevis.VENDOR_HIDDEN_NAMES;
   for (var vendorCounter = 0; vendorCounter <
       vendorHiddenNames.length; vendorCounter++){
@@ -85,5 +85,4 @@ rflect.pagevis.detect_ = function() {
       break;
     }
   }
-}
-rflect.pagevis.detect_();
+})();
