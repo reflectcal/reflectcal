@@ -10,6 +10,9 @@
 
 goog.provide('rflect.structs.IntervalTree');
 
+goog.require('goog.array');
+goog.require('rflect.date.Interval');
+
 
 
 /**
@@ -20,37 +23,44 @@ goog.provide('rflect.structs.IntervalTree');
  * @constructor
  */
 rflect.structs.IntervalTree = function(aIntervals) {
-  if (goog.isNumber(opt_start) && goog.isNumber(opt_end)) {
-    this.start = opt_start;
-    this.end = opt_end;
-  } else if (goog.isObject(opt_start) && goog.isObject(opt_end)) {
-    this.start = opt_start.getTime();
-    this.end = opt_end.getTime();
-  } else {
-    return rflect.structs.IntervalTree.getNonNullInterval(null);
-  }
+  this.root_ = rflect.structs.IntervalTree.Node(aIntervals);
 };
 
 
 rflect.structs.IntervalTree.findEndPoint = function(aIntervals, aMax) {
   var endPoint = aMax ? aIntervals[0].end : aIntervals[0].start;
   goog.array.forEach(aIntervals, function(aItem){
-    if (aItem > endPoint)
+    if (aMax ? aItem > endPoint : aItem < endPoint)
       endPoint = aItem;
-  })
+  });
+  return endPoint;
 }
 
-rflect.structs.IntervalTree.Node = function(opt_start, opt_end) {
 
-  this.left_
-
-  this.right_
-
-  this.midpoint_
-
-  this.sortedBySP_ = [];
-  this.sortedByEP_ = [];
-
+rflect.structs.IntervalTree.Node = function(aIntervals) {
+  var max = rflect.structs.IntervalTree.findEndPoint(aIntervals, true);
+  var min = rflect.structs.IntervalTree.findEndPoint(aIntervals, false);
+  var midpoint = (max + min) / 2;
+  var left;
+  var right;
+  for (var counter = 0; counter < aIntervals.length; counter++){
+    if (aIntervals[counter].contains(midpoint)){
+      goog.array.binaryInsert(this.sortedBySP_ || this.sortedBySP_ = [],
+          aIntervals[counter],
+          rflect.date.Interval.compareBySP);
+      goog.array.binaryInsert(this.sortedByEP_ || this.sortedByEP_ = [],
+          aIntervals[counter],
+          rflect.date.Interval.compareByEP);
+    }
+    else if (aIntervals[counter].end <= midpoint)
+      (left || left = []).push(aIntervals[counter]);
+    else
+      (right || right = []).push(aIntervals[counter]);
+  }
+  if (left)
+    this.left_ = new rflect.structs.IntervalTree.Node(left);
+  if (right)
+    this.right_ = new rflect.structs.IntervalTree.Node(right);
 };
 
 
