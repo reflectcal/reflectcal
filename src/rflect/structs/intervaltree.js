@@ -16,207 +16,172 @@ goog.require('rflect.date.Interval');
 
 
 /**
- * Class that represents time interval tree.
+ * Class that represents time interval tree. Intervals are connected to events 
+ * they belong too.
  * @see {http://en.wikipedia.org/wiki/Interval_tree}
- * @param {number|goog.date.DateLike=} opt_start Start of interval.
- * @param {number|goog.date.DateLike=} opt_end End of interval.
+ * @param {Array.<rflect.date.Interval>} aIntervals Set of intervals.
  * @constructor
  */
 rflect.structs.IntervalTree = function(aIntervals) {
-  this.root_ = rflect.structs.IntervalTree.Node(aIntervals);
+  /**
+   * Root node for tree.
+   * @type {rflect.structs.IntervalTree.Node_}
+   * @private
+   */
+  this.root_ = new rflect.structs.IntervalTree.Node_(aIntervals);
 };
 
 
-rflect.structs.IntervalTree.findEndPoint = function(aIntervals, aMax) {
-  var endPoint = aMax ? aIntervals[0].end : aIntervals[0].start;
+/**
+ * @param {Array.<rflect.date.Interval>} aIntervals Set of intervals.
+ * @return {number} Maximal end point of all intervals.
+ */
+rflect.structs.IntervalTree.findEndPoint = function(aIntervals) {
+  var endPoint = aIntervals[0].end;
   goog.array.forEach(aIntervals, function(aItem){
-    if (aMax ? aItem > endPoint : aItem < endPoint)
-      endPoint = aItem;
+    var itemEnd = aItem.end;
+    if (itemEnd > endPoint)
+      endPoint = itemEnd;
   });
   return endPoint;
 }
 
 
-rflect.structs.IntervalTree.Node = function(aIntervals) {
-  var max = rflect.structs.IntervalTree.findEndPoint(aIntervals, true);
-  var min = rflect.structs.IntervalTree.findEndPoint(aIntervals, false);
-  var midpoint = (max + min) / 2;
-  var left;
-  var right;
-  for (var counter = 0; counter < aIntervals.length; counter++){
-    if (aIntervals[counter].contains(midpoint)){
+/**
+ * @param {Array.<rflect.date.Interval>} aIntervals Set of intervals.
+ * @return {number} Minimal start point of all intervals.
+ */
+rflect.structs.IntervalTree.findStartPoint = function(aIntervals) {
+  var startPoint = aIntervals[0].start;
+  goog.array.forEach(aIntervals, function(aItem){
+    var itemStart = aItem.start;
+    if (itemStart > startPoint)
+      startPoint = itemStart;
+  });
+  return startPoint;
+}
+
+
+/**
+ * Unique id counter for intervals within tree.
+ * @type {number}
+ * @private
+ */
+rflect.structs.IntervalTree.prototype.uid_ = 0;
+
+
+/**
+ * @return {number} Unique id for interval within tree.
+ */
+rflect.structs.IntervalTree.prototype.getUid = function() {
+  return this.uid_++;
+}
+
+
+/**
+ * Searches for all intersections with given interval.
+ * @param {rflect.date.Interval} aInterval Input interval.
+ * @return {Array.<rflect.date.Interval>} Intervals intersected with input.
+ */
+rflect.structs.IntervalTree.prototype.search = function(aInterval) {
+  return this.root_.search(aInterval);
+}
+
+
+/**
+ * Individual node of interval tree.
+ * @param {Array.<rflect.date.Interval>} aIntervals Set of intervals.
+ * @param {rflect.struct.IntervalTree} aTree Parent tree.
+ * @constructor
+ * @private
+ */
+rflect.structs.IntervalTree.Node_ = function(aIntervals, aTree) {
+  var max = rflect.structs.IntervalTree.findEndPoint(aIntervals);
+  var min = rflect.structs.IntervalTree.findStartPoint(aIntervals);
+  var leftIntervals;
+  var rightIntervals;
+
+  this.midpoint_ = Math.round((max + min) / 2);
+  for (var counter = 0, length = aIntervals.length; counter < length;
+      counter++){
+    var interval = aIntervals[counter];
+    if (interval.contains(this.midpoint_)){
+      interval.id = aTree.getUid();
       goog.array.binaryInsert(this.sortedBySP_ || this.sortedBySP_ = [],
-          aIntervals[counter],
-          rflect.date.Interval.compareBySP);
+          interval, rflect.date.Interval.compareBySP);
       goog.array.binaryInsert(this.sortedByEP_ || this.sortedByEP_ = [],
-          aIntervals[counter],
-          rflect.date.Interval.compareByEP);
+          interval, rflect.date.Interval.compareByEP);
     }
-    else if (aIntervals[counter].end <= midpoint)
-      (left || left = []).push(aIntervals[counter]);
+    else if (aIntervals[counter].end <= this.midpoint_)
+      (leftIntervals || leftIntervals = []).push(aIntervals[counter]);
     else
-      (right || right = []).push(aIntervals[counter]);
+      (rightIntervals || rightIntervals = []).push(aIntervals[counter]);
   }
-  if (left)
-    this.left_ = new rflect.structs.IntervalTree.Node(left);
-  if (right)
-    this.right_ = new rflect.structs.IntervalTree.Node(right);
+  if (leftIntervals)
+    this.leftNode_ = new rflect.structs.IntervalTree.Node_(leftIntervals);
+  if (rightIntervals)
+    this.rightNode_ = new rflect.structs.IntervalTree.Node_(rightIntervals);
 };
 
 
 /**
- * Gets the interval handling null.
- * <p>
- * If the interval is <code>null</code>, an interval representing now
- * to now will be returned. Otherwise, the interval specified is returned.
- * @param {rflect.structs.IntervalTree} aInterval The interval to use, null means now
- * to now.
- * @return {!rflect.structs.IntervalTree} The interval, never null.
- */
-rflect.structs.IntervalTree.getNonNullInterval = function(aInterval) {
-  if (aInterval == null) {
-    var now = goog.now();
-    aInterval = new rflect.structs.IntervalTree(now, now);
-  }
-  return aInterval;
-}
-
-
-/**
- * Start of interval.
+ * Point in the middle between maximal end point of all intervals within this
+ * node and minimal start point.
  * @type {number}
  * @private
  */
-rflect.structs.IntervalTree.prototype.start = 0;
+rflect.structs.IntervalTree.Node_.prototype.midpoint_;
 
 
 /**
- * End of interval.
- * @type {number}
+ * Left child node.
+ * @type {rflect.structs.IntervalTree.Node_}
  * @private
  */
-rflect.structs.IntervalTree.prototype.end = 0;
+rflect.structs.IntervalTree.Node_.prototype.leftNode_;
 
 
 /**
- * Does this time interval contain the specified millisecond instant.
- * Non-zero duration intervals are inclusive of the start instant and
- * exclusive of the end. A zero duration interval cannot contain anything.
- * @param {number} aMillisInstant The instant to compare to, millisecond instant
- * from 1970-01-01T00:00:00Z
- * @return {boolean} Whether this interval contains instant.
+ * Right child node.
+ * @type {rflect.structs.IntervalTree.Node_}
+ * @private
  */
-rflect.structs.IntervalTree.prototype.contains = function(aMillisInstant) {
-  return (aMillisInstant >= this.start && aMillisInstant < this.end);
-}
+rflect.structs.IntervalTree.Node_.prototype.rightNode_;
 
 
 /**
- * Does this time interval overlap the specified time interval.
- * <p>
- * Intervals are inclusive of the start instant and exclusive of the end.
- * An interval overlaps another if it shares some common part of the
- * datetime continuum. 
- * <p>
- * When two intervals are compared the result is one of three states:
- * (a) they abut, (b) there is a gap between them, (c) they overlap.
- * The abuts state takes precedence over the other two, thus a zero duration
- * interval at the start of a larger interval abuts and does not overlap.
- * <p>
- * For example:
- * <pre>
- * [09:00 to 10:00) overlaps [08:00 to 08:30)  = false (completely before)
- * [09:00 to 10:00) overlaps [08:00 to 09:00)  = false (abuts before)
- * [09:00 to 10:00) overlaps [08:00 to 09:30)  = true
- * [09:00 to 10:00) overlaps [08:00 to 10:00)  = true
- * [09:00 to 10:00) overlaps [08:00 to 11:00)  = true
- * 
- * [09:00 to 10:00) overlaps [09:00 to 09:00)  = false (abuts before)
- * [09:00 to 10:00) overlaps [09:00 to 09:30)  = true
- * [09:00 to 10:00) overlaps [09:00 to 10:00)  = true
- * [09:00 to 10:00) overlaps [09:00 to 11:00)  = true
- * 
- * [09:00 to 10:00) overlaps [09:30 to 09:30)  = true
- * [09:00 to 10:00) overlaps [09:30 to 10:00)  = true
- * [09:00 to 10:00) overlaps [09:30 to 11:00)  = true
- * 
- * [09:00 to 10:00) overlaps [10:00 to 10:00)  = false (abuts after)
- * [09:00 to 10:00) overlaps [10:00 to 11:00)  = false (abuts after)
- * 
- * [09:00 to 10:00) overlaps [10:30 to 11:00)  = false (completely after)
- * 
- * [14:00 to 14:00) overlaps [14:00 to 14:00)  = false (abuts before and after)
- * [14:00 to 14:00) overlaps [13:00 to 15:00)  = true
- * </pre>
- *
- * @param {rflect.structs.IntervalTree} aInterval The time interval to compare to, null
- * means a zero length interval now.
- * @return {boolean} Whether intervals overlap.
+ * Searches for all intersections with given interval within this node.
+ * @param {rflect.date.Interval} aInterval Input interval.
+ * @return {Array.<rflect.date.Interval>} Intervals intersected with input.
  */
-rflect.structs.IntervalTree.prototype.overlaps = function(aInterval) {
-  var thisStart = this.start;
-  var thisEnd = this.end;
-  if (aInterval == null) {
-    var now = goog.now();
-    return (thisStart < now && now < thisEnd);
-  }  else {
-    return (thisStart < aInterval.end && aInterval.start < thisEnd);
+rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
+  var result = null;
+  var index;
+  if (!this.sortedBySP_ || !this.sortedByEP_)
+    return result;
+  if (aInterval.end > this.midpoint_ || aInterval.start <= this.midpoint_) {
+    result = goog.array.slice(this.sortedBySP_);
+  } else if (aInterval.end <= this.midpoint_) {
+    index = goog.array.binarySearch(this.sortedBySP_, aInterval.end,
+        rflect.date.Interval.compareBySP);
+    // Whether we found index or insertion point.
+    index = index < 0 ? -index - 1 : index;
+    result = goog.array.slice(this.sortedBySP_, 0, index);
+  } else if (aInterval.start > this.midpoint_) {
+    index = goog.array.binarySearch(this.sortedByEP_, aInterval.start,
+        rflect.date.Interval.compareByEP);
+    index = index < 0 ? -index - 1 : index;
+    result = goog.array.slice(this.sortedByEP_, index);
   }
-}
 
-
-/**
- * Gets the overlap between this interval and another interval.
- * <p>
- * Intervals are inclusive of the start instant and exclusive of the end.
- * An interval overlaps another if it shares some common part of the
- * datetime continuum. This method returns the amount of the overlap,
- * only if the intervals actually do overlap.
- * If the intervals do not overlap, then null is returned.
- * <p>
- * When two intervals are compared the result is one of three states:
- * (a) they abut, (b) there is a gap between them, (c) they overlap.
- * The abuts state takes precedence over the other two, thus a zero duration
- * interval at the start of a larger interval abuts and does not overlap.
- * <p>
- * @param {rflect.structs.IntervalTree} aInterval The interval to examine, 
- * null means now.
- * @return {rflect.structs.IntervalTree} The overlap interval, null if no overlap.
- */
-rflect.structs.IntervalTree.prototype.overlap = function(aInterval) {
-  var interval = rflect.structs.IntervalTree.getNonNullInterval(aInterval);
-  if (!this.overlaps(interval)) {
-    return null;
+  if (this.leftNode_){
+    var leftNodeResult = this.leftNode_.search(aInterval);
+    if (leftNodeResult) result = result.concat(leftNodeResult)
   }
-  var start = Math.max(this.start, interval.start);
-  var end = Math.min(this.end, interval.end);
-  return new rflect.structs.IntervalTree(start, end);
-}
-
-
-/**
- * @return {number} Length of this interval in milliseconds
- */
-rflect.structs.IntervalTree.prototype.length = function() {
-  return this.end - this.start;
-}
-
-
-/**
- * @return {string} String representation.
- */
-rflect.structs.IntervalTree.prototype.toString = function() {
-  if (goog.DEBUG){
-    return new goog.date.Date(new Date(this.start)).toString() + '/' +
-        new goog.date.Date(new Date(this.end)).toString();
+  if (this.rightNode_){
+    var rightNodeResult = this.rightNode_.search(aInterval);
+    if (rightNodeResult) result = result.concat(rightNodeResult)
   }
-  return this.start + '/' + this.end;
-};
 
-
-/**
- * @return {number} Value of interval in form of duration.
- */
-rflect.structs.IntervalTree.prototype.valueOf = function() {
-  return this.length();
-};
+  return result;
+}

@@ -36,3 +36,4 @@ goog.addDependency('../../../rflect/i18n/symbols.js', ['rflect.cal.i18n.Symbols'
 goog.addDependency('../../../rflect/math/math.js', ['rflect.math'], []);
 goog.addDependency('../../../rflect/pagevis/pagevisibility.js', ['rflect.pagevis'], []);
 goog.addDependency('../../../rflect/string/string.js', ['rflect.string'], ['goog.string']);
+goog.addDependency('../../../rflect/structs/intervaltree.js', ['rflect.structs.IntervalTree'], ['goog.array', 'rflect.date.Interval']);
