@@ -11,6 +11,7 @@
 goog.provide('rflect.structs.IntervalTree');
 
 goog.require('goog.array');
+goog.require('rflect.array');
 goog.require('rflect.date.Interval');
 
 
@@ -28,7 +29,7 @@ rflect.structs.IntervalTree = function(aIntervals) {
    * @type {rflect.structs.IntervalTree.Node_}
    * @private
    */
-  this.root_ = new rflect.structs.IntervalTree.Node_(aIntervals);
+  this.root_ = new rflect.structs.IntervalTree.Node_(aIntervals, this);
 };
 
 
@@ -36,7 +37,7 @@ rflect.structs.IntervalTree = function(aIntervals) {
  * @param {Array.<rflect.date.Interval>} aIntervals Set of intervals.
  * @return {number} Maximal end point of all intervals.
  */
-rflect.structs.IntervalTree.findEndPoint = function(aIntervals) {
+rflect.structs.IntervalTree.findMaxEndPoint = function(aIntervals) {
   var endPoint = aIntervals[0].end;
   goog.array.forEach(aIntervals, function(aItem){
     var itemEnd = aItem.end;
@@ -51,11 +52,11 @@ rflect.structs.IntervalTree.findEndPoint = function(aIntervals) {
  * @param {Array.<rflect.date.Interval>} aIntervals Set of intervals.
  * @return {number} Minimal start point of all intervals.
  */
-rflect.structs.IntervalTree.findStartPoint = function(aIntervals) {
+rflect.structs.IntervalTree.findMinStartPoint = function(aIntervals) {
   var startPoint = aIntervals[0].start;
   goog.array.forEach(aIntervals, function(aItem){
     var itemStart = aItem.start;
-    if (itemStart > startPoint)
+    if (itemStart < startPoint)
       startPoint = itemStart;
   });
   return startPoint;
@@ -96,31 +97,43 @@ rflect.structs.IntervalTree.prototype.search = function(aInterval) {
  * @private
  */
 rflect.structs.IntervalTree.Node_ = function(aIntervals, aTree) {
-  var max = rflect.structs.IntervalTree.findEndPoint(aIntervals);
-  var min = rflect.structs.IntervalTree.findStartPoint(aIntervals);
   var leftIntervals;
   var rightIntervals;
 
-  this.midpoint_ = Math.round((max + min) / 2);
+  var max = rflect.structs.IntervalTree.findMinStartPoint(aIntervals);
+  var min = rflect.structs.IntervalTree.findMaxEndPoint(aIntervals);
+  var nodeFirstInterval;
+  var nodeLastInterval;
+
+  this.midPoint_ = Math.round((max + min) / 2);
+
   for (var counter = 0, length = aIntervals.length; counter < length;
       counter++){
     var interval = aIntervals[counter];
-    if (interval.contains(this.midpoint_)){
+    if (interval.contains(this.midPoint_)){
       interval.id = aTree.getUid();
-      goog.array.binaryInsert(this.sortedBySP_ || this.sortedBySP_ = [],
+      rflect.array.binaryInsert(this.sortedBySP_ || (this.sortedBySP_ = []),
           interval, rflect.date.Interval.compareBySP);
-      goog.array.binaryInsert(this.sortedByEP_ || this.sortedByEP_ = [],
+      rflect.array.binaryInsert(this.sortedByEP_ || (this.sortedByEP_ = []),
           interval, rflect.date.Interval.compareByEP);
     }
-    else if (aIntervals[counter].end <= this.midpoint_)
-      (leftIntervals || leftIntervals = []).push(aIntervals[counter]);
+    else if (aIntervals[counter].end <= this.midPoint_)
+      (leftIntervals || (leftIntervals = [])).push(aIntervals[counter]);
     else
-      (rightIntervals || rightIntervals = []).push(aIntervals[counter]);
+      (rightIntervals || (rightIntervals = [])).push(aIntervals[counter]);
   }
+
+  if (nodeFirstInterval = this.sortedBySP_[0])
+    this.startPoint_ = nodeFirstInterval.start;
+  if (nodeLastInterval = goog.array.peek(this.sortedByEP_))
+    this.endPoint_ = nodeLastInterval.end;
+
   if (leftIntervals)
-    this.leftNode_ = new rflect.structs.IntervalTree.Node_(leftIntervals);
+    this.leftNode_ = new rflect.structs.IntervalTree.Node_(leftIntervals,
+        aTree);
   if (rightIntervals)
-    this.rightNode_ = new rflect.structs.IntervalTree.Node_(rightIntervals);
+    this.rightNode_ = new rflect.structs.IntervalTree.Node_(rightIntervals,
+        aTree);
 };
 
 
@@ -130,7 +143,7 @@ rflect.structs.IntervalTree.Node_ = function(aIntervals, aTree) {
  * @type {number}
  * @private
  */
-rflect.structs.IntervalTree.Node_.prototype.midpoint_;
+rflect.structs.IntervalTree.Node_.prototype.midPoint_;
 
 
 /**
@@ -159,15 +172,19 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
   var index;
   if (!this.sortedBySP_ || !this.sortedByEP_)
     return result;
-  if (aInterval.end > this.midpoint_ || aInterval.start <= this.midpoint_) {
+  if (aInterval.contains(this.midPoint_)) {
     result = goog.array.slice(this.sortedBySP_);
-  } else if (aInterval.end <= this.midpoint_) {
+    if (goog.DEBUG)
+      _log('node ' + this + ' overlaps ' + aInterval);
+  } else if (aInterval.end <= this.midPoint_ && aInterval.end >
+      this.startPoint_) {
     index = goog.array.binarySearch(this.sortedBySP_, aInterval.end,
         rflect.date.Interval.compareBySP);
     // Whether we found index or insertion point.
     index = index < 0 ? -index - 1 : index;
     result = goog.array.slice(this.sortedBySP_, 0, index);
-  } else if (aInterval.start > this.midpoint_) {
+  } else if (aInterval.start > this.midPoint_ && aInterval.start <
+      this.endPoint_) {
     index = goog.array.binarySearch(this.sortedByEP_, aInterval.start,
         rflect.date.Interval.compareByEP);
     index = index < 0 ? -index - 1 : index;
@@ -176,12 +193,21 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
 
   if (this.leftNode_){
     var leftNodeResult = this.leftNode_.search(aInterval);
-    if (leftNodeResult) result = result.concat(leftNodeResult)
+    if (leftNodeResult) result = (result || []).concat(leftNodeResult)
   }
   if (this.rightNode_){
     var rightNodeResult = this.rightNode_.search(aInterval);
-    if (rightNodeResult) result = result.concat(rightNodeResult)
+    if (rightNodeResult) result = (result || []).concat(rightNodeResult)
   }
 
   return result;
+}
+
+
+/**
+ * @return {string} String representation of node.
+ */
+rflect.structs.IntervalTree.Node_.prototype.toString = function(aInterval) {
+  return '[' + this.startPoint_ + ';' + this.midPoint_ + ';' +
+      this.endPoint_ + ']';
 }

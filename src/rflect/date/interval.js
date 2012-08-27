@@ -53,27 +53,31 @@ rflect.date.Interval.getNonNullInterval = function(aInterval) {
 
 
 /**
- * @param {rflect.date.Interval|number} aInterval1 First interval to compare.
- * @param {rflect.date.Interval|number} aInterval2 Second interval to compare.
+ * @param {rflect.date.Interval|number} aFirst First interval or instant to
+ * compare.
+ * @param {rflect.date.Interval|number} aSecond Second interval or instant to
+ * compare.
  * @return {number} -1 if first interval's start is lesser than second's, 0 if 
  * they are equal, 1 otherwise.
  */
-rflect.date.Interval.compareBySP = function(a, b) {
-  var aNum = typeof a == 'number' ? a : a.start;
-  var bNum = typeof a == 'number' ? b : b.start;
+rflect.date.Interval.compareBySP = function(aFirst, aSecond) {
+  var aNum = typeof aFirst == 'number' ? aFirst : aFirst.start;
+  var bNum = typeof aFirst == 'number' ? aSecond : aSecond.start;
   return aNum < bNum ? -1 : (aNum == bNum ? 0 : 1);
 }
 
 
 /**
- * @param {rflect.date.Interval|number} aInterval1 First interval to compare.
- * @param {rflect.date.Interval|number} aInterval2 Second interval to compare.
+ * @param {rflect.date.Interval|number} aFirst First interval or instant to
+ * compare.
+ * @param {rflect.date.Interval|number} aSecond Second interval or instant to
+ * compare.
  * @return {number} -1 if first interval's end is lesser than second's, 0 if 
  * they are equal, 1 otherwise.
  */
-rflect.date.Interval.compareByEP = function(aInterval1, aInterval2) {
-  var aNum = typeof a == 'number' ? a : a.end;
-  var bNum = typeof a == 'number' ? b : b.end;
+rflect.date.Interval.compareByEP = function(aFirst, aSecond) {
+  var aNum = typeof aFirst == 'number' ? aFirst : aFirst.end;
+  var bNum = typeof aFirst == 'number' ? aSecond : aSecond.end;
   return aNum < bNum ? -1 : (aNum == bNum ? 0 : 1);
 }
 
