@@ -435,7 +435,6 @@ rflect.cal.MainPane.prototype.updateByRedraw = function() {
   // We add scroll listeners on freshly built content.
   this.addScrollListeners_();
   // Return to previous scrollTop, scrollLeft values, if any.
-  // TODO(alexk): maybe introcude shortcuts for modes within each class.
   if (this.viewManager_.isInWeekMode()) {
     if (this.blockManager_.blockPoolWeek.expanded)
       this.dom_.getElement('main-pane-body-scrollable-wk').scrollLeft =

@@ -218,11 +218,11 @@ rflect.date.Interval.prototype.length = function() {
  * @return {string} String representation.
  */
 rflect.date.Interval.prototype.toString = function() {
-  if (goog.DEBUG){
-    return new goog.date.Date(new Date(this.start)).toString() + '/' +
-        new goog.date.Date(new Date(this.end)).toString();
-  }
-  return this.start + '/' + this.end;
+  /*if (goog.DEBUG){
+    return '[' + new goog.date.Date(new Date(this.start)).toString() + ';' +
+        new goog.date.Date(new Date(this.end)).toString() + ')';
+  }*/
+  return '[' + this.start + ';' + this.end + ')';
 };
 
 

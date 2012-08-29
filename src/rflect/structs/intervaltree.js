@@ -175,9 +175,11 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
   if (aInterval.contains(this.midPoint_)) {
     result = goog.array.slice(this.sortedBySP_);
     if (goog.DEBUG)
-      _log('node ' + this + ' overlaps ' + aInterval);
+      _log(aInterval.toString() + ' contains midpoint of node ' + this);
   } else if (aInterval.end <= this.midPoint_ && aInterval.end >
       this.startPoint_) {
+    if (goog.DEBUG)
+      _log(aInterval.toString() + ' is left-touches node ' + this);
     index = goog.array.binarySearch(this.sortedBySP_, aInterval.end,
         rflect.date.Interval.compareBySP);
     // Whether we found index or insertion point.
@@ -185,6 +187,8 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
     result = goog.array.slice(this.sortedBySP_, 0, index);
   } else if (aInterval.start > this.midPoint_ && aInterval.start <
       this.endPoint_) {
+    if (goog.DEBUG)
+      _log(aInterval.toString() + ' is right-touches node ' + this);
     index = goog.array.binarySearch(this.sortedByEP_, aInterval.start,
         rflect.date.Interval.compareByEP);
     index = index < 0 ? -index - 1 : index;
