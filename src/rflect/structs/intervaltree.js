@@ -182,6 +182,8 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
       _log(aInterval.toString() + ' is left-touches node ' + this);
     index = goog.array.binarySearch(this.sortedBySP_, aInterval.end,
         rflect.date.Interval.compareBySP);
+    if (goog.DEBUG)
+      _log('index', index);
     // Whether we found index or insertion point.
     index = index < 0 ? -index - 1 : index;
     result = goog.array.slice(this.sortedBySP_, 0, index);
