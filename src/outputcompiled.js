@@ -2738,7 +2738,7 @@ $JSCompiler_prototypeAlias$$.length = function $$JSCompiler_prototypeAlias$$$len
   return this.end - this.start
 };
 $JSCompiler_prototypeAlias$$.toString = function $$JSCompiler_prototypeAlias$$$toString$() {
-  return(new $goog$date$Date$$(new Date(this.start))).toString() + "/" + (new $goog$date$Date$$(new Date(this.end))).toString()
+  return"[" + this.start + ";" + this.end + ")"
 };
 $JSCompiler_prototypeAlias$$.valueOf = function $$JSCompiler_prototypeAlias$$$valueOf$() {
   return this.length()

@@ -62,7 +62,7 @@ rflect.date.Interval.getNonNullInterval = function(aInterval) {
  */
 rflect.date.Interval.compareBySP = function(aFirst, aSecond) {
   var aNum = typeof aFirst == 'number' ? aFirst : aFirst.start;
-  var bNum = typeof aFirst == 'number' ? aSecond : aSecond.start;
+  var bNum = typeof aSecond == 'number' ? aSecond : aSecond.start;
   return aNum < bNum ? -1 : (aNum == bNum ? 0 : 1);
 }
 
@@ -77,7 +77,7 @@ rflect.date.Interval.compareBySP = function(aFirst, aSecond) {
  */
 rflect.date.Interval.compareByEP = function(aFirst, aSecond) {
   var aNum = typeof aFirst == 'number' ? aFirst : aFirst.end;
-  var bNum = typeof aFirst == 'number' ? aSecond : aSecond.end;
+  var bNum = typeof aSecond == 'number' ? aSecond : aSecond.end;
   return aNum < bNum ? -1 : (aNum == bNum ? 0 : 1);
 }
 

@@ -183,9 +183,11 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
     index = goog.array.binarySearch(this.sortedBySP_, aInterval.end,
         rflect.date.Interval.compareBySP);
     if (goog.DEBUG)
-      _log('index', index);
+      _log('index or insertion point', index);
     // Whether we found index or insertion point.
     index = index < 0 ? -index - 1 : index;
+    if (goog.DEBUG)
+      _log('index', index);
     result = goog.array.slice(this.sortedBySP_, 0, index);
   } else if (aInterval.start > this.midPoint_ && aInterval.start <
       this.endPoint_) {
@@ -197,11 +199,11 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
     result = goog.array.slice(this.sortedByEP_, index);
   }
 
-  if (this.leftNode_){
+  if (this.leftNode_ && aInterval.start < this.leftNode_.endPoint_){
     var leftNodeResult = this.leftNode_.search(aInterval);
     if (leftNodeResult) result = (result || []).concat(leftNodeResult)
   }
-  if (this.rightNode_){
+  if (this.rightNode_ && aInterval.end > this.rightNode_.startPoint_){
     var rightNodeResult = this.rightNode_.search(aInterval);
     if (rightNodeResult) result = (result || []).concat(rightNodeResult)
   }
