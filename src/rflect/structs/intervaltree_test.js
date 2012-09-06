@@ -145,4 +145,40 @@ function testEdgeCase2() {
   assertEquals('second interval end', result[1].end, 40);
 }
 
+var tree2 = null;
+
+function makeIntervalTree2() {
+  var intervals = [];
+  var int1 = new rflect.date.Interval(0, 6);
+  var int2 = new rflect.date.Interval(0, 10);
+  var int3 = new rflect.date.Interval(36, 40);
+  var int4 = new rflect.date.Interval(32, 40);
+  var int5 = new rflect.date.Interval(19, 30);
+  var int6 = new rflect.date.Interval(15, 25);
+  var int7 = new rflect.date.Interval(14, 22);
+  var int8 = new rflect.date.Interval(18, 26);
+  var int9 = new rflect.date.Interval(10, 21);
+  var int10 = new rflect.date.Interval(0, 40);
+
+  intervals.push(int1);
+  intervals.push(int2);
+  intervals.push(int3);
+  intervals.push(int4);
+  intervals.push(int5);
+  intervals.push(int6);
+  intervals.push(int7);
+  intervals.push(int8);
+  intervals.push(int9);
+  intervals.push(int10);
+
+  tree2 = new rflect.structs.IntervalTree(intervals);
+  return tree2;
+
+}
+
+function testConstructor2() {
+  makeIntervalTree2();
+  assertNotEquals('tree', tree2, null);
+}
+
 
