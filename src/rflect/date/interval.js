@@ -207,6 +207,15 @@ rflect.date.Interval.prototype.overlap = function(aInterval) {
 
 
 /**
+ * @return {boolean} Whether this intervals equals to given.
+ * @param {rflect.date.Interval} aInterval Interval to check equality.
+ */
+rflect.date.Interval.prototype.equals = function(aInterval) {
+  return this.start == aInterval.start && this.end == aInterval.end;
+}
+
+
+/**
  * @return {number} Length of this interval in milliseconds
  */
 rflect.date.Interval.prototype.length = function() {

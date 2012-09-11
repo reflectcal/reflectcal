@@ -149,6 +149,8 @@
     <!--Gzip test.-->
     <target name="gziptest" description="Gzip example size test"
             depends="compile_prod">
+        <copy file="${basedir}/src/outputcompiled.js" todir="${basedir}/build">
+        </copy>
         <gzip src="${basedir}/build/outputcompiled.js"
               destfile="${basedir}/build/outputcompiled.js.gz"/>
     </target>
