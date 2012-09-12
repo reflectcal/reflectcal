@@ -124,10 +124,10 @@ rflect.structs.IntervalTree.Node_ = function(aIntervals, aTree) {
   }
 
   if (this.sortedBySP_ && (nodeFirstInterval = this.sortedBySP_[0]))
-    this.startPoint_ = nodeFirstInterval.start;
+    this.startPoint = nodeFirstInterval.start;
   if (this.sortedByEP_ && (nodeLastInterval = goog.array.peek(
       this.sortedByEP_)))
-    this.endPoint_ = nodeLastInterval.end;
+    this.endPoint = nodeLastInterval.end;
 
   if (leftIntervals)
     this.leftNode_ = new rflect.structs.IntervalTree.Node_(leftIntervals,
@@ -145,6 +145,22 @@ rflect.structs.IntervalTree.Node_ = function(aIntervals, aTree) {
  * @private
  */
 rflect.structs.IntervalTree.Node_.prototype.midPoint_;
+
+
+/**
+ * Minimal start point of all intervals within this node.
+ * @type {number}
+ * @private
+ */
+rflect.structs.IntervalTree.Node_.prototype.startPoint;
+
+
+/**
+ * Maximal end point of all intervals within this node.
+ * @type {number}
+ * @private
+ */
+rflect.structs.IntervalTree.Node_.prototype.endPoint;
 
 
 /**
@@ -177,7 +193,7 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
       if (goog.DEBUG)
         _log(aInterval.toString() + ' contains midpoint of node ' + this);
     } else if (aInterval.end <= this.midPoint_ && aInterval.end >
-        this.startPoint_) {
+        this.startPoint) {
       if (goog.DEBUG)
         _log(aInterval.toString() + ' is left-touches node ' + this);
       index = goog.array.binarySearch(this.sortedBySP_, aInterval.end,
@@ -190,7 +206,7 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
         _log('index', index);
       result = goog.array.slice(this.sortedBySP_, 0, index);
     } else if (aInterval.start > this.midPoint_ && aInterval.start <
-        this.endPoint_) {
+        this.endPoint) {
       if (goog.DEBUG)
         _log(aInterval.toString() + ' is right-touches node ' + this);
       index = goog.array.binarySearch(this.sortedByEP_, aInterval.start,
@@ -200,13 +216,13 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
     }
   }
 
-  if (this.leftNode_ && aInterval.start < this.leftNode_.endPoint_){
+  if (this.leftNode_ && aInterval.start < this.leftNode_.endPoint){
     if (goog.DEBUG)
       _log(aInterval.toString() + ' is searched within ' + this.leftNode_);
     var leftNodeResult = this.leftNode_.search(aInterval);
     if (leftNodeResult) result = (result || []).concat(leftNodeResult)
   }
-  if (this.rightNode_ && aInterval.end > this.rightNode_.startPoint_){
+  if (this.rightNode_ && aInterval.end > this.rightNode_.startPoint){
     if (goog.DEBUG)
       _log(aInterval.toString() + ' is searched within ' + this.rightNode_);
     var rightNodeResult = this.rightNode_.search(aInterval);
@@ -221,6 +237,6 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
  * @return {string} String representation of node.
  */
 rflect.structs.IntervalTree.Node_.prototype.toString = function(aInterval) {
-  return '[' + this.startPoint_ + ';' + this.midPoint_ + ';' +
-      this.endPoint_ + ']';
+  return '[' + this.startPoint + ';' + this.midPoint_ + ';' +
+      this.endPoint + ']';
 }

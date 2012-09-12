@@ -80,9 +80,7 @@ rflect.cal.TimeMarker.prototype.timer_;
  * @private
  */
 rflect.cal.TimeMarker.prototype.onTick_ = function(opt_event) {
-  _log('onTick_ called');
   if (rflect.pagevis.pageIsVisible() && this.viewManager_.isInWeekMode()) {
-    _log('page is visible');
     var today = new Date();
     var headEl = goog.dom.getElement('time-marker-head');
     if (headEl)
