@@ -180,6 +180,23 @@ rflect.structs.IntervalTree.Node_.prototype.rightNode_;
 
 
 /**
+ * Adds interval(s) to this node.
+ * @param {rflect.date.Interval|Array.<rflect.date.Interval>} aInterval One or
+ * more intervals to add.
+ */
+rflect.structs.IntervalTree.Node_.prototype.add = function(aInterval) {
+  if (aInterval instanceof rflect.date.Interval)
+    this.add_(aInterval1);
+  else {
+    for (var counter = 1, length = aInterval.length; counter < length;
+        counter++) {
+      this.add_(aInterval[counter]);
+    }
+  }
+}
+
+
+/**
  * Searches for all intersections with given interval within this node.
  * @param {rflect.date.Interval} aInterval Input interval.
  * @return {Array.<rflect.date.Interval>} Intervals intersected with input.
