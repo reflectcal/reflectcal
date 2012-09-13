@@ -233,13 +233,13 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
     }
   }
 
-  if (this.leftNode_ && aInterval.start < this.leftNode_.endPoint){
+  if (this.leftNode_){
     if (goog.DEBUG)
       _log(aInterval.toString() + ' is searched within ' + this.leftNode_);
     var leftNodeResult = this.leftNode_.search(aInterval);
     if (leftNodeResult) result = (result || []).concat(leftNodeResult)
   }
-  if (this.rightNode_ && aInterval.end > this.rightNode_.startPoint){
+  if (this.rightNode_){
     if (goog.DEBUG)
       _log(aInterval.toString() + ' is searched within ' + this.rightNode_);
     var rightNodeResult = this.rightNode_.search(aInterval);
