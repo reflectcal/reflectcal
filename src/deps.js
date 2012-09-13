@@ -10,6 +10,8 @@ goog.addDependency('../../../rflect/cal/component.js', ['rflect.cal.Component'],
 goog.addDependency('../../../rflect/cal/containersizemonitor.js', ['rflect.cal.ContainerSizeMonitor'], ['goog.dom.ViewportSizeMonitor', 'goog.style', 'rflect.cal.predefined']);
 goog.addDependency('../../../rflect/cal/eventmanager.js', ['rflect.cal.EventManager'], []);
 goog.addDependency('../../../rflect/cal/eventtype.js', ['rflect.cal.EventType'], []);
+goog.addDependency('../../../rflect/cal/i18n/predefined.js', ['rflect.cal.i18n.predefined', 'rflect.cal.i18n.predefined_by', 'rflect.cal.i18n.predefined_en', 'rflect.cal.i18n.predefined_ru'], []);
+goog.addDependency('../../../rflect/cal/i18n/symbols.js', ['rflect.cal.i18n.Symbols', 'rflect.cal.i18n.Symbols_by', 'rflect.cal.i18n.Symbols_en', 'rflect.cal.i18n.Symbols_en_US', 'rflect.cal.i18n.Symbols_ru'], []);
 goog.addDependency('../../../rflect/cal/listselector.js', ['rflect.cal.ListSelector'], ['goog.events', 'goog.events.EventType', 'rflect.cal.Component', 'rflect.cal.MouseOverRegistry', 'rflect.cal.predefined', 'rflect.string']);
 goog.addDependency('../../../rflect/cal/loader.js', ['rflect.cal.Loader'], ['goog.events', 'rflect.Debug', 'rflect.cal.Main']);
 goog.addDependency('../../../rflect/cal/main.js', ['rflect.cal.Main'], ['goog.Disposable', 'rflect.cal.ViewManager']);
@@ -32,8 +34,6 @@ goog.addDependency('../../../rflect/cal/viewtype.js', ['rflect.cal.ViewType'], [
 goog.addDependency('../../../rflect/date/date.js', ['rflect.date', 'rflect.date.DateShim'], ['goog.date.Date', 'goog.date.DateTime', 'goog.date.Interval', 'goog.i18n.DateTimeSymbols']);
 goog.addDependency('../../../rflect/date/interval.js', ['rflect.date.Interval'], ['goog.date.Date']);
 goog.addDependency('../../../rflect/debug/debug.js', ['rflect.Debug'], ['goog.debug.FancyWindow', 'goog.debug.Logger', 'goog.userAgent']);
-goog.addDependency('../../../rflect/i18n/predefined.js', ['rflect.cal.i18n.predefined', 'rflect.cal.i18n.predefined_by', 'rflect.cal.i18n.predefined_en', 'rflect.cal.i18n.predefined_ru'], []);
-goog.addDependency('../../../rflect/i18n/symbols.js', ['rflect.cal.i18n.Symbols', 'rflect.cal.i18n.Symbols_by', 'rflect.cal.i18n.Symbols_en', 'rflect.cal.i18n.Symbols_en_US', 'rflect.cal.i18n.Symbols_ru'], []);
 goog.addDependency('../../../rflect/math/math.js', ['rflect.math'], []);
 goog.addDependency('../../../rflect/pagevis/pagevisibility.js', ['rflect.pagevis'], []);
 goog.addDependency('../../../rflect/string/string.js', ['rflect.string'], ['goog.string']);
