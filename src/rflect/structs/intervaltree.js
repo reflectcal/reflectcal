@@ -123,12 +123,6 @@ rflect.structs.IntervalTree.Node_ = function(aIntervals, aTree) {
       (rightIntervals || (rightIntervals = [])).push(aIntervals[counter]);
   }
 
-  if (this.sortedBySP_ && (nodeFirstInterval = this.sortedBySP_[0]))
-    this.startPoint = nodeFirstInterval.start;
-  if (this.sortedByEP_ && (nodeLastInterval = goog.array.peek(
-      this.sortedByEP_)))
-    this.endPoint = nodeLastInterval.end;
-
   if (leftIntervals)
     this.leftNode_ = new rflect.structs.IntervalTree.Node_(leftIntervals,
         aTree);
