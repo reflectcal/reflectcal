@@ -244,8 +244,9 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
  * @return {string} String representation of node.
  */
 rflect.structs.IntervalTree.Node_.prototype.toString = function(aInterval) {
-  return '[' + (this.sortedBySP_.length > 0 ?
+  return '[' + (this.sortedBySP_ && (this.sortedBySP_.length) > 0 ?
       this.sortedBySP_[0].start : '-') + ';' + this.midPoint_ + ';' +
-      (this.sortedByEP_.length > 0 ? goog.array.peek(this.sortedByEP_).end :
+      (this.sortedByEP_ && (this.sortedByEP_.length > 0) ?
+      goog.array.peek(this.sortedByEP_).end :
       '-') + ']';
 }
