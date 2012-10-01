@@ -225,13 +225,11 @@ function testSearchLength8() {
   assertEquals('search of ' + interval + ' interval', tree3.search(
       interval).length, 6);
 }
-
 function searchConditionMaker(aIntervalToFind) {
   return function(aIntervalItem) {
     return aIntervalToFind.equals(aIntervalItem);
   }
 }
-
 function testTree3Search() {
   var interval = new rflect.date.Interval(8, 14);
   var result = tree3.search(interval);

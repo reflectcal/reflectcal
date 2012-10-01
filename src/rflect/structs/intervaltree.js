@@ -189,6 +189,7 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
       if (goog.DEBUG)
         _log(aInterval.toString() + ' contains midpoint of node ' + this);
     } else if (aInterval.end <= this.midPoint_) {
+      var firstIntervalStart = this.sortedBySP_[0].start;
       if (goog.DEBUG)
         _log(aInterval.toString() + ' is left-touches node ' + this);
       index = goog.array.binarySearch(this.sortedBySP_, aInterval.end,
@@ -198,16 +199,27 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
       // Whether we found index or insertion point.
       insertionPoint = index < 0;
       index = index < 0 ? -index - 1 : index;
-      if (!insertionPoint || index != 0)
+      if (aInterval.end != firstIntervalStart && !(insertionPoint &&
+          index == 0))
         result = goog.array.slice(this.sortedBySP_, 0, index);
+      if (goog.DEBUG)
+        _log('result', result);
+
     } else {
+      var length = this.sortedByEP_.length;
+      var lastIntervalEnd = goog.array.peek(this.sortedByEP_).end;
       if (goog.DEBUG)
         _log(aInterval.toString() + ' is right-touches node ' + this);
       index = goog.array.binarySearch(this.sortedByEP_, aInterval.start,
           rflect.date.Interval.compareByEP);
+      if (goog.DEBUG)
+        _log('index or insertion point', index);
       index = index < 0 ? -index - 1 : index;
-      if (!insertionPoint || index != this.sortedByEP_.length)
+      if (aInterval.start != lastIntervalEnd &&
+        index != length)
         result = goog.array.slice(this.sortedByEP_, index);
+      if (goog.DEBUG)
+        _log('result', result);
     }
   }
 
