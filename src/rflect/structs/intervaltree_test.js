@@ -295,3 +295,42 @@ function testTree4Search2() {
   assertNotNull('Interval ' + int2 + ' is found.',
       goog.array.find(result, searchConditionMaker(int2)));
 }
+
+var tree5 = null;
+
+function makeIntervalTree5() {
+  var intervals = [];
+  var int1 = new rflect.date.Interval(0, 10);
+  var int2 = new rflect.date.Interval(0, 10);
+  var int3 = new rflect.date.Interval(0, 10);
+  var int4 = new rflect.date.Interval(20, 30);
+  var int5 = new rflect.date.Interval(20, 30);
+  var int6 = new rflect.date.Interval(20, 30);
+
+  intervals.push(int1);
+  intervals.push(int2);
+  intervals.push(int3);
+  intervals.push(int4);
+  intervals.push(int5);
+  intervals.push(int6);
+
+  tree5 = new rflect.structs.IntervalTree(intervals);
+  return tree5;
+
+}
+
+function testConstructor5() {
+  makeIntervalTree5();
+  assertNotNull('tree5', tree5);
+}
+
+function testTree5Search() {
+  var int1 = new rflect.date.Interval(10, 20);
+  var int2 = new rflect.date.Interval(11, 19);
+  var result = tree5.search(int1);
+  assertNull('Interval ' + int1 + ' is not found.',
+      result);
+  result = tree5.search(int2);
+  assertNull('Interval ' + int2 + ' is not found.',
+      result);
+}
