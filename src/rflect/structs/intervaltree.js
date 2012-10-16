@@ -39,11 +39,12 @@ rflect.structs.IntervalTree = function(aIntervals) {
  */
 rflect.structs.IntervalTree.findMaxEndPoint = function(aIntervals) {
   var endPoint = aIntervals[0].end;
-  goog.array.forEach(aIntervals, function(aItem){
-    var itemEnd = aItem.end;
+  for (var counter = 0, length = aIntervals.length; counter < length;
+      counter++){
+    var itemEnd = aIntervals[counter].end;
     if (itemEnd > endPoint)
       endPoint = itemEnd;
-  });
+  }
   return endPoint;
 }
 
@@ -54,11 +55,12 @@ rflect.structs.IntervalTree.findMaxEndPoint = function(aIntervals) {
  */
 rflect.structs.IntervalTree.findMinStartPoint = function(aIntervals) {
   var startPoint = aIntervals[0].start;
-  goog.array.forEach(aIntervals, function(aItem){
-    var itemStart = aItem.start;
+  for (var counter = 0, length = aIntervals.length; counter < length;
+      counter++){
+    var itemStart = aIntervals[counter].start;
     if (itemStart < startPoint)
       startPoint = itemStart;
-  });
+  }
   return startPoint;
 }
 
@@ -244,9 +246,9 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
  * @return {string} String representation of node.
  */
 rflect.structs.IntervalTree.Node_.prototype.toString = function(aInterval) {
-  return '[' + (this.sortedBySP_ && (this.sortedBySP_.length) > 0 ?
+  return '[' + (this.sortedBySP_ && this.sortedBySP_.length ?
       this.sortedBySP_[0].start : '-') + ';' + this.midPoint_ + ';' +
-      (this.sortedByEP_ && (this.sortedByEP_.length > 0) ?
+      (this.sortedByEP_ && this.sortedByEP_.length ?
       goog.array.peek(this.sortedByEP_).end :
       '-') + ']';
 }
