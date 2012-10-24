@@ -84,10 +84,29 @@ rflect.structs.IntervalTree.prototype.getUid = function() {
 /**
  * Searches for all intersections with given interval.
  * @param {rflect.date.Interval} aInterval Input interval.
- * @return {Array.<rflect.date.Interval>} Intervals intersected with input.
+ * @return {Array.<rflect.date.Interval>} Intervals intersected with input,
+ * with no duplicates.
  */
 rflect.structs.IntervalTree.prototype.search = function(aInterval) {
-  return this.root_.search(aInterval);
+  var resultWithDuplicates = this.root_.search(aInterval);
+  var foundIntervalIds = {};
+  var foundCounter = 0;
+  var result = null;
+
+  if (!resultWithDuplicates)
+    return null;
+
+  for (var counter = 0, length = resultWithDuplicates.length; counter < length;
+      counter++){
+    var interval = resultWithDuplicates[counter];
+    var id = interval.id;
+    if (!(id in foundIntervalIds)) {
+      foundIntervalIds[id] = 1;
+      if (!result) result = [];
+      result[foundCounter++] = interval;
+    }
+  }
+  return result;
 }
 
 
@@ -118,8 +137,7 @@ rflect.structs.IntervalTree.Node_ = function(aIntervals, aTree) {
           interval, rflect.date.Interval.compareBySP);
       rflect.array.binaryInsert(this.sortedByEP_ || (this.sortedByEP_ = []),
           interval, rflect.date.Interval.compareByEP);
-    }
-    else if (aIntervals[counter].end <= this.midPoint_)
+    } else if (aIntervals[counter].end <= this.midPoint_)
       (leftIntervals || (leftIntervals = [])).push(aIntervals[counter]);
     else
       (rightIntervals || (rightIntervals = [])).push(aIntervals[counter]);
@@ -173,6 +191,31 @@ rflect.structs.IntervalTree.Node_.prototype.add = function(aInterval) {
       this.add_(aInterval[counter]);
     }
   }
+}
+
+
+/**
+ * Adds interval to this node.
+ * @param {rflect.date.Interval} aInterval Interval to add.
+ */
+rflect.structs.IntervalTree.Node_.prototype.add_ = function(aInterval) {
+
+  if (interval.contains(this.midPoint_)){
+    interval.id = aTree.getUid();
+    rflect.array.binaryInsert(this.sortedBySP_ || (this.sortedBySP_ = []),
+        interval, rflect.date.Interval.compareBySP);
+    rflect.array.binaryInsert(this.sortedByEP_ || (this.sortedByEP_ = []),
+        interval, rflect.date.Interval.compareByEP);
+  } else if (interval.end <= this.midPoint_) {
+    if (this.leftNode_)
+      this.leftNode_.add_(interval);
+    else {
+
+    }
+  } else {
+
+  }
+
 }
 
 
