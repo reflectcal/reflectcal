@@ -9,6 +9,8 @@
 
 goog.provide('rflect.cal.EventManager');
 
+goog.require('rflect.structs.IntervalTree');
+
 
 
 /**

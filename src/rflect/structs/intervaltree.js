@@ -29,7 +29,15 @@ rflect.structs.IntervalTree = function(aIntervals) {
    * @type {rflect.structs.IntervalTree.Node_}
    * @private
    */
-  this.root_ = new rflect.structs.IntervalTree.Node_(aIntervals, this);
+  this.root_ = this.createRootNode_(aIntervals);
+
+  /**
+   * Set for interval ids that were added after initial tree creation and are
+   * unbalanced.
+   * @type {Object.<number, number>}
+   * @private
+   */
+  this.unbalancedIntervalIds_ = {};
 };
 
 
@@ -74,10 +82,113 @@ rflect.structs.IntervalTree.prototype.uid_ = 0;
 
 
 /**
+ * Number of intervals within tree that were included since creation and,
+ * therefore, are balanced.
+ * @type {number}
+ * @private
+ */
+rflect.structs.IntervalTree.prototype.numberBalanced_ = 0;
+
+
+/**
+ * Number of added intervals.
+ * @type {number}
+ * @private
+ */
+rflect.structs.IntervalTree.prototype.numberAdded_ = 0;
+
+
+/**
+ * Number of intervals deleted from initial balanced ones.
+ * @type {number}
+ * @private
+ */
+rflect.structs.IntervalTree.prototype.numberRemoved_ = 0;
+
+
+/**
+ * Temporary storage of intervals when rabalancing tree.
+ * @type {Array.<rflect.date.Interval>}
+ */
+rflect.structs.IntervalTree.prototype.rebalancingBuffer_;
+
+
+/**
  * @return {number} Unique id for interval within tree.
  */
 rflect.structs.IntervalTree.prototype.getUid = function() {
   return this.uid_++;
+}
+
+
+/**
+ * @param {boolean=} aUnbalanced Whether interval that was added is 
+ * unbalanced.
+ * @param {number=} aUid Interval's id in case it's unbalanced.
+ */
+rflect.structs.IntervalTree.prototype.registerAdding = function(
+    aUnbalanced, aUid) {
+  if (!aUnbalanced)
+    this.numberBalanced_++;
+  else if (aUid) {
+    this.unbalancedIntervalIds_[aUid] = 1;
+    this.numberAdded_++;
+  }
+}
+
+
+/**
+ * @param {number} aUid Interval's id in case it's unbalanced.
+ */
+rflect.structs.IntervalTree.prototype.registerRemoving = function(aUid) {
+  if (aUid in this.unbalancedIntervalIds_) {
+    delete this.unbalancedIntervalIds_[aUid];
+    this.numberAdded_--;
+  }
+  else {
+    this.numberRemoved_--;
+  }
+}
+
+
+/**
+ * Checks whether tree should be rebalanced and rebalances it if needed.
+ */
+rflect.structs.IntervalTree.prototype.checkForRebalancing = function() {
+  // Coefficient:
+  // 1 - rebalance will occur after each add/remove
+  // 0 - never
+  // anything between - added / (added + balanced) or removed / balanced
+  // rate for rebalance to occur.
+  var coefficient = 0.5;
+  if ((this.numberBalanced_ + this.numberAdded_) * coefficient >=
+      this.numberBalanced_ ||
+      this.numberBalanced_ - this.numberRemoved_ <= this.numberBalanced_ *
+      coefficient)
+    this.rebalance_();
+}
+
+
+/**
+ * Rebalances tree by setting new root node.
+ */
+rflect.structs.IntervalTree.prototype.rebalance_ = function() {
+  var rebalancingBuffer;
+
+  this.numberBalanced_ = this.numberAdded_ = 0;
+  rebalancingBuffer = this.search(new rflect.date.Interval(-Infinity,
+      Infinity));
+  this.root_ = this.createRootNode_(rebalancingBuffer);
+}
+
+
+/**
+ * @param {Array.<rflect.date.Interval>} aIntervals Intervals from which to
+ * construct node.
+ * @return {rflect.structs.IntervalTree.Node_} Root node.
+ */
+rflect.structs.IntervalTree.prototype.createRootNode_ = function(aIntervals) {
+  return new rflect.structs.IntervalTree.Node_(aIntervals, this);
 }
 
 
@@ -88,10 +199,11 @@ rflect.structs.IntervalTree.prototype.getUid = function() {
  * with no duplicates.
  */
 rflect.structs.IntervalTree.prototype.search = function(aInterval) {
-  var resultWithDuplicates = this.root_.search(aInterval);
   var foundIntervalIds = {};
   var foundCounter = 0;
   var result = null;
+
+  var resultWithDuplicates = this.root_.search(aInterval);
 
   if (!resultWithDuplicates)
     return null;
@@ -111,9 +223,19 @@ rflect.structs.IntervalTree.prototype.search = function(aInterval) {
 
 
 /**
+ * Adds one or many intervals to this tree.
+ * @param {Array.<rflect.date.Interval>|rflect.date.Interval} aIntervals
+ * Interval(s) to add.
+ */
+rflect.structs.IntervalTree.prototype.add = function(aIntervals) {
+  this.root_.add(aIntervals);
+}
+
+
+/**
  * Individual node of interval tree.
  * @param {Array.<rflect.date.Interval>} aIntervals Set of intervals.
- * @param {rflect.struct.IntervalTree} aTree Parent tree.
+ * @param {rflect.structs.IntervalTree} aTree Parent tree.
  * @constructor
  * @private
  */
@@ -126,29 +248,16 @@ rflect.structs.IntervalTree.Node_ = function(aIntervals, aTree) {
   var nodeFirstInterval;
   var nodeLastInterval;
 
+  /**
+   * Link to parent tree.
+   * @type {rflect.structs.IntervalTree}
+   * @private
+   */
+  this.tree_ = aTree;
+
   this.midPoint_ = Math.round((max + min) / 2);
 
-  for (var counter = 0, length = aIntervals.length; counter < length;
-      counter++){
-    var interval = aIntervals[counter];
-    if (interval.contains(this.midPoint_)){
-      interval.id = aTree.getUid();
-      rflect.array.binaryInsert(this.sortedBySP_ || (this.sortedBySP_ = []),
-          interval, rflect.date.Interval.compareBySP);
-      rflect.array.binaryInsert(this.sortedByEP_ || (this.sortedByEP_ = []),
-          interval, rflect.date.Interval.compareByEP);
-    } else if (aIntervals[counter].end <= this.midPoint_)
-      (leftIntervals || (leftIntervals = [])).push(aIntervals[counter]);
-    else
-      (rightIntervals || (rightIntervals = [])).push(aIntervals[counter]);
-  }
-
-  if (leftIntervals)
-    this.leftNode_ = new rflect.structs.IntervalTree.Node_(leftIntervals,
-        aTree);
-  if (rightIntervals)
-    this.rightNode_ = new rflect.structs.IntervalTree.Node_(rightIntervals,
-        aTree);
+  this.add_(aIntervals);
 };
 
 
@@ -178,44 +287,62 @@ rflect.structs.IntervalTree.Node_.prototype.rightNode_;
 
 
 /**
- * Adds interval(s) to this node.
+ * Adds one or many intervals to this node.
  * @param {rflect.date.Interval|Array.<rflect.date.Interval>} aInterval One or
  * more intervals to add.
  */
 rflect.structs.IntervalTree.Node_.prototype.add = function(aInterval) {
-  if (aInterval instanceof rflect.date.Interval)
-    this.add_(aInterval1);
+  if (aInterval instanceof rflect.date.Interval){
+    this.add_([aInterval], true);
+  }
   else {
-    for (var counter = 1, length = aInterval.length; counter < length;
-        counter++) {
-      this.add_(aInterval[counter]);
-    }
+    this.add_(aInterval, true);
   }
 }
 
 
 /**
- * Adds interval to this node.
- * @param {rflect.date.Interval} aInterval Interval to add.
+ * Adds intervals to this node.
+ * @param {Array.<rflect.date.Interval>} aIntervals Intervals to add.
+ * @param {boolean=} aUnbalanced Whether this method adds unbalanced intervals.
  */
-rflect.structs.IntervalTree.Node_.prototype.add_ = function(aInterval) {
+rflect.structs.IntervalTree.Node_.prototype.add_ = function(aIntervals, 
+    aUnbalanced) {
+  var leftIntervals;
+  var rightIntervals;
 
-  if (interval.contains(this.midPoint_)){
-    interval.id = aTree.getUid();
-    rflect.array.binaryInsert(this.sortedBySP_ || (this.sortedBySP_ = []),
-        interval, rflect.date.Interval.compareBySP);
-    rflect.array.binaryInsert(this.sortedByEP_ || (this.sortedByEP_ = []),
-        interval, rflect.date.Interval.compareByEP);
-  } else if (interval.end <= this.midPoint_) {
-    if (this.leftNode_)
-      this.leftNode_.add_(interval);
-    else {
-
-    }
-  } else {
-
+  for (var counter = 0, length = aIntervals.length; counter < length;
+      counter++){
+    var interval = aIntervals[counter];
+    if (interval.contains(this.midPoint_)){
+      var uid = this.tree_.getUid();
+      interval.id = uid;
+      rflect.array.binaryInsert(this.sortedBySP_ || (this.sortedBySP_ = []),
+          interval, rflect.date.Interval.compareBySP);
+      rflect.array.binaryInsert(this.sortedByEP_ || (this.sortedByEP_ = []),
+          interval, rflect.date.Interval.compareByEP);
+      this.tree_.registerAdding(aUnbalanced, uid);
+    } else if (aIntervals[counter].end <= this.midPoint_)
+      (leftIntervals || (leftIntervals = [])).push(aIntervals[counter]);
+    else
+      (rightIntervals || (rightIntervals = [])).push(aIntervals[counter]);
   }
 
+  if (leftIntervals)
+    if (this.leftNode_)
+      this.leftNode_.add(leftIntervals);
+    else
+      this.leftNode_ = new rflect.structs.IntervalTree.Node_(leftIntervals,
+          this.tree_);
+  if (rightIntervals)
+    if (this.rightNode_)
+      this.rightNode_.add(rightIntervals);
+    else
+      this.rightNode_ = new rflect.structs.IntervalTree.Node_(rightIntervals,
+        this.tree_);
+
+  if (aUnbalanced)
+    this.tree_.checkForRebalancing();
 }
 
 
@@ -227,10 +354,10 @@ rflect.structs.IntervalTree.Node_.prototype.add_ = function(aInterval) {
 rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
   var result = null;
   var index;
-  var insertionPoint;
+  var isInsertionPoint;
   if (this.sortedBySP_ && this.sortedByEP_) {
     if (aInterval.contains(this.midPoint_)) {
-      result = goog.array.slice(this.sortedBySP_);
+      result = goog.array.slice(this.sortedBySP_, 0);
       if (goog.DEBUG)
         _log(aInterval.toString() + ' contains midpoint of node ' + this);
     } else if (aInterval.end <= this.midPoint_) {
@@ -242,9 +369,9 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
       if (goog.DEBUG)
         _log('index or insertion point', index);
       // Whether we found index or insertion point.
-      insertionPoint = index < 0;
+      isInsertionPoint = index < 0;
       index = index < 0 ? -index - 1 : index;
-      if (aInterval.end != firstIntervalStart && !(insertionPoint &&
+      if (aInterval.end != firstIntervalStart && !(isInsertionPoint &&
           index == 0))
         result = goog.array.slice(this.sortedBySP_, 0, index);
       if (goog.DEBUG)

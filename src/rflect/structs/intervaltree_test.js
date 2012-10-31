@@ -334,3 +334,60 @@ function testTree5Search() {
   assertNull('Interval ' + int2 + ' is not found.',
       result);
 }
+
+var tree6 = null;
+
+function makeIntervalTree6() {
+  var intervals = [];
+  var int1 = new rflect.date.Interval(0, 10);
+  var int2 = new rflect.date.Interval(0, 10);
+  var int3 = new rflect.date.Interval(0, 10);
+  var int4 = new rflect.date.Interval(20, 30);
+  var int5 = new rflect.date.Interval(20, 30);
+  var int6 = new rflect.date.Interval(20, 30);
+
+  intervals.push(int1);
+  intervals.push(int2);
+  intervals.push(int3);
+  intervals.push(int4);
+  intervals.push(int5);
+  intervals.push(int6);
+
+  tree6 = new rflect.structs.IntervalTree(intervals);
+  return tree6;
+
+}
+
+function testConstructor6() {
+  makeIntervalTree6();
+  assertNotNull('tree6', tree6);
+}
+
+function testAdd() {
+  makeIntervalTree6();
+  tree6.add(new rflect.date.Interval(0, 10));
+
+  tree6.add([new rflect.date.Interval(0, 10), new rflect.date.Interval(0, 10),
+      new rflect.date.Interval(0, 10), new rflect.date.Interval(0, 10)]);
+}
+
+function testAddAndRebalance() {
+  makeIntervalTree6();
+  assertEquals('tree6.numberAdded_ before balance', tree6.numberAdded_, 0);
+  assertEquals('tree6.numberBalanced_ before balance', tree6.numberBalanced_,
+      6);
+  tree6.add(new rflect.date.Interval(0, 10));
+  tree6.add(new rflect.date.Interval(0, 10));
+  tree6.add(new rflect.date.Interval(0, 10));
+  assertEquals('tree6.numberAdded_ after balance', tree6.numberAdded_, 3);
+  assertEquals('tree6.numberBalanced_ after balance', tree6.numberBalanced_,
+      6);
+  tree6.add(new rflect.date.Interval(0, 10));
+  tree6.add(new rflect.date.Interval(0, 10));
+  tree6.add(new rflect.date.Interval(0, 10));
+  assertEquals('tree6.numberAdded_ after balance', tree6.numberAdded_, 0);
+  assertEquals('tree6.numberBalanced_ after balance', tree6.numberBalanced_,
+      12);
+}
+
+
