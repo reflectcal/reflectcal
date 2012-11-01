@@ -156,10 +156,10 @@ rflect.structs.IntervalTree.prototype.registerRemoving = function(aUid) {
  */
 rflect.structs.IntervalTree.prototype.checkForRebalancing = function() {
   // Coefficient:
-  // 1 - rebalance will occur after each add/remove
-  // 0 - never
-  // anything between - added / (added + balanced) or removed / balanced
-  // rate for rebalance to occur.
+  // 1: rebalance will occur after each add/remove
+  // 0: never
+  // between 0 and 1: if added / (added + balanced) or removed / balanced
+  // equals coefficient, rebalance will occur.
   var coefficient = 0.5;
   if ((this.numberBalanced_ + this.numberAdded_) * coefficient >=
       this.numberBalanced_ ||
@@ -345,6 +345,65 @@ rflect.structs.IntervalTree.Node_.prototype.add_ = function(aIntervals,
     this.tree_.checkForRebalancing();
 }
 
+/**
+ * Searches for all intersections with given interval within this node.
+ * @param {rflect.date.Interval} aInterval Input interval.
+ * @return {Array.<rflect.date.Interval>} Intervals intersected with input.
+ */
+rflect.structs.IntervalTree.Node_.prototype.remove = function(aInterval) {
+  var result = null;
+  var index;
+  var isInsertionPoint;
+  if (this.sortedBySP_ && this.sortedByEP_) {
+    if (aInterval.contains(this.midPoint_)) {
+      result = goog.array.slice(this.sortedBySP_, 0);
+
+    } else if (aInterval.end <= this.midPoint_) {
+      var firstIntervalStart = this.sortedBySP_[0].start;
+
+      index = goog.array.binarySearch(this.sortedBySP_, aInterval.end,
+          rflect.date.Interval.compareBySP);
+
+      // Whether we found index or insertion point.
+      isInsertionPoint = index < 0;
+      index = index < 0 ? -index - 1 : index;
+      if (aInterval.end != firstIntervalStart && !(isInsertionPoint &&
+          index == 0))
+        result = goog.array.slice(this.sortedBySP_, 0, index);
+
+
+    } else {
+      var length = this.sortedByEP_.length;
+      var lastIntervalEnd = goog.array.peek(this.sortedByEP_).end;
+
+      index = goog.array.binarySearch(this.sortedByEP_, aInterval.start,
+          rflect.date.Interval.compareByEP);
+      if (goog.DEBUG)
+        _log('index or insertion point', index);
+      index = index < 0 ? -index - 1 : index;
+      if (aInterval.start != lastIntervalEnd &&
+        index != length)
+        result = goog.array.slice(this.sortedByEP_, index);
+      if (goog.DEBUG)
+        _log('result', result);
+    }
+  }
+
+  if (this.leftNode_){
+    if (goog.DEBUG)
+      _log(aInterval.toString() + ' is searched within ' + this.leftNode_);
+    var leftNodeResult = this.leftNode_.search(aInterval);
+    if (leftNodeResult) result = (result || []).concat(leftNodeResult)
+  }
+  if (this.rightNode_){
+    if (goog.DEBUG)
+      _log(aInterval.toString() + ' is searched within ' + this.rightNode_);
+    var rightNodeResult = this.rightNode_.search(aInterval);
+    if (rightNodeResult) result = (result || []).concat(rightNodeResult)
+  }
+
+  return result;
+}
 
 /**
  * Searches for all intersections with given interval within this node.
