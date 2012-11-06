@@ -346,17 +346,40 @@ rflect.structs.IntervalTree.Node_.prototype.add_ = function(aIntervals,
 }
 
 /**
- * Searches for all intersections with given interval within this node.
- * @param {rflect.date.Interval} aInterval Input interval.
- * @return {Array.<rflect.date.Interval>} Intervals intersected with input.
+ * Removes interval and its duplicates from node.
+ * @param {rflect.date.Interval} aInterval Interval to delete.
  */
 rflect.structs.IntervalTree.Node_.prototype.remove = function(aInterval) {
   var result = null;
-  var index;
+  var indexFirst;
+  var indexLast;
   var isInsertionPoint;
+
   if (this.sortedBySP_ && this.sortedByEP_) {
+
+    var idsFoundInSP = {};
+
+
     if (aInterval.contains(this.midPoint_)) {
-      result = goog.array.slice(this.sortedBySP_, 0);
+      indexFirst = goog.array.binarySearch(this.sortedBySP_, aInterval.start,
+            rflect.date.Interval.compareBySP);
+      if (indexFirst > 0)
+        for (var index = indexFirst; index < this.sortedBySP_.length;
+          index++)
+          if (this.sortedBySP_[index].start == aInterval.start) {
+            idsFoundInSP[this.sortedBySP_[index].id] = index;
+          } else
+            break;
+
+      for (var index = indexFirst; index <= indexLast; index++)
+        if (this.sortedByEP_[index].end == aInterval.end) {
+          if (this.sortedByEP_[index].id in idsFoundInSP) {
+            //Actual deleting.
+            goog.array.splice(this.sortedBySP_, idsFoundInSP[id]);
+            goog.array.splice(this.sortedBySP_, idsFoundInSP[id]);
+          }
+        }
+
 
     } else if (aInterval.end <= this.midPoint_) {
       var firstIntervalStart = this.sortedBySP_[0].start;
@@ -378,27 +401,23 @@ rflect.structs.IntervalTree.Node_.prototype.remove = function(aInterval) {
 
       index = goog.array.binarySearch(this.sortedByEP_, aInterval.start,
           rflect.date.Interval.compareByEP);
-      if (goog.DEBUG)
-        _log('index or insertion point', index);
+
       index = index < 0 ? -index - 1 : index;
       if (aInterval.start != lastIntervalEnd &&
         index != length)
         result = goog.array.slice(this.sortedByEP_, index);
-      if (goog.DEBUG)
-        _log('result', result);
+
     }
   }
 
   if (this.leftNode_){
-    if (goog.DEBUG)
-      _log(aInterval.toString() + ' is searched within ' + this.leftNode_);
-    var leftNodeResult = this.leftNode_.search(aInterval);
+
+    var leftNodeResult = this.leftNode_.remove(aInterval);
     if (leftNodeResult) result = (result || []).concat(leftNodeResult)
   }
   if (this.rightNode_){
-    if (goog.DEBUG)
-      _log(aInterval.toString() + ' is searched within ' + this.rightNode_);
-    var rightNodeResult = this.rightNode_.search(aInterval);
+
+    var rightNodeResult = this.rightNode_.remove(aInterval);
     if (rightNodeResult) result = (result || []).concat(rightNodeResult)
   }
 
