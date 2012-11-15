@@ -390,4 +390,15 @@ function testAddAndRebalance() {
       12);
 }
 
+function testRemove() {
+  makeIntervalTree6();
+  var intl1 = new rflect.date.Interval(0, 10);
+  var result = null;
+
+  tree6.remove(intl1);
+  result = tree6.search(intl1);
+
+  assertNull('Search result for removed interval ' + intl1 + ' is null',
+      result);
+}
 

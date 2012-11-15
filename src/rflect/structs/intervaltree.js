@@ -233,6 +233,16 @@ rflect.structs.IntervalTree.prototype.add = function(aIntervals) {
 
 
 /**
+ * Removes one or many intervals from this tree.
+ * @param {Array.<rflect.date.Interval>|rflect.date.Interval} aIntervals
+ * Interval(s) to remove.
+ */
+rflect.structs.IntervalTree.prototype.remove = function(aIntervals) {
+  this.root_.remove(aIntervals);
+}
+
+
+/**
  * Individual node of interval tree.
  * @param {Array.<rflect.date.Interval>} aIntervals Set of intervals.
  * @param {rflect.structs.IntervalTree} aTree Parent tree.
@@ -259,6 +269,38 @@ rflect.structs.IntervalTree.Node_ = function(aIntervals, aTree) {
 
   this.add_(aIntervals);
 };
+
+
+/**
+ * Removes all occurrences of interval from node's arrays.
+ * @param {rflect.date.Interval} aInterval Interval to remove.
+ * @param {Array.<rflect.date.Interval>} aArray One of node's arrays.
+ * @param {function(rflect.date.Interval|number, rflect.date.Interval|number):number} aCompareFnPrimary Function for major part of comparations within method.
+ * @param {function(rflect.date.Interval|number, rflect.date.Interval|number):number} aCompareFnSecondary Function for minor part of comparations within method.
+ */
+rflect.structs.IntervalTree.Node_.removeIntervalsFromArray_ =
+    function(aInterval, aArray, aCompareFnPrimary, aCompareFnSecondary) {
+  var index;
+  var indexMid;
+  var indexLast;
+
+  indexMid = goog.array.binarySearch(aArray, aInterval.start,
+      aCompareFnPrimary);
+  if (indexMid > 0){
+    indexLast = indexMid;
+    while (aCompareFnPrimary(aArray[indexLast], aInterval) == 0 &&
+        indexLast < aArray.length)
+      indexLast++;
+
+    index = indexLast - 1;
+    while (aCompareFnPrimary(aArray[index], aInterval) == 0 &&
+        index >= 0){
+      if (aCompareFnSecondary(aArray[index], aInterval) == 0)
+        goog.array.splice(aArray, index, 1);
+      index--;
+    }
+  }
+}
 
 
 /**
@@ -345,84 +387,68 @@ rflect.structs.IntervalTree.Node_.prototype.add_ = function(aIntervals,
     this.tree_.checkForRebalancing();
 }
 
+
 /**
- * Removes interval and its duplicates from node.
- * @param {rflect.date.Interval} aInterval Interval to delete.
+ * Removes one or many intervals from this node.
+ * @param {rflect.date.Interval|Array.<rflect.date.Interval>} aInterval One or
+ * more intervals to remove.
  */
 rflect.structs.IntervalTree.Node_.prototype.remove = function(aInterval) {
-  var result = null;
-  var indexFirst;
-  var indexLast;
-  var isInsertionPoint;
+  if (aInterval instanceof rflect.date.Interval){
+    this.remove_([aInterval], true);
+  }
+  else {
+    this.remove_(aInterval, true);
+  }
+}
 
-  if (this.sortedBySP_ && this.sortedByEP_) {
 
-    var idsFoundInSP = {};
+/**
+ * Removes interval and its duplicates from this node.
+ * @param {rflect.date.Interval} aIntervals Intervals to delete.
+ * @return {boolean} Whether deletion leaves this node empty.
+ */
+rflect.structs.IntervalTree.Node_.prototype.remove_ = function(aIntervals) {
+  var leftNodeIsEmpty = this.leftNode_;
+  var rightNodeIsEmpty = this.rightNode_;
 
-
-    if (aInterval.contains(this.midPoint_)) {
-      indexFirst = goog.array.binarySearch(this.sortedBySP_, aInterval.start,
+  for (var counter = 0, length = aIntervals.length; counter < length;
+        counter++){
+    var interval = aIntervals[counter];    
+    if (this.sortedBySP_ && this.sortedByEP_) {
+    
+      var idsFoundInSP = {};
+    
+      if (interval.contains(this.midPoint_)) {
+        rflect.structs.IntervalTree.Node_.removeIntervalsFromArray_(
+            interval, this.sortedBySP_, rflect.date.Interval.compareBySP,
+            rflect.date.Interval.compareByEP);
+        rflect.structs.IntervalTree.Node_.removeIntervalsFromArray_(
+            interval, this.sortedByEP_, rflect.date.Interval.compareByEP,
             rflect.date.Interval.compareBySP);
-      if (indexFirst > 0)
-        for (var index = indexFirst; index < this.sortedBySP_.length;
-          index++)
-          if (this.sortedBySP_[index].start == aInterval.start) {
-            idsFoundInSP[this.sortedBySP_[index].id] = index;
-          } else
-            break;
-
-      for (var index = indexFirst; index <= indexLast; index++)
-        if (this.sortedByEP_[index].end == aInterval.end) {
-          if (this.sortedByEP_[index].id in idsFoundInSP) {
-            //Actual deleting.
-            goog.array.splice(this.sortedBySP_, idsFoundInSP[id]);
-            goog.array.splice(this.sortedBySP_, idsFoundInSP[id]);
-          }
-        }
-
-
-    } else if (aInterval.end <= this.midPoint_) {
-      var firstIntervalStart = this.sortedBySP_[0].start;
-
-      index = goog.array.binarySearch(this.sortedBySP_, aInterval.end,
-          rflect.date.Interval.compareBySP);
-
-      // Whether we found index or insertion point.
-      isInsertionPoint = index < 0;
-      index = index < 0 ? -index - 1 : index;
-      if (aInterval.end != firstIntervalStart && !(isInsertionPoint &&
-          index == 0))
-        result = goog.array.slice(this.sortedBySP_, 0, index);
-
-
-    } else {
-      var length = this.sortedByEP_.length;
-      var lastIntervalEnd = goog.array.peek(this.sortedByEP_).end;
-
-      index = goog.array.binarySearch(this.sortedByEP_, aInterval.start,
-          rflect.date.Interval.compareByEP);
-
-      index = index < 0 ? -index - 1 : index;
-      if (aInterval.start != lastIntervalEnd &&
-        index != length)
-        result = goog.array.slice(this.sortedByEP_, index);
-
+            
+        if (!this.sortedBySP_.length)
+          this.sortedBySP_ = null;
+        if (!this.sortedByEP_.length)
+          this.sortedByEP_ = null;      
+      }
     }
   }
 
-  if (this.leftNode_){
-
-    var leftNodeResult = this.leftNode_.remove(aInterval);
-    if (leftNodeResult) result = (result || []).concat(leftNodeResult)
-  }
-  if (this.rightNode_){
-
-    var rightNodeResult = this.rightNode_.remove(aInterval);
-    if (rightNodeResult) result = (result || []).concat(rightNodeResult)
+  if (!leftNodeIsEmpty){
+    leftNodeIsEmpty = this.leftNode_.remove_(aIntervals);
+    if (leftNodeIsEmpty) this.leftNode_ = null;
   }
 
-  return result;
+  if (!rightNodeIsEmpty){
+    rightNodeIsEmpty = this.rightNode_.remove_(aIntervals);
+    if (rightNodeIsEmpty) this.rightNode_ = null;
+  }
+
+  return !this.sortedBySP_ && !this.sortedByEP_ && leftNodeIsEmpty &&
+      rightNodeIsEmpty;
 }
+
 
 /**
  * Searches for all intersections with given interval within this node.
