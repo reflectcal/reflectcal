@@ -284,8 +284,7 @@ rflect.structs.IntervalTree.Node_.removeIntervalsFromArray_ =
   var indexMid;
   var indexLast;
 
-  indexMid = goog.array.binarySearch(aArray, aInterval.start,
-      aCompareFnPrimary);
+  indexMid = goog.array.binarySearch(aArray, aInterval, aCompareFnPrimary);
   if (indexMid > 0){
     indexLast = indexMid;
     while (aCompareFnPrimary(aArray[indexLast], aInterval) == 0 &&
@@ -409,8 +408,8 @@ rflect.structs.IntervalTree.Node_.prototype.remove = function(aInterval) {
  * @return {boolean} Whether deletion leaves this node empty.
  */
 rflect.structs.IntervalTree.Node_.prototype.remove_ = function(aIntervals) {
-  var leftNodeIsEmpty = this.leftNode_;
-  var rightNodeIsEmpty = this.rightNode_;
+  var leftNodeIsEmpty = !this.leftNode_;
+  var rightNodeIsEmpty = !this.rightNode_;
 
   for (var counter = 0, length = aIntervals.length; counter < length;
         counter++){
