@@ -388,7 +388,7 @@ function testAddAndRebalance() {
   assertEquals('tree6.numberAdded_ after balance', tree6.numberAdded_, 0);
   assertEquals('tree6.numberBalanced_ after balance', tree6.numberBalanced_,
       12);
-}*/
+}
 
 function testRemove() {
   makeIntervalTree6();
@@ -399,6 +399,49 @@ function testRemove() {
   result = tree6.search(intl1);
 
   assertNull('Search result for removed interval ' + intl1 + ' is null',
+      result);
+}*/
+
+
+function testRemove2() {
+  var intervals = [];
+  var int1 = new rflect.date.Interval(0, 10);
+  var int2 = new rflect.date.Interval(10, 20);
+  var int3 = new rflect.date.Interval(20, 30);
+
+  intervals.push(int1);
+  intervals.push(int2);
+  intervals.push(int3);
+
+  tree6 = new rflect.structs.IntervalTree(intervals);
+
+  tree6.remove(int1);
+  result = tree6.search(int1);
+
+  assertNull('Search result for removed interval ' + int1 + ' is null',
+      result);
+}
+
+function testRemove3() {
+  var intervals = [];
+  var int1 = new rflect.date.Interval(0, 10);
+  var int2 = new rflect.date.Interval(10, 20);
+  var int3 = new rflect.date.Interval(20, 30);
+  var int4 = new rflect.date.Interval(20, 30);
+  var int5 = new rflect.date.Interval(20, 30);
+
+  intervals.push(int1);
+  intervals.push(int2);
+  intervals.push(int3);
+  intervals.push(int4);
+  intervals.push(int5);
+
+  tree6 = new rflect.structs.IntervalTree(intervals);
+
+  tree6.remove(int3);
+  result = tree6.search(int3);
+
+  assertNull('Search result for removed interval ' + int3 + ' is null',
       result);
 }
 
