@@ -8,7 +8,7 @@ goog.require('rflect.array');
 goog.require('rflect.date.Interval');
 goog.require('rflect.structs.IntervalTree');
 
-var tree = null;
+/*var tree = null;
 
 function makeIntervalTree() {
   var intervals = [];
@@ -333,7 +333,7 @@ function testTree5Search() {
   result = tree5.search(int2);
   assertNull('Interval ' + int2 + ' is not found.',
       result);
-}
+}*/
 
 var tree6 = null;
 
@@ -358,7 +358,7 @@ function makeIntervalTree6() {
 
 }
 
-function testConstructor6() {
+/*function testConstructor6() {
   makeIntervalTree6();
   assertNotNull('tree6', tree6);
 }
@@ -388,7 +388,7 @@ function testAddAndRebalance() {
   assertEquals('tree6.numberAdded_ after balance', tree6.numberAdded_, 0);
   assertEquals('tree6.numberBalanced_ after balance', tree6.numberBalanced_,
       12);
-}
+}*/
 
 function testRemove() {
   makeIntervalTree6();

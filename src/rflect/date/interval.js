@@ -53,9 +53,15 @@ rflect.date.Interval.getNonNullInterval = function(aInterval) {
 
 
 /**
- * @param {rflect.date.Interval|number} aFirst First interval or instant to
+ * @typedef {rflect.date.Interval|number}
+ */
+rflect.date.IntervalOrPoint;
+
+
+/**
+ * @param {rflect.date.IntervalOrPoint} aFirst First interval or instant to
  * compare.
- * @param {rflect.date.Interval|number} aSecond Second interval or instant to
+ * @param {rflect.date.IntervalOrPoint} aSecond Second interval or instant to
  * compare.
  * @return {number} -1 if first interval's start is lesser than second's, 0 if 
  * they are equal, 1 otherwise.
@@ -68,9 +74,9 @@ rflect.date.Interval.compareBySP = function(aFirst, aSecond) {
 
 
 /**
- * @param {rflect.date.Interval|number} aFirst First interval or instant to
+ * @param {rflect.date.IntervalOrPoint} aFirst First interval or instant to
  * compare.
- * @param {rflect.date.Interval|number} aSecond Second interval or instant to
+ * @param {rflect.date.IntervalOrPoint} aSecond Second interval or instant to
  * compare.
  * @return {number} -1 if first interval's end is lesser than second's, 0 if 
  * they are equal, 1 otherwise.

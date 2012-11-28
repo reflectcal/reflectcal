@@ -275,8 +275,8 @@ rflect.structs.IntervalTree.Node_ = function(aIntervals, aTree) {
  * Removes all occurrences of interval from node's arrays.
  * @param {rflect.date.Interval} aInterval Interval to remove.
  * @param {Array.<rflect.date.Interval>} aArray One of node's arrays.
- * @param {function(rflect.date.Interval|number, rflect.date.Interval|number):number} aCompareFnPrimary Function for major part of comparations within method.
- * @param {function(rflect.date.Interval|number, rflect.date.Interval|number):number} aCompareFnSecondary Function for minor part of comparations within method.
+ * @param {function(rflect.date.IntervalOrPoint, rflect.date.IntervalOrPoint): number} aCompareFnPrimary Function for major part of comparations within method.
+ * @param {function(rflect.date.IntervalOrPoint, rflect.date.IntervalOrPoint): number} aCompareFnSecondary Function for minor part of comparations within method.
  */
 rflect.structs.IntervalTree.Node_.removeIntervalsFromArray_ =
     function(aInterval, aArray, aCompareFnPrimary, aCompareFnSecondary) {
@@ -285,15 +285,19 @@ rflect.structs.IntervalTree.Node_.removeIntervalsFromArray_ =
   var indexLast;
 
   indexMid = goog.array.binarySearch(aArray, aInterval, aCompareFnPrimary);
-  if (indexMid > 0){
+  if (goog.DEBUG){
+    _log('aArray: ' + aArray);
+    _log('indexMid: ' + indexMid);
+  }
+  if (indexMid >= 0){
     indexLast = indexMid;
-    while (aCompareFnPrimary(aArray[indexLast], aInterval) == 0 &&
-        indexLast < aArray.length)
+    while (indexLast < aArray.length &&
+        aCompareFnPrimary(aArray[indexLast], aInterval) == 0)
       indexLast++;
-
+    if (goog.DEBUG)
+      _log('indexLast: ' + indexLast);
     index = indexLast - 1;
-    while (aCompareFnPrimary(aArray[index], aInterval) == 0 &&
-        index >= 0){
+    while (index >= 0 && aCompareFnPrimary(aArray[index], aInterval) == 0){
       if (aCompareFnSecondary(aArray[index], aInterval) == 0)
         goog.array.splice(aArray, index, 1);
       index--;
@@ -394,17 +398,17 @@ rflect.structs.IntervalTree.Node_.prototype.add_ = function(aIntervals,
  */
 rflect.structs.IntervalTree.Node_.prototype.remove = function(aInterval) {
   if (aInterval instanceof rflect.date.Interval){
-    this.remove_([aInterval], true);
+    this.remove_([aInterval]);
   }
   else {
-    this.remove_(aInterval, true);
+    this.remove_(aInterval);
   }
 }
 
 
 /**
  * Removes interval and its duplicates from this node.
- * @param {rflect.date.Interval} aIntervals Intervals to delete.
+ * @param {Array.<rflect.date.Interval>} aIntervals Intervals to delete.
  * @return {boolean} Whether deletion leaves this node empty.
  */
 rflect.structs.IntervalTree.Node_.prototype.remove_ = function(aIntervals) {
@@ -419,13 +423,20 @@ rflect.structs.IntervalTree.Node_.prototype.remove_ = function(aIntervals) {
       var idsFoundInSP = {};
     
       if (interval.contains(this.midPoint_)) {
+        if (goog.DEBUG)
+          _log('removing interval ' + interval + ' from node: ' + this);
+        if (goog.DEBUG)
+          _log('this.sortedBySP_ before removal ' + this.sortedBySP_);
         rflect.structs.IntervalTree.Node_.removeIntervalsFromArray_(
             interval, this.sortedBySP_, rflect.date.Interval.compareBySP,
             rflect.date.Interval.compareByEP);
         rflect.structs.IntervalTree.Node_.removeIntervalsFromArray_(
             interval, this.sortedByEP_, rflect.date.Interval.compareByEP,
             rflect.date.Interval.compareBySP);
-            
+        if (goog.DEBUG)
+          _log('this.sortedBySP_ after removal ' + this.sortedBySP_);
+
+
         if (!this.sortedBySP_.length)
           this.sortedBySP_ = null;
         if (!this.sortedByEP_.length)
