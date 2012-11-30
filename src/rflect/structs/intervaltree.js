@@ -423,19 +423,12 @@ rflect.structs.IntervalTree.Node_.prototype.remove_ = function(aIntervals) {
       var idsFoundInSP = {};
     
       if (interval.contains(this.midPoint_)) {
-        if (goog.DEBUG)
-          _log('removing interval ' + interval + ' from node: ' + this);
-        if (goog.DEBUG)
-          _log('this.sortedBySP_ before removal ' + this.sortedBySP_);
         rflect.structs.IntervalTree.Node_.removeIntervalsFromArray_(
             interval, this.sortedBySP_, rflect.date.Interval.compareBySP,
             rflect.date.Interval.compareByEP);
         rflect.structs.IntervalTree.Node_.removeIntervalsFromArray_(
             interval, this.sortedByEP_, rflect.date.Interval.compareByEP,
             rflect.date.Interval.compareBySP);
-        if (goog.DEBUG)
-          _log('this.sortedBySP_ after removal ' + this.sortedBySP_);
-
 
         if (!this.sortedBySP_.length)
           this.sortedBySP_ = null;
