@@ -35,3 +35,28 @@ rflect.cal.EventManager = function(aViewManager, aTimeManager) {
    */
   this.timeManager_ = aTimeManager;
 };
+
+
+/**
+ * Map of event id to event.
+ * @type {Object.<string,rflect.cal.events.Event>}
+ */
+rflect.cal.EventManager.prototype.eventsMap_;
+
+
+/**
+ *
+ */
+rflect.cal.EventManager.prototype.chipsMap_;
+
+
+/**
+ *
+ */
+rflect.cal.EventManager.prototype.plansTree_;
+
+
+/**
+ *
+ */
+rflect.cal.EventManager.prototype.eternalPlansList_;
