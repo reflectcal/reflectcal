@@ -141,8 +141,8 @@ rflect.date.getYesterday = function(aGivenDate){
  * otherwise.
  */
 rflect.date.compareByWeekAndYear = function(aDateA, aDateB){
-  return aDateA.getYear() == aDateB.getYear() ? (aDateA.week == aDateB.week
-      ? 0 : (aDateA.week > aDateB.week ? 1 : -1)) : (aDateA.getYear() >
+  return aDateA.getYear() == aDateB.getYear() ? (aDateA.weekOfYear == aDateB.weekOfYear
+      ? 0 : (aDateA.weekOfYear > aDateB.weekOfYear ? 1 : -1)) : (aDateA.getYear() >
       aDateB.getYear() ? 1 : -1)
 }
 
@@ -166,9 +166,9 @@ rflect.date.fields = {
 /**
  * Class that simulates Date, could be used instead it in simple calculations
  * for performance reasons (Firefox 2 has slow Date object).
- * @param {number|goog.date.DateLike=} opt_year Four digit year or a date-like
- * object. If not set, the created object will contain the date determined by
- * goog.now().
+ * @param {number|string|goog.date.DateLike=} opt_year_or_date Four digit year or a date-like
+ * object, or a JSON date string. If not set, the created object will contain 
+ * the date determined by goog.now().
  * @param {number=} opt_month Month, 0 = Jan, 11 = Dec.
  * @param {number=} opt_date Date of month, 1 - 31.
  * @param {number=} opt_hours Hours, 0 - 24.
@@ -178,20 +178,27 @@ rflect.date.fields = {
  * @constructor
  * @extends {goog.date.DateTime}
  */
-rflect.date.DateShim = function(opt_year, opt_month, opt_date, opt_hours,
+rflect.date.DateShim = function(opt_year_or_date, opt_month, opt_date, opt_hours,
     opt_minutes, opt_seconds, opt_milliseconds) {
-  if (goog.isNumber(opt_year)) {
-    this.setYear(opt_year || 0);
+  if (goog.isNumber(opt_year_or_date)) {
+    this.setYear(opt_year_or_date || 0);
     this.setMonth(opt_month || 0);
     this.setDate(opt_date || 0);
     this.setHours(opt_hours || 0);
     this.setMinutes(opt_minutes || 0);
     this.setSeconds(opt_seconds || 0);
     this.setMilliseconds(opt_milliseconds || 0);
+  } else if (goog.isString(opt_year_or_date) && opt_year_or_date.length = 14) {
+    this.setYear(opt_year_or_date.substr(0, 4)+);
+    this.setMonth(opt_year_or_date.substr(4, 2)+);
+    this.setDate(opt_year_or_date.substr(6, 2)+);
+    this.setHours(opt_year_or_date.substr(8, 2)+);
+    this.setMinutes(opt_year_or_date.substr(10, 2)+);
+    this.setSeconds(opt_year_or_date.substr(12, 2)+);
   } else {
     var date;
-    if (goog.isObject(opt_year))
-      date = new Date(opt_year);
+    if (goog.isObject(opt_year_or_date))
+      date = new Date(opt_year_or_date);
     else
       date = new Date(goog.now());
     this.setYear(date.getFullYear());
@@ -224,10 +231,17 @@ rflect.date.DateShim.prototype.month_ = goog.date.month.JAN;
 
 
 /**
- * Week.
+ * Day of year.
  * @type {number}
  */
-rflect.date.DateShim.prototype.week = 0;
+rflect.date.DateShim.prototype.dayOfYear = 0;
+
+
+/**
+ * Week of year.
+ * @type {number}
+ */
+rflect.date.DateShim.prototype.weekOfYear = 0;
 
 
 /**
@@ -236,14 +250,6 @@ rflect.date.DateShim.prototype.week = 0;
  * @private
  */
 rflect.date.DateShim.prototype.dayOfMonth_ = 0;
-
-
-/**
- * Week of year.
- * @type {number}
- * @private
- */
-rflect.date.DateShim.prototype.weekNumber_ = 0;
 
 
 /**
@@ -457,22 +463,6 @@ rflect.date.DateShim.prototype.setSeconds = function(aSeconds) {
  */
 rflect.date.DateShim.prototype.setMilliseconds = function(aMs) {
   this.milliseconds_ = aMs;
-};
-
-
-/**
- * @return {number} The week number.
- */
-/*rflect.date.DateShim.prototype.getWeekNumber = function() {
-  return this.weekNumber_;
-};*/
-
-
-/**
- * @param {number} aWeekNumber The week number.
- */
-rflect.date.DateShim.prototype.setWeekNumber = function(aWeekNumber) {
-  this.weekNumber_ = aWeekNumber;
 };
 
 

@@ -131,6 +131,7 @@ rflect.date.Interval.prototype.contains = function(aMillisInstant) {
 
 /**
  * Does this time interval overlap the specified time interval.
+ * Taken from Joda Time @link {http://joda-time.sourceforge.net/}.
  * <p>
  * Intervals are inclusive of the start instant and exclusive of the end.
  * An interval overlaps another if it shares some common part of the

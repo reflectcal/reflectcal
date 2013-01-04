@@ -21,15 +21,23 @@ rflect.cal.events.Event = function() {
 
 /**
  * Id of event.
- * @type {string}
+ * @type {number}
  */
-rflect.cal.events.Event.id_;
+rflect.cal.events.Event.prototype.id;
 
 
 /**
- *
+ * Id of event that is stored on server.
+ * @type {string}
  */
-rflect.cal.events.Event.
+rflect.cal.events.Event.prototype.longId;
+
+
+/**
+ * Description of event.
+ * @type {string}
+ */
+rflect.cal.events.Event.prototype.description;
 
 
 

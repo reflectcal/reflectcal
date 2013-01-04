@@ -34,29 +34,60 @@ rflect.cal.EventManager = function(aViewManager, aTimeManager) {
    * @private
    */
   this.timeManager_ = aTimeManager;
+
+  /**
+   * Map of event id to event.
+   * @type {Object.<number, rflect.cal.events.Event|rflect.cal.events.RecurringEvent>}
+   * @private
+   */
+  rflect.cal.EventManager.prototype.events_ = {};
+
+
+  /**
+   * Map of year -> {dayOfYear -> chip}.
+   * @type {Object.<number, <Object.<number, rflect.cal.events.Chip>>}
+   * @private
+   */
+  rflect.cal.EventManager.prototype.chipsByDay_ = {};
+
+
+  /**
+   * Map of year -> {weekOfYear -> chip}.
+   * @type {Object.<number, <Object.<number, rflect.cal.events.Chip>>}
+   * @private
+   */
+  rflect.cal.EventManager.prototype.chipsByWeek_ = {};
+
+
+  /**
+   * Tree for recurring events which have interval.
+   * @type {rflect.structs.IntervalTree}
+   * @private
+   */
+  rflect.cal.EventManager.prototype.plans_ = null;
+
+
+  /**
+   * List of recurring events with infinite intervals.
+   * @type {Array.<rflect.cal.events.RecurringEvent>}
+   */
+  rflect.cal.EventManager.prototype.infinitePlans_ = [];
 };
 
 
 /**
- * Map of event id to event.
- * @type {Object.<string,rflect.cal.events.Event>}
+ * Adds events from parsed json.
+ * @param {Array.<Array>} aJSONEvents List of JSON representation of events.
  */
-rflect.cal.EventManager.prototype.eventsMap_;
+rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
+  for (var counter = 0, length = aJSONEvents.length; counter < length;
+      counter++) {
+    var jsonStartDate = aJSONEvents[counter][0];
+    var startDate = new rflect.date.DateShim(jsonStartDate);
+    var jsonEndDate = aJSONEvents[counter][1];
+    var endDate = new rflect.date.DateShim(jsonEndDate);
 
+    var dayOfYear = startDate.getDayOfYear();
+  }
+};
 
-/**
- *
- */
-rflect.cal.EventManager.prototype.chipsMap_;
-
-
-/**
- *
- */
-rflect.cal.EventManager.prototype.plansTree_;
-
-
-/**
- *
- */
-rflect.cal.EventManager.prototype.eternalPlansList_;
