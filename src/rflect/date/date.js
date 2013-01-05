@@ -24,6 +24,17 @@ goog.date.DateLike;
 
 
 /**
+ * Returns the number of days for a given year.
+ *
+ * @param {number} year Year part of date.
+ * @return {number} The number of days for the given year.
+ */
+rflect.date.getNumberOfDaysInYear = function(year) {
+  return goog.date.isLeapYear(year) ? 366 : 365;
+};
+
+
+/**
  * Move to the next or last dayOfWeek based on the orient value.
  * @param aDate {goog.date.DateLike} Date to shift.
  * @param aDay {number} The dayOfWeek to move to (0 is Monday).
@@ -57,7 +68,6 @@ rflect.date.moveToDayOfWeekIfNeeded = function(aDate, aDay, opt_orient) {
 };
 
 
-
 /**
  * Returns minimal or maximal date number in this date and month depending on
  * direction of search.
@@ -75,53 +85,87 @@ rflect.date.getDayLimit_ = function(aYear, aMonth, aDirection) {
 
 /**
  * Returns date standing some number of days from current.
- * @param {goog.date.DateLike} aGivenDate Current date.
+ * @param {goog.date.Date|rflect.date.DateShim} aGivenDate Current date.
  * @param {number} aNumberOfDays Number of days from given.
  * @param {number} aDirection Direction in which we should move: 1 is forward,
  * -1 is backward.
- * @param {boolean=} opt_calculateWeeks Whether to calculate week number.
+ * @param {boolean=} opt_calculations Whether to calculate week number and 
+ * day of year.
  * @return {rflect.date.DateShim} Next date.
  */
 rflect.date.getDayFromGiven =
-    function(aGivenDate, aNumberOfDays, aDirection, opt_calculateWeeks) {
+    function(aGivenDate, aNumberOfDays, aDirection, opt_calculations) {
   var dateObject = null;
   var year = aGivenDate.getFullYear();
   var month = aGivenDate.getMonth();
   var date = aGivenDate.getDate();
   var currentDayOfWeek = aGivenDate.getDay();
-  var dayOfWeek = (currentDayOfWeek + aNumberOfDays * aDirection + 7) % 7;
+  var dayOfWeek;
 
-  var monthLimit = aDirection > 0 ? 11 : 0;
-  var nextBeginingMonth = aDirection > 0 ? 0 : 11;
+  var monthLimit = 11;
+  var nextBeginningMonth = 0;
 
-  for (var counter = 0; counter < aNumberOfDays; counter++) {
-    if (date == rflect.date.getDayLimit_(year, month, aDirection)) {
-      if (month == monthLimit) {
-        year += aDirection;
-        month = nextBeginingMonth;
-        // Reverse limit in next month.
-        date = rflect.date.getDayLimit_(year, month, aDirection > 0 ? -1 : 1);
-      } else {
-        month += aDirection;
-        date = rflect.date.getDayLimit_(year, month, aDirection > 0 ? -1 : 1);
+  var dayOfYear = aGivenDate.dayOfYear;
+  var weekOfYear = aGivenDate.weekOfYear;
+
+  var numberOfDaysInCurrentYear;
+
+  if (opt_calculations) {
+    numberOfDaysInCurrentYear = rflect.date.getNumberOfDaysInYear(year);
+
+    if (!dayOfYear)
+      aGivenDate.dayOfYear = dayOfYear =
+          goog.date.DateTime.prototype.getDayOfYear.call(aGivenDate);
+    if (!weekOfYear)
+      aGivenDate.weekOfYear = weekOfYear =
+          goog.date.DateTime.prototype.getWeekNumber.call(aGivenDate);
+  }
+
+  if (date == goog.date.getNumberOfDaysInMonth(year, month)) {
+    if (month == monthLimit) {
+      year++;
+      month = nextBeginningMonth;
+      date = 0;
+      if (opt_calculations) {
+        dayOfYear = 0;
       }
     } else {
-      date += aDirection;
+      month++;
+      date = 0;
+      if (opt_calculations)
+        dayOfYear++;
     }
+  } else {
+    date++;
+    if (opt_calculations)
+      dayOfYear++;
+  }
+
+  dayOfWeek = (currentDayOfWeek + 1 + 7) % 7;
+  if (dayOfWeek == 0) {
+    weekOfYear++;
+    if (weekOfYear > 52 && (dayOfYear + cutoff - currentDayOfWeek) >
+        numberOfDaysInCurrentYear)
+      weekOfYear = 0;
   }
 
   dateObject = new rflect.date.DateShim(year, month, date);
   dateObject.setDay(dayOfWeek);
+  if (opt_calculations) {
+    dateObject.dayOfYear = dayOfYear;
+  }
   return dateObject;
 };
 
 
 /**
  * @param {goog.date.DateLike} aGivenDate Current date.
+ * @param {boolean=} opt_calculations Whether to calculate week number and 
+ * day of year.
  * @return {rflect.date.DateShim} Tomorrow date.
  */
-rflect.date.getTomorrow = function(aGivenDate){
-  return rflect.date.getDayFromGiven(aGivenDate, 1, 1);
+rflect.date.getTomorrow = function(aGivenDate, opt_calculations){
+  return rflect.date.getDayFromGiven(aGivenDate, 1, 1, opt_calculations);
 }
 
 

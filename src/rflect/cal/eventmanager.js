@@ -52,6 +52,14 @@ rflect.cal.EventManager = function(aViewManager, aTimeManager) {
 
 
   /**
+   * As day chips map, but only for all day chips.
+   * @type {Object.<number, <Object.<number, rflect.cal.events.Chip>>}
+   * @private
+   */
+  rflect.cal.EventManager.prototype.allDayChipsByDay_ = {};
+
+
+  /**
    * Map of year -> {weekOfYear -> chip}.
    * @type {Object.<number, <Object.<number, rflect.cal.events.Chip>>}
    * @private
@@ -82,11 +90,17 @@ rflect.cal.EventManager = function(aViewManager, aTimeManager) {
 rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
   for (var counter = 0, length = aJSONEvents.length; counter < length;
       counter++) {
+
     var jsonStartDate = aJSONEvents[counter][0];
     var startDate = new rflect.date.DateShim(jsonStartDate);
+    startDate.setFirstWeekCutOffDay(this.timeManager_.symbols.FIRSTWEEKCUTOFFDAY);
+    startDate.setFirstDayOfWeek(this.timeManager_.symbols.FIRSTDAYOFWEEK);
+
     var jsonEndDate = aJSONEvents[counter][1];
     var endDate = new rflect.date.DateShim(jsonEndDate);
-
+    startDate.setFirstWeekCutOffDay(this.timeManager_.symbols.FIRSTWEEKCUTOFFDAY);
+    startDate.setFirstDayOfWeek(this.timeManager_.symbols.FIRSTDAYOFWEEK);
+        
     var dayOfYear = startDate.getDayOfYear();
   }
 };

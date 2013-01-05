@@ -12,7 +12,7 @@ goog.provide('rflect.cal.events.Chip');
 
 
 /**
- * Chip - visual rectangle that represent event of event's part.
+ * Chip - visual rectangle that represent event or event's part.
  * @param {number} aStart Chip start.
  * @param {number} aEnd Chip end.
  * @param {number} aEventId Corresponding event id.
@@ -26,19 +26,26 @@ rflect.cal.events.Chip = function(aStart, aEnd, aEventId) {
 
 
 /**
- * Pixel/percent position of chip start, or -1 if it begins off-screen.
+ * Position where chip starts.
+ * In case of day chips this is pixel.
+ * In case of week chips this is percent.
+ * In case of all-day chips this is 0 when event starts in this day, -1 when
+ * event starts earlier.
  */
-rflect.cal.events.Chip.start = 0;
+rflect.cal.events.Chip.prototype.start = 0;
 
 
 /**
- * Pixel/percent position of chip end, or -1 if it ends off-screen.
+ * Position where chip starts.
+ * All like for <code>start</code> except for all-day chips this is how many
+ * days event spans.
+ * @see {rflect.cal.events.Chip.prototype.start}.
  */
-rflect.cal.events.Chip.end = 0;
+rflect.cal.events.Chip.prototype.end = 0;
 
 
 /**
  * Id of event this chip belongs to.
  * @type {number}
  */
-rflect.cal.events.Chip.eventId;
+rflect.cal.events.Chip.prototype.eventId;

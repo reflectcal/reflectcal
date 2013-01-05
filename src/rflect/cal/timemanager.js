@@ -35,9 +35,8 @@ rflect.cal.TimeManager = function(opt_date) {
   /**
    * Date and time symbols for i18n.
    * @type {goog.i18n.DateTimeSymbols}
-   * @private
    */
-  this.symbols_ = goog.i18n.DateTimeSymbols;
+  this.symbols = goog.i18n.DateTimeSymbols;
 
   /**
    * Interval for this time manager.
@@ -316,6 +315,6 @@ rflect.cal.TimeManager.prototype.shiftBasis = function(aDirection) {
  */
 rflect.cal.TimeManager.prototype.setBasis = function(opt_date) {
   this.basis = opt_date || new goog.date.Date();
-  this.basis.setFirstWeekCutOffDay(this.symbols_.FIRSTWEEKCUTOFFDAY);
-  this.basis.setFirstDayOfWeek(this.symbols_.FIRSTDAYOFWEEK);
+  this.basis.setFirstWeekCutOffDay(this.symbols.FIRSTWEEKCUTOFFDAY);
+  this.basis.setFirstDayOfWeek(this.symbols.FIRSTDAYOFWEEK);
 };
