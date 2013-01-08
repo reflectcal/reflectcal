@@ -7,7 +7,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1463" />
     <bookmark url="file://$PROJECT_DIR$/css/rflectcalendar.css" line="1215" />
     <bookmark url="file://$PROJECT_DIR$/css/rflectcalendar.css" line="1301" />
-    <bookmark url="file://$PROJECT_DIR$/src/rflect/date/date.js" line="96" />
+    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1057" />
   </component>
   <component name="CCaseConfig">
     <option name="checkoutReserved" value="false" />
@@ -23,383 +23,8 @@
     <option name="historyRevisionsNumber" value="4" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="94f59c91-c161-4423-a022-ed195e39c373" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\base.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\deps.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\dom\classes.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\dom\dom.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\dom\fontsizemonitor.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\dom\selection.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\dom\viewportsizemonitor.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\dom\xml.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\actionhandler.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\browserevent.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\browserevent_old.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\customevent.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\event.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\eventhandler.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\events.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\eventtarget.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\focushandler.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\inputhandler.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\keycodes.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\keyhandler.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\keynames.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\listener.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\mousewheelhandler.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events\onlinehandler.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\iter\iter.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\math\box.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\math\coordinate.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\math\math.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\math\rect.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\math\size.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\avltree.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\circularbuffer.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\heap.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\linkedmap.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\map.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\node.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\pool.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\prioritypool.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\priorityqueue.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\queue.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\set.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\simplepool.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\structs.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs\trie.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\style\style.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\useragent\adobereader.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\useragent\flash.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\useragent\iphoto.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\useragent\jscript.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\useragent\picasa.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\useragent\useragent.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\util\array.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\util\delay.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\util\disposable.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\util\history.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\util\json.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\util\object.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\util\string.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\util\stringbuffer.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\util\throttle.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\util\timer.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\util\uri.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\util\window.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\block.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\boot.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\calendarevent\calendarevent.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\calendarevent\localization\en-US.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\calendarevent\localization\fr-FR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\calendarevent\localization\ja-JP.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\calendarevent\localization\ru-RU.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\gridcontrol.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\history.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotip.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipchanging\infotipchanging.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipchanging\localization\en-US.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipchanging\localization\fr-FR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipchanging\localization\ja-JP.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipchanging\localization\ru-RU.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipchanging\localization\zh-TW.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipcreating\infotipcreating.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipcreating\localization\en-US.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipcreating\localization\fr-FR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipcreating\localization\ja-JP.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipcreating\localization\ru-RU.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main\localization\en-US.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main\localization\fr-FR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main\localization\ja-JP.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main\localization\ru-RU.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main\main.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main__Add__Coll.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main__Crea__Disp.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main__DrawS__OnCl.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main__OnKey__OnMouseM.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main__OnMouseO__Prep.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main__Roll__Swit.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main__Upd__Upd.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\timegrid.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\datetime.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\af-ZA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-AE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-BH.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-DZ.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-EG.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-IQ.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-JO.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-KW.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-LB.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-LY.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-MA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-OM.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-QA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-SA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-SY.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-TN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ar-YE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\az-Cyrl-AZ.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\az-Latn-AZ.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\be-BY.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\bg-BG.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\bs-Latn-BA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ca-ES.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\cs-CZ.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\cy-GB.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\da-DK.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\de-AT.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\de-CH.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\de-DE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\de-LI.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\de-LU.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\dv-MV.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\el-GR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\en-029.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\en-AU.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\en-BZ.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\en-CA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\en-GB.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\en-IE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\en-JM.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\en-NZ.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\en-PH.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\en-TT.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\en-US.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\en-ZA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\en-ZW.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-AR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-BO.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-CL.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-CO.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-CR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-DO.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-EC.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-ES.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-GT.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-HN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-MX.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-NI.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-PA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-PE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-PR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-PY.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-SV.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-UY.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\es-VE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\et-EE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\eu-ES.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\fa-IR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\fi-FI.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\fo-FO.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\fr-BE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\fr-CA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\fr-CH.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\fr-FR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\fr-LU.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\fr-MC.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\gl-ES.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\gu-IN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\he-IL.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\hi-IN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\hr-BA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\hr-HR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\hu-HU.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\hy-AM.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\id-ID.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\is-IS.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\it-CH.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\it-IT.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ja-JP.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ka-GE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\kk-KZ.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\kn-IN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ko-KR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\kok-IN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ky-KG.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\lt-LT.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\lv-LV.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\mi-NZ.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\mk-MK.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\mn-MN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\mr-IN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ms-BN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ms-MY.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\mt-MT.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\nb-NO.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\nl-BE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\nl-NL.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\nn-NO.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ns-ZA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\pa-IN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\pl-PL.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\pt-BR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\pt-PT.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\quz-BO.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\quz-EC.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\quz-PE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ro-RO.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ru-RU.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sa-IN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\se-FI.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\se-NO.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\se-SE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sk-SK.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sl-SI.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sma-NO.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sma-SE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\smj-NO.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\smj-SE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\smn-FI.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sms-FI.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sq-AL.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sr-Cyrl-BA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sr-Cyrl-CS.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sr-Latn-BA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sr-Latn-CS.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sv-FI.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sv-SE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\sw-KE.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\syr-SY.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ta-IN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\te-IN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\th-TH.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\tn-ZA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\tr-TR.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\tt-RU.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\uk-UA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\ur-PK.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\uz-Cyrl-UZ.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\uz-Latn-UZ.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\vi-VN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\xh-ZA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\zh-CN.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\zh-HK.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\zh-MO.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\zh-SG.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\zh-TW.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization\zu-ZA.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\instant.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\interval.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\parser-debug.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\timeprocessor.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\timeprocessor_old.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\browser\browser.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\browser\browserdetector.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\debug.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\drag\drag.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\events\event.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\events\eventsource.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\firebug-lite-compressed.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\structs\hashmap.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\util\unit.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\dom\autoscroll.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\localization\dictionary.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\localization\dictionarysubs.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\localization\localization.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\localization\localizationsubs.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\math\math.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\rflect\rflect.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\rflect\root.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\util\mime.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\util\xmlhttp.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\widg\infotip.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\CircularDependency.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\GeckoCalendarHTML.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\IE6CalendarHTML.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\IE7CalendarHTML.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\IE7_OriginalCalendarHTML.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\IE8CalendarHTML.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\OperaCalendarHTML.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\SafariCalendarHTML.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\a.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\b.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\boot_public_methods.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\compiler_compiled_1.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\compiler_compiled_2.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\compiler_compiled_3.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\compiler_raw_1.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\compiler_raw_2.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\compiler_raw_3.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\date.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\deps.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\entityToString.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\for_in_loop.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\goog.EventTarget.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\goog.Throttle.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\goog.clientPosition.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\goog.dom.$dom.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\goog.events.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\goog.events_capturing_bubbling.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\goog.json.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\goog.object.transpose.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\goog.provide.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\goog.useragent.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\hollow_input.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\in_iteration_modification.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\mousebuttons.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\print.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\prototype_chain.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.Debug.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.Root.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.XMLHTTP.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.calendar.Autoscroll.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.calendar.Block.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.calendar.Calendar.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.calendar.CalendarEvent.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.calendar.Calendar_public_methods.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.calendar.TimeGrid.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.calendar.event_templates.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.calendar.popupbox.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.datetime.Interval.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.datetime.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.infowindow.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.infowindowHTML.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.localization.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.zIndex.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\browser" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\calendarevent" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\compiler.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\dom" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\dom" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\drag" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\events" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\events" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\datetime\datetime\globalization" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipchanging" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipcreating" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\iter" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\localization" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\calendarevent\localization" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipchanging\localization" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\infotipcreating\localization" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main\localization" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\cal\main" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\math" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\math" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test\rflect.XMLHTTP.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\rflect" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\structs" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\structs" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\style" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\test" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\useragent" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\goog\util" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\util" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\debug\util" afterPath="" />
-      <change type="DELETED" beforePath="C:\Work\rflectevents\src\engine\rflect\widg" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trac/db/trac.db" afterPath="$PROJECT_DIR$/trac/db/trac.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/events/chip.js" afterPath="$PROJECT_DIR$/src/rflect/cal/events/chip.js" />
+    <list default="true" readonly="true" id="94f59c91-c161-4423-a022-ed195e39c373" name="Default" comment="Intermediate commit - date now is always">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/date/date.js" afterPath="$PROJECT_DIR$/src/rflect/date/date.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/eventmanager.js" afterPath="$PROJECT_DIR$/src/rflect/cal/eventmanager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/timemanager.js" afterPath="$PROJECT_DIR$/src/rflect/cal/timemanager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Calendar.iws" />
@@ -408,14 +33,14 @@
     <file path="$PROJECT_DIR$/../Salcus client/src/env.properties" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356516468995" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/wsdl/ProductCatalogueDataService.wsdl" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356514260538" ignored="false" />
     <file path="/ProductCatalogueDataService.wsdl" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356514257869" ignored="false" />
-    <file path="$PROJECT_DIR$/../Salcus client/src/TestClient.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356615955309" ignored="false" />
+    <file path="$PROJECT_DIR$/../Salcus client/src/TestClient.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357655483982" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/CustomerProperty.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356514847203" ignored="false" />
     <file path="/CustomerProperty.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356514829315" ignored="false" />
-    <file path="/TestClient.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356613739136" ignored="false" />
+    <file path="/TestClient.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357642759733" ignored="false" />
     <file path="/DBLink.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356519310418" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/DBLink.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356519320500" ignored="false" />
     <file path="/env.properties" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356516450039" ignored="false" />
-    <file path="/Dummy.txt" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357401041483" ignored="false" />
+    <file path="/Dummy.txt" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357654844607" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/.idea/workspace.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356622292298" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/request.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356601088511" ignored="false" />
     <file path="/eventmanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357376077345" ignored="false" />
@@ -424,13 +49,15 @@
     <file path="/CustomFromBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356602153103" ignored="false" />
     <file path="/fragment.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356602205215" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/CustomRefParamsBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356602353838" ignored="false" />
-    <file path="/a.dummy" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357394910333" ignored="false" />
-    <file path="$PROJECT_DIR$/../Salcus client/src/tefo2de/productcataloguedataservice/ProductCatalogueDataService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356613878620" ignored="false" />
-    <file path="/ProductCatalogueDataService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356613696372" ignored="false" />
+    <file path="/a.dummy" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357648163522" ignored="false" />
+    <file path="$PROJECT_DIR$/../Salcus client/src/tefo2de/productcataloguedataservice/ProductCatalogueDataService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357658183557" ignored="false" />
+    <file path="/ProductCatalogueDataService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357658153144" ignored="false" />
     <file path="/recurringevent.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357303959398" ignored="false" />
     <file path="/chip.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357379626178" ignored="false" />
     <file path="/interval.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357305730698" ignored="false" />
-    <file path="/date.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357400584809" ignored="false" />
+    <file path="/date.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357650238356" ignored="false" />
+    <file path="$PROJECT_DIR$/../salcus-soap/salcus-soap/src/main/java/de/o2/bic/ProductCatalogueDataServicePortImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357658161420" ignored="false" />
+    <file path="/ProductCatalogueDataServicePortImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357658049156" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -501,7 +128,7 @@
       <file leaf-file-name="eventmanager.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/eventmanager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="104" column="3" selection-start="2798" selection-end="2798" vertical-scroll-proportion="-4.88">
+            <state line="104" column="3" selection-start="2798" selection-end="2798" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -528,7 +155,7 @@
       <file leaf-file-name="date.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="221" column="40" selection-start="5999" selection-end="5999" vertical-scroll-proportion="12.92">
+            <state line="249" column="52" selection-start="7048" selection-end="7054" vertical-scroll-proportion="-6.0">
               <folding />
             </state>
           </provider>
@@ -537,7 +164,16 @@
       <file leaf-file-name="timemanager.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/timemanager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="317" column="2" selection-start="8523" selection-end="8650" vertical-scroll-proportion="-8.24">
+            <state line="144" column="55" selection-start="3054" selection-end="3089" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="timemarker.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/rflect/cal/timemarker.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="15" column="46" selection-start="349" selection-end="349" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -546,7 +182,16 @@
       <file leaf-file-name="date.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/rflect/date/date.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="95" column="0" selection-start="2915" selection-end="2942" vertical-scroll-proportion="0.17003366">
+            <state line="102" column="22" selection-start="3023" selection-end="3023" vertical-scroll-proportion="0.56749314">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mainpanebuilder.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="1070" column="32" selection-start="34953" selection-end="34953" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -592,15 +237,6 @@
         <entry file="file://$PROJECT_DIR$/src/rflect/date/interval.js">
           <provider selected="true" editor-type-id="text-editor">
             <state line="68" column="23" selection-start="1852" selection-end="1852" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/rflect/cal/main.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -775,6 +411,22 @@
       <pane id="PackagesPane">
         <subPane />
       </pane>
+      <pane id="Scope">
+        <subPane />
+        <subPane subId="Non-Project Files" />
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="rflectevents">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -941,22 +593,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="events" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane />
-        <subPane subId="Non-Project Files" />
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="rflectevents">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -1379,7 +1015,11 @@
       <created>1357314318126</created>
       <updated>1357314318126</updated>
     </task>
-    <option name="localTasksCounter" value="77" />
+    <task id="LOCAL-00077" summary="Intermediate commit - simplified function rflect.date.getDayFromGiven">
+      <created>1357401060103</created>
+      <updated>1357401060103</updated>
+    </task>
+    <option name="localTasksCounter" value="78" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1404,24 +1044,23 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1168" height="840" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32896653" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32971016" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29575402" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29575402" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14052583" sideWeight="0.63529414" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="SBT Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6281113" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36456808" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32896653" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2540687" sideWeight="0.14787701" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2540687" sideWeight="0.09956076" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32849365" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2540687" sideWeight="0.84187406" order="0" side_tool="true" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2540687" sideWeight="0.5944363" order="0" side_tool="true" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32849365" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1430,6 +1069,7 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36456808" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1575,18 +1215,6 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/rflect/structs/intervaltree.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="189" column="53" selection-start="4638" selection-end="4653" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/mouseoverregistry.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/css/flatbutton.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="17" column="12" selection-start="413" selection-end="413" vertical-scroll-proportion="0.0">
@@ -1643,35 +1271,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/cal/eventmanager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="104" column="3" selection-start="2798" selection-end="2798" vertical-scroll-proportion="-4.88">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/timemanager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="317" column="2" selection-start="8523" selection-end="8650" vertical-scroll-proportion="-8.24">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="221" column="40" selection-start="5999" selection-end="5999" vertical-scroll-proportion="12.92">
+        <state line="104" column="3" selection-start="2798" selection-end="2798" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/cal/predefined.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1070" column="32" selection-start="34953" selection-end="34953" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/timemarker.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="46" selection-start="349" selection-end="349" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/timemanager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="144" column="55" selection-start="3054" selection-end="3089" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="249" column="52" selection-start="7048" selection-end="7054" vertical-scroll-proportion="-6.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/date/date.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="95" column="0" selection-start="2915" selection-end="2942" vertical-scroll-proportion="0.17003366">
+        <state line="102" column="22" selection-start="3023" selection-end="3023" vertical-scroll-proportion="0.56749314">
           <folding />
         </state>
       </provider>

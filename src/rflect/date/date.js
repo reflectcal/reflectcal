@@ -84,89 +84,58 @@ rflect.date.getDayLimit_ = function(aYear, aMonth, aDirection) {
 
 
 /**
- * Returns date standing some number of days from current.
- * @param {goog.date.Date|rflect.date.DateShim} aGivenDate Current date.
- * @param {number} aNumberOfDays Number of days from given.
- * @param {number} aDirection Direction in which we should move: 1 is forward,
- * -1 is backward.
- * @param {boolean=} opt_calculations Whether to calculate week number and 
- * day of year.
  * @return {rflect.date.DateShim} Next date.
  */
-rflect.date.getDayFromGiven =
-    function(aGivenDate, aNumberOfDays, aDirection, opt_calculations) {
+rflect.date.getDayFromGiven = function(aGivenDate) {
   var dateObject = null;
   var year = aGivenDate.getFullYear();
   var month = aGivenDate.getMonth();
   var date = aGivenDate.getDate();
-  var currentDayOfWeek = aGivenDate.getDay();
+
   var dayOfWeek;
+  var previousDayOfWeek = aGivenDate.getDay();
+  var dayOfYear = aGivenDate.getDayOfYear();
+  var previousDayOfYear = dayOfYear;
 
-  var monthLimit = 11;
-  var nextBeginningMonth = 0;
+  var weekNumber = aGivenDate.getWeekNumber();
+  var firstDayOfWeek = aGivenDate.getFirstDayOfWeek();
+  var cutoff = aGivenDate.getFirstWeekCutOffDay();
 
-  var dayOfYear = aGivenDate.dayOfYear;
-  var weekOfYear = aGivenDate.weekOfYear;
-
-  var numberOfDaysInCurrentYear;
-
-  if (opt_calculations) {
-    numberOfDaysInCurrentYear = rflect.date.getNumberOfDaysInYear(year);
-
-    if (!dayOfYear)
-      aGivenDate.dayOfYear = dayOfYear =
-          goog.date.DateTime.prototype.getDayOfYear.call(aGivenDate);
-    if (!weekOfYear)
-      aGivenDate.weekOfYear = weekOfYear =
-          goog.date.DateTime.prototype.getWeekNumber.call(aGivenDate);
-  }
+  var numberOfDaysInCurrentYear = rflect.date.getNumberOfDaysInYear(year);
 
   if (date == goog.date.getNumberOfDaysInMonth(year, month)) {
-    if (month == monthLimit) {
+    if (month == 11) {
       year++;
-      month = nextBeginningMonth;
+      month = 0;
       date = 0;
-      if (opt_calculations) {
-        dayOfYear = 0;
-      }
+      dayOfYear = 0;
     } else {
       month++;
       date = 0;
-      if (opt_calculations)
-        dayOfYear++;
+      dayOfYear++;
     }
   } else {
     date++;
-    if (opt_calculations)
-      dayOfYear++;
+    dayOfYear++;
   }
 
   dayOfWeek = (currentDayOfWeek + 1 + 7) % 7;
-  if (dayOfWeek == 0) {
-    weekOfYear++;
-    if (weekOfYear > 52 && (dayOfYear + cutoff - currentDayOfWeek) >
-        numberOfDaysInCurrentYear)
-      weekOfYear = 0;
+  if (dayOfWeek == firstDayOfWeek) {
+    // Assumes cutoff >= first day of week
+    if (weekNumber < 53 || (weekNumber == 53 && (dayOfYear - 1 + cutoff -
+        firstDayOfWeek) < numberOfDaysInCurrentYear))
+      weekNumber++;
+    else
+      weekNumber = 0;
   }
 
   dateObject = new rflect.date.DateShim(year, month, date);
   dateObject.setDay(dayOfWeek);
-  if (opt_calculations) {
-    dateObject.dayOfYear = dayOfYear;
-  }
+  dateObject.setDayOfYear(dayOfYear);
+  dateObject.setWeekNumber(weekNumber);
+
   return dateObject;
 };
-
-
-/**
- * @param {goog.date.DateLike} aGivenDate Current date.
- * @param {boolean=} opt_calculations Whether to calculate week number and 
- * day of year.
- * @return {rflect.date.DateShim} Tomorrow date.
- */
-rflect.date.getTomorrow = function(aGivenDate, opt_calculations){
-  return rflect.date.getDayFromGiven(aGivenDate, 1, 1, opt_calculations);
-}
 
 
 /**
@@ -185,8 +154,8 @@ rflect.date.getYesterday = function(aGivenDate){
  * otherwise.
  */
 rflect.date.compareByWeekAndYear = function(aDateA, aDateB){
-  return aDateA.getYear() == aDateB.getYear() ? (aDateA.weekOfYear == aDateB.weekOfYear
-      ? 0 : (aDateA.weekOfYear > aDateB.weekOfYear ? 1 : -1)) : (aDateA.getYear() >
+  return aDateA.getYear() == aDateB.getYear() ? (aDateA.weekNumber == aDateB.weekNumber
+      ? 0 : (aDateA.weekNumber > aDateB.weekNumber ? 1 : -1)) : (aDateA.getYear() >
       aDateB.getYear() ? 1 : -1)
 }
 
@@ -285,7 +254,7 @@ rflect.date.DateShim.prototype.dayOfYear = 0;
  * Week of year.
  * @type {number}
  */
-rflect.date.DateShim.prototype.weekOfYear = 0;
+rflect.date.DateShim.prototype.weekNumber = 0;
 
 
 /**
@@ -340,6 +309,22 @@ rflect.date.DateShim.prototype.seconds_ = 0;
  * @private
  */
 rflect.date.DateShim.prototype.milliseconds_ = 0;
+
+
+/**
+ * Day of year.
+ * @type {number}
+ * @private
+ */
+rflect.date.DateShim.prototype.dayOfYear_ = 0;
+
+
+/**
+ * Week of year.
+ * @type {number}
+ * @private
+ */
+rflect.date.DateShim.prototype.weekNumber_ = 0;
 
 
 /**
@@ -471,6 +456,22 @@ rflect.date.DateShim.prototype.getMilliseconds = function() {
 
 
 /**
+ * @return {number} The day of year.
+ */
+rflect.date.DateShim.prototype.getDayOfYear = function() {
+  return this.dayOfYear_;
+};
+
+
+/**
+ * @return {number} The week number.
+ */
+rflect.date.DateShim.prototype.getWeekNumber = function() {
+  return this.weekNumber_;
+};
+
+
+/**
  * Sets the hours part of the datetime.
  *
  * @param {number} aHours An integer between 0 and 23, representing the hour.
@@ -507,6 +508,22 @@ rflect.date.DateShim.prototype.setSeconds = function(aSeconds) {
  */
 rflect.date.DateShim.prototype.setMilliseconds = function(aMs) {
   this.milliseconds_ = aMs;
+};
+
+
+/**
+ * @param {number} aDayOfYear The day of year.
+ */
+rflect.date.DateShim.prototype.setDayOfYear = function(aDayOfYear) {
+  this.dayOfYear_ = aDayOfYear;
+};
+
+
+/**
+ * @param {number} aWeekNumber The week number.
+ */
+rflect.date.DateShim.prototype.setWeekNumber = function(aWeekNumber) {
+  this.weekNumber_ = aWeekNumber;
 };
 
 
