@@ -84,9 +84,9 @@ rflect.date.getDayLimit_ = function(aYear, aMonth, aDirection) {
 
 
 /**
- * @return {rflect.date.DateShim} Next date.
+ * @return {rflect.date.DateShim} Tomorrow date.
  */
-rflect.date.getDayFromGiven = function(aGivenDate) {
+rflect.date.getTomorrow = function(aGivenDate) {
   var dateObject = null;
   var year = aGivenDate.getFullYear();
   var month = aGivenDate.getMonth();
@@ -119,11 +119,11 @@ rflect.date.getDayFromGiven = function(aGivenDate) {
     dayOfYear++;
   }
 
-  dayOfWeek = (currentDayOfWeek + 1 + 7) % 7;
+  dayOfWeek = (previousDayOfWeek + 1 + 7) % 7;
   if (dayOfWeek == firstDayOfWeek) {
-    // Assumes cutoff >= first day of week
-    if (weekNumber < 53 || (weekNumber == 53 && (dayOfYear - 1 + cutoff -
-        firstDayOfWeek) < numberOfDaysInCurrentYear))
+    // Only difference of cutoff - first day of week is important.
+    if (weekNumber < 52 || (weekNumber == 52 && (previousDayOfYear - 1 +
+        Math.abs(cutoff - firstDayOfWeek)) < numberOfDaysInCurrentYear))
       weekNumber++;
     else
       weekNumber = 0;
@@ -136,15 +136,6 @@ rflect.date.getDayFromGiven = function(aGivenDate) {
 
   return dateObject;
 };
-
-
-/**
- * @param {goog.date.DateLike} aGivenDate Current date.
- * @return {rflect.date.DateShim} Yesterday date.
- */
-rflect.date.getYesterday = function(aGivenDate){
-  return rflect.date.getDayFromGiven(aGivenDate, 1, -1);
-}
 
 
 /**
@@ -241,20 +232,6 @@ rflect.date.DateShim.prototype.year_ = 0;
  * @private
  */
 rflect.date.DateShim.prototype.month_ = goog.date.month.JAN;
-
-
-/**
- * Day of year.
- * @type {number}
- */
-rflect.date.DateShim.prototype.dayOfYear = 0;
-
-
-/**
- * Week of year.
- * @type {number}
- */
-rflect.date.DateShim.prototype.weekNumber = 0;
 
 
 /**
