@@ -13,6 +13,7 @@ goog.provide('rflect.cal.i18n.Symbols_by');
 goog.provide('rflect.cal.i18n.Symbols_en');
 goog.provide('rflect.cal.i18n.Symbols_en_US');
 goog.provide('rflect.cal.i18n.Symbols_ru');
+goog.provide('rflect.cal.i18n.Symbols_fr');
 
 
 /**
@@ -58,6 +59,20 @@ rflect.cal.i18n.Symbols_by = {
 
 
 /**
+ * Date/time formatting symbols for locale fr.
+ */
+rflect.cal.i18n.Symbols_fr = {
+  NOW: 'présent',
+  NEW_EVENT: 'Nouvel',
+  DAY: 'Jour',
+  WEEK: 'Semaine',
+  MONTH: 'Mois',
+  CALENDARS_LABEL: 'Calendriers',
+  TASKS_LABEL: 'Tâches'
+};
+
+
+/**
  * Selected date/time formatting symbols by locale.
  * "switch" statement won't work here. JsCompiler cannot handle it yet.
  */
@@ -67,6 +82,8 @@ if (goog.LOCALE == 'en') {
   rflect.cal.i18n.Symbols = rflect.cal.i18n.Symbols_ru;
 } else if (goog.LOCALE == 'by') {
   rflect.cal.i18n.Symbols = rflect.cal.i18n.Symbols_by;
+} else if (goog.LOCALE == 'fr') {
+  rflect.cal.i18n.Symbols = rflect.cal.i18n.Symbols_fr;
 } else {
   rflect.cal.i18n.Symbols = rflect.cal.i18n.Symbols_en;
 }

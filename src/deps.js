@@ -9,6 +9,9 @@ goog.addDependency('../../../rflect/cal/calselector.js', ['rflect.cal.CalSelecto
 goog.addDependency('../../../rflect/cal/component.js', ['rflect.cal.Component'], ['goog.string.StringBuffer', 'goog.ui.Component']);
 goog.addDependency('../../../rflect/cal/containersizemonitor.js', ['rflect.cal.ContainerSizeMonitor'], ['goog.dom.ViewportSizeMonitor', 'goog.style', 'rflect.cal.predefined']);
 goog.addDependency('../../../rflect/cal/eventmanager.js', ['rflect.cal.EventManager'], ['rflect.structs.IntervalTree']);
+goog.addDependency('../../../rflect/cal/events/chip.js', ['rflect.cal.events.Chip'], []);
+goog.addDependency('../../../rflect/cal/events/event.js', ['rflect.cal.events.Event'], []);
+goog.addDependency('../../../rflect/cal/events/recurringevent.js', ['rflect.cal.events.RecurringEvent'], []);
 goog.addDependency('../../../rflect/cal/eventtype.js', ['rflect.cal.EventType'], []);
 goog.addDependency('../../../rflect/cal/i18n/predefined.js', ['rflect.cal.i18n.predefined', 'rflect.cal.i18n.predefined_by', 'rflect.cal.i18n.predefined_en', 'rflect.cal.i18n.predefined_ru'], []);
 goog.addDependency('../../../rflect/cal/i18n/symbols.js', ['rflect.cal.i18n.Symbols', 'rflect.cal.i18n.Symbols_by', 'rflect.cal.i18n.Symbols_en', 'rflect.cal.i18n.Symbols_en_US', 'rflect.cal.i18n.Symbols_ru'], []);

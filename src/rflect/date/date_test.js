@@ -8,47 +8,105 @@ goog.require('rflect.date');
 
 
 
-function testRemove5() {
-  var intervals = [];
-  var int1 = new rflect.date.Interval(0, 2);
-  var int2 = new rflect.date.Interval(3, 5);
-  var int3 = new rflect.date.Interval(6, 8);
-  var int4 = new rflect.date.Interval(9, 11);
-  var int5 = new rflect.date.Interval(11, 13);
+/*
+function testGetTomorrowDate() {
+  var date = new goog.date.Date(2013, 0, 10);
 
-  intervals.push(int1);
-  intervals.push(int2);
-  intervals.push(int3);
-  intervals.push(int4);
-  intervals.push(int5);
+  var rDate = new rflect.date.DateShim(date);
+  var tomorrow = rDate.getTomorrow();
 
-  tree6 = new rflect.structs.IntervalTree(intervals);
-
-  tree6.remove(int1);
-  tree6.remove(int2);
-  tree6.remove(int4);
-  tree6.remove(int5);
-  tree6.remove(int3);
-
-  result = tree6.search(int1);
-  assertNull('Search result for removed interval ' + int1 + ' is null',
-      result);
-  result = tree6.search(int2);
-  assertNull('Search result for removed interval ' + int2 + ' is null',
-      result);
-  result = tree6.search(int4);
-  assertNull('Search result for removed interval ' + int4 + ' is null',
-      result);
-  result = tree6.search(int5);
-  assertNull('Search result for removed interval ' + int5 + ' is null',
-      result);
-  result = tree6.search(int3);
-  assertNull('Search result for removed interval ' + int3 + ' is null',
-      result);
-
-  assertNull('Search result for removed node tree6.root_.leftNode_ is null',
-      tree6.root_.leftNode_);
-  assertNull('Search result for removed node tree6.root_.rightNode_ is null',
-      tree6.root_.rightNode_);
+  if (goog.DEBUG)
+    _log('tomorrow', tomorrow);
+  assertEquals('tommorow date', tomorrow.getDate(), 11);
 }
+
+function testGoogTomorrowEqualsRflectTomorrow() {
+  var date = new goog.date.Date(2013, 0, 10);
+
+  var rDate = new rflect.date.DateShim(date);
+  var rTomorrow = rDate.getTomorrow();
+  date.add(new goog.date.Interval(goog.date.Interval.DAYS, 1));
+
+  if (goog.DEBUG) {
+    _log('rTomorrow', rTomorrow);
+    _log('gTomorrow', date);
+  }
+  assertTrue('tommorow rflect date equals goog', rTomorrow.equals(date,
+      rflect.date.fields.YEAR | rflect.date.fields.MONTH |
+      rflect.date.fields.DATE));
+}
+
+function testGoogDayOfYearEqualsRflect() {
+  var date = new goog.date.Date(2013, 0, 10);
+
+  var rDate = new rflect.date.DateShim(date);
+  rDate.setDayOfYear(date.getDayOfYear());
+  rDate.setWeekNumber(date.getWeekNumber());
+
+  var rTomorrow = rDate.getTomorrow();
+  date.add(new goog.date.Interval(goog.date.Interval.DAYS, 1));
+
+  if (goog.DEBUG) {
+    _log('rTomorrow.getDayOfYear()', rTomorrow.getDayOfYear());
+    _log('date.getDayOfYear()', date.getDayOfYear());
+  }
+  assertTrue('tommorow rflect day of year equals goog',
+      rTomorrow.getDayOfYear() == date.getDayOfYear()
+      );
+}
+
+
+function testGoogDayOfYearEqualsRflect2() {
+  var date = new goog.date.Date(2012, 11, 31);
+
+  var rDate = new rflect.date.DateShim(date);
+  rDate.setDayOfYear(date.getDayOfYear());
+  rDate.setWeekNumber(date.getWeekNumber());
+
+  var rTomorrow = rDate.getTomorrow();
+  date.add(new goog.date.Interval(goog.date.Interval.DAYS, 1));
+
+  if (goog.DEBUG) {
+    _log('rTomorrow.getDayOfYear()', rTomorrow.getDayOfYear());
+    _log('date.getDayOfYear()', date.getDayOfYear());
+  }
+  assertTrue('tommorow rflect day of year equals goog',
+      rTomorrow.getDayOfYear() == date.getDayOfYear()
+      );
+}
+
+*/
+
+function testGoogWeekOfYearEqualsRflect() {
+  var dates = [
+    new goog.date.Date(2012, 11, 29),
+    new goog.date.Date(2012, 11, 30),
+    new goog.date.Date(2012, 11, 31),
+    new goog.date.Date(2013, 0, 4),
+    new goog.date.Date(2013, 0, 5),
+    new goog.date.Date(2013, 1, 2),
+    new goog.date.Date(2014, 11, 28),
+    new goog.date.Date(2012, 11, 23)
+  ];
+
+  goog.array.forEach(dates, function(date) {
+    var rDate = new rflect.date.DateShim(date);
+    rDate.setDayOfYear(date.getDayOfYear());
+    rDate.setWeekNumber(date.getWeekNumber());
+
+    var rTomorrow = rDate.getTomorrow();
+    date.add(new goog.date.Interval(goog.date.Interval.DAYS, 1));
+
+    if (goog.DEBUG) {
+      _log('rTomorrow.getWeekNumber()', rTomorrow.getWeekNumber());
+      _log('date.getWeekNumber()', date.getWeekNumber());
+    }
+    assertTrue('tommorow rflect week of year equals goog',
+        rTomorrow.getWeekNumber() == date.getWeekNumber()
+    );
+  });
+
+}
+
+
 

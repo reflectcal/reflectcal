@@ -93,14 +93,10 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
 
     var jsonStartDate = aJSONEvents[counter][0];
     var startDate = new rflect.date.DateShim(jsonStartDate);
-    startDate.setFirstWeekCutOffDay(this.timeManager_.symbols.FIRSTWEEKCUTOFFDAY);
-    startDate.setFirstDayOfWeek(this.timeManager_.symbols.FIRSTDAYOFWEEK);
 
     var jsonEndDate = aJSONEvents[counter][1];
     var endDate = new rflect.date.DateShim(jsonEndDate);
-    startDate.setFirstWeekCutOffDay(this.timeManager_.symbols.FIRSTWEEKCUTOFFDAY);
-    startDate.setFirstDayOfWeek(this.timeManager_.symbols.FIRSTDAYOFWEEK);
-        
+
     var dayOfYear = startDate.getDayOfYear();
   }
 };

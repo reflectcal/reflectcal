@@ -94,6 +94,7 @@ rflect.date.getTomorrow = function(aGivenDate) {
 
   var dayOfWeek;
   var previousDayOfWeek = aGivenDate.getDay();
+  var previousDayOfWeekISO = aGivenDate.getDay();
   var dayOfYear = aGivenDate.getDayOfYear();
   var previousDayOfYear = dayOfYear;
 
@@ -107,11 +108,11 @@ rflect.date.getTomorrow = function(aGivenDate) {
     if (month == 11) {
       year++;
       month = 0;
-      date = 0;
-      dayOfYear = 0;
+      date = 1;
+      dayOfYear = 1;
     } else {
       month++;
-      date = 0;
+      date = 1;
       dayOfYear++;
     }
   } else {
@@ -120,13 +121,19 @@ rflect.date.getTomorrow = function(aGivenDate) {
   }
 
   dayOfWeek = (previousDayOfWeek + 1 + 7) % 7;
-  if (dayOfWeek == firstDayOfWeek) {
+  var dayOfWeekIso = (dayOfWeek + 6) % 7;
+  var cutoffAndFirstDiff = (cutoff - firstDayOfWeek + 7) % 7
+
+  // Locales have weekdays in ISO format.
+  if (dayOfWeekIso == firstDayOfWeek) {
     // Only difference of cutoff - first day of week is important.
-    if (weekNumber < 52 || (weekNumber == 52 && (previousDayOfYear - 1 +
-        Math.abs(cutoff - firstDayOfWeek)) < numberOfDaysInCurrentYear))
+    // We add +1 to previous day of year, because current may be zero due to
+    // calculations above.
+    if (weekNumber < 52 || (weekNumber == 52 && (previousDayOfYear + 1 +
+        cutoffAndFirstDiff) < (numberOfDaysInCurrentYear + 1)))
       weekNumber++;
     else
-      weekNumber = 0;
+      weekNumber = 1;
   }
 
   dateObject = new rflect.date.DateShim(year, month, date);
@@ -170,9 +177,12 @@ rflect.date.fields = {
 /**
  * Class that simulates Date, could be used instead it in simple calculations
  * for performance reasons (Firefox 2 has slow Date object).
- * @param {number|string|goog.date.DateLike=} opt_year_or_date Four digit year or a date-like
- * object, or a JSON date string. If not set, the created object will contain 
- * the date determined by goog.now().
+ * NOTE: For operations on day of year and week of year they must be set
+ * explicitly on date shim object after calling this constructor.
+ *
+ * @param {number|goog.date.DateLike=} opt_year_or_date Four digit year
+ * or a date-like object. If not set, the created object
+ * will contain the date determined by goog.now().
  * @param {number=} opt_month Month, 0 = Jan, 11 = Dec.
  * @param {number=} opt_date Date of month, 1 - 31.
  * @param {number=} opt_hours Hours, 0 - 24.
@@ -192,19 +202,13 @@ rflect.date.DateShim = function(opt_year_or_date, opt_month, opt_date, opt_hours
     this.setMinutes(opt_minutes || 0);
     this.setSeconds(opt_seconds || 0);
     this.setMilliseconds(opt_milliseconds || 0);
-  } else if (goog.isString(opt_year_or_date) && opt_year_or_date.length = 14) {
-    this.setYear(opt_year_or_date.substr(0, 4)+);
-    this.setMonth(opt_year_or_date.substr(4, 2)+);
-    this.setDate(opt_year_or_date.substr(6, 2)+);
-    this.setHours(opt_year_or_date.substr(8, 2)+);
-    this.setMinutes(opt_year_or_date.substr(10, 2)+);
-    this.setSeconds(opt_year_or_date.substr(12, 2)+);
   } else {
     var date;
     if (goog.isObject(opt_year_or_date))
       date = new Date(opt_year_or_date);
     else
       date = new Date(goog.now());
+
     this.setYear(date.getFullYear());
     this.setMonth(date.getMonth());
     this.setDate(date.getDate());
@@ -537,3 +541,11 @@ rflect.date.DateShim.prototype.valueOf = function() {
   return +[this.year_, this.month_, this.dayOfMonth_, this.hours_,
       this.minutes_, this.seconds_, this.milliseconds_].join('');
 };
+
+
+/**
+ * @return {rflect.date.DateShim} Tomorrow date.
+ */
+rflect.date.DateShim.prototype.getTomorrow = function() {
+  return rflect.date.getTomorrow(this);
+}

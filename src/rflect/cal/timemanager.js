@@ -195,6 +195,8 @@ rflect.cal.TimeManager.prototype.generateDaySeries = function() {
 
   this.daySeries.length = 0;
   var date = new rflect.date.DateShim(this.start_);
+  date.setDayOfYear(this.start_.getDayOfYear());
+  date.setWeekNumber(this.start_.getWeekNumber());
   for (var counter = 0; counter < daysNumber; counter++) {
     this.daySeries[counter] = date;
     date = rflect.date.getTomorrow(date);
