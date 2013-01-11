@@ -198,7 +198,9 @@ rflect.date.fields = {
   HOURS: 8,
   MINUTES: 16,
   SECONDS: 32,
-  ALL: 63
+  ALL: 63,
+  DAY_OF_YEAR: 64,
+  WEEK_OF_YEAR: 128
 }
 
 
@@ -570,6 +572,17 @@ rflect.date.DateShim.prototype.equals = function(aOther, opt_bitmask) {
 rflect.date.DateShim.prototype.equalsByDate = function(aOther) {
   return this.equals(aOther, rflect.date.fields.YEAR |
       rflect.date.fields.MONTH | rflect.date.fields.DATE);
+};
+
+
+/**
+ * Checks equality by week of year.
+ * @param {goog.date.DateLike} aOther Date to test.
+ * @return {boolean} Whether this date equals other.
+ */
+rflect.date.DateShim.prototype.equalsByWeek = function(aOther) {
+  return this.equals(aOther, rflect.date.fields.YEAR |
+      rflect.date.fields.WEEK_OF_YEAR);
 };
 
 

@@ -39,6 +39,14 @@ rflect.cal.events.Chip.MAX_MINUTES_DAY = 24 * 60;
 
 
 /**
+ * Maximum minutes for week chip.
+ * @type {number}
+ * @const
+ */
+rflect.cal.events.Chip.MAX_MINUTES_WEEK = 24 * 60 * 7;
+
+
+/**
  * Position where chip starts.
  * In case of day chips this is pixel.
  * In case of week chips this is percent.
