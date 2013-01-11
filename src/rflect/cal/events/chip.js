@@ -15,14 +15,27 @@ goog.provide('rflect.cal.events.Chip');
  * Chip - visual rectangle that represent event or event's part.
  * @param {number} aStart Chip start.
  * @param {number} aEnd Chip end.
+ * @param {boolean} aStartIsCut Whether chip starts before block's start.
+ * @param {boolean} aEndIsCut Whether chip ends after block's end.
  * @param {number} aEventId Corresponding event id.
  * @constructor
  */
-rflect.cal.events.Chip = function(aStart, aEnd, aEventId) {
+rflect.cal.events.Chip = function(aEventId, aStart, aEnd, aStartIsCut,
+    aEndIsCut) {
+  this.eventId = aEventId;
   this.start = aStart;
   this.end = aEnd;
-  this.eventId = aEventId;
+  this.startIsCut = aStartIsCut;
+  this.endIsCut = aEndIsCut;
 };
+
+
+/**
+ * Maximum minutes for day chip.
+ * @type {number}
+ * @const
+ */
+rflect.cal.events.Chip.MAX_MINUTES_DAY = 24 * 60;
 
 
 /**
@@ -49,3 +62,17 @@ rflect.cal.events.Chip.prototype.end = 0;
  * @type {number}
  */
 rflect.cal.events.Chip.prototype.eventId;
+
+
+/**
+ * Whether chip starts before block's start.
+ * @type {boolean}
+ */
+rflect.cal.events.Chip.prototype.startIsCut;
+
+
+/**
+ * Whether chip starts after block's end.
+ * @type {boolean}
+ */
+rflect.cal.events.Chip.prototype.endIsCut;

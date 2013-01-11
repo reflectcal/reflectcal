@@ -10,6 +10,7 @@
 goog.provide('rflect.cal.EventManager');
 
 goog.require('rflect.structs.IntervalTree');
+goog.require('rflect.cal.events.Chip');
 
 
 
@@ -45,7 +46,7 @@ rflect.cal.EventManager = function(aViewManager, aTimeManager) {
 
   /**
    * Map of year -> {dayOfYear -> chip}.
-   * @type {Object.<number, <Object.<number, rflect.cal.events.Chip>>}
+   * @type {Object.<number, <Object.<number, Array.<rflect.cal.events.Chip>>>}
    * @private
    */
   rflect.cal.EventManager.prototype.chipsByDay_ = {};
@@ -53,7 +54,7 @@ rflect.cal.EventManager = function(aViewManager, aTimeManager) {
 
   /**
    * As day chips map, but only for all day chips.
-   * @type {Object.<number, <Object.<number, rflect.cal.events.Chip>>}
+   * @type {Object.<number, <Object.<number, Array.<rflect.cal.events.Chip>>>}
    * @private
    */
   rflect.cal.EventManager.prototype.allDayChipsByDay_ = {};
@@ -61,7 +62,7 @@ rflect.cal.EventManager = function(aViewManager, aTimeManager) {
 
   /**
    * Map of year -> {weekOfYear -> chip}.
-   * @type {Object.<number, <Object.<number, rflect.cal.events.Chip>>}
+   * @type {Object.<number, <Object.<number, Array.<rflect.cal.events.Chip>>>}
    * @private
    */
   rflect.cal.EventManager.prototype.chipsByWeek_ = {};
@@ -83,6 +84,14 @@ rflect.cal.EventManager = function(aViewManager, aTimeManager) {
 };
 
 
+rflect.cal.EventManager.prototype.eventUid_ = 0;
+
+
+rflect.cal.EventManager.prototype.createEventId = function() {
+  return this.eventUid_++;
+};
+
+
 /**
  * Adds events from parsed json.
  * @param {Array.<Array>} aJSONEvents List of JSON representation of events.
@@ -92,12 +101,69 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
       counter++) {
 
     var jsonStartDate = aJSONEvents[counter][0];
-    var startDate = new rflect.date.DateShim(jsonStartDate);
-
+    var startDate = rflect.date.parse(jsonStartDate, true, true);
     var jsonEndDate = aJSONEvents[counter][1];
-    var endDate = new rflect.date.DateShim(jsonEndDate);
+    var endDate = rflect.date.parse(jsonEndDate);
 
-    var dayOfYear = startDate.getDayOfYear();
+    var eventStartMins = startDate.getHours() * 60 + startDate.getMinutes();
+    var eventEndMins = endDate.getHours() * 60 + endDate.getMinutes();
+    var currentDate = startDate.clone();
+
+    var hasNext = true;
+    var hasPrev = false;
+    var hasChip = true;
+    var chipStartMins = 0;
+    var chipEndMins = 0;
+    var startIsCut = false;
+    var endIsCut = false;
+
+    var event = new rflect.cal.events.Event();
+
+    // Generating chips.
+    while (hasNext) {
+      hasPrev = !currentDate.equalsByDate(startDate);
+      hasNext = !currentDate.equalsByDate(endDate);
+
+      if (!hasNext){
+        if (eventEndMins == 0)
+          hasChip = false;
+        else
+          chipEndMins = eventEndMins;
+      } else {
+         chipEndMins = rflect.cal.events.Chip.MAX_MINUTES_DAY;
+         endIsCut = true;
+      }
+      if (!hasPrev){
+        chipStartMins = eventStartMins;
+      } else {
+         chipEndMins = 0;
+         startIsCut = true;
+      }
+
+      if (hasChip){
+        var chip = new rflect.cal.events.Chip(event.id, chipStartMins,
+            chipEndMins, startIsCut, endIsCut);
+        this.putDayChip(chip, currentDate);
+      }
+      currentDate = startDate.getTomorrow();
+    }
   }
 };
+
+
+/**
+ * Saves chip.
+ * @param {rflect.cal.events.Chip} aChip Chip to save.
+ * @param {rflect.date.DateShim} aDate Which date characterizes chip.
+ * @private
+ */
+rflect.cal.EventManager.prototype.putDayChip_ = function(aChip, aDate) {
+  var year = aDate.getYear();
+  var dayOfYear = aDate.getDayOfYear();
+  if (!(year in this.chipsByDay_))
+    this.chipsByDay_[year] = {};
+  if (!(dayOfYear in this.chipsByDay_[year]))
+    this.chipsByDay_[year][dayOfYear] = [];
+  this.chipsByDay_[year][dayOfYear].push(aChip);
+}
 

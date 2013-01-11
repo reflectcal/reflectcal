@@ -23,17 +23,13 @@
     <option name="historyRevisionsNumber" value="4" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="94f59c91-c161-4423-a022-ed195e39c373" name="Default" comment="Some changes to date">
+    <list default="true" readonly="true" id="94f59c91-c161-4423-a022-ed195e39c373" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trac/db/trac.db" afterPath="$PROJECT_DIR$/trac/db/trac.db" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/events/chip.js" afterPath="$PROJECT_DIR$/src/rflect/cal/events/chip.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/date/date.js" afterPath="$PROJECT_DIR$/src/rflect/date/date.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/date/date_test.html" afterPath="$PROJECT_DIR$/src/rflect/date/date_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/date/date_test.js" afterPath="$PROJECT_DIR$/src/rflect/date/date_test.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/deps.js" afterPath="$PROJECT_DIR$/src/deps.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/eventmanager.js" afterPath="$PROJECT_DIR$/src/rflect/cal/eventmanager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/outputcompiled.js.map" afterPath="$PROJECT_DIR$/src/outputcompiled.js.map" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/outputcompiled.js" afterPath="$PROJECT_DIR$/src/outputcompiled.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/i18n/symbols.js" afterPath="$PROJECT_DIR$/src/rflect/cal/i18n/symbols.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/timemanager.js" afterPath="$PROJECT_DIR$/src/rflect/cal/timemanager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Calendar.iws" />
@@ -42,29 +38,29 @@
     <file path="$PROJECT_DIR$/../Salcus client/src/env.properties" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742365450" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/wsdl/ProductCatalogueDataService.wsdl" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356514260538" ignored="false" />
     <file path="/ProductCatalogueDataService.wsdl" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356514257869" ignored="false" />
-    <file path="$PROJECT_DIR$/../Salcus client/src/TestClient.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357805943294" ignored="false" />
+    <file path="$PROJECT_DIR$/../Salcus client/src/TestClient.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357911533008" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/CustomerProperty.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356514847203" ignored="false" />
     <file path="/CustomerProperty.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356514829315" ignored="false" />
-    <file path="/TestClient.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357740543125" ignored="false" />
+    <file path="/TestClient.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357910914931" ignored="false" />
     <file path="/DBLink.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356519310418" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/DBLink.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357805943294" ignored="false" />
     <file path="/env.properties" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742339458" ignored="false" />
-    <file path="/Dummy.txt" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357819703079" ignored="false" />
-    <file path="$PROJECT_DIR$/../Salcus client/.idea/workspace.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357747491274" ignored="false" />
-    <file path="$PROJECT_DIR$/../Salcus client/src/request.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357728521308" ignored="false" />
-    <file path="/eventmanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357376077345" ignored="false" />
+    <file path="/Dummy.txt" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357896607741" ignored="false" />
+    <file path="$PROJECT_DIR$/../Salcus client/.idea/workspace.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357897089284" ignored="false" />
+    <file path="$PROJECT_DIR$/../Salcus client/src/request.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357910631991" ignored="false" />
+    <file path="/eventmanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357909837844" ignored="false" />
     <file path="/event.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357304658173" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/CustomFromBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357737049220" ignored="false" />
     <file path="/CustomFromBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357736736033" ignored="false" />
     <file path="/fragment.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356602205215" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/CustomRefParamsBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357736985203" ignored="false" />
-    <file path="/a.dummy" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357827751410" ignored="false" />
+    <file path="/a.dummy" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357893920326" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/tefo2de/productcataloguedataservice/ProductCatalogueDataService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742558891" ignored="false" />
     <file path="/ProductCatalogueDataService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357658153144" ignored="false" />
     <file path="/recurringevent.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357303959398" ignored="false" />
-    <file path="/chip.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357379626178" ignored="false" />
+    <file path="/chip.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357906032873" ignored="false" />
     <file path="/interval.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357305730698" ignored="false" />
-    <file path="/date.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357830837307" ignored="false" />
+    <file path="/date.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357901739847" ignored="false" />
     <file path="$PROJECT_DIR$/../salcus-soap/salcus-soap/src/main/java/de/o2/bic/ProductCatalogueDataServicePortImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357658161420" ignored="false" />
     <file path="/ProductCatalogueDataServicePortImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357658049156" ignored="false" />
     <file path="/date_test.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357826147499" ignored="false" />
@@ -73,14 +69,14 @@
     <file path="$PROJECT_DIR$/../bic_soap_new/nbaa-soap/src/main/webapp/WEB-INF/wsdls/schema.xsd" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357724145132" ignored="false" />
     <file path="/CustomRefParamsBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357736911858" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/tefo2de/productcataloguedataservice/ProductCatalogueDataServicePort.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357738035931" ignored="false" />
-    <file path="$PROJECT_DIR$/../Salcus client/src/SalcusClientHandler.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357805943294" ignored="false" />
+    <file path="$PROJECT_DIR$/../Salcus client/src/SalcusClientHandler.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357895472835" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/handlers.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742931713" ignored="false" />
     <file path="/SalcusClientHandler.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357746524577" ignored="false" />
     <file path="/handlers.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742727039" ignored="false" />
     <file path="/date_test.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357807455924" ignored="false" />
     <file path="/SBT" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357811274672" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/WEB-INF/web.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357811254543" ignored="false" />
-    <file path="/base.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357832307294" ignored="false" />
+    <file path="/base.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357909761487" ignored="false" />
     <file path="$PROJECT_DIR$/../Research/Closure Library/closure/goog/graphics/abstractgraphics.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357821653806" ignored="false" />
     <file path="$PROJECT_DIR$/../Research/Closure Library/closure/goog/dom/dom.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357821669832" ignored="false" />
     <file path="$PROJECT_DIR$/../Research/Closure Library/closure/goog/array/array.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357821669832" ignored="false" />
@@ -108,8 +104,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
-    <breakpoint_rules default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -144,6 +138,8 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
+    <breakpoint_rules default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -174,7 +170,7 @@
       <file leaf-file-name="array.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/array/array.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="172" column="18" selection-start="5911" selection-end="5918" vertical-scroll-proportion="-11.56">
+            <state line="172" column="18" selection-start="5911" selection-end="5918" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -183,16 +179,16 @@
       <file leaf-file-name="datetimesymbols.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/i18n/datetimesymbols.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2454" column="10" selection-start="105090" selection-end="105090" vertical-scroll-proportion="19.32">
+            <state line="2454" column="10" selection-start="105090" selection-end="105090" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="base.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="base.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/base.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="93" column="32" selection-start="3628" selection-end="3628" vertical-scroll-proportion="0.67676765">
+            <state line="77" column="17" selection-start="2960" selection-end="2960" vertical-scroll-proportion="-5.16">
               <folding />
             </state>
           </provider>
@@ -210,16 +206,43 @@
       <file leaf-file-name="timemanager.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/timemanager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="198" column="50" selection-start="5297" selection-end="5297" vertical-scroll-proportion="-9.4">
+            <state line="198" column="50" selection-start="5297" selection-end="5297" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="eventmanager.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="eventmanager.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/eventmanager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="99" column="4" selection-start="2429" selection-end="2429" vertical-scroll-proportion="0.0">
+            <state line="130" column="67" selection-start="3333" selection-end="3333" vertical-scroll-proportion="0.57300276">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="event.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/event.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="timemarker.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/rflect/cal/timemarker.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="132" column="32" selection-start="3471" selection-end="3471" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="chip.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/chip.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="67" column="28" selection-start="1536" selection-end="1536" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -228,7 +251,7 @@
       <file leaf-file-name="date.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="824" column="63" selection-start="24361" selection-end="24415" vertical-scroll-proportion="-8.8">
+            <state line="824" column="36" selection-start="24388" selection-end="24388" vertical-scroll-proportion="-10.76">
               <folding />
             </state>
           </provider>
@@ -255,7 +278,7 @@
       <file leaf-file-name="date_test.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/date/date_test.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="19" selection-start="591" selection-end="591" vertical-scroll-proportion="-7.6923075">
+            <state line="20" column="19" selection-start="591" selection-end="591" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -264,7 +287,7 @@
       <file leaf-file-name="date.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/date/date.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="144" column="26" selection-start="4209" selection-end="4209" vertical-scroll-proportion="-19.72">
+            <state line="173" column="48" selection-start="5366" selection-end="5366" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -273,7 +296,7 @@
       <file leaf-file-name="dom_test.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/dom/dom_test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1124" column="14" selection-start="40979" selection-end="40979" vertical-scroll-proportion="-10.2">
+            <state line="1124" column="14" selection-start="40979" selection-end="40979" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -304,14 +327,14 @@
         <option value="$PROJECT_DIR$/src/rflect/cal/events/event.js" />
         <option value="$PROJECT_DIR$/src/rflect/date/interval.js" />
         <option value="$PROJECT_DIR$/css/flatbutton.css" />
-        <option value="$PROJECT_DIR$/src/rflect/cal/events/chip.js" />
         <option value="$PROJECT_DIR$/src/rflect/date/date_test.html" />
-        <option value="$PROJECT_DIR$/src/rflect/cal/eventmanager.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/timemanager.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/i18n/symbols.js" />
-        <option value="$PROJECT_DIR$/src/rflect/date/date.js" />
         <option value="$PROJECT_DIR$/src/rflect/date/date_test.js" />
+        <option value="$PROJECT_DIR$/src/rflect/cal/events/chip.js" />
         <option value="$PROJECT_DIR$/src/closure-library/closure/goog/base.js" />
+        <option value="$PROJECT_DIR$/src/rflect/date/date.js" />
+        <option value="$PROJECT_DIR$/src/rflect/cal/eventmanager.js" />
       </list>
     </option>
   </component>
@@ -382,6 +405,25 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane">
+        <subPane />
+      </pane>
+      <pane id="Scope">
+        <subPane />
+        <subPane subId="Non-Project Files" />
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="rflectevents">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -494,27 +536,48 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="rflect" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="events" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Calendar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rflectevents" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="closure-library" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane />
-      </pane>
-      <pane id="Scope">
-        <subPane />
-        <subPane subId="Non-Project Files" />
-        <subPane subId="Project Files">
           <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Calendar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="rflectevents">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rflectevents" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="build" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -523,45 +586,45 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="61" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="55" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="46" />
     <property name="project.structure.last.edited" value="Project" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="43" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="36" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="38" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="59" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="56" />
-    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder1" value="1" />
+    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder0" value="0" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder2" value="2" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth2" value="55" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth2" value="54" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder5" value="5" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth1" value="54" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder4" value="4" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Research/dhtmlxScheduler_v30_120111" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth0" value="55" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth5" value="429" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth4" value="429" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth0" value="54" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth5" value="423" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth4" value="424" />
     <property name="GoToClass.includeJavaFiles" value="false" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth3" value="54" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="315" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="565" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="257" />
     <property name="GoToClass.includeLibraries" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="608" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
     <property name="options.lastSelected" value="preferences.sourceCode.General" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder1" value="1" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
     <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
@@ -953,7 +1016,11 @@
       <created>1357819705128</created>
       <updated>1357819705128</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="Week numbers are correct, at least for ISO weeks.">
+      <created>1357833324138</created>
+      <updated>1357833324138</updated>
+    </task>
+    <option name="localTasksCounter" value="82" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -984,18 +1051,18 @@
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32971016" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29575402" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14014466" sideWeight="0.704246" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13019891" sideWeight="0.704246" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="SBT Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6281113" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29868227" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29575402" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32896653" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2540687" sideWeight="0.084919475" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2188065" sideWeight="0.103953145" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32849365" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2540687" sideWeight="0.90483165" order="0" side_tool="true" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2188065" sideWeight="0.5900439" order="0" side_tool="true" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32849365" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1047,7 +1114,7 @@
     <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed date-time symbols from timemanager because date class already contains localized cutoff and first day of week as defaults." />
+    <option name="LAST_COMMIT_MESSAGE" value="Week numbers are correct, at least for ISO weeks." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1060,7 +1127,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="Today decoration, mask gets proper z-index." />
     <MESSAGE value="Fixed bug in month mode, concerning today decoration of daycell." />
     <MESSAGE value="Further css optimizations of today daycell. Renaming of rflect.date.Date to rflect.date.DateShim." />
     <MESSAGE value="Interval tree started." />
@@ -1085,6 +1151,7 @@
     <MESSAGE value="Intermediate commit - date now is always calculated with day of year and week of year." />
     <MESSAGE value="Some changes to date. Unit tests created." />
     <MESSAGE value="Removed date-time symbols from timemanager because date class already contains localized cutoff and first day of week as defaults." />
+    <MESSAGE value="Week numbers are correct, at least for ISO weeks." />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -1149,75 +1216,37 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/css/common.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="16" selection-start="776" selection-end="776" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/viewtype.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="23" selection-start="256" selection-end="256" vertical-scroll-proportion="0.43987823" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/structs/intervaltree_test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/structs/intervaltree_test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="824" column="63" selection-start="24361" selection-end="24415" vertical-scroll-proportion="-8.8">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/dom/dom_test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1124" column="14" selection-start="40979" selection-end="40979" vertical-scroll-proportion="-10.2">
+        <state line="1124" column="14" selection-start="40979" selection-end="40979" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/array/array.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="172" column="18" selection-start="5911" selection-end="5918" vertical-scroll-proportion="-11.56">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/eventmanager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="99" column="4" selection-start="2429" selection-end="2429" vertical-scroll-proportion="0.0">
+        <state line="172" column="18" selection-start="5911" selection-end="5918" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/date/date_test.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="19" selection-start="591" selection-end="591" vertical-scroll-proportion="-7.6923075">
+        <state line="20" column="19" selection-start="591" selection-end="591" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/cal/timemanager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="198" column="50" selection-start="5297" selection-end="5297" vertical-scroll-proportion="-9.4">
+        <state line="198" column="50" selection-start="5297" selection-end="5297" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/i18n/datetimesymbols.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2454" column="10" selection-start="105090" selection-end="105090" vertical-scroll-proportion="19.32">
+        <state line="2454" column="10" selection-start="105090" selection-end="105090" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1236,13 +1265,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/date/date.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="144" column="26" selection-start="4209" selection-end="4209" vertical-scroll-proportion="-19.72">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/date/date_test.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="88" column="30" selection-start="2495" selection-end="2495" vertical-scroll-proportion="0.0">
@@ -1250,9 +1272,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/timemarker.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="132" column="32" selection-start="3471" selection-end="3471" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/event.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/chip.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="28" selection-start="1536" selection-end="1536" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="824" column="36" selection-start="24388" selection-end="24388" vertical-scroll-proportion="-10.76">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/base.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="93" column="32" selection-start="3628" selection-end="3628" vertical-scroll-proportion="0.67676765">
+        <state line="77" column="17" selection-start="2960" selection-end="2960" vertical-scroll-proportion="-5.16">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/date/date.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="173" column="48" selection-start="5366" selection-end="5366" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build/outputcompiled.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-3.06">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/eventmanager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="130" column="67" selection-start="3333" selection-end="3333" vertical-scroll-proportion="0.57300276">
           <folding />
         </state>
       </provider>

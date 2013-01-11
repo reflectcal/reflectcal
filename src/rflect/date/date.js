@@ -159,6 +159,34 @@ rflect.date.compareByWeekAndYear = function(aDateA, aDateB){
 
 
 /**
+ * @param {string} aDateStr JSON string representation of date.
+ * @param {boolean=} opt_calc_day Whether to calculate day of year.
+ * @param {boolean=} opt_calc_week Whether to calculate week of year.
+ * @return {rflect.date.DateShim} Date in DateShim form.
+ */
+rflect.date.parse = function(aDateStr, opt_calc_day, opt_calc_week){
+  var dateShim = new rflect.date.DateShim(
+    dateShim.setYear(+aDateStr.substr(0, 4)),
+    dateShim.setMonth(+aDateStr.substr(4, 2)),
+    dateShim.setDate(+aDateStr.substr(6, 2)),
+    dateShim.setHours(+aDateStr.substr(8, 2)),
+    dateShim.setMinutes(+aDateStr.substr(10, 2)),
+    dateShim.setSeconds(+aDateStr.substr(12, 2))
+  );
+  if (opt_calc_day)
+    dateShim.setDayOfYear(goog.date.Date.prototype.getDayOfYear.call(dateShim));
+  if (opt_calc_week) {
+    var weekNumber = goog.date.getWeekNumber(dateShim.getYear(),
+        dateShim.getMonth(), dateShim.getDate(),
+        goog.i18n.DateTimeSymbols.FIRSTWEEKCUTOFFDAY,
+        goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK);
+    dateShim.setWeekNumber(weekNumber);
+  }
+  return dateShim;
+}
+
+
+/**
  * Fields by which dates could be compared.
  * @enum {number}
  */
@@ -535,6 +563,17 @@ rflect.date.DateShim.prototype.equals = function(aOther, opt_bitmask) {
 
 
 /**
+ * Checks equality by date fields only.
+ * @param {goog.date.DateLike} aOther Date to test.
+ * @return {boolean} Whether this date equals other.
+ */
+rflect.date.DateShim.prototype.equalsByDate = function(aOther) {
+  return this.equals(aOther, rflect.date.fields.YEAR |
+      rflect.date.fields.MONTH | rflect.date.fields.DATE);
+};
+
+
+/**
  * @return {number} Value of wrapped date.
  */
 rflect.date.DateShim.prototype.valueOf = function() {
@@ -549,3 +588,17 @@ rflect.date.DateShim.prototype.valueOf = function() {
 rflect.date.DateShim.prototype.getTomorrow = function() {
   return rflect.date.getTomorrow(this);
 }
+
+
+/**
+ * @return {!rflect.date.DateShim} A clone of the DateShim.
+ */
+rflect.date.DateShim.prototype.clone = function() {
+  var date = new rflect.date.DateShim(this);
+  date.setFirstDayOfWeek(this.getFirstDayOfWeek());
+  date.setFirstWeekCutOffDay(this.getFirstWeekCutOffDay());
+  date.setDayOfYear(this.getDayOfYear());
+  date.setWeekNumber(this.getWeekNumber());
+
+  return date;
+};
