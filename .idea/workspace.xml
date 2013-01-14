@@ -24,12 +24,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="94f59c91-c161-4423-a022-ed195e39c373" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trac/db/trac.db" afterPath="$PROJECT_DIR$/trac/db/trac.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/events/chip.js" afterPath="$PROJECT_DIR$/src/rflect/cal/events/chip.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/date/date.js" afterPath="$PROJECT_DIR$/src/rflect/date/date.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/eventmanager.js" afterPath="$PROJECT_DIR$/src/rflect/cal/eventmanager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/outputcompiled.js.map" afterPath="$PROJECT_DIR$/src/outputcompiled.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/outputcompiled.js" afterPath="$PROJECT_DIR$/src/outputcompiled.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Calendar.iws" />
@@ -38,29 +33,29 @@
     <file path="$PROJECT_DIR$/../Salcus client/src/env.properties" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742365450" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/wsdl/ProductCatalogueDataService.wsdl" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356514260538" ignored="false" />
     <file path="/ProductCatalogueDataService.wsdl" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356514257869" ignored="false" />
-    <file path="$PROJECT_DIR$/../Salcus client/src/TestClient.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357911533008" ignored="false" />
+    <file path="$PROJECT_DIR$/../Salcus client/src/TestClient.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357918163032" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/CustomerProperty.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356514847203" ignored="false" />
     <file path="/CustomerProperty.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356514829315" ignored="false" />
     <file path="/TestClient.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357910914931" ignored="false" />
     <file path="/DBLink.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356519310418" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/DBLink.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357805943294" ignored="false" />
     <file path="/env.properties" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742339458" ignored="false" />
-    <file path="/Dummy.txt" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357896607741" ignored="false" />
-    <file path="$PROJECT_DIR$/../Salcus client/.idea/workspace.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357897089284" ignored="false" />
-    <file path="$PROJECT_DIR$/../Salcus client/src/request.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357910631991" ignored="false" />
-    <file path="/eventmanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357909837844" ignored="false" />
+    <file path="/Dummy.txt" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358158882981" ignored="false" />
+    <file path="$PROJECT_DIR$/../Salcus client/.idea/workspace.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357920242430" ignored="false" />
+    <file path="$PROJECT_DIR$/../Salcus client/src/request.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357915629834" ignored="false" />
+    <file path="/eventmanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358153158655" ignored="false" />
     <file path="/event.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357304658173" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/CustomFromBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357737049220" ignored="false" />
     <file path="/CustomFromBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357736736033" ignored="false" />
     <file path="/fragment.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356602205215" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/CustomRefParamsBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357736985203" ignored="false" />
-    <file path="/a.dummy" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357893920326" ignored="false" />
+    <file path="/a.dummy" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358177390295" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/tefo2de/productcataloguedataservice/ProductCatalogueDataService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742558891" ignored="false" />
     <file path="/ProductCatalogueDataService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357658153144" ignored="false" />
     <file path="/recurringevent.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357303959398" ignored="false" />
-    <file path="/chip.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357906032873" ignored="false" />
+    <file path="/chip.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357919252674" ignored="false" />
     <file path="/interval.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357305730698" ignored="false" />
-    <file path="/date.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357901739847" ignored="false" />
+    <file path="/date.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357918740215" ignored="false" />
     <file path="$PROJECT_DIR$/../salcus-soap/salcus-soap/src/main/java/de/o2/bic/ProductCatalogueDataServicePortImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357658161420" ignored="false" />
     <file path="/ProductCatalogueDataServicePortImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357658049156" ignored="false" />
     <file path="/date_test.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357826147499" ignored="false" />
@@ -69,7 +64,7 @@
     <file path="$PROJECT_DIR$/../bic_soap_new/nbaa-soap/src/main/webapp/WEB-INF/wsdls/schema.xsd" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357724145132" ignored="false" />
     <file path="/CustomRefParamsBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357736911858" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/tefo2de/productcataloguedataservice/ProductCatalogueDataServicePort.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357738035931" ignored="false" />
-    <file path="$PROJECT_DIR$/../Salcus client/src/SalcusClientHandler.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357895472835" ignored="false" />
+    <file path="$PROJECT_DIR$/../Salcus client/src/SalcusClientHandler.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357918201748" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/handlers.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742931713" ignored="false" />
     <file path="/SalcusClientHandler.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357746524577" ignored="false" />
     <file path="/handlers.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742727039" ignored="false" />
@@ -82,6 +77,13 @@
     <file path="$PROJECT_DIR$/../Research/Closure Library/closure/goog/array/array.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357821669832" ignored="false" />
     <file path="/timemanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357828736662" ignored="false" />
     <file path="/symbols.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357831562145" ignored="false" />
+    <file path="/request_salcus.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357915589779" ignored="false" />
+    <file path="$PROJECT_DIR$/../Salcus client/src/request_salcus.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357915602516" ignored="false" />
+    <file path="$PROJECT_DIR$/../cat/cat-web/src/main/webapp/resources/scripts/common/json2.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358159168739" ignored="false" />
+    <file path="$PROJECT_DIR$/../cat/cat-web/src/main/webapp/resources/scripts/pack/packBoltonCommon.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358171063293" ignored="false" />
+    <file path="/packBoltonCommon.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358171061674" ignored="false" />
+    <file path="$PROJECT_DIR$/../cat/cat-schema/src/main/xsd/BusinessBuildingBlock.xsd" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358173106994" ignored="false" />
+    <file path="$PROJECT_DIR$/../cat/cat-web/src/main/conf/xsd/BusinessBuildingBlock.xsd" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358173071430" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,6 +106,7 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -138,7 +141,6 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
@@ -188,7 +190,7 @@
       <file leaf-file-name="base.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/base.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="77" column="17" selection-start="2960" selection-end="2960" vertical-scroll-proportion="-5.16">
+            <state line="77" column="17" selection-start="2960" selection-end="2960" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -215,7 +217,7 @@
       <file leaf-file-name="eventmanager.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/eventmanager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="130" column="67" selection-start="3333" selection-end="3333" vertical-scroll-proportion="0.57300276">
+            <state line="168" column="14" selection-start="4588" selection-end="4588" vertical-scroll-proportion="0.33170733">
               <folding />
             </state>
           </provider>
@@ -242,7 +244,7 @@
       <file leaf-file-name="chip.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/chip.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="67" column="28" selection-start="1536" selection-end="1536" vertical-scroll-proportion="0.0">
+            <state line="47" column="44" selection-start="1024" selection-end="1024" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -251,7 +253,7 @@
       <file leaf-file-name="date.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="824" column="36" selection-start="24388" selection-end="24388" vertical-scroll-proportion="-10.76">
+            <state line="824" column="36" selection-start="24388" selection-end="24388" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -287,7 +289,7 @@
       <file leaf-file-name="date.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/date/date.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="173" column="48" selection-start="5366" selection-end="5366" vertical-scroll-proportion="0.0">
+            <state line="583" column="18" selection-start="14579" selection-end="14579" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -331,9 +333,9 @@
         <option value="$PROJECT_DIR$/src/rflect/cal/timemanager.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/i18n/symbols.js" />
         <option value="$PROJECT_DIR$/src/rflect/date/date_test.js" />
-        <option value="$PROJECT_DIR$/src/rflect/cal/events/chip.js" />
         <option value="$PROJECT_DIR$/src/closure-library/closure/goog/base.js" />
         <option value="$PROJECT_DIR$/src/rflect/date/date.js" />
+        <option value="$PROJECT_DIR$/src/rflect/cal/events/chip.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/eventmanager.js" />
       </list>
     </option>
@@ -407,22 +409,6 @@
     <panes>
       <pane id="PackagesPane">
         <subPane />
-      </pane>
-      <pane id="Scope">
-        <subPane />
-        <subPane subId="Non-Project Files" />
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="rflectevents">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
       </pane>
       <pane id="ProjectPane">
         <subPane>
@@ -578,6 +564,22 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="build" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane />
+        <subPane subId="Non-Project Files" />
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="rflectevents">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -1020,7 +1022,15 @@
       <created>1357833324138</created>
       <updated>1357833324138</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="Forming day chips.">
+      <created>1357912902106</created>
+      <updated>1357912902106</updated>
+    </task>
+    <task id="LOCAL-00083" summary="Intermediate commit: week chips.">
+      <created>1357919492104</created>
+      <updated>1357919492104</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1044,25 +1054,24 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1168" height="840" extended-state="6" />
+    <frame x="-8" y="-8" width="1168" height="840" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32896653" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32971016" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29575402" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13019891" sideWeight="0.704246" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.13019891" sideWeight="0.704246" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="SBT Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6281113" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29575402" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32896653" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2188065" sideWeight="0.103953145" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32849365" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2188065" sideWeight="0.13909224" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820976" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2188065" sideWeight="0.5900439" order="0" side_tool="true" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2188065" sideWeight="0.85065883" order="0" side_tool="true" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32849365" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1071,6 +1080,7 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29575402" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1114,7 +1124,7 @@
     <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Week numbers are correct, at least for ISO weeks." />
+    <option name="LAST_COMMIT_MESSAGE" value="Intermediate commit: week chips." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1127,8 +1137,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="Fixed bug in month mode, concerning today decoration of daycell." />
-    <MESSAGE value="Further css optimizations of today daycell. Renaming of rflect.date.Date to rflect.date.DateShim." />
     <MESSAGE value="Interval tree started." />
     <MESSAGE value="Interval tree is added." />
     <MESSAGE value="Test suite for intervaltree.js." />
@@ -1152,6 +1160,8 @@
     <MESSAGE value="Some changes to date. Unit tests created." />
     <MESSAGE value="Removed date-time symbols from timemanager because date class already contains localized cutoff and first day of week as defaults." />
     <MESSAGE value="Week numbers are correct, at least for ISO weeks." />
+    <MESSAGE value="Forming day chips." />
+    <MESSAGE value="Intermediate commit: week chips." />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -1286,44 +1296,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/chip.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="28" selection-start="1536" selection-end="1536" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="824" column="36" selection-start="24388" selection-end="24388" vertical-scroll-proportion="-10.76">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/base.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="77" column="17" selection-start="2960" selection-end="2960" vertical-scroll-proportion="-5.16">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/date/date.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="173" column="48" selection-start="5366" selection-end="5366" vertical-scroll-proportion="0.0">
+        <state line="77" column="17" selection-start="2960" selection-end="2960" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/build/outputcompiled.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-3.06">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-3.06" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="824" column="36" selection-start="24388" selection-end="24388" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/date/date.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="583" column="18" selection-start="14579" selection-end="14579" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/chip.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="44" selection-start="1024" selection-end="1024" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/cal/eventmanager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="130" column="67" selection-start="3333" selection-end="3333" vertical-scroll-proportion="0.57300276">
+        <state line="168" column="14" selection-start="4588" selection-end="4588" vertical-scroll-proportion="0.33170733">
           <folding />
         </state>
       </provider>

@@ -121,16 +121,21 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
 
     // Generating chips.
     while (hasNext) {
+      tomorrow = currentDate.getTomorrow();
+
       hasPrev = !currentDate.equalsByDate(startDate);
-      hasNext = !currentDate.equalsByDate(endDate);
+      hasNext = !currentDate.equalsByDate(endDate) ||
+          tomorrow.equalsByDate(endDate) && eventEndMins == 0;
 
       hasPrevWeek = !currentDate.equalsByWeek(startDate);
-      hasNextWeek = !currentDate.equalsByWeek(endDate);
+      hasNextWeek = hasNext && tomorrow.getWeekday() == 0;
 
       if (!hasNext){
-        if (eventEndMins == 0)
-          hasChip = false;
-        else
+        if (eventEndMins == 0){
+          dayChipEndMins = rflect.cal.events.Chip.MAX_MINUTES_DAY;
+          weekChipEndMins = currentDate.getWeekday();
+          endIsCut = false;
+        } else
           dayChipEndMins = eventEndMins;
       } else {
          dayChipEndMins = rflect.cal.events.Chip.MAX_MINUTES_DAY;
@@ -144,9 +149,10 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
       }
 
       if (!hasNextWeek){
-        if (eventEndMins == 0)
-          hasWeekChip = false;
-        else
+        if (eventEndMins == 0) {
+          dayChipEndMins = rflect.cal.events.Chip.MAX_MINUTES_WEEK;
+          endIsCut = false;
+        } else
           weekChipEndMins = currentDate.getWeekday() *
               rflect.cal.events.MAX_MINUTES_DAY + eventEndMins;
       } else {
@@ -161,17 +167,16 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
          startIsCut = true;
       }
 
-      if (hasChip){
-        var chip = new rflect.cal.events.Chip(event.id, dayChipStartMins,
-            dayChipEndMins, startIsCut, endIsCut);
-        this.putDayChip(chip, currentDate);
-      }
+      var chip = new rflect.cal.events.Chip(event.id, dayChipStartMins,
+          dayChipEndMins, startIsCut, endIsCut);
+      this.putDayChip(chip, currentDate);
+
       if (hasWeekChip){
-        var chip = new rflect.cal.events.Chip(event.id, dayChipStartMins,
-            dayChipEndMins, startIsCut, endIsCut);
-        this.putDayChip(chip, currentDate);
+        var chip = new rflect.cal.events.Chip(event.id, weekChipStartMins,
+            weekChipEndMins, startIsCut, endIsCut);
+        this.putWeekChip(chip, currentDate);
       }
-      currentDate = startDate.getTomorrow();
+      currentDate = tomorrow;
     }
   }
 };
