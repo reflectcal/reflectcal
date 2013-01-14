@@ -43,7 +43,7 @@ rflect.cal.events.Chip.MAX_MINUTES_DAY = 24 * 60;
  * @type {number}
  * @const
  */
-rflect.cal.events.Chip.MAX_MINUTES_WEEK = 24 * 60 * 7;
+rflect.cal.events.Chip.MAX_DAYS_WEEK = 7;
 
 
 /**

@@ -111,11 +111,15 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
 
     var hasNext = true;
     var hasPrev = false;
-    var hasChip = true;
+    var hasNextWeek = false;
+    var hasPrevWeek = false;
+    var weekChip = false;
     var dayChipStartMins = 0;
     var dayChipEndMins = 0;
     var startIsCut = false;
     var endIsCut = false;
+    var weekChipStartMins = 0;
+    var weekChipEndMins = 0;
 
     var event = new rflect.cal.events.Event();
 
@@ -126,20 +130,24 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
       hasPrev = !currentDate.equalsByDate(startDate);
       hasNext = !currentDate.equalsByDate(endDate) ||
           tomorrow.equalsByDate(endDate) && eventEndMins == 0;
+      weekChip = !weekChip && (!hasNext || currentDate.getWeekday() == 6);
 
       hasPrevWeek = !currentDate.equalsByWeek(startDate);
       hasNextWeek = hasNext && tomorrow.getWeekday() == 0;
 
+      weekChipEndMins = hasNextWeek ? rflect.cal.events.Chip.MAX_DAYS_WEEK :
+          currentDate.getWeekday() + 1;
+      weekChipStartMins = hasPrevWeek ? 0 : startDate.getWeekday();
+
       if (!hasNext){
         if (eventEndMins == 0){
           dayChipEndMins = rflect.cal.events.Chip.MAX_MINUTES_DAY;
-          weekChipEndMins = currentDate.getWeekday();
           endIsCut = false;
         } else
           dayChipEndMins = eventEndMins;
       } else {
-         dayChipEndMins = rflect.cal.events.Chip.MAX_MINUTES_DAY;
-         endIsCut = true;
+        dayChipEndMins = rflect.cal.events.Chip.MAX_MINUTES_DAY;
+        endIsCut = true;
       }
       if (!hasPrev){
         dayChipStartMins = eventStartMins;
@@ -148,33 +156,20 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
          startIsCut = true;
       }
 
-      if (!hasNextWeek){
-        if (eventEndMins == 0) {
-          dayChipEndMins = rflect.cal.events.Chip.MAX_MINUTES_WEEK;
-          endIsCut = false;
-        } else
-          weekChipEndMins = currentDate.getWeekday() *
-              rflect.cal.events.MAX_MINUTES_DAY + eventEndMins;
-      } else {
-        weekChipEndMins = rflect.cal.events.Chip.MAX_MINUTES_WEEK;
-        endIsCut = true;
-      }
-      if (!hasPrevWeek){
-        weekChipStartMins = currentDate.getWeekday() *
-            rflect.cal.events.MAX_MINUTES_DAY + eventStartMins;
-      } else {
-         weekChipStartMins = 0;
-         startIsCut = true;
-      }
+      weekChipStartMins = hasPrevWeek ? 0 : startDate.getWeekday();
+      weekChipEndMins = hasNextWeek ? rflect.cal.events.Chip.MAX_DAYS_WEEK :
+          eventEndMins != 0 ? endDate.getWeekday() + 1 : endDate.getWeekday();
+
 
       var chip = new rflect.cal.events.Chip(event.id, dayChipStartMins,
           dayChipEndMins, startIsCut, endIsCut);
       this.putDayChip(chip, currentDate);
 
-      if (hasWeekChip){
-        var chip = new rflect.cal.events.Chip(event.id, weekChipStartMins,
+      if (weekChip){
+        chip = new rflect.cal.events.Chip(event.id, weekChipStartMins,
             weekChipEndMins, startIsCut, endIsCut);
         this.putWeekChip(chip, currentDate);
+        weekChip = false;
       }
       currentDate = tomorrow;
     }
@@ -183,7 +178,7 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
 
 
 /**
- * Saves chip.
+ * Saves day chip.
  * @param {rflect.cal.events.Chip} aChip Chip to save.
  * @param {rflect.date.DateShim} aDate Which date characterizes chip.
  * @private
@@ -196,5 +191,22 @@ rflect.cal.EventManager.prototype.putDayChip_ = function(aChip, aDate) {
   if (!(dayOfYear in this.chipsByDay_[year]))
     this.chipsByDay_[year][dayOfYear] = [];
   this.chipsByDay_[year][dayOfYear].push(aChip);
+}
+
+
+/**
+ * Saves week chip.
+ * @param {rflect.cal.events.Chip} aChip Chip to save.
+ * @param {rflect.date.DateShim} aDate Which date characterizes chip.
+ * @private
+ */
+rflect.cal.EventManager.prototype.putWeekChip_ = function(aChip, aDate) {
+  var year = aDate.getYear();
+  var weekOfYear = aDate.getWeekNumber();
+  if (!(year in this.chipsByWeek_))
+    this.chipsByWeek_[year] = {};
+  if (!(weekOfYear in this.chipsByWeek_[year]))
+    this.chipsByWeek_[year][weekOfYear] = [];
+  this.chipsByWeek_[year][weekOfYear].push(aChip);
 }
 
