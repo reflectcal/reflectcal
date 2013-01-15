@@ -41,7 +41,7 @@ rflect.cal.EventManager = function(aViewManager, aTimeManager) {
    * @type {Object.<number, rflect.cal.events.Event|rflect.cal.events.RecurringEvent>}
    * @private
    */
-  rflect.cal.EventManager.prototype.events_ = {};
+  this.events_ = {};
 
 
   /**
@@ -49,7 +49,7 @@ rflect.cal.EventManager = function(aViewManager, aTimeManager) {
    * @type {Object.<number, <Object.<number, Array.<rflect.cal.events.Chip>>>}
    * @private
    */
-  rflect.cal.EventManager.prototype.chipsByDay_ = {};
+  this.chipsByDay_ = {};
 
 
   /**
@@ -57,7 +57,7 @@ rflect.cal.EventManager = function(aViewManager, aTimeManager) {
    * @type {Object.<number, <Object.<number, Array.<rflect.cal.events.Chip>>>}
    * @private
    */
-  rflect.cal.EventManager.prototype.allDayChipsByDay_ = {};
+  this.allDayChipsByDay_ = {};
 
 
   /**
@@ -65,7 +65,34 @@ rflect.cal.EventManager = function(aViewManager, aTimeManager) {
    * @type {Object.<number, <Object.<number, Array.<rflect.cal.events.Chip>>>}
    * @private
    */
-  rflect.cal.EventManager.prototype.chipsByWeek_ = {};
+  this.chipsByWeek_ = {};
+
+
+  /**
+   * Object for quick access to chip indexes (year, day), used for deleting of
+   * chips.
+   * @type {Object<number>.Array<number>}
+   * @private
+   */
+  this.tracksChipsByDay_ = {};
+
+
+  /**
+   * Similar as <code>tracksChipsByDay_</code>, for week chips.
+   * chips.
+   * @type {Object<number>.Array<number>}
+   * @private
+   */
+  this.tracksChipsByWeek_ = {};
+
+
+  /**
+   * Similar as <code>tracksChipsByDay_</code>, for all-day chips.
+   * chips.
+   * @type {Object<number>.Array<number>}
+   * @private
+   */
+  this.tracksAllDayChipsByDay_ = {};
 
 
   /**
@@ -73,14 +100,14 @@ rflect.cal.EventManager = function(aViewManager, aTimeManager) {
    * @type {rflect.structs.IntervalTree}
    * @private
    */
-  rflect.cal.EventManager.prototype.plans_ = null;
+  this.plans_ = null;
 
 
   /**
    * List of recurring events with infinite intervals.
    * @type {Array.<rflect.cal.events.RecurringEvent>}
    */
-  rflect.cal.EventManager.prototype.infinitePlans_ = [];
+  this.infinitePlans_ = [];
 };
 
 
@@ -116,8 +143,6 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
     var weekChip = false;
     var dayChipStartMins = 0;
     var dayChipEndMins = 0;
-    var startIsCut = false;
-    var endIsCut = false;
     var weekChipStartMins = 0;
     var weekChipEndMins = 0;
 
@@ -130,14 +155,11 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
       hasPrev = !currentDate.equalsByDate(startDate);
       hasNext = !currentDate.equalsByDate(endDate) ||
           tomorrow.equalsByDate(endDate) && eventEndMins == 0;
+
       weekChip = !hasNext || currentDate.getWeekday() == 6;
 
       hasPrevWeek = !currentDate.equalsByWeek(startDate);
       hasNextWeek = hasNext && tomorrow.getWeekday() == 0;
-
-      weekChipEndMins = hasNextWeek ? rflect.cal.events.Chip.MAX_DAYS_WEEK :
-          currentDate.getWeekday() + 1;
-      weekChipStartMins = hasPrevWeek ? 0 : startDate.getWeekday();
 
       if (!hasNext){
         if (eventEndMins == 0){
@@ -145,45 +167,39 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
         } else {
           dayChipEndMins = eventEndMins;
         }
-        endIsCut = false;
       } else {
         dayChipEndMins = rflect.cal.events.Chip.MAX_MINUTES_DAY;
-        endIsCut = true;
       }
       if (!hasPrev){
         dayChipStartMins = eventStartMins;
-        startIsCut = false;
       } else {
          dayChipStartMins = 0;
-         startIsCut = true;
       }
 
       var chip = new rflect.cal.events.Chip(event.id, dayChipStartMins,
-          dayChipEndMins, startIsCut, endIsCut);
+          dayChipEndMins, hasPrev, hasNext);
       this.putDayChip(chip, currentDate);
 
       if (weekChip){
+        weekChip = false;
+
         if (!hasNextWeek){
           if (eventEndMins == 0){
             weekChipEndMins = endDate.getWeekday();
-            endIsCutWeek = false;
           } else
             weekChipEndMins = endDate.getWeekday() + 1;
         } else {
           weekChipEndMins = rflect.cal.events.Chip.MAX_DAYS_WEEK;
-          endIsCutWeek = true;
         }
         if (!hasPrevWeek){
           weekChipStartMins = startDate.getWeekday();
         } else {
            weekChipStartMins = 0;
-           startIsCutWeek = true;
         }
 
         chip = new rflect.cal.events.Chip(event.id, weekChipStartMins,
-            weekChipEndMins, startIsCutWeek, endIsCutWeek);
+            weekChipEndMins, hasPrevWeek, hasNextWeek);
         this.putWeekChip(chip, currentDate);
-        weekChip = false;
       }
       currentDate = tomorrow;
     }
@@ -205,6 +221,8 @@ rflect.cal.EventManager.prototype.putDayChip_ = function(aChip, aDate) {
   if (!(dayOfYear in this.chipsByDay_[year]))
     this.chipsByDay_[year][dayOfYear] = [];
   this.chipsByDay_[year][dayOfYear].push(aChip);
+
+  this.tracksChipsByDay_[aChip.eventId] = [year, dayOfYear];
 }
 
 
@@ -222,5 +240,7 @@ rflect.cal.EventManager.prototype.putWeekChip_ = function(aChip, aDate) {
   if (!(weekOfYear in this.chipsByWeek_[year]))
     this.chipsByWeek_[year][weekOfYear] = [];
   this.chipsByWeek_[year][weekOfYear].push(aChip);
+
+  this.tracksChipsByWeek_[aChip.eventId] = [year, weekOfYear];
 }
 
