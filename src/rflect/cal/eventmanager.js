@@ -142,15 +142,17 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
     var hasPrev = false;
     var hasNextWeek = false;
     var hasPrevWeek = false;
-    var weekChip = false;
+    var isWeekChip = false;
     var dayChipStartMins = 0;
     var dayChipEndMins = 0;
     var weekChipStartMins = 0;
     var weekChipEndMins = 0;
     var total = 0;
-    var allDay = false;
+    var isAllDay = false;
 
-    if (allDay)
+    var chip;
+
+    if (isAllDay)
       var allDayIndexes = [];
 
     // Generating chips.
@@ -161,12 +163,12 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
       hasNext = !currentDate.equalsByDate(endDate) ||
           tomorrow.equalsByDate(endDate) && eventEndMins == 0;
 
-      weekChip = !hasNext || currentDate.getWeekday() == 6;
+      isWeekChip = !hasNext || currentDate.getWeekday() == 6;
 
       hasPrevWeek = !currentDate.equalsByWeek(startDate);
       hasNextWeek = hasNext && tomorrow.getWeekday() == 0;
 
-      if (allDay) {
+      if (isAllDay) {
         allDayIndexes[total++] = [
           currentDate.getYear(),
           currentDate.getDate()
@@ -190,12 +192,12 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
            dayChipStartMins = 0;
         }
 
-        var chip = new rflect.cal.events.Chip(event.id, dayChipStartMins,
+        chip = new rflect.cal.events.Chip(event.id, dayChipStartMins,
             dayChipEndMins, hasPrev, hasNext);
         this.putDayChip(chip, currentDate);
       }
 
-      if (weekChip){
+      if (isWeekChip){
         if (!hasNextWeek){
           if (eventEndMins == 0){
             weekChipEndMins = endDate.getWeekday();
@@ -230,13 +232,8 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
 rflect.cal.EventManager.prototype.putDayChip_ = function(aChip, aDate) {
   var year = aDate.getYear();
   var dayOfYear = aDate.getDayOfYear();
-  if (!(year in this.chipsByDay_))
-    this.chipsByDay_[year] = {};
-  if (!(dayOfYear in this.chipsByDay_[year]))
-    this.chipsByDay_[year][dayOfYear] = [];
-  this.chipsByDay_[year][dayOfYear].push(aChip);
-
-  this.tracksChipsByDay_[aChip.eventId] = [year, dayOfYear];
+  this.putChip_(aChip, year, dayOfYear, this.chipsByDay_,
+      this.tracksChipsByDay_);
 }
 
 
@@ -255,13 +252,8 @@ rflect.cal.EventManager.prototype.putAllDayChips_ =
     var chip = new rflect.cal.events.Chip(aEventId, 0, length - counter,
         counter != 0, false);
 
-    if (!(year in this.allDayChipsByDay_))
-      this.allDayChipsByDay_[year] = {};
-    if (!(dayOfYear in this.allDayChipsByDay_[year]))
-      this.allDayChipsByDay_[year][dayOfYear] = [];
-    this.allDayChipsByDay_[year][dayOfYear].push(chip);
-  
-    this.tracksAllDayChipsByDay_[chip.eventId] = [year, dayOfYear];
+    this.putChip_(chip, year, dayOfYear, this.allDayChipsByDay_,
+        this.tracksAllDayChipsByDay_);
   }
 }
 
@@ -275,13 +267,8 @@ rflect.cal.EventManager.prototype.putAllDayChips_ =
 rflect.cal.EventManager.prototype.putWeekChip_ = function(aChip, aDate) {
   var year = aDate.getYear();
   var weekOfYear = aDate.getWeekNumber();
-  if (!(year in this.chipsByWeek_))
-    this.chipsByWeek_[year] = {};
-  if (!(weekOfYear in this.chipsByWeek_[year]))
-    this.chipsByWeek_[year][weekOfYear] = [];
-  this.chipsByWeek_[year][weekOfYear].push(aChip);
-
-  this.tracksChipsByWeek_[aChip.eventId] = [year, weekOfYear];
+  this.putChip_(aChip, year, weekOfYear, this.chipsByWeek_,
+      this.tracksChipsByWeek_);
 }
 
 
@@ -294,13 +281,14 @@ rflect.cal.EventManager.prototype.putWeekChip_ = function(aChip, aDate) {
  * @param {number} aTracks Tracks data structure.
  * @private
  */
-rflect.cal.events.EventManager.putChip_ = function() {
-  if (!(aIndex1 in this.aDataSctructure))
-      this.aDataSctructure[aIndex1] = {};
-    if (!(aIndex2 in this.aDataSctructure[aIndex1]))
-      this.aDataSctructure[aIndex1][aIndex2] = [];
-    this.aDataSctructure[aIndex1][aIndex2].push(aChip);
+rflect.cal.events.EventManager.putChip_ = function(aChip, aIndex1, aIndex2,
+                                                   aDataStructure, aTracks) {
+  if (!(aIndex1 in aDataSctructure))
+      aDataSctructure[aIndex1] = {};
+    if (!(aIndex2 in aDataSctructure[aIndex1]))
+      aDataSctructure[aIndex1][aIndex2] = [];
+    aDataSctructure[aIndex1][aIndex2].push(aChip);
   
-    this.aTracks[aChip.eventId] = [aIndex1, aIndex2];
+    aTracks[aChip.eventId] = [aIndex1, aIndex2];
 }
 
