@@ -136,6 +136,8 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
     var eventEndMins = endDate.getHours() * 60 + endDate.getMinutes();
     var currentDate = startDate.clone();
 
+    var event = new rflect.cal.events.Event();
+
     var hasNext = true;
     var hasPrev = false;
     var hasNextWeek = false;
@@ -145,8 +147,11 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
     var dayChipEndMins = 0;
     var weekChipStartMins = 0;
     var weekChipEndMins = 0;
+    var total = 0;
+    var allDay = false;
 
-    var event = new rflect.cal.events.Event();
+    if (allDay)
+      var allDayIndexes = [];
 
     // Generating chips.
     while (hasNext) {
@@ -161,28 +166,36 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
       hasPrevWeek = !currentDate.equalsByWeek(startDate);
       hasNextWeek = hasNext && tomorrow.getWeekday() == 0;
 
-      if (!hasNext){
-        if (eventEndMins == 0){
-          dayChipEndMins = rflect.cal.events.Chip.MAX_MINUTES_DAY;
-        } else {
-          dayChipEndMins = eventEndMins;
-        }
-      } else {
-        dayChipEndMins = rflect.cal.events.Chip.MAX_MINUTES_DAY;
-      }
-      if (!hasPrev){
-        dayChipStartMins = eventStartMins;
-      } else {
-         dayChipStartMins = 0;
-      }
+      if (allDay) {
+        allDayIndexes[total++] = [
+          currentDate.getYear(),
+          currentDate.getDate()
+        ];
 
-      var chip = new rflect.cal.events.Chip(event.id, dayChipStartMins,
-          dayChipEndMins, hasPrev, hasNext);
-      this.putDayChip(chip, currentDate);
+        if (!hasNext)
+          this.putAllDayChips_(allDayIndexes);
+      } else {
+        if (!hasNext){
+          if (eventEndMins == 0){
+            dayChipEndMins = rflect.cal.events.Chip.MAX_MINUTES_DAY;
+          } else {
+            dayChipEndMins = eventEndMins;
+          }
+        } else {
+          dayChipEndMins = rflect.cal.events.Chip.MAX_MINUTES_DAY;
+        }
+        if (!hasPrev){
+          dayChipStartMins = eventStartMins;
+        } else {
+           dayChipStartMins = 0;
+        }
+
+        var chip = new rflect.cal.events.Chip(event.id, dayChipStartMins,
+            dayChipEndMins, hasPrev, hasNext);
+        this.putDayChip(chip, currentDate);
+      }
 
       if (weekChip){
-        weekChip = false;
-
         if (!hasNextWeek){
           if (eventEndMins == 0){
             weekChipEndMins = endDate.getWeekday();
@@ -201,6 +214,7 @@ rflect.cal.EventManager.prototype.addEvents = function(aJSONEvents) {
             weekChipEndMins, hasPrevWeek, hasNextWeek);
         this.putWeekChip(chip, currentDate);
       }
+      
       currentDate = tomorrow;
     }
   }
@@ -227,6 +241,32 @@ rflect.cal.EventManager.prototype.putDayChip_ = function(aChip, aDate) {
 
 
 /**
+ * Forms series of all-day chips.
+ * @param {Array.<Array.<number>>} aIndexes Indexes of all-day chips.
+ * @param {number} aEventId Event id.
+ * @private
+ */
+rflect.cal.EventManager.prototype.putAllDayChips_ =
+    function(aIndexes, aEventId) {
+  for (var counter = 0, length = aIndexes.length; counter < length; 
+      counter++) {
+    var year = aIndexes[0];
+    var dayOfYear = aIndexes[1];
+    var chip = new rflect.cal.events.Chip(aEventId, 0, length - counter,
+        counter != 0, false);
+
+    if (!(year in this.allDayChipsByDay_))
+      this.allDayChipsByDay_[year] = {};
+    if (!(dayOfYear in this.allDayChipsByDay_[year]))
+      this.allDayChipsByDay_[year][dayOfYear] = [];
+    this.allDayChipsByDay_[year][dayOfYear].push(chip);
+  
+    this.tracksAllDayChipsByDay_[chip.eventId] = [year, dayOfYear];
+  }
+}
+
+
+/**
  * Saves week chip.
  * @param {rflect.cal.events.Chip} aChip Chip to save.
  * @param {rflect.date.DateShim} aDate Which date characterizes chip.
@@ -242,5 +282,25 @@ rflect.cal.EventManager.prototype.putWeekChip_ = function(aChip, aDate) {
   this.chipsByWeek_[year][weekOfYear].push(aChip);
 
   this.tracksChipsByWeek_[aChip.eventId] = [year, weekOfYear];
+}
+
+
+/**
+ * Puts chip in appropriate data structures.
+ * @param {rflect.cal.events.Chip} aChip Chip to save.
+ * @param {number} aIndex1 First index (year).
+ * @param {number} aIndex2 Second index (day of year or week of year).
+ * @param {number} aDataStructure Data structure where to put chip.
+ * @param {number} aTracks Tracks data structure.
+ * @private
+ */
+rflect.cal.events.EventManager.putChip_ = function() {
+  if (!(aIndex1 in this.aDataSctructure))
+      this.aDataSctructure[aIndex1] = {};
+    if (!(aIndex2 in this.aDataSctructure[aIndex1]))
+      this.aDataSctructure[aIndex1][aIndex2] = [];
+    this.aDataSctructure[aIndex1][aIndex2].push(aChip);
+  
+    this.aTracks[aChip.eventId] = [aIndex1, aIndex2];
 }
 

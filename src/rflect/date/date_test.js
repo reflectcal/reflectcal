@@ -8,7 +8,6 @@ goog.require('rflect.date');
 
 
 
-/*
 function testGetTomorrowDate() {
   var date = new goog.date.Date(2013, 0, 10);
 
@@ -75,7 +74,6 @@ function testGoogDayOfYearEqualsRflect2() {
       );
 }
 
-*/
 
 function testGoogWeekOfYearEqualsRflect() {
   var dates = [
