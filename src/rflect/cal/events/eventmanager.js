@@ -11,6 +11,7 @@ goog.provide('rflect.cal.events.EventManager');
 
 goog.require('rflect.structs.IntervalTree');
 goog.require('rflect.cal.events.Chip');
+goog.require('rflect.cal.events.Event');
 
 
 
@@ -204,7 +205,7 @@ rflect.cal.events.EventManager.prototype.addEvents = function(aEventsArray) {
         ];
 
         if (!hasNext)
-          this.putAllDayChips_(allDayIndexes);
+          this.putAllDayChips_(allDayIndexes, event.id);
       } else {
         if (!hasNext){
           if (eventEndMins == 0){
@@ -223,7 +224,7 @@ rflect.cal.events.EventManager.prototype.addEvents = function(aEventsArray) {
 
         chip = new rflect.cal.events.Chip(event.id, dayChipStartMins,
             dayChipEndMins, hasPrev, hasNext);
-        this.putDayChip(chip, currentDate);
+        this.putDayChip_(chip, currentDate);
       }
 
       if (isWeekChip){
@@ -243,7 +244,7 @@ rflect.cal.events.EventManager.prototype.addEvents = function(aEventsArray) {
 
         chip = new rflect.cal.events.Chip(event.id, weekChipStartMins,
             weekChipEndMins, hasPrevWeek, hasNextWeek);
-        this.putWeekChip(chip, currentDate);
+        this.putWeekChip_(chip, currentDate);
       }
       
       currentDate = tomorrow;
@@ -276,8 +277,8 @@ rflect.cal.events.EventManager.prototype.putAllDayChips_ =
     function(aIndexes, aEventId) {
   for (var counter = 0, length = aIndexes.length; counter < length; 
       counter++) {
-    var year = aIndexes[0];
-    var dayOfYear = aIndexes[1];
+    var year = aIndexes[counter][0];
+    var dayOfYear = aIndexes[counter][1];
     var chip = new rflect.cal.events.Chip(aEventId, 0, length - counter,
         counter != 0, false);
 
@@ -306,12 +307,13 @@ rflect.cal.events.EventManager.prototype.putWeekChip_ = function(aChip, aDate) {
  * @param {rflect.cal.events.Chip} aChip Chip to save.
  * @param {number} aIndex1 First index (year).
  * @param {number} aIndex2 Second index (day of year or week of year).
- * @param {number} aDataStructure Data structure where to put chip.
- * @param {number} aTracks Tracks data structure.
+ * @param {Object.<number, Object.<number, Array.<rflect.cal.events.Chip>>>}
+ * aDataStructure Data structure where to put chip.
+ * @param {Object.<number, Array.<number>>} aTracks Tracks data structure.
  * @private
  */
-rflect.cal.events.EventManager.putChip_ = function(aChip, aIndex1, aIndex2,
-                                                   aDataStructure, aTracks) {
+rflect.cal.events.EventManager.prototype.putChip_ = function(aChip, aIndex1,
+    aIndex2, aDataStructure, aTracks) {
   if (!(aIndex1 in aDataStructure))
       aDataStructure[aIndex1] = {};
     if (!(aIndex2 in aDataStructure[aIndex1]))

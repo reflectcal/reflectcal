@@ -54,7 +54,7 @@ rflect.cal.ViewManager = function(aMainInstance) {
 
   /**
    * Container size monitor.
-   * @type {rlect.cal.ContainerSizeMonitor}
+   * @type {rflect.cal.ContainerSizeMonitor}
    */
   this.containerSizeMonitor_ = new rflect.cal.ContainerSizeMonitor(this,
       //TODO(alexk): Implement configuration options.
@@ -114,7 +114,7 @@ rflect.cal.ViewManager.prototype.currentView = rflect.cal.ViewType.NONE;
 
 /**
  * Container size monitor.
- * @type {rlect.cal.ContainerSizeMonitor}
+ * @type {rflect.cal.ContainerSizeMonitor}
  */
 rflect.cal.ViewManager.prototype.containerSizeMonitor_ = null;
 

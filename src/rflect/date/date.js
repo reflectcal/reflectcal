@@ -43,8 +43,8 @@ rflect.date.getNumberOfDaysInYear = function(year) {
  */
 rflect.date.moveToDayOfWeek = function(aDate, aDay, opt_orient) {
   // Locale-dependent first date of week.
-  var date = (goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK + aDay + 1) % 7;
-  var diff = (date - aDate.getDay() + 7 * (opt_orient || +1)) % 7;
+  var dayOfWeek = (goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK + aDay + 1) % 7;
+  var diff = (dayOfWeek - aDate.getDay() + 7 * (opt_orient || +1)) % 7;
   var date = aDate.clone();
   date.add(new goog.date.Interval(0, 0, (diff === 0) ? diff += 7 *
       (opt_orient || +1) : diff));
@@ -152,8 +152,9 @@ rflect.date.getTomorrow = function(aGivenDate) {
  * otherwise.
  */
 rflect.date.compareByWeekAndYear = function(aDateA, aDateB){
-  return aDateA.getYear() == aDateB.getYear() ? (aDateA.weekNumber == aDateB.weekNumber
-      ? 0 : (aDateA.weekNumber > aDateB.weekNumber ? 1 : -1)) : (aDateA.getYear() >
+  return aDateA.getYear() == aDateB.getYear() ? (aDateA.getWeekNumber() ==
+      aDateB.getWeekNumber() ? 0 : (aDateA.getWeekNumber() >
+      aDateB.getWeekNumber() ? 1 : -1)) : (aDateA.getYear() >
       aDateB.getYear() ? 1 : -1)
 }
 
@@ -221,7 +222,7 @@ rflect.date.DateShim = function(opt_year_or_date, opt_month, opt_date, opt_hours
     opt_minutes, opt_seconds, opt_milliseconds) {
   if (goog.isNumber(opt_year_or_date)) {
     this.setYear(opt_year_or_date || 0);
-    this.setMonth(opt_month || 0);
+    this.setMonth(/**@type {goog.date.month}*/(opt_month || 0));
     this.setDate(opt_date || 0);
     this.setHours(opt_hours || 0);
     this.setMinutes(opt_minutes || 0);
@@ -235,7 +236,7 @@ rflect.date.DateShim = function(opt_year_or_date, opt_month, opt_date, opt_hours
       date = new Date(goog.now());
 
     this.setYear(date.getFullYear());
-    this.setMonth(date.getMonth());
+    this.setMonth(/**@type {goog.date.month}*/ (date.getMonth()));
     this.setDate(date.getDate());
     this.setDay(date.getDay());
     this.setHours(date.getHours());
@@ -273,7 +274,7 @@ rflect.date.DateShim.prototype.dayOfMonth_ = 0;
 
 /**
  * Day of week in US style (0 - Sun, 6 - Sat).
- * @type {goog.date.weekDay}
+ * @type {number}
  */
 rflect.date.DateShim.prototype.day_ = 0;
 

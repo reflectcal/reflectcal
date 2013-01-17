@@ -17,17 +17,17 @@ goog.provide('rflect.cal.events.Event');
  * Class that stores info about event.
  * @param {number} aUid Client-side id for event.
  * @param {string} aLongId Server-side id for event.
- * @param {rflect.date.Shim} aStartDate Start date.
- * @param {rflect.date.Shim} aStartDate End date.
+ * @param {rflect.date.DateShim} aStartDate Start date.
+ * @param {rflect.date.DateShim} aEndDate End date.
  * @param {boolean} aAllDay Whether event is all day.
  * @param {string=} opt_summary Name of event.
  * @param {string=} opt_description Longer description of event.
  * @constructor
  */
-rflect.cal.events.Event = function(aUid, aLongId, sStartDate, aEndDate, aAllDay
+rflect.cal.events.Event = function(aUid, aLongId, aStartDate, aEndDate, aAllDay,
     opt_summary, opt_description) {
   this.id = aUid;
-  this.longId = aLogId;
+  this.longId = aLongId;
   this.startDate = aStartDate;
   this.endDate = aEndDate;
   this.allDay = aAllDay;
@@ -113,14 +113,14 @@ rflect.cal.events.Event.prototype.description;
 
 /**
  * Start date of event.
- * @type {rflect.date.Shim}
+ * @type {rflect.date.DateShim}
  */
 rflect.cal.events.Event.prototype.startDate;
 
 
 /**
  * End date of event.
- * @type {rflect.date.Shim}
+ * @type {rflect.date.DateShim}
  */
 rflect.cal.events.Event.prototype.endDate;
 

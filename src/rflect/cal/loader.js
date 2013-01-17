@@ -24,8 +24,8 @@ rflect.cal.Loader.main = function() {
     // Load event will fire later than dom ready.
     if (!this.documentLoaded_)
       this.calInstance_ = new rflect.cal.Main();
-
   }, false, this);
+
   goog.events.listenOnce(window, 'DOMContentLoaded', function(aEvent) {
     this.documentLoaded_ = true;
     this.calInstance_ = new rflect.cal.Main();

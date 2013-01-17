@@ -53,14 +53,15 @@
             <arg line="--compiler_flags=&quot;--summary_detail_level=3&quot;"/>
             <arg line="--compiler_flags=&quot;--warning_level=VERBOSE&quot;"/>
             <!--To prevent warnings from compiler.-->
-            <arg line="--compiler_flags=&quot;--js=${basedir}\src\closure-library\closure\goog\deps.js&quot;"/>
             <arg line="--compiler_flags=&quot;--js=${basedir}\src\deps.js&quot;"/>
+            <arg line="--compiler_flags=&quot;--js=${basedir}\src\closure-library\closure\goog\deps.js&quot;"/>
             <arg value="--namespace=rflect.cal.Loader"/>
             <arg line="--compiler_flags=&quot;--define=&quot;goog.DEBUG=true&quot;&quot;"/>
             <arg line="--compiler_flags=&quot;--debug&quot;"/>
             <arg line="--compiler_flags=&quot;--source_map_format=V1&quot;"/>
             <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\src\outputcompiled.js.map&quot;"/>
             <arg line="--compiler_flags=&quot;--formatting=PRETTY_PRINT&quot;"/>
+            <arg line="--compiler_flags=&quot;--closure_entry_point=rflect.cal.Loader&quot;"/>
         </exec>
     </target>
     <target name="compile_preprod" description="Compilation for pre-production,
