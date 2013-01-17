@@ -3,38 +3,42 @@
  */
 goog.require('goog.testing.jsunit');
 goog.require('rflect.Debug');
-goog.require('rflect.cal.EventManager');
+goog.require('rflect.cal.events.EventManager');
+goog.require('rflect.cal.i18n.Symbols');
 
 
-
-
-
-function testChips() {
-  var dates = [
-    new goog.date.Date(2012, 11, 29),
-    new goog.date.Date(2012, 11, 30),
-    new goog.date.Date(2012, 11, 31),
-    new goog.date.Date(2013, 0, 4),
-    new goog.date.Date(2013, 0, 5),
-    new goog.date.Date(2013, 1, 2),
-    new goog.date.Date(2014, 11, 28),
-    new goog.date.Date(2012, 11, 23)
+function testCreateEvent() {
+  var events = [
+    ['asd0f6a706fs7df60asdf6as', '201301170000', '201301180000', '', '', false]
   ];
 
-  goog.array.forEach(dates, function(date) {
-    var rDate = new rflect.date.DateShim(date);
-    rDate.setDayOfYear(date.getDayOfYear());
-    rDate.setWeekNumber(date.getWeekNumber());
+  var fields = [
+    [
+    'asd0f6a706fs7df60asdf6as',
+    new rflect.date.DateShim(2013, 0, 17),
+    new rflect.date.DateShim(2013, 0, 18),
+    rflect.cal.i18n.Symbols.NO_NAME_EVENT,
+    '',
+    false
+    ]
+  ];
 
-    var rTomorrow = rDate.getTomorrow();
-    date.add(new goog.date.Interval(goog.date.Interval.DAYS, 1));
+  goog.array.forEach(events, function(event, index) {
+    var event = rflect.cal.events.EventManager.createEvent(event);
 
-    if (goog.DEBUG) {
-      _log('rTomorrow.getWeekNumber()', rTomorrow.getWeekNumber());
-      _log('date.getWeekNumber()', date.getWeekNumber());
-    }
-    assertTrue('tommorow rflect week of year equals goog',
-        rTomorrow.getWeekNumber() == date.getWeekNumber()
+    assertNonNull('event is not null', event);
+    assertTrue('id equals control', event.longId == fields[index][0]);
+    assertTrue('startDate equals control',
+        event.startDate.equals(fields[index][1]);
+    assertTrue('endDate equals control',
+        event.endDate.equals(fields[index][2]);
+    assertTrue('summary equals default',
+        event.summary == fields[index][3]);
+    assertTrue('description equals control',
+        event.description == fields[index][4]);
+    assertTrue('all day equals control',
+        event.allDay == fields[index][5]);
+
     );
   });
 

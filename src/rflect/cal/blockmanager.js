@@ -21,7 +21,7 @@ goog.require('rflect.cal.predefined');
  * <code>rflect.cal.BlockPool</code> objects for different views.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
- * @param {rflect.cal.EventManager} aEventManager Link to event manager.
+ * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @constructor
  */
 rflect.cal.BlockManager = function(aViewManager, aTimeManager, aEventManager) {
@@ -42,7 +42,7 @@ rflect.cal.BlockManager = function(aViewManager, aTimeManager, aEventManager) {
 
   /**
    * Link to event manager.
-   * @type {rflect.cal.EventManager}
+   * @type {rflect.cal.events.EventManager}
    * @private
    */
   this.eventManager_ = aEventManager;

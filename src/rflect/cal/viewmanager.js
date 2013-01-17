@@ -14,7 +14,7 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('rflect.cal.BlockManager');
 goog.require('rflect.cal.ContainerSizeMonitor');
-goog.require('rflect.cal.EventManager');
+goog.require('rflect.cal.events.EventManager');
 goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.MainBody');
 goog.require('rflect.cal.TimeManager');
@@ -62,10 +62,10 @@ rflect.cal.ViewManager = function(aMainInstance) {
 
   /**
    * Event manager.
-   * @type {rflect.cal.EventManager}
+   * @type {rflect.cal.events.EventManager}
    * @private
    */
-  this.eventManager_ = new rflect.cal.EventManager(this, this.timeManager);
+  this.eventManager_ = new rflect.cal.events.EventManager(this, this.timeManager);
 
   /**
    * Block manager.

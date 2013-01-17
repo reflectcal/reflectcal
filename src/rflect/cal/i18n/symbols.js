@@ -26,7 +26,8 @@ rflect.cal.i18n.Symbols_en = {
   WEEK: 'Week',
   MONTH: 'Month',
   CALENDARS_LABEL: 'Calendars',
-  TASKS_LABEL: 'Tasks'
+  TASKS_LABEL: 'Tasks',
+  NO_NAME_EVENT: '(Untitled)'
 };
 
 
@@ -40,7 +41,8 @@ rflect.cal.i18n.Symbols_ru = {
   WEEK: 'Неделя',
   MONTH: 'Месяц',
   CALENDARS_LABEL: 'Календари',
-  TASKS_LABEL: 'Задачи'
+  TASKS_LABEL: 'Задачи',
+  NO_NAME_EVENT: '(Без имени)'
 };
 
 
@@ -54,7 +56,8 @@ rflect.cal.i18n.Symbols_by = {
   WEEK: 'Тыдзень',
   MONTH: 'Месяц',
   CALENDARS_LABEL: 'Календары',
-  TASKS_LABEL: 'Задачы'
+  TASKS_LABEL: 'Задачы',
+  NO_NAME_EVENT: '(Без імя)'
 };
 
 
@@ -68,7 +71,8 @@ rflect.cal.i18n.Symbols_fr = {
   WEEK: 'Semaine',
   MONTH: 'Mois',
   CALENDARS_LABEL: 'Calendriers',
-  TASKS_LABEL: 'Tâches'
+  TASKS_LABEL: 'Tâches',
+  NO_NAME_EVENT: '(pas de nom)'
 };
 
 

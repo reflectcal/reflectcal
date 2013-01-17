@@ -165,14 +165,9 @@ rflect.date.compareByWeekAndYear = function(aDateA, aDateB){
  * @return {rflect.date.DateShim} Date in DateShim form.
  */
 rflect.date.parse = function(aDateStr, opt_calc_day, opt_calc_week){
-  var dateShim = new rflect.date.DateShim(
-    dateShim.setYear(+aDateStr.substr(0, 4)),
-    dateShim.setMonth(+aDateStr.substr(4, 2)),
-    dateShim.setDate(+aDateStr.substr(6, 2)),
-    dateShim.setHours(+aDateStr.substr(8, 2)),
-    dateShim.setMinutes(+aDateStr.substr(10, 2)),
-    dateShim.setSeconds(+aDateStr.substr(12, 2))
-  );
+  var dateShim = new rflect.date.DateShim(+aDateStr.substr(0, 4),
+    +aDateStr.substr(4, 2) - 1, +aDateStr.substr(6, 2), +aDateStr.substr(8, 2),
+    +aDateStr.substr(10, 2), +aDateStr.substr(12, 2));
   if (opt_calc_day)
     dateShim.setDayOfYear(goog.date.Date.prototype.getDayOfYear.call(dateShim));
   if (opt_calc_week) {
