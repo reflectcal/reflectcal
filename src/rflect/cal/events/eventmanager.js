@@ -159,7 +159,8 @@ rflect.cal.events.EventManager.prototype.addEvents = function(aEventsArray) {
   for (var counter = 0, length = aEventsArray.length; counter < length;
       counter++) {
 
-    var event = rflect.cal.events.EventManager.createEvent(aEventsArray[counter]);
+    var event = rflect.cal.events.EventManager.createEvent(
+        aEventsArray[counter]);
     var startDate = event.startDate;
     var endDate = event.endDate;
 
