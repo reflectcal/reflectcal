@@ -161,22 +161,32 @@ rflect.date.compareByWeekAndYear = function(aDateA, aDateB){
 
 /**
  * @param {string} aDateStr JSON string representation of date.
- * @param {boolean=} opt_calc_day Whether to calculate day of year.
- * @param {boolean=} opt_calc_week Whether to calculate week of year.
+ * @param {boolean=} opt_full Whether to use real date object in parsing.
  * @return {rflect.date.DateShim} Date in DateShim form.
  */
-rflect.date.parse = function(aDateStr, opt_calc_day, opt_calc_week){
-  var dateShim = new rflect.date.DateShim(+aDateStr.substr(0, 4),
-    +aDateStr.substr(4, 2) - 1, +aDateStr.substr(6, 2), +aDateStr.substr(8, 2),
-    +aDateStr.substr(10, 2), +aDateStr.substr(12, 2));
-  if (opt_calc_day)
-    dateShim.setDayOfYear(goog.date.Date.prototype.getDayOfYear.call(dateShim));
-  if (opt_calc_week) {
-    var weekNumber = goog.date.getWeekNumber(dateShim.getYear(),
-        dateShim.getMonth(), dateShim.getDate(),
-        goog.i18n.DateTimeSymbols.FIRSTWEEKCUTOFFDAY,
-        goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK);
-    dateShim.setWeekNumber(weekNumber);
+rflect.date.parse = function(aDateStr, opt_full){
+  var year = +aDateStr.substr(0, 4);
+  var month = +aDateStr.substr(4, 2) - 1;
+  var date = +aDateStr.substr(6, 2);
+  var hours = +aDateStr.substr(8, 2);
+  var minutes = +aDateStr.substr(10, 2);
+  var seconds = +aDateStr.substr(12, 2);
+
+  var date;
+  var dateShim;
+
+  if (opt_full) {
+    date = new goog.date.DateTime(year,month, date, hours, minutes,
+                     seconds);
+    dateShim = new rflect.date.DateShim(date);
+  } else
+    dateShim = new rflect.date.DateShim(year, month, date, hours, minutes,
+      seconds);
+
+  if (opt_full) {
+    dateShim.setDay(date.getDay());
+    dateShim.setDayOfYear(date.getDayOfYear());
+    dateShim.setWeekNumber(date.getWeekNumber());
   }
   return dateShim;
 }
@@ -229,20 +239,22 @@ rflect.date.DateShim = function(opt_year_or_date, opt_month, opt_date, opt_hours
     this.setSeconds(opt_seconds || 0);
     this.setMilliseconds(opt_milliseconds || 0);
   } else {
-    var date;
+    var dateObj;
     if (goog.isObject(opt_year_or_date))
-      date = new Date(opt_year_or_date);
+      dateObj = opt_year_or_date;
     else
-      date = new Date(goog.now());
+      dateObj = new Date(goog.now());
 
-    this.setYear(date.getFullYear());
-    this.setMonth(/**@type {goog.date.month}*/ (date.getMonth()));
-    this.setDate(date.getDate());
-    this.setDay(date.getDay());
-    this.setHours(date.getHours());
-    this.setMinutes(date.getMinutes());
-    this.setSeconds(date.getSeconds());
-    this.setMilliseconds(date.getMilliseconds());
+    this.setYear(dateObj.getFullYear());
+    this.setMonth(/**@type {goog.date.month}*/ (dateObj.getMonth()));
+    this.setDate(dateObj.getDate());
+    this.setDay(dateObj.getDay());
+    if (dateObj.setHours) {
+      this.setHours(dateObj.getHours());
+      this.setMinutes(dateObj.getMinutes());
+      this.setSeconds(dateObj.getSeconds());
+      this.setMilliseconds(dateObj.getMilliseconds());
+    }
   }
 };
 goog.inherits(rflect.date.DateShim, goog.date.DateTime);

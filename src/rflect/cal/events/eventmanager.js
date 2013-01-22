@@ -139,7 +139,7 @@ rflect.cal.events.EventManager.createEvent = function(aArray) {
   // We parse start day with day and week fields, they are needed for forming
   // chips.
   var startDate = rflect.date.parse(
-      aArray[rflect.cal.events.Event.FIELD_START_DATE], true, true);
+      aArray[rflect.cal.events.Event.FIELD_START_DATE], true);
   var endDate = rflect.date.parse(
       aArray[rflect.cal.events.Event.FIELD_END_DATE]);
   var summary = aArray[rflect.cal.events.Event.FIELD_SUMMARY];
@@ -155,7 +155,8 @@ rflect.cal.events.EventManager.createEvent = function(aArray) {
  * Adds events from parsed json.
  * @param {Array.<Array>} aEventsArray List of JSON representation of events.
  */
-rflect.cal.events.EventManager.prototype.addEvents = function(aEventsArray) {
+rflect.cal.events.EventManager.prototype.processToChips =
+    function(aEventsArray) {
   for (var counter = 0, length = aEventsArray.length; counter < length;
       counter++) {
 
@@ -188,6 +189,11 @@ rflect.cal.events.EventManager.prototype.addEvents = function(aEventsArray) {
 
     // Generating chips.
     while (hasNext) {
+
+
+      if (goog.DEBUG)
+        _log('currentDate', currentDate);
+
       tomorrow = currentDate.getTomorrow();
 
       hasPrev = !currentDate.equalsByDate(startDate);

@@ -106,5 +106,64 @@ function testGoogWeekOfYearEqualsRflect() {
 
 }
 
+function testClone() {
+  var date = new rflect.date.DateShim(2000, 1, 1, 1, 1, 1);
+  date.setFirstDayOfWeek(1);
+  date.setFirstWeekCutOffDay(3);
+  date.setDayOfYear(1);
+  date.setWeekNumber(1);
+
+  var clone = date.clone();
+
+  assertEquals('year', date.getYear(), clone.getYear());
+  assertEquals('month', date.getMonth(), clone.getMonth());
+  assertEquals('date', date.getDate(), clone.getDate());
+  assertEquals('day', date.getDay(), clone.getDay());
+  assertEquals('hours', date.getHours(), clone.getHours());
+  assertEquals('minutes', date.getMinutes(), clone.getMinutes());
+  assertEquals('seconds', date.getSeconds(), clone.getSeconds());
+  assertEquals('millis', date.getMilliseconds(), clone.getMilliseconds());
+
+  assertEquals('first day of week', date.getFirstDayOfWeek(),
+      clone.getFirstDayOfWeek());
+  assertEquals('first week cutoff day', date.getFirstWeekCutOffDay(),
+      clone.getFirstWeekCutOffDay());
+  assertEquals('day of year', date.getDayOfYear(), clone.getDayOfYear());
+  assertEquals('week number', date.getWeekNumber(), clone.getWeekNumber());
+
+}
+
+function testConstructor() {
+  var referenceDate1 = new goog.date.DateTime(2000, 1, 1, 1, 1, 1);
+  var referenceDate2 = new goog.date.DateTime();
+
+  var date1 = new rflect.date.DateShim(2000, 1, 1, 1, 1, 1);
+  var date2 = new rflect.date.DateShim(new Date());
+  var date3 = new rflect.date.DateShim(new goog.date.DateTime());
+  var date4 = new rflect.date.DateShim(date3);
+  var date5 = new rflect.date.DateShim();
+
+  assertTrue('date1', date1.equals(referenceDate1));
+  assertTrue('date2', date2.equals(referenceDate2));
+  assertTrue('date3', date3.equals(referenceDate2));
+  assertTrue('date4', date4.equals(referenceDate2));
+  assertTrue('date5', date5.equals(referenceDate2));
+}
+
+function testParse() {
+  var referenceDate = new goog.date.DateTime(2000, 1, 1, 1, 1, 1);
+
+  var parsedShim = rflect.date.parse('20000101010101');
+  var fullyParsedShim = rflect.date.parse('20000101010101');
+
+  assertTrue('parsed shim', parsedShim.equals(referenceDate));
+  assertTrue('fully parsed shim', fullyParsedShim.equals(referenceDate));
+  assertTrue('date3', date3.equals(referenceDate2));
+  assertTrue('date4', date4.equals(referenceDate2));
+  assertTrue('date5', date5.equals(referenceDate2));
+}
+
+
+
 
 
