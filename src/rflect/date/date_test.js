@@ -103,7 +103,6 @@ function testGoogWeekOfYearEqualsRflect() {
         rTomorrow.getWeekNumber() == date.getWeekNumber()
     );
   });
-
 }
 
 function testClone() {
@@ -154,13 +153,23 @@ function testParse() {
   var referenceDate = new goog.date.DateTime(2000, 1, 1, 1, 1, 1);
 
   var parsedShim = rflect.date.parse('20000101010101');
-  var fullyParsedShim = rflect.date.parse('20000101010101');
+  var fullyParsedShim = rflect.date.parse('20000101010101', true);
+
+  if (goog.DEBUG)
+    _log('referenceDate', referenceDate);
+  if (goog.DEBUG)
+    _log('parsedShim', parsedShim);
+  if (goog.DEBUG)
+    _log('fullyParsedShim', fullyParsedShim);
 
   assertTrue('parsed shim', parsedShim.equals(referenceDate));
+
   assertTrue('fully parsed shim', fullyParsedShim.equals(referenceDate));
-  assertTrue('date3', date3.equals(referenceDate2));
-  assertTrue('date4', date4.equals(referenceDate2));
-  assertTrue('date5', date5.equals(referenceDate2));
+  assertEquals('day of year', fullyParsedShim.getDayOfYear(),
+      referenceDate.getDayOfYear());
+  assertEquals('week number', fullyParsedShim.getWeekNumber(),
+      referenceDate.getWeekNumber());
+  assertEquals('day', fullyParsedShim.getDay(), referenceDate.getDay());
 }
 
 

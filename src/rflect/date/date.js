@@ -166,7 +166,7 @@ rflect.date.compareByWeekAndYear = function(aDateA, aDateB){
  */
 rflect.date.parse = function(aDateStr, opt_full){
   var year = +aDateStr.substr(0, 4);
-  var month = +aDateStr.substr(4, 2) - 1;
+  var month = +aDateStr.substr(4, 2);
   var date = +aDateStr.substr(6, 2);
   var hours = +aDateStr.substr(8, 2);
   var minutes = +aDateStr.substr(10, 2);
