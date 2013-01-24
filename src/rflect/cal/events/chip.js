@@ -87,7 +87,7 @@ rflect.cal.events.Chip.prototype.endIsCut;
 
 
 /**
- * @param {rflect.cal.events.Chip} aCip Another chip to compare.
+ * @param {rflect.cal.events.Chip} aChip Another chip to compare.
  * @returns {boolean} Whether this chip equals another.
  */
 rflect.cal.events.Chip.prototype.equals = function(aChip) {

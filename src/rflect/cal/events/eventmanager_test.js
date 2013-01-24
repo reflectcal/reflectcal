@@ -8,14 +8,13 @@ goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.date.DateShim');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.ViewManager');
+goog.require('goog.array');
 
 
 var eventsJSON;
 var fields;
 var events;
-var chipsByDay;
-var chipsByWeek;
-var allDayChipsByDay;
+var chips;
 
 function prepareDataStructures() {
   eventsJSON = [
@@ -36,27 +35,19 @@ function prepareDataStructures() {
   events = [];
   if (goog.DEBUG)
     _inspect('events', events);
-}
 
-function prepareChips() {
-  {
-    chipsByDay: {
-      2000: {
-        17: new rflect.cal.events.Chip(0, 0, 1440, false, true),
-        18: new rflect.cal.events.Chip(0, 0, 1440, true, false)
-      }
-    },
-    chipsByWeek: {
-      2000: {
-        3: new rflect.cal.events.Chip(0, 4, 5, false, false)
-      }
-    },
-    allDayChipsByDay: {
-      2000: {
-        3: new rflect.cal.events.Chip(0, 4, 5, false, false)
-      }
+  chips = [
+    {
+      chipsByDay: [
+        [2000, 17, new rflect.cal.events.Chip(0, 0, 1440, false, true)],
+        [2000, 18, new rflect.cal.events.Chip(0, 0, 1440, true, false)],
+      ],
+      chipsByWeek: [
+        [2000, 3, new rflect.cal.events.Chip(0, 4, 5, false, false)]
+      ],
+      allDayChipsByDay: []
     }
-  }
+  ]
 }
 
 var eventManager;
@@ -94,26 +85,36 @@ function testCreateEvent() {
 function testChipCreation() {
   var em = makeEventManager();
   prepareDataStructures();
-  prepareChips();
 
   em.processToChips(eventsJSON);
   if (goog.DEBUG)
     _inspect('em', em);
-
-  //Tests below are locale-dependent.
-
-  assertNotNull('em.chipsByDay_[2013]', em.chipsByDay_[2013]);
-  assertNotNull('em.chipsByDay_[2013]', em.chipsByDay_[2013][17]);
-  assertNotNull('em.chipsByDay_[2013]', em.chipsByDay_[2013][18]);
-  assertTrue('day chip1 equals reference', chipsByDay[0].equals(
-    em.chipsByDay_[2013][17]));
-  assertTrue('chip2 equals reference',
-    chipsByDay[1].equals(em.chipsByDay_[2013][18]));
-
-  assertNotNull('em.chipsByWeek_[2013]', em.chipsByWeek_[2013]);
-  assertNotNull('em.chipsByWeek_[2013]', em.chipsByWeek_[2013][3]);
-  assertTrue('week chip1 equals reference',
-    chipsByWeek[0].equals(em.chipsByWeek_[2013][3]));
+  goog.array.forEach(chips, function(el, index) {
+    goog.array.forEach(el.chipsByDay, function(chipByDay, index) {
+      var year = chipByDay[0];
+      var dayOfYear = chipByDay[1];
+      assertNotNull('em.chipsByDay_[' + year + ']', em.chipsByDay_[year]);
+      assertNotNull('em.chipsByDay_[' + year + '][' + dayOfYear + ']',
+          em.chipsByDay_[year][dayOfYear]);
+      assertTrue(chipByDay[2].equals(em.chipsByDay_[year][dayOfYear]));
+    });
+    goog.array.forEach(el.allDayChipsByDay, function(allDayChipByDay, index) {
+      var year = allDayChipByDay[0];
+      var dayOfYear = allDayChipByDay[1];
+      assertNotNull('em.allDayChipsByDay_[' + year + ']', em.allDayChipsByDay_[year]);
+      assertNotNull('em.allDayChipsByDay_[' + year + '][' + dayOfYear + ']',
+          em.allDayChipsByDay_[year][dayOfYear]);
+      assertTrue(allDayChipByDay[2].equals(em.allDayChipsByDay_[year][dayOfYear]));
+    });
+    goog.array.forEach(el.chipsByWeek, function(chipByWeek, index) {
+      var year = chipByWeek[0];
+      var weekOfYear = chipByWeek[1];
+      assertNotNull('em.chipsByWeek_[' + year + ']', em.chipsByWeek_[year]);
+      assertNotNull('em.chipsByWeek_[' + year + '][' + weekOfYear + ']',
+          em.chipsByWeek_[year][weekOfYear]);
+      assertTrue(chipByWeek[2].equals(em.chipsByWeek_[year][dayOfWeek]));
+    });
+  });
 }
 
 
