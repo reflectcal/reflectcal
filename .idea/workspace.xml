@@ -24,10 +24,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="94f59c91-c161-4423-a022-ed195e39c373" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/events/chip.js" afterPath="$PROJECT_DIR$/src/rflect/cal/events/chip.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/events/eventmanager_test.js" afterPath="$PROJECT_DIR$/src/rflect/cal/events/eventmanager_test.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/outputcompiled.js.map" afterPath="$PROJECT_DIR$/src/outputcompiled.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/outputcompiled.js" afterPath="$PROJECT_DIR$/src/outputcompiled.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Calendar.iws" />
@@ -79,7 +76,7 @@
     <file path="$PROJECT_DIR$/../cat/cat-schema/target/generated-sources/jaxb/de/o2/bic/cat/persistence/pack/xml/jaxb/PackBuildingBlock.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358843923106" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-schema/target/generated-sources/jaxb/de/o2/bic/cat/persistence/pack/xml/jaxb/PackBuildingBlockCounterInstance.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358843923106" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-schema/target/generated-sources/jaxb/de/o2/bic/cat/persistence/pack/xml/jaxb/PackBuildingBlockNoCounterInstance.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358843923106" ignored="false" />
-    <file path="/eventmanager_test.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359039952542" ignored="false" />
+    <file path="/eventmanager_test.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359471199994" ignored="false" />
     <file path="/eventmanager_test.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358343036504" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client test/src/TestClient.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1355843483567" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/env.properties" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742365450" ignored="false" />
@@ -92,7 +89,7 @@
     <file path="/DBLink.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356519310418" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/DBLink.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357805943294" ignored="false" />
     <file path="/env.properties" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742339458" ignored="false" />
-    <file path="/Dummy.txt" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359028469236" ignored="false" />
+    <file path="/Dummy.txt" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359472299066" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/.idea/workspace.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357920242430" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/request.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357915629834" ignored="false" />
     <file path="/eventmanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358859608050" ignored="false" />
@@ -101,7 +98,7 @@
     <file path="/CustomFromBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357736736033" ignored="false" />
     <file path="/fragment.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356602205215" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/CustomRefParamsBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357736985203" ignored="false" />
-    <file path="/a.dummy" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359028191253" ignored="false" />
+    <file path="/a.dummy" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359472219625" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/tefo2de/productcataloguedataservice/ProductCatalogueDataService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742558891" ignored="false" />
     <file path="/ProductCatalogueDataService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357658153144" ignored="false" />
     <file path="/recurringevent.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357303959398" ignored="false" />
@@ -121,11 +118,11 @@
     <file path="/SalcusClientHandler.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357746524577" ignored="false" />
     <file path="/handlers.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742727039" ignored="false" />
     <file path="/date_test.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357807455924" ignored="false" />
-    <file path="/SBT" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358863693301" ignored="false" />
+    <file path="/SBT" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359382057433" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/WEB-INF/web.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357811254543" ignored="false" />
     <file path="/base.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357909761487" ignored="false" />
     <file path="$PROJECT_DIR$/../Research/Closure Library/closure/goog/graphics/abstractgraphics.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357821653806" ignored="false" />
-    <file path="$PROJECT_DIR$/../Research/Closure Library/closure/goog/dom/dom.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357821669832" ignored="false" />
+    <file path="$PROJECT_DIR$/../Research/Closure Library/closure/goog/dom/dom.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359460648663" ignored="false" />
     <file path="$PROJECT_DIR$/../Research/Closure Library/closure/goog/array/array.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357821669832" ignored="false" />
     <file path="/timemanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357828736662" ignored="false" />
     <file path="/symbols.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358420635746" ignored="false" />
@@ -148,20 +145,20 @@
     <file path="/offers.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358762000691" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/ui/css/default.css" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358777712587" ignored="false" />
     <file path="/default.css" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358777680165" ignored="false" />
-    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/Offers.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358764788036" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/Offers.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359460623900" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/_resources.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358768579864" ignored="false" />
     <file path="/_resources.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358762020752" ignored="false" />
     <file path="/Offers.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358764247829" ignored="false" />
-    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/UsersView.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358768579864" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/UsersView.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359472252202" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/LeadManagement.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358863773761" ignored="false" />
-    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/Activities.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358768579864" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/Activities.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359460623900" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/java/de/o2/bic/nbaa/postpaid/web/ui/security/InfoscreenUserDetailsService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358768579864" ignored="false" />
-    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/UserFilter.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358768579864" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/UserFilter.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359458386941" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/ui/js/application.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358857801016" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-service/src/main/java/de/o2/bic/nbaa/postpaid/advisoryservice/model/client/ClientType.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358768579864" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/templates-hidden/default.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358768579864" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/templates-hidden/leads-widget.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358863773761" ignored="false" />
-    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-service/src/main/java/de/o2/bic/nbaa/postpaid/advisoryservice/service/agent/Agent.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358768579864" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-service/src/main/java/de/o2/bic/nbaa/postpaid/advisoryservice/service/agent/Agent.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359468588527" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-web/src/main/webapp/WEB-INF/jspx/pack/packOffers.jspx" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358844291217" ignored="false" />
     <file path="/packOffers.jspx" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358844291217" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-web/src/main/java/de/o2/bic/cat/web/controller/pack/PackController.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358845508434" ignored="false" />
@@ -178,7 +175,7 @@
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-rest/src/main/resources/log4j.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358863773761" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/ui/confirmation.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358863773761" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/LeadsStats.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358863773761" ignored="false" />
-    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/Confirmation.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358863773761" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/Confirmation.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359460623900" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-web/src/main/java/de/o2/bic/cat/persistence/pack/xml/JaxbBenefitAdapterImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358937298630" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-web/src/main/java/de/o2/bic/cat/web/controller/pack/validator/PackDetailsValidator.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358937381692" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-web/src/main/java/de/o2/bic/cat/web/controller/pack/validator/PackTriggersValidator.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358937404234" ignored="false" />
@@ -199,6 +196,48 @@
     <file path="$PROJECT_DIR$/../cat/cat-web/src/main/webapp/WEB-INF/jspx/pack/newPack.jspx" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359028347321" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-web/src/main/environments/dev/conf/spring/security.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359030914056" ignored="false" />
     <file path="/security.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359030912686" ignored="false" />
+    <file path="$PROJECT_DIR$/../mapsdemo/app/views/index.scala.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359110687356" ignored="false" />
+    <file path="/index.scala.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359110687005" ignored="false" />
+    <file path="$PROJECT_DIR$/../mapsdemo/public/javascripts/main.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359112422045" ignored="false" />
+    <file path="/main.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359110737608" ignored="false" />
+    <file path="$PROJECT_DIR$/../mapsdemo/target/scala-2.10/src_managed/main/views/html/index.template.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359111111141" ignored="false" />
+    <file path="$PROJECT_DIR$/../mapsdemo/app/controllers/Application.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359370839277" ignored="false" />
+    <file path="/application.conf" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359109987632" ignored="false" />
+    <file path="$PROJECT_DIR$/../mapsdemo/conf/application.conf" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359109987632" ignored="false" />
+    <file path="$PROJECT_DIR$/../geo-data-push/src/main/scala/de/o2/geo/push/DataPush.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359112612748" ignored="false" />
+    <file path="/DataPush.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359112610754" ignored="false" />
+    <file path="/Application.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359370833548" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-assembly/src/main/java/de/o2/bic/nbaa/admin/dao/SqlMapAdministrationDaoImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359472205884" ignored="false" />
+    <file path="/SqlMapAdministrationDaoImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359467700725" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-service/src/main/java/de/o2/bic/nbaa/postpaid/advisoryservice/service/agent/Team.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359458003751" ignored="false" />
+    <file path="/NBAAPostpaidAdminComponent.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359467294461" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-assembly/src/main/java/de/o2/bic/nbaa/postpaid/assembly/component/NBAAPostpaidAdminComponent.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359472135218" ignored="false" />
+    <file path="/UsersView.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359452343325" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/Admin.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359460268134" ignored="false" />
+    <file path="/Admin.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359460268134" ignored="false" />
+    <file path="/NBAAPostpaidAssemblyFlow.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359459025929" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-assembly/src/main/java/de/o2/bic/nbaa/postpaid/assembly/NBAAPostpaidAssemblyFlow.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359459031326" ignored="false" />
+    <file path="/CreateNewTeam.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359461522851" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/CreateNewTeam.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359461524353" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/EditUserAccount.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359458386941" ignored="false" />
+    <file path="/EditUserAccount.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359458383895" ignored="false" />
+    <file path="/UserFilter.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359458118749" ignored="false" />
+    <file path="/Team.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359457994533" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/CreateNewCallCenter.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359460809595" ignored="false" />
+    <file path="/CreateNewCallCenter.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359460808782" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/TeamsView.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359460079288" ignored="false" />
+    <file path="/TeamsView.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359459943438" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/CcToAdminsView.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359468005865" ignored="false" />
+    <file path="/CcToAdminsView.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359467539978" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-service/src/main/java/de/o2/bic/nbaa/postpaid/advisoryservice/model/activity/MarketingActivity.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359460623900" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/SearchMask.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359460623900" ignored="false" />
+    <file path="$PROJECT_DIR$/../Research/Closure Library/closure/goog/ui/component.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359460648663" ignored="false" />
+    <file path="$PROJECT_DIR$/../Research/Closure Library/closure/goog/useragent/useragent.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359460648663" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-service/src/main/java/de/o2/bic/nbaa/postpaid/advisoryservice/service/agent/CallCenter.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359462896258" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-assembly/src/main/java/de/o2/bic/nbaa/admin/dao/IAdministrationDao.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359467234858" ignored="false" />
+    <file path="/IAdministrationDao.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359467234508" ignored="false" />
+    <file path="/Administration.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359466356989" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/resources/sqlmap/Administration.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359466357340" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -221,7 +260,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <breakpoint_rules default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -256,6 +294,7 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
+    <breakpoint_rules default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
@@ -269,7 +308,7 @@
       <file leaf-file-name="symbols.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/i18n/symbols.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="40" selection-start="508" selection-end="508" vertical-scroll-proportion="0.0">
+            <state line="18" column="3" selection-start="508" selection-end="508" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -278,7 +317,34 @@
       <file leaf-file-name="eventmanager_test.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/eventmanager_test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="111" column="26" selection-start="3381" selection-end="3381" vertical-scroll-proportion="0.82828283">
+            <state line="110" column="23" selection-start="3069" selection-end="3069" vertical-scroll-proportion="0.5701275">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="object.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/object/object.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="134" column="20" selection-start="4502" selection-end="4510" vertical-scroll-proportion="-7.68">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="array.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/array/array.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="1230" column="32" selection-start="44751" selection-end="44751" vertical-scroll-proportion="-16.84">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="base.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/base.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="1054" column="31" selection-start="33250" selection-end="33254" vertical-scroll-proportion="-7.28">
               <folding />
             </state>
           </provider>
@@ -287,7 +353,7 @@
       <file leaf-file-name="eventmanager.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="154" column="43" selection-start="3672" selection-end="3672" vertical-scroll-proportion="0.0">
+            <state line="154" column="32" selection-start="3672" selection-end="3672" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -296,7 +362,7 @@
       <file leaf-file-name="build.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="65" column="41" selection-start="3251" selection-end="3251" vertical-scroll-proportion="0.0">
+            <state line="65" column="13" selection-start="3251" selection-end="3251" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -306,15 +372,6 @@
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/viewmanager.js">
           <provider selected="true" editor-type-id="text-editor">
             <state line="9" column="14" selection-start="185" selection-end="207" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="loader.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/rflect/cal/loader.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="3" selection-start="976" selection-end="976" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -368,16 +425,7 @@
       <file leaf-file-name="chip.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/chip.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="80" column="40" selection-start="1736" selection-end="1736" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="date.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="712" column="31" selection-start="21795" selection-end="21795" vertical-scroll-proportion="0.0">
+            <state line="80" column="0" selection-start="1736" selection-end="1736" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -422,7 +470,7 @@
       <file leaf-file-name="date.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/date/date.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="172" column="31" selection-start="5214" selection-end="5214" vertical-scroll-proportion="0.0">
+            <state line="181" column="41" selection-start="5426" selection-end="5426" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -484,10 +532,8 @@
     <option name="LAST_EDITED_TAB_NAME" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1168" />
-    <option name="height" value="840" />
+    <option name="width" value="1152" />
+    <option name="height" value="824" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -700,13 +746,13 @@
   </component>
   <component name="PropertiesComponent">
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="107" />
-    <property name="project.structure.last.edited" value="Project" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="48" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="40" />
-    <property name="project.structure.proportion" value="0.15" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="63" />
-    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder1" value="1" />
+    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder0" value="0" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder2" value="2" />
@@ -725,19 +771,19 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="195" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="610" />
     <property name="GoToClass.includeLibraries" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="610" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
     <property name="options.lastSelected" value="preferences.keymap" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder1" value="1" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
     <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
@@ -1165,7 +1211,11 @@
       <created>1358953485104</created>
       <updated>1358953485104</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="End of day commit. More tests.">
+      <created>1359042852104</created>
+      <updated>1359042852105</updated>
+    </task>
+    <option name="localTasksCounter" value="91" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1189,24 +1239,24 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1168" height="840" extended-state="0" />
+    <frame x="0" y="0" width="1152" height="824" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32896653" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13019891" sideWeight="0.5739385" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30284858" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1482821" sideWeight="0.704246" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="SBT Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6281113" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42606148" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32896653" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21338156" sideWeight="0.3455344" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820976" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21338156" sideWeight="0.5739385" order="0" side_tool="true" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21651377" sideWeight="0.6971514" order="0" side_tool="true" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32849365" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1216,7 +1266,7 @@
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29575402" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42606148" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1362,34 +1412,6 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/loader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="3" selection-start="976" selection-end="976" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/dom/dom_test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1124" column="0" selection-start="40979" selection-end="40979" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="41" selection-start="3251" selection-end="3251" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/i18n/symbols.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="40" selection-start="508" selection-end="508" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/structs/intervaltree.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="25" column="15" selection-start="558" selection-end="558" vertical-scroll-proportion="0.0" />
@@ -1426,13 +1448,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="712" column="31" selection-start="21795" selection-end="21795" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/date/date_test.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="107" column="21" selection-start="3104" selection-end="3104" vertical-scroll-proportion="0.0">
@@ -1440,30 +1455,65 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/date/date.js">
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="172" column="31" selection-start="5214" selection-end="5214" vertical-scroll-proportion="0.0">
+        <state line="154" column="32" selection-start="3672" selection-end="3672" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js">
+    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/base.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="154" column="43" selection-start="3672" selection-end="3672" vertical-scroll-proportion="0.0">
+        <state line="1054" column="31" selection-start="33250" selection-end="33254" vertical-scroll-proportion="-7.28">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/loader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="3" selection-start="976" selection-end="976" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/array/array.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1230" column="32" selection-start="44751" selection-end="44751" vertical-scroll-proportion="-16.84">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="481" column="19" selection-start="15225" selection-end="15230" vertical-scroll-proportion="0.33333334">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/chip.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="40" selection-start="1736" selection-end="1736" vertical-scroll-proportion="0.0">
+        <state line="80" column="0" selection-start="1736" selection-end="1736" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/date/date.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="181" column="41" selection-start="5426" selection-end="5426" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/object/object.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="134" column="20" selection-start="4502" selection-end="4510" vertical-scroll-proportion="-7.68">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/eventmanager_test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="111" column="26" selection-start="3381" selection-end="3381" vertical-scroll-proportion="0.82828283">
+        <state line="110" column="23" selection-start="3069" selection-end="3069" vertical-scroll-proportion="0.5701275">
           <folding />
         </state>
       </provider>

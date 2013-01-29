@@ -9,6 +9,7 @@ goog.require('rflect.date.DateShim');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.ViewManager');
 goog.require('goog.array');
+goog.require('goog.object');
 
 
 var eventsJSON;
@@ -18,7 +19,7 @@ var chips;
 
 function prepareDataStructures() {
   eventsJSON = [
-    ['asd0f6a706fs7df60asdf6as', '201301170000', '201301180000', '', '', false]
+    ['asd0f6a706fs7df60asdf6as', '201300170000', '201300180000', '', '', false]
   ];
 
   fields = [
@@ -38,23 +39,24 @@ function prepareDataStructures() {
 
   chips = [
     {
-      chipsByDay: [
-        [2000, 17, new rflect.cal.events.Chip(0, 0, 1440, false, true)],
-        [2000, 18, new rflect.cal.events.Chip(0, 0, 1440, true, false)],
-      ],
-      chipsByWeek: [
-        [2000, 3, new rflect.cal.events.Chip(0, 4, 5, false, false)]
-      ],
-      allDayChipsByDay: []
+      chipsByDay: {
+        2000: {
+            17: [new rflect.cal.events.Chip(0, 0, 1440, false, true)],
+            18: [new rflect.cal.events.Chip(0, 0, 1440, true, false)]
+          }
+      },
+      chipsByWeek: {
+        2000: {
+          3: [new rflect.cal.events.Chip(0, 4, 5, false, false)]
+        }
+      },
+      allDayChipsByDay: {}
     }
   ]
 }
 
-var eventManager;
-
 function makeEventManager() {
-  return eventManager ? eventManager : eventManager =
-      new rflect.cal.events.EventManager(null,
+  return new rflect.cal.events.EventManager(null,
       null);
 }
 
@@ -66,6 +68,10 @@ function testCreateEvent() {
 
     assertNotNull('event is not null', event);
     assertTrue('id equals control', event.longId == fields[index][0]);
+    if (goog.DEBUG)
+      _log('event.startDate', event.startDate);
+    if (goog.DEBUG)
+        _log('fields[index][1]', fields[index][1]);
     assertTrue('startDate equals control',
         event.startDate.equals(fields[index][1]));
     assertTrue('endDate equals control',
@@ -83,38 +89,53 @@ function testCreateEvent() {
 
 // Requires that event creation works.
 function testChipCreation() {
-  var em = makeEventManager();
   prepareDataStructures();
 
-  em.processToChips(eventsJSON);
-  if (goog.DEBUG)
-    _inspect('em', em);
   goog.array.forEach(chips, function(el, index) {
-    goog.array.forEach(el.chipsByDay, function(chipByDay, index) {
-      var year = chipByDay[0];
-      var dayOfYear = chipByDay[1];
-      assertNotNull('em.chipsByDay_[' + year + ']', em.chipsByDay_[year]);
-      assertNotNull('em.chipsByDay_[' + year + '][' + dayOfYear + ']',
-          em.chipsByDay_[year][dayOfYear]);
-      assertTrue(chipByDay[2].equals(em.chipsByDay_[year][dayOfYear]));
-    });
-    goog.array.forEach(el.allDayChipsByDay, function(allDayChipByDay, index) {
-      var year = allDayChipByDay[0];
-      var dayOfYear = allDayChipByDay[1];
-      assertNotNull('em.allDayChipsByDay_[' + year + ']', em.allDayChipsByDay_[year]);
-      assertNotNull('em.allDayChipsByDay_[' + year + '][' + dayOfYear + ']',
-          em.allDayChipsByDay_[year][dayOfYear]);
-      assertTrue(allDayChipByDay[2].equals(em.allDayChipsByDay_[year][dayOfYear]));
-    });
-    goog.array.forEach(el.chipsByWeek, function(chipByWeek, index) {
-      var year = chipByWeek[0];
-      var weekOfYear = chipByWeek[1];
-      assertNotNull('em.chipsByWeek_[' + year + ']', em.chipsByWeek_[year]);
-      assertNotNull('em.chipsByWeek_[' + year + '][' + weekOfYear + ']',
-          em.chipsByWeek_[year][weekOfYear]);
-      assertTrue(chipByWeek[2].equals(em.chipsByWeek_[year][dayOfWeek]));
-    });
+    var em = makeEventManager();
+    if (goog.DEBUG)
+      _inspect('em', em);
+    em.processToChips([eventsJSON[index]]);
+
+    assertTrue('chipsByDay year number is the same',
+        goog.object.getCount(el.chipsByDay) ==
+        goog.object.getCount(em.chipsByDay_));
+    assertTrue('allDayChipsByDay year number is the same',
+        goog.object.getCount(el.allDayChipsByDay) ==
+        goog.object.getCount(em.allDayChipsByDay_));
+    assertTrue('chipsByWeek year number is the same',
+        goog.object.getCount(el.chipsByWeek) ==
+        goog.object.getCount(em.chipsByWeek_));
+
+    goog.array.forEach(el.chipsByDay, goog.bind(checkChipEquality, null,
+        em.chipsByDay_));
+    goog.array.forEach(el.allDayChipsByDay,
+        goog.bind(checkChipEquality, null, em.allDayChipsByDay_));
+    goog.array.forEach(el.chipsByWeek, goog.bind(checkChipEquality, null,
+        em.chipsByWeek_));
   });
+}
+
+function checkChipEquality(testDataStructure, chipEntry) {
+  for (var index1 in chipEntry) {
+    assertNotNull('testDataStructure[' + index1 + ']',
+        testDataStructure[index1]);
+    assertTrue('days/weeks count equals',
+        goog.object.getCount(chipEntry[index1]) ==
+        goog.object.getCount(testDataStructure[index1]));
+    for (var index2 in chipEntry[index1]) {
+      assertNotNull('testDataStructure[' + index1 + '][' + index2 + ']',
+          testDataStructure[index1][index2]);
+      assertTrue('chips count', chipEntry[index1][index2].length ==
+              testDataStructure[index1][index2].length);
+      assertNotNull(
+          'first chip of testDataStructure[' + index1 + '][' + index2 + '][0]',
+          testDataStructure[index1][index2][0]);
+      //TODO(alexk): expand chipEntry to properties
+      assertTrue('chip start', chipEntry[index1][index2][0].equals(
+          testDataStructure[index1][index2][0]));
+    }
+  }
 }
 
 
