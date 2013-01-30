@@ -237,9 +237,9 @@ rflect.cal.events.EventManager.prototype.processToChips =
       if (isWeekChip){
         if (!hasNextWeek){
           if (eventEndMins == 0){
-            weekChipEndMins = endDate.getWeekday();
+            weekChipEndMins = currentDate.getWeekday();
           } else
-            weekChipEndMins = endDate.getWeekday() + 1;
+            weekChipEndMins = currentDate.getWeekday() + 1;
         } else {
           weekChipEndMins = rflect.cal.events.Chip.MAX_DAYS_WEEK;
         }
