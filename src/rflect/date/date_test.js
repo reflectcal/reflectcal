@@ -172,6 +172,13 @@ function testParse() {
   assertEquals('day', fullyParsedShim.getDay(), referenceDate.getDay());
 }
 
+function testEqualsByWeek() {
+  var referenceDate = new goog.date.DateTime(2013, 0, 5, 0, 0, 0);
+  var tomorrow = new goog.date.DateTime(2013, 0, 5, 0, 0, 0);
+  var referenceDate = new goog.date.DateTime(2013, 0, 5, 0, 0, 0);
+
+}
+
 
 
 

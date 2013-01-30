@@ -19,7 +19,10 @@ var chips;
 
 function prepareDataStructures() {
   eventsJSON = [
-    ['asd0f6a706fs7df60asdf6as', '201300170000', '201300180000', '', '', false]
+    // Simplest possible input - no week breaks, no specific time
+    ['asd0f6a706fs7df60asdf6as', '201300170000', '201300180000', '', '', false],
+    // Different weeks
+    ['asd0f6a706fs7df60asdf6as', '201300180000', '201300210000', '', '', false]
   ];
 
   fields = [
@@ -27,6 +30,13 @@ function prepareDataStructures() {
     'asd0f6a706fs7df60asdf6as',
     new rflect.date.DateShim(2013, 0, 17),
     new rflect.date.DateShim(2013, 0, 18),
+    rflect.cal.i18n.Symbols.NO_NAME_EVENT,
+    '',
+    false
+    ],[
+    'asd0f6a706fs7df60asdf6as',
+    new rflect.date.DateShim(2013, 0, 18),
+    new rflect.date.DateShim(2013, 0, 21),
     rflect.cal.i18n.Symbols.NO_NAME_EVENT,
     '',
     false
@@ -48,6 +58,22 @@ function prepareDataStructures() {
       chipsByWeek: {
         2013: {
           3: [new rflect.cal.events.Chip(0, 4, 5, false, false)]
+        }
+      },
+      allDayChipsByDay: {}
+    },{
+      chipsByDay: {
+        2013: {
+            18: [new rflect.cal.events.Chip(1, 0, 1440, false, true)],
+            19: [new rflect.cal.events.Chip(1, 0, 1440, true, true)],
+            20: [new rflect.cal.events.Chip(1, 0, 1440, true, true)],
+            21: [new rflect.cal.events.Chip(1, 0, 1440, true, false)]
+          }
+      },
+      chipsByWeek: {
+        2013: {
+          3: [new rflect.cal.events.Chip(1, 5, 7, false, true)],
+          4: [new rflect.cal.events.Chip(1, 0, 1, true, false)]
         }
       },
       allDayChipsByDay: {}
@@ -111,7 +137,7 @@ function testChipCreation() {
     for (var index1 in el.chipsByDay) {
       assertNotNull('em.chipsByDay_[' + index1 + ']',
           em.chipsByDay_[index1]);
-      assertTrue('days/weeks count equals',
+      assertTrue('days count equals',
           goog.object.getCount(el.chipsByDay[index1]) ==
           goog.object.getCount(em.chipsByDay_[index1]));
       for (var index2 in el.chipsByDay[index1]) {
@@ -123,7 +149,7 @@ function testChipCreation() {
             'first chip of em.chipsByDay_[' + index1 + '][' + index2 + '][0]',
             em.chipsByDay_[index1][index2][0]);
         //TODO(alexk): expand el.chipsByDay to properties
-        assertTrue('chip start', el.chipsByDay[index1][index2][0].equals(
+        assertTrue('day chip equality', el.chipsByDay[index1][index2][0].equals(
             em.chipsByDay_[index1][index2][0]));
       }
     }
@@ -131,7 +157,7 @@ function testChipCreation() {
     for (var index1 in el.allDayChipsByDay) {
       assertNotNull('em.allDayChipsByDay_[' + index1 + ']',
           em.allDayChipsByDay_[index1]);
-      assertTrue('days/weeks count equals',
+      assertTrue('days count equals',
           goog.object.getCount(el.allDayChipsByDay[index1]) ==
           goog.object.getCount(em.allDayChipsByDay_[index1]));
       for (var index2 in el.allDayChipsByDay[index1]) {
@@ -143,7 +169,7 @@ function testChipCreation() {
             'first chip of em.allDayChipsByDay_[' + index1 + '][' + index2 + '][0]',
             em.allDayChipsByDay_[index1][index2][0]);
         //TODO(alexk): expand el.allDayChipsByDay to properties
-        assertTrue('chip start', el.allDayChipsByDay[index1][index2][0].equals(
+        assertTrue('all day chip equality', el.allDayChipsByDay[index1][index2][0].equals(
             em.allDayChipsByDay_[index1][index2][0]));
       }
     }
@@ -151,7 +177,7 @@ function testChipCreation() {
     for (var index1 in el.chipsByWeek) {
       assertNotNull('em.chipsByWeek_[' + index1 + ']',
           em.chipsByWeek_[index1]);
-      assertTrue('days/weeks count equals',
+      assertTrue('weeks count equals',
           goog.object.getCount(el.chipsByWeek[index1]) ==
           goog.object.getCount(em.chipsByWeek_[index1]));
       for (var index2 in el.chipsByWeek[index1]) {
@@ -163,7 +189,7 @@ function testChipCreation() {
             'first chip of em.chipsByWeek_[' + index1 + '][' + index2 + '][0]',
             em.chipsByWeek_[index1][index2][0]);
         //TODO(alexk): expand el.chipsByWeek to properties
-        assertTrue('chip start', el.chipsByWeek[index1][index2][0].equals(
+        assertTrue('week chip equality', el.chipsByWeek[index1][index2][0].equals(
             em.chipsByWeek_[index1][index2][0]));
       }
     }
