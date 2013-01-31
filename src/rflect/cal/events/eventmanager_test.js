@@ -22,7 +22,9 @@ function prepareDataStructures() {
     // Simplest possible input - no week breaks, no specific time
     ['asd0f6a706fs7df60asdf6as', '201300170000', '201300180000', '', '', false],
     // Different weeks
-    ['asd0f6a706fs7df60asdf6as', '201300180000', '201300210000', '', '', false]
+    ['asd0f6a706fs7df60asdf6as', '201300180000', '201300210000', '', '', false],
+    // Different years, same week
+    ['asd0f6a706fs7df60asdf6as', '201211310000', '201300020000', '', '', false],
   ];
 
   fields = [
@@ -37,6 +39,13 @@ function prepareDataStructures() {
     'asd0f6a706fs7df60asdf6as',
     new rflect.date.DateShim(2013, 0, 18),
     new rflect.date.DateShim(2013, 0, 21),
+    rflect.cal.i18n.Symbols.NO_NAME_EVENT,
+    '',
+    false
+    ],[
+    'asd0f6a706fs7df60asdf6as',
+    new rflect.date.DateShim(2012, 11, 31),
+    new rflect.date.DateShim(2013, 0, 2),
     rflect.cal.i18n.Symbols.NO_NAME_EVENT,
     '',
     false
@@ -74,6 +83,22 @@ function prepareDataStructures() {
         2013: {
           3: [new rflect.cal.events.Chip(1, 5, 7, false, true)],
           4: [new rflect.cal.events.Chip(1, 0, 1, true, false)]
+        }
+      },
+      allDayChipsByDay: {}
+    },{
+      chipsByDay: {
+        2012: {
+            366: [new rflect.cal.events.Chip(2, 0, 1440, false, true)],
+        },
+        2013: {
+            1: [new rflect.cal.events.Chip(2, 0, 1440, true, true)],
+            2: [new rflect.cal.events.Chip(2, 0, 1440, true, false)]
+        }
+      },
+      chipsByWeek: {
+        2013: {
+          1: [new rflect.cal.events.Chip(1, 1, 3, false, false)]
         }
       },
       allDayChipsByDay: {}
@@ -117,7 +142,7 @@ function testCreateEvent() {
 function testChipCreation() {
   prepareDataStructures();
 
-  goog.array.forEach(chips, function(el, index) {
+  goog.array.forEach(chips.slice(0, 2), function(el, index) {
     var em = makeEventManager();
     if (goog.DEBUG)
       _inspect('em', em);
@@ -141,7 +166,7 @@ function testChipCreation() {
           goog.object.getCount(el.chipsByDay[index1]) ==
           goog.object.getCount(em.chipsByDay_[index1]));
       for (var index2 in el.chipsByDay[index1]) {
-        assertNotNull('em.chipsByDay_[' + index1 + '][' + index2 + ']',
+        assertNotNullNorUndefined('em.chipsByDay_[' + index1 + '][' + index2 + ']',
             em.chipsByDay_[index1][index2]);
         assertTrue('chips count', el.chipsByDay[index1][index2].length ==
                 em.chipsByDay_[index1][index2].length);
@@ -161,7 +186,7 @@ function testChipCreation() {
           goog.object.getCount(el.allDayChipsByDay[index1]) ==
           goog.object.getCount(em.allDayChipsByDay_[index1]));
       for (var index2 in el.allDayChipsByDay[index1]) {
-        assertNotNull('em.allDayChipsByDay_[' + index1 + '][' + index2 + ']',
+        assertNotNullNorUndefined('em.allDayChipsByDay_[' + index1 + '][' + index2 + ']',
             em.allDayChipsByDay_[index1][index2]);
         assertTrue('chips count', el.allDayChipsByDay[index1][index2].length ==
                 em.allDayChipsByDay_[index1][index2].length);
@@ -181,7 +206,7 @@ function testChipCreation() {
           goog.object.getCount(el.chipsByWeek[index1]) ==
           goog.object.getCount(em.chipsByWeek_[index1]));
       for (var index2 in el.chipsByWeek[index1]) {
-        assertNotNull('em.chipsByWeek_[' + index1 + '][' + index2 + ']',
+        assertNotNullNorUndefined('em.chipsByWeek_[' + index1 + '][' + index2 + ']',
             em.chipsByWeek_[index1][index2]);
         assertTrue('chips count', el.chipsByWeek[index1][index2].length ==
                 em.chipsByWeek_[index1][index2].length);
