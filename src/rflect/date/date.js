@@ -567,6 +567,8 @@ rflect.date.DateShim.prototype.equals = function(aOther, opt_bitmask) {
      equal = equal && this.getMinutes() == aOther.getMinutes();
   if (equal && bitmask & rflect.date.fields.SECONDS)
      equal = equal && this.getSeconds() == aOther.getSeconds();
+  if (equal && bitmask & rflect.date.fields.WEEK_OF_YEAR)
+     equal = equal && this.getWeekNumber() == aOther.getWeekNumber();
 
   return equal;
 };

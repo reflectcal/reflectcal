@@ -173,10 +173,18 @@ function testParse() {
 }
 
 function testEqualsByWeek() {
-  var referenceDate = new goog.date.DateTime(2013, 0, 5, 0, 0, 0);
-  var tomorrow = new goog.date.DateTime(2013, 0, 5, 0, 0, 0);
-  var referenceDate = new goog.date.DateTime(2013, 0, 5, 0, 0, 0);
-
+  var referenceDate = new goog.date.DateTime(2013, 0, 4, 0, 0, 0);
+  var tomorrow = rflect.date.getTomorrow(referenceDate);
+  var afterTomorrow = rflect.date.getTomorrow(tomorrow);
+  if (goog.DEBUG) {
+    _log('referenceDate.getWeekNumber()', referenceDate.getWeekNumber());
+    _log('tomorrow.getWeekNumber()', tomorrow.getWeekNumber());
+    _log('afterTomorrow.getWeekNumber()', afterTomorrow.getWeekNumber());
+  }
+  assertTrue('ref date equals tomorrow by week',
+      tomorrow.equalsByWeek(referenceDate));
+  assertFalse('ref date not equals after tomorrow by week',
+      afterTomorrow.equalsByWeek(referenceDate));
 }
 
 
