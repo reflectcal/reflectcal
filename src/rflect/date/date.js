@@ -591,8 +591,7 @@ rflect.date.DateShim.prototype.equalsByDate = function(aOther) {
  * @return {boolean} Whether this date equals other.
  */
 rflect.date.DateShim.prototype.equalsByWeek = function(aOther) {
-  return this.equals(aOther, rflect.date.fields.YEAR |
-      rflect.date.fields.WEEK_OF_YEAR);
+  return this.equals(aOther, rflect.date.fields.WEEK_OF_YEAR);
 };
 
 

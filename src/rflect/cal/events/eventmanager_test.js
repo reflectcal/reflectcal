@@ -17,7 +17,7 @@ var fields;
 var events;
 var chips;
 
-function prepareDataStructures() {
+function prepareDataStructures(indexFrom, indexTo) {
   eventsJSON = [
     // Simplest possible input - no week breaks, no specific time
     ['asd0f6a706fs7df60asdf6as', '201300170000', '201300180000', '', '', false],
@@ -25,7 +25,11 @@ function prepareDataStructures() {
     ['asd0f6a706fs7df60asdf6as', '201300180000', '201300210000', '', '', false],
     // Different years, same week
     ['asd0f6a706fs7df60asdf6as', '201211310000', '201300020000', '', '', false],
-  ];
+    // Same as previous, but end has non-zero minutes
+    ['asd0f6a706fs7df60asdf6as', '201211310000', '201300020400', '', '', false],
+    // One day - specific start and end minutes.
+    ['asd0f6a706fs7df60asdf6as', '201300171000', '201300171400', '', '', false]
+  ].slice(indexFrom, indexTo);
 
   fields = [
     [
@@ -49,8 +53,22 @@ function prepareDataStructures() {
     rflect.cal.i18n.Symbols.NO_NAME_EVENT,
     '',
     false
+    ],[
+    'asd0f6a706fs7df60asdf6as',
+    new rflect.date.DateShim(2012, 11, 31),
+    new rflect.date.DateShim(2013, 0, 2, 4),
+    rflect.cal.i18n.Symbols.NO_NAME_EVENT,
+    '',
+    false
+    ],[
+    'asd0f6a706fs7df60asdf6as',
+    new rflect.date.DateShim(2012, 0, 17, 10),
+    new rflect.date.DateShim(2013, 0, 17, 14),
+    rflect.cal.i18n.Symbols.NO_NAME_EVENT,
+    '',
+    false
     ]
-  ];
+  ].slice(indexFrom, indexTo);
 
   events = [];
   if (goog.DEBUG)
@@ -60,8 +78,7 @@ function prepareDataStructures() {
     {
       chipsByDay: {
         2013: {
-            17: [new rflect.cal.events.Chip(0, 0, 1440, false, true)],
-            18: [new rflect.cal.events.Chip(0, 0, 1440, true, false)]
+            17: [new rflect.cal.events.Chip(0, 0, 1440, false, false)]
           }
       },
       chipsByWeek: {
@@ -75,8 +92,7 @@ function prepareDataStructures() {
         2013: {
             18: [new rflect.cal.events.Chip(1, 0, 1440, false, true)],
             19: [new rflect.cal.events.Chip(1, 0, 1440, true, true)],
-            20: [new rflect.cal.events.Chip(1, 0, 1440, true, true)],
-            21: [new rflect.cal.events.Chip(1, 0, 1440, true, false)]
+            20: [new rflect.cal.events.Chip(1, 0, 1440, true, false)]
           }
       },
       chipsByWeek: {
@@ -92,18 +108,45 @@ function prepareDataStructures() {
             366: [new rflect.cal.events.Chip(2, 0, 1440, false, true)],
         },
         2013: {
-            1: [new rflect.cal.events.Chip(2, 0, 1440, true, true)],
-            2: [new rflect.cal.events.Chip(2, 0, 1440, true, false)]
+            1: [new rflect.cal.events.Chip(2, 0, 1440, true, false)]
         }
       },
       chipsByWeek: {
         2013: {
-          1: [new rflect.cal.events.Chip(1, 1, 3, false, false)]
+          1: [new rflect.cal.events.Chip(2, 1, 3, false, false)]
+        }
+      },
+      allDayChipsByDay: {}
+    },{
+      chipsByDay: {
+        2012: {
+            366: [new rflect.cal.events.Chip(3, 0, 1440, false, true)],
+        },
+        2013: {
+            1: [new rflect.cal.events.Chip(3, 0, 1440, true, true)],
+            2: [new rflect.cal.events.Chip(3, 0, 240, true, false)]
+        }
+      },
+      chipsByWeek: {
+        2013: {
+          1: [new rflect.cal.events.Chip(3, 1, 4, false, false)]
+        }
+      },
+      allDayChipsByDay: {}
+    },{
+      chipsByDay: {
+        2013: {
+            17: [new rflect.cal.events.Chip(4, 600, 840, false, false)]
+          }
+      },
+      chipsByWeek: {
+        2013: {
+          3: [new rflect.cal.events.Chip(4, 4, 5, false, false)]
         }
       },
       allDayChipsByDay: {}
     }
-  ]
+  ].slice(indexFrom, indexTo);
 }
 
 function makeEventManager() {
@@ -140,9 +183,11 @@ function testCreateEvent() {
 
 // Requires that event creation works.
 function testChipCreation() {
+  // Do this: prepareDataStructures(0, 2) when you want work on specific
+  // subset of chips.
   prepareDataStructures();
 
-  goog.array.forEach(chips.slice(0, 2), function(el, index) {
+  goog.array.forEach(chips, function(el, index) {
     var em = makeEventManager();
     if (goog.DEBUG)
       _inspect('em', em);

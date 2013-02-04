@@ -171,6 +171,7 @@ rflect.cal.events.EventManager.prototype.processToChips =
 
     var hasNext = true;
     var hasPrev = false;
+    var lastDayWithMinutes = false;
     var hasNextWeek = false;
     var hasPrevWeek = false;
     var isWeekChip = false;
@@ -191,18 +192,26 @@ rflect.cal.events.EventManager.prototype.processToChips =
     while (hasNext) {
 
 
-      if (goog.DEBUG)
+      if (goog.DEBUG) {
         _log('currentDate', currentDate);
+      }
+      if (goog.DEBUG)
+        _log('currentDate.getWeekday()', currentDate.getWeekday());
+      if (goog.DEBUG)
+        _log('currentDate.getWeekNumber()', currentDate.getWeekNumber());
 
       tomorrow = currentDate.getTomorrow();
 
       hasPrev = !currentDate.equalsByDate(startDate);
-      hasNext = !currentDate.equalsByDate(endDate) ||
-          tomorrow.equalsByDate(endDate) && eventEndMins == 0;
+      hasNext = !lastDayWithMinutes && (!tomorrow.equalsByDate(endDate) ||
+          (lastDayWithMinutes = tomorrow.equalsByDate(endDate) &&
+          eventEndMins != 0));
 
       isWeekChip = !hasNext || currentDate.getWeekday() == 6;
 
       hasPrevWeek = !currentDate.equalsByWeek(startDate);
+      if (goog.DEBUG)
+        _log('hasPrevWeek', hasPrevWeek);
       hasNextWeek = hasNext && tomorrow.getWeekday() == 0;
 
       if (isAllDay) {
@@ -237,7 +246,7 @@ rflect.cal.events.EventManager.prototype.processToChips =
       if (isWeekChip){
         if (!hasNextWeek){
           if (eventEndMins == 0){
-            weekChipEndMins = currentDate.getWeekday();
+            weekChipEndMins = currentDate.getWeekday() + 1;
           } else
             weekChipEndMins = currentDate.getWeekday() + 1;
         } else {
