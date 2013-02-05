@@ -172,21 +172,21 @@ rflect.date.parse = function(aDateStr, opt_full){
   var minutes = +aDateStr.substr(10, 2);
   var seconds = +aDateStr.substr(12, 2);
 
-  var date;
+  var dateObj;
   var dateShim;
 
   if (opt_full) {
-    date = new goog.date.DateTime(year,month, date, hours, minutes,
+    dateObj = new goog.date.DateTime(year,month, date, hours, minutes,
                      seconds);
-    dateShim = new rflect.date.DateShim(date);
+    dateShim = new rflect.date.DateShim(dateObj);
   } else
     dateShim = new rflect.date.DateShim(year, month, date, hours, minutes,
       seconds);
 
   if (opt_full) {
-    dateShim.setDay(date.getDay());
-    dateShim.setDayOfYear(date.getDayOfYear());
-    dateShim.setWeekNumber(date.getWeekNumber());
+    dateShim.setDay(dateObj.getDay());
+    dateShim.setDayOfYear(dateObj.getDayOfYear());
+    dateShim.setWeekNumber(dateObj.getWeekNumber());
   }
   return dateShim;
 }
@@ -553,24 +553,37 @@ rflect.date.DateShim.prototype.setWeekNumber = function(aWeekNumber) {
  * @return {boolean} Whether this date equals other.
  */
 rflect.date.DateShim.prototype.equals = function(aOther, opt_bitmask) {
-  var equal = true;
+  return this.compare(aOther, opt_bitmask) == 0;
+};
+
+
+/**
+ * @param {goog.date.DateLike} aOther Date to test.
+ * @param {number} opt_bitmask Bitmask which shows what fields should
+ * participate in comparison.
+ * @return {number} 1 if this date is greater than other, -1 if it's less,
+ * 0 if equals.
+ */
+rflect.date.DateShim.prototype.compare = function(aOther, opt_bitmask) {
+  var diff = 0;
   var bitmask = opt_bitmask || rflect.date.fields.ALL;
   if (bitmask & rflect.date.fields.YEAR)
-     equal = equal && this.getYear() == aOther.getFullYear();
-  if (equal && bitmask & rflect.date.fields.MONTH)
-     equal = equal && this.getMonth() == aOther.getMonth();
-  if (equal && bitmask & rflect.date.fields.DATE)
-     equal = equal && this.getDate() == aOther.getDate();
-  if (equal && bitmask & rflect.date.fields.HOURS)
-     equal = equal && this.getHours() == aOther.getHours();
-  if (equal && bitmask & rflect.date.fields.MINUTES)
-     equal = equal && this.getMinutes() == aOther.getMinutes();
-  if (equal && bitmask & rflect.date.fields.SECONDS)
-     equal = equal && this.getSeconds() == aOther.getSeconds();
-  if (equal && bitmask & rflect.date.fields.WEEK_OF_YEAR)
-     equal = equal && this.getWeekNumber() == aOther.getWeekNumber();
+     diff = this.getYear() - aOther.getFullYear();
+  if (diff == 0 && bitmask & rflect.date.fields.MONTH)
+     diff = this.getMonth() - aOther.getMonth();
+  if (diff == 0 && bitmask & rflect.date.fields.DATE)
+     diff = this.getDate() - aOther.getDate();
+  if (diff == 0 && bitmask & rflect.date.fields.HOURS)
+     diff = this.getHours() - aOther.getHours();
+  if (diff == 0 && bitmask & rflect.date.fields.MINUTES)
+     diff = this.getMinutes() - aOther.getMinutes();
+  if (diff == 0 && bitmask & rflect.date.fields.SECONDS)
+     diff = this.getSeconds() - aOther.getSeconds();
+  // Comparison of week is independent.
+  if (bitmask & rflect.date.fields.WEEK_OF_YEAR)
+      diff = this.getWeekNumber() - aOther.getWeekNumber();
 
-  return equal;
+  return diff > 0 ? 1 : diff == 0 ? 0 : -1;
 };
 
 
@@ -581,6 +594,17 @@ rflect.date.DateShim.prototype.equals = function(aOther, opt_bitmask) {
  */
 rflect.date.DateShim.prototype.equalsByDate = function(aOther) {
   return this.equals(aOther, rflect.date.fields.YEAR |
+      rflect.date.fields.MONTH | rflect.date.fields.DATE);
+};
+
+
+/**
+ * Compares by date fields only.
+ * @param {goog.date.DateLike} aOther Date to test.
+ * @return {number} Comparison result.
+ */
+rflect.date.DateShim.prototype.compareByDate = function(aOther) {
+  return this.compare(aOther, rflect.date.fields.YEAR |
       rflect.date.fields.MONTH | rflect.date.fields.DATE);
 };
 

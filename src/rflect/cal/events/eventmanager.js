@@ -171,7 +171,6 @@ rflect.cal.events.EventManager.prototype.processToChips =
 
     var hasNext = true;
     var hasPrev = false;
-    var lastDayWithMinutes = false;
     var hasNextWeek = false;
     var hasPrevWeek = false;
     var isWeekChip = false;
@@ -203,9 +202,8 @@ rflect.cal.events.EventManager.prototype.processToChips =
       tomorrow = currentDate.getTomorrow();
 
       hasPrev = !currentDate.equalsByDate(startDate);
-      hasNext = !lastDayWithMinutes && (!tomorrow.equalsByDate(endDate) ||
-          (lastDayWithMinutes = tomorrow.equalsByDate(endDate) &&
-          eventEndMins != 0));
+      hasNext = tomorrow.compareByDate(endDate) == -1 ||
+          tomorrow.equalsByDate(endDate) && eventEndMins != 0;
 
       isWeekChip = !hasNext || currentDate.getWeekday() == 6;
 

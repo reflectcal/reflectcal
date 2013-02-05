@@ -62,7 +62,7 @@ function prepareDataStructures(indexFrom, indexTo) {
     false
     ],[
     'asd0f6a706fs7df60asdf6as',
-    new rflect.date.DateShim(2012, 0, 17, 10),
+    new rflect.date.DateShim(2013, 0, 17, 10),
     new rflect.date.DateShim(2013, 0, 17, 14),
     rflect.cal.i18n.Symbols.NO_NAME_EVENT,
     '',
@@ -165,7 +165,7 @@ function testCreateEvent() {
     if (goog.DEBUG)
       _log('event.startDate', event.startDate);
     if (goog.DEBUG)
-        _log('fields[index][1]', fields[index][1]);
+        _log('fields[' + index + '][1]', fields[index][1]);
     assertTrue('startDate equals control',
         event.startDate.equals(fields[index][1]));
     assertTrue('endDate equals control',

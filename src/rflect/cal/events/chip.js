@@ -39,7 +39,7 @@ rflect.cal.events.Chip.MAX_MINUTES_DAY = 24 * 60;
 
 
 /**
- * Maximum minutes for week chip.
+ * Maximum days for week chip.
  * @type {number}
  * @const
  */
