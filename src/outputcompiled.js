@@ -2861,13 +2861,13 @@ function $rflect$date$moveToDayOfWeekIfNeeded$$($aDate$$3_date$$inline_378$$) {
   0 != $JSCompiler_StaticMethods_getWeekday$$($aDate$$3_date$$inline_378$$) && ($JSCompiler_temp$$16_diff$$inline_377$$ = (($goog$i18n$DateTimeSymbols_en$$.$FIRSTDAYOFWEEK$ + 0 + 1) % 7 - $aDate$$3_date$$inline_378$$.getDay() + -7) % 7, $aDate$$3_date$$inline_378$$ = $aDate$$3_date$$inline_378$$.$clone$(), $aDate$$3_date$$inline_378$$.add(new $goog$date$Interval$$(0, 0, 0 === $JSCompiler_temp$$16_diff$$inline_377$$ ? $JSCompiler_temp$$16_diff$$inline_377$$ + -7 : $JSCompiler_temp$$16_diff$$inline_377$$)));
   return $JSCompiler_temp$$16_diff$$inline_377$$ = $aDate$$3_date$$inline_378$$
 }
-function $rflect$date$getTomorrow$$($aGivenDate_cutoff$$1$$) {
-  var $dateObject_year$$15$$ = $JSCompiler_alias_NULL$$, $dateObject_year$$15$$ = $aGivenDate_cutoff$$1$$.getFullYear(), $month$$7$$ = $aGivenDate_cutoff$$1$$.getMonth(), $date$$42$$ = $aGivenDate_cutoff$$1$$.getDate(), $dayOfWeek$$3_previousDayOfWeek$$;
-  $dayOfWeek$$3_previousDayOfWeek$$ = $aGivenDate_cutoff$$1$$.getDay();
-  var $dayOfYear$$4$$ = $aGivenDate_cutoff$$1$$.$getDayOfYear$(), $previousDayOfYear$$ = $dayOfYear$$4$$, $weekNumber$$ = $aGivenDate_cutoff$$1$$.$getWeekNumber$(), $firstDayOfWeek$$ = $aGivenDate_cutoff$$1$$.$firstDayOfWeek_$, $aGivenDate_cutoff$$1$$ = $aGivenDate_cutoff$$1$$.$firstWeekCutOffDay_$, $numberOfDaysInCurrentYear$$ = 0 == $dateObject_year$$15$$ % 4 && (0 != $dateObject_year$$15$$ % 100 || 0 == $dateObject_year$$15$$ % 400) ? 366 : 365;
+function $rflect$date$getTomorrow$$($aGivenDate_cutoff$$2$$) {
+  var $dateObject_year$$15$$ = $JSCompiler_alias_NULL$$, $dateObject_year$$15$$ = $aGivenDate_cutoff$$2$$.getFullYear(), $month$$7$$ = $aGivenDate_cutoff$$2$$.getMonth(), $date$$42$$ = $aGivenDate_cutoff$$2$$.getDate(), $dayOfWeek$$3_previousDayOfWeek$$;
+  $dayOfWeek$$3_previousDayOfWeek$$ = $aGivenDate_cutoff$$2$$.getDay();
+  var $dayOfYear$$4$$ = $aGivenDate_cutoff$$2$$.$getDayOfYear$(), $previousDayOfYear$$ = $dayOfYear$$4$$, $weekNumber$$ = $aGivenDate_cutoff$$2$$.$getWeekNumber$(), $firstDayOfWeek$$ = $aGivenDate_cutoff$$2$$.$firstDayOfWeek_$, $aGivenDate_cutoff$$2$$ = $aGivenDate_cutoff$$2$$.$firstWeekCutOffDay_$, $numberOfDaysInCurrentYear$$ = 0 == $dateObject_year$$15$$ % 4 && (0 != $dateObject_year$$15$$ % 100 || 0 == $dateObject_year$$15$$ % 400) ? 366 : 365;
   $date$$42$$ == $goog$date$getNumberOfDaysInMonth$$($dateObject_year$$15$$, $month$$7$$) ? 11 == $month$$7$$ ? ($dateObject_year$$15$$++, $month$$7$$ = 0, $dayOfYear$$4$$ = $date$$42$$ = 1) : ($month$$7$$++, $date$$42$$ = 1, $dayOfYear$$4$$++) : ($date$$42$$++, $dayOfYear$$4$$++);
   $dayOfWeek$$3_previousDayOfWeek$$ = ($dayOfWeek$$3_previousDayOfWeek$$ + 1 + 7) % 7;
-  ($dayOfWeek$$3_previousDayOfWeek$$ + 6) % 7 == $firstDayOfWeek$$ && (52 > $weekNumber$$ || 52 == $weekNumber$$ && $previousDayOfYear$$ + 1 + ($aGivenDate_cutoff$$1$$ - $firstDayOfWeek$$ + 7) % 7 < $numberOfDaysInCurrentYear$$ + 1 ? $weekNumber$$++ : $weekNumber$$ = 1);
+  ($dayOfWeek$$3_previousDayOfWeek$$ + 6) % 7 == $firstDayOfWeek$$ && (52 > $weekNumber$$ || 52 == $weekNumber$$ && $previousDayOfYear$$ + 1 + ($aGivenDate_cutoff$$2$$ - $firstDayOfWeek$$ + 7) % 7 < $numberOfDaysInCurrentYear$$ + 1 ? $weekNumber$$++ : $weekNumber$$ = 1);
   $dateObject_year$$15$$ = new $rflect$date$DateShim$$($dateObject_year$$15$$, $month$$7$$, $date$$42$$);
   $dateObject_year$$15$$.$day_$ = $dayOfWeek$$3_previousDayOfWeek$$;
   $dateObject_year$$15$$.$dayOfYear_$ = $dayOfYear$$4$$;
@@ -2920,7 +2920,7 @@ $JSCompiler_prototypeAlias$$.$equals$ = function $$JSCompiler_prototypeAlias$$$$
   0 == $diff$$inline_396$$ && $bitmask$$inline_397$$ & 16 && ($diff$$inline_396$$ = this.getMinutes() - $aOther$$.getMinutes());
   0 == $diff$$inline_396$$ && $bitmask$$inline_397$$ & 32 && ($diff$$inline_396$$ = this.getSeconds() - $aOther$$.getSeconds());
   $bitmask$$inline_397$$ & 128 && ($diff$$inline_396$$ = this.$getWeekNumber$() - $aOther$$.$getWeekNumber$());
-  return 0 == $diff$$inline_396$$
+  return 0 == (0 < $diff$$inline_396$$ ? 1 : 0 == $diff$$inline_396$$ ? 0 : -1)
 };
 $JSCompiler_prototypeAlias$$.valueOf = function $$JSCompiler_prototypeAlias$$$valueOf$() {
   return+[this.$year_$, this.$month_$, this.$dayOfMonth_$, this.$hours_$, this.$minutes_$, this.$seconds_$, this.$milliseconds_$].join("")

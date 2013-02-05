@@ -28,7 +28,9 @@ function prepareDataStructures(indexFrom, indexTo) {
     // Same as previous, but end has non-zero minutes
     ['asd0f6a706fs7df60asdf6as', '201211310000', '201300020400', '', '', false],
     // One day - specific start and end minutes.
-    ['asd0f6a706fs7df60asdf6as', '201300171000', '201300171400', '', '', false]
+    ['asd0f6a706fs7df60asdf6as', '201300171000', '201300171400', '', '', false],
+    // Day that is last in 2012 year, week should be first in 2013.
+    ['asd0f6a706fs7df60asdf6as', '201211310000', '201300010000', '', '', false]
   ].slice(indexFrom, indexTo);
 
   fields = [
@@ -64,6 +66,13 @@ function prepareDataStructures(indexFrom, indexTo) {
     'asd0f6a706fs7df60asdf6as',
     new rflect.date.DateShim(2013, 0, 17, 10),
     new rflect.date.DateShim(2013, 0, 17, 14),
+    rflect.cal.i18n.Symbols.NO_NAME_EVENT,
+    '',
+    false
+    ],[
+    'asd0f6a706fs7df60asdf6as',
+    new rflect.date.DateShim(2012, 11, 31),
+    new rflect.date.DateShim(2013, 0, 1),
     rflect.cal.i18n.Symbols.NO_NAME_EVENT,
     '',
     false
@@ -145,6 +154,18 @@ function prepareDataStructures(indexFrom, indexTo) {
         }
       },
       allDayChipsByDay: {}
+    },{
+      chipsByDay: {
+        2012: {
+            366: [new rflect.cal.events.Chip(5, 0, 1440, false, false)]
+          }
+      },
+      chipsByWeek: {
+        2013: {
+          1: [new rflect.cal.events.Chip(5, 1, 2, false, false)]
+        }
+      },
+      allDayChipsByDay: {}
     }
   ].slice(indexFrom, indexTo);
 }
@@ -185,7 +206,7 @@ function testCreateEvent() {
 function testChipCreation() {
   // Do this: prepareDataStructures(0, 2) when you want work on specific
   // subset of chips.
-  prepareDataStructures();
+  prepareDataStructures(-1);
 
   goog.array.forEach(chips, function(el, index) {
     var em = makeEventManager();

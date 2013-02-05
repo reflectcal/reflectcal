@@ -190,7 +190,6 @@ rflect.cal.events.EventManager.prototype.processToChips =
     // Generating chips.
     while (hasNext) {
 
-
       if (goog.DEBUG) {
         _log('currentDate', currentDate);
       }
@@ -202,7 +201,7 @@ rflect.cal.events.EventManager.prototype.processToChips =
       tomorrow = currentDate.getTomorrow();
 
       hasPrev = !currentDate.equalsByDate(startDate);
-      hasNext = tomorrow.compareByDate(endDate) == -1 ||
+      hasNext = tomorrow.compareByDate(endDate) < 0 ||
           tomorrow.equalsByDate(endDate) && eventEndMins != 0;
 
       isWeekChip = !hasNext || currentDate.getWeekday() == 6;
@@ -258,7 +257,17 @@ rflect.cal.events.EventManager.prototype.processToChips =
 
         chip = new rflect.cal.events.Chip(event.id, weekChipStartMins,
             weekChipEndMins, hasPrevWeek, hasNextWeek);
-        this.putWeekChip_(chip, currentDate);
+
+        var cutoff = currentDate.getFirstWeekCutOffDay();
+        var cutoffAndCurrentDiff = cutoff - currentDate.getIsoWeekday();
+        var cutoffAndCurrentDiffAbs = (cutoff - currentDate.getIsoWeekday()
+            + 7) % 7;
+        var weekIsFromNextYear = cutoffAndCurrentDiff > 0 &&
+            (currentDate.getDayOfYear() +
+            cutoffAndCurrentDiffAbs > rflect.date.getNumberOfDaysInYear(
+            currentDate.getFullYear()));
+        this.putWeekChip_(chip, currentDate,
+            weekIsFromNextYear);
       }
       
       currentDate = tomorrow;
@@ -306,10 +315,13 @@ rflect.cal.events.EventManager.prototype.putAllDayChips_ =
  * Saves week chip.
  * @param {rflect.cal.events.Chip} aChip Chip to save.
  * @param {rflect.date.DateShim} aDate Which date characterizes chip.
+ * @param {boolean} aNextYear Whether this chips belongs to next
+ * year, i.e. should we +1 year that we pass in previous param.
  * @private
  */
-rflect.cal.events.EventManager.prototype.putWeekChip_ = function(aChip, aDate) {
-  var year = aDate.getYear();
+rflect.cal.events.EventManager.prototype.putWeekChip_ = function(aChip, aDate,
+    aNextYear) {
+  var year = aDate.getYear() + (aNextYear ? 1 : 0);
   var weekOfYear = aDate.getWeekNumber();
   this.putChip_(aChip, year, weekOfYear, this.chipsByWeek_,
       this.tracksChipsByWeek_);
