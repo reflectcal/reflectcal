@@ -42,7 +42,8 @@ function prepareDataStructures(indexFrom, indexTo) {
     ['asd0f6a706fs7df60asdf6as', '201301060000', '201301070000', '', '', true],
     // All-day event in multiple days.
     ['asd0f6a706fs7df60asdf6as', '201301060000', '201301090000', '', '', true],
-
+    // All-day event in multiple days and weeks.
+    ['asd0f6a706fs7df60asdf6as', '201301060000', '201301210000', '', '', true]
 
   ].slice(indexFrom, indexTo);
 
@@ -120,7 +121,7 @@ function prepareDataStructures(indexFrom, indexTo) {
     ],[
     'asd0f6a706fs7df60asdf6as',
     new rflect.date.DateShim(2013, 1, 6),
-    new rflect.date.DateShim(2013, 1, 9),
+    new rflect.date.DateShim(2013, 1, 21),
     rflect.cal.i18n.Symbols.NO_NAME_EVENT,
     '',
     true
@@ -325,6 +326,35 @@ function prepareDataStructures(indexFrom, indexTo) {
           37: [new rflect.cal.events.Chip(7, 0, 3, false, false)],
           38: [new rflect.cal.events.Chip(7, 0, 2, true, false)],
           39: [new rflect.cal.events.Chip(7, 0, 1, true, false)]
+        }
+      }
+    },{
+      chipsByDay: {
+      },
+      chipsByWeek: {
+        2013: {
+          6: [new rflect.cal.events.Chip(7, 3, 7, false, true)],
+          7: [new rflect.cal.events.Chip(7, 0, 7, true, true)],
+          8: [new rflect.cal.events.Chip(7, 0, 4, true, false)]
+        }
+      },
+      allDayChipsByDay: {
+        2013: {
+          37: [new rflect.cal.events.Chip(7, 0, 15, false, false)],
+          38: [new rflect.cal.events.Chip(7, 0, 14, true, false)],
+          39: [new rflect.cal.events.Chip(7, 0, 13, true, false)],
+          40: [new rflect.cal.events.Chip(7, 0, 12, true, false)],
+          41: [new rflect.cal.events.Chip(7, 0, 11, true, false)],
+          42: [new rflect.cal.events.Chip(7, 0, 10, true, false)],
+          43: [new rflect.cal.events.Chip(7, 0, 9, true, false)],
+          44: [new rflect.cal.events.Chip(7, 0, 8, true, false)],
+          45: [new rflect.cal.events.Chip(7, 0, 7, true, false)],
+          46: [new rflect.cal.events.Chip(7, 0, 6, true, false)],
+          47: [new rflect.cal.events.Chip(7, 0, 5, true, false)],
+          48: [new rflect.cal.events.Chip(7, 0, 4, true, false)],
+          49: [new rflect.cal.events.Chip(7, 0, 3, true, false)],
+          50: [new rflect.cal.events.Chip(7, 0, 2, true, false)],
+          51: [new rflect.cal.events.Chip(7, 0, 1, true, false)]
         }
       }
     }
