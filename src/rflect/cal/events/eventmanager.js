@@ -353,7 +353,40 @@ rflect.cal.events.EventManager.prototype.putChip_ = function(aChip, aIndex1,
     if (!(aIndex2 in aDataStructure[aIndex1]))
       aDataStructure[aIndex1][aIndex2] = [];
     aDataStructure[aIndex1][aIndex2].push(aChip);
-  
+
     aTracks[aChip.eventId] = [aIndex1, aIndex2];
 }
 
+
+/**
+ * @return {Array.<rflect.cal.events.Chip>} Array of day chips actual for this
+ * time configuration.
+ */
+rflect.cal.events.EventManager.prototype.getDayChips = function() {
+  var dayChips = [];
+  for (var counter = 0, length = this.timeManager_.daySeries.length;
+      counter < length; counter++) {
+    var yearKey = this.timeManager_.daySeries[counter].getFullYear();
+    var dayOfYearKey = this.timeManager_.daySeries[counter].getDayOfYear();
+    dayChips.push(this.chipsByDay_[yearKey][dayOfYearKey]);
+  }
+  return dayChips;
+}
+
+
+/**
+ * @return {Array.<rflect.cal.events.Chip>} Array of all-day chips actual for
+ * this time configuration.
+ */
+rflect.cal.events.EventManager.prototype.getAllDayChips = function() {
+
+}
+
+
+/**
+ * @return {Array.<rflect.cal.events.Chip>} Array of week chips actual for
+ * this time configuration.
+ */
+rflect.cal.events.EventManager.prototype.getWeekChips = function() {
+
+}
