@@ -29,8 +29,21 @@ function prepareDataStructures(indexFrom, indexTo) {
     ['asd0f6a706fs7df60asdf6as', '201211310000', '201300020400', '', '', false],
     // One day - specific start and end minutes.
     ['asd0f6a706fs7df60asdf6as', '201300171000', '201300171400', '', '', false],
-    // Day that is last in 2012 year, week should be first in 2013.
-    ['asd0f6a706fs7df60asdf6as', '201211310000', '201300010000', '', '', false]
+    // Day that is last in 2012 year and weekday < cutoff,
+    // week should be first in 2013.
+    ['asd0f6a706fs7df60asdf6as', '201211310000', '201300010000', '', '', false],
+    // Day that is last in 2005 year and == cutoff, week should be is 53.
+    ['asd0f6a706fs7df60asdf6as', '200511310000', '200600010000', '', '', false],
+    // Different weeks with zero start-end.
+    ['asd0f6a706fs7df60asdf6as', '201300310000', '201301210000', '', '', false],
+    // Same, but non-zero start-end.
+    ['asd0f6a706fs7df60asdf6as', '201300310400', '201301210400', '', '', false],
+    // All-day event.
+    ['asd0f6a706fs7df60asdf6as', '201301060000', '201301070000', '', '', true],
+    // All-day event in multiple days.
+    ['asd0f6a706fs7df60asdf6as', '201301060000', '201301090000', '', '', true],
+
+
   ].slice(indexFrom, indexTo);
 
   fields = [
@@ -76,6 +89,41 @@ function prepareDataStructures(indexFrom, indexTo) {
     rflect.cal.i18n.Symbols.NO_NAME_EVENT,
     '',
     false
+    ],[
+    'asd0f6a706fs7df60asdf6as',
+    new rflect.date.DateShim(2005, 11, 31),
+    new rflect.date.DateShim(2006, 0, 1),
+    rflect.cal.i18n.Symbols.NO_NAME_EVENT,
+    '',
+    false
+    ],[
+    'asd0f6a706fs7df60asdf6as',
+    new rflect.date.DateShim(2013, 0, 31),
+    new rflect.date.DateShim(2013, 1, 21),
+    rflect.cal.i18n.Symbols.NO_NAME_EVENT,
+    '',
+    false
+    ],[
+    'asd0f6a706fs7df60asdf6as',
+    new rflect.date.DateShim(2013, 0, 31, 4),
+    new rflect.date.DateShim(2013, 1, 21, 4),
+    rflect.cal.i18n.Symbols.NO_NAME_EVENT,
+    '',
+    false
+    ],[
+    'asd0f6a706fs7df60asdf6as',
+    new rflect.date.DateShim(2013, 1, 6),
+    new rflect.date.DateShim(2013, 1, 7),
+    rflect.cal.i18n.Symbols.NO_NAME_EVENT,
+    '',
+    true
+    ],[
+    'asd0f6a706fs7df60asdf6as',
+    new rflect.date.DateShim(2013, 1, 6),
+    new rflect.date.DateShim(2013, 1, 9),
+    rflect.cal.i18n.Symbols.NO_NAME_EVENT,
+    '',
+    true
     ]
   ].slice(indexFrom, indexTo);
 
@@ -166,6 +214,119 @@ function prepareDataStructures(indexFrom, indexTo) {
         }
       },
       allDayChipsByDay: {}
+    },{
+      chipsByDay: {
+        2005: {
+            365: [new rflect.cal.events.Chip(6, 0, 1440, false, false)]
+          }
+      },
+      chipsByWeek: {
+        2005: {
+          53: [new rflect.cal.events.Chip(6, 6, 7, false, false)]
+        }
+      },
+      allDayChipsByDay: {}
+    },{
+      chipsByDay: {
+        2013: {
+          31: [new rflect.cal.events.Chip(7, 0, 1440, false, true)],
+          32: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          33: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          34: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          35: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          36: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          37: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          38: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          39: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          40: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          41: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          42: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          43: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          44: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          45: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          46: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          47: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          48: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          49: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          50: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          51: [new rflect.cal.events.Chip(7, 0, 1440, true, false)]
+        }
+      },
+      chipsByWeek: {
+        2013: {
+          5: [new rflect.cal.events.Chip(7, 4, 7, false, true)],
+          6: [new rflect.cal.events.Chip(7, 0, 7, true, true)],
+          7: [new rflect.cal.events.Chip(7, 0, 7, true, true)],
+          8: [new rflect.cal.events.Chip(7, 0, 4, true, false)]
+        }
+      },
+      allDayChipsByDay: {
+      }
+    },{
+      chipsByDay: {
+        2013: {
+          31: [new rflect.cal.events.Chip(7, 240, 1440, false, true)],
+          32: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          33: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          34: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          35: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          36: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          37: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          38: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          39: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          40: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          41: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          42: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          43: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          44: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          45: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          46: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          47: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          48: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          49: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          50: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          51: [new rflect.cal.events.Chip(7, 0, 1440, true, true)],
+          52: [new rflect.cal.events.Chip(7, 0, 240, true, false)]
+        }
+      },
+      chipsByWeek: {
+        2013: {
+          5: [new rflect.cal.events.Chip(7, 4, 7, false, true)],
+          6: [new rflect.cal.events.Chip(7, 0, 7, true, true)],
+          7: [new rflect.cal.events.Chip(7, 0, 7, true, true)],
+          8: [new rflect.cal.events.Chip(7, 0, 5, true, false)]
+        }
+      },
+      allDayChipsByDay: {
+      }
+    },{
+      chipsByDay: {
+      },
+      chipsByWeek: {
+        2013: {
+          6: [new rflect.cal.events.Chip(7, 3, 4, false, false)]
+        }
+      },
+      allDayChipsByDay: {
+        2013: {
+          37: [new rflect.cal.events.Chip(7, 0, 1, false, false)]
+        }
+      }
+    },{
+      chipsByDay: {
+      },
+      chipsByWeek: {
+        2013: {
+          6: [new rflect.cal.events.Chip(7, 3, 6, false, false)]
+        }
+      },
+      allDayChipsByDay: {
+        2013: {
+          37: [new rflect.cal.events.Chip(7, 0, 3, false, false)],
+          38: [new rflect.cal.events.Chip(7, 0, 2, true, false)],
+          39: [new rflect.cal.events.Chip(7, 0, 1, true, false)]
+        }
+      }
     }
   ].slice(indexFrom, indexTo);
 }
@@ -176,7 +337,7 @@ function makeEventManager() {
 }
 
 function testCreateEvent() {
-  prepareDataStructures();
+  prepareDataStructures(-1);
 
   goog.array.forEach(eventsJSON, function(event, index) {
     var event = rflect.cal.events.EventManager.createEvent(event);
@@ -193,7 +354,8 @@ function testCreateEvent() {
         event.endDate.equals(fields[index][2]));
     assertTrue('summary equals default',
         event.summary == fields[index][3]);
-    assertTrue('description equals control',
+    assertTrue('description equals control: ' + event.description + ' == ' +
+        fields[index][4],
         event.description == fields[index][4]);
     assertTrue('all day equals control',
         event.allDay == fields[index][5]);

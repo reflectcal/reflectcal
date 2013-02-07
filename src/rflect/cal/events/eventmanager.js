@@ -146,8 +146,8 @@ rflect.cal.events.EventManager.createEvent = function(aArray) {
   var description = aArray[rflect.cal.events.Event.FIELD_DESCRIPTION];
   var allDay = aArray[rflect.cal.events.Event.FIELD_ALL_DAY];
 
-  return new rflect.cal.events.Event(uid, longId, startDate, endDate, summary,
-      description, allDay);
+  return new rflect.cal.events.Event(uid, longId, startDate, endDate, allDay,
+      summary, description);
 }
 
 
@@ -214,7 +214,7 @@ rflect.cal.events.EventManager.prototype.processToChips =
       if (isAllDay) {
         allDayIndexes[total++] = [
           currentDate.getYear(),
-          currentDate.getDate()
+          currentDate.getDayOfYear()
         ];
 
         if (!hasNext)
@@ -266,6 +266,14 @@ rflect.cal.events.EventManager.prototype.processToChips =
             (currentDate.getDayOfYear() +
             cutoffAndCurrentDiffAbs > rflect.date.getNumberOfDaysInYear(
             currentDate.getFullYear()));
+        if (goog.DEBUG)
+          _log('cutoff', cutoff);
+        if (goog.DEBUG)
+          _log('cutoffAndCurrentDiff', cutoffAndCurrentDiff);
+        if (goog.DEBUG)
+          _log('cutoffAndCurrentDiffAbs', cutoffAndCurrentDiffAbs);
+        if (goog.DEBUG)
+          _log('weekIsFromNextYear', weekIsFromNextYear);
         this.putWeekChip_(chip, currentDate,
             weekIsFromNextYear);
       }
