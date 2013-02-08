@@ -86,8 +86,8 @@ rflect.cal.BlockManager.prototype.update = function() {
     this.blockPoolAllday.updateCollapsedBlocks();
 
     // Event manager calculations and nesting is here.
-    this.blockPoolWeek.updateEventMap();
-    this.blockPoolAllday.updateEventMap();
+    this.blockPoolWeek.updateEventMap(this.eventManager.dayChips);
+    this.blockPoolAllday.updateEventMap(this.eventManager.allDayChips);
 
     this.blockPoolWeek.updateExpandedBlocks();
     this.blockPoolAllday.updateExpandedBlocks();
@@ -97,7 +97,7 @@ rflect.cal.BlockManager.prototype.update = function() {
     this.blockPoolMonth.updateCollapsedBlocks();
 
     // Event manager calculations and nesting is here.
-    this.blockPoolMonth.updateEventMap();
+    this.blockPoolMonth.updateEventMap(this.eventManager.weekChips);
 
     this.blockPoolMonth.updateExpandedBlocks();
   }

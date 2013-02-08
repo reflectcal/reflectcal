@@ -85,3 +85,11 @@ rflect.cal.Block.prototype.position = 0;
 rflect.cal.Block.prototype.clone = function() {
   return new rflect.cal.Block(this.size, this.capacity, this.expanded);
 };
+
+
+/**
+ * @param {!Array.<rflect.cal.events.Chip>} aChips Collection of chips for this
+ * block.
+ */
+rflect.cal.Block.prototype.calculateEventMap = function(aChips) {
+};

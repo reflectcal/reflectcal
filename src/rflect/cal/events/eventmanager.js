@@ -70,6 +70,27 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
 
 
   /**
+   * List of current day chips.
+   * @type {Array.<!Array.<rflect.cal.events.Chip>>}
+   */
+  this.dayChips = [];
+
+
+  /**
+   * List of current all-day chips.
+   * @type {Array.<!Array.<rflect.cal.events.Chip>>}
+   */
+  this.allDayChips = [];
+
+
+  /**
+   * List of current week chips.
+   * @type {Array.<!Array.<rflect.cal.events.Chip>>}
+   */
+  this.weekChips = [];
+
+
+  /**
    * Object for quick access to chip indexes (year, day), used for deleting of
    * chips.
    * @type {Object.<number, Array.<number>>}
@@ -152,6 +173,36 @@ rflect.cal.events.EventManager.createEvent = function(aArray) {
 
 
 /**
+ * @return {Array.<rflect.cal.events.Chip>} Chips from data structure.
+ * @param {Object.<number, Object.<number, Array.<rflect.cal.events.Chip>>>} aDataStructure Data structure from where to retrieve chips.
+ * @param {number} aIndex1 First index.
+ * @param {number} aIndex2 Second index.
+ */
+rflect.cal.events.EventManager.getNestedChips_ = function(
+    aDataStructure, aIndex1, aIndex2) {
+  if (aDataStructure[aIndex1] && aDataStructure[aIndex1][aIndex2])
+    return aDataStructure[aIndex1][aIndex2];
+  return null;
+}
+
+
+rflect.cal.events.EventManager.getNestedAllDayChips_ = function(aYear,
+    aDayOfYear, aDaysNumber) {
+  var knownChipsIds = {};
+  if (chips = rflect.cal.events.EventManager.getNestedChips_(
+      this.allDayChipsByDay_, aYear, aDayOfYear)) {
+    for (var counter = 0, length = chips.length; counter < length; counter++) {
+      var id = chips[counter].id;
+      if (!knownChipsIds[id]) {
+        knownChipsIds[id] = 1;
+
+      }
+    }
+  }
+}
+
+
+/**
  * Adds events from parsed json.
  * @param {Array.<Array>} aEventsArray List of JSON representation of events.
  */
@@ -190,14 +241,6 @@ rflect.cal.events.EventManager.prototype.processToChips =
     // Generating chips.
     while (hasNext) {
 
-      if (goog.DEBUG) {
-        _log('currentDate', currentDate);
-      }
-      if (goog.DEBUG)
-        _log('currentDate.getWeekday()', currentDate.getWeekday());
-      if (goog.DEBUG)
-        _log('currentDate.getWeekNumber()', currentDate.getWeekNumber());
-
       tomorrow = currentDate.getTomorrow();
 
       hasPrev = !currentDate.equalsByDate(startDate);
@@ -207,8 +250,6 @@ rflect.cal.events.EventManager.prototype.processToChips =
       isWeekChip = !hasNext || currentDate.getWeekday() == 6;
 
       hasPrevWeek = !currentDate.equalsByWeek(startDate);
-      if (goog.DEBUG)
-        _log('hasPrevWeek', hasPrevWeek);
       hasNextWeek = hasNext && tomorrow.getWeekday() == 0;
 
       if (isAllDay) {
@@ -266,14 +307,6 @@ rflect.cal.events.EventManager.prototype.processToChips =
             (currentDate.getDayOfYear() +
             cutoffAndCurrentDiffAbs > rflect.date.getNumberOfDaysInYear(
             currentDate.getFullYear()));
-        if (goog.DEBUG)
-          _log('cutoff', cutoff);
-        if (goog.DEBUG)
-          _log('cutoffAndCurrentDiff', cutoffAndCurrentDiff);
-        if (goog.DEBUG)
-          _log('cutoffAndCurrentDiffAbs', cutoffAndCurrentDiffAbs);
-        if (goog.DEBUG)
-          _log('weekIsFromNextYear', weekIsFromNextYear);
         this.putWeekChip_(chip, currentDate,
             weekIsFromNextYear);
       }
@@ -359,34 +392,31 @@ rflect.cal.events.EventManager.prototype.putChip_ = function(aChip, aIndex1,
 
 
 /**
- * @return {Array.<rflect.cal.events.Chip>} Array of day chips actual for this
- * time configuration.
+ * Export arrays of chips actual for this time configuration.
  */
-rflect.cal.events.EventManager.prototype.getDayChips = function() {
-  var dayChips = [];
-  for (var counter = 0, length = this.timeManager_.daySeries.length;
+rflect.cal.events.EventManager.prototype.run = function() {
+  var counterWeek = 0;
+  var daySeries = this.timeManager_.daySeries;
+
+  this.dayChips.length = 0;
+  this.allDayChips.length = 0;
+  this.weekChips.length = 0;
+
+  for (var counter = 0, length = daySeries.length;
       counter < length; counter++) {
-    var yearKey = this.timeManager_.daySeries[counter].getFullYear();
-    var dayOfYearKey = this.timeManager_.daySeries[counter].getDayOfYear();
-    dayChips.push(this.chipsByDay_[yearKey][dayOfYearKey]);
+    var yearKey = daySeries[counter].getFullYear();
+    if (this.timeManager_.isInDayMode()) {
+      var dayOfYearKey = daySeries[counter].getDayOfYear();
+      this.dayChips[counter].push(
+          rflect.cal.events.EventManager.getNestedChips_(
+          this.chipsByDay_, yearKey, dayOfYearKey) || []);
+      this.allDayChips.push(
+          rflect.cal.events.EventManager.getNestedAllDayChips_(
+          yearKey, dayOfYearKey, length) || []);
+    } else if (this.timeManager_.isInWeekMode() && counter % 7 == 0) {
+      var weekKey = daySeries[counter].getWeekNumber();
+      this.weekChips.push(rflect.cal.events.EventManager.getNestedChips_(
+          this.chipsByWeek_, yearKey, weekKey) || []);
+    }
   }
-  return dayChips;
-}
-
-
-/**
- * @return {Array.<rflect.cal.events.Chip>} Array of all-day chips actual for
- * this time configuration.
- */
-rflect.cal.events.EventManager.prototype.getAllDayChips = function() {
-
-}
-
-
-/**
- * @return {Array.<rflect.cal.events.Chip>} Array of week chips actual for
- * this time configuration.
- */
-rflect.cal.events.EventManager.prototype.getWeekChips = function() {
-
 }

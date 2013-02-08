@@ -241,13 +241,17 @@ rflect.cal.BlockPool.prototype.updateCollapsedBlocks =
 /**
  * Creates and nests series of chips - visual representation for events. Here
  * <code>rflect.cal.Block#couldBeExpanded</code> flag is set.
+ * @param {Array.<!Array.<rflect.cal.event.Chip>>} aChips chips for this block pool.
  */
-rflect.cal.BlockPool.prototype.updateEventMap = function() {
+rflect.cal.BlockPool.prototype.updateEventMap = function(aChips) {
   for (var counter = 0; counter < this.blocksNumber_; counter++) {
     // NOTE(alexk): Whether horizontal block could be expanded, depends on
     // optimal size of chips, too. Say, we could have no additional hidden cols
     // but still are able to expand block because chips have width less that
     // optimal. But maybe there's no need to show this case via expand sign.
+
+    this.blocks[counter].calculateEventMap(aChips[counter]);
+
     if (!this.blocks[counter].expanded)
       this.blocks[counter].couldBeExpanded = true;
   }
