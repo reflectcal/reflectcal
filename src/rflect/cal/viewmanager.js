@@ -374,7 +374,7 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
   this.timeManager.configuration =
       /** @type {rflect.cal.TimeManager.Configuration} */ this.currentView;
   this.timeManager.run();
-  this.eventManager.run();
+  this.eventManager_.run();
 
   if (this.isOnStartup_) {
     this.mainBody_.preRender();

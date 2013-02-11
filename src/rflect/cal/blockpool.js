@@ -241,7 +241,7 @@ rflect.cal.BlockPool.prototype.updateCollapsedBlocks =
 /**
  * Creates and nests series of chips - visual representation for events. Here
  * <code>rflect.cal.Block#couldBeExpanded</code> flag is set.
- * @param {Array.<!Array.<rflect.cal.event.Chip>>} aChips chips for this block pool.
+ * @param {Array.<!Array.<rflect.cal.events.Chip>>} aChips chips for this block pool.
  */
 rflect.cal.BlockPool.prototype.updateEventMap = function(aChips) {
   for (var counter = 0; counter < this.blocksNumber_; counter++) {

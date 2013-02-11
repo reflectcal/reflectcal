@@ -186,19 +186,38 @@ rflect.cal.events.EventManager.getNestedChips_ = function(
 }
 
 
-rflect.cal.events.EventManager.getNestedAllDayChips_ = function(aYear,
-    aDayOfYear, aDaysNumber) {
+/**
+ * Gets whole all-day chips from sequences of split by day ones.
+ * @param {number} aYear Year index.
+ * @param {number} aDayOfYear Day of year index.
+ * @param {number} aDayNumber Number of day in day grid.
+ * @param {number} aTotalDays Length of day grid.
+ * @return {!Array.<rflect.cal.events.Chip>} All-day chips for this time
+ * configuration.
+ */
+rflect.cal.events.EventManager.prototype.getNestedAllDayChips_ = function(aYear,
+    aDayOfYear, aDayNumber, aTotalDays) {
   var knownChipsIds = {};
+  var allDayChips = [];
+  var allDayChipsCounter = 0;
+  var chips;
+
   if (chips = rflect.cal.events.EventManager.getNestedChips_(
       this.allDayChipsByDay_, aYear, aDayOfYear)) {
     for (var counter = 0, length = chips.length; counter < length; counter++) {
-      var id = chips[counter].id;
+      var id = chips[counter].eventId;
       if (!knownChipsIds[id]) {
         knownChipsIds[id] = 1;
-
+        var newChip = chips[counter].clone();
+        newChip.start = aDayNumber;
+        newChip.endIsCut = (aTotalDays - aDayNumber) < newChip.end;
+        newChip.end = newChip.endIsCut ? aDayNumber : aDayNumber + newChip.end;
+        // This function must be fast.
+        allDayChips[allDayChipsCounter++] = newChip;
       }
     }
   }
+  return allDayChips;
 }
 
 
@@ -405,15 +424,14 @@ rflect.cal.events.EventManager.prototype.run = function() {
   for (var counter = 0, length = daySeries.length;
       counter < length; counter++) {
     var yearKey = daySeries[counter].getFullYear();
-    if (this.timeManager_.isInDayMode()) {
+    if (this.viewManager_.isInWeekMode()) {
       var dayOfYearKey = daySeries[counter].getDayOfYear();
       this.dayChips[counter].push(
           rflect.cal.events.EventManager.getNestedChips_(
           this.chipsByDay_, yearKey, dayOfYearKey) || []);
       this.allDayChips.push(
-          rflect.cal.events.EventManager.getNestedAllDayChips_(
-          yearKey, dayOfYearKey, length) || []);
-    } else if (this.timeManager_.isInWeekMode() && counter % 7 == 0) {
+          this.getNestedAllDayChips_(yearKey, dayOfYearKey, counter, length));
+    } else if (this.viewManager_.isInMonthMode() && counter % 7 == 0) {
       var weekKey = daySeries[counter].getWeekNumber();
       this.weekChips.push(rflect.cal.events.EventManager.getNestedChips_(
           this.chipsByWeek_, yearKey, weekKey) || []);
