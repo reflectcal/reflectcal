@@ -147,7 +147,7 @@ rflect.date.getTomorrow = function(aGivenDate) {
 
 /**
  * @param {rflect.date.DateShim} aDateA First date to compare.
- * @param {rflect.date.DateShim} aDateB First date to compare.
+ * @param {rflect.date.DateShim} aDateB Second date to compare.
  * @return {number|undefined} 1 if first arg is greater, 0 if equals, -1
  * otherwise.
  */

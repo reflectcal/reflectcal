@@ -250,7 +250,7 @@ rflect.cal.BlockPool.prototype.updateEventMap = function(aChips) {
     // but still are able to expand block because chips have width less that
     // optimal. But maybe there's no need to show this case via expand sign.
 
-    this.blocks[counter].calculateEventMap(aChips[counter]);
+    this.blocks[counter].computeEventMap(aChips[counter]);
 
     if (!this.blocks[counter].expanded)
       this.blocks[counter].couldBeExpanded = true;
