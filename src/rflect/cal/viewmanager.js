@@ -82,7 +82,7 @@ rflect.cal.ViewManager = function(aMainInstance) {
    * @private
    */
   this.mainBody_ = new rflect.cal.MainBody(this, this.timeManager,
-      this.containerSizeMonitor_, this.blockManager_);
+      this.eventManager_, this.containerSizeMonitor_, this.blockManager_);
 
   if (goog.DEBUG)
     _inspect('mainBody_', this.mainBody_);
@@ -92,6 +92,8 @@ rflect.cal.ViewManager = function(aMainInstance) {
     _inspect('blockManager', this.blockManager_);
   if (goog.DEBUG)
     _inspect('containerSizeMonitor_', this.containerSizeMonitor_);
+  if (goog.DEBUG)
+    _inspect('eventManager_', this.eventManager_);
 
   this.showView(this.currentView);
 };

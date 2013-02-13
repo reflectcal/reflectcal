@@ -188,8 +188,8 @@ a: {
     }
   }
   if($goog$userAgent$IE$$) {
-    var $docMode$$inline_51$$, $doc$$inline_661$$ = $goog$global$$.document;
-    $docMode$$inline_51$$ = $doc$$inline_661$$ ? $doc$$inline_661$$.documentMode : $JSCompiler_alias_VOID$$;
+    var $docMode$$inline_51$$, $doc$$inline_677$$ = $goog$global$$.document;
+    $docMode$$inline_51$$ = $doc$$inline_677$$ ? $doc$$inline_677$$.documentMode : $JSCompiler_alias_VOID$$;
     if($docMode$$inline_51$$ > parseFloat($version$$inline_47$$)) {
       $goog$userAgent$VERSION$$ = "" + $docMode$$inline_51$$;
       break a
@@ -1073,6 +1073,7 @@ var $rflect$cal$i18n$Symbols$$ = {$NOW$:"Now", $NEW_EVENT$:"New event", $DAY$:"D
 function $rflect$cal$events$EventManager$$($aViewManager$$, $aTimeManager$$) {
   this.$viewManager_$ = $aViewManager$$;
   this.$timeManager_$ = $aTimeManager$$;
+  this.$events_$ = {};
   this.$chipsByDay_$ = {};
   this.$allDayChipsByDay_$ = {};
   this.$chipsByWeek_$ = {};
@@ -1102,7 +1103,7 @@ $rflect$cal$events$EventManager$$.prototype.$run$ = function $$rflect$cal$events
     var $yearKey$$ = $daySeries$$[$counter$$8$$].getFullYear();
     if($JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$)) {
       var $dayOfYearKey_weekKey$$ = $daySeries$$[$counter$$8$$].$getDayOfYear$();
-      this.$dayChips$[$counter$$8$$].push($rflect$cal$events$EventManager$getNestedChips_$$(this.$chipsByDay_$, $yearKey$$, $dayOfYearKey_weekKey$$) || []);
+      this.$dayChips$.push($rflect$cal$events$EventManager$getNestedChips_$$(this.$chipsByDay_$, $yearKey$$, $dayOfYearKey_weekKey$$) || []);
       this.$allDayChips$.push($JSCompiler_StaticMethods_getNestedAllDayChips_$$(this, $yearKey$$, $dayOfYearKey_weekKey$$, $counter$$8$$, $length$$25$$))
     }else {
       $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && 0 == $counter$$8$$ % 7 && ($dayOfYearKey_weekKey$$ = $daySeries$$[$counter$$8$$].$getWeekNumber$(), this.$weekChips$.push($rflect$cal$events$EventManager$getNestedChips_$$(this.$chipsByWeek_$, $yearKey$$, $dayOfYearKey_weekKey$$) || []))
@@ -1221,63 +1222,64 @@ function $JSCompiler_StaticMethods_updateCollapsedBlocks$$($JSCompiler_StaticMet
 }
 function $JSCompiler_StaticMethods_updateEventMap$$($JSCompiler_StaticMethods_updateEventMap$self$$, $aChips$$1$$) {
   for(var $counter$$11$$ = 0;$counter$$11$$ < $JSCompiler_StaticMethods_updateEventMap$self$$.$blocksNumber_$;$counter$$11$$++) {
-    var $aChips$$inline_119$$ = $aChips$$1$$[$counter$$11$$], $i$$inline_120$$ = 0, $length$$inline_121$$ = 0, $blobs$$inline_122$$ = [], $currentBlob$$inline_123$$ = [], $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ = 0, $maxCol$$inline_125$$ = 0;
-    $aChips$$inline_119$$.sort($rflect$cal$Block$sort$$);
-    for(var $latestItemEnd$$inline_126$$ = $JSCompiler_alias_VOID$$, $colEndArray$$inline_127$$ = [], $i$$inline_120$$ = 0, $length$$inline_121$$ = $aChips$$inline_119$$.length;$i$$inline_120$$ < $length$$inline_121$$;++$i$$inline_120$$) {
-      var $chip$$inline_128$$ = $aChips$$inline_119$$[$i$$inline_120$$], $itemStart$$inline_129$$ = $chip$$inline_128$$.start, $itemEnd$$inline_130$$ = $chip$$inline_128$$.end;
-      $latestItemEnd$$inline_126$$ || ($latestItemEnd$$inline_126$$ = $itemEnd$$inline_130$$);
-      $currentBlob$$inline_123$$.length && ($latestItemEnd$$inline_126$$ && $itemStart$$inline_129$$ >= $latestItemEnd$$inline_126$$) && ($blobs$$inline_122$$.push({blob:$currentBlob$$inline_123$$, $totalCols$:$colEndArray$$inline_127$$.length}), $currentBlob$$inline_123$$ = [], $colEndArray$$inline_127$$ = []);
-      for(var $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ = $JSCompiler_alias_FALSE$$, $ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$ = 0, $colEndArrayLength$$inline_133_currentBlobLength$$inline_137_spanOfShrunkItem$$inline_138$$ = $colEndArray$$inline_127$$.length;$ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$ < $colEndArrayLength$$inline_133_currentBlobLength$$inline_137_spanOfShrunkItem$$inline_138$$;++$ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$) {
-        if($colEndArray$$inline_127$$[$ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$].end <= $itemStart$$inline_129$$) {
-          $colEndArray$$inline_127$$[$ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$] = $chip$$inline_128$$;
-          for($lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ = Number($ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$) + 1;$lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ < $colEndArray$$inline_127$$.length && !($colEndArray$$inline_127$$[$lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$].end > $itemStart$$inline_129$$);) {
-            $colEndArray$$inline_127$$[$lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$] = $chip$$inline_128$$, $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$++
+    var $JSCompiler_StaticMethods_computeEventMap$self$$inline_119$$ = $JSCompiler_StaticMethods_updateEventMap$self$$.$blocks$[$counter$$11$$], $aChips$$inline_120$$ = $aChips$$1$$[$counter$$11$$], $i$$inline_121$$ = 0, $length$$inline_122$$ = 0, $blobs$$inline_123$$ = [], $currentBlob$$inline_124$$ = [], $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ = 0, $maxCol$$inline_126$$ = 0;
+    $aChips$$inline_120$$.sort($rflect$cal$Block$sort$$);
+    for(var $latestItemEnd$$inline_127$$ = $JSCompiler_alias_VOID$$, $colEndArray$$inline_128$$ = [], $i$$inline_121$$ = 0, $length$$inline_122$$ = $aChips$$inline_120$$.length;$i$$inline_121$$ < $length$$inline_122$$;++$i$$inline_121$$) {
+      var $chip$$inline_129$$ = $aChips$$inline_120$$[$i$$inline_121$$], $itemStart$$inline_130$$ = $chip$$inline_129$$.start, $itemEnd$$inline_131$$ = $chip$$inline_129$$.end;
+      $latestItemEnd$$inline_127$$ || ($latestItemEnd$$inline_127$$ = $itemEnd$$inline_131$$);
+      $currentBlob$$inline_124$$.length && ($latestItemEnd$$inline_127$$ && $itemStart$$inline_130$$ >= $latestItemEnd$$inline_127$$) && ($blobs$$inline_123$$.push({blob:$currentBlob$$inline_124$$, $totalCols$:$colEndArray$$inline_128$$.length}), $currentBlob$$inline_124$$ = [], $colEndArray$$inline_128$$ = []);
+      for(var $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ = $JSCompiler_alias_FALSE$$, $ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$ = 0, $colEndArrayLength$$inline_134_currentBlobLength$$inline_138_spanOfShrunkItem$$inline_139$$ = $colEndArray$$inline_128$$.length;$ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$ < $colEndArrayLength$$inline_134_currentBlobLength$$inline_138_spanOfShrunkItem$$inline_139$$;++$ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$) {
+        if($colEndArray$$inline_128$$[$ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$].end <= $itemStart$$inline_130$$) {
+          $colEndArray$$inline_128$$[$ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$] = $chip$$inline_129$$;
+          for($lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ = Number($ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$) + 1;$lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ < $colEndArray$$inline_128$$.length && !($colEndArray$$inline_128$$[$lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$].end > $itemStart$$inline_130$$);) {
+            $colEndArray$$inline_128$$[$lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$] = $chip$$inline_129$$, $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$++
           }
-          $currentBlob$$inline_123$$.push({$chip$:$chip$$inline_128$$, $startCol$:$ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$, colSpan:$lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ - $ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$});
-          $ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$ > $maxCol$$inline_125$$ && ($maxCol$$inline_125$$ = $ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$);
-          $latestItemEnd$$inline_126$$ && $itemEnd$$inline_130$$ > $latestItemEnd$$inline_126$$ && ($latestItemEnd$$inline_126$$ = $itemEnd$$inline_130$$);
-          $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ = $JSCompiler_alias_TRUE$$;
+          $currentBlob$$inline_124$$.push({$chip$:$chip$$inline_129$$, $startCol$:$ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$, colSpan:$lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ - $ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$});
+          $ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$ > $maxCol$$inline_126$$ && ($maxCol$$inline_126$$ = $ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$);
+          $latestItemEnd$$inline_127$$ && $itemEnd$$inline_131$$ > $latestItemEnd$$inline_127$$ && ($latestItemEnd$$inline_127$$ = $itemEnd$$inline_131$$);
+          $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ = $JSCompiler_alias_TRUE$$;
           break
         }
       }
-      if(!$lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$) {
-        $ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$ = 1;
-        for($colEndArrayLength$$inline_133_currentBlobLength$$inline_137_spanOfShrunkItem$$inline_138$$ = $colEndArray$$inline_127$$.length;$ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$ < $colEndArrayLength$$inline_133_currentBlobLength$$inline_137_spanOfShrunkItem$$inline_138$$;++$ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$) {
-          if($goog$getUid$$($colEndArray$$inline_127$$[$ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$]) == $goog$getUid$$($colEndArray$$inline_127$$[$ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$ - 1])) {
-            for(var $kk$$inline_136_mm$$inline_141$$ = 1, $colEndArrayLength$$inline_133_currentBlobLength$$inline_137_spanOfShrunkItem$$inline_138$$ = $currentBlob$$inline_123$$.length;$kk$$inline_136_mm$$inline_141$$ < $colEndArrayLength$$inline_133_currentBlobLength$$inline_137_spanOfShrunkItem$$inline_138$$;++$kk$$inline_136_mm$$inline_141$$) {
-              if($goog$getUid$$($currentBlob$$inline_123$$[$kk$$inline_136_mm$$inline_141$$].$chip$) == $goog$getUid$$($colEndArray$$inline_127$$[$ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$])) {
-                $colEndArrayLength$$inline_133_currentBlobLength$$inline_137_spanOfShrunkItem$$inline_138$$ = $currentBlob$$inline_123$$[$kk$$inline_136_mm$$inline_141$$].colSpan;
-                $currentBlob$$inline_123$$.push({$chip$:$chip$$inline_128$$, $startCol$:$lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ = Number($currentBlob$$inline_123$$[$kk$$inline_136_mm$$inline_141$$].$startCol$) + 1, colSpan:$colEndArrayLength$$inline_133_currentBlobLength$$inline_137_spanOfShrunkItem$$inline_138$$ - 1});
-                $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ > $maxCol$$inline_125$$ && ($maxCol$$inline_125$$ = $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$);
-                for($lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ = $ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$;$lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ < $ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$ + $colEndArrayLength$$inline_133_currentBlobLength$$inline_137_spanOfShrunkItem$$inline_138$$ - 1;$lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$++) {
-                  $colEndArray$$inline_127$$[$lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$] = $chip$$inline_128$$
+      if(!$lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$) {
+        $ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$ = 1;
+        for($colEndArrayLength$$inline_134_currentBlobLength$$inline_138_spanOfShrunkItem$$inline_139$$ = $colEndArray$$inline_128$$.length;$ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$ < $colEndArrayLength$$inline_134_currentBlobLength$$inline_138_spanOfShrunkItem$$inline_139$$;++$ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$) {
+          if($goog$getUid$$($colEndArray$$inline_128$$[$ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$]) == $goog$getUid$$($colEndArray$$inline_128$$[$ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$ - 1])) {
+            for(var $kk$$inline_137_mm$$inline_142$$ = 1, $colEndArrayLength$$inline_134_currentBlobLength$$inline_138_spanOfShrunkItem$$inline_139$$ = $currentBlob$$inline_124$$.length;$kk$$inline_137_mm$$inline_142$$ < $colEndArrayLength$$inline_134_currentBlobLength$$inline_138_spanOfShrunkItem$$inline_139$$;++$kk$$inline_137_mm$$inline_142$$) {
+              if($goog$getUid$$($currentBlob$$inline_124$$[$kk$$inline_137_mm$$inline_142$$].$chip$) == $goog$getUid$$($colEndArray$$inline_128$$[$ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$])) {
+                $colEndArrayLength$$inline_134_currentBlobLength$$inline_138_spanOfShrunkItem$$inline_139$$ = $currentBlob$$inline_124$$[$kk$$inline_137_mm$$inline_142$$].colSpan;
+                $currentBlob$$inline_124$$.push({$chip$:$chip$$inline_129$$, $startCol$:$lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ = Number($currentBlob$$inline_124$$[$kk$$inline_137_mm$$inline_142$$].$startCol$) + 1, colSpan:$colEndArrayLength$$inline_134_currentBlobLength$$inline_138_spanOfShrunkItem$$inline_139$$ - 1});
+                $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ > $maxCol$$inline_126$$ && ($maxCol$$inline_126$$ = $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$);
+                for($lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ = $ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$;$lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ < $ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$ + $colEndArrayLength$$inline_134_currentBlobLength$$inline_138_spanOfShrunkItem$$inline_139$$ - 1;$lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$++) {
+                  $colEndArray$$inline_128$$[$lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$] = $chip$$inline_129$$
                 }
-                $currentBlob$$inline_123$$[$kk$$inline_136_mm$$inline_141$$] = {$chip$:$currentBlob$$inline_123$$[$kk$$inline_136_mm$$inline_141$$].$chip$, $startCol$:$lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ = $currentBlob$$inline_123$$[$kk$$inline_136_mm$$inline_141$$].$startCol$, colSpan:1};
-                $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ > $maxCol$$inline_125$$ && ($maxCol$$inline_125$$ = $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$);
-                $latestItemEnd$$inline_126$$ && $itemEnd$$inline_130$$ > $latestItemEnd$$inline_126$$ && ($latestItemEnd$$inline_126$$ = $itemEnd$$inline_130$$);
+                $currentBlob$$inline_124$$[$kk$$inline_137_mm$$inline_142$$] = {$chip$:$currentBlob$$inline_124$$[$kk$$inline_137_mm$$inline_142$$].$chip$, $startCol$:$lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ = $currentBlob$$inline_124$$[$kk$$inline_137_mm$$inline_142$$].$startCol$, colSpan:1};
+                $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ > $maxCol$$inline_126$$ && ($maxCol$$inline_126$$ = $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$);
+                $latestItemEnd$$inline_127$$ && $itemEnd$$inline_131$$ > $latestItemEnd$$inline_127$$ && ($latestItemEnd$$inline_127$$ = $itemEnd$$inline_131$$);
                 break
               }
             }
-            $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ = $JSCompiler_alias_TRUE$$;
+            $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ = $JSCompiler_alias_TRUE$$;
             break
           }
         }
-        if(!$lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$) {
-          $ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$ = $colEndArray$$inline_127$$.length;
-          $kk$$inline_136_mm$$inline_141$$ = 1;
-          for($colEndArrayLength$$inline_133_currentBlobLength$$inline_137_spanOfShrunkItem$$inline_138$$ = $currentBlob$$inline_123$$.length;$kk$$inline_136_mm$$inline_141$$ < $colEndArrayLength$$inline_133_currentBlobLength$$inline_137_spanOfShrunkItem$$inline_138$$;++$kk$$inline_136_mm$$inline_141$$) {
-            $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ = $currentBlob$$inline_123$$[$kk$$inline_136_mm$$inline_141$$].$chip$.end, $currentBlob$$inline_123$$[$kk$$inline_136_mm$$inline_141$$].$startCol$ + $currentBlob$$inline_123$$[$kk$$inline_136_mm$$inline_141$$].colSpan == $ii$$inline_132_jj$$inline_135_lastColNum$$inline_140$$ && $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ <= $itemStart$$inline_129$$ && 
-            ($currentBlob$$inline_123$$[$kk$$inline_136_mm$$inline_141$$] = {$chip$:$currentBlob$$inline_123$$[$kk$$inline_136_mm$$inline_141$$].$chip$, $startCol$:$lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ = $currentBlob$$inline_123$$[$kk$$inline_136_mm$$inline_141$$].$startCol$, colSpan:$currentBlob$$inline_123$$[$kk$$inline_136_mm$$inline_141$$].colSpan + 1}, $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ > 
-            $maxCol$$inline_125$$ && ($maxCol$$inline_125$$ = $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$))
+        if(!$lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$) {
+          $ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$ = $colEndArray$$inline_128$$.length;
+          $kk$$inline_137_mm$$inline_142$$ = 1;
+          for($colEndArrayLength$$inline_134_currentBlobLength$$inline_138_spanOfShrunkItem$$inline_139$$ = $currentBlob$$inline_124$$.length;$kk$$inline_137_mm$$inline_142$$ < $colEndArrayLength$$inline_134_currentBlobLength$$inline_138_spanOfShrunkItem$$inline_139$$;++$kk$$inline_137_mm$$inline_142$$) {
+            $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ = $currentBlob$$inline_124$$[$kk$$inline_137_mm$$inline_142$$].$chip$.end, $currentBlob$$inline_124$$[$kk$$inline_137_mm$$inline_142$$].$startCol$ + $currentBlob$$inline_124$$[$kk$$inline_137_mm$$inline_142$$].colSpan == $ii$$inline_133_jj$$inline_136_lastColNum$$inline_141$$ && $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ <= $itemStart$$inline_130$$ && 
+            ($currentBlob$$inline_124$$[$kk$$inline_137_mm$$inline_142$$] = {$chip$:$currentBlob$$inline_124$$[$kk$$inline_137_mm$$inline_142$$].$chip$, $startCol$:$lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ = $currentBlob$$inline_124$$[$kk$$inline_137_mm$$inline_142$$].$startCol$, colSpan:$currentBlob$$inline_124$$[$kk$$inline_137_mm$$inline_142$$].colSpan + 1}, $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ > 
+            $maxCol$$inline_126$$ && ($maxCol$$inline_126$$ = $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$))
           }
-          $currentBlob$$inline_123$$.push({$chip$:$chip$$inline_128$$, $startCol$:$lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ = $colEndArray$$inline_127$$.length, colSpan:1});
-          $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$ > $maxCol$$inline_125$$ && ($maxCol$$inline_125$$ = $lastCol$$inline_134_ll$$inline_139_mmEnd$$inline_142_placedItem$$inline_131_startCol$$inline_124$$);
-          $colEndArray$$inline_127$$.push($chip$$inline_128$$);
-          $latestItemEnd$$inline_126$$ && $itemEnd$$inline_130$$ > $latestItemEnd$$inline_126$$ && ($latestItemEnd$$inline_126$$ = $itemEnd$$inline_130$$)
+          $currentBlob$$inline_124$$.push({$chip$:$chip$$inline_129$$, $startCol$:$lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ = $colEndArray$$inline_128$$.length, colSpan:1});
+          $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$ > $maxCol$$inline_126$$ && ($maxCol$$inline_126$$ = $lastCol$$inline_135_ll$$inline_140_mmEnd$$inline_143_placedItem$$inline_132_startCol$$inline_125$$);
+          $colEndArray$$inline_128$$.push($chip$$inline_129$$);
+          $latestItemEnd$$inline_127$$ && $itemEnd$$inline_131$$ > $latestItemEnd$$inline_127$$ && ($latestItemEnd$$inline_127$$ = $itemEnd$$inline_131$$)
         }
       }
     }
-    $blobs$$inline_122$$.push({blob:$currentBlob$$inline_123$$, $totalCols$:$colEndArray$$inline_127$$.length});
+    $blobs$$inline_123$$.push({blob:$currentBlob$$inline_124$$, $totalCols$:$colEndArray$$inline_128$$.length});
+    $JSCompiler_StaticMethods_computeEventMap$self$$inline_119$$.$blobs$ = $blobs$$inline_123$$;
     $JSCompiler_StaticMethods_updateEventMap$self$$.$blocks$[$counter$$11$$].$expanded$ || ($JSCompiler_StaticMethods_updateEventMap$self$$.$blocks$[$counter$$11$$].$couldBeExpanded$ = $JSCompiler_alias_TRUE$$)
   }
 }
@@ -1290,8 +1292,8 @@ function $JSCompiler_StaticMethods_updateExpandedBlocks$$($JSCompiler_StaticMeth
     $cumulativeSize$$ += $block$$1$$.size
   }
 }
-;function $rflect$cal$BlockManager$$($JSCompiler_StaticMethods_setBlocksNumber$self$$inline_144_aViewManager$$1$$, $aTimeManager$$1$$, $aEventManager$$) {
-  this.$viewManager_$ = $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_144_aViewManager$$1$$;
+;function $rflect$cal$BlockManager$$($JSCompiler_StaticMethods_setBlocksNumber$self$$inline_145_aViewManager$$1$$, $aTimeManager$$1$$, $aEventManager$$) {
+  this.$viewManager_$ = $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_145_aViewManager$$1$$;
   this.$timeManager_$ = $aTimeManager$$1$$;
   this.$eventManager_$ = $aEventManager$$;
   this.$blockPoolWeek$ = new $rflect$cal$BlockPool$$($JSCompiler_alias_TRUE$$);
@@ -1300,18 +1302,18 @@ function $JSCompiler_StaticMethods_updateExpandedBlocks$$($JSCompiler_StaticMeth
   this.$blockPoolMonth$.fill(6);
   this.$blockPoolAllday$ = new $rflect$cal$BlockPool$$($JSCompiler_alias_FALSE$$);
   this.$blockPoolAllday$.fill(1);
-  $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_144_aViewManager$$1$$ = this.$blockPoolAllday$;
-  $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_144_aViewManager$$1$$.$blocksNumber_$ = 1;
-  $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_setBlocksNumber$self$$inline_144_aViewManager$$1$$)
+  $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_145_aViewManager$$1$$ = this.$blockPoolAllday$;
+  $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_145_aViewManager$$1$$.$blocksNumber_$ = 1;
+  $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_setBlocksNumber$self$$inline_145_aViewManager$$1$$)
 }
 $rflect$cal$BlockManager$$.prototype.update = function $$rflect$cal$BlockManager$$$$update$() {
   if($JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$)) {
-    var $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_147_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_150_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_153$$ = this.$blockPoolWeek$;
-    $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_147_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_150_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_153$$.$blocksNumber_$ = this.$timeManager_$.$daySeries$.length;
-    $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_setBlocksNumber$self$$inline_147_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_150_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_153$$);
-    $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_147_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_150_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_153$$ = this.$blockPoolAllday$;
-    $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_147_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_150_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_153$$.$blocksNumber_$ = 1;
-    $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_setBlocksNumber$self$$inline_147_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_150_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_153$$);
+    var $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_148_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_151_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_154$$ = this.$blockPoolWeek$;
+    $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_148_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_151_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_154$$.$blocksNumber_$ = this.$timeManager_$.$daySeries$.length;
+    $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_setBlocksNumber$self$$inline_148_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_151_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_154$$);
+    $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_148_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_151_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_154$$ = this.$blockPoolAllday$;
+    $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_148_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_151_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_154$$.$blocksNumber_$ = 1;
+    $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_setBlocksNumber$self$$inline_148_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_151_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_154$$);
     $JSCompiler_StaticMethods_updateCollapsedBlocks$$(this.$blockPoolWeek$);
     $JSCompiler_StaticMethods_updateCollapsedBlocks$$(this.$blockPoolAllday$);
     $JSCompiler_StaticMethods_updateEventMap$$(this.$blockPoolWeek$, this.$eventManager_$.$dayChips$);
@@ -1319,8 +1321,8 @@ $rflect$cal$BlockManager$$.prototype.update = function $$rflect$cal$BlockManager
     $JSCompiler_StaticMethods_updateExpandedBlocks$$(this.$blockPoolWeek$);
     $JSCompiler_StaticMethods_updateExpandedBlocks$$(this.$blockPoolAllday$)
   }else {
-    $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && ($JSCompiler_StaticMethods_setBlocksNumber$self$$inline_147_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_150_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_153$$ = this.$blockPoolMonth$, $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_147_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_150_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_153$$.$blocksNumber_$ = this.$timeManager_$.$daySeries$.length / 
-    7, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_setBlocksNumber$self$$inline_147_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_150_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_153$$), $JSCompiler_StaticMethods_updateCollapsedBlocks$$(this.$blockPoolMonth$), $JSCompiler_StaticMethods_updateEventMap$$(this.$blockPoolMonth$, this.$eventManager_$.$weekChips$), $JSCompiler_StaticMethods_updateExpandedBlocks$$(this.$blockPoolMonth$))
+    $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && ($JSCompiler_StaticMethods_setBlocksNumber$self$$inline_148_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_151_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_154$$ = this.$blockPoolMonth$, $JSCompiler_StaticMethods_setBlocksNumber$self$$inline_148_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_151_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_154$$.$blocksNumber_$ = this.$timeManager_$.$daySeries$.length / 
+    7, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_setBlocksNumber$self$$inline_148_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_151_JSCompiler_StaticMethods_setBlocksNumber$self$$inline_154$$), $JSCompiler_StaticMethods_updateCollapsedBlocks$$(this.$blockPoolMonth$), $JSCompiler_StaticMethods_updateEventMap$$(this.$blockPoolMonth$, this.$eventManager_$.$weekChips$), $JSCompiler_StaticMethods_updateExpandedBlocks$$(this.$blockPoolMonth$))
   }
 };
 var $goog$i18n$DateTimePatterns_en$$ = {$YEAR_FULL$:"yyyy", $YEAR_MONTH_ABBR$:"MMM y", $YEAR_MONTH_FULL$:"MMMM yyyy", $MONTH_DAY_ABBR$:"MMM d", $MONTH_DAY_FULL$:"MMMM dd", $MONTH_DAY_SHORT$:"M/d", $MONTH_DAY_MEDIUM$:"MMMM d", $DAY_ABBR$:"d"}, $goog$i18n$DateTimePatterns$$ = $goog$i18n$DateTimePatterns_en$$, $goog$i18n$DateTimePatterns$$ = $goog$i18n$DateTimePatterns_en$$;
@@ -1330,8 +1332,8 @@ function $goog$dom$classes$get$$($className$$4_element$$6$$) {
   return $goog$isString$$($className$$4_element$$6$$) && $className$$4_element$$6$$.match(/\S+/g) || []
 }
 function $goog$dom$classes$add$$($element$$7$$, $var_args$$50$$) {
-  for(var $classes$$ = $goog$dom$classes$get$$($element$$7$$), $args$$3_args$$inline_157$$ = $goog$array$slice$$(arguments, 1), $expectedCount$$ = $classes$$.length + $args$$3_args$$inline_157$$.length, $classes$$inline_156$$ = $classes$$, $i$$inline_158$$ = 0;$i$$inline_158$$ < $args$$3_args$$inline_157$$.length;$i$$inline_158$$++) {
-    $goog$array$contains$$($classes$$inline_156$$, $args$$3_args$$inline_157$$[$i$$inline_158$$]) || $classes$$inline_156$$.push($args$$3_args$$inline_157$$[$i$$inline_158$$])
+  for(var $classes$$ = $goog$dom$classes$get$$($element$$7$$), $args$$3_args$$inline_158$$ = $goog$array$slice$$(arguments, 1), $expectedCount$$ = $classes$$.length + $args$$3_args$$inline_158$$.length, $classes$$inline_157$$ = $classes$$, $i$$inline_159$$ = 0;$i$$inline_159$$ < $args$$3_args$$inline_158$$.length;$i$$inline_159$$++) {
+    $goog$array$contains$$($classes$$inline_157$$, $args$$3_args$$inline_158$$[$i$$inline_159$$]) || $classes$$inline_157$$.push($args$$3_args$$inline_158$$[$i$$inline_159$$])
   }
   $element$$7$$.className = $classes$$.join(" ");
   return $classes$$.length == $expectedCount$$
@@ -1538,9 +1540,9 @@ $JSCompiler_prototypeAlias$$.createElement = function $$JSCompiler_prototypeAlia
 $JSCompiler_prototypeAlias$$.createTextNode = function $$JSCompiler_prototypeAlias$$$createTextNode$($content$$1$$) {
   return this.$document_$.createTextNode($content$$1$$)
 };
-function $JSCompiler_StaticMethods_getDocumentScroll$$($JSCompiler_StaticMethods_getDocumentScroll$self_el$$inline_162$$) {
-  var $doc$$inline_161_win$$inline_163$$ = $JSCompiler_StaticMethods_getDocumentScroll$self_el$$inline_162$$.$document_$, $JSCompiler_StaticMethods_getDocumentScroll$self_el$$inline_162$$ = !$goog$userAgent$WEBKIT$$ && "CSS1Compat" == $doc$$inline_161_win$$inline_163$$.compatMode ? $doc$$inline_161_win$$inline_163$$.documentElement : $doc$$inline_161_win$$inline_163$$.body, $doc$$inline_161_win$$inline_163$$ = $doc$$inline_161_win$$inline_163$$.parentWindow || $doc$$inline_161_win$$inline_163$$.defaultView;
-  return new $goog$math$Coordinate$$($doc$$inline_161_win$$inline_163$$.pageXOffset || $JSCompiler_StaticMethods_getDocumentScroll$self_el$$inline_162$$.scrollLeft, $doc$$inline_161_win$$inline_163$$.pageYOffset || $JSCompiler_StaticMethods_getDocumentScroll$self_el$$inline_162$$.scrollTop)
+function $JSCompiler_StaticMethods_getDocumentScroll$$($JSCompiler_StaticMethods_getDocumentScroll$self_el$$inline_163$$) {
+  var $doc$$inline_162_win$$inline_164$$ = $JSCompiler_StaticMethods_getDocumentScroll$self_el$$inline_163$$.$document_$, $JSCompiler_StaticMethods_getDocumentScroll$self_el$$inline_163$$ = !$goog$userAgent$WEBKIT$$ && "CSS1Compat" == $doc$$inline_162_win$$inline_164$$.compatMode ? $doc$$inline_162_win$$inline_164$$.documentElement : $doc$$inline_162_win$$inline_164$$.body, $doc$$inline_162_win$$inline_164$$ = $doc$$inline_162_win$$inline_164$$.parentWindow || $doc$$inline_162_win$$inline_164$$.defaultView;
+  return new $goog$math$Coordinate$$($doc$$inline_162_win$$inline_164$$.pageXOffset || $JSCompiler_StaticMethods_getDocumentScroll$self_el$$inline_163$$.scrollLeft, $doc$$inline_162_win$$inline_164$$.pageYOffset || $JSCompiler_StaticMethods_getDocumentScroll$self_el$$inline_163$$.scrollTop)
 }
 $JSCompiler_prototypeAlias$$.appendChild = function $$JSCompiler_prototypeAlias$$$appendChild$($parent$$9$$, $child$$2$$) {
   $parent$$9$$.appendChild($child$$2$$)
@@ -1549,28 +1551,28 @@ $JSCompiler_prototypeAlias$$.append = function $$JSCompiler_prototypeAlias$$$app
   $goog$dom$append_$$($goog$dom$getOwnerDocument$$($parent$$10$$), $parent$$10$$, arguments, 1)
 };
 function $JSCompiler_StaticMethods_getFirstElementChild$$($JSCompiler_StaticMethods_getFirstElementChild$self$$, $node$$6$$) {
-  var $JSCompiler_temp$$30_node$$inline_165$$;
+  var $JSCompiler_temp$$30_node$$inline_166$$;
   if($node$$6$$.firstElementChild != $JSCompiler_alias_VOID$$) {
-    $JSCompiler_temp$$30_node$$inline_165$$ = $node$$6$$.firstElementChild
+    $JSCompiler_temp$$30_node$$inline_166$$ = $node$$6$$.firstElementChild
   }else {
-    for($JSCompiler_temp$$30_node$$inline_165$$ = $node$$6$$.firstChild;$JSCompiler_temp$$30_node$$inline_165$$ && 1 != $JSCompiler_temp$$30_node$$inline_165$$.nodeType;) {
-      $JSCompiler_temp$$30_node$$inline_165$$ = $JSCompiler_temp$$30_node$$inline_165$$.nextSibling
+    for($JSCompiler_temp$$30_node$$inline_166$$ = $node$$6$$.firstChild;$JSCompiler_temp$$30_node$$inline_166$$ && 1 != $JSCompiler_temp$$30_node$$inline_166$$.nodeType;) {
+      $JSCompiler_temp$$30_node$$inline_166$$ = $JSCompiler_temp$$30_node$$inline_166$$.nextSibling
     }
   }
-  return $JSCompiler_temp$$30_node$$inline_165$$
+  return $JSCompiler_temp$$30_node$$inline_166$$
 }
 $JSCompiler_prototypeAlias$$.contains = $goog$dom$contains$$;
 function $goog$style$getStyle_$$($element$$33$$, $style$$3$$) {
-  var $JSCompiler_inline_result$$168_doc$$inline_171_styles$$inline_172$$;
+  var $JSCompiler_inline_result$$169_doc$$inline_172_styles$$inline_173$$;
   a: {
-    $JSCompiler_inline_result$$168_doc$$inline_171_styles$$inline_172$$ = $goog$dom$getOwnerDocument$$($element$$33$$);
-    if($JSCompiler_inline_result$$168_doc$$inline_171_styles$$inline_172$$.defaultView && $JSCompiler_inline_result$$168_doc$$inline_171_styles$$inline_172$$.defaultView.getComputedStyle && ($JSCompiler_inline_result$$168_doc$$inline_171_styles$$inline_172$$ = $JSCompiler_inline_result$$168_doc$$inline_171_styles$$inline_172$$.defaultView.getComputedStyle($element$$33$$, $JSCompiler_alias_NULL$$))) {
-      $JSCompiler_inline_result$$168_doc$$inline_171_styles$$inline_172$$ = $JSCompiler_inline_result$$168_doc$$inline_171_styles$$inline_172$$[$style$$3$$] || $JSCompiler_inline_result$$168_doc$$inline_171_styles$$inline_172$$.getPropertyValue($style$$3$$);
+    $JSCompiler_inline_result$$169_doc$$inline_172_styles$$inline_173$$ = $goog$dom$getOwnerDocument$$($element$$33$$);
+    if($JSCompiler_inline_result$$169_doc$$inline_172_styles$$inline_173$$.defaultView && $JSCompiler_inline_result$$169_doc$$inline_172_styles$$inline_173$$.defaultView.getComputedStyle && ($JSCompiler_inline_result$$169_doc$$inline_172_styles$$inline_173$$ = $JSCompiler_inline_result$$169_doc$$inline_172_styles$$inline_173$$.defaultView.getComputedStyle($element$$33$$, $JSCompiler_alias_NULL$$))) {
+      $JSCompiler_inline_result$$169_doc$$inline_172_styles$$inline_173$$ = $JSCompiler_inline_result$$169_doc$$inline_172_styles$$inline_173$$[$style$$3$$] || $JSCompiler_inline_result$$169_doc$$inline_172_styles$$inline_173$$.getPropertyValue($style$$3$$);
       break a
     }
-    $JSCompiler_inline_result$$168_doc$$inline_171_styles$$inline_172$$ = ""
+    $JSCompiler_inline_result$$169_doc$$inline_172_styles$$inline_173$$ = ""
   }
-  return $JSCompiler_inline_result$$168_doc$$inline_171_styles$$inline_172$$ || ($element$$33$$.currentStyle ? $element$$33$$.currentStyle[$style$$3$$] : $JSCompiler_alias_NULL$$) || $element$$33$$.style && $element$$33$$.style[$style$$3$$]
+  return $JSCompiler_inline_result$$169_doc$$inline_172_styles$$inline_173$$ || ($element$$33$$.currentStyle ? $element$$33$$.currentStyle[$style$$3$$] : $JSCompiler_alias_NULL$$) || $element$$33$$.style && $element$$33$$.style[$style$$3$$]
 }
 function $goog$style$getBoundingClientRect_$$($doc$$25_el$$5$$) {
   var $rect$$4$$ = $doc$$25_el$$5$$.getBoundingClientRect();
@@ -1593,60 +1595,60 @@ function $goog$style$getRelativePosition$$($a$$20_ap$$) {
   var $b$$19_bp$$ = document.documentElement, $a$$20_ap$$ = $goog$style$getClientPosition$$($a$$20_ap$$), $b$$19_bp$$ = $goog$style$getClientPosition$$($b$$19_bp$$);
   return new $goog$math$Coordinate$$($a$$20_ap$$.x - $b$$19_bp$$.x, $a$$20_ap$$.y - $b$$19_bp$$.y)
 }
-function $goog$style$getClientPosition$$($box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$) {
+function $goog$style$getClientPosition$$($box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$) {
   var $pos$$4$$ = new $goog$math$Coordinate$$;
-  if(1 == $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.nodeType) {
-    if($box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.getBoundingClientRect) {
-      $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$ = $goog$style$getBoundingClientRect_$$($box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$), $pos$$4$$.x = $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.left, $pos$$4$$.y = $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.top
+  if(1 == $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.nodeType) {
+    if($box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.getBoundingClientRect) {
+      $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$ = $goog$style$getBoundingClientRect_$$($box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$), $pos$$4$$.x = $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.left, $pos$$4$$.y = $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.top
     }else {
-      var $isAbstractedEvent_scrollCoord$$1$$ = $JSCompiler_StaticMethods_getDocumentScroll$$($goog$dom$getDomHelper$$($box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$));
-      var $box$$inline_178_doc$$inline_664$$, $doc$$inline_179$$ = $goog$dom$getOwnerDocument$$($box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$), $positionStyle$$inline_180$$ = $goog$style$getStyle_$$($box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$, "position"), $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$ = $goog$userAgent$GECKO$$ && $doc$$inline_179$$.getBoxObjectFor && !$box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.getBoundingClientRect && "absolute" == 
-      $positionStyle$$inline_180$$ && ($box$$inline_178_doc$$inline_664$$ = $doc$$inline_179$$.getBoxObjectFor($box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$)) && (0 > $box$$inline_178_doc$$inline_664$$.screenX || 0 > $box$$inline_178_doc$$inline_664$$.screenY), $pos$$inline_182_targetEvent$$ = new $goog$math$Coordinate$$(0, 0), $JSCompiler_temp$$inline_665_JSCompiler_temp$$inline_666_viewportElement$$inline_183$$;
-      $box$$inline_178_doc$$inline_664$$ = $doc$$inline_179$$ ? 9 == $doc$$inline_179$$.nodeType ? $doc$$inline_179$$ : $goog$dom$getOwnerDocument$$($doc$$inline_179$$) : document;
-      if($JSCompiler_temp$$inline_665_JSCompiler_temp$$inline_666_viewportElement$$inline_183$$ = $goog$userAgent$IE$$) {
-        if($JSCompiler_temp$$inline_665_JSCompiler_temp$$inline_666_viewportElement$$inline_183$$ = !$goog$userAgent$isDocumentMode$$(9)) {
-          $JSCompiler_temp$$inline_665_JSCompiler_temp$$inline_666_viewportElement$$inline_183$$ = "CSS1Compat" != $goog$dom$getDomHelper$$($box$$inline_178_doc$$inline_664$$).$document_$.compatMode
+      var $isAbstractedEvent_scrollCoord$$1$$ = $JSCompiler_StaticMethods_getDocumentScroll$$($goog$dom$getDomHelper$$($box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$));
+      var $box$$inline_179_doc$$inline_680$$, $doc$$inline_180$$ = $goog$dom$getOwnerDocument$$($box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$), $positionStyle$$inline_181$$ = $goog$style$getStyle_$$($box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$, "position"), $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$ = $goog$userAgent$GECKO$$ && $doc$$inline_180$$.getBoxObjectFor && !$box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.getBoundingClientRect && "absolute" == 
+      $positionStyle$$inline_181$$ && ($box$$inline_179_doc$$inline_680$$ = $doc$$inline_180$$.getBoxObjectFor($box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$)) && (0 > $box$$inline_179_doc$$inline_680$$.screenX || 0 > $box$$inline_179_doc$$inline_680$$.screenY), $pos$$inline_183_targetEvent$$ = new $goog$math$Coordinate$$(0, 0), $JSCompiler_temp$$inline_681_JSCompiler_temp$$inline_682_viewportElement$$inline_184$$;
+      $box$$inline_179_doc$$inline_680$$ = $doc$$inline_180$$ ? 9 == $doc$$inline_180$$.nodeType ? $doc$$inline_180$$ : $goog$dom$getOwnerDocument$$($doc$$inline_180$$) : document;
+      if($JSCompiler_temp$$inline_681_JSCompiler_temp$$inline_682_viewportElement$$inline_184$$ = $goog$userAgent$IE$$) {
+        if($JSCompiler_temp$$inline_681_JSCompiler_temp$$inline_682_viewportElement$$inline_184$$ = !$goog$userAgent$isDocumentMode$$(9)) {
+          $JSCompiler_temp$$inline_681_JSCompiler_temp$$inline_682_viewportElement$$inline_184$$ = "CSS1Compat" != $goog$dom$getDomHelper$$($box$$inline_179_doc$$inline_680$$).$document_$.compatMode
         }
       }
-      $JSCompiler_temp$$inline_665_JSCompiler_temp$$inline_666_viewportElement$$inline_183$$ = $JSCompiler_temp$$inline_665_JSCompiler_temp$$inline_666_viewportElement$$inline_183$$ ? $box$$inline_178_doc$$inline_664$$.body : $box$$inline_178_doc$$inline_664$$.documentElement;
-      if($box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$ != $JSCompiler_temp$$inline_665_JSCompiler_temp$$inline_666_viewportElement$$inline_183$$) {
-        if($box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.getBoundingClientRect) {
-          $box$$inline_178_doc$$inline_664$$ = $goog$style$getBoundingClientRect_$$($box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$), $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$ = $JSCompiler_StaticMethods_getDocumentScroll$$($goog$dom$getDomHelper$$($doc$$inline_179$$)), $pos$$inline_182_targetEvent$$.x = $box$$inline_178_doc$$inline_664$$.left + $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.x, $pos$$inline_182_targetEvent$$.y = $box$$inline_178_doc$$inline_664$$.top + 
-          $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.y
+      $JSCompiler_temp$$inline_681_JSCompiler_temp$$inline_682_viewportElement$$inline_184$$ = $JSCompiler_temp$$inline_681_JSCompiler_temp$$inline_682_viewportElement$$inline_184$$ ? $box$$inline_179_doc$$inline_680$$.body : $box$$inline_179_doc$$inline_680$$.documentElement;
+      if($box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$ != $JSCompiler_temp$$inline_681_JSCompiler_temp$$inline_682_viewportElement$$inline_184$$) {
+        if($box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.getBoundingClientRect) {
+          $box$$inline_179_doc$$inline_680$$ = $goog$style$getBoundingClientRect_$$($box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$), $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$ = $JSCompiler_StaticMethods_getDocumentScroll$$($goog$dom$getDomHelper$$($doc$$inline_180$$)), $pos$$inline_183_targetEvent$$.x = $box$$inline_179_doc$$inline_680$$.left + $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.x, $pos$$inline_183_targetEvent$$.y = $box$$inline_179_doc$$inline_680$$.top + 
+          $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.y
         }else {
-          if($doc$$inline_179$$.getBoxObjectFor && !$BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$) {
-            $box$$inline_178_doc$$inline_664$$ = $doc$$inline_179$$.getBoxObjectFor($box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$), $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$ = $doc$$inline_179$$.getBoxObjectFor($JSCompiler_temp$$inline_665_JSCompiler_temp$$inline_666_viewportElement$$inline_183$$), $pos$$inline_182_targetEvent$$.x = $box$$inline_178_doc$$inline_664$$.screenX - $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.screenX, $pos$$inline_182_targetEvent$$.y = 
-            $box$$inline_178_doc$$inline_664$$.screenY - $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.screenY
+          if($doc$$inline_180$$.getBoxObjectFor && !$BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$) {
+            $box$$inline_179_doc$$inline_680$$ = $doc$$inline_180$$.getBoxObjectFor($box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$), $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$ = $doc$$inline_180$$.getBoxObjectFor($JSCompiler_temp$$inline_681_JSCompiler_temp$$inline_682_viewportElement$$inline_184$$), $pos$$inline_183_targetEvent$$.x = $box$$inline_179_doc$$inline_680$$.screenX - $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.screenX, $pos$$inline_183_targetEvent$$.y = 
+            $box$$inline_179_doc$$inline_680$$.screenY - $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.screenY
           }else {
-            $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$ = $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$;
+            $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$ = $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$;
             do {
-              $pos$$inline_182_targetEvent$$.x += $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$.offsetLeft;
-              $pos$$inline_182_targetEvent$$.y += $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$.offsetTop;
-              $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$ != $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$ && ($pos$$inline_182_targetEvent$$.x += $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$.clientLeft || 0, $pos$$inline_182_targetEvent$$.y += $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$.clientTop || 0);
-              if($goog$userAgent$WEBKIT$$ && "fixed" == $goog$style$getStyle_$$($BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$, "position")) {
-                $pos$$inline_182_targetEvent$$.x += $doc$$inline_179$$.body.scrollLeft;
-                $pos$$inline_182_targetEvent$$.y += $doc$$inline_179$$.body.scrollTop;
+              $pos$$inline_183_targetEvent$$.x += $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$.offsetLeft;
+              $pos$$inline_183_targetEvent$$.y += $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$.offsetTop;
+              $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$ != $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$ && ($pos$$inline_183_targetEvent$$.x += $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$.clientLeft || 0, $pos$$inline_183_targetEvent$$.y += $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$.clientTop || 0);
+              if($goog$userAgent$WEBKIT$$ && "fixed" == $goog$style$getStyle_$$($BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$, "position")) {
+                $pos$$inline_183_targetEvent$$.x += $doc$$inline_180$$.body.scrollLeft;
+                $pos$$inline_183_targetEvent$$.y += $doc$$inline_180$$.body.scrollTop;
                 break
               }
-              $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$ = $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$.offsetParent
-            }while($BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$ && $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$ != $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$);
-            if($goog$userAgent$OPERA$$ || $goog$userAgent$WEBKIT$$ && "absolute" == $positionStyle$$inline_180$$) {
-              $pos$$inline_182_targetEvent$$.y -= $doc$$inline_179$$.body.offsetTop
+              $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$ = $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$.offsetParent
+            }while($BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$ && $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$ != $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$);
+            if($goog$userAgent$OPERA$$ || $goog$userAgent$WEBKIT$$ && "absolute" == $positionStyle$$inline_181$$) {
+              $pos$$inline_183_targetEvent$$.y -= $doc$$inline_180$$.body.offsetTop
             }
-            for($BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$ = $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$;($BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$ = $goog$style$getOffsetParent$$($BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$)) && $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$ != $doc$$inline_179$$.body && $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$ != $JSCompiler_temp$$inline_665_JSCompiler_temp$$inline_666_viewportElement$$inline_183$$;) {
-              if($pos$$inline_182_targetEvent$$.x -= $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$.scrollLeft, !$goog$userAgent$OPERA$$ || "TR" != $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$.tagName) {
-                $pos$$inline_182_targetEvent$$.y -= $BUGGY_GECKO_BOX_OBJECT$$inline_181_parent$$inline_186$$.scrollTop
+            for($BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$ = $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$;($BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$ = $goog$style$getOffsetParent$$($BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$)) && $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$ != $doc$$inline_180$$.body && $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$ != $JSCompiler_temp$$inline_681_JSCompiler_temp$$inline_682_viewportElement$$inline_184$$;) {
+              if($pos$$inline_183_targetEvent$$.x -= $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$.scrollLeft, !$goog$userAgent$OPERA$$ || "TR" != $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$.tagName) {
+                $pos$$inline_183_targetEvent$$.y -= $BUGGY_GECKO_BOX_OBJECT$$inline_182_parent$$inline_187$$.scrollTop
               }
             }
           }
         }
       }
-      $pos$$4$$.x = $pos$$inline_182_targetEvent$$.x - $isAbstractedEvent_scrollCoord$$1$$.x;
-      $pos$$4$$.y = $pos$$inline_182_targetEvent$$.y - $isAbstractedEvent_scrollCoord$$1$$.y
+      $pos$$4$$.x = $pos$$inline_183_targetEvent$$.x - $isAbstractedEvent_scrollCoord$$1$$.x;
+      $pos$$4$$.y = $pos$$inline_183_targetEvent$$.y - $isAbstractedEvent_scrollCoord$$1$$.y
     }
   }else {
-    $isAbstractedEvent_scrollCoord$$1$$ = $goog$isFunction$$($box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.$getBrowserEvent$), $pos$$inline_182_targetEvent$$ = $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$, $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.targetTouches ? $pos$$inline_182_targetEvent$$ = $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.targetTouches[0] : $isAbstractedEvent_scrollCoord$$1$$ && $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.$event_$.targetTouches && 
-    ($pos$$inline_182_targetEvent$$ = $box$$6_el$$12_scrollCoord$$inline_184_vpBox$$inline_185$$.$event_$.targetTouches[0]), $pos$$4$$.x = $pos$$inline_182_targetEvent$$.clientX, $pos$$4$$.y = $pos$$inline_182_targetEvent$$.clientY
+    $isAbstractedEvent_scrollCoord$$1$$ = $goog$isFunction$$($box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.$getBrowserEvent$), $pos$$inline_183_targetEvent$$ = $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$, $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.targetTouches ? $pos$$inline_183_targetEvent$$ = $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.targetTouches[0] : $isAbstractedEvent_scrollCoord$$1$$ && $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.$event_$.targetTouches && 
+    ($pos$$inline_183_targetEvent$$ = $box$$6_el$$12_scrollCoord$$inline_185_vpBox$$inline_186$$.$event_$.targetTouches[0]), $pos$$4$$.x = $pos$$inline_183_targetEvent$$.clientX, $pos$$4$$.y = $pos$$inline_183_targetEvent$$.clientY
   }
   return $pos$$4$$
 }
@@ -1721,8 +1723,8 @@ function $JSCompiler_StaticMethods_getId$$($JSCompiler_StaticMethods_getId$self$
 }
 function $JSCompiler_StaticMethods_setId$$($JSCompiler_StaticMethods_setId$self$$, $id$$4$$) {
   if($JSCompiler_StaticMethods_setId$self$$.$parent_$ && $JSCompiler_StaticMethods_setId$self$$.$parent_$.$childIndex_$) {
-    var $obj$$inline_669$$ = $JSCompiler_StaticMethods_setId$self$$.$parent_$.$childIndex_$, $key$$inline_670$$ = $JSCompiler_StaticMethods_setId$self$$.$id_$;
-    $key$$inline_670$$ in $obj$$inline_669$$ && delete $obj$$inline_669$$[$key$$inline_670$$];
+    var $obj$$inline_685$$ = $JSCompiler_StaticMethods_setId$self$$.$parent_$.$childIndex_$, $key$$inline_686$$ = $JSCompiler_StaticMethods_setId$self$$.$id_$;
+    $key$$inline_686$$ in $obj$$inline_685$$ && delete $obj$$inline_685$$[$key$$inline_686$$];
     $goog$object$add$$($JSCompiler_StaticMethods_setId$self$$.$parent_$.$childIndex_$, $id$$4$$, $JSCompiler_StaticMethods_setId$self$$)
   }
   $JSCompiler_StaticMethods_setId$self$$.$id_$ = $id$$4$$
@@ -1786,22 +1788,22 @@ $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototype
   this.$parent_$ = this.$element_$ = this.$childIndex_$ = this.$children_$ = $JSCompiler_alias_NULL$$
 };
 function $JSCompiler_StaticMethods_addChild$$($JSCompiler_StaticMethods_addChild$self$$, $child$$11$$) {
-  var $index$$inline_200$$ = $JSCompiler_StaticMethods_addChild$self$$.$children_$ ? $JSCompiler_StaticMethods_addChild$self$$.$children_$.length : 0;
+  var $index$$inline_201$$ = $JSCompiler_StaticMethods_addChild$self$$.$children_$ ? $JSCompiler_StaticMethods_addChild$self$$.$children_$.length : 0;
   $child$$11$$.$inDocument_$ && !$JSCompiler_StaticMethods_addChild$self$$.$inDocument_$ && $JSCompiler_alias_THROW$$(Error("Component already rendered"));
-  (0 > $index$$inline_200$$ || $index$$inline_200$$ > ($JSCompiler_StaticMethods_addChild$self$$.$children_$ ? $JSCompiler_StaticMethods_addChild$self$$.$children_$.length : 0)) && $JSCompiler_alias_THROW$$(Error("Child component index out of bounds"));
+  (0 > $index$$inline_201$$ || $index$$inline_201$$ > ($JSCompiler_StaticMethods_addChild$self$$.$children_$ ? $JSCompiler_StaticMethods_addChild$self$$.$children_$.length : 0)) && $JSCompiler_alias_THROW$$(Error("Child component index out of bounds"));
   if(!$JSCompiler_StaticMethods_addChild$self$$.$childIndex_$ || !$JSCompiler_StaticMethods_addChild$self$$.$children_$) {
     $JSCompiler_StaticMethods_addChild$self$$.$childIndex_$ = {}, $JSCompiler_StaticMethods_addChild$self$$.$children_$ = []
   }
   if($child$$11$$.getParent() == $JSCompiler_StaticMethods_addChild$self$$) {
-    var $contentElement$$inline_202_key$$inline_673$$ = $JSCompiler_StaticMethods_getId$$($child$$11$$);
-    $JSCompiler_StaticMethods_addChild$self$$.$childIndex_$[$contentElement$$inline_202_key$$inline_673$$] = $child$$11$$;
+    var $contentElement$$inline_203_key$$inline_689$$ = $JSCompiler_StaticMethods_getId$$($child$$11$$);
+    $JSCompiler_StaticMethods_addChild$self$$.$childIndex_$[$contentElement$$inline_203_key$$inline_689$$] = $child$$11$$;
     $goog$array$remove$$($JSCompiler_StaticMethods_addChild$self$$.$children_$, $child$$11$$)
   }else {
     $goog$object$add$$($JSCompiler_StaticMethods_addChild$self$$.$childIndex_$, $JSCompiler_StaticMethods_getId$$($child$$11$$), $child$$11$$)
   }
   $JSCompiler_StaticMethods_setParent$$($child$$11$$, $JSCompiler_StaticMethods_addChild$self$$);
-  $goog$array$splice$$($JSCompiler_StaticMethods_addChild$self$$.$children_$, $index$$inline_200$$, 0, $child$$11$$);
-  $child$$11$$.$inDocument_$ && $JSCompiler_StaticMethods_addChild$self$$.$inDocument_$ && $child$$11$$.getParent() == $JSCompiler_StaticMethods_addChild$self$$ ? ($contentElement$$inline_202_key$$inline_673$$ = $JSCompiler_StaticMethods_addChild$self$$.$getContentElement$(), $contentElement$$inline_202_key$$inline_673$$.insertBefore($child$$11$$.$getElement$(), $contentElement$$inline_202_key$$inline_673$$.childNodes[$index$$inline_200$$] || $JSCompiler_alias_NULL$$)) : $JSCompiler_StaticMethods_addChild$self$$.$inDocument_$ && 
+  $goog$array$splice$$($JSCompiler_StaticMethods_addChild$self$$.$children_$, $index$$inline_201$$, 0, $child$$11$$);
+  $child$$11$$.$inDocument_$ && $JSCompiler_StaticMethods_addChild$self$$.$inDocument_$ && $child$$11$$.getParent() == $JSCompiler_StaticMethods_addChild$self$$ ? ($contentElement$$inline_203_key$$inline_689$$ = $JSCompiler_StaticMethods_addChild$self$$.$getContentElement$(), $contentElement$$inline_203_key$$inline_689$$.insertBefore($child$$11$$.$getElement$(), $contentElement$$inline_203_key$$inline_689$$.childNodes[$index$$inline_201$$] || $JSCompiler_alias_NULL$$)) : $JSCompiler_StaticMethods_addChild$self$$.$inDocument_$ && 
   (!$child$$11$$.$inDocument_$ && $child$$11$$.$element_$) && $child$$11$$.$enterDocument$()
 }
 $JSCompiler_prototypeAlias$$.$getContentElement$ = $JSCompiler_get$$("$element_$");
@@ -1816,8 +1818,8 @@ $JSCompiler_prototypeAlias$$.removeChild = function $$JSCompiler_prototypeAlias$
   if($child$$15$$) {
     var $id$$7$$ = $goog$isString$$($child$$15$$) ? $child$$15$$ : $JSCompiler_StaticMethods_getId$$($child$$15$$), $child$$15$$ = this.$childIndex_$ && $id$$7$$ ? ($id$$7$$ in this.$childIndex_$ ? this.$childIndex_$[$id$$7$$] : $JSCompiler_alias_VOID$$) || $JSCompiler_alias_NULL$$ : $JSCompiler_alias_NULL$$;
     if($id$$7$$ && $child$$15$$) {
-      var $obj$$inline_680$$ = this.$childIndex_$;
-      $id$$7$$ in $obj$$inline_680$$ && delete $obj$$inline_680$$[$id$$7$$];
+      var $obj$$inline_696$$ = this.$childIndex_$;
+      $id$$7$$ in $obj$$inline_696$$ && delete $obj$$inline_696$$[$id$$7$$];
       $goog$array$remove$$(this.$children_$, $child$$15$$);
       $opt_unrender$$ && ($child$$15$$.$exitDocument$(), $child$$15$$.$element_$ && $goog$dom$removeNode$$($child$$15$$.$element_$));
       $JSCompiler_StaticMethods_setParent$$($child$$15$$, $JSCompiler_alias_NULL$$)
@@ -1858,24 +1860,24 @@ $JSCompiler_prototypeAlias$$.$decorate$ = function $$JSCompiler_prototypeAlias$$
   var $contentElem_hasCombinedClassName$$ = this.$getContentElement$($element$$79$$);
   $contentElem_hasCombinedClassName$$ && $contentElem_hasCombinedClassName$$.firstChild ? $JSCompiler_StaticMethods_setContentInternal$$($control$$3$$, $contentElem_hasCombinedClassName$$.firstChild.nextSibling ? $goog$array$clone$$($contentElem_hasCombinedClassName$$.childNodes) : $contentElem_hasCombinedClassName$$.firstChild) : $control$$3$$.$content_$ = $JSCompiler_alias_NULL$$;
   var $state$$2$$ = 0, $rendererClassName$$ = this.$getCssClass$(), $structuralClassName$$ = this.$getCssClass$(), $hasRendererClassName$$ = $JSCompiler_alias_FALSE$$, $hasStructuralClassName$$ = $JSCompiler_alias_FALSE$$, $contentElem_hasCombinedClassName$$ = $JSCompiler_alias_FALSE$$, $classNames$$1$$ = $goog$dom$classes$get$$($element$$79$$);
-  $goog$array$forEach$$($classNames$$1$$, function($className$$18_state$$inline_219$$) {
-    if(!$hasRendererClassName$$ && $className$$18_state$$inline_219$$ == $rendererClassName$$) {
+  $goog$array$forEach$$($classNames$$1$$, function($className$$18_state$$inline_220$$) {
+    if(!$hasRendererClassName$$ && $className$$18_state$$inline_220$$ == $rendererClassName$$) {
       $hasRendererClassName$$ = $JSCompiler_alias_TRUE$$, $structuralClassName$$ == $rendererClassName$$ && ($hasStructuralClassName$$ = $JSCompiler_alias_TRUE$$)
     }else {
-      if(!$hasStructuralClassName$$ && $className$$18_state$$inline_219$$ == $structuralClassName$$) {
+      if(!$hasStructuralClassName$$ && $className$$18_state$$inline_220$$ == $structuralClassName$$) {
         $hasStructuralClassName$$ = $JSCompiler_alias_TRUE$$
       }else {
         var $JSCompiler_temp_const$$9$$ = $state$$2$$;
         if(!this.$stateByClass_$) {
           this.$classByState_$ || $JSCompiler_StaticMethods_createClassByStateMap_$$(this);
-          var $obj$$inline_912$$ = this.$classByState_$, $transposed$$inline_913$$ = {}, $key$$inline_914$$;
-          for($key$$inline_914$$ in $obj$$inline_912$$) {
-            $transposed$$inline_913$$[$obj$$inline_912$$[$key$$inline_914$$]] = $key$$inline_914$$
+          var $obj$$inline_940$$ = this.$classByState_$, $transposed$$inline_941$$ = {}, $key$$inline_942$$;
+          for($key$$inline_942$$ in $obj$$inline_940$$) {
+            $transposed$$inline_941$$[$obj$$inline_940$$[$key$$inline_942$$]] = $key$$inline_942$$
           }
-          this.$stateByClass_$ = $transposed$$inline_913$$
+          this.$stateByClass_$ = $transposed$$inline_941$$
         }
-        $className$$18_state$$inline_219$$ = parseInt(this.$stateByClass_$[$className$$18_state$$inline_219$$], 10);
-        $state$$2$$ = $JSCompiler_temp_const$$9$$ | (isNaN($className$$18_state$$inline_219$$) ? 0 : $className$$18_state$$inline_219$$)
+        $className$$18_state$$inline_220$$ = parseInt(this.$stateByClass_$[$className$$18_state$$inline_220$$], 10);
+        $state$$2$$ = $JSCompiler_temp_const$$9$$ | (isNaN($className$$18_state$$inline_220$$) ? 0 : $className$$18_state$$inline_220$$)
       }
     }
   }, this);
@@ -1908,18 +1910,18 @@ $JSCompiler_prototypeAlias$$.$setAriaStates$ = function $$JSCompiler_prototypeAl
   $control$$5$$.$supportedStates_$ & 64 && this.$updateAriaState$($element$$81$$, 64, !!($control$$5$$.$state_$ & 64))
 };
 $JSCompiler_prototypeAlias$$.$setAllowTextSelection$ = function $$JSCompiler_prototypeAlias$$$$setAllowTextSelection$$($element$$82$$, $allow$$) {
-  var $unselectable$$inline_231_value$$inline_234$$ = !$allow$$, $descendants$$inline_233$$ = $goog$userAgent$IE$$ || $goog$userAgent$OPERA$$ ? $element$$82$$.getElementsByTagName("*") : $JSCompiler_alias_NULL$$;
+  var $unselectable$$inline_232_value$$inline_235$$ = !$allow$$, $descendants$$inline_234$$ = $goog$userAgent$IE$$ || $goog$userAgent$OPERA$$ ? $element$$82$$.getElementsByTagName("*") : $JSCompiler_alias_NULL$$;
   if($goog$style$unselectableStyle_$$) {
-    if($unselectable$$inline_231_value$$inline_234$$ = $unselectable$$inline_231_value$$inline_234$$ ? "none" : "", $element$$82$$.style[$goog$style$unselectableStyle_$$] = $unselectable$$inline_231_value$$inline_234$$, $descendants$$inline_233$$) {
-      for(var $i$$inline_235$$ = 0, $descendant$$inline_236$$;$descendant$$inline_236$$ = $descendants$$inline_233$$[$i$$inline_235$$];$i$$inline_235$$++) {
-        $descendant$$inline_236$$.style[$goog$style$unselectableStyle_$$] = $unselectable$$inline_231_value$$inline_234$$
+    if($unselectable$$inline_232_value$$inline_235$$ = $unselectable$$inline_232_value$$inline_235$$ ? "none" : "", $element$$82$$.style[$goog$style$unselectableStyle_$$] = $unselectable$$inline_232_value$$inline_235$$, $descendants$$inline_234$$) {
+      for(var $i$$inline_236$$ = 0, $descendant$$inline_237$$;$descendant$$inline_237$$ = $descendants$$inline_234$$[$i$$inline_236$$];$i$$inline_236$$++) {
+        $descendant$$inline_237$$.style[$goog$style$unselectableStyle_$$] = $unselectable$$inline_232_value$$inline_235$$
       }
     }
   }else {
     if($goog$userAgent$IE$$ || $goog$userAgent$OPERA$$) {
-      if($unselectable$$inline_231_value$$inline_234$$ = $unselectable$$inline_231_value$$inline_234$$ ? "on" : "", $element$$82$$.setAttribute("unselectable", $unselectable$$inline_231_value$$inline_234$$), $descendants$$inline_233$$) {
-        for($i$$inline_235$$ = 0;$descendant$$inline_236$$ = $descendants$$inline_233$$[$i$$inline_235$$];$i$$inline_235$$++) {
-          $descendant$$inline_236$$.setAttribute("unselectable", $unselectable$$inline_231_value$$inline_234$$)
+      if($unselectable$$inline_232_value$$inline_235$$ = $unselectable$$inline_232_value$$inline_235$$ ? "on" : "", $element$$82$$.setAttribute("unselectable", $unselectable$$inline_232_value$$inline_235$$), $descendants$$inline_234$$) {
+        for($i$$inline_236$$ = 0;$descendant$$inline_237$$ = $descendants$$inline_234$$[$i$$inline_236$$];$i$$inline_236$$++) {
+          $descendant$$inline_237$$.setAttribute("unselectable", $unselectable$$inline_232_value$$inline_235$$)
         }
       }
     }
@@ -1933,16 +1935,16 @@ $JSCompiler_prototypeAlias$$.$isFocusable$ = function $$JSCompiler_prototypeAlia
   return $control$$6$$.$supportedStates_$ & 32 && ($keyTarget$$ = $control$$6$$.$getKeyEventTarget$()) ? $goog$dom$isFocusableTabIndex$$($keyTarget$$) : $JSCompiler_alias_FALSE$$
 };
 $JSCompiler_prototypeAlias$$.$setFocusable$ = function $$JSCompiler_prototypeAlias$$$$setFocusable$$($control$$7$$, $focusable$$) {
-  var $element$$inline_238_keyTarget$$1$$;
-  if($control$$7$$.$supportedStates_$ & 32 && ($element$$inline_238_keyTarget$$1$$ = $control$$7$$.$getKeyEventTarget$())) {
+  var $element$$inline_239_keyTarget$$1$$;
+  if($control$$7$$.$supportedStates_$ & 32 && ($element$$inline_239_keyTarget$$1$$ = $control$$7$$.$getKeyEventTarget$())) {
     if(!$focusable$$ && $control$$7$$.$state_$ & 32) {
       try {
-        $element$$inline_238_keyTarget$$1$$.blur()
+        $element$$inline_239_keyTarget$$1$$.blur()
       }catch($e$$20$$) {
       }
       $control$$7$$.$state_$ & 32 && $control$$7$$.$handleBlur$()
     }
-    $goog$dom$isFocusableTabIndex$$($element$$inline_238_keyTarget$$1$$) != $focusable$$ && ($focusable$$ ? $element$$inline_238_keyTarget$$1$$.tabIndex = 0 : ($element$$inline_238_keyTarget$$1$$.tabIndex = -1, $element$$inline_238_keyTarget$$1$$.removeAttribute("tabIndex")))
+    $goog$dom$isFocusableTabIndex$$($element$$inline_239_keyTarget$$1$$) != $focusable$$ && ($focusable$$ ? $element$$inline_239_keyTarget$$1$$.tabIndex = 0 : ($element$$inline_239_keyTarget$$1$$.tabIndex = -1, $element$$inline_239_keyTarget$$1$$.removeAttribute("tabIndex")))
   }
 };
 $JSCompiler_prototypeAlias$$.$setVisible$ = function $$JSCompiler_prototypeAlias$$$$setVisible$$($element$$84$$, $visible$$) {
@@ -1965,16 +1967,16 @@ $JSCompiler_prototypeAlias$$.$getKeyEventTarget$ = function $$JSCompiler_prototy
 };
 $JSCompiler_prototypeAlias$$.$getCssClass$ = $JSCompiler_returnArg$$("goog-control");
 function $JSCompiler_StaticMethods_getClassNames$$($JSCompiler_StaticMethods_getClassNames$self$$, $control$$10$$) {
-  var $cssClass_extraClassNames$$1_state$$inline_249$$ = $JSCompiler_StaticMethods_getClassNames$self$$.$getCssClass$(), $classNames$$2$$ = [$cssClass_extraClassNames$$1_state$$inline_249$$], $classNames$$inline_250_structuralCssClass$$ = $JSCompiler_StaticMethods_getClassNames$self$$.$getCssClass$();
-  $classNames$$inline_250_structuralCssClass$$ != $cssClass_extraClassNames$$1_state$$inline_249$$ && $classNames$$2$$.push($classNames$$inline_250_structuralCssClass$$);
-  $cssClass_extraClassNames$$1_state$$inline_249$$ = $control$$10$$.$state_$;
-  for($classNames$$inline_250_structuralCssClass$$ = [];$cssClass_extraClassNames$$1_state$$inline_249$$;) {
-    var $mask$$inline_251$$ = $cssClass_extraClassNames$$1_state$$inline_249$$ & -$cssClass_extraClassNames$$1_state$$inline_249$$;
-    $classNames$$inline_250_structuralCssClass$$.push($JSCompiler_StaticMethods_getClassForState$$($JSCompiler_StaticMethods_getClassNames$self$$, $mask$$inline_251$$));
-    $cssClass_extraClassNames$$1_state$$inline_249$$ &= ~$mask$$inline_251$$
+  var $cssClass_extraClassNames$$1_state$$inline_250$$ = $JSCompiler_StaticMethods_getClassNames$self$$.$getCssClass$(), $classNames$$2$$ = [$cssClass_extraClassNames$$1_state$$inline_250$$], $classNames$$inline_251_structuralCssClass$$ = $JSCompiler_StaticMethods_getClassNames$self$$.$getCssClass$();
+  $classNames$$inline_251_structuralCssClass$$ != $cssClass_extraClassNames$$1_state$$inline_250$$ && $classNames$$2$$.push($classNames$$inline_251_structuralCssClass$$);
+  $cssClass_extraClassNames$$1_state$$inline_250$$ = $control$$10$$.$state_$;
+  for($classNames$$inline_251_structuralCssClass$$ = [];$cssClass_extraClassNames$$1_state$$inline_250$$;) {
+    var $mask$$inline_252$$ = $cssClass_extraClassNames$$1_state$$inline_250$$ & -$cssClass_extraClassNames$$1_state$$inline_250$$;
+    $classNames$$inline_251_structuralCssClass$$.push($JSCompiler_StaticMethods_getClassForState$$($JSCompiler_StaticMethods_getClassNames$self$$, $mask$$inline_252$$));
+    $cssClass_extraClassNames$$1_state$$inline_250$$ &= ~$mask$$inline_252$$
   }
-  $classNames$$2$$.push.apply($classNames$$2$$, $classNames$$inline_250_structuralCssClass$$);
-  ($cssClass_extraClassNames$$1_state$$inline_249$$ = $control$$10$$.$extraClassNames_$) && $classNames$$2$$.push.apply($classNames$$2$$, $cssClass_extraClassNames$$1_state$$inline_249$$);
+  $classNames$$2$$.push.apply($classNames$$2$$, $classNames$$inline_251_structuralCssClass$$);
+  ($cssClass_extraClassNames$$1_state$$inline_250$$ = $control$$10$$.$extraClassNames_$) && $classNames$$2$$.push.apply($classNames$$2$$, $cssClass_extraClassNames$$1_state$$inline_250$$);
   $goog$userAgent$IE$$ && !$goog$userAgent$isVersion$$("7") && $classNames$$2$$.push.apply($classNames$$2$$, $JSCompiler_StaticMethods_getAppliedCombinedClassNames_$$($classNames$$2$$));
   return $classNames$$2$$
 }
@@ -2141,19 +2143,19 @@ function $goog$events$KeyEvent$$($keyCode$$4$$, $charCode$$1$$, $repeat$$1$$, $b
   this.repeat = $repeat$$1$$
 }
 $goog$inherits$$($goog$events$KeyEvent$$, $goog$events$BrowserEvent$$);
-function $goog$ui$Control$$($content$$3$$, $JSCompiler_temp$$26_componentCtor$$inline_257_opt_renderer$$, $opt_domHelper$$1$$) {
+function $goog$ui$Control$$($content$$3$$, $JSCompiler_temp$$26_componentCtor$$inline_258_opt_renderer$$, $opt_domHelper$$1$$) {
   $goog$ui$Component$$.call(this, $opt_domHelper$$1$$);
-  if(!$JSCompiler_temp$$26_componentCtor$$inline_257_opt_renderer$$) {
-    for(var $JSCompiler_temp$$26_componentCtor$$inline_257_opt_renderer$$ = this.constructor, $key$$inline_258_rendererCtor$$inline_259$$;$JSCompiler_temp$$26_componentCtor$$inline_257_opt_renderer$$;) {
-      $key$$inline_258_rendererCtor$$inline_259$$ = $goog$getUid$$($JSCompiler_temp$$26_componentCtor$$inline_257_opt_renderer$$);
-      if($key$$inline_258_rendererCtor$$inline_259$$ = $goog$ui$registry$defaultRenderers_$$[$key$$inline_258_rendererCtor$$inline_259$$]) {
+  if(!$JSCompiler_temp$$26_componentCtor$$inline_258_opt_renderer$$) {
+    for(var $JSCompiler_temp$$26_componentCtor$$inline_258_opt_renderer$$ = this.constructor, $key$$inline_259_rendererCtor$$inline_260$$;$JSCompiler_temp$$26_componentCtor$$inline_258_opt_renderer$$;) {
+      $key$$inline_259_rendererCtor$$inline_260$$ = $goog$getUid$$($JSCompiler_temp$$26_componentCtor$$inline_258_opt_renderer$$);
+      if($key$$inline_259_rendererCtor$$inline_260$$ = $goog$ui$registry$defaultRenderers_$$[$key$$inline_259_rendererCtor$$inline_260$$]) {
         break
       }
-      $JSCompiler_temp$$26_componentCtor$$inline_257_opt_renderer$$ = $JSCompiler_temp$$26_componentCtor$$inline_257_opt_renderer$$.$superClass_$ ? $JSCompiler_temp$$26_componentCtor$$inline_257_opt_renderer$$.$superClass_$.constructor : $JSCompiler_alias_NULL$$
+      $JSCompiler_temp$$26_componentCtor$$inline_258_opt_renderer$$ = $JSCompiler_temp$$26_componentCtor$$inline_258_opt_renderer$$.$superClass_$ ? $JSCompiler_temp$$26_componentCtor$$inline_258_opt_renderer$$.$superClass_$.constructor : $JSCompiler_alias_NULL$$
     }
-    $JSCompiler_temp$$26_componentCtor$$inline_257_opt_renderer$$ = $key$$inline_258_rendererCtor$$inline_259$$ ? $goog$isFunction$$($key$$inline_258_rendererCtor$$inline_259$$.$getInstance$) ? $key$$inline_258_rendererCtor$$inline_259$$.$getInstance$() : new $key$$inline_258_rendererCtor$$inline_259$$ : $JSCompiler_alias_NULL$$
+    $JSCompiler_temp$$26_componentCtor$$inline_258_opt_renderer$$ = $key$$inline_259_rendererCtor$$inline_260$$ ? $goog$isFunction$$($key$$inline_259_rendererCtor$$inline_260$$.$getInstance$) ? $key$$inline_259_rendererCtor$$inline_260$$.$getInstance$() : new $key$$inline_259_rendererCtor$$inline_260$$ : $JSCompiler_alias_NULL$$
   }
-  this.$renderer_$ = $JSCompiler_temp$$26_componentCtor$$inline_257_opt_renderer$$;
+  this.$renderer_$ = $JSCompiler_temp$$26_componentCtor$$inline_258_opt_renderer$$;
   this.$content_$ = $content$$3$$
 }
 $goog$inherits$$($goog$ui$Control$$, $goog$ui$Component$$);
@@ -2178,8 +2180,8 @@ $JSCompiler_prototypeAlias$$.$enableClassName$ = function $$JSCompiler_prototype
 $JSCompiler_prototypeAlias$$.$createDom$ = function $$JSCompiler_prototypeAlias$$$$createDom$$() {
   var $element$$91$$ = this.$renderer_$.$createDom$(this);
   this.$element_$ = $element$$91$$;
-  var $ariaRole$$inline_286$$ = this.$preferredAriaRole_$ || this.$renderer_$.$getAriaRole$();
-  $ariaRole$$inline_286$$ && ($element$$91$$.setAttribute("role", $ariaRole$$inline_286$$), $element$$91$$.$roleName$ = $ariaRole$$inline_286$$);
+  var $ariaRole$$inline_287$$ = this.$preferredAriaRole_$ || this.$renderer_$.$getAriaRole$();
+  $ariaRole$$inline_287$$ && ($element$$91$$.setAttribute("role", $ariaRole$$inline_287$$), $element$$91$$.$roleName$ = $ariaRole$$inline_287$$);
   this.$allowTextSelection_$ || this.$renderer_$.$setAllowTextSelection$($element$$91$$, $JSCompiler_alias_FALSE$$);
   this.$visible_$ || this.$renderer_$.$setVisible$($element$$91$$, $JSCompiler_alias_FALSE$$)
 };
@@ -2191,11 +2193,11 @@ $JSCompiler_prototypeAlias$$.$canDecorate$ = function $$JSCompiler_prototypeAlia
 };
 $JSCompiler_prototypeAlias$$.$decorateInternal$ = function $$JSCompiler_prototypeAlias$$$$decorateInternal$$($element$$93$$) {
   this.$element_$ = $element$$93$$ = this.$renderer_$.$decorate$(this, $element$$93$$);
-  var $ariaRole$$inline_294$$ = this.$preferredAriaRole_$ || this.$renderer_$.$getAriaRole$();
-  if($ariaRole$$inline_294$$) {
-    var $element$$inline_698$$ = $element$$93$$;
-    $element$$inline_698$$.setAttribute("role", $ariaRole$$inline_294$$);
-    $element$$inline_698$$.$roleName$ = $ariaRole$$inline_294$$
+  var $ariaRole$$inline_295$$ = this.$preferredAriaRole_$ || this.$renderer_$.$getAriaRole$();
+  if($ariaRole$$inline_295$$) {
+    var $element$$inline_714$$ = $element$$93$$;
+    $element$$inline_714$$.setAttribute("role", $ariaRole$$inline_295$$);
+    $element$$inline_714$$.$roleName$ = $ariaRole$$inline_295$$
   }
   this.$allowTextSelection_$ || this.$renderer_$.$setAllowTextSelection$($element$$93$$, $JSCompiler_alias_FALSE$$);
   this.$visible_$ = "none" != $element$$93$$.style.display
@@ -2232,29 +2234,29 @@ $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototype
 function $JSCompiler_StaticMethods_setContentInternal$$($JSCompiler_StaticMethods_setContentInternal$self$$, $content$$5$$) {
   $JSCompiler_StaticMethods_setContentInternal$self$$.$content_$ = $content$$5$$
 }
-function $JSCompiler_StaticMethods_getCaption$$($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$) {
-  $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$ = $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$.$content_$;
-  if(!$JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$) {
+function $JSCompiler_StaticMethods_getCaption$$($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$) {
+  $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$ = $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$.$content_$;
+  if(!$JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$) {
     return""
   }
-  if(!$goog$isString$$($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$)) {
-    if($goog$isArray$$($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$)) {
-      $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$ = $goog$array$map$$($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$, $goog$dom$getRawTextContent$$).join("")
+  if(!$goog$isString$$($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$)) {
+    if($goog$isArray$$($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$)) {
+      $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$ = $goog$array$map$$($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$, $goog$dom$getRawTextContent$$).join("")
     }else {
-      if($goog$dom$BrowserFeature$CAN_USE_INNER_TEXT$$ && "innerText" in $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$) {
-        $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$ = $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$.innerText.replace(/(\r\n|\r|\n)/g, "\n")
+      if($goog$dom$BrowserFeature$CAN_USE_INNER_TEXT$$ && "innerText" in $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$) {
+        $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$ = $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$.innerText.replace(/(\r\n|\r|\n)/g, "\n")
       }else {
-        var $buf$$inline_298$$ = [];
-        $goog$dom$getTextContent_$$($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$, $buf$$inline_298$$, $JSCompiler_alias_TRUE$$);
-        $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$ = $buf$$inline_298$$.join("")
+        var $buf$$inline_299$$ = [];
+        $goog$dom$getTextContent_$$($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$, $buf$$inline_299$$, $JSCompiler_alias_TRUE$$);
+        $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$ = $buf$$inline_299$$.join("")
       }
-      $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$ = $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$.replace(/ \xAD /g, " ").replace(/\xAD/g, "");
-      $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$ = $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$.replace(/\u200B/g, "");
-      $goog$dom$BrowserFeature$CAN_USE_INNER_TEXT$$ || ($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$ = $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$.replace(/ +/g, " "));
-      " " != $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$ && ($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$ = $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$.replace(/^\s*/, ""))
+      $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$ = $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$.replace(/ \xAD /g, " ").replace(/\xAD/g, "");
+      $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$ = $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$.replace(/\u200B/g, "");
+      $goog$dom$BrowserFeature$CAN_USE_INNER_TEXT$$ || ($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$ = $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$.replace(/ +/g, " "));
+      " " != $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$ && ($JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$ = $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$.replace(/^\s*/, ""))
     }
   }
-  return $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_297$$.replace(/[\t\r\n ]+/g, " ").replace(/^[\t\r\n ]+|[\t\r\n ]+$/g, "")
+  return $JSCompiler_StaticMethods_getCaption$self_JSCompiler_temp$$27_JSCompiler_temp$$28_content$$6_textContent$$inline_298$$.replace(/[\t\r\n ]+/g, " ").replace(/^[\t\r\n ]+|[\t\r\n ]+$/g, "")
 }
 $JSCompiler_prototypeAlias$$.$setRightToLeft$ = function $$JSCompiler_prototypeAlias$$$$setRightToLeft$$($rightToLeft$$3$$) {
   $goog$ui$Control$$.$superClass_$.$setRightToLeft$.call(this, $rightToLeft$$3$$);
@@ -2280,8 +2282,8 @@ $JSCompiler_prototypeAlias$$.isEnabled = function $$JSCompiler_prototypeAlias$$$
   return!(this.$state_$ & 1)
 };
 $JSCompiler_prototypeAlias$$.$setEnabled$ = function $$JSCompiler_prototypeAlias$$$$setEnabled$$($enable$$8$$) {
-  var $parent$$inline_302$$ = this.getParent();
-  if((!$parent$$inline_302$$ || "function" != typeof $parent$$inline_302$$.isEnabled || $parent$$inline_302$$.isEnabled()) && $JSCompiler_StaticMethods_isTransitionAllowed$$(this, 1, !$enable$$8$$)) {
+  var $parent$$inline_303$$ = this.getParent();
+  if((!$parent$$inline_303$$ || "function" != typeof $parent$$inline_303$$.isEnabled || $parent$$inline_303$$.isEnabled()) && $JSCompiler_StaticMethods_isTransitionAllowed$$(this, 1, !$enable$$8$$)) {
     $enable$$8$$ || (this.setActive($JSCompiler_alias_FALSE$$), $JSCompiler_StaticMethods_setHighlighted$$(this, $JSCompiler_alias_FALSE$$)), this.$visible_$ && this.$renderer_$.$setFocusable$(this, $enable$$8$$), this.$setState$(1, !$enable$$8$$)
   }
 };
@@ -2338,12 +2340,12 @@ $JSCompiler_prototypeAlias$$.$performActionInternal$ = function $$JSCompiler_pro
   $JSCompiler_StaticMethods_isAutoState$$(this, 16) && $JSCompiler_StaticMethods_setChecked$$(this, !(this.$state_$ & 16));
   $JSCompiler_StaticMethods_isAutoState$$(this, 8) && $JSCompiler_StaticMethods_isTransitionAllowed$$(this, 8, $JSCompiler_alias_TRUE$$) && this.$setState$(8, $JSCompiler_alias_TRUE$$);
   if($JSCompiler_StaticMethods_isAutoState$$(this, 64)) {
-    var $actionEvent_open$$inline_308$$ = !(this.$state_$ & 64);
-    $JSCompiler_StaticMethods_isTransitionAllowed$$(this, 64, $actionEvent_open$$inline_308$$) && this.$setState$(64, $actionEvent_open$$inline_308$$)
+    var $actionEvent_open$$inline_309$$ = !(this.$state_$ & 64);
+    $JSCompiler_StaticMethods_isTransitionAllowed$$(this, 64, $actionEvent_open$$inline_309$$) && this.$setState$(64, $actionEvent_open$$inline_309$$)
   }
-  $actionEvent_open$$inline_308$$ = new $goog$events$Event$$("action", this);
-  $e$$31$$ && ($actionEvent_open$$inline_308$$.altKey = $e$$31$$.altKey, $actionEvent_open$$inline_308$$.ctrlKey = $e$$31$$.ctrlKey, $actionEvent_open$$inline_308$$.metaKey = $e$$31$$.metaKey, $actionEvent_open$$inline_308$$.shiftKey = $e$$31$$.shiftKey, $actionEvent_open$$inline_308$$.$platformModifierKey$ = $e$$31$$.$platformModifierKey$);
-  return this.dispatchEvent($actionEvent_open$$inline_308$$)
+  $actionEvent_open$$inline_309$$ = new $goog$events$Event$$("action", this);
+  $e$$31$$ && ($actionEvent_open$$inline_309$$.altKey = $e$$31$$.altKey, $actionEvent_open$$inline_309$$.ctrlKey = $e$$31$$.ctrlKey, $actionEvent_open$$inline_309$$.metaKey = $e$$31$$.metaKey, $actionEvent_open$$inline_309$$.shiftKey = $e$$31$$.shiftKey, $actionEvent_open$$inline_309$$.$platformModifierKey$ = $e$$31$$.$platformModifierKey$);
+  return this.dispatchEvent($actionEvent_open$$inline_309$$)
 };
 $JSCompiler_prototypeAlias$$.$handleFocus$ = function $$JSCompiler_prototypeAlias$$$$handleFocus$$() {
   $JSCompiler_StaticMethods_isAutoState$$(this, 32) && $JSCompiler_StaticMethods_setFocused$$(this, $JSCompiler_alias_TRUE$$)
@@ -2360,8 +2362,8 @@ $JSCompiler_prototypeAlias$$.$handleKeyEventInternal$ = function $$JSCompiler_pr
 };
 $goog$isFunction$$($goog$ui$Control$$) || $JSCompiler_alias_THROW$$(Error("Invalid component class " + $goog$ui$Control$$));
 $goog$isFunction$$($goog$ui$ControlRenderer$$) || $JSCompiler_alias_THROW$$(Error("Invalid renderer class " + $goog$ui$ControlRenderer$$));
-var $key$$inline_312$$ = $goog$getUid$$($goog$ui$Control$$);
-$goog$ui$registry$defaultRenderers_$$[$key$$inline_312$$] = $goog$ui$ControlRenderer$$;
+var $key$$inline_313$$ = $goog$getUid$$($goog$ui$Control$$);
+$goog$ui$registry$defaultRenderers_$$[$key$$inline_313$$] = $goog$ui$ControlRenderer$$;
 $goog$ui$registry$setDecoratorByClassName$$("goog-control", function() {
   return new $goog$ui$Control$$($JSCompiler_alias_NULL$$)
 });
@@ -2382,8 +2384,8 @@ $JSCompiler_prototypeAlias$$.$createDom$ = function $$JSCompiler_prototypeAlias$
   return $element$$99$$
 };
 $JSCompiler_prototypeAlias$$.$decorate$ = function $$JSCompiler_prototypeAlias$$$$decorate$$($button$$2$$, $element$$100$$) {
-  var $element$$100$$ = $goog$ui$ButtonRenderer$$.$superClass_$.$decorate$.call(this, $button$$2$$, $element$$100$$), $value$$inline_319$$ = this.$getValue$($element$$100$$);
-  $button$$2$$.$value_$ = $value$$inline_319$$;
+  var $element$$100$$ = $goog$ui$ButtonRenderer$$.$superClass_$.$decorate$.call(this, $button$$2$$, $element$$100$$), $value$$inline_320$$ = this.$getValue$($element$$100$$);
+  $button$$2$$.$value_$ = $value$$inline_320$$;
   $button$$2$$.$tooltip_$ = this.$getTooltip$($element$$100$$);
   $button$$2$$.$supportedStates_$ & 16 && this.$updateAriaState$($element$$100$$, 16, !!($button$$2$$.$state_$ & 16));
   return $element$$100$$
@@ -2530,17 +2532,17 @@ $JSCompiler_prototypeAlias$$.$canDecorate$ = function $$JSCompiler_prototypeAlia
 $JSCompiler_prototypeAlias$$.$decorate$ = function $$JSCompiler_prototypeAlias$$$$decorate$$($button$$15$$, $element$$116$$) {
   $goog$ui$CustomButtonRenderer$trimTextNodes_$$($element$$116$$, $JSCompiler_alias_TRUE$$);
   $goog$ui$CustomButtonRenderer$trimTextNodes_$$($element$$116$$, $JSCompiler_alias_FALSE$$);
-  var $JSCompiler_inline_result$$327_inner$$inline_332_outer$$inline_331$$;
+  var $JSCompiler_inline_result$$328_inner$$inline_333_outer$$inline_332$$;
   a: {
-    if(($JSCompiler_inline_result$$327_inner$$inline_332_outer$$inline_331$$ = $JSCompiler_StaticMethods_getFirstElementChild$$($button$$15$$.$getDomHelper$(), $element$$116$$)) && -1 != $JSCompiler_inline_result$$327_inner$$inline_332_outer$$inline_331$$.className.indexOf(this.$getCssClass$() + "-outer-box")) {
-      if(($JSCompiler_inline_result$$327_inner$$inline_332_outer$$inline_331$$ = $JSCompiler_StaticMethods_getFirstElementChild$$($button$$15$$.$getDomHelper$(), $JSCompiler_inline_result$$327_inner$$inline_332_outer$$inline_331$$)) && -1 != $JSCompiler_inline_result$$327_inner$$inline_332_outer$$inline_331$$.className.indexOf(this.$getCssClass$() + "-inner-box")) {
-        $JSCompiler_inline_result$$327_inner$$inline_332_outer$$inline_331$$ = $JSCompiler_alias_TRUE$$;
+    if(($JSCompiler_inline_result$$328_inner$$inline_333_outer$$inline_332$$ = $JSCompiler_StaticMethods_getFirstElementChild$$($button$$15$$.$getDomHelper$(), $element$$116$$)) && -1 != $JSCompiler_inline_result$$328_inner$$inline_333_outer$$inline_332$$.className.indexOf(this.$getCssClass$() + "-outer-box")) {
+      if(($JSCompiler_inline_result$$328_inner$$inline_333_outer$$inline_332$$ = $JSCompiler_StaticMethods_getFirstElementChild$$($button$$15$$.$getDomHelper$(), $JSCompiler_inline_result$$328_inner$$inline_333_outer$$inline_332$$)) && -1 != $JSCompiler_inline_result$$328_inner$$inline_333_outer$$inline_332$$.className.indexOf(this.$getCssClass$() + "-inner-box")) {
+        $JSCompiler_inline_result$$328_inner$$inline_333_outer$$inline_332$$ = $JSCompiler_alias_TRUE$$;
         break a
       }
     }
-    $JSCompiler_inline_result$$327_inner$$inline_332_outer$$inline_331$$ = $JSCompiler_alias_FALSE$$
+    $JSCompiler_inline_result$$328_inner$$inline_333_outer$$inline_332$$ = $JSCompiler_alias_FALSE$$
   }
-  $JSCompiler_inline_result$$327_inner$$inline_332_outer$$inline_331$$ || $element$$116$$.appendChild($JSCompiler_StaticMethods_createButton$$(this, $element$$116$$.childNodes, $button$$15$$.$getDomHelper$()));
+  $JSCompiler_inline_result$$328_inner$$inline_333_outer$$inline_332$$ || $element$$116$$.appendChild($JSCompiler_StaticMethods_createButton$$(this, $element$$116$$.childNodes, $button$$15$$.$getDomHelper$()));
   $goog$dom$classes$add$$($element$$116$$, "goog-inline-block", this.$getCssClass$());
   return $goog$ui$CustomButtonRenderer$$.$superClass_$.$decorate$.call(this, $button$$15$$, $element$$116$$)
 };
@@ -2574,35 +2576,35 @@ $goog$ui$registry$setDecoratorByClassName$$("goog-toggle-button", function() {
 });
 function $goog$i18n$TimeZone$$() {
 }
-function $goog$i18n$TimeZone$createTimeZone$$($offset$$inline_705_str$$inline_337_timeZoneData$$) {
-  if("number" == typeof $offset$$inline_705_str$$inline_337_timeZoneData$$) {
-    var $tz$$1_tz$$inline_336$$ = new $goog$i18n$TimeZone$$;
-    $tz$$1_tz$$inline_336$$.$standardOffset_$ = $offset$$inline_705_str$$inline_337_timeZoneData$$;
-    var $JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$;
-    $JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$ = $offset$$inline_705_str$$inline_337_timeZoneData$$;
-    if(0 == $JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$) {
-      $JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$ = "Etc/GMT"
+function $goog$i18n$TimeZone$createTimeZone$$($offset$$inline_721_str$$inline_338_timeZoneData$$) {
+  if("number" == typeof $offset$$inline_721_str$$inline_338_timeZoneData$$) {
+    var $tz$$1_tz$$inline_337$$ = new $goog$i18n$TimeZone$$;
+    $tz$$1_tz$$inline_337$$.$standardOffset_$ = $offset$$inline_721_str$$inline_338_timeZoneData$$;
+    var $JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$;
+    $JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$ = $offset$$inline_721_str$$inline_338_timeZoneData$$;
+    if(0 == $JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$) {
+      $JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$ = "Etc/GMT"
     }else {
-      var $parts$$inline_703$$ = ["Etc/GMT", 0 > $JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$ ? "-" : "+"];
-      $JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$ = Math.abs($JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$);
-      $parts$$inline_703$$.push(Math.floor($JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$ / 60) % 100);
-      $JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$ %= 60;
-      0 != $JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$ && $parts$$inline_703$$.push(":", $goog$string$padNumber$$($JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$, 2));
-      $JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$ = $parts$$inline_703$$.join("")
+      var $parts$$inline_719$$ = ["Etc/GMT", 0 > $JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$ ? "-" : "+"];
+      $JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$ = Math.abs($JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$);
+      $parts$$inline_719$$.push(Math.floor($JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$ / 60) % 100);
+      $JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$ %= 60;
+      0 != $JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$ && $parts$$inline_719$$.push(":", $goog$string$padNumber$$($JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$, 2));
+      $JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$ = $parts$$inline_719$$.join("")
     }
-    $tz$$1_tz$$inline_336$$.$timeZoneId_$ = $JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$;
-    0 == $offset$$inline_705_str$$inline_337_timeZoneData$$ ? $offset$$inline_705_str$$inline_337_timeZoneData$$ = "UTC" : ($JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$ = ["UTC", 0 > $offset$$inline_705_str$$inline_337_timeZoneData$$ ? "+" : "-"], $offset$$inline_705_str$$inline_337_timeZoneData$$ = Math.abs($offset$$inline_705_str$$inline_337_timeZoneData$$), $JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$.push(Math.floor($offset$$inline_705_str$$inline_337_timeZoneData$$ / 
-    60) % 100), $offset$$inline_705_str$$inline_337_timeZoneData$$ %= 60, 0 != $offset$$inline_705_str$$inline_337_timeZoneData$$ && $JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$.push(":", $offset$$inline_705_str$$inline_337_timeZoneData$$), $offset$$inline_705_str$$inline_337_timeZoneData$$ = $JSCompiler_inline_result$$701_offset$$inline_702_parts$$inline_706$$.join(""));
-    $tz$$1_tz$$inline_336$$.$tzNames_$ = [$offset$$inline_705_str$$inline_337_timeZoneData$$, $offset$$inline_705_str$$inline_337_timeZoneData$$];
-    $tz$$1_tz$$inline_336$$.$transitions_$ = [];
-    return $tz$$1_tz$$inline_336$$
+    $tz$$1_tz$$inline_337$$.$timeZoneId_$ = $JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$;
+    0 == $offset$$inline_721_str$$inline_338_timeZoneData$$ ? $offset$$inline_721_str$$inline_338_timeZoneData$$ = "UTC" : ($JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$ = ["UTC", 0 > $offset$$inline_721_str$$inline_338_timeZoneData$$ ? "+" : "-"], $offset$$inline_721_str$$inline_338_timeZoneData$$ = Math.abs($offset$$inline_721_str$$inline_338_timeZoneData$$), $JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$.push(Math.floor($offset$$inline_721_str$$inline_338_timeZoneData$$ / 
+    60) % 100), $offset$$inline_721_str$$inline_338_timeZoneData$$ %= 60, 0 != $offset$$inline_721_str$$inline_338_timeZoneData$$ && $JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$.push(":", $offset$$inline_721_str$$inline_338_timeZoneData$$), $offset$$inline_721_str$$inline_338_timeZoneData$$ = $JSCompiler_inline_result$$717_offset$$inline_718_parts$$inline_722$$.join(""));
+    $tz$$1_tz$$inline_337$$.$tzNames_$ = [$offset$$inline_721_str$$inline_338_timeZoneData$$, $offset$$inline_721_str$$inline_338_timeZoneData$$];
+    $tz$$1_tz$$inline_337$$.$transitions_$ = [];
+    return $tz$$1_tz$$inline_337$$
   }
-  $tz$$1_tz$$inline_336$$ = new $goog$i18n$TimeZone$$;
-  $tz$$1_tz$$inline_336$$.$timeZoneId_$ = $offset$$inline_705_str$$inline_337_timeZoneData$$.id;
-  $tz$$1_tz$$inline_336$$.$standardOffset_$ = -$offset$$inline_705_str$$inline_337_timeZoneData$$.std_offset;
-  $tz$$1_tz$$inline_336$$.$tzNames_$ = $offset$$inline_705_str$$inline_337_timeZoneData$$.names;
-  $tz$$1_tz$$inline_336$$.$transitions_$ = $offset$$inline_705_str$$inline_337_timeZoneData$$.transitions;
-  return $tz$$1_tz$$inline_336$$
+  $tz$$1_tz$$inline_337$$ = new $goog$i18n$TimeZone$$;
+  $tz$$1_tz$$inline_337$$.$timeZoneId_$ = $offset$$inline_721_str$$inline_338_timeZoneData$$.id;
+  $tz$$1_tz$$inline_337$$.$standardOffset_$ = -$offset$$inline_721_str$$inline_338_timeZoneData$$.std_offset;
+  $tz$$1_tz$$inline_337$$.$tzNames_$ = $offset$$inline_721_str$$inline_338_timeZoneData$$.names;
+  $tz$$1_tz$$inline_337$$.$transitions_$ = $offset$$inline_721_str$$inline_338_timeZoneData$$.transitions;
+  return $tz$$1_tz$$inline_337$$
 }
 function $JSCompiler_StaticMethods_getDaylightAdjustment$$($JSCompiler_StaticMethods_getDaylightAdjustment$self$$, $date$$13$$) {
   for(var $timeInHours$$ = Date.UTC($date$$13$$.getUTCFullYear(), $date$$13$$.getUTCMonth(), $date$$13$$.getUTCDate(), $date$$13$$.getUTCHours(), $date$$13$$.getUTCMinutes()) / 36E5, $index$$59$$ = 0;$index$$59$$ < $JSCompiler_StaticMethods_getDaylightAdjustment$self$$.$transitions_$.length && $timeInHours$$ >= $JSCompiler_StaticMethods_getDaylightAdjustment$self$$.$transitions_$[$index$$59$$];) {
@@ -2694,55 +2696,55 @@ function $JSCompiler_StaticMethods_formatStandaloneMonth_$$($count$$20$$, $date$
       return $goog$string$padNumber$$($value$$75$$ + 1, $count$$20$$)
   }
 }
-function $JSCompiler_StaticMethods_formatField_$$($opt_timeZone$$inline_370_opt_timeZone$$inline_375_patternStr$$, $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$, $dateForDate$$1$$, $dateForTime$$1$$) {
-  var $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ = $opt_timeZone$$inline_370_opt_timeZone$$inline_375_patternStr$$.length;
-  switch($opt_timeZone$$inline_370_opt_timeZone$$inline_375_patternStr$$.charAt(0)) {
+function $JSCompiler_StaticMethods_formatField_$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$, $dateForDate$$1$$, $dateForTime$$1$$) {
+  var $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.length;
+  switch($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.charAt(0)) {
     case "G":
-      return $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$ = 0 < $dateForDate$$1$$.getFullYear() ? 1 : 0, 4 <= $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ ? $goog$i18n$DateTimeSymbols_en$$.$ERANAMES$[$date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$] : $goog$i18n$DateTimeSymbols_en$$.$ERAS$[$date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$];
+      return $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = 0 < $dateForDate$$1$$.getFullYear() ? 1 : 0, 4 <= $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? $goog$i18n$DateTimeSymbols_en$$.$ERANAMES$[$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$] : $goog$i18n$DateTimeSymbols_en$$.$ERAS$[$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$];
     case "y":
-      return $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$ = $dateForDate$$1$$.getFullYear(), 0 > $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$ && ($date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$ = -$date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$), 
-      2 == $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ ? $goog$string$padNumber$$($date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$ % 100, 2) : "" + $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$;
+      return $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = $dateForDate$$1$$.getFullYear(), 0 > $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ && ($date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = -$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$), 
+      2 == $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? $goog$string$padNumber$$($date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ % 100, 2) : "" + $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$;
     case "M":
-      return $JSCompiler_StaticMethods_formatMonth_$$($JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$, $dateForDate$$1$$);
+      return $JSCompiler_StaticMethods_formatMonth_$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$, $dateForDate$$1$$);
     case "k":
-      return $goog$string$padNumber$$($dateForTime$$1$$.getHours() || 24, $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$);
+      return $goog$string$padNumber$$($dateForTime$$1$$.getHours() || 24, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
     case "S":
-      return($dateForTime$$1$$.getTime() % 1E3 / 1E3).toFixed(Math.min(3, $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$)).substr(2) + (3 < $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ ? $goog$string$padNumber$$(0, $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ - 3) : "");
+      return($dateForTime$$1$$.getTime() % 1E3 / 1E3).toFixed(Math.min(3, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$)).substr(2) + (3 < $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? $goog$string$padNumber$$(0, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ - 3) : "");
     case "E":
-      return $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$ = $dateForDate$$1$$.getDay(), 4 <= $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ ? $goog$i18n$DateTimeSymbols_en$$.$WEEKDAYS$[$date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$] : $goog$i18n$DateTimeSymbols_en$$.$SHORTWEEKDAYS$[$date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$];
+      return $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = $dateForDate$$1$$.getDay(), 4 <= $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? $goog$i18n$DateTimeSymbols_en$$.$WEEKDAYS$[$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$] : $goog$i18n$DateTimeSymbols_en$$.$SHORTWEEKDAYS$[$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$];
     case "a":
-      return $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ = $dateForTime$$1$$.getHours(), $goog$i18n$DateTimeSymbols_en$$.$AMPMS$[12 <= $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ && 24 > $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ ? 1 : 0];
+      return $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = $dateForTime$$1$$.getHours(), $goog$i18n$DateTimeSymbols_en$$.$AMPMS$[12 <= $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ && 24 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? 1 : 0];
     case "h":
-      return $goog$string$padNumber$$($dateForTime$$1$$.getHours() % 12 || 12, $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$);
+      return $goog$string$padNumber$$($dateForTime$$1$$.getHours() % 12 || 12, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
     case "K":
-      return $goog$string$padNumber$$($dateForTime$$1$$.getHours() % 12, $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$);
+      return $goog$string$padNumber$$($dateForTime$$1$$.getHours() % 12, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
     case "H":
-      return $goog$string$padNumber$$($dateForTime$$1$$.getHours(), $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$);
+      return $goog$string$padNumber$$($dateForTime$$1$$.getHours(), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
     case "c":
-      return $JSCompiler_StaticMethods_formatStandaloneDay_$$($JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$, $dateForDate$$1$$);
+      return $JSCompiler_StaticMethods_formatStandaloneDay_$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$, $dateForDate$$1$$);
     case "L":
-      return $JSCompiler_StaticMethods_formatStandaloneMonth_$$($JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$, $dateForDate$$1$$);
+      return $JSCompiler_StaticMethods_formatStandaloneMonth_$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$, $dateForDate$$1$$);
     case "Q":
-      return $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$ = Math.floor($dateForDate$$1$$.getMonth() / 3), 4 > $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ ? $goog$i18n$DateTimeSymbols_en$$.$SHORTQUARTERS$[$date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$] : $goog$i18n$DateTimeSymbols_en$$.$QUARTERS$[$date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$];
+      return $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = Math.floor($dateForDate$$1$$.getMonth() / 3), 4 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? $goog$i18n$DateTimeSymbols_en$$.$SHORTQUARTERS$[$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$] : $goog$i18n$DateTimeSymbols_en$$.$QUARTERS$[$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$];
     case "d":
-      return $goog$string$padNumber$$($dateForDate$$1$$.getDate(), $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$);
+      return $goog$string$padNumber$$($dateForDate$$1$$.getDate(), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
     case "m":
-      return $goog$string$padNumber$$($dateForTime$$1$$.getMinutes(), $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$);
+      return $goog$string$padNumber$$($dateForTime$$1$$.getMinutes(), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
     case "s":
-      return $goog$string$padNumber$$($dateForTime$$1$$.getSeconds(), $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$);
+      return $goog$string$padNumber$$($dateForTime$$1$$.getSeconds(), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
     case "v":
-      return $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$.getTimezoneOffset()), $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$.$timeZoneId_$;
+      return $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.getTimezoneOffset()), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$.$timeZoneId_$;
     case "z":
-      return $opt_timeZone$$inline_370_opt_timeZone$$inline_375_patternStr$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$.getTimezoneOffset()), 4 > $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ ? $opt_timeZone$$inline_370_opt_timeZone$$inline_375_patternStr$$.$tzNames_$[0 < $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_370_opt_timeZone$$inline_375_patternStr$$, 
-      $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$) ? 2 : 0] : $opt_timeZone$$inline_370_opt_timeZone$$inline_375_patternStr$$.$tzNames_$[0 < $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_370_opt_timeZone$$inline_375_patternStr$$, $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$) ? 3 : 1];
+      return $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.getTimezoneOffset()), 4 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.$tzNames_$[0 < $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, 
+      $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$) ? 2 : 0] : $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.$tzNames_$[0 < $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$) ? 3 : 1];
     case "Z":
-      return $opt_timeZone$$inline_370_opt_timeZone$$inline_375_patternStr$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$.getTimezoneOffset()), 4 > $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ ? ($JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ = 
-      -($opt_timeZone$$inline_370_opt_timeZone$$inline_375_patternStr$$.$standardOffset_$ - $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_370_opt_timeZone$$inline_375_patternStr$$, $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$)), $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$ = [0 > $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ ? 
-      "-" : "+"], $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ = Math.abs($JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$), $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$.push($goog$string$padNumber$$(Math.floor($JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ / 
-      60) % 100, 2), $goog$string$padNumber$$($JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ % 60, 2))) : ($JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ = $opt_timeZone$$inline_370_opt_timeZone$$inline_375_patternStr$$.$standardOffset_$ - $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_370_opt_timeZone$$inline_375_patternStr$$, $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$), 
-      $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$ = ["GMT"], $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$.push(0 >= $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ ? "+" : "-"), $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ = 
-      Math.abs($JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$), $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$.push($goog$string$padNumber$$(Math.floor($JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ / 60) % 100, 2), ":", $goog$string$padNumber$$($JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ % 
-      60, 2))), $JSCompiler_temp$$653_count$$27_hours$$inline_356_offset$$inline_710_offset$$inline_916_opt_timeZone$$inline_365$$ = $date$$40_parts$$inline_711_parts$$inline_917_value$$inline_342_value$$inline_347_value$$inline_352_value$$inline_361$$.join("");
+      return $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.getTimezoneOffset()), 4 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? ($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = 
+      -($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.$standardOffset_$ - $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$)), $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = [0 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? 
+      "-" : "+"], $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = Math.abs($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$), $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.push($goog$string$padNumber$$(Math.floor($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ / 
+      60) % 100, 2), $goog$string$padNumber$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ % 60, 2))) : ($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.$standardOffset_$ - $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$), 
+      $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = ["GMT"], $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.push(0 >= $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? "+" : "-"), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = 
+      Math.abs($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$), $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.push($goog$string$padNumber$$(Math.floor($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ / 60) % 100, 2), ":", $goog$string$padNumber$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ % 
+      60, 2))), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.join("");
     default:
       return""
   }
@@ -2925,14 +2927,14 @@ $rflect$cal$MiniCalBuilder$$.prototype.$buildBodyInternal$ = function $$rflect$c
         this.$miniCal_$.$hovered$ && $aSb$$3$$.append("goog-datepicker-hover");
         break;
       case 5:
-        var $aSb$$inline_391_aSb$$inline_393$$ = $aSb$$3$$;
-        $aSb$$inline_391_aSb$$inline_393$$.append(this.$timeManager_$.$basis$.getYear());
-        $aSb$$inline_391_aSb$$inline_393$$.append("&nbsp;");
-        $aSb$$inline_391_aSb$$inline_393$$.append($goog$i18n$DateTimeSymbols_en$$.$MONTHS$[this.$timeManager_$.$basis$.getMonth()]);
+        var $aSb$$inline_392_aSb$$inline_394$$ = $aSb$$3$$;
+        $aSb$$inline_392_aSb$$inline_394$$.append(this.$timeManager_$.$basis$.getYear());
+        $aSb$$inline_392_aSb$$inline_394$$.append("&nbsp;");
+        $aSb$$inline_392_aSb$$inline_394$$.append($goog$i18n$DateTimeSymbols_en$$.$MONTHS$[this.$timeManager_$.$basis$.getMonth()]);
         break;
       case 8:
-        for(var $aSb$$inline_391_aSb$$inline_393$$ = $aSb$$3$$, $aOffset$$inline_394$$ = $offset$$24$$, $dayNamesFirstNumber$$inline_395$$ = $goog$i18n$DateTimeSymbols_en$$.$FIRSTDAYOFWEEK$, $dayNameNumber$$inline_396$$ = 0, $counter$$inline_397$$ = 0;7 > $counter$$inline_397$$;$counter$$inline_397$$++) {
-          0 < $counter$$inline_397$$ && $aSb$$inline_391_aSb$$inline_393$$.append($rflect$cal$MiniCalBuilder$HTML_PARTS_$$[$aOffset$$inline_394$$]), $dayNameNumber$$inline_396$$ = ($dayNamesFirstNumber$$inline_395$$ + $counter$$inline_397$$ + 1) % 7, $aSb$$inline_391_aSb$$inline_393$$.append($goog$i18n$DateTimeSymbols_en$$.$WEEKDAYS$[$dayNameNumber$$inline_396$$].charAt(0).toUpperCase()), $aSb$$inline_391_aSb$$inline_393$$.append($rflect$cal$MiniCalBuilder$HTML_PARTS_$$[$aOffset$$inline_394$$ + 1])
+        for(var $aSb$$inline_392_aSb$$inline_394$$ = $aSb$$3$$, $aOffset$$inline_395$$ = $offset$$24$$, $dayNamesFirstNumber$$inline_396$$ = $goog$i18n$DateTimeSymbols_en$$.$FIRSTDAYOFWEEK$, $dayNameNumber$$inline_397$$ = 0, $counter$$inline_398$$ = 0;7 > $counter$$inline_398$$;$counter$$inline_398$$++) {
+          0 < $counter$$inline_398$$ && $aSb$$inline_392_aSb$$inline_394$$.append($rflect$cal$MiniCalBuilder$HTML_PARTS_$$[$aOffset$$inline_395$$]), $dayNameNumber$$inline_397$$ = ($dayNamesFirstNumber$$inline_396$$ + $counter$$inline_398$$ + 1) % 7, $aSb$$inline_392_aSb$$inline_394$$.append($goog$i18n$DateTimeSymbols_en$$.$WEEKDAYS$[$dayNameNumber$$inline_397$$].charAt(0).toUpperCase()), $aSb$$inline_392_aSb$$inline_394$$.append($rflect$cal$MiniCalBuilder$HTML_PARTS_$$[$aOffset$$inline_395$$ + 1])
         }
         $offset$$24$$++;
         break;
@@ -2952,10 +2954,10 @@ $rflect$cal$MiniCalBuilder$$.prototype.$buildDayCells_$ = function $$rflect$cal$
     3])
   }
 };
-function $rflect$date$moveToDayOfWeekIfNeeded$$($aDate$$3_date$$inline_403$$) {
-  var $JSCompiler_temp$$16_diff$$inline_402$$;
-  0 != $JSCompiler_StaticMethods_getWeekday$$($aDate$$3_date$$inline_403$$) && ($JSCompiler_temp$$16_diff$$inline_402$$ = (($goog$i18n$DateTimeSymbols_en$$.$FIRSTDAYOFWEEK$ + 0 + 1) % 7 - $aDate$$3_date$$inline_403$$.getDay() + -7) % 7, $aDate$$3_date$$inline_403$$ = $aDate$$3_date$$inline_403$$.$clone$(), $aDate$$3_date$$inline_403$$.add(new $goog$date$Interval$$(0, 0, 0 === $JSCompiler_temp$$16_diff$$inline_402$$ ? $JSCompiler_temp$$16_diff$$inline_402$$ + -7 : $JSCompiler_temp$$16_diff$$inline_402$$)));
-  return $JSCompiler_temp$$16_diff$$inline_402$$ = $aDate$$3_date$$inline_403$$
+function $rflect$date$moveToDayOfWeekIfNeeded$$($aDate$$3_date$$inline_404$$) {
+  var $JSCompiler_temp$$16_diff$$inline_403$$;
+  0 != $JSCompiler_StaticMethods_getWeekday$$($aDate$$3_date$$inline_404$$) && ($JSCompiler_temp$$16_diff$$inline_403$$ = (($goog$i18n$DateTimeSymbols_en$$.$FIRSTDAYOFWEEK$ + 0 + 1) % 7 - $aDate$$3_date$$inline_404$$.getDay() + -7) % 7, $aDate$$3_date$$inline_404$$ = $aDate$$3_date$$inline_404$$.$clone$(), $aDate$$3_date$$inline_404$$.add(new $goog$date$Interval$$(0, 0, 0 === $JSCompiler_temp$$16_diff$$inline_403$$ ? $JSCompiler_temp$$16_diff$$inline_403$$ + -7 : $JSCompiler_temp$$16_diff$$inline_403$$)));
+  return $JSCompiler_temp$$16_diff$$inline_403$$ = $aDate$$3_date$$inline_404$$
 }
 function $rflect$date$getTomorrow$$($aGivenDate_cutoff$$2$$) {
   var $dateObject_year$$15$$ = $JSCompiler_alias_NULL$$, $dateObject_year$$15$$ = $aGivenDate_cutoff$$2$$.getFullYear(), $month$$7$$ = $aGivenDate_cutoff$$2$$.getMonth(), $date$$42$$ = $aGivenDate_cutoff$$2$$.getDate(), $dayOfWeek$$3_previousDayOfWeek$$;
@@ -3008,15 +3010,15 @@ $JSCompiler_prototypeAlias$$.setMinutes = $JSCompiler_set$$("$minutes_$");
 $JSCompiler_prototypeAlias$$.setSeconds = $JSCompiler_set$$("$seconds_$");
 $JSCompiler_prototypeAlias$$.setMilliseconds = $JSCompiler_set$$("$milliseconds_$");
 $JSCompiler_prototypeAlias$$.$equals$ = function $$JSCompiler_prototypeAlias$$$$equals$$($aOther$$, $opt_bitmask$$) {
-  var $diff$$inline_421$$ = 0, $bitmask$$inline_422$$ = $opt_bitmask$$ || 63;
-  $bitmask$$inline_422$$ & 1 && ($diff$$inline_421$$ = this.getYear() - $aOther$$.getFullYear());
-  0 == $diff$$inline_421$$ && $bitmask$$inline_422$$ & 2 && ($diff$$inline_421$$ = this.getMonth() - $aOther$$.getMonth());
-  0 == $diff$$inline_421$$ && $bitmask$$inline_422$$ & 4 && ($diff$$inline_421$$ = this.getDate() - $aOther$$.getDate());
-  0 == $diff$$inline_421$$ && $bitmask$$inline_422$$ & 8 && ($diff$$inline_421$$ = this.getHours() - $aOther$$.getHours());
-  0 == $diff$$inline_421$$ && $bitmask$$inline_422$$ & 16 && ($diff$$inline_421$$ = this.getMinutes() - $aOther$$.getMinutes());
-  0 == $diff$$inline_421$$ && $bitmask$$inline_422$$ & 32 && ($diff$$inline_421$$ = this.getSeconds() - $aOther$$.getSeconds());
-  $bitmask$$inline_422$$ & 128 && ($diff$$inline_421$$ = this.$getWeekNumber$() - $aOther$$.$getWeekNumber$());
-  return 0 == (0 < $diff$$inline_421$$ ? 1 : 0 == $diff$$inline_421$$ ? 0 : -1)
+  var $diff$$inline_422$$ = 0, $bitmask$$inline_423$$ = $opt_bitmask$$ || 63;
+  $bitmask$$inline_423$$ & 1 && ($diff$$inline_422$$ = this.getYear() - $aOther$$.getFullYear());
+  0 == $diff$$inline_422$$ && $bitmask$$inline_423$$ & 2 && ($diff$$inline_422$$ = this.getMonth() - $aOther$$.getMonth());
+  0 == $diff$$inline_422$$ && $bitmask$$inline_423$$ & 4 && ($diff$$inline_422$$ = this.getDate() - $aOther$$.getDate());
+  0 == $diff$$inline_422$$ && $bitmask$$inline_423$$ & 8 && ($diff$$inline_422$$ = this.getHours() - $aOther$$.getHours());
+  0 == $diff$$inline_422$$ && $bitmask$$inline_423$$ & 16 && ($diff$$inline_422$$ = this.getMinutes() - $aOther$$.getMinutes());
+  0 == $diff$$inline_422$$ && $bitmask$$inline_423$$ & 32 && ($diff$$inline_422$$ = this.getSeconds() - $aOther$$.getSeconds());
+  $bitmask$$inline_423$$ & 128 && ($diff$$inline_422$$ = this.$getWeekNumber$() - $aOther$$.$getWeekNumber$());
+  return 0 == (0 < $diff$$inline_422$$ ? 1 : 0 == $diff$$inline_422$$ ? 0 : -1)
 };
 $JSCompiler_prototypeAlias$$.valueOf = function $$JSCompiler_prototypeAlias$$$valueOf$() {
   return+[this.$year_$, this.$month_$, this.$dayOfMonth_$, this.$hours_$, this.$minutes_$, this.$seconds_$, this.$milliseconds_$].join("")
@@ -3026,8 +3028,8 @@ $JSCompiler_prototypeAlias$$.$clone$ = function $$JSCompiler_prototypeAlias$$$$c
   $date$$45$$.$firstDayOfWeek_$ = this.$firstDayOfWeek_$;
   $date$$45$$.$firstWeekCutOffDay_$ = this.$firstWeekCutOffDay_$;
   $date$$45$$.$dayOfYear_$ = this.$getDayOfYear$();
-  var $aWeekNumber$$inline_434$$ = this.$getWeekNumber$();
-  $date$$45$$.$weekNumber_$ = $aWeekNumber$$inline_434$$;
+  var $aWeekNumber$$inline_435$$ = this.$getWeekNumber$();
+  $date$$45$$.$weekNumber_$ = $aWeekNumber$$inline_435$$;
   return $date$$45$$
 };
 function $rflect$cal$TimeManager$$($opt_date$$4$$) {
@@ -3059,45 +3061,45 @@ $JSCompiler_prototypeAlias$$.$run$ = function $$JSCompiler_prototypeAlias$$$$run
     case 5:
       this.$start_$ = this.$basis$.$clone$(), this.$start_$.setDate(1), this.$start_$ = $rflect$date$moveToDayOfWeekIfNeeded$$(this.$start_$)
   }
-  var $daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$ = 0;
+  var $daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$ = 0;
   switch(this.$configuration$) {
     case 1:
-      $daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$ = 1;
+      $daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$ = 1;
       break;
     case 2:
-      $daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$ = this.$daysNumber$;
+      $daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$ = this.$daysNumber$;
       break;
     case 3:
-      $daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$ = 7;
+      $daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$ = 7;
       break;
     case 4:
-      $daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$ = this.$daysNumber$;
+      $daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$ = this.$daysNumber$;
       break;
     case 7:
     ;
     case 5:
-      var $daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$ = 0, $date$$inline_448_firstDayOfMonth$$inline_447$$ = this.$basis$.$clone$();
-      $date$$inline_448_firstDayOfMonth$$inline_447$$.setDate(1);
-      this.$start_$.$equals$($date$$inline_448_firstDayOfMonth$$inline_447$$) || ($daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$ = $JSCompiler_StaticMethods_getWeekday$$($date$$inline_448_firstDayOfMonth$$inline_447$$) - $JSCompiler_StaticMethods_getWeekday$$(this.$start_$));
-      $daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$ = 7 == this.$configuration$ ? 42 : 0 == ($daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$ + $goog$date$getNumberOfDaysInMonth$$(this.$basis$.getFullYear(), this.$basis$.getMonth())) % 7 ? $daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$ + $goog$date$getNumberOfDaysInMonth$$(this.$basis$.getFullYear(), this.$basis$.getMonth()) : $daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$ + 
-      $goog$date$getNumberOfDaysInMonth$$(this.$basis$.getFullYear(), this.$basis$.getMonth()) - ($daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$ + $goog$date$getNumberOfDaysInMonth$$(this.$basis$.getFullYear(), this.$basis$.getMonth())) % 7 + 7
+      var $daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$ = 0, $date$$inline_449_firstDayOfMonth$$inline_448$$ = this.$basis$.$clone$();
+      $date$$inline_449_firstDayOfMonth$$inline_448$$.setDate(1);
+      this.$start_$.$equals$($date$$inline_449_firstDayOfMonth$$inline_448$$) || ($daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$ = $JSCompiler_StaticMethods_getWeekday$$($date$$inline_449_firstDayOfMonth$$inline_448$$) - $JSCompiler_StaticMethods_getWeekday$$(this.$start_$));
+      $daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$ = 7 == this.$configuration$ ? 42 : 0 == ($daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$ + $goog$date$getNumberOfDaysInMonth$$(this.$basis$.getFullYear(), this.$basis$.getMonth())) % 7 ? $daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$ + $goog$date$getNumberOfDaysInMonth$$(this.$basis$.getFullYear(), this.$basis$.getMonth()) : $daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$ + 
+      $goog$date$getNumberOfDaysInMonth$$(this.$basis$.getFullYear(), this.$basis$.getMonth()) - ($daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$ + $goog$date$getNumberOfDaysInMonth$$(this.$basis$.getFullYear(), this.$basis$.getMonth())) % 7 + 7
   }
   this.$daySeries$.length = 0;
-  $date$$inline_448_firstDayOfMonth$$inline_447$$ = new $rflect$date$DateShim$$(this.$start_$);
-  $date$$inline_448_firstDayOfMonth$$inline_447$$.$dayOfYear_$ = this.$start_$.$getDayOfYear$();
-  var $aWeekNumber$$inline_720_counter$$inline_449$$ = this.$start_$.$getWeekNumber$();
-  $date$$inline_448_firstDayOfMonth$$inline_447$$.$weekNumber_$ = $aWeekNumber$$inline_720_counter$$inline_449$$;
-  for($aWeekNumber$$inline_720_counter$$inline_449$$ = 0;$aWeekNumber$$inline_720_counter$$inline_449$$ < $daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$;$aWeekNumber$$inline_720_counter$$inline_449$$++) {
-    this.$daySeries$[$aWeekNumber$$inline_720_counter$$inline_449$$] = $date$$inline_448_firstDayOfMonth$$inline_447$$, $date$$inline_448_firstDayOfMonth$$inline_447$$ = $rflect$date$getTomorrow$$($date$$inline_448_firstDayOfMonth$$inline_447$$)
+  $date$$inline_449_firstDayOfMonth$$inline_448$$ = new $rflect$date$DateShim$$(this.$start_$);
+  $date$$inline_449_firstDayOfMonth$$inline_448$$.$dayOfYear_$ = this.$start_$.$getDayOfYear$();
+  var $aWeekNumber$$inline_736_counter$$inline_450$$ = this.$start_$.$getWeekNumber$();
+  $date$$inline_449_firstDayOfMonth$$inline_448$$.$weekNumber_$ = $aWeekNumber$$inline_736_counter$$inline_450$$;
+  for($aWeekNumber$$inline_736_counter$$inline_450$$ = 0;$aWeekNumber$$inline_736_counter$$inline_450$$ < $daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$;$aWeekNumber$$inline_736_counter$$inline_450$$++) {
+    this.$daySeries$[$aWeekNumber$$inline_736_counter$$inline_450$$] = $date$$inline_449_firstDayOfMonth$$inline_448$$, $date$$inline_449_firstDayOfMonth$$inline_448$$ = $rflect$date$getTomorrow$$($date$$inline_449_firstDayOfMonth$$inline_448$$)
   }
   this.$interval$.start = this.$start_$.getTime();
-  this.$interval$.end = (new $goog$date$Date$$($date$$inline_448_firstDayOfMonth$$inline_447$$)).getTime();
+  this.$interval$.end = (new $goog$date$Date$$($date$$inline_449_firstDayOfMonth$$inline_448$$)).getTime();
   if(this.$isInNowPoint$ = this.$interval$.contains($goog$now$$())) {
-    $daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$ = new Date, this.$currentDay_$ = new $rflect$date$DateShim$$($daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$.getFullYear(), $daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$.getMonth(), $daysNumber$$inline_445_difference$$inline_446_today$$inline_450$$.getDate())
+    $daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$ = new Date, this.$currentDay_$ = new $rflect$date$DateShim$$($daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$.getFullYear(), $daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$.getMonth(), $daysNumber$$inline_446_difference$$inline_447_today$$inline_451$$.getDate())
   }
 };
 $JSCompiler_prototypeAlias$$.shift = function $$JSCompiler_prototypeAlias$$$shift$($aDirection$$1$$) {
-  var $daysNumber$$inline_454$$ = 0;
+  var $daysNumber$$inline_455$$ = 0;
   switch(this.$configuration$) {
     case 1:
       this.$basis$.add(new $goog$date$Interval$$(0, 0, 1 * $aDirection$$1$$));
@@ -3108,8 +3110,8 @@ $JSCompiler_prototypeAlias$$.shift = function $$JSCompiler_prototypeAlias$$$shif
     case 2:
     ;
     case 4:
-      $daysNumber$$inline_454$$ = this.$daysNumber$ * $aDirection$$1$$;
-      this.$basis$.add(new $goog$date$Interval$$(0, 0, $daysNumber$$inline_454$$));
+      $daysNumber$$inline_455$$ = this.$daysNumber$ * $aDirection$$1$$;
+      this.$basis$.add(new $goog$date$Interval$$(0, 0, $daysNumber$$inline_455$$));
       break;
     case 7:
     ;
@@ -3140,8 +3142,8 @@ function $JSCompiler_StaticMethods_registerTarget$$($JSCompiler_StaticMethods_re
   });
   return RegExp("(\\s|^)" + $buffer$$9$$.join("(\\s|$)|(\\s|^)") + "(\\s|$)")
 }
-function $rflect$string$getNumericIndex$$($aId_matches$$) {
-  return($aId_matches$$ = /\d{1,2}/.exec($aId_matches$$)) ? +$aId_matches$$[0] : NaN
+function $rflect$string$getNumericIndex$$($aId$$1_matches$$) {
+  return($aId$$1_matches$$ = /\d{1,2}/.exec($aId$$1_matches$$)) ? +$aId$$1_matches$$[0] : NaN
 }
 ;function $rflect$cal$SelectionMask$$($aViewManager$$3$$, $aComponent$$, $aTimeManager$$4$$) {
   this.$viewManager_$ = $aViewManager$$3$$;
@@ -3172,19 +3174,19 @@ function $JSCompiler_StaticMethods_calculateDates_$$($JSCompiler_StaticMethods_c
 }
 function $JSCompiler_StaticMethods_build_$$($JSCompiler_StaticMethods_build_$self$$, $aSb$$10$$) {
   for(var $sb$$3$$ = $aSb$$10$$ || new $goog$string$StringBuffer$$, $counter$$16$$ = 0, $length$$33$$ = $JSCompiler_StaticMethods_build_$self$$.$rects_$.length;$counter$$16$$ < $length$$33$$;$counter$$16$$++) {
-    var $JSCompiler_StaticMethods_buildUnit_$self$$inline_456$$ = $JSCompiler_StaticMethods_build_$self$$, $aSb$$inline_457$$ = $sb$$3$$, $aRect$$inline_458$$ = $JSCompiler_StaticMethods_build_$self$$.$rects_$[$counter$$16$$];
-    $aSb$$inline_457$$.append('<div class="mask');
-    $JSCompiler_StaticMethods_buildUnit_$self$$inline_456$$.$additionalClassNames$ && ($aSb$$inline_457$$.append(" "), $aSb$$inline_457$$.append($JSCompiler_StaticMethods_buildUnit_$self$$inline_456$$.$additionalClassNames$));
-    $aSb$$inline_457$$.append('" style="left:');
-    $aSb$$inline_457$$.append(Math.floor($aRect$$inline_458$$.left));
-    $aSb$$inline_457$$.append("px;top:");
-    $aSb$$inline_457$$.append(Math.floor($aRect$$inline_458$$.top));
-    $aSb$$inline_457$$.append("px;width:");
-    $aSb$$inline_457$$.append(Math.ceil($aRect$$inline_458$$.width));
-    $aSb$$inline_457$$.append("px;height:");
-    $aSb$$inline_457$$.append(Math.ceil($aRect$$inline_458$$.height));
-    $aSb$$inline_457$$.append('px">');
-    $aSb$$inline_457$$.append("</div>")
+    var $JSCompiler_StaticMethods_buildUnit_$self$$inline_457$$ = $JSCompiler_StaticMethods_build_$self$$, $aSb$$inline_458$$ = $sb$$3$$, $aRect$$inline_459$$ = $JSCompiler_StaticMethods_build_$self$$.$rects_$[$counter$$16$$];
+    $aSb$$inline_458$$.append('<div class="mask');
+    $JSCompiler_StaticMethods_buildUnit_$self$$inline_457$$.$additionalClassNames$ && ($aSb$$inline_458$$.append(" "), $aSb$$inline_458$$.append($JSCompiler_StaticMethods_buildUnit_$self$$inline_457$$.$additionalClassNames$));
+    $aSb$$inline_458$$.append('" style="left:');
+    $aSb$$inline_458$$.append(Math.floor($aRect$$inline_459$$.left));
+    $aSb$$inline_458$$.append("px;top:");
+    $aSb$$inline_458$$.append(Math.floor($aRect$$inline_459$$.top));
+    $aSb$$inline_458$$.append("px;width:");
+    $aSb$$inline_458$$.append(Math.ceil($aRect$$inline_459$$.width));
+    $aSb$$inline_458$$.append("px;height:");
+    $aSb$$inline_458$$.append(Math.ceil($aRect$$inline_459$$.height));
+    $aSb$$inline_458$$.append('px">');
+    $aSb$$inline_458$$.append("</div>")
   }
   return $aSb$$10$$ ? $JSCompiler_alias_VOID$$ : $sb$$3$$.toString()
 }
@@ -3205,26 +3207,26 @@ $JSCompiler_prototypeAlias$$.update = function $$JSCompiler_prototypeAlias$$$upd
   $aIndex$$7_currentCell$$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($aIndex$$7_currentCell$$);
   this.$dragStarted_$ && !$goog$math$Coordinate$equals$$(this.$currentCell_$, $aIndex$$7_currentCell$$) && (this.$initialized_$ = this.$draggedAtLeastOnce_$ = $JSCompiler_alias_TRUE$$, this.$currentCell_$ = $aIndex$$7_currentCell$$, this.$update_$())
 };
-$JSCompiler_prototypeAlias$$.$init$ = function $$JSCompiler_prototypeAlias$$$$init$$($JSCompiler_inline_result$$460_aConfiguration$$1_cell$$inline_463$$, $startSelectionIndex$$, $endSelectionIndex_minCell$$inline_464$$) {
-  $rflect$cal$SelectionMask$$.prototype.$init$.call(this, $JSCompiler_inline_result$$460_aConfiguration$$1_cell$$inline_463$$);
+$JSCompiler_prototypeAlias$$.$init$ = function $$JSCompiler_prototypeAlias$$$$init$$($JSCompiler_inline_result$$461_aConfiguration$$1_cell$$inline_464$$, $startSelectionIndex$$, $endSelectionIndex_minCell$$inline_465$$) {
+  $rflect$cal$SelectionMask$$.prototype.$init$.call(this, $JSCompiler_inline_result$$461_aConfiguration$$1_cell$$inline_464$$);
   this.$maskEl_$ = $goog$dom$getElement$$("minical-mask-cnt");
   this.$indexIsInMask_$ = this.$draggedAtLeastOnce_$ = this.$dragStarted_$ = $JSCompiler_alias_FALSE$$;
   $_log$$("this.configuration_", this.$configuration_$);
   if(5 == this.$configuration_$) {
-    this.$initialized_$ = $JSCompiler_alias_FALSE$$, this.$startCell_$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($startSelectionIndex$$), this.$currentCell_$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($endSelectionIndex_minCell$$inline_464$$), this.$update_$(), this.close()
+    this.$initialized_$ = $JSCompiler_alias_FALSE$$, this.$startCell_$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($startSelectionIndex$$), this.$currentCell_$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($endSelectionIndex_minCell$$inline_465$$), this.$update_$(), this.close()
   }else {
     this.$dragStarted_$ = $JSCompiler_alias_TRUE$$;
     if(this.$initialized_$) {
-      var $JSCompiler_inline_result$$460_aConfiguration$$1_cell$$inline_463$$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($startSelectionIndex$$), $endSelectionIndex_minCell$$inline_464$$ = -1 == $JSCompiler_StaticMethods_compareCells_$$(this, this.$visibleStartCell_$, this.$visibleCurrentCell_$) ? this.$visibleStartCell_$ : this.$visibleCurrentCell_$, $maxCell$$inline_465$$ = 1 == $JSCompiler_StaticMethods_compareCells_$$(this, this.$visibleStartCell_$, this.$visibleCurrentCell_$) ? this.$visibleStartCell_$ : 
+      var $JSCompiler_inline_result$$461_aConfiguration$$1_cell$$inline_464$$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($startSelectionIndex$$), $endSelectionIndex_minCell$$inline_465$$ = -1 == $JSCompiler_StaticMethods_compareCells_$$(this, this.$visibleStartCell_$, this.$visibleCurrentCell_$) ? this.$visibleStartCell_$ : this.$visibleCurrentCell_$, $maxCell$$inline_466$$ = 1 == $JSCompiler_StaticMethods_compareCells_$$(this, this.$visibleStartCell_$, this.$visibleCurrentCell_$) ? this.$visibleStartCell_$ : 
       this.$visibleCurrentCell_$;
-      $_log$$("cell", $JSCompiler_inline_result$$460_aConfiguration$$1_cell$$inline_463$$);
-      $_log$$("minCell", $endSelectionIndex_minCell$$inline_464$$);
-      $_log$$("maxCell", $maxCell$$inline_465$$);
-      $JSCompiler_inline_result$$460_aConfiguration$$1_cell$$inline_463$$ = 0 <= $JSCompiler_StaticMethods_compareCells_$$(this, $JSCompiler_inline_result$$460_aConfiguration$$1_cell$$inline_463$$, $endSelectionIndex_minCell$$inline_464$$) && 0 >= $JSCompiler_StaticMethods_compareCells_$$(this, $JSCompiler_inline_result$$460_aConfiguration$$1_cell$$inline_463$$, $maxCell$$inline_465$$)
+      $_log$$("cell", $JSCompiler_inline_result$$461_aConfiguration$$1_cell$$inline_464$$);
+      $_log$$("minCell", $endSelectionIndex_minCell$$inline_465$$);
+      $_log$$("maxCell", $maxCell$$inline_466$$);
+      $JSCompiler_inline_result$$461_aConfiguration$$1_cell$$inline_464$$ = 0 <= $JSCompiler_StaticMethods_compareCells_$$(this, $JSCompiler_inline_result$$461_aConfiguration$$1_cell$$inline_464$$, $endSelectionIndex_minCell$$inline_465$$) && 0 >= $JSCompiler_StaticMethods_compareCells_$$(this, $JSCompiler_inline_result$$461_aConfiguration$$1_cell$$inline_464$$, $maxCell$$inline_466$$)
     }else {
-      $JSCompiler_inline_result$$460_aConfiguration$$1_cell$$inline_463$$ = $JSCompiler_alias_FALSE$$
+      $JSCompiler_inline_result$$461_aConfiguration$$1_cell$$inline_464$$ = $JSCompiler_alias_FALSE$$
     }
-    this.$indexIsInMask_$ = $JSCompiler_inline_result$$460_aConfiguration$$1_cell$$inline_463$$;
+    this.$indexIsInMask_$ = $JSCompiler_inline_result$$461_aConfiguration$$1_cell$$inline_464$$;
     $JSCompiler_StaticMethods_calculateDates_$$(this, this.$startCell_$ = $JSCompiler_StaticMethods_getCellBySelectionIndex_$$($startSelectionIndex$$));
     this.$currentCell_$ = this.$startCell_$.$clone$()
   }
@@ -3438,10 +3440,11 @@ $rflect$cal$TaskSelector$$.prototype.$buildOptions$ = function $$rflect$cal$Task
 $rflect$cal$TaskSelector$$.prototype.$buildContent$ = function $$rflect$cal$TaskSelector$$$$$buildContent$$($aSb$$21$$) {
   $aSb$$21$$.append("")
 };
-function $rflect$cal$MainPaneBuilder$$($aViewManager$$9$$, $aMainPane$$, $aTimeManager$$6$$, $aBlockPoolWeek$$, $aBlockPoolAllday$$, $aBlockPoolMonth$$, $aContainerSizeMonitor$$3$$, $aTimeMarker$$) {
+function $rflect$cal$MainPaneBuilder$$($aViewManager$$9$$, $aMainPane$$, $aTimeManager$$6$$, $aEventManager$$1$$, $aBlockPoolWeek$$, $aBlockPoolAllday$$, $aBlockPoolMonth$$, $aContainerSizeMonitor$$3$$, $aTimeMarker$$) {
   this.$viewManager_$ = $aViewManager$$9$$;
   this.$mainPane_$ = $aMainPane$$;
   this.$timeManager_$ = $aTimeManager$$6$$;
+  this.$eventManager_$ = $aEventManager$$1$$;
   this.$blockPoolWeek_$ = $aBlockPoolWeek$$;
   this.$blockPoolAllday_$ = $aBlockPoolAllday$$;
   this.$blockPoolMonth_$ = $aBlockPoolMonth$$;
@@ -3450,28 +3453,32 @@ function $rflect$cal$MainPaneBuilder$$($aViewManager$$9$$, $aMainPane$$, $aTimeM
   this.$weekDayNameFormatWeek_$ = new $goog$i18n$DateTimeFormat$$("EEE, d MMM");
   this.$cache_$ = {}
 }
-var $rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$ = '<div id="main-pane" class="main-pane">,<div id="main-pane-header">,<div id="daynames-prefix-wk" style="width:61,px"><div id="daynames-zippy" class="zippy ,"></div>,</div>,<div id="main-pane-header-container" class="main-pane-header-container-wk" style="margin-left:61px,"><div id="main-pane-header-wk-daynames">,<div id="weekmode-daynames-table" style="width:,%">,<div id="dayname," class="dayname-wk" style="margin-left:,%;margin-right:,%;top:,%"><span class=",">,</span></div>,</div>,</div>,<div id="main-pane-header-scrollable" class="," style="height:,px">,<div id="alldayevents-grid-wrapper">,<div id="alldayevents-grid" style="height:,px;width:,%"><div id="wk-ad-mask-cnt"></div>,<div id="weekgrid-ad-col," class="weekgrid-col, wk-ad-layers-cont-outer" style="margin-left:,%;margin-right:,%;top:,%">,<div class="wk-ad-layers-cont">,<div id="wk-ad-dec-layer-col," class="wk-ad-decoration-layer">,<div class="expand-sign-wk-ad-cont">,<div class="expand-sign-wk-ad ,"></div></div>,</div>,<div id="wk-ad-events-layer-col," class="wk-ad-events-layer">,</div>,</div>,</div>,</div>,</div>,</div>,<div id="main-pane-header-wk-zippies">,<div id="weekmode-zippies-table" style="width:,%">,<div class="wk-col-zippy-cont" style="margin-left:,%;margin-right:,%;top:,%">,<div id="wk-zippy-col," class="zippy wk-col-zippy ,"></div>,</div>,</div>,</div>,</div>,</div>,<div id="main-pane-body-scrollable-wk" style="height:,px" class=",">,<div id="hours-container" style="width:60,px">,<div class=","><div class="hour-label ,">,</div></div>,</div>,<div id="grid-table-wrapper-wk" style="margin-left:60px">,<div id="grid-rows-container" class="wk-grid-rows-cont" style="width:,%">,<div class=","></div>,</div>,<div id="grid-table-wk" class="grid-table-wk" style="width:,%"><div id="wk-mask-cnt"></div>,<div id="weekgrid-col," class="weekgrid-col," style="margin-left:,%;margin-right:,%;top:,%">,<div id="wk-dec-layer-in-col," class="wk-decoration-layer">,<div class="today-mask-wk"></div>,<div class="expand-sign-wk-cont"><div class="expand-sign-wk ,"></div></div>,</div>,<div id="wk-events-layer-col," class="wk-events-layer">,</div>,</div>,</div>,</div>,</div>,</div>'.split(","), 
+var $rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$ = '<div id="main-pane" class="main-pane">,<div id="main-pane-header">,<div id="daynames-prefix-wk" style="width:61,px"><div id="daynames-zippy" class="zippy ,"></div>,</div>,<div id="main-pane-header-container" class="main-pane-header-container-wk" style="margin-left:61px,"><div id="main-pane-header-wk-daynames">,<div id="weekmode-daynames-table" style="width:,%">,<div id="dayname," class="dayname-wk" style="margin-left:,%;margin-right:,%;top:,%"><span class=",">,</span></div>,</div>,</div>,<div id="main-pane-header-scrollable" class="," style="height:,px">,<div id="alldayevents-grid-wrapper">,<div id="alldayevents-grid" style="height:,px;width:,%"><div id="wk-ad-mask-cnt"></div>,<div id="weekgrid-ad-col," class="weekgrid-col, wk-ad-layers-cont-outer" style="margin-left:,%;margin-right:,%;top:,%">,<div class="wk-ad-layers-cont">,<div id="wk-ad-dec-layer-col," class="wk-ad-decoration-layer">,<div class="expand-sign-wk-ad-cont">,<div class="expand-sign-wk-ad ,"></div></div>,</div>,<div id="wk-ad-events-layer-col," class="wk-ad-events-layer">,</div>,</div>,</div>,</div>,</div>,</div>,<div id="main-pane-header-wk-zippies">,<div id="weekmode-zippies-table" style="width:,%">,<div class="wk-col-zippy-cont" style="margin-left:,%;margin-right:,%;top:,%">,<div id="wk-zippy-col," class="zippy wk-col-zippy ,"></div>,</div>,</div>,</div>,</div>,</div>,<div id="main-pane-body-scrollable-wk" style="height:,px" class=",">,<div id="hours-container" style="width:60,px">,<div class=","><div class="hour-label ,">,</div></div>,</div>,<div id="grid-table-wrapper-wk" style="margin-left:60px">,<div id="grid-rows-container" class="wk-grid-rows-cont" style="width:,%">,<div class=","></div>,</div>,<div id="grid-table-wk" class="grid-table-wk" style="width:,%"><div id="wk-mask-cnt"></div>,<div id="weekgrid-col," class="weekgrid-col," style="margin-left:,%;margin-right:,%;top:,%">,<div id="wk-dec-layer-in-col," class="wk-decoration-layer">,<div class="today-mask-wk"></div>,<div class="expand-sign-wk-cont"><div class="expand-sign-wk ,"></div></div>,</div>,<div id="wk-events-layer-col," class="wk-events-layer">,<div class="event-rect-wk" style="top:,px; margin-left:,%; margin-right:,%; height:,px; margin-bottom:,px;"><div class="event-rect-wk-inner ,"><div class="event-wk-timelabel">, - ,</div>,</div></div>,</div>,</div>,</div>,</div>,</div>,</div>'.split(","), 
 $rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$ = '<div id="main-pane" class="main-pane">,<div id="main-pane-header">,<div id="daynames-prefix-mn">,</div>,<div id="main-pane-header-container" class="main-pane-header-container-mn">,<div id="main-pane-header-wk-daynames" style="margin-right:,px"><table id="weekmode-daynames-table" cellspacing="0" cellpadding="0">,<tbody><tr>,<td id="dayname,">,</td>,</tr></tbody></table>,</div>,</div>,</div>,<div id="main-pane-body-scrollable-wrapper" style="height:,px;">,<div id="main-pane-header-mn-zippies">,<table id="monthmode-zippies-table" cellspacing="0" cellpadding="0"><tbody>,<tr><td id="mn-zippy-cont-row," style="height:,px;">,<div class="mn-row-zippy-cont">,<div id="mn-zippy-row," class="zippy mn-row-zippy ,"></div>,</div>,</td></tr>,</tbody></table>,</div>,<div id="main-pane-body-scrollable-mn" class=",">,<div id="grid-table-wrapper-outer" style="height:,px;">,<div id="weeknum-cont"><table id="weeknums" cellspacing="0" cellpadding="0">,<tr><td id="weeknum," class="weeknum-label" style="height:,px;"><span class="weeknum-label-inner">,</span></td></tr>,</table>,</div>,<div id="grid-table-wrapper-mn"><div id="mn-mask-cnt"></div>,<div id="grid-cols-container" class="mn-grid-cols-cont"><table id="grid-cols-cont-inner" cellspacing="0" cellpadding="0"><tbody><tr>,<td class="weekgrid-col,">&nbsp;</td>,</tr></tbody></table>,</div>,<table id="grid-table-mn" cellspacing="0" cellpadding="0" class="grid-table-mn"><tbody>,<tr><td id="monthgrid-row," class="monthgrid-row ," style="height:,px;">,<div class="mn-layers-cont">,<div id="mn-dec-layer-row," class="mn-decoration-layer">,<table cellspacing="0" cellpadding="0" class="daynums"><tbody><tr>,<td class="daycell"><div class="daycell-decoration-cont">,<div class="today-mask-mn"></div>,</div><div class="daycell-daynum-outer-cont"><div class="expand-sign-mn-cont"><div class="expand-sign-mn ,"></div>,</div>,<div class="daynum-cont"><div id="daynum-," class="daynum-label ,">,</div>,</div></div>,</td>,</tr></tbody></table>,</div>,<div id="mn-events-layer-row," class="mn-events-layer">,</div>,</div>,</td></tr>,</tbody></table>,</div>,</div>,</div>,</div>,</div>'.split(",");
-$rflect$cal$MainPaneBuilder$$.prototype.$buildMonthGridRows_$ = function $$rflect$cal$MainPaneBuilder$$$$$buildMonthGridRows_$$($aSb$$44$$, $aOffset$$22$$) {
+function $rflect$cal$MainPaneBuilder$buildWeekChipsTimeLabel_$$($aSb$$45$$, $aChip$$5_mins$$, $aStart$$2$$) {
+  var $totalMins$$ = $aStart$$2$$ ? $aChip$$5_mins$$.start : $aChip$$5_mins$$.end;
+  $aStart$$2$$ && $aChip$$5_mins$$.$startIsCut$ || !$aStart$$2$$ && $aChip$$5_mins$$.$endIsCut$ ? $aSb$$45$$.append("00:00") : ($aChip$$5_mins$$ = $totalMins$$ % 60, $aSb$$45$$.append(($totalMins$$ - $aChip$$5_mins$$) / 60), $aSb$$45$$.append(":"), $aSb$$45$$.append($aChip$$5_mins$$))
+}
+$rflect$cal$MainPaneBuilder$$.prototype.$buildMonthGridRows_$ = function $$rflect$cal$MainPaneBuilder$$$$$buildMonthGridRows_$$($aSb$$48$$, $aOffset$$25$$) {
   for(var $rowCounter$$3$$ = 0, $rowsNumber$$1$$ = this.$blockPoolMonth_$.$blocksNumber_$;$rowCounter$$3$$ < $rowsNumber$$1$$;$rowCounter$$3$$++) {
-    0 < $rowCounter$$3$$ && $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$]), $aSb$$44$$.append($rowCounter$$3$$), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 1]), $rowCounter$$3$$ == $rowsNumber$$1$$ - 1 && $aSb$$44$$.append("monthgrid-row-last"), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 2]), $aSb$$44$$.append(this.$blockPoolMonth_$.$blocks$[$rowCounter$$3$$].size - 1), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 
-    3]), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 4]), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 5]), $aSb$$44$$.append($rowCounter$$3$$), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 6]), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 7]), this.$buildDayCells_$($aSb$$44$$, $aOffset$$22$$ + 8, $rowCounter$$3$$), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 
-    19]), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 20]), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 21]), $aSb$$44$$.append($rowCounter$$3$$), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 22]), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 23]), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 24]), $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$22$$ + 
+    0 < $rowCounter$$3$$ && $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$]), $aSb$$48$$.append($rowCounter$$3$$), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 1]), $rowCounter$$3$$ == $rowsNumber$$1$$ - 1 && $aSb$$48$$.append("monthgrid-row-last"), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 2]), $aSb$$48$$.append(this.$blockPoolMonth_$.$blocks$[$rowCounter$$3$$].size - 1), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 
+    3]), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 4]), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 5]), $aSb$$48$$.append($rowCounter$$3$$), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 6]), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 7]), this.$buildDayCells_$($aSb$$48$$, $aOffset$$25$$ + 8, $rowCounter$$3$$), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 
+    19]), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 20]), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 21]), $aSb$$48$$.append($rowCounter$$3$$), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 22]), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 23]), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 24]), $aSb$$48$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$25$$ + 
     25])
   }
 };
-$rflect$cal$MainPaneBuilder$$.prototype.$buildDayCells_$ = function $$rflect$cal$MainPaneBuilder$$$$$buildDayCells_$$($aSb$$45$$, $aOffset$$23$$, $aRowCounter$$1$$) {
+$rflect$cal$MainPaneBuilder$$.prototype.$buildDayCells_$ = function $$rflect$cal$MainPaneBuilder$$$$$buildDayCells_$$($aSb$$49$$, $aOffset$$26$$, $aRowCounter$$1$$) {
   for(var $daySeries$$3$$ = this.$timeManager_$.$daySeries$, $block$$4$$, $currentMonth$$ = this.$timeManager_$.$basis$.getMonth(), $isInMonthView$$ = 5 == this.$viewManager_$.$currentView$, $colCounter$$5$$ = 0;7 > $colCounter$$5$$;$colCounter$$5$$++) {
-    $block$$4$$ = this.$blockPoolMonth_$.$blocks$[$aRowCounter$$1$$], $aSb$$45$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$23$$]), this.$timeManager_$.$currentDay_$ && this.$timeManager_$.$currentDay_$.$equals$(this.$timeManager_$.$daySeries$[7 * $aRowCounter$$1$$ + $colCounter$$5$$], 7) && $aSb$$45$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$23$$ + 1]), $aSb$$45$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$23$$ + 2]), $aSb$$45$$.append(!$block$$4$$.$expanded$ && 
-    $block$$4$$.$couldBeExpanded$ ? "expand-sign-mn-collapsed" : $block$$4$$.$expanded$ && $block$$4$$.$couldBeCollapsed$ ? "expand-sign-mn-expanded" : ""), $aSb$$45$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$23$$ + 3]), $aSb$$45$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$23$$ + 4]), $aSb$$45$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$23$$ + 5]), $aSb$$45$$.append(7 * $aRowCounter$$1$$ + $colCounter$$5$$), $aSb$$45$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$23$$ + 
-    6]), $isInMonthView$$ && $currentMonth$$ != $daySeries$$3$$[7 * $aRowCounter$$1$$ + $colCounter$$5$$].getMonth() && $aSb$$45$$.append("dl-other-month"), $aSb$$45$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$23$$ + 7]), $aSb$$45$$.append($daySeries$$3$$[7 * $aRowCounter$$1$$ + $colCounter$$5$$].getDate()), $aSb$$45$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$23$$ + 8]), $aSb$$45$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$23$$ + 
-    9]), $aSb$$45$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$23$$ + 10])
+    $block$$4$$ = this.$blockPoolMonth_$.$blocks$[$aRowCounter$$1$$], $aSb$$49$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$26$$]), this.$timeManager_$.$currentDay_$ && this.$timeManager_$.$currentDay_$.$equals$(this.$timeManager_$.$daySeries$[7 * $aRowCounter$$1$$ + $colCounter$$5$$], 7) && $aSb$$49$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$26$$ + 1]), $aSb$$49$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$26$$ + 2]), $aSb$$49$$.append(!$block$$4$$.$expanded$ && 
+    $block$$4$$.$couldBeExpanded$ ? "expand-sign-mn-collapsed" : $block$$4$$.$expanded$ && $block$$4$$.$couldBeCollapsed$ ? "expand-sign-mn-expanded" : ""), $aSb$$49$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$26$$ + 3]), $aSb$$49$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$26$$ + 4]), $aSb$$49$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$26$$ + 5]), $aSb$$49$$.append(7 * $aRowCounter$$1$$ + $colCounter$$5$$), $aSb$$49$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$26$$ + 
+    6]), $isInMonthView$$ && $currentMonth$$ != $daySeries$$3$$[7 * $aRowCounter$$1$$ + $colCounter$$5$$].getMonth() && $aSb$$49$$.append("dl-other-month"), $aSb$$49$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$26$$ + 7]), $aSb$$49$$.append($daySeries$$3$$[7 * $aRowCounter$$1$$ + $colCounter$$5$$].getDate()), $aSb$$49$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$26$$ + 8]), $aSb$$49$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$26$$ + 
+    9]), $aSb$$49$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$26$$ + 10])
   }
 };
-for(var $rflect$pagevis$nameOfHiddenProperty_$$, $rflect$pagevis$nameOfVisibilityChangeEvent$$, $rflect$pagevis$VENDOR_HIDDEN_NAMES$$ = ["hidden", "msHidden", "mozHidden", "webkitHidden"], $rflect$pagevis$VENDOR_VISIBILITYCHANGE_NAMES$$ = ["visibilitychange", "msvisibilitychange", "mozvisibilitychange", "webkitvisibilitychange"], $vendorCounter$$inline_490$$ = 0;$vendorCounter$$inline_490$$ < $rflect$pagevis$VENDOR_HIDDEN_NAMES$$.length;$vendorCounter$$inline_490$$++) {
-  if($rflect$pagevis$VENDOR_HIDDEN_NAMES$$[$vendorCounter$$inline_490$$] in document) {
-    $rflect$pagevis$nameOfHiddenProperty_$$ = $rflect$pagevis$VENDOR_HIDDEN_NAMES$$[$vendorCounter$$inline_490$$];
-    $rflect$pagevis$nameOfVisibilityChangeEvent$$ = $rflect$pagevis$VENDOR_VISIBILITYCHANGE_NAMES$$[$vendorCounter$$inline_490$$];
+for(var $rflect$pagevis$nameOfHiddenProperty_$$, $rflect$pagevis$nameOfVisibilityChangeEvent$$, $rflect$pagevis$VENDOR_HIDDEN_NAMES$$ = ["hidden", "msHidden", "mozHidden", "webkitHidden"], $rflect$pagevis$VENDOR_VISIBILITYCHANGE_NAMES$$ = ["visibilitychange", "msvisibilitychange", "mozvisibilitychange", "webkitvisibilitychange"], $vendorCounter$$inline_506$$ = 0;$vendorCounter$$inline_506$$ < $rflect$pagevis$VENDOR_HIDDEN_NAMES$$.length;$vendorCounter$$inline_506$$++) {
+  if($rflect$pagevis$VENDOR_HIDDEN_NAMES$$[$vendorCounter$$inline_506$$] in document) {
+    $rflect$pagevis$nameOfHiddenProperty_$$ = $rflect$pagevis$VENDOR_HIDDEN_NAMES$$[$vendorCounter$$inline_506$$];
+    $rflect$pagevis$nameOfVisibilityChangeEvent$$ = $rflect$pagevis$VENDOR_VISIBILITYCHANGE_NAMES$$[$vendorCounter$$inline_506$$];
     break
   }
 }
@@ -3559,8 +3566,8 @@ function $JSCompiler_StaticMethods_getCellByCoordinate_$$($JSCompiler_StaticMeth
   $cell$$1$$.y > $maxY$$ && ($cell$$1$$.y = $maxY$$);
   return $cell$$1$$
 }
-function $JSCompiler_StaticMethods_getBlockIndexByCoordinate_$$($aCoord$$, $aBlockPool$$) {
-  for(var $blocksNumber$$6$$ = $aBlockPool$$.$blocksNumber_$, $counter$$22$$ = 0, $index$$63$$ = 0;$counter$$22$$ < $blocksNumber$$6$$ && $aCoord$$ > $aBlockPool$$.$blocks$[$counter$$22$$].position;) {
+function $JSCompiler_StaticMethods_getBlockIndexByCoordinate_$$($aCoord$$, $aBlockPool$$1$$) {
+  for(var $blocksNumber$$6$$ = $aBlockPool$$1$$.$blocksNumber_$, $counter$$22$$ = 0, $index$$63$$ = 0;$counter$$22$$ < $blocksNumber$$6$$ && $aCoord$$ > $aBlockPool$$1$$.$blocks$[$counter$$22$$].position;) {
     $index$$63$$ = $counter$$22$$++
   }
   return $index$$63$$
@@ -3585,29 +3592,30 @@ $JSCompiler_prototypeAlias$$.$update_$ = function $$JSCompiler_prototypeAlias$$$
     $maxCell$$2$$ = 1 == $JSCompiler_StaticMethods_compareCells_$$(this, this.$startCell_$, this.$currentCell_$) ? this.$startCell_$ : this.$currentCell_$;
     var $startCellPrimaryCoord$$ = $JSCompiler_StaticMethods_getCellCoord_$$(this, this.$startCell_$, $JSCompiler_alias_TRUE$$), $startCellSecondaryCoord$$ = $JSCompiler_StaticMethods_getCellCoord_$$(this, this.$startCell_$, $JSCompiler_alias_FALSE$$), $currentCellPrimaryCoord$$ = $JSCompiler_StaticMethods_getCellCoord_$$(this, this.$currentCell_$, $JSCompiler_alias_TRUE$$), $currentCellSecondaryCoord$$ = $JSCompiler_StaticMethods_getCellCoord_$$(this, this.$currentCell_$, $JSCompiler_alias_FALSE$$), 
     $blockPositionForStartCell$$ = $JSCompiler_StaticMethods_getBlockPositionOrSize_$$(this, this.$startCell_$, $JSCompiler_alias_TRUE$$), $blockPositionForCurrentCell$$ = $JSCompiler_StaticMethods_getBlockPositionOrSize_$$(this, this.$currentCell_$, $JSCompiler_alias_TRUE$$), $blockSizeForStartCell$$ = $JSCompiler_StaticMethods_getBlockPositionOrSize_$$(this, this.$startCell_$, $JSCompiler_alias_FALSE$$), $blockSizeForCurrentCell$$ = $JSCompiler_StaticMethods_getBlockPositionOrSize_$$(this, this.$currentCell_$, 
-    $JSCompiler_alias_FALSE$$), $defaultStep_step$$inline_499$$;
-    $defaultStep_step$$inline_499$$ = 0;
-    $defaultStep_step$$inline_499$$ = 1 == this.$configuration_$ ? this.$blockPoolAllday_$.$gridSize$.height : 2 == this.$configuration_$ ? 24 : this.$blockPoolMonth_$.$gridSize$.width / 7;
-    var $maxSize_size$$inline_502$$;
-    $maxSize_size$$inline_502$$ = 0;
-    $maxSize_size$$inline_502$$ = 1 == this.$configuration_$ ? this.$blockPoolAllday_$.$gridSize$.height : 2 == this.$configuration_$ ? 1152 : this.$blockPoolMonth_$.$gridSize$.width;
+    $JSCompiler_alias_FALSE$$), $defaultStep_step$$inline_515$$;
+    $defaultStep_step$$inline_515$$ = 0;
+    $defaultStep_step$$inline_515$$ = 1 == this.$configuration_$ ? this.$blockPoolAllday_$.$gridSize$.height : 2 == this.$configuration_$ ? 24 : this.$blockPoolMonth_$.$gridSize$.width / 7;
+    var $maxSize_size$$inline_518$$;
+    $maxSize_size$$inline_518$$ = 0;
+    $maxSize_size$$inline_518$$ = 1 == this.$configuration_$ ? this.$blockPoolAllday_$.$gridSize$.height : 2 == this.$configuration_$ ? 1152 : this.$blockPoolMonth_$.$gridSize$.width;
     var $minIndex$$ = 0, $maxIndex$$ = 0;
-    $startCellPrimaryCoord$$ == $currentCellPrimaryCoord$$ ? ($minIndex$$ = Math.min($startCellSecondaryCoord$$, $currentCellSecondaryCoord$$), $maxIndex$$ = Math.max($startCellSecondaryCoord$$, $currentCellSecondaryCoord$$), this.$rects_$.push(this.$getRect_$($blockPositionForStartCell$$, $minIndex$$ * $defaultStep_step$$inline_499$$, $blockSizeForStartCell$$, ($maxIndex$$ - $minIndex$$ + 1) * $defaultStep_step$$inline_499$$))) : (this.$rects_$.push(this.$getRect_$($blockPositionForStartCell$$, 
-    $currentCellPrimaryCoord$$ > $startCellPrimaryCoord$$ ? $startCellSecondaryCoord$$ * $defaultStep_step$$inline_499$$ : 0, $blockSizeForStartCell$$, $currentCellPrimaryCoord$$ > $startCellPrimaryCoord$$ ? $maxSize_size$$inline_502$$ - $startCellSecondaryCoord$$ * $defaultStep_step$$inline_499$$ : ($startCellSecondaryCoord$$ + 1) * $defaultStep_step$$inline_499$$)), this.$rects_$.push(this.$getRect_$($blockPositionForCurrentCell$$, $currentCellPrimaryCoord$$ > $startCellPrimaryCoord$$ ? 0 : $currentCellSecondaryCoord$$ * 
-    $defaultStep_step$$inline_499$$, $blockSizeForCurrentCell$$, $currentCellPrimaryCoord$$ > $startCellPrimaryCoord$$ ? ($currentCellSecondaryCoord$$ + 1) * $defaultStep_step$$inline_499$$ : $maxSize_size$$inline_502$$ - $currentCellSecondaryCoord$$ * $defaultStep_step$$inline_499$$)), 1 < Math.abs($currentCellPrimaryCoord$$ - $startCellPrimaryCoord$$) && ($minIndex$$ = Math.min($startCellPrimaryCoord$$, $currentCellPrimaryCoord$$), $maxIndex$$ = Math.max($startCellPrimaryCoord$$, $currentCellPrimaryCoord$$), 
-    this.$rects_$.push(this.$getRect_$($JSCompiler_StaticMethods_getBlockPositionOrSize_$$(this, $minIndex$$ + 1, $JSCompiler_alias_TRUE$$), 0, $JSCompiler_StaticMethods_getBlockPositionOrSize_$$(this, $maxIndex$$, $JSCompiler_alias_TRUE$$) - $JSCompiler_StaticMethods_getBlockPositionOrSize_$$(this, $minIndex$$ + 1, $JSCompiler_alias_TRUE$$), $maxSize_size$$inline_502$$))));
+    $startCellPrimaryCoord$$ == $currentCellPrimaryCoord$$ ? ($minIndex$$ = Math.min($startCellSecondaryCoord$$, $currentCellSecondaryCoord$$), $maxIndex$$ = Math.max($startCellSecondaryCoord$$, $currentCellSecondaryCoord$$), this.$rects_$.push(this.$getRect_$($blockPositionForStartCell$$, $minIndex$$ * $defaultStep_step$$inline_515$$, $blockSizeForStartCell$$, ($maxIndex$$ - $minIndex$$ + 1) * $defaultStep_step$$inline_515$$))) : (this.$rects_$.push(this.$getRect_$($blockPositionForStartCell$$, 
+    $currentCellPrimaryCoord$$ > $startCellPrimaryCoord$$ ? $startCellSecondaryCoord$$ * $defaultStep_step$$inline_515$$ : 0, $blockSizeForStartCell$$, $currentCellPrimaryCoord$$ > $startCellPrimaryCoord$$ ? $maxSize_size$$inline_518$$ - $startCellSecondaryCoord$$ * $defaultStep_step$$inline_515$$ : ($startCellSecondaryCoord$$ + 1) * $defaultStep_step$$inline_515$$)), this.$rects_$.push(this.$getRect_$($blockPositionForCurrentCell$$, $currentCellPrimaryCoord$$ > $startCellPrimaryCoord$$ ? 0 : $currentCellSecondaryCoord$$ * 
+    $defaultStep_step$$inline_515$$, $blockSizeForCurrentCell$$, $currentCellPrimaryCoord$$ > $startCellPrimaryCoord$$ ? ($currentCellSecondaryCoord$$ + 1) * $defaultStep_step$$inline_515$$ : $maxSize_size$$inline_518$$ - $currentCellSecondaryCoord$$ * $defaultStep_step$$inline_515$$)), 1 < Math.abs($currentCellPrimaryCoord$$ - $startCellPrimaryCoord$$) && ($minIndex$$ = Math.min($startCellPrimaryCoord$$, $currentCellPrimaryCoord$$), $maxIndex$$ = Math.max($startCellPrimaryCoord$$, $currentCellPrimaryCoord$$), 
+    this.$rects_$.push(this.$getRect_$($JSCompiler_StaticMethods_getBlockPositionOrSize_$$(this, $minIndex$$ + 1, $JSCompiler_alias_TRUE$$), 0, $JSCompiler_StaticMethods_getBlockPositionOrSize_$$(this, $maxIndex$$, $JSCompiler_alias_TRUE$$) - $JSCompiler_StaticMethods_getBlockPositionOrSize_$$(this, $minIndex$$ + 1, $JSCompiler_alias_TRUE$$), $maxSize_size$$inline_518$$))));
     $JSCompiler_StaticMethods_calculateDates_$$(this, $minCell$$2$$, $maxCell$$2$$);
     this.$maskEl_$.innerHTML = $JSCompiler_StaticMethods_build_$$(this)
   }
 };
-function $rflect$cal$MainPane$$($aViewManager$$12$$, $aTimeManager$$9$$, $aContainerSizeMonitor$$4$$, $aBlockManager$$) {
+function $rflect$cal$MainPane$$($aViewManager$$12$$, $aTimeManager$$9$$, $aEventManager$$4$$, $aContainerSizeMonitor$$4$$, $aBlockManager$$) {
   $goog$ui$Component$$.call(this, $JSCompiler_alias_VOID$$);
   this.$viewManager_$ = $aViewManager$$12$$;
   this.$timeManager_$ = $aTimeManager$$9$$;
+  this.$eventManager_$ = $aEventManager$$4$$;
   this.$containerSizeMonitor_$ = $aContainerSizeMonitor$$4$$;
   this.$blockManager_$ = $aBlockManager$$;
   this.$timeMarker_$ = new $rflect$cal$TimeMarker$$($aViewManager$$12$$, $aTimeManager$$9$$);
-  this.$mainPaneBuilder_$ = new $rflect$cal$MainPaneBuilder$$(this.$viewManager_$, this, $aTimeManager$$9$$, this.$blockManager_$.$blockPoolWeek$, this.$blockManager_$.$blockPoolAllday$, this.$blockManager_$.$blockPoolMonth$, this.$containerSizeMonitor_$, this.$timeMarker_$);
+  this.$mainPaneBuilder_$ = new $rflect$cal$MainPaneBuilder$$(this.$viewManager_$, this, $aTimeManager$$9$$, this.$eventManager_$, this.$blockManager_$.$blockPoolWeek$, this.$blockManager_$.$blockPoolAllday$, this.$blockManager_$.$blockPoolMonth$, this.$containerSizeMonitor_$, this.$timeMarker_$);
   $_inspect$$("mainPaneBuilder", this.$mainPaneBuilder_$);
   this.$selectionMask_$ = new $rflect$cal$MainPaneSelectionMask$$($aViewManager$$12$$, this, $aTimeManager$$9$$, this.$blockManager_$.$blockPoolWeek$, this.$blockManager_$.$blockPoolAllday$, this.$blockManager_$.$blockPoolMonth$);
   $_inspect$$("selectionMask", this.$selectionMask_$);
@@ -3618,19 +3626,19 @@ function $rflect$cal$MainPane$$($aViewManager$$12$$, $aTimeManager$$9$$, $aConta
 $goog$inherits$$($rflect$cal$MainPane$$, $rflect$cal$Component$$);
 $JSCompiler_prototypeAlias$$ = $rflect$cal$MainPane$$.prototype;
 $JSCompiler_prototypeAlias$$.$updateBeforeRedraw$ = function $$JSCompiler_prototypeAlias$$$$updateBeforeRedraw$$() {
-  var $JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$ = this.$containerSizeMonitor_$.$getSize$();
-  516 > $JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.width && ($JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.width = 516);
-  374 > $JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.height && ($JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.height = 374);
-  $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) ? (this.$scrollablesCombinedWkSize_$ = $JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.$clone$(), this.$scrollablesCombinedWkSize_$.height -= 113, this.$scrollablesCombinedWkSize_$.width -= 229, this.$scrollablesCombinedWkSize_$.width -= this.$containerSizeMonitor_$.$scrollbarWidth$, this.$alldayGridContainerSize$ = this.$scrollablesCombinedWkSize_$.$clone$(), this.$gridContainerSize$ = this.$scrollablesCombinedWkSize_$.$clone$(), 
-  this.$gridSize$ = this.$gridContainerSize$.$clone$(), this.$gridSize$.height = 1152, this.$blockManager_$.$blockPoolAllday$.$expanded$ || (this.$alldayGridContainerSize$.height = 47, this.$alldayGridSize$ = this.$alldayGridContainerSize$.$clone$())) : $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && (this.$gridContainerSize$ = $JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.$clone$(), this.$gridContainerSize$.height -= 78, this.$gridContainerSize$.width -= 
+  var $JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$ = this.$containerSizeMonitor_$.$getSize$();
+  516 > $JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.width && ($JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.width = 516);
+  374 > $JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.height && ($JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.height = 374);
+  $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) ? (this.$scrollablesCombinedWkSize_$ = $JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.$clone$(), this.$scrollablesCombinedWkSize_$.height -= 113, this.$scrollablesCombinedWkSize_$.width -= 229, this.$scrollablesCombinedWkSize_$.width -= this.$containerSizeMonitor_$.$scrollbarWidth$, this.$alldayGridContainerSize$ = this.$scrollablesCombinedWkSize_$.$clone$(), this.$gridContainerSize$ = this.$scrollablesCombinedWkSize_$.$clone$(), 
+  this.$gridSize$ = this.$gridContainerSize$.$clone$(), this.$gridSize$.height = 1152, this.$blockManager_$.$blockPoolAllday$.$expanded$ || (this.$alldayGridContainerSize$.height = 47, this.$alldayGridSize$ = this.$alldayGridContainerSize$.$clone$())) : $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && (this.$gridContainerSize$ = $JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.$clone$(), this.$gridContainerSize$.height -= 78, this.$gridContainerSize$.width -= 
   196, this.$gridSize$ = this.$gridContainerSize$.$clone$(), this.$gridSize$.width -= $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) || $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && this.$blockManager_$.$blockPoolMonth$.$expanded$ ? this.$containerSizeMonitor_$.$scrollbarWidth$ : 0);
-  var $JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$ = this.$blockManager_$, $aGridSize$$inline_726$$ = this.$gridSize$, $aGridContainerSize$$inline_727$$ = this.$gridContainerSize$, $opt_alldayGridSize$$inline_728$$ = this.$alldayGridSize$, $opt_alldayGridContainerSize$$inline_729$$ = this.$alldayGridContainerSize$;
-  $JSCompiler_StaticMethods_isInWeekMode$$($JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.$viewManager_$) ? ($JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.$blockPoolWeek$.$gridContainerSize$ = $aGridContainerSize$$inline_727$$, $JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.$blockPoolWeek$.$gridSize$ = $aGridSize$$inline_726$$, $JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.$blockPoolAllday$.$gridSize$ = 
-  $opt_alldayGridSize$$inline_728$$, $JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.$blockPoolAllday$.$gridContainerSize$ = $opt_alldayGridContainerSize$$inline_729$$) : $JSCompiler_StaticMethods_isInMonthMode$$($JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.$viewManager_$) && ($JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.$blockPoolMonth$.$gridContainerSize$ = $aGridContainerSize$$inline_727$$, 
-  $JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$.$blockPoolMonth$.$gridSize$ = $aGridSize$$inline_726$$);
+  var $JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$ = this.$blockManager_$, $aGridSize$$inline_754$$ = this.$gridSize$, $aGridContainerSize$$inline_755$$ = this.$gridContainerSize$, $opt_alldayGridSize$$inline_756$$ = this.$alldayGridSize$, $opt_alldayGridContainerSize$$inline_757$$ = this.$alldayGridContainerSize$;
+  $JSCompiler_StaticMethods_isInWeekMode$$($JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.$viewManager_$) ? ($JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.$blockPoolWeek$.$gridContainerSize$ = $aGridContainerSize$$inline_755$$, $JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.$blockPoolWeek$.$gridSize$ = $aGridSize$$inline_754$$, $JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.$blockPoolAllday$.$gridSize$ = 
+  $opt_alldayGridSize$$inline_756$$, $JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.$blockPoolAllday$.$gridContainerSize$ = $opt_alldayGridContainerSize$$inline_757$$) : $JSCompiler_StaticMethods_isInMonthMode$$($JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.$viewManager_$) && ($JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.$blockPoolMonth$.$gridContainerSize$ = $aGridContainerSize$$inline_755$$, 
+  $JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$.$blockPoolMonth$.$gridSize$ = $aGridSize$$inline_754$$);
   this.$blockManager_$.update();
-  if($JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) && (this.$blockManager_$.$blockPoolAllday$.$expanded$ && ($JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$ = 0, $JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$ = Math.floor(this.$scrollablesCombinedWkSize_$.height / 2), this.$alldayGridContainerSize$.height = this.$alldayGridSize$.height > $JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$ ? 
-  $JSCompiler_StaticMethods_setSizes$self$$inline_725_alldayBlockMaxHeight_containerSize$$ : this.$alldayGridSize$.height), this.$gridContainerSize$.height = this.$scrollablesCombinedWkSize_$.height - this.$alldayGridContainerSize$.height, this.$alldayGridContainerSize$.height += this.$blockManager_$.$blockPoolWeek$.$expanded$ ? this.$containerSizeMonitor_$.$scrollbarWidth$ : 0, 1152 < this.$gridContainerSize$.height)) {
+  if($JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) && (this.$blockManager_$.$blockPoolAllday$.$expanded$ && ($JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$ = 0, $JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$ = Math.floor(this.$scrollablesCombinedWkSize_$.height / 2), this.$alldayGridContainerSize$.height = this.$alldayGridSize$.height > $JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$ ? 
+  $JSCompiler_StaticMethods_setSizes$self$$inline_753_alldayBlockMaxHeight_containerSize$$ : this.$alldayGridSize$.height), this.$gridContainerSize$.height = this.$scrollablesCombinedWkSize_$.height - this.$alldayGridContainerSize$.height, this.$alldayGridContainerSize$.height += this.$blockManager_$.$blockPoolWeek$.$expanded$ ? this.$containerSizeMonitor_$.$scrollbarWidth$ : 0, 1152 < this.$gridContainerSize$.height)) {
     this.$gridContainerSize$.height = 1152 + ($JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) && this.$blockManager_$.$blockPoolWeek$.$expanded$ ? this.$containerSizeMonitor_$.$scrollbarWidth$ : 0)
   }
   $JSCompiler_StaticMethods_removeScrollListeners_$$(this)
@@ -3647,387 +3655,244 @@ $JSCompiler_prototypeAlias$$.$updateByRedraw$ = function $$JSCompiler_prototypeA
   "scroll", this.$onMainPaneScrollableScroll_$, $JSCompiler_alias_FALSE$$, this));
   $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) ? this.$blockManager_$.$blockPoolWeek$.$expanded$ && (this.$dom_$.$getElement$("main-pane-body-scrollable-wk").scrollLeft = this.$dom_$.$getElement$("main-pane-header-scrollable").scrollLeft = this.$blockManager_$.$blockPoolWeek$.scrollLeft) : $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && this.$blockManager_$.$blockPoolMonth$.$expanded$ && (this.$dom_$.$getElement$("main-pane-body-scrollable-mn").scrollTop = this.$blockManager_$.$blockPoolMonth$.scrollTop)
 };
-$JSCompiler_prototypeAlias$$.$buildBodyInternal$ = function $$JSCompiler_prototypeAlias$$$$buildBodyInternal$$($aSb$$49$$) {
+$JSCompiler_prototypeAlias$$.$buildBodyInternal$ = function $$JSCompiler_prototypeAlias$$$$buildBodyInternal$$($aSb$$53$$) {
   if($JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$)) {
-    for(var $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$ = this.$mainPaneBuilder_$, $offset$$inline_512_offset$$inline_517$$ = 0, $length$$inline_513_length$$inline_518$$ = $rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$.length;++$offset$$inline_512_offset$$inline_517$$ < $length$$inline_513_length$$inline_518$$ - 1;) {
-      switch($aSb$$49$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$offset$$inline_512_offset$$inline_517$$]), $offset$$inline_512_offset$$inline_517$$) {
+    for(var $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_526$$ = this.$mainPaneBuilder_$, $offset$$inline_528$$ = 0, $length$$inline_529$$ = $rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$.length;++$offset$$inline_528$$ < $length$$inline_529$$ - 1;) {
+      switch($aSb$$53$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$offset$$inline_528$$]), $offset$$inline_528$$) {
         case 5:
-          var $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-          $aSb$$49$$;
-          $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$.$blockPoolMonth_$.$expanded$ ? $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append($JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$.$containerSizeMonitor_$.$scrollbarWidth$ + 
-          2) : $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append(2);
+          var $aSb$$inline_760$$ = $aSb$$53$$;
+          $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_526$$.$blockPoolMonth_$.$expanded$ ? $aSb$$inline_760$$.append($JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_526$$.$containerSizeMonitor_$.$scrollbarWidth$ + 2) : $aSb$$inline_760$$.append(2);
           break;
         case 8:
-          for(var $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-          $aSb$$49$$, $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ = $offset$$inline_512_offset$$inline_517$$, $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ = 
-          $goog$i18n$DateTimeSymbols_en$$.$FIRSTDAYOFWEEK$, $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ = 0, $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ = 0;7 > $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$;$blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$++) {
-            0 < $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ && $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$]), 
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append($blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$), 
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ + 
-            1]), $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ = ($aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ + 1) % 7, $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append($goog$i18n$DateTimeSymbols_en$$.$WEEKDAYS$[$dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$]), 
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ + 
+          for(var $aSb$$inline_762$$ = $aSb$$53$$, $aOffset$$inline_763$$ = $offset$$inline_528$$, $dayNamesFirstNumber$$inline_764$$ = $goog$i18n$DateTimeSymbols_en$$.$FIRSTDAYOFWEEK$, $dayNameNumber$$inline_765$$ = 0, $counter$$inline_766$$ = 0;7 > $counter$$inline_766$$;$counter$$inline_766$$++) {
+            0 < $counter$$inline_766$$ && $aSb$$inline_762$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_763$$]), $aSb$$inline_762$$.append($counter$$inline_766$$), $aSb$$inline_762$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_763$$ + 1]), $dayNameNumber$$inline_765$$ = ($dayNamesFirstNumber$$inline_764$$ + $counter$$inline_766$$ + 1) % 7, $aSb$$inline_762$$.append($goog$i18n$DateTimeSymbols_en$$.$WEEKDAYS$[$dayNameNumber$$inline_765$$]), $aSb$$inline_762$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_763$$ + 
             2])
           }
-          $offset$$inline_512_offset$$inline_517$$ += 2;
+          $offset$$inline_528$$ += 2;
           break;
         case 15:
-          $aSb$$49$$.append($JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$.$blockPoolMonth_$.$gridContainerSize$.height);
+          $aSb$$53$$.append($JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_526$$.$blockPoolMonth_$.$gridContainerSize$.height);
           break;
         case 19:
-          $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-          $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$;
-          $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ = $aSb$$49$$;
-          $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ = $offset$$inline_512_offset$$inline_517$$;
-          $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ = 0;
-          for($blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolMonth_$.$blocksNumber_$;$dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ < 
-          $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$;$dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$++) {
-            0 < $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ && $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$]), 
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            1]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolMonth_$.$blocks$[$dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$].size), 
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            2]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            3]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            4]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            5]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolMonth_$.$blocks$[$dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$].$expanded$ ? 
-            "mn-row-zippy-expanded" : "mn-row-zippy-collapsed"), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            6]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            7]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            8])
+          for(var $JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_771$$ = $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_526$$, $aSb$$inline_772$$ = $aSb$$53$$, $aOffset$$inline_773$$ = $offset$$inline_528$$, $rowCounter$$inline_774$$ = 0, $blocksNumber$$inline_775$$ = $JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_771$$.$blockPoolMonth_$.$blocksNumber_$;$rowCounter$$inline_774$$ < $blocksNumber$$inline_775$$;$rowCounter$$inline_774$$++) {
+            0 < $rowCounter$$inline_774$$ && $aSb$$inline_772$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_773$$]), $aSb$$inline_772$$.append($rowCounter$$inline_774$$), $aSb$$inline_772$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_773$$ + 1]), $aSb$$inline_772$$.append($JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_771$$.$blockPoolMonth_$.$blocks$[$rowCounter$$inline_774$$].size), $aSb$$inline_772$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_773$$ + 
+            2]), $aSb$$inline_772$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_773$$ + 3]), $aSb$$inline_772$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_773$$ + 4]), $aSb$$inline_772$$.append($rowCounter$$inline_774$$), $aSb$$inline_772$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_773$$ + 5]), $aSb$$inline_772$$.append($JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_771$$.$blockPoolMonth_$.$blocks$[$rowCounter$$inline_774$$].$expanded$ ? 
+            "mn-row-zippy-expanded" : "mn-row-zippy-collapsed"), $aSb$$inline_772$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_773$$ + 6]), $aSb$$inline_772$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_773$$ + 7]), $aSb$$inline_772$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_773$$ + 8])
           }
-          $offset$$inline_512_offset$$inline_517$$ += 7;
+          $offset$$inline_528$$ += 7;
           break;
         case 30:
-          $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-          $aSb$$49$$;
-          $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$.$blockPoolMonth_$.$expanded$ ? $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append("mpbs-mn-scroll-vert-on") : 
-          $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append("mpbs-mn-scroll-vert-off");
+          var $aSb$$inline_778$$ = $aSb$$53$$;
+          $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_526$$.$blockPoolMonth_$.$expanded$ ? $aSb$$inline_778$$.append("mpbs-mn-scroll-vert-on") : $aSb$$inline_778$$.append("mpbs-mn-scroll-vert-off");
           break;
         case 32:
-          $aSb$$49$$.append($JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$.$blockPoolMonth_$.$gridSize$.height);
+          $aSb$$53$$.append($JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_526$$.$blockPoolMonth_$.$gridSize$.height);
           break;
         case 35:
-          for(var $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-          $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$, $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ = $aSb$$49$$, $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ = 
-          $offset$$inline_512_offset$$inline_517$$, $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ = $JSCompiler_alias_NULL$$, $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ = 
-          0, $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolMonth_$.$blocksNumber_$;$blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ < 
-          $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$;$blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$++) {
-            0 < $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ && $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$]), 
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            1]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolMonth_$.$blocks$[$blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$].size), 
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            2]), $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$timeManager_$.$daySeries$[7 * 
-            $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$], $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$.$getWeekNumber$()), 
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            3])
+          for(var $JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_783$$ = $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_526$$, $aSb$$inline_784$$ = $aSb$$53$$, $aOffset$$inline_785$$ = $offset$$inline_528$$, $dateInFirstCol$$inline_786$$ = $JSCompiler_alias_NULL$$, $rowCounter$$inline_787$$ = 0, $blocksNumber$$inline_788$$ = $JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_783$$.$blockPoolMonth_$.$blocksNumber_$;$rowCounter$$inline_787$$ < $blocksNumber$$inline_788$$;$rowCounter$$inline_787$$++) {
+            0 < $rowCounter$$inline_787$$ && $aSb$$inline_784$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_785$$]), $aSb$$inline_784$$.append($rowCounter$$inline_787$$), $aSb$$inline_784$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_785$$ + 1]), $aSb$$inline_784$$.append($JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_783$$.$blockPoolMonth_$.$blocks$[$rowCounter$$inline_787$$].size), $aSb$$inline_784$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_785$$ + 
+            2]), $dateInFirstCol$$inline_786$$ = $JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_783$$.$timeManager_$.$daySeries$[7 * $rowCounter$$inline_787$$], $aSb$$inline_784$$.append($dateInFirstCol$$inline_786$$.$getWeekNumber$()), $aSb$$inline_784$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_785$$ + 3])
           }
-          $offset$$inline_512_offset$$inline_517$$ += 3;
+          $offset$$inline_528$$ += 3;
           break;
         case 43:
-          $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-          $aSb$$49$$;
-          $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ = $offset$$inline_512_offset$$inline_517$$;
-          for($aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ = 0;7 > $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$;$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$++) {
-            0 < $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ && $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$]), 
-            6 == $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ && $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append(" weekgrid-col-last"), 
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ + 
-            1])
+          for(var $aSb$$inline_790$$ = $aSb$$53$$, $aOffset$$inline_791$$ = $offset$$inline_528$$, $counter$$inline_792$$ = 0;7 > $counter$$inline_792$$;$counter$$inline_792$$++) {
+            0 < $counter$$inline_792$$ && $aSb$$inline_790$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_791$$]), 6 == $counter$$inline_792$$ && $aSb$$inline_790$$.append(" weekgrid-col-last"), $aSb$$inline_790$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_MONTH_$$[$aOffset$$inline_791$$ + 1])
           }
-          $offset$$inline_512_offset$$inline_517$$++;
+          $offset$$inline_528$$++;
           break;
         case 48:
-          $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$.$buildMonthGridRows_$($aSb$$49$$, $offset$$inline_512_offset$$inline_517$$), $offset$$inline_512_offset$$inline_517$$ += 25
+          $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_526$$.$buildMonthGridRows_$($aSb$$53$$, $offset$$inline_528$$), $offset$$inline_528$$ += 25
       }
     }
   }else {
     if($JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$)) {
-      $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$ = this.$mainPaneBuilder_$;
-      $offset$$inline_512_offset$$inline_517$$ = 0;
-      for($length$$inline_513_length$$inline_518$$ = $rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$.length;++$offset$$inline_512_offset$$inline_517$$ < $length$$inline_513_length$$inline_518$$ - 1;) {
-        switch($aSb$$49$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$offset$$inline_512_offset$$inline_517$$]), $offset$$inline_512_offset$$inline_517$$) {
+      for(var $JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_531$$ = this.$mainPaneBuilder_$, $offset$$inline_533$$ = 0, $length$$inline_534$$ = $rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$.length;++$offset$$inline_533$$ < $length$$inline_534$$ - 1;) {
+        switch($aSb$$53$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$offset$$inline_533$$]), $offset$$inline_533$$) {
           case 3:
-            $aSb$$49$$.append($JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$.$blockPoolAllday_$.$expanded$ ? "goog-zippy-expanded" : "goog-zippy-collapsed");
+            $aSb$$53$$.append($JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_531$$.$blockPoolAllday_$.$expanded$ ? "goog-zippy-expanded" : "goog-zippy-collapsed");
             break;
           case 8:
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-            $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$;
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ = $aSb$$49$$;
-            $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ = $offset$$inline_512_offset$$inline_517$$;
-            $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$timeManager_$.$daySeries$;
-            $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ = 0;
-            $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$gridSize$.width;
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append((100 * ($blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ / $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolAllday_$.$gridContainerSize$.width)).toFixed(4));
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            1]);
-            for(var $blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$ = 0, $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$blocksNumber_$;$blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$ < 
-            $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$;$blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$++) {
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              2]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              3]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append((100 * ($blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ / $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$)).toFixed(4)), 
-              $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ += $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$blocks$[$blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$].size, 
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              4]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append((100 - 100 * ($blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ / $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$)).toFixed(4)), 
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              5]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append(-100 * $blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              6]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append(1 != $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$ ? "dayname-wk-inner" : ""), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              7]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($JSCompiler_StaticMethods_format$$($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$weekDayNameFormatWeek_$, 
-              $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$[$blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$])), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
+            var $JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_797$$ = $JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_531$$, $aSb$$inline_798$$ = $aSb$$53$$, $aOffset$$inline_799$$ = $offset$$inline_533$$, $daySeries$$inline_800$$ = $JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_797$$.$timeManager_$.$daySeries$, $prevColsCumulativeSize$$inline_801$$ = 0, $gridWidth$$inline_802$$ = $JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_797$$.$blockPoolWeek_$.$gridSize$.width;
+            $aSb$$inline_798$$.append((100 * ($gridWidth$$inline_802$$ / $JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_797$$.$blockPoolAllday_$.$gridContainerSize$.width)).toFixed(4));
+            $aSb$$inline_798$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_799$$ + 1]);
+            for(var $colCounter$$inline_803$$ = 0, $blocksNumber$$inline_804$$ = $JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_797$$.$blockPoolWeek_$.$blocksNumber_$;$colCounter$$inline_803$$ < $blocksNumber$$inline_804$$;$colCounter$$inline_803$$++) {
+              $aSb$$inline_798$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_799$$ + 2]), $aSb$$inline_798$$.append($colCounter$$inline_803$$), $aSb$$inline_798$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_799$$ + 3]), $aSb$$inline_798$$.append((100 * ($prevColsCumulativeSize$$inline_801$$ / $gridWidth$$inline_802$$)).toFixed(4)), $prevColsCumulativeSize$$inline_801$$ += $JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_797$$.$blockPoolWeek_$.$blocks$[$colCounter$$inline_803$$].size, 
+              $aSb$$inline_798$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_799$$ + 4]), $aSb$$inline_798$$.append((100 - 100 * ($prevColsCumulativeSize$$inline_801$$ / $gridWidth$$inline_802$$)).toFixed(4)), $aSb$$inline_798$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_799$$ + 5]), $aSb$$inline_798$$.append(-100 * $colCounter$$inline_803$$), $aSb$$inline_798$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_799$$ + 6]), 
+              $aSb$$inline_798$$.append(1 != $blocksNumber$$inline_804$$ ? "dayname-wk-inner" : ""), $aSb$$inline_798$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_799$$ + 7]), $aSb$$inline_798$$.append($JSCompiler_StaticMethods_format$$($JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_797$$.$weekDayNameFormatWeek_$, $daySeries$$inline_800$$[$colCounter$$inline_803$$])), $aSb$$inline_798$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_799$$ + 
               8])
             }
-            $offset$$inline_512_offset$$inline_517$$ += 8;
+            $offset$$inline_533$$ += 8;
             break;
           case 19:
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-            $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$;
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ = $aSb$$49$$;
-            $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ = $offset$$inline_512_offset$$inline_517$$;
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolAllday_$.$expanded$ ? 
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append("mphs-scroll-vert-on ") : $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append("mphs-scroll-vert-off ");
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$expanded$ ? 
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append("mphs-scroll-horz-on") : $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append("mphs-scroll-horz-off");
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            1]);
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolAllday_$.$gridContainerSize$.height);
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            2]);
-            $offset$$inline_512_offset$$inline_517$$ += 2;
+            var $JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_806$$ = $JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_531$$, $aSb$$inline_807$$ = $aSb$$53$$, $aOffset$$inline_808$$ = $offset$$inline_533$$;
+            $JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_806$$.$blockPoolAllday_$.$expanded$ ? $aSb$$inline_807$$.append("mphs-scroll-vert-on ") : $aSb$$inline_807$$.append("mphs-scroll-vert-off ");
+            $JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_806$$.$blockPoolWeek_$.$expanded$ ? $aSb$$inline_807$$.append("mphs-scroll-horz-on") : $aSb$$inline_807$$.append("mphs-scroll-horz-off");
+            $aSb$$inline_807$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_808$$ + 1]);
+            $aSb$$inline_807$$.append($JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_806$$.$blockPoolAllday_$.$gridContainerSize$.height);
+            $aSb$$inline_807$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_808$$ + 2]);
+            $offset$$inline_533$$ += 2;
             break;
           case 23:
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-            $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$;
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ = $aSb$$49$$;
-            $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ = $offset$$inline_512_offset$$inline_517$$;
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolAllday_$.$gridSize$.height);
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            1]);
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append((100 * ($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$gridSize$.width / 
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolAllday_$.$gridContainerSize$.width)).toFixed(4));
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            2]);
-            $offset$$inline_512_offset$$inline_517$$ += 2;
+            var $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_810$$ = $JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_531$$, $aSb$$inline_811$$ = $aSb$$53$$, $aOffset$$inline_812$$ = $offset$$inline_533$$;
+            $aSb$$inline_811$$.append($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_810$$.$blockPoolAllday_$.$gridSize$.height);
+            $aSb$$inline_811$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_812$$ + 1]);
+            $aSb$$inline_811$$.append((100 * ($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_810$$.$blockPoolWeek_$.$gridSize$.width / $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_810$$.$blockPoolAllday_$.$gridContainerSize$.width)).toFixed(4));
+            $aSb$$inline_811$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_812$$ + 2]);
+            $offset$$inline_533$$ += 2;
             break;
           case 26:
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-            $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$;
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ = $aSb$$49$$;
-            $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ = $offset$$inline_512_offset$$inline_517$$;
-            $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ = 0;
-            $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$gridSize$.width;
-            $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ = 0;
-            for($blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$blocksNumber_$;$blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ < 
-            $blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$;$blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$++) {
-              0 < $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ && $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              1]);
-              $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ == $blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$ - 1 && $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append(" weekgrid-col-last");
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              2]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append((100 * ($dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ / $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$)).toFixed(4));
-              $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ += $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$blocks$[$blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$].size;
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              3]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append((100 - 100 * ($dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ / $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$)).toFixed(4));
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              4]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append(-100 * $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              5]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              6]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              7]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              8]);
-              var $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$ = $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$, $aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ = $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              9, $block$$inline_795_block$$inline_925$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolAllday_$.$blocks$[0];
-              $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$]);
-              $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ + 1]);
-              $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$.append(!$block$$inline_795_block$$inline_925$$.$expanded$ && $block$$inline_795_block$$inline_925$$.$couldBeExpanded$ ? "expand-sign-wk-ad-collapsed" : $block$$inline_795_block$$inline_925$$.$expanded$ && $block$$inline_795_block$$inline_925$$.$couldBeCollapsed$ ? "expand-sign-wk-ad-expanded" : "");
-              $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ + 2]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              12]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              13]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              14]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              15]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              16]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              17])
+            for(var $JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_814$$ = $JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_531$$, $aSb$$inline_815$$ = $aSb$$53$$, $aOffset$$inline_816$$ = $offset$$inline_533$$, $prevColsCumulativeSize$$inline_817$$ = 0, $gridWidth$$inline_818$$ = $JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_814$$.$blockPoolWeek_$.$gridSize$.width, $colCounter$$inline_819$$ = 0, $blocksNumber$$inline_820$$ = $JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_814$$.$blockPoolWeek_$.$blocksNumber_$;$colCounter$$inline_819$$ < 
+            $blocksNumber$$inline_820$$;$colCounter$$inline_819$$++) {
+              0 < $colCounter$$inline_819$$ && $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$]);
+              $aSb$$inline_815$$.append($colCounter$$inline_819$$);
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 1]);
+              $colCounter$$inline_819$$ == $blocksNumber$$inline_820$$ - 1 && $aSb$$inline_815$$.append(" weekgrid-col-last");
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 2]);
+              $aSb$$inline_815$$.append((100 * ($prevColsCumulativeSize$$inline_817$$ / $gridWidth$$inline_818$$)).toFixed(4));
+              $prevColsCumulativeSize$$inline_817$$ += $JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_814$$.$blockPoolWeek_$.$blocks$[$colCounter$$inline_819$$].size;
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 3]);
+              $aSb$$inline_815$$.append((100 - 100 * ($prevColsCumulativeSize$$inline_817$$ / $gridWidth$$inline_818$$)).toFixed(4));
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 4]);
+              $aSb$$inline_815$$.append(-100 * $colCounter$$inline_819$$);
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 5]);
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 6]);
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 7]);
+              $aSb$$inline_815$$.append($colCounter$$inline_819$$);
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 8]);
+              var $aSb$$inline_821$$ = $aSb$$inline_815$$, $aOffset$$inline_822$$ = $aOffset$$inline_816$$ + 9, $block$$inline_823$$ = $JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_814$$.$blockPoolAllday_$.$blocks$[0];
+              $aSb$$inline_821$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_822$$]);
+              $aSb$$inline_821$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_822$$ + 1]);
+              $aSb$$inline_821$$.append(!$block$$inline_823$$.$expanded$ && $block$$inline_823$$.$couldBeExpanded$ ? "expand-sign-wk-ad-collapsed" : $block$$inline_823$$.$expanded$ && $block$$inline_823$$.$couldBeCollapsed$ ? "expand-sign-wk-ad-expanded" : "");
+              $aSb$$inline_821$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_822$$ + 2]);
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 12]);
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 13]);
+              $aSb$$inline_815$$.append($colCounter$$inline_819$$);
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 14]);
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 15]);
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 16]);
+              $aSb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_816$$ + 17])
             }
-            $offset$$inline_512_offset$$inline_517$$ += 17;
+            $offset$$inline_533$$ += 17;
             break;
           case 48:
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-            $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$;
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ = $aSb$$49$$;
-            $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ = $offset$$inline_512_offset$$inline_517$$;
-            $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ = 0;
-            $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$gridSize$.width;
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append((100 * ($blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ / $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$gridContainerSize$.width)).toFixed(4));
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            1]);
-            $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ = 0;
-            for($blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$blocksNumber_$;$blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ < 
-            $blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$;$blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$++) {
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              2]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append((100 * ($dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ / $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$)).toFixed(4)), 
-              $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ += $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$blocks$[$blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$].size, 
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              3]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append((100 - 100 * ($dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ / $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$)).toFixed(4)), 
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              4]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append(-100 * $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              5]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              6]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              7]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$blocks$[$blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$].$expanded$ ? 
-              "wk-col-zippy-expanded" : "wk-col-zippy-collapsed"), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              8]), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
+            var $JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_825$$ = $JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_531$$, $aSb$$inline_826$$ = $aSb$$53$$, $aOffset$$inline_827$$ = $offset$$inline_533$$, $prevColsCumulativeSize$$inline_828$$ = 0, $gridWidth$$inline_829$$ = $JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_825$$.$blockPoolWeek_$.$gridSize$.width;
+            $aSb$$inline_826$$.append((100 * ($gridWidth$$inline_829$$ / $JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_825$$.$blockPoolWeek_$.$gridContainerSize$.width)).toFixed(4));
+            $aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_827$$ + 1]);
+            for(var $colCounter$$inline_830$$ = 0, $blocksNumber$$inline_831$$ = $JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_825$$.$blockPoolWeek_$.$blocksNumber_$;$colCounter$$inline_830$$ < $blocksNumber$$inline_831$$;$colCounter$$inline_830$$++) {
+              $aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_827$$ + 2]), $aSb$$inline_826$$.append((100 * ($prevColsCumulativeSize$$inline_828$$ / $gridWidth$$inline_829$$)).toFixed(4)), $prevColsCumulativeSize$$inline_828$$ += $JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_825$$.$blockPoolWeek_$.$blocks$[$colCounter$$inline_830$$].size, $aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_827$$ + 3]), $aSb$$inline_826$$.append((100 - 
+              100 * ($prevColsCumulativeSize$$inline_828$$ / $gridWidth$$inline_829$$)).toFixed(4)), $aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_827$$ + 4]), $aSb$$inline_826$$.append(-100 * $colCounter$$inline_830$$), $aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_827$$ + 5]), $aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_827$$ + 6]), $aSb$$inline_826$$.append($colCounter$$inline_830$$), 
+              $aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_827$$ + 7]), $aSb$$inline_826$$.append($JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_825$$.$blockPoolWeek_$.$blocks$[$colCounter$$inline_830$$].$expanded$ ? "wk-col-zippy-expanded" : "wk-col-zippy-collapsed"), $aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_827$$ + 8]), $aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_827$$ + 
               9])
             }
-            $offset$$inline_512_offset$$inline_517$$ += 9;
+            $offset$$inline_533$$ += 9;
             break;
           case 62:
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-            $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$;
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ = $aSb$$49$$;
-            $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ = $offset$$inline_512_offset$$inline_517$$;
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$gridContainerSize$.height);
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-            1]);
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$expanded$ ? 
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append("mpbs-wk-scroll-horz-on") : $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append("mpbs-wk-scroll-horz-off");
-            $offset$$inline_512_offset$$inline_517$$++;
+            var $JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_833$$ = $JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_531$$, $aSb$$inline_834$$ = $aSb$$53$$, $aOffset$$inline_835$$ = $offset$$inline_533$$;
+            $aSb$$inline_834$$.append($JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_833$$.$blockPoolWeek_$.$gridContainerSize$.height);
+            $aSb$$inline_834$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_835$$ + 1]);
+            $JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_833$$.$blockPoolWeek_$.$expanded$ ? $aSb$$inline_834$$.append("mpbs-wk-scroll-horz-on") : $aSb$$inline_834$$.append("mpbs-wk-scroll-horz-off");
+            $offset$$inline_533$$++;
             break;
           case 66:
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-            $aSb$$49$$;
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append($rflect$cal$TimeMarker$HEAD_PARTS_$$[0]);
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append($JSCompiler_StaticMethods_getPosition_$$($JSCompiler_alias_TRUE$$));
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append($rflect$cal$TimeMarker$HEAD_PARTS_$$[1]);
+            var $aSb$$inline_837$$ = $aSb$$53$$;
+            $aSb$$inline_837$$.append($rflect$cal$TimeMarker$HEAD_PARTS_$$[0]);
+            $aSb$$inline_837$$.append($JSCompiler_StaticMethods_getPosition_$$($JSCompiler_alias_TRUE$$));
+            $aSb$$inline_837$$.append($rflect$cal$TimeMarker$HEAD_PARTS_$$[1]);
             break;
           case 67:
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-            $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$;
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ = $aSb$$49$$;
-            $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ = $offset$$inline_512_offset$$inline_517$$;
-            $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ = 100 * ($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$gridSize$.width / 
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$gridContainerSize$.width);
-            if(1 in $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$cache_$ && 
-            2 in $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$cache_$) {
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$cache_$[1]), 
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$), $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$cache_$[2])
+            var $JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_839$$ = $JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_531$$, $aSb$$inline_840$$ = $aSb$$53$$, $aOffset$$inline_841$$ = $offset$$inline_533$$, $gridRowsWidth$$inline_842$$ = 100 * ($JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_839$$.$blockPoolWeek_$.$gridSize$.width / $JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_839$$.$blockPoolWeek_$.$gridContainerSize$.width);
+            if(1 in $JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_839$$.$cache_$ && 2 in $JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_839$$.$cache_$) {
+              $aSb$$inline_840$$.append($JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_839$$.$cache_$[1]), $aSb$$inline_840$$.append($gridRowsWidth$$inline_842$$), $aSb$$inline_840$$.append($JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_839$$.$cache_$[2])
             }else {
-              $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ = new $goog$string$StringBuffer$$;
-              $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ = new $goog$i18n$DateTimeFormat$$($goog$i18n$DateTimeSymbols_en$$.$TIMEFORMATS$[3]);
-              $blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$ = new $goog$date$DateTime$$;
-              $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$ = new $goog$date$Interval$$(0, 0, 0, 0, 30);
-              $blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$.setHours(0);
-              $blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$.setMinutes(0);
-              $blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$.setSeconds(0);
-              for($aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ = 0;48 > $aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$;$aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$++, $blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$.add($aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$)) {
-                0 < $aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ && $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$]), 
-                $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append("grid-table-row "), 0 == $aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ % 2 ? (47 != $aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ && $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append("grid-table-row-even"), 
-                $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-                1]), $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append("hl-even")) : (47 != $aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ && $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append("grid-table-row-odd"), 
-                $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-                1]), $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append("hl-odd")), $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-                2]), $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append($JSCompiler_StaticMethods_format$$($blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$, $blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$)), 
-                $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-                3])
+              var $sb$$inline_843$$ = new $goog$string$StringBuffer$$, $timeFormat$$inline_844$$ = new $goog$i18n$DateTimeFormat$$($goog$i18n$DateTimeSymbols_en$$.$TIMEFORMATS$[3]), $timeCounter$$inline_845$$ = new $goog$date$DateTime$$, $timeIncrement$$inline_846$$ = new $goog$date$Interval$$(0, 0, 0, 0, 30);
+              $timeCounter$$inline_845$$.setHours(0);
+              $timeCounter$$inline_845$$.setMinutes(0);
+              $timeCounter$$inline_845$$.setSeconds(0);
+              for(var $counter$$inline_847$$ = 0;48 > $counter$$inline_847$$;$counter$$inline_847$$++, $timeCounter$$inline_845$$.add($timeIncrement$$inline_846$$)) {
+                0 < $counter$$inline_847$$ && $sb$$inline_843$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_841$$]), $sb$$inline_843$$.append("grid-table-row "), 0 == $counter$$inline_847$$ % 2 ? (47 != $counter$$inline_847$$ && $sb$$inline_843$$.append("grid-table-row-even"), $sb$$inline_843$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_841$$ + 1]), $sb$$inline_843$$.append("hl-even")) : (47 != $counter$$inline_847$$ && $sb$$inline_843$$.append("grid-table-row-odd"), 
+                $sb$$inline_843$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_841$$ + 1]), $sb$$inline_843$$.append("hl-odd")), $sb$$inline_843$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_841$$ + 2]), $sb$$inline_843$$.append($JSCompiler_StaticMethods_format$$($timeFormat$$inline_844$$, $timeCounter$$inline_845$$)), $sb$$inline_843$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_841$$ + 3])
               }
-              $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              4]);
-              $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              5]);
-              $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              6]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$cache_$[1] = 
-              $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.toString());
-              $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.clear();
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$);
-              $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              7]);
-              for($aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ = 0;48 > $aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$;$aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$++) {
-                $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-                8]), $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append("grid-table-row "), 0 == $aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ % 2 ? 47 != $aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ && $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append("grid-table-row-even") : 
-                47 != $aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ && $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append("grid-table-row-odd"), $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-                9])
+              $sb$$inline_843$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_841$$ + 4]);
+              $sb$$inline_843$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_841$$ + 5]);
+              $sb$$inline_843$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_841$$ + 6]);
+              $aSb$$inline_840$$.append($JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_839$$.$cache_$[1] = $sb$$inline_843$$.toString());
+              $sb$$inline_843$$.clear();
+              $aSb$$inline_840$$.append($gridRowsWidth$$inline_842$$);
+              $sb$$inline_843$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_841$$ + 7]);
+              for($counter$$inline_847$$ = 0;48 > $counter$$inline_847$$;$counter$$inline_847$$++) {
+                $sb$$inline_843$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_841$$ + 8]), $sb$$inline_843$$.append("grid-table-row "), 0 == $counter$$inline_847$$ % 2 ? 47 != $counter$$inline_847$$ && $sb$$inline_843$$.append("grid-table-row-even") : 47 != $counter$$inline_847$$ && $sb$$inline_843$$.append("grid-table-row-odd"), $sb$$inline_843$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_841$$ + 9])
               }
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$cache_$[2] = 
-              $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$.toString())
+              $aSb$$inline_840$$.append($JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_839$$.$cache_$[2] = $sb$$inline_843$$.toString())
             }
-            $offset$$inline_512_offset$$inline_517$$ += 9;
+            $offset$$inline_533$$ += 9;
             break;
           case 78:
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-            $aSb$$49$$;
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ = $offset$$inline_512_offset$$inline_517$$;
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append(100 * 
-            ($JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$.$blockPoolWeek_$.$gridSize$.width / $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$.$blockPoolWeek_$.$gridContainerSize$.width));
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ + 
-            1]);
-            $offset$$inline_512_offset$$inline_517$$++;
+            var $aSb$$inline_850$$ = $aSb$$53$$, $aOffset$$inline_851$$ = $offset$$inline_533$$;
+            $aSb$$inline_850$$.append(100 * ($JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_531$$.$blockPoolWeek_$.$gridSize$.width / $JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_531$$.$blockPoolWeek_$.$gridContainerSize$.width));
+            $aSb$$inline_850$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_851$$ + 1]);
+            $offset$$inline_533$$++;
             break;
           case 80:
-            $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$ = 
-            $JSCompiler_StaticMethods_buildBodyInternalMonth_$self$$inline_510_JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_515$$;
-            $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$ = $aSb$$49$$;
-            $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ = $offset$$inline_512_offset$$inline_517$$;
-            $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ = 0;
-            $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$gridSize$.width;
-            $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ = 0;
-            for($blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$blocksNumber_$;$blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ < 
-            $blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$;$blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$++) {
-              0 < $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ && $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              1]);
-              $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$ == $blocksNumber$$inline_792_blocksNumber$$inline_803_blocksNumber$$inline_831_colCounter$$inline_775_timeCounter$$inline_817$$ - 1 && $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append(" weekgrid-col-last");
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              2]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append((100 * ($dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ / $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$)).toFixed(4));
-              $dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ += $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$blocks$[$blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$].size;
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              3]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append((100 - 100 * ($dateInFirstCol$$inline_758_dayNameNumber$$inline_737_daySeries$$inline_772_gridRowsWidth$$inline_814_prevColsCumulativeSize$$inline_789_prevColsCumulativeSize$$inline_800_prevColsCumulativeSize$$inline_828_rowCounter$$inline_746$$ / $blocksNumber$$inline_747_counter$$inline_738_gridWidth$$inline_790_gridWidth$$inline_801_gridWidth$$inline_829_prevColsCumulativeSize$$inline_773_rowCounter$$inline_759_sb$$inline_815$$)).toFixed(4));
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              4]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append(-100 * $blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              5]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              6]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              7]);
-              $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$timeManager_$.$currentDay_$ && 
-              $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$timeManager_$.$currentDay_$.$equals$($JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$timeManager_$.$daySeries$[$blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$], 
-              7) && ($aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              8]), $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$ = $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$, $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$.append($rflect$cal$TimeMarker$HEAD_PARTS_$$[2]), $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$.append($JSCompiler_StaticMethods_getPosition_$$($JSCompiler_alias_FALSE$$)), 
-              $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$.append($rflect$cal$TimeMarker$HEAD_PARTS_$$[3]));
-              for(var $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$ = $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$, $aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ = $aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              9, $block$$inline_795_block$$inline_925$$ = $JSCompiler_StaticMethods_buildAllDayGrid_$self$$inline_782_JSCompiler_StaticMethods_buildDayNamesWeek_$self$$inline_769_JSCompiler_StaticMethods_buildHoursAndGridRows_$self$$inline_811_JSCompiler_StaticMethods_buildMnRowZippies_$self$$inline_743_JSCompiler_StaticMethods_buildScrollableAllday_$self$$inline_778_JSCompiler_StaticMethods_buildScrollableWeek_$self$$inline_805_JSCompiler_StaticMethods_buildWeekColZippies_$self$$inline_797_JSCompiler_StaticMethods_buildWeekGridAdCols_$self$$inline_786_JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_825_JSCompiler_StaticMethods_buildWeekNumbers_$self$$inline_755_aSb$$inline_732_aSb$$inline_734_aSb$$inline_750_aSb$$inline_762_aSb$$inline_809_aSb$$inline_822$$.$blockPoolWeek_$.$blocks$[$blocksNumber$$inline_760_colCounter$$inline_791_colCounter$$inline_802_colCounter$$inline_830_gridWidth$$inline_774_timeFormat$$inline_816$$], 
-              $counter$$inline_926$$ = 0;6 > $counter$$inline_926$$;$counter$$inline_926$$++) {
-                $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$]), $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$.append(!$block$$inline_795_block$$inline_925$$.$expanded$ && $block$$inline_795_block$$inline_925$$.$couldBeExpanded$ ? "expand-sign-wk-collapsed" : $block$$inline_795_block$$inline_925$$.$expanded$ && 
-                $block$$inline_795_block$$inline_925$$.$couldBeCollapsed$ ? "expand-sign-wk-expanded" : ""), $aSb$$inline_793_aSb$$inline_919_aSb$$inline_922_blocksNumber$$inline_776_timeIncrement$$inline_818$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_794_aOffset$$inline_923_counter$$inline_819$$ + 1])
+            for(var $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$ = $JSCompiler_StaticMethods_buildBodyInternalWeek_$self$$inline_531$$, $aSb$$inline_854$$ = $aSb$$53$$, $aOffset$$inline_855$$ = $offset$$inline_533$$, $prevColsCumulativeSize$$inline_856$$ = 0, $gridWidth$$inline_857$$ = $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$blockPoolWeek_$.$gridSize$.width, $colCounter$$inline_858$$ = 0, $blocksNumber$$inline_859$$ = $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$blockPoolWeek_$.$blocksNumber_$;$colCounter$$inline_858$$ < 
+            $blocksNumber$$inline_859$$;$colCounter$$inline_858$$++) {
+              0 < $colCounter$$inline_858$$ && $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$]);
+              $aSb$$inline_854$$.append($colCounter$$inline_858$$);
+              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 1]);
+              $colCounter$$inline_858$$ == $blocksNumber$$inline_859$$ - 1 && $aSb$$inline_854$$.append(" weekgrid-col-last");
+              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 2]);
+              $aSb$$inline_854$$.append((100 * ($prevColsCumulativeSize$$inline_856$$ / $gridWidth$$inline_857$$)).toFixed(4));
+              $prevColsCumulativeSize$$inline_856$$ += $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$blockPoolWeek_$.$blocks$[$colCounter$$inline_858$$].size;
+              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 3]);
+              $aSb$$inline_854$$.append((100 - 100 * ($prevColsCumulativeSize$$inline_856$$ / $gridWidth$$inline_857$$)).toFixed(4));
+              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 4]);
+              $aSb$$inline_854$$.append(-100 * $colCounter$$inline_858$$);
+              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 5]);
+              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 6]);
+              $aSb$$inline_854$$.append($colCounter$$inline_858$$);
+              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 7]);
+              if($JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$timeManager_$.$currentDay_$ && $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$timeManager_$.$currentDay_$.$equals$($JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$timeManager_$.$daySeries$[$colCounter$$inline_858$$], 7)) {
+                $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 8]);
+                var $aSb$$inline_947$$ = $aSb$$inline_854$$;
+                $aSb$$inline_947$$.append($rflect$cal$TimeMarker$HEAD_PARTS_$$[2]);
+                $aSb$$inline_947$$.append($JSCompiler_StaticMethods_getPosition_$$($JSCompiler_alias_FALSE$$));
+                $aSb$$inline_947$$.append($rflect$cal$TimeMarker$HEAD_PARTS_$$[3])
               }
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              11]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              12]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              13]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              14]);
-              $aOffset$$inline_735_aOffset$$inline_763_aOffset$$inline_823_aSb$$inline_744_aSb$$inline_756_aSb$$inline_770_aSb$$inline_779_aSb$$inline_783_aSb$$inline_787_aSb$$inline_798_aSb$$inline_806_aSb$$inline_812_aSb$$inline_826$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_745_aOffset$$inline_757_aOffset$$inline_771_aOffset$$inline_780_aOffset$$inline_784_aOffset$$inline_788_aOffset$$inline_799_aOffset$$inline_807_aOffset$$inline_813_aOffset$$inline_827_counter$$inline_764_dayNamesFirstNumber$$inline_736$$ + 
-              15])
+              for(var $aSb$$inline_950$$ = $aSb$$inline_854$$, $aOffset$$inline_951$$ = $aOffset$$inline_855$$ + 9, $block$$inline_953$$ = $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$blockPoolWeek_$.$blocks$[$colCounter$$inline_858$$], $counter$$inline_954$$ = 0;6 > $counter$$inline_954$$;$counter$$inline_954$$++) {
+                $aSb$$inline_950$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_951$$]), $aSb$$inline_950$$.append(!$block$$inline_953$$.$expanded$ && $block$$inline_953$$.$couldBeExpanded$ ? "expand-sign-wk-collapsed" : $block$$inline_953$$.$expanded$ && $block$$inline_953$$.$couldBeCollapsed$ ? "expand-sign-wk-expanded" : ""), $aSb$$inline_950$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_951$$ + 1])
+              }
+              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 11]);
+              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 12]);
+              for(var $aSb$$inline_957$$ = $aSb$$inline_854$$, $aOffset$$inline_958$$ = $aOffset$$inline_855$$ + 14, $aEventManager$$inline_960$$ = $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$eventManager_$, $blobs$$inline_961$$ = $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$blockPoolWeek_$.$blocks$[$colCounter$$inline_858$$].$blobs$, $blobCounter$$inline_962$$ = 0, $blobLength$$inline_963$$ = $blobs$$inline_961$$.length;$blobCounter$$inline_962$$ < $blobLength$$inline_963$$;$blobCounter$$inline_962$$++) {
+                for(var $blob$$inline_964$$ = $blobs$$inline_961$$[$blobCounter$$inline_962$$].blob, $totalCols$$inline_965$$ = $blobs$$inline_961$$[$blobCounter$$inline_962$$].$totalCols$, $blobEntryCounter$$inline_966$$ = 0, $blobEntriesLength$$inline_967$$ = $blob$$inline_964$$.length;$blobEntryCounter$$inline_966$$ < $blobEntriesLength$$inline_967$$;$blobEntryCounter$$inline_966$$++) {
+                  var $blobEntry$$inline_968$$ = $blob$$inline_964$$[$blobEntryCounter$$inline_966$$], $aSb$$inline_969$$ = $aSb$$inline_957$$, $aOffset$$inline_970$$ = $aOffset$$inline_958$$, $aChip$$inline_971$$ = $blobEntry$$inline_968$$.$chip$, $aStartCol$$inline_972$$ = $blobEntry$$inline_968$$.$startCol$, $aColSpan$$inline_973$$ = $blobEntry$$inline_968$$.colSpan, $pixelStart$$inline_974$$ = 24 * $aChip$$inline_971$$.start / 30, $pixelHeight$$inline_975$$ = 24 * ($aChip$$inline_971$$.end - 
+                  $aChip$$inline_971$$.start) / 30, $widthQuant$$inline_976$$ = 100 / $totalCols$$inline_965$$, $event$$inline_977$$ = $aEventManager$$inline_960$$.$events_$[$aChip$$inline_971$$.$eventId$];
+                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$]);
+                  $aSb$$inline_969$$.append($pixelStart$$inline_974$$);
+                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 1]);
+                  $aSb$$inline_969$$.append($widthQuant$$inline_976$$ * $aStartCol$$inline_972$$);
+                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 2]);
+                  $aSb$$inline_969$$.append(100 - $widthQuant$$inline_976$$ * ($aStartCol$$inline_972$$ + $aColSpan$$inline_973$$));
+                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 3]);
+                  $aSb$$inline_969$$.append($pixelHeight$$inline_975$$);
+                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 4]);
+                  $aSb$$inline_969$$.append(-$pixelHeight$$inline_975$$);
+                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 5]);
+                  $aSb$$inline_969$$.append("");
+                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 6]);
+                  $rflect$cal$MainPaneBuilder$buildWeekChipsTimeLabel_$$($aSb$$inline_969$$, $aChip$$inline_971$$, $JSCompiler_alias_TRUE$$);
+                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 7]);
+                  $rflect$cal$MainPaneBuilder$buildWeekChipsTimeLabel_$$($aSb$$inline_969$$, $aChip$$inline_971$$, $JSCompiler_alias_FALSE$$);
+                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 8]);
+                  $aSb$$inline_969$$.append($event$$inline_977$$.summary);
+                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 9])
+                }
+              }
+              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 23]);
+              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 24]);
+              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 25])
             }
-            $offset$$inline_512_offset$$inline_517$$ += 15
+            $offset$$inline_533$$ += 25
         }
       }
     }
@@ -4042,19 +3907,19 @@ $JSCompiler_prototypeAlias$$.$enterDocument$ = function $$JSCompiler_prototypeAl
   $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mousedown", this.$onMouseDown_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "selectstart", this.$onSelectStart_$, $JSCompiler_alias_FALSE$$, this), document, "mousemove", this.$onMouseMove_$, $JSCompiler_alias_FALSE$$, this), document, "mouseup", this.$onMouseUp_$, $JSCompiler_alias_FALSE$$, this);
   this.$timeMarker_$.start()
 };
-$JSCompiler_prototypeAlias$$.$onClick_$ = function $$JSCompiler_prototypeAlias$$$$onClick_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$) {
-  var $target$$48$$ = $JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$.target, $id$$12$$ = $target$$48$$.id, $className$$34$$ = $target$$48$$.className, $JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$ = $JSCompiler_alias_FALSE$$, 
-  $day$$inline_526_index$$65_index$$inline_525$$ = 0;
-  $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) ? /mn\-zippy\-row\d{1}/.test($id$$12$$) ? ($day$$inline_526_index$$65_index$$inline_525$$ = /\d{1}/.exec($id$$12$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$ = this.$blockManager_$.$blockPoolMonth$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$.$blocks$[$day$$inline_526_index$$65_index$$inline_525$$].$expanded$ = 
-  !$JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$.$blocks$[$day$$inline_526_index$$65_index$$inline_525$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$), this.$blockManager_$.$blockPoolMonth$.$expanded$ || 
-  (this.$blockManager_$.$blockPoolMonth$.scrollTop = 0), $JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$34$$) ? $JSCompiler_StaticMethods_onDaynumLabelClick_$$(this, $id$$12$$) : $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $className$$34$$) && ($day$$inline_526_index$$65_index$$inline_525$$ = 
-  $rflect$string$getNumericIndex$$($target$$48$$.parentNode.id), $_log$$("index", $day$$inline_526_index$$65_index$$inline_525$$), ($day$$inline_526_index$$65_index$$inline_525$$ = this.$timeManager_$.$daySeries$[7 * $day$$inline_526_index$$65_index$$inline_525$$]) && $JSCompiler_StaticMethods_switchView_$$(this, $day$$inline_526_index$$65_index$$inline_525$$, 3)) : $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) && (/wk\-zippy\-col\d{1}/.test($id$$12$$) ? ($day$$inline_526_index$$65_index$$inline_525$$ = 
-  /\d{1}/.exec($id$$12$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$ = this.$blockManager_$.$blockPoolWeek$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$.$blocks$[$day$$inline_526_index$$65_index$$inline_525$$].$expanded$ = 
-  !$JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$.$blocks$[$day$$inline_526_index$$65_index$$inline_525$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$), this.$blockManager_$.$blockPoolWeek$.$expanded$ || 
-  (this.$blockManager_$.$blockPoolWeek$.scrollLeft = 0), $JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : /daynames\-zippy/.test($id$$12$$) ? ($JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$ = 
-  this.$blockManager_$.$blockPoolAllday$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$.$blocks$[0].$expanded$ = !$JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$.$blocks$[0].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$), 
-  $JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$34$$) && $JSCompiler_StaticMethods_onDaynumLabelClick_$$(this, $target$$48$$.parentNode.id));
-  $JSCompiler_StaticMethods_toggleBlock$self$$inline_520_JSCompiler_StaticMethods_toggleBlock$self$$inline_528_JSCompiler_StaticMethods_toggleBlock$self$$inline_531_aEvent$$12_zippyClicked$$ && (this.$updateBeforeRedraw$(), this.$updateByRedraw$())
+$JSCompiler_prototypeAlias$$.$onClick_$ = function $$JSCompiler_prototypeAlias$$$$onClick_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$) {
+  var $target$$48$$ = $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.target, $id$$12$$ = $target$$48$$.id, $className$$34$$ = $target$$48$$.className, $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = $JSCompiler_alias_FALSE$$, 
+  $day$$inline_542_index$$65_index$$inline_541$$ = 0;
+  $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) ? /mn\-zippy\-row\d{1}/.test($id$$12$$) ? ($day$$inline_542_index$$65_index$$inline_541$$ = /\d{1}/.exec($id$$12$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = this.$blockManager_$.$blockPoolMonth$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.$blocks$[$day$$inline_542_index$$65_index$$inline_541$$].$expanded$ = 
+  !$JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.$blocks$[$day$$inline_542_index$$65_index$$inline_541$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$), this.$blockManager_$.$blockPoolMonth$.$expanded$ || 
+  (this.$blockManager_$.$blockPoolMonth$.scrollTop = 0), $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$34$$) ? $JSCompiler_StaticMethods_onDaynumLabelClick_$$(this, $id$$12$$) : $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $className$$34$$) && ($day$$inline_542_index$$65_index$$inline_541$$ = 
+  $rflect$string$getNumericIndex$$($target$$48$$.parentNode.id), $_log$$("index", $day$$inline_542_index$$65_index$$inline_541$$), ($day$$inline_542_index$$65_index$$inline_541$$ = this.$timeManager_$.$daySeries$[7 * $day$$inline_542_index$$65_index$$inline_541$$]) && $JSCompiler_StaticMethods_switchView_$$(this, $day$$inline_542_index$$65_index$$inline_541$$, 3)) : $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) && (/wk\-zippy\-col\d{1}/.test($id$$12$$) ? ($day$$inline_542_index$$65_index$$inline_541$$ = 
+  /\d{1}/.exec($id$$12$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = this.$blockManager_$.$blockPoolWeek$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.$blocks$[$day$$inline_542_index$$65_index$$inline_541$$].$expanded$ = 
+  !$JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.$blocks$[$day$$inline_542_index$$65_index$$inline_541$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$), this.$blockManager_$.$blockPoolWeek$.$expanded$ || 
+  (this.$blockManager_$.$blockPoolWeek$.scrollLeft = 0), $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : /daynames\-zippy/.test($id$$12$$) ? ($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = 
+  this.$blockManager_$.$blockPoolAllday$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.$blocks$[0].$expanded$ = !$JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.$blocks$[0].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$), 
+  $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$34$$) && $JSCompiler_StaticMethods_onDaynumLabelClick_$$(this, $target$$48$$.parentNode.id));
+  $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ && (this.$updateBeforeRedraw$(), this.$updateByRedraw$())
 };
 $JSCompiler_prototypeAlias$$.$onMouseOut_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOut_$$($aEvent$$13_className$$35$$) {
   $aEvent$$13_className$$35$$ = $aEvent$$13_className$$35$$.target.className;
@@ -4064,14 +3929,14 @@ $JSCompiler_prototypeAlias$$.$onMouseOver_$ = function $$JSCompiler_prototypeAli
   var $aEvent$$14_target$$50$$ = $aEvent$$14_target$$50$$.target, $className$$36$$ = $aEvent$$14_target$$50$$.className;
   $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$36$$) || $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $className$$36$$) ? $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $aEvent$$14_target$$50$$, "label-underlined") : $rflect$string$buildClassNameRe$$("zippy").test($className$$36$$) ? $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $aEvent$$14_target$$50$$, "zippy-highlighted") : $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $JSCompiler_alias_NULL$$)
 };
-function $JSCompiler_StaticMethods_onDaynumLabelClick_$$($JSCompiler_StaticMethods_onDaynumLabelClick_$self$$, $aId$$2$$) {
-  var $day$$4_index$$66$$ = $rflect$string$getNumericIndex$$($aId$$2$$);
+function $JSCompiler_StaticMethods_onDaynumLabelClick_$$($JSCompiler_StaticMethods_onDaynumLabelClick_$self$$, $aId$$3$$) {
+  var $day$$4_index$$66$$ = $rflect$string$getNumericIndex$$($aId$$3$$);
   $_log$$("index", $day$$4_index$$66$$);
   ($day$$4_index$$66$$ = $JSCompiler_StaticMethods_onDaynumLabelClick_$self$$.$timeManager_$.$daySeries$[$day$$4_index$$66$$]) && $JSCompiler_StaticMethods_switchView_$$($JSCompiler_StaticMethods_onDaynumLabelClick_$self$$, $day$$4_index$$66$$, 1)
 }
-function $JSCompiler_StaticMethods_switchView_$$($JSCompiler_StaticMethods_switchView_$self$$, $aDate$$9_opt_date$$inline_846$$, $aType$$) {
-  $aDate$$9_opt_date$$inline_846$$ = new $goog$date$DateTime$$($aDate$$9_opt_date$$inline_846$$.getYear(), $aDate$$9_opt_date$$inline_846$$.getMonth(), $aDate$$9_opt_date$$inline_846$$.getDate());
-  $JSCompiler_StaticMethods_switchView_$self$$.$timeManager_$.$basis$ = $aDate$$9_opt_date$$inline_846$$ || new $goog$date$Date$$;
+function $JSCompiler_StaticMethods_switchView_$$($JSCompiler_StaticMethods_switchView_$self$$, $aDate$$9_opt_date$$inline_874$$, $aType$$) {
+  $aDate$$9_opt_date$$inline_874$$ = new $goog$date$DateTime$$($aDate$$9_opt_date$$inline_874$$.getYear(), $aDate$$9_opt_date$$inline_874$$.getMonth(), $aDate$$9_opt_date$$inline_874$$.getDate());
+  $JSCompiler_StaticMethods_switchView_$self$$.$timeManager_$.$basis$ = $aDate$$9_opt_date$$inline_874$$ || new $goog$date$Date$$;
   $JSCompiler_StaticMethods_showView$$($JSCompiler_StaticMethods_switchView_$self$$.$viewManager_$, $aType$$, $JSCompiler_StaticMethods_switchView_$self$$)
 }
 function $JSCompiler_StaticMethods_isWeekGrid_$$($JSCompiler_StaticMethods_isWeekGrid_$self$$, $aClassName$$9$$) {
@@ -4118,14 +3983,15 @@ $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototype
   $JSCompiler_StaticMethods_removeScrollListeners_$$(this);
   this.$containerSizeMonitor_$ = this.$timeManager_$ = this.$viewManager_$ = $JSCompiler_alias_NULL$$
 };
-function $rflect$cal$MainBody$$($aViewManager$$13$$, $aTimeManager$$10$$, $aContainerSizeMonitor$$5$$, $aBlockManager$$1$$) {
+function $rflect$cal$MainBody$$($aViewManager$$13$$, $aTimeManager$$10$$, $aEventManager$$5$$, $aContainerSizeMonitor$$5$$, $aBlockManager$$1$$) {
   $goog$ui$Component$$.call(this, $JSCompiler_alias_VOID$$);
   this.$viewManager_$ = $aViewManager$$13$$;
   this.$timeManager_$ = $aTimeManager$$10$$;
+  this.$eventManager_$ = $aEventManager$$5$$;
   this.$containerSizeMonitor_$ = $aContainerSizeMonitor$$5$$;
   this.$blockManager_$ = $aBlockManager$$1$$;
   $JSCompiler_StaticMethods_addChild$$(this, this.$topPane_$ = new $rflect$cal$TopPane$$(this.$viewManager_$, this.$timeManager_$));
-  $JSCompiler_StaticMethods_addChild$$(this, this.$mainPane_$ = new $rflect$cal$MainPane$$(this.$viewManager_$, this.$timeManager_$, this.$containerSizeMonitor_$, this.$blockManager_$));
+  $JSCompiler_StaticMethods_addChild$$(this, this.$mainPane_$ = new $rflect$cal$MainPane$$(this.$viewManager_$, this.$timeManager_$, this.$eventManager_$, this.$containerSizeMonitor_$, this.$blockManager_$));
   $JSCompiler_StaticMethods_addChild$$(this, this.$miniCal$ = new $rflect$cal$MiniCal$$(this.$viewManager_$, this.$timeManager_$));
   $JSCompiler_StaticMethods_addChild$$(this, this.$calSelector_$ = new $rflect$cal$CalSelector$$(this.$viewManager_$, this.$containerSizeMonitor_$));
   $JSCompiler_StaticMethods_addChild$$(this, this.$taskSelector_$ = new $rflect$cal$TaskSelector$$(this.$viewManager_$, this.$containerSizeMonitor_$));
@@ -4145,23 +4011,23 @@ $JSCompiler_prototypeAlias$$.$decorateInternal$ = function $$JSCompiler_prototyp
   $rflect$cal$MainBody$$.$superClass_$.$decorateInternal$.call(this, $aElement$$5$$, $opt_doNotBuildBody$$5$$);
   $opt_doNotBuildBody$$5$$ || (this.$getElement$().id = "main-container", this.$getElement$().className = "main-container")
 };
-$JSCompiler_prototypeAlias$$.$buildBodyInternal$ = function $$JSCompiler_prototypeAlias$$$$buildBodyInternal$$($aSb$$50$$) {
+$JSCompiler_prototypeAlias$$.$buildBodyInternal$ = function $$JSCompiler_prototypeAlias$$$$buildBodyInternal$$($aSb$$54$$) {
   for(var $counter$$23$$ = 1, $length$$37$$ = $rflect$cal$MainBody$HTML_PARTS_$$.length - 1;$counter$$23$$ < $length$$37$$;$counter$$23$$++) {
-    switch($aSb$$50$$.append($rflect$cal$MainBody$HTML_PARTS_$$[$counter$$23$$]), $counter$$23$$) {
+    switch($aSb$$54$$.append($rflect$cal$MainBody$HTML_PARTS_$$[$counter$$23$$]), $counter$$23$$) {
       case 2:
-        $JSCompiler_StaticMethods_buildBody$$(this.$topPane_$, $aSb$$50$$);
+        $JSCompiler_StaticMethods_buildBody$$(this.$topPane_$, $aSb$$54$$);
         break;
       case 7:
-        $JSCompiler_StaticMethods_buildBody$$(this.$miniCal$, $aSb$$50$$);
+        $JSCompiler_StaticMethods_buildBody$$(this.$miniCal$, $aSb$$54$$);
         break;
       case 9:
-        $JSCompiler_StaticMethods_buildBody$$(this.$calSelector_$, $aSb$$50$$);
+        $JSCompiler_StaticMethods_buildBody$$(this.$calSelector_$, $aSb$$54$$);
         break;
       case 11:
-        $JSCompiler_StaticMethods_buildBody$$(this.$taskSelector_$, $aSb$$50$$);
+        $JSCompiler_StaticMethods_buildBody$$(this.$taskSelector_$, $aSb$$54$$);
         break;
       case 17:
-        $JSCompiler_StaticMethods_buildBody$$(this.$mainPane_$, $aSb$$50$$)
+        $JSCompiler_StaticMethods_buildBody$$(this.$mainPane_$, $aSb$$54$$)
     }
   }
 };
@@ -4208,21 +4074,21 @@ $JSCompiler_prototypeAlias$$.$checkForSizeChange_$ = function $$JSCompiler_proto
   var $size$$14$$ = $goog$dom$getViewportSize_$$(this.$window_$ || window);
   $goog$math$Size$equals$$($size$$14$$, this.$size_$) || (this.$size_$ = $size$$14$$, this.dispatchEvent("resize"))
 };
-function $rflect$cal$ContainerSizeMonitor$$($aViewManager$$14_outerDiv$$inline_543$$, $aContainer$$2_innerDiv$$inline_544_width$$inline_545$$, $opt_window$$5_w$$inline_849$$) {
-  $goog$dom$ViewportSizeMonitor$$.call(this, $opt_window$$5_w$$inline_849$$);
-  this.$container_$ = $aContainer$$2_innerDiv$$inline_544_width$$inline_545$$;
+function $rflect$cal$ContainerSizeMonitor$$($aViewManager$$14_outerDiv$$inline_559$$, $aContainer$$2_innerDiv$$inline_560_width$$inline_561$$, $opt_window$$5_w$$inline_877$$) {
+  $goog$dom$ViewportSizeMonitor$$.call(this, $opt_window$$5_w$$inline_877$$);
+  this.$container_$ = $aContainer$$2_innerDiv$$inline_560_width$$inline_561$$;
   this.$containerSize_$ = new $goog$math$Size$$(this.$container_$.clientWidth, this.$container_$.clientHeight);
-  $aViewManager$$14_outerDiv$$inline_543$$ = document.createElement("div");
-  $aViewManager$$14_outerDiv$$inline_543$$.style.cssText = "visiblity:hidden;overflow:auto;position:absolute;top:0;width:100px;height:100px";
-  var $aContainer$$2_innerDiv$$inline_544_width$$inline_545$$ = document.createElement("div"), $opt_window$$5_w$$inline_849$$ = "200px", $h$$inline_850$$;
-  $opt_window$$5_w$$inline_849$$ instanceof $goog$math$Size$$ ? ($h$$inline_850$$ = $opt_window$$5_w$$inline_849$$.height, $opt_window$$5_w$$inline_849$$ = $opt_window$$5_w$$inline_849$$.width) : $h$$inline_850$$ = "200px";
-  $aContainer$$2_innerDiv$$inline_544_width$$inline_545$$.style.width = $goog$style$getPixelStyleValue_$$($opt_window$$5_w$$inline_849$$);
-  $aContainer$$2_innerDiv$$inline_544_width$$inline_545$$.style.height = $goog$style$getPixelStyleValue_$$($h$$inline_850$$);
-  $aViewManager$$14_outerDiv$$inline_543$$.appendChild($aContainer$$2_innerDiv$$inline_544_width$$inline_545$$);
-  document.body.appendChild($aViewManager$$14_outerDiv$$inline_543$$);
-  $aContainer$$2_innerDiv$$inline_544_width$$inline_545$$ = $aViewManager$$14_outerDiv$$inline_543$$.offsetWidth - $aViewManager$$14_outerDiv$$inline_543$$.clientWidth;
-  $goog$dom$removeNode$$($aViewManager$$14_outerDiv$$inline_543$$);
-  this.$scrollbarWidth$ = $aContainer$$2_innerDiv$$inline_544_width$$inline_545$$
+  $aViewManager$$14_outerDiv$$inline_559$$ = document.createElement("div");
+  $aViewManager$$14_outerDiv$$inline_559$$.style.cssText = "visiblity:hidden;overflow:auto;position:absolute;top:0;width:100px;height:100px";
+  var $aContainer$$2_innerDiv$$inline_560_width$$inline_561$$ = document.createElement("div"), $opt_window$$5_w$$inline_877$$ = "200px", $h$$inline_878$$;
+  $opt_window$$5_w$$inline_877$$ instanceof $goog$math$Size$$ ? ($h$$inline_878$$ = $opt_window$$5_w$$inline_877$$.height, $opt_window$$5_w$$inline_877$$ = $opt_window$$5_w$$inline_877$$.width) : $h$$inline_878$$ = "200px";
+  $aContainer$$2_innerDiv$$inline_560_width$$inline_561$$.style.width = $goog$style$getPixelStyleValue_$$($opt_window$$5_w$$inline_877$$);
+  $aContainer$$2_innerDiv$$inline_560_width$$inline_561$$.style.height = $goog$style$getPixelStyleValue_$$($h$$inline_878$$);
+  $aViewManager$$14_outerDiv$$inline_559$$.appendChild($aContainer$$2_innerDiv$$inline_560_width$$inline_561$$);
+  document.body.appendChild($aViewManager$$14_outerDiv$$inline_559$$);
+  $aContainer$$2_innerDiv$$inline_560_width$$inline_561$$ = $aViewManager$$14_outerDiv$$inline_559$$.offsetWidth - $aViewManager$$14_outerDiv$$inline_559$$.clientWidth;
+  $goog$dom$removeNode$$($aViewManager$$14_outerDiv$$inline_559$$);
+  this.$scrollbarWidth$ = $aContainer$$2_innerDiv$$inline_560_width$$inline_561$$
 }
 $goog$inherits$$($rflect$cal$ContainerSizeMonitor$$, $goog$dom$ViewportSizeMonitor$$);
 $JSCompiler_prototypeAlias$$ = $rflect$cal$ContainerSizeMonitor$$.prototype;
@@ -4232,8 +4098,8 @@ $JSCompiler_prototypeAlias$$.$getSize$ = function $$JSCompiler_prototypeAlias$$$
   return this.$containerSize_$ ? this.$containerSize_$.$clone$() : $JSCompiler_alias_NULL$$
 };
 $JSCompiler_prototypeAlias$$.$checkForSizeChange_$ = function $$JSCompiler_prototypeAlias$$$$checkForSizeChange_$$($aNotActualResize$$) {
-  var $containerSize$$inline_548_viewportSize$$ = $goog$dom$getViewportSize_$$(this.$window_$ || window);
-  if(!$goog$math$Size$equals$$($containerSize$$inline_548_viewportSize$$, this.$size_$) && (this.$size_$ = $containerSize$$inline_548_viewportSize$$, $containerSize$$inline_548_viewportSize$$ = new $goog$math$Size$$(this.$container_$.clientWidth, this.$container_$.clientHeight), $goog$math$Size$equals$$($containerSize$$inline_548_viewportSize$$, this.$containerSize_$) || (this.$containerSize_$ = $containerSize$$inline_548_viewportSize$$, this.dispatchEvent("resize")), this.$windowSizePollInterval_$ == 
+  var $containerSize$$inline_564_viewportSize$$ = $goog$dom$getViewportSize_$$(this.$window_$ || window);
+  if(!$goog$math$Size$equals$$($containerSize$$inline_564_viewportSize$$, this.$size_$) && (this.$size_$ = $containerSize$$inline_564_viewportSize$$, $containerSize$$inline_564_viewportSize$$ = new $goog$math$Size$$(this.$container_$.clientWidth, this.$container_$.clientHeight), $goog$math$Size$equals$$($containerSize$$inline_564_viewportSize$$, this.$containerSize_$) || (this.$containerSize_$ = $containerSize$$inline_564_viewportSize$$, this.dispatchEvent("resize")), this.$windowSizePollInterval_$ == 
   $JSCompiler_alias_NULL$$ && !$aNotActualResize$$)) {
     clearTimeout(this.$windowSizePollTimeout_$), this.$windowSizePollTimeout_$ = setTimeout($goog$bind$$(this.$checkForSizeChange_$, this, $JSCompiler_alias_TRUE$$), $goog$dom$ViewportSizeMonitor$WINDOW_SIZE_POLL_RATE$$)
   }
@@ -4251,7 +4117,7 @@ function $rflect$cal$ViewManager$$() {
   this.$containerSizeMonitor_$ = new $rflect$cal$ContainerSizeMonitor$$(0, document.body);
   this.$eventManager_$ = new $rflect$cal$events$EventManager$$(this, this.$timeManager$);
   this.$blockManager_$ = new $rflect$cal$BlockManager$$(this, this.$timeManager$, this.$eventManager_$);
-  this.$mainBody_$ = new $rflect$cal$MainBody$$(this, this.$timeManager$, this.$containerSizeMonitor_$, this.$blockManager_$);
+  this.$mainBody_$ = new $rflect$cal$MainBody$$(this, this.$timeManager$, this.$eventManager_$, this.$containerSizeMonitor_$, this.$blockManager_$);
   $_inspect$$("mainBody_", this.$mainBody_$);
   $_inspect$$("timeManager", this.$timeManager$);
   $_inspect$$("blockManager", this.$blockManager_$);
@@ -4309,14 +4175,14 @@ $JSCompiler_prototypeAlias$$.$onDateDrag_$ = function $$JSCompiler_prototypeAlia
   this.$timeManager$.$daysNumber$ = $aEvent$$22$$.duration;
   $JSCompiler_StaticMethods_showView$$(this, $aEvent$$22$$.$selectionConfiguration$, $aEvent$$22$$.target)
 };
-function $JSCompiler_StaticMethods_showView$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$, $container$$inline_564_opt_caller$$) {
-  var $calledByMiniCal$$ = $container$$inline_564_opt_caller$$ == $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$miniCal$;
-  $JSCompiler_StaticMethods_showView$self$$.$currentView$ == $JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$ && $container$$inline_564_opt_caller$$ == $JSCompiler_alias_VOID$$ && !$JSCompiler_StaticMethods_showView$self$$.$isOnStartup_$ || ($JSCompiler_StaticMethods_showView$self$$.$currentView$ = $JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$, $JSCompiler_StaticMethods_showView$self$$.$timeManager$.$configuration$ = 
-  $JSCompiler_StaticMethods_showView$self$$.$currentView$, $JSCompiler_StaticMethods_showView$self$$.$timeManager$.$run$(), $JSCompiler_StaticMethods_showView$self$$.$eventManager_$.$run$(), $JSCompiler_StaticMethods_showView$self$$.$isOnStartup_$ ? ($JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$ = $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, $container$$inline_564_opt_caller$$ = $JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$.$dom_$.$document_$.body, 
-  $container$$inline_564_opt_caller$$.innerHTML = $rflect$cal$MainBody$HTML_PARTS_$$[0] + $rflect$cal$MainBody$HTML_PARTS_$$[1] + $rflect$cal$MainBody$HTML_PARTS_$$[20] + $rflect$cal$MainBody$HTML_PARTS_$$[21], $JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$.$containerSizeMonitor_$.$checkForSizeChange_$($JSCompiler_alias_TRUE$$), $container$$inline_564_opt_caller$$.innerHTML = "", $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateBeforeRedraw$(), 
-  $JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$ = $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, $JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$.$inDocument_$ && $JSCompiler_alias_THROW$$(Error("Component already rendered")), $JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$.$element_$ || $JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$.$createDom$(), 
-  $JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$.$dom_$.$document_$.body.appendChild($JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$.$element_$), (!$JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$.$parent_$ || $JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$.$parent_$.$inDocument_$) && 
-  $JSCompiler_StaticMethods_preRender$self$$inline_562_JSCompiler_StaticMethods_render_$self$$inline_869_aType$$1$$.$enterDocument$(), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_showView$self$$.$containerSizeMonitor_$, "resize", $JSCompiler_StaticMethods_showView$self$$.$onViewportResize_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, 
+function $JSCompiler_StaticMethods_showView$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$, $container$$inline_580_opt_caller$$) {
+  var $calledByMiniCal$$ = $container$$inline_580_opt_caller$$ == $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$miniCal$;
+  $JSCompiler_StaticMethods_showView$self$$.$currentView$ == $JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$ && $container$$inline_580_opt_caller$$ == $JSCompiler_alias_VOID$$ && !$JSCompiler_StaticMethods_showView$self$$.$isOnStartup_$ || ($JSCompiler_StaticMethods_showView$self$$.$currentView$ = $JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$, $JSCompiler_StaticMethods_showView$self$$.$timeManager$.$configuration$ = 
+  $JSCompiler_StaticMethods_showView$self$$.$currentView$, $JSCompiler_StaticMethods_showView$self$$.$timeManager$.$run$(), $JSCompiler_StaticMethods_showView$self$$.$eventManager_$.$run$(), $JSCompiler_StaticMethods_showView$self$$.$isOnStartup_$ ? ($JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$ = $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, $container$$inline_580_opt_caller$$ = $JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$.$dom_$.$document_$.body, 
+  $container$$inline_580_opt_caller$$.innerHTML = $rflect$cal$MainBody$HTML_PARTS_$$[0] + $rflect$cal$MainBody$HTML_PARTS_$$[1] + $rflect$cal$MainBody$HTML_PARTS_$$[20] + $rflect$cal$MainBody$HTML_PARTS_$$[21], $JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$.$containerSizeMonitor_$.$checkForSizeChange_$($JSCompiler_alias_TRUE$$), $container$$inline_580_opt_caller$$.innerHTML = "", $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateBeforeRedraw$(), 
+  $JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$ = $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, $JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$.$inDocument_$ && $JSCompiler_alias_THROW$$(Error("Component already rendered")), $JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$.$element_$ || $JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$.$createDom$(), 
+  $JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$.$dom_$.$document_$.body.appendChild($JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$.$element_$), (!$JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$.$parent_$ || $JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$.$parent_$.$inDocument_$) && 
+  $JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$.$enterDocument$(), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_showView$self$$.$containerSizeMonitor_$, "resize", $JSCompiler_StaticMethods_showView$self$$.$onViewportResize_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, 
   $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "action", $JSCompiler_StaticMethods_showView$self$$.$onMainBodyAction_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "dateselect", $JSCompiler_StaticMethods_showView$self$$.$onDateSelect_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, 
   $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "datedrag", $JSCompiler_StaticMethods_showView$self$$.$onDateDrag_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "datedragend", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_showView$self$$.$isOnStartup_$ = $JSCompiler_alias_FALSE$$) : 
   $calledByMiniCal$$ ? ($JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateBeforeRedraw$(2, 3, 4), $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateByRedraw$(2, 3, 4)) : ($JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateBeforeRedraw$(3, 4), $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateByRedraw$(3, 4)))
@@ -4494,8 +4360,8 @@ Infinity), $goog$debug$Logger$Level$SHOUT$$, $goog$debug$Logger$Level$SEVERE$$, 
 function $goog$debug$Logger$Level$getPredefinedLevel$$($name$$65$$) {
   if(!$goog$debug$Logger$Level$predefinedLevelsCache_$$) {
     $goog$debug$Logger$Level$predefinedLevelsCache_$$ = {};
-    for(var $i$$inline_573$$ = 0, $level$$inline_574$$;$level$$inline_574$$ = $goog$debug$Logger$Level$PREDEFINED_LEVELS$$[$i$$inline_573$$];$i$$inline_573$$++) {
-      $goog$debug$Logger$Level$predefinedLevelsCache_$$[$level$$inline_574$$.value] = $level$$inline_574$$, $goog$debug$Logger$Level$predefinedLevelsCache_$$[$level$$inline_574$$.name] = $level$$inline_574$$
+    for(var $i$$inline_589$$ = 0, $level$$inline_590$$;$level$$inline_590$$ = $goog$debug$Logger$Level$PREDEFINED_LEVELS$$[$i$$inline_589$$];$i$$inline_589$$++) {
+      $goog$debug$Logger$Level$predefinedLevelsCache_$$[$level$$inline_590$$.value] = $level$$inline_590$$, $goog$debug$Logger$Level$predefinedLevelsCache_$$[$level$$inline_590$$.name] = $level$$inline_590$$
     }
   }
   return $goog$debug$Logger$Level$predefinedLevelsCache_$$[$name$$65$$] || $JSCompiler_alias_NULL$$
@@ -4513,20 +4379,20 @@ function $JSCompiler_StaticMethods_getEffectiveLevel$$($JSCompiler_StaticMethods
   $goog$asserts$fail$$("Root logger has no level set.");
   return $JSCompiler_alias_NULL$$
 }
-$JSCompiler_prototypeAlias$$.log = function $$JSCompiler_prototypeAlias$$$log$($level$$15_logRecord$$inline_577$$, $msg$$5_msg$$inline_873_target$$inline_578$$, $JSCompiler_StaticMethods_callPublish_$self$$inline_875_opt_exception$$) {
-  if($level$$15_logRecord$$inline_577$$.value >= $JSCompiler_StaticMethods_getEffectiveLevel$$(this).value) {
-    $level$$15_logRecord$$inline_577$$ = this.$getLogRecord$($level$$15_logRecord$$inline_577$$, $msg$$5_msg$$inline_873_target$$inline_578$$, $JSCompiler_StaticMethods_callPublish_$self$$inline_875_opt_exception$$);
-    $msg$$5_msg$$inline_873_target$$inline_578$$ = "log:" + $level$$15_logRecord$$inline_577$$.$msg_$;
-    $goog$global$$.console && ($goog$global$$.console.timeStamp ? $goog$global$$.console.timeStamp($msg$$5_msg$$inline_873_target$$inline_578$$) : $goog$global$$.console.markTimeline && $goog$global$$.console.markTimeline($msg$$5_msg$$inline_873_target$$inline_578$$));
-    $goog$global$$.msWriteProfilerMark && $goog$global$$.msWriteProfilerMark($msg$$5_msg$$inline_873_target$$inline_578$$);
-    for($msg$$5_msg$$inline_873_target$$inline_578$$ = this;$msg$$5_msg$$inline_873_target$$inline_578$$;) {
-      var $JSCompiler_StaticMethods_callPublish_$self$$inline_875_opt_exception$$ = $msg$$5_msg$$inline_873_target$$inline_578$$, $logRecord$$inline_876$$ = $level$$15_logRecord$$inline_577$$;
-      if($JSCompiler_StaticMethods_callPublish_$self$$inline_875_opt_exception$$.$handlers_$) {
-        for(var $i$$inline_877$$ = 0, $handler$$inline_878$$ = $JSCompiler_alias_VOID$$;$handler$$inline_878$$ = $JSCompiler_StaticMethods_callPublish_$self$$inline_875_opt_exception$$.$handlers_$[$i$$inline_877$$];$i$$inline_877$$++) {
-          $handler$$inline_878$$($logRecord$$inline_876$$)
+$JSCompiler_prototypeAlias$$.log = function $$JSCompiler_prototypeAlias$$$log$($level$$15_logRecord$$inline_593$$, $msg$$5_msg$$inline_901_target$$inline_594$$, $JSCompiler_StaticMethods_callPublish_$self$$inline_903_opt_exception$$) {
+  if($level$$15_logRecord$$inline_593$$.value >= $JSCompiler_StaticMethods_getEffectiveLevel$$(this).value) {
+    $level$$15_logRecord$$inline_593$$ = this.$getLogRecord$($level$$15_logRecord$$inline_593$$, $msg$$5_msg$$inline_901_target$$inline_594$$, $JSCompiler_StaticMethods_callPublish_$self$$inline_903_opt_exception$$);
+    $msg$$5_msg$$inline_901_target$$inline_594$$ = "log:" + $level$$15_logRecord$$inline_593$$.$msg_$;
+    $goog$global$$.console && ($goog$global$$.console.timeStamp ? $goog$global$$.console.timeStamp($msg$$5_msg$$inline_901_target$$inline_594$$) : $goog$global$$.console.markTimeline && $goog$global$$.console.markTimeline($msg$$5_msg$$inline_901_target$$inline_594$$));
+    $goog$global$$.msWriteProfilerMark && $goog$global$$.msWriteProfilerMark($msg$$5_msg$$inline_901_target$$inline_594$$);
+    for($msg$$5_msg$$inline_901_target$$inline_594$$ = this;$msg$$5_msg$$inline_901_target$$inline_594$$;) {
+      var $JSCompiler_StaticMethods_callPublish_$self$$inline_903_opt_exception$$ = $msg$$5_msg$$inline_901_target$$inline_594$$, $logRecord$$inline_904$$ = $level$$15_logRecord$$inline_593$$;
+      if($JSCompiler_StaticMethods_callPublish_$self$$inline_903_opt_exception$$.$handlers_$) {
+        for(var $i$$inline_905$$ = 0, $handler$$inline_906$$ = $JSCompiler_alias_VOID$$;$handler$$inline_906$$ = $JSCompiler_StaticMethods_callPublish_$self$$inline_903_opt_exception$$.$handlers_$[$i$$inline_905$$];$i$$inline_905$$++) {
+          $handler$$inline_906$$($logRecord$$inline_904$$)
         }
       }
-      $msg$$5_msg$$inline_873_target$$inline_578$$ = $msg$$5_msg$$inline_873_target$$inline_578$$.getParent()
+      $msg$$5_msg$$inline_901_target$$inline_594$$ = $msg$$5_msg$$inline_901_target$$inline_594$$.getParent()
     }
   }
 };
@@ -4534,32 +4400,32 @@ $JSCompiler_prototypeAlias$$.$getLogRecord$ = function $$JSCompiler_prototypeAli
   var $logRecord$$4$$ = new $goog$debug$LogRecord$$($level$$16$$, "" + $msg$$6$$, this.$name_$);
   if($opt_exception$$1$$) {
     $logRecord$$4$$.$exception_$ = $opt_exception$$1$$;
-    var $JSCompiler_inline_result$$592$$;
-    var $opt_fn$$inline_594$$ = arguments.callee.caller;
+    var $JSCompiler_inline_result$$608$$;
+    var $opt_fn$$inline_610$$ = arguments.callee.caller;
     try {
-      var $e$$inline_595$$;
-      var $href$$inline_881$$ = $goog$getObjectByName$$("window.location.href");
+      var $e$$inline_611$$;
+      var $href$$inline_909$$ = $goog$getObjectByName$$("window.location.href");
       if($goog$isString$$($opt_exception$$1$$)) {
-        $e$$inline_595$$ = {message:$opt_exception$$1$$, name:"Unknown error", lineNumber:"Not available", fileName:$href$$inline_881$$, stack:"Not available"}
+        $e$$inline_611$$ = {message:$opt_exception$$1$$, name:"Unknown error", lineNumber:"Not available", fileName:$href$$inline_909$$, stack:"Not available"}
       }else {
-        var $lineNumber$$inline_882$$, $fileName$$inline_883$$, $threwError$$inline_884$$ = $JSCompiler_alias_FALSE$$;
+        var $lineNumber$$inline_910$$, $fileName$$inline_911$$, $threwError$$inline_912$$ = $JSCompiler_alias_FALSE$$;
         try {
-          $lineNumber$$inline_882$$ = $opt_exception$$1$$.lineNumber || $opt_exception$$1$$.$line$ || "Not available"
-        }catch($e$$inline_885$$) {
-          $lineNumber$$inline_882$$ = "Not available", $threwError$$inline_884$$ = $JSCompiler_alias_TRUE$$
+          $lineNumber$$inline_910$$ = $opt_exception$$1$$.lineNumber || $opt_exception$$1$$.$line$ || "Not available"
+        }catch($e$$inline_913$$) {
+          $lineNumber$$inline_910$$ = "Not available", $threwError$$inline_912$$ = $JSCompiler_alias_TRUE$$
         }
         try {
-          $fileName$$inline_883$$ = $opt_exception$$1$$.fileName || $opt_exception$$1$$.filename || $opt_exception$$1$$.sourceURL || $href$$inline_881$$
-        }catch($e$$inline_886$$) {
-          $fileName$$inline_883$$ = "Not available", $threwError$$inline_884$$ = $JSCompiler_alias_TRUE$$
+          $fileName$$inline_911$$ = $opt_exception$$1$$.fileName || $opt_exception$$1$$.filename || $opt_exception$$1$$.sourceURL || $href$$inline_909$$
+        }catch($e$$inline_914$$) {
+          $fileName$$inline_911$$ = "Not available", $threwError$$inline_912$$ = $JSCompiler_alias_TRUE$$
         }
-        $e$$inline_595$$ = $threwError$$inline_884$$ || !$opt_exception$$1$$.lineNumber || !$opt_exception$$1$$.fileName || !$opt_exception$$1$$.stack ? {message:$opt_exception$$1$$.message, name:$opt_exception$$1$$.name, lineNumber:$lineNumber$$inline_882$$, fileName:$fileName$$inline_883$$, stack:$opt_exception$$1$$.stack || "Not available"} : $opt_exception$$1$$
+        $e$$inline_611$$ = $threwError$$inline_912$$ || !$opt_exception$$1$$.lineNumber || !$opt_exception$$1$$.fileName || !$opt_exception$$1$$.stack ? {message:$opt_exception$$1$$.message, name:$opt_exception$$1$$.name, lineNumber:$lineNumber$$inline_910$$, fileName:$fileName$$inline_911$$, stack:$opt_exception$$1$$.stack || "Not available"} : $opt_exception$$1$$
       }
-      $JSCompiler_inline_result$$592$$ = "Message: " + $goog$string$htmlEscape$$($e$$inline_595$$.message) + '\nUrl: <a href="view-source:' + $e$$inline_595$$.fileName + '" target="_new">' + $e$$inline_595$$.fileName + "</a>\nLine: " + $e$$inline_595$$.lineNumber + "\n\nBrowser stack:\n" + $goog$string$htmlEscape$$($e$$inline_595$$.stack + "-> ") + "[end]\n\nJS stack traversal:\n" + $goog$string$htmlEscape$$($goog$debug$getStacktrace$$($opt_fn$$inline_594$$) + "-> ")
-    }catch($e2$$inline_596$$) {
-      $JSCompiler_inline_result$$592$$ = "Exception trying to expose exception! You win, we lose. " + $e2$$inline_596$$
+      $JSCompiler_inline_result$$608$$ = "Message: " + $goog$string$htmlEscape$$($e$$inline_611$$.message) + '\nUrl: <a href="view-source:' + $e$$inline_611$$.fileName + '" target="_new">' + $e$$inline_611$$.fileName + "</a>\nLine: " + $e$$inline_611$$.lineNumber + "\n\nBrowser stack:\n" + $goog$string$htmlEscape$$($e$$inline_611$$.stack + "-> ") + "[end]\n\nJS stack traversal:\n" + $goog$string$htmlEscape$$($goog$debug$getStacktrace$$($opt_fn$$inline_610$$) + "-> ")
+    }catch($e2$$inline_612$$) {
+      $JSCompiler_inline_result$$608$$ = "Exception trying to expose exception! You win, we lose. " + $e2$$inline_612$$
     }
-    $logRecord$$4$$.$exceptionText_$ = $JSCompiler_inline_result$$592$$
+    $logRecord$$4$$.$exceptionText_$ = $JSCompiler_inline_result$$608$$
   }
   return $logRecord$$4$$
 };
@@ -4572,16 +4438,16 @@ function $goog$debug$LogManager$initialize$$() {
 }
 function $goog$debug$LogManager$getLogger$$($name$$68$$) {
   $goog$debug$LogManager$initialize$$();
-  var $JSCompiler_temp$$0_logger$$inline_605$$;
-  if(!($JSCompiler_temp$$0_logger$$inline_605$$ = $goog$debug$LogManager$loggers_$$[$name$$68$$])) {
-    $JSCompiler_temp$$0_logger$$inline_605$$ = new $goog$debug$Logger$$($name$$68$$);
-    var $lastDotIndex$$inline_606_parentLogger$$inline_608$$ = $name$$68$$.lastIndexOf("."), $leafName$$inline_607$$ = $name$$68$$.substr($lastDotIndex$$inline_606_parentLogger$$inline_608$$ + 1), $lastDotIndex$$inline_606_parentLogger$$inline_608$$ = $goog$debug$LogManager$getLogger$$($name$$68$$.substr(0, $lastDotIndex$$inline_606_parentLogger$$inline_608$$));
-    $lastDotIndex$$inline_606_parentLogger$$inline_608$$.$children_$ || ($lastDotIndex$$inline_606_parentLogger$$inline_608$$.$children_$ = {});
-    $lastDotIndex$$inline_606_parentLogger$$inline_608$$.$children_$[$leafName$$inline_607$$] = $JSCompiler_temp$$0_logger$$inline_605$$;
-    $JSCompiler_temp$$0_logger$$inline_605$$.$parent_$ = $lastDotIndex$$inline_606_parentLogger$$inline_608$$;
-    $goog$debug$LogManager$loggers_$$[$name$$68$$] = $JSCompiler_temp$$0_logger$$inline_605$$
+  var $JSCompiler_temp$$0_logger$$inline_621$$;
+  if(!($JSCompiler_temp$$0_logger$$inline_621$$ = $goog$debug$LogManager$loggers_$$[$name$$68$$])) {
+    $JSCompiler_temp$$0_logger$$inline_621$$ = new $goog$debug$Logger$$($name$$68$$);
+    var $lastDotIndex$$inline_622_parentLogger$$inline_624$$ = $name$$68$$.lastIndexOf("."), $leafName$$inline_623$$ = $name$$68$$.substr($lastDotIndex$$inline_622_parentLogger$$inline_624$$ + 1), $lastDotIndex$$inline_622_parentLogger$$inline_624$$ = $goog$debug$LogManager$getLogger$$($name$$68$$.substr(0, $lastDotIndex$$inline_622_parentLogger$$inline_624$$));
+    $lastDotIndex$$inline_622_parentLogger$$inline_624$$.$children_$ || ($lastDotIndex$$inline_622_parentLogger$$inline_624$$.$children_$ = {});
+    $lastDotIndex$$inline_622_parentLogger$$inline_624$$.$children_$[$leafName$$inline_623$$] = $JSCompiler_temp$$0_logger$$inline_621$$;
+    $JSCompiler_temp$$0_logger$$inline_621$$.$parent_$ = $lastDotIndex$$inline_622_parentLogger$$inline_624$$;
+    $goog$debug$LogManager$loggers_$$[$name$$68$$] = $JSCompiler_temp$$0_logger$$inline_621$$
   }
-  return $JSCompiler_temp$$0_logger$$inline_605$$
+  return $JSCompiler_temp$$0_logger$$inline_621$$
 }
 ;function $goog$debug$DebugWindow$$($opt_identifier$$, $opt_prefix$$3$$) {
   this.$identifier_$ = $opt_identifier$$ || "";
@@ -4594,9 +4460,9 @@ function $goog$debug$LogManager$getLogger$$($name$$68$$) {
   if($JSCompiler_alias_TRUE$$ != this.$isCapturing_$) {
     this.$isCapturing_$ = $JSCompiler_alias_TRUE$$;
     $goog$debug$LogManager$initialize$$();
-    var $JSCompiler_StaticMethods_addHandler$self$$inline_896$$ = $goog$debug$LogManager$rootLogger_$$, $handler$$inline_897$$ = this.$publishHandler_$;
-    $JSCompiler_StaticMethods_addHandler$self$$inline_896$$.$handlers_$ || ($JSCompiler_StaticMethods_addHandler$self$$inline_896$$.$handlers_$ = []);
-    $JSCompiler_StaticMethods_addHandler$self$$inline_896$$.$handlers_$.push($handler$$inline_897$$)
+    var $JSCompiler_StaticMethods_addHandler$self$$inline_924$$ = $goog$debug$LogManager$rootLogger_$$, $handler$$inline_925$$ = this.$publishHandler_$;
+    $JSCompiler_StaticMethods_addHandler$self$$inline_924$$.$handlers_$ || ($JSCompiler_StaticMethods_addHandler$self$$inline_924$$.$handlers_$ = []);
+    $JSCompiler_StaticMethods_addHandler$self$$inline_924$$.$handlers_$.push($handler$$inline_925$$)
   }
   this.$enabled_$ = "1" == $goog$debug$DebugWindow$getCookieValue_$$(this.$identifier_$, "enabled");
   $goog$global$$.setInterval($goog$bind$$(this.$saveWindowPositionSize_$, this), 7500)
@@ -4627,37 +4493,37 @@ $JSCompiler_prototypeAlias$$.$clear_$ = function $$JSCompiler_prototypeAlias$$$$
 };
 $JSCompiler_prototypeAlias$$.$addLogRecord$ = function $$JSCompiler_prototypeAlias$$$$addLogRecord$$($logRecord$$8$$) {
   if(!this.$filteredLoggers_$[$logRecord$$8$$.$loggerName_$]) {
-    var $JSCompiler_StaticMethods_formatRecord$self$$inline_618_html$$inline_624$$ = this.$formatter_$, $className$$inline_620$$;
+    var $JSCompiler_StaticMethods_formatRecord$self$$inline_634_html$$inline_640$$ = this.$formatter_$, $className$$inline_636$$;
     switch($logRecord$$8$$.$level_$.value) {
       case $goog$debug$Logger$Level$SHOUT$$.value:
-        $className$$inline_620$$ = "dbg-sh";
+        $className$$inline_636$$ = "dbg-sh";
         break;
       case $goog$debug$Logger$Level$SEVERE$$.value:
-        $className$$inline_620$$ = "dbg-sev";
+        $className$$inline_636$$ = "dbg-sev";
         break;
       case $goog$debug$Logger$Level$WARNING$$.value:
-        $className$$inline_620$$ = "dbg-w";
+        $className$$inline_636$$ = "dbg-w";
         break;
       case $goog$debug$Logger$Level$INFO$$.value:
-        $className$$inline_620$$ = "dbg-i";
+        $className$$inline_636$$ = "dbg-i";
         break;
       default:
-        $className$$inline_620$$ = "dbg-f"
+        $className$$inline_636$$ = "dbg-f"
     }
-    var $sb$$inline_621$$ = [];
-    $sb$$inline_621$$.push($JSCompiler_StaticMethods_formatRecord$self$$inline_618_html$$inline_624$$.$prefix_$, " ");
-    if($JSCompiler_StaticMethods_formatRecord$self$$inline_618_html$$inline_624$$.$showAbsoluteTime$) {
-      var $time$$inline_901$$ = new Date($logRecord$$8$$.$time_$);
-      $sb$$inline_621$$.push("[", $goog$debug$Formatter$getTwoDigitString_$$($time$$inline_901$$.getFullYear() - 2E3) + $goog$debug$Formatter$getTwoDigitString_$$($time$$inline_901$$.getMonth() + 1) + $goog$debug$Formatter$getTwoDigitString_$$($time$$inline_901$$.getDate()) + " " + $goog$debug$Formatter$getTwoDigitString_$$($time$$inline_901$$.getHours()) + ":" + $goog$debug$Formatter$getTwoDigitString_$$($time$$inline_901$$.getMinutes()) + ":" + $goog$debug$Formatter$getTwoDigitString_$$($time$$inline_901$$.getSeconds()) + 
-      "." + $goog$debug$Formatter$getTwoDigitString_$$(Math.floor($time$$inline_901$$.getMilliseconds() / 10)), "] ")
+    var $sb$$inline_637$$ = [];
+    $sb$$inline_637$$.push($JSCompiler_StaticMethods_formatRecord$self$$inline_634_html$$inline_640$$.$prefix_$, " ");
+    if($JSCompiler_StaticMethods_formatRecord$self$$inline_634_html$$inline_640$$.$showAbsoluteTime$) {
+      var $time$$inline_929$$ = new Date($logRecord$$8$$.$time_$);
+      $sb$$inline_637$$.push("[", $goog$debug$Formatter$getTwoDigitString_$$($time$$inline_929$$.getFullYear() - 2E3) + $goog$debug$Formatter$getTwoDigitString_$$($time$$inline_929$$.getMonth() + 1) + $goog$debug$Formatter$getTwoDigitString_$$($time$$inline_929$$.getDate()) + " " + $goog$debug$Formatter$getTwoDigitString_$$($time$$inline_929$$.getHours()) + ":" + $goog$debug$Formatter$getTwoDigitString_$$($time$$inline_929$$.getMinutes()) + ":" + $goog$debug$Formatter$getTwoDigitString_$$($time$$inline_929$$.getSeconds()) + 
+      "." + $goog$debug$Formatter$getTwoDigitString_$$(Math.floor($time$$inline_929$$.getMilliseconds() / 10)), "] ")
     }
-    $JSCompiler_StaticMethods_formatRecord$self$$inline_618_html$$inline_624$$.$showRelativeTime$ && $sb$$inline_621$$.push("[", $goog$string$whitespaceEscape$$($goog$debug$Formatter$getRelativeTime_$$($logRecord$$8$$, $JSCompiler_StaticMethods_formatRecord$self$$inline_618_html$$inline_624$$.$startTimeProvider_$.get())), "s] ");
-    $JSCompiler_StaticMethods_formatRecord$self$$inline_618_html$$inline_624$$.$showLoggerName$ && $sb$$inline_621$$.push("[", $goog$string$htmlEscape$$($logRecord$$8$$.$loggerName_$), "] ");
-    $sb$$inline_621$$.push('<span class="', $className$$inline_620$$, '">', $goog$string$newLineToBr$$($goog$string$whitespaceEscape$$($goog$string$htmlEscape$$($logRecord$$8$$.$msg_$))));
-    $JSCompiler_StaticMethods_formatRecord$self$$inline_618_html$$inline_624$$.$showExceptionText$ && $logRecord$$8$$.$exception_$ && $sb$$inline_621$$.push("<br>", $goog$string$newLineToBr$$($goog$string$whitespaceEscape$$($logRecord$$8$$.$exceptionText_$ || "")));
-    $sb$$inline_621$$.push("</span><br>");
-    $JSCompiler_StaticMethods_formatRecord$self$$inline_618_html$$inline_624$$ = $sb$$inline_621$$.join("");
-    this.$enabled_$ ? ($JSCompiler_StaticMethods_openWindow_$$(this), this.$savedMessages_$.add($JSCompiler_StaticMethods_formatRecord$self$$inline_618_html$$inline_624$$), $JSCompiler_StaticMethods_writeToLog_$$(this, $JSCompiler_StaticMethods_formatRecord$self$$inline_618_html$$inline_624$$)) : this.$savedMessages_$.add($JSCompiler_StaticMethods_formatRecord$self$$inline_618_html$$inline_624$$);
+    $JSCompiler_StaticMethods_formatRecord$self$$inline_634_html$$inline_640$$.$showRelativeTime$ && $sb$$inline_637$$.push("[", $goog$string$whitespaceEscape$$($goog$debug$Formatter$getRelativeTime_$$($logRecord$$8$$, $JSCompiler_StaticMethods_formatRecord$self$$inline_634_html$$inline_640$$.$startTimeProvider_$.get())), "s] ");
+    $JSCompiler_StaticMethods_formatRecord$self$$inline_634_html$$inline_640$$.$showLoggerName$ && $sb$$inline_637$$.push("[", $goog$string$htmlEscape$$($logRecord$$8$$.$loggerName_$), "] ");
+    $sb$$inline_637$$.push('<span class="', $className$$inline_636$$, '">', $goog$string$newLineToBr$$($goog$string$whitespaceEscape$$($goog$string$htmlEscape$$($logRecord$$8$$.$msg_$))));
+    $JSCompiler_StaticMethods_formatRecord$self$$inline_634_html$$inline_640$$.$showExceptionText$ && $logRecord$$8$$.$exception_$ && $sb$$inline_637$$.push("<br>", $goog$string$newLineToBr$$($goog$string$whitespaceEscape$$($logRecord$$8$$.$exceptionText_$ || "")));
+    $sb$$inline_637$$.push("</span><br>");
+    $JSCompiler_StaticMethods_formatRecord$self$$inline_634_html$$inline_640$$ = $sb$$inline_637$$.join("");
+    this.$enabled_$ ? ($JSCompiler_StaticMethods_openWindow_$$(this), this.$savedMessages_$.add($JSCompiler_StaticMethods_formatRecord$self$$inline_634_html$$inline_640$$), $JSCompiler_StaticMethods_writeToLog_$$(this, $JSCompiler_StaticMethods_formatRecord$self$$inline_634_html$$inline_640$$)) : this.$savedMessages_$.add($JSCompiler_StaticMethods_formatRecord$self$$inline_634_html$$inline_640$$);
     this.$enableOnSevere_$ && $logRecord$$8$$.$level_$.value >= $goog$debug$Logger$Level$SEVERE$$.value && this.$setEnabled$($JSCompiler_alias_TRUE$$)
   }
 };
@@ -4676,11 +4542,11 @@ $JSCompiler_prototypeAlias$$.$writeBufferToLog_$ = function $$JSCompiler_prototy
   }
 };
 function $JSCompiler_StaticMethods_writeSavedMessages_$$($JSCompiler_StaticMethods_writeSavedMessages_$self$$) {
-  for(var $JSCompiler_StaticMethods_getNewestValues$self$$inline_903_i$$112$$ = $JSCompiler_StaticMethods_writeSavedMessages_$self$$.$savedMessages_$, $l$$inline_905$$ = $JSCompiler_StaticMethods_getNewestValues$self$$inline_903_i$$112$$.$buff_$.length, $rv$$inline_906$$ = [], $i$$inline_907$$ = $JSCompiler_StaticMethods_getNewestValues$self$$inline_903_i$$112$$.$buff_$.length - $JSCompiler_StaticMethods_writeSavedMessages_$self$$.$savedMessages_$.$buff_$.length;$i$$inline_907$$ < $l$$inline_905$$;$i$$inline_907$$++) {
-    $rv$$inline_906$$[$i$$inline_907$$] = $JSCompiler_StaticMethods_getNewestValues$self$$inline_903_i$$112$$.get($i$$inline_907$$)
+  for(var $JSCompiler_StaticMethods_getNewestValues$self$$inline_931_i$$112$$ = $JSCompiler_StaticMethods_writeSavedMessages_$self$$.$savedMessages_$, $l$$inline_933$$ = $JSCompiler_StaticMethods_getNewestValues$self$$inline_931_i$$112$$.$buff_$.length, $rv$$inline_934$$ = [], $i$$inline_935$$ = $JSCompiler_StaticMethods_getNewestValues$self$$inline_931_i$$112$$.$buff_$.length - $JSCompiler_StaticMethods_writeSavedMessages_$self$$.$savedMessages_$.$buff_$.length;$i$$inline_935$$ < $l$$inline_933$$;$i$$inline_935$$++) {
+    $rv$$inline_934$$[$i$$inline_935$$] = $JSCompiler_StaticMethods_getNewestValues$self$$inline_931_i$$112$$.get($i$$inline_935$$)
   }
-  for($JSCompiler_StaticMethods_getNewestValues$self$$inline_903_i$$112$$ = 0;$JSCompiler_StaticMethods_getNewestValues$self$$inline_903_i$$112$$ < $rv$$inline_906$$.length;$JSCompiler_StaticMethods_getNewestValues$self$$inline_903_i$$112$$++) {
-    $JSCompiler_StaticMethods_writeToLog_$$($JSCompiler_StaticMethods_writeSavedMessages_$self$$, $rv$$inline_906$$[$JSCompiler_StaticMethods_getNewestValues$self$$inline_903_i$$112$$])
+  for($JSCompiler_StaticMethods_getNewestValues$self$$inline_931_i$$112$$ = 0;$JSCompiler_StaticMethods_getNewestValues$self$$inline_931_i$$112$$ < $rv$$inline_934$$.length;$JSCompiler_StaticMethods_getNewestValues$self$$inline_931_i$$112$$++) {
+    $JSCompiler_StaticMethods_writeToLog_$$($JSCompiler_StaticMethods_writeSavedMessages_$self$$, $rv$$inline_934$$[$JSCompiler_StaticMethods_getNewestValues$self$$inline_931_i$$112$$])
   }
 }
 function $JSCompiler_StaticMethods_openWindow_$$($JSCompiler_StaticMethods_openWindow_$self$$) {
@@ -4710,10 +4576,10 @@ $JSCompiler_prototypeAlias$$.$saveWindowPositionSize_$ = function $$JSCompiler_p
 };
 function $goog$debug$FancyWindow$$($opt_identifier$$1$$, $opt_prefix$$4$$) {
   if($goog$debug$FancyWindow$HAS_LOCAL_STORE$$) {
-    var $storedKeys$$inline_631$$ = $goog$debug$FancyWindow$getStoredKeys_$$(), $key$$inline_632$$;
-    for($key$$inline_632$$ in $storedKeys$$inline_631$$) {
-      var $logger$$inline_634_loggerName$$inline_633$$ = $key$$inline_632$$.replace("fancywindow.sel.", ""), $logger$$inline_634_loggerName$$inline_633$$ = $goog$debug$LogManager$getLogger$$($logger$$inline_634_loggerName$$inline_633$$), $curLevel$$inline_635$$ = $logger$$inline_634_loggerName$$inline_633$$.$level_$, $storedLevel$$inline_636$$ = window.localStorage.getItem($key$$inline_632$$).toString();
-      (!$curLevel$$inline_635$$ || $curLevel$$inline_635$$.toString() != $storedLevel$$inline_636$$) && $logger$$inline_634_loggerName$$inline_633$$.$setLevel$($goog$debug$Logger$Level$getPredefinedLevel$$($storedLevel$$inline_636$$))
+    var $storedKeys$$inline_647$$ = $goog$debug$FancyWindow$getStoredKeys_$$(), $key$$inline_648$$;
+    for($key$$inline_648$$ in $storedKeys$$inline_647$$) {
+      var $logger$$inline_650_loggerName$$inline_649$$ = $key$$inline_648$$.replace("fancywindow.sel.", ""), $logger$$inline_650_loggerName$$inline_649$$ = $goog$debug$LogManager$getLogger$$($logger$$inline_650_loggerName$$inline_649$$), $curLevel$$inline_651$$ = $logger$$inline_650_loggerName$$inline_649$$.$level_$, $storedLevel$$inline_652$$ = window.localStorage.getItem($key$$inline_648$$).toString();
+      (!$curLevel$$inline_651$$ || $curLevel$$inline_651$$.toString() != $storedLevel$$inline_652$$) && $logger$$inline_650_loggerName$$inline_649$$.$setLevel$($goog$debug$Logger$Level$getPredefinedLevel$$($storedLevel$$inline_652$$))
     }
   }
   $goog$debug$DebugWindow$$.call(this, $opt_identifier$$1$$, $opt_prefix$$4$$)
@@ -4724,7 +4590,7 @@ a: {
   try {
     $goog$debug$FancyWindow$HAS_LOCAL_STORE$$ = !!window.localStorage.getItem;
     break a
-  }catch($e$$inline_638$$) {
+  }catch($e$$inline_654$$) {
   }
   $goog$debug$FancyWindow$HAS_LOCAL_STORE$$ = $JSCompiler_alias_FALSE$$
 }
@@ -4778,16 +4644,16 @@ function $JSCompiler_StaticMethods_getDropDown_$$($JSCompiler_StaticMethods_getD
 }
 $JSCompiler_prototypeAlias$$.$closeOptions_$ = function $$JSCompiler_prototypeAlias$$$$closeOptions_$$() {
   this.$dh_$.$getElement$("options").style.display = "none";
-  for(var $loggers$$1_loggers$$inline_640$$ = $goog$debug$FancyWindow$getLoggers_$$(), $dh$$3_storedKeys$$inline_641$$ = this.$dh_$, $i$$116_i$$inline_642$$ = 0;$i$$116_i$$inline_642$$ < $loggers$$1_loggers$$inline_640$$.length;$i$$116_i$$inline_642$$++) {
-    var $key$$inline_643_logger$$4$$ = $goog$debug$LogManager$getLogger$$($loggers$$1_loggers$$inline_640$$[$i$$116_i$$inline_642$$]), $level$$18_level$$inline_644_sel$$1$$ = $dh$$3_storedKeys$$inline_641$$.$getElement$("sel" + $loggers$$1_loggers$$inline_640$$[$i$$116_i$$inline_642$$]), $level$$18_level$$inline_644_sel$$1$$ = $level$$18_level$$inline_644_sel$$1$$.options[$level$$18_level$$inline_644_sel$$1$$.selectedIndex].text;
-    "INHERIT" == $level$$18_level$$inline_644_sel$$1$$ ? $key$$inline_643_logger$$4$$.$setLevel$($JSCompiler_alias_NULL$$) : $key$$inline_643_logger$$4$$.$setLevel$($goog$debug$Logger$Level$getPredefinedLevel$$($level$$18_level$$inline_644_sel$$1$$))
+  for(var $loggers$$1_loggers$$inline_656$$ = $goog$debug$FancyWindow$getLoggers_$$(), $dh$$3_storedKeys$$inline_657$$ = this.$dh_$, $i$$116_i$$inline_658$$ = 0;$i$$116_i$$inline_658$$ < $loggers$$1_loggers$$inline_656$$.length;$i$$116_i$$inline_658$$++) {
+    var $key$$inline_659_logger$$4$$ = $goog$debug$LogManager$getLogger$$($loggers$$1_loggers$$inline_656$$[$i$$116_i$$inline_658$$]), $level$$18_level$$inline_660_sel$$1$$ = $dh$$3_storedKeys$$inline_657$$.$getElement$("sel" + $loggers$$1_loggers$$inline_656$$[$i$$116_i$$inline_658$$]), $level$$18_level$$inline_660_sel$$1$$ = $level$$18_level$$inline_660_sel$$1$$.options[$level$$18_level$$inline_660_sel$$1$$.selectedIndex].text;
+    "INHERIT" == $level$$18_level$$inline_660_sel$$1$$ ? $key$$inline_659_logger$$4$$.$setLevel$($JSCompiler_alias_NULL$$) : $key$$inline_659_logger$$4$$.$setLevel$($goog$debug$Logger$Level$getPredefinedLevel$$($level$$18_level$$inline_660_sel$$1$$))
   }
   if($goog$debug$FancyWindow$HAS_LOCAL_STORE$$) {
-    $loggers$$1_loggers$$inline_640$$ = $goog$debug$FancyWindow$getLoggers_$$();
-    $dh$$3_storedKeys$$inline_641$$ = $goog$debug$FancyWindow$getStoredKeys_$$();
-    for($i$$116_i$$inline_642$$ = 0;$i$$116_i$$inline_642$$ < $loggers$$1_loggers$$inline_640$$.length;$i$$116_i$$inline_642$$++) {
-      $key$$inline_643_logger$$4$$ = "fancywindow.sel." + $loggers$$1_loggers$$inline_640$$[$i$$116_i$$inline_642$$], $level$$18_level$$inline_644_sel$$1$$ = $goog$debug$LogManager$getLogger$$($loggers$$1_loggers$$inline_640$$[$i$$116_i$$inline_642$$]).$level_$, $key$$inline_643_logger$$4$$ in $dh$$3_storedKeys$$inline_641$$ ? $level$$18_level$$inline_644_sel$$1$$ ? window.localStorage.getItem($key$$inline_643_logger$$4$$) != $level$$18_level$$inline_644_sel$$1$$.name && window.localStorage.setItem($key$$inline_643_logger$$4$$, 
-      $level$$18_level$$inline_644_sel$$1$$.name) : window.localStorage.removeItem($key$$inline_643_logger$$4$$) : $level$$18_level$$inline_644_sel$$1$$ && window.localStorage.setItem($key$$inline_643_logger$$4$$, $level$$18_level$$inline_644_sel$$1$$.name)
+    $loggers$$1_loggers$$inline_656$$ = $goog$debug$FancyWindow$getLoggers_$$();
+    $dh$$3_storedKeys$$inline_657$$ = $goog$debug$FancyWindow$getStoredKeys_$$();
+    for($i$$116_i$$inline_658$$ = 0;$i$$116_i$$inline_658$$ < $loggers$$1_loggers$$inline_656$$.length;$i$$116_i$$inline_658$$++) {
+      $key$$inline_659_logger$$4$$ = "fancywindow.sel." + $loggers$$1_loggers$$inline_656$$[$i$$116_i$$inline_658$$], $level$$18_level$$inline_660_sel$$1$$ = $goog$debug$LogManager$getLogger$$($loggers$$1_loggers$$inline_656$$[$i$$116_i$$inline_658$$]).$level_$, $key$$inline_659_logger$$4$$ in $dh$$3_storedKeys$$inline_657$$ ? $level$$18_level$$inline_660_sel$$1$$ ? window.localStorage.getItem($key$$inline_659_logger$$4$$) != $level$$18_level$$inline_660_sel$$1$$.name && window.localStorage.setItem($key$$inline_659_logger$$4$$, 
+      $level$$18_level$$inline_660_sel$$1$$.name) : window.localStorage.removeItem($key$$inline_659_logger$$4$$) : $level$$18_level$$inline_660_sel$$1$$ && window.localStorage.setItem($key$$inline_659_logger$$4$$, $level$$18_level$$inline_660_sel$$1$$.name)
     }
   }
   return $JSCompiler_alias_FALSE$$
@@ -4812,12 +4678,12 @@ function $goog$debug$FancyWindow$getStoredKeys_$$() {
   return $storedKeys$$2$$
 }
 function $goog$debug$FancyWindow$getLoggers_$$() {
-  var $res$$inline_647$$ = [], $i$$inline_648$$ = 0, $key$$inline_649$$;
-  for($key$$inline_649$$ in $goog$debug$LogManager$loggers_$$) {
-    $res$$inline_647$$[$i$$inline_648$$++] = $key$$inline_649$$
+  var $res$$inline_663$$ = [], $i$$inline_664$$ = 0, $key$$inline_665$$;
+  for($key$$inline_665$$ in $goog$debug$LogManager$loggers_$$) {
+    $res$$inline_663$$[$i$$inline_664$$++] = $key$$inline_665$$
   }
-  $res$$inline_647$$.sort();
-  return $res$$inline_647$$
+  $res$$inline_663$$.sort();
+  return $res$$inline_663$$
 }
 ;var $rflect$Debug$theLogger$$;
 function $_inspect$$($name$$70$$, $obj$$74$$) {

@@ -22,13 +22,14 @@ goog.require('rflect.cal.TaskSelector');
  * Main body main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
+ * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
  * @param {rflect.cal.BlockManager} aBlockManager Link to block manager.
  * @constructor
  * @extends {rflect.cal.Component}
  */
-rflect.cal.MainBody = function(aViewManager, aTimeManager,
+rflect.cal.MainBody = function(aViewManager, aTimeManager, aEventManager,
     aContainerSizeMonitor, aBlockManager) {
   rflect.cal.Component.call(this);
 
@@ -45,6 +46,13 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager,
    * @private
    */
   this.timeManager_ = aTimeManager;
+
+  /**
+   * Link to event manager.
+   * @type {rflect.cal.events.EventManager}
+   * @private
+   */
+  this.eventManager_ = aEventManager;
 
   /**
    * Link to container size monitor.
@@ -65,7 +73,8 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager,
   this.addChild(this.topPane_ = new rflect.cal.TopPane(this.viewManager_,
       this.timeManager_));
   this.addChild(this.mainPane_ = new rflect.cal.MainPane(this.viewManager_,
-        this.timeManager_, this.containerSizeMonitor_, this.blockManager_));
+        this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
+        this.blockManager_));
   this.addChild(this.miniCal = new rflect.cal.MiniCal(this.viewManager_,
       this.timeManager_));
   this.addChild(this.calSelector_ = new rflect.cal.CalSelector(this.viewManager_,

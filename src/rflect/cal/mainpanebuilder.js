@@ -23,6 +23,7 @@ goog.require('rflect.date');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.MainPane} aMainPane Link to main pane.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
+ * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @param {rflect.cal.BlockPool} aBlockPoolWeek Link to week block pool.
  * @param {rflect.cal.BlockPool} aBlockPoolAllday Link to allday block pool.
  * @param {rflect.cal.BlockPool} aBlockPoolMonth Link to month block pool.
@@ -32,8 +33,8 @@ goog.require('rflect.date');
  * @constructor
  */
 rflect.cal.MainPaneBuilder = function(aViewManager, aMainPane, aTimeManager,
-    aBlockPoolWeek, aBlockPoolAllday, aBlockPoolMonth, aContainerSizeMonitor,
-    aTimeMarker) {
+    aEventManager, aBlockPoolWeek, aBlockPoolAllday, aBlockPoolMonth,
+    aContainerSizeMonitor, aTimeMarker) {
   /**
    * Link to view manager.
    * @type {rflect.cal.ViewManager}
@@ -54,6 +55,13 @@ rflect.cal.MainPaneBuilder = function(aViewManager, aMainPane, aTimeManager,
    * @private
    */
   this.timeManager_ = aTimeManager;
+
+  /**
+   * Link to event manager.
+   * @type {rflect.cal.events.EventManager}
+   * @private
+   */
+  this.eventManager_ = aEventManager;
 
   /**
    * Link to week block pool.
@@ -319,8 +327,10 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   // Individual event chip
   '<div class="event-rect-wk" style="top:',
   /*Chip top in pixels (30)*/
-  'px; width:',
-  /*Chip width in percents (100)*/
+  'px; margin-left:',
+  /*Chip margin-left in percents (33.3)*/
+  '%; margin-right:',
+  /*Chip margin-right in percents (33.3)*/
   '%; height:',
   /*Chip height in pixels (30)*/
   'px; margin-bottom:',
@@ -565,7 +575,7 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb) {
       };break;
       case 80: {
         this.buildWeekGridCols_(aSb, offset);
-        offset += 15;
+        offset += 25;
       };break;
       default: break;
     }
@@ -1349,28 +1359,35 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridCols_ =
 
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 11]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 12]);
+    aSb.append(colCounter);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 13]);
     // Events are placed here.
-    this.buildWeekBlockChips_(aSb, aOffset + 13, colCounter);
+    this.buildWeekBlockChips_(aSb, aOffset + 14, colCounter);
 
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 22]);
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 23]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 24]);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 25]);
   }
 };
 
 
 /**
- * Builds html for chips for particular block.
+ * Builds html for individual week chip.
  * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @param {number} aOffset Passed offset.
- * @param {number} aColCounter Number of column.
+ * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
+ * @param {rflect.cal.events.Chip} aChip Chip to build.
+ * @param {number} aTotalCols How many cols are in this chip's blob.
+ * @param {number} aStartCol In which col chip starts.
+ * @param {number} aColSpan How many cols chip spans.
  * @private
  *
- * // Individual event chip
+ * Individual event chip
  * '<div class="event-rect-wk" style="top:',
  * Chip top in pixels (30)
- * 'px; width:',
- * Chip width in percents (100)
+ * 'px; margin-left:',
+ * Chip margin-left in percents (33.3)
+ * '%; margin-right:',
+ * Chip margin-right in percents (33.3)
  * '%; height:',
  * Chip height in pixels (30)
  * 'px; margin-bottom:',
@@ -1386,9 +1403,99 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridCols_ =
  * '</div></div>',
  * // End of individual event chip.
  */
+rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
+    function(aSb, aOffset, aEventManager, aChip, aTotalCols, aStartCol,
+    aColSpan) {
+  var pixelStart = aChip.start * rflect.cal.predefined.HOUR_ROW_HEIGHT / 30;
+  var pixelHeight = (aChip.end - aChip.start) *
+      rflect.cal.predefined.HOUR_ROW_HEIGHT / 30;
+  var widthQuant = 100 / aTotalCols;
+  var event = aEventManager.getEventById(aChip.eventId);
+
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
+  aSb.append(pixelStart);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
+  // margin-left.
+  aSb.append(widthQuant * aStartCol);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
+  // margin-right.
+  aSb.append(100 - widthQuant * (aStartCol + aColSpan));
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
+  // Height.
+  aSb.append(pixelHeight);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 4]);
+  // margin-bottom.
+  aSb.append(-pixelHeight);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 5]);
+  // Addition class.
+  aSb.append('');
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 6]);
+  // Start time.
+  rflect.cal.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, true);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
+  // End time.
+  rflect.cal.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, false);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
+  // Description.
+  aSb.append(event.summary);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 9]);
+}
+
+
+/**
+ * Builds time label for chip.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @param {rflect.cal.events.Chip} aChip Chip.
+ * @param {boolean} aStart Whether label is for start.
+ * @private
+ */
+rflect.cal.MainPaneBuilder.buildWeekChipsTimeLabel_ =
+    function(aSb, aChip, aStart) {
+  var edgeIsCut = aStart && aChip.startIsCut || !aStart && aChip.endIsCut;
+  var totalMins = aStart ? aChip.start : aChip.end;
+  if (edgeIsCut)
+    aSb.append('00:00');
+  else {
+    var mins = totalMins % 60;
+    var hours = (totalMins - mins) / 60;
+    aSb.append(hours);
+    aSb.append(':');
+    aSb.append(mins);
+  }
+}
+
+
+/**
+ * Builds html for chips for particular block.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @param {number} aOffset Passed offset.
+ * @param {number} aColCounter Number of column.
+ * @private
+ */
 rflect.cal.MainPaneBuilder.prototype.buildWeekBlockChips_ =
     function(aSb, aOffset, aColCounter) {
-  var blobs = this.blockPoolWeek_.blocks[aColCounter];
+  rflect.cal.MainPaneBuilder.forEachChip_(aSb, aOffset, this.eventManager_,
+      this.blockPoolWeek_, aColCounter,
+      rflect.cal.MainPaneBuilder.buildWeekBlockChip_);
+}
+
+
+/**
+ * Iterates over each chip and calls callback on one.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @param {number} aOffset Passed offset.
+ * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
+ * @param {rflect.cal.BlockPool} aBlockPool Block pool that contains for which
+ * to iterate.
+ * @param {number} aColCounter Number of column to select block from block pool.
+ * @param {function(goog.string.StringBuffer, number, rflect.cal.events.EventManager, rflect.cal.events.Chip, number, number, number)} aFn
+ * Callback to call on each
+ * iteration.
+ * @private
+ */
+rflect.cal.MainPaneBuilder.forEachChip_ =
+    function(aSb, aOffset, aEventManager, aBlockPool, aColCounter, aFn) {
+  var blobs = aBlockPool.blocks[aColCounter].blobs;
   for (var blobCounter = 0, blobLength = blobs.length; blobCounter < blobLength;
       blobCounter++) {
     var blob = blobs[blobCounter].blob;
@@ -1400,16 +1507,7 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekBlockChips_ =
       var chip = blobEntry.chip;
       var startCol = blobEntry.startCol;
       var colSpan = blobEntry.colSpan;
-
-      aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
-      aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
-      aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
-      aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
-      aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 4]);
-      aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 5]);
-      aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 6]);
-      aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
-      aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
+      aFn(aSb, aOffset, aEventManager, chip, totalCols, startCol, colSpan);
     }
   }
 }

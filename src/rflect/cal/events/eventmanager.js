@@ -426,7 +426,7 @@ rflect.cal.events.EventManager.prototype.run = function() {
     var yearKey = daySeries[counter].getFullYear();
     if (this.viewManager_.isInWeekMode()) {
       var dayOfYearKey = daySeries[counter].getDayOfYear();
-      this.dayChips[counter].push(
+      this.dayChips.push(
           rflect.cal.events.EventManager.getNestedChips_(
           this.chipsByDay_, yearKey, dayOfYearKey) || []);
       this.allDayChips.push(
@@ -437,4 +437,13 @@ rflect.cal.events.EventManager.prototype.run = function() {
           this.chipsByWeek_, yearKey, weekKey) || []);
     }
   }
+}
+
+
+/**
+ * @param {number} aId Id of event.
+ * @return {rflect.cal.events.Event} Event with this id.
+ */
+rflect.cal.events.EventManager.prototype.getEventById = function(aId) {
+  return this.events_[aId];
 }
