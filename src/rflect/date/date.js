@@ -160,6 +160,37 @@ rflect.date.compareByWeekAndYear = function(aDateA, aDateB){
 
 
 /**
+ * @param {number} aYear Four digit year.
+ * @param {number} aMonth Month, 0 = Jan, 11 = Dec.
+ * @param {number} aDate Date of month, 1 - 31.
+ * @param {number} aHours Hours, 0 - 24.
+ * @param {number} aMinutes Minutes, 0 - 59.
+ * @param {number} aSeconds Seconds, 0 - 61.
+ * @param {boolean=} opt_full Whether to use real date object in creating.
+ * @return {rflect.date.DateShim} Date in DateShim form.
+ */
+rflect.date.createDateShim = function(aYear, aMonth, aDate, aHours, aMinutes, 
+    aSeconds, opt_full){
+  var dateObj;
+  var dateShim;
+
+  if (opt_full) {
+    dateObj = new goog.date.DateTime(aYear,aMonth, aDate, aHours, aMinutes,
+                     aSeconds);
+    dateShim = new rflect.date.DateShim(dateObj);
+  } else
+    dateShim = new rflect.date.DateShim(aYear, aMonth, aDate, aHours, aMinutes,
+      aSeconds);
+
+  if (opt_full) {
+    dateShim.setDay(dateObj.getDay());
+    dateShim.setDayOfYear(dateObj.getDayOfYear());
+    dateShim.setWeekNumber(dateObj.getWeekNumber());
+  }
+  return dateShim;
+}
+
+/**
  * @param {string} aDateStr JSON string representation of date.
  * @param {boolean=} opt_full Whether to use real date object in parsing.
  * @return {rflect.date.DateShim} Date in DateShim form.
@@ -172,23 +203,8 @@ rflect.date.parse = function(aDateStr, opt_full){
   var minutes = +aDateStr.substr(10, 2);
   var seconds = +aDateStr.substr(12, 2);
 
-  var dateObj;
-  var dateShim;
-
-  if (opt_full) {
-    dateObj = new goog.date.DateTime(year,month, date, hours, minutes,
-                     seconds);
-    dateShim = new rflect.date.DateShim(dateObj);
-  } else
-    dateShim = new rflect.date.DateShim(year, month, date, hours, minutes,
-      seconds);
-
-  if (opt_full) {
-    dateShim.setDay(dateObj.getDay());
-    dateShim.setDayOfYear(dateObj.getDayOfYear());
-    dateShim.setWeekNumber(dateObj.getWeekNumber());
-  }
-  return dateShim;
+  return rflect.date.createDateShim(year, month, date, hours, minutes, seconds,
+      opt_full);
 }
 
 
@@ -233,7 +249,7 @@ rflect.date.DateShim = function(opt_year_or_date, opt_month, opt_date, opt_hours
   if (goog.isNumber(opt_year_or_date)) {
     this.setYear(opt_year_or_date || 0);
     this.setMonth(/**@type {goog.date.month}*/(opt_month || 0));
-    this.setDate(opt_date || 0);
+    this.setDate(opt_date || 1);
     this.setHours(opt_hours || 0);
     this.setMinutes(opt_minutes || 0);
     this.setSeconds(opt_seconds || 0);
@@ -281,7 +297,7 @@ rflect.date.DateShim.prototype.month_ = goog.date.month.JAN;
  * @type {number}
  * @private
  */
-rflect.date.DateShim.prototype.dayOfMonth_ = 0;
+rflect.date.DateShim.prototype.dayOfMonth_ = 1;
 
 
 /**

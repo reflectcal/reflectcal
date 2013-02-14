@@ -1870,11 +1870,11 @@ $JSCompiler_prototypeAlias$$.$decorate$ = function $$JSCompiler_prototypeAlias$$
         var $JSCompiler_temp_const$$9$$ = $state$$2$$;
         if(!this.$stateByClass_$) {
           this.$classByState_$ || $JSCompiler_StaticMethods_createClassByStateMap_$$(this);
-          var $obj$$inline_940$$ = this.$classByState_$, $transposed$$inline_941$$ = {}, $key$$inline_942$$;
-          for($key$$inline_942$$ in $obj$$inline_940$$) {
-            $transposed$$inline_941$$[$obj$$inline_940$$[$key$$inline_942$$]] = $key$$inline_942$$
+          var $obj$$inline_938$$ = this.$classByState_$, $transposed$$inline_939$$ = {}, $key$$inline_940$$;
+          for($key$$inline_940$$ in $obj$$inline_938$$) {
+            $transposed$$inline_939$$[$obj$$inline_938$$[$key$$inline_940$$]] = $key$$inline_940$$
           }
-          this.$stateByClass_$ = $transposed$$inline_941$$
+          this.$stateByClass_$ = $transposed$$inline_939$$
         }
         $className$$18_state$$inline_220$$ = parseInt(this.$stateByClass_$[$className$$18_state$$inline_220$$], 10);
         $state$$2$$ = $JSCompiler_temp_const$$9$$ | (isNaN($className$$18_state$$inline_220$$) ? 0 : $className$$18_state$$inline_220$$)
@@ -2696,55 +2696,55 @@ function $JSCompiler_StaticMethods_formatStandaloneMonth_$$($count$$20$$, $date$
       return $goog$string$padNumber$$($value$$75$$ + 1, $count$$20$$)
   }
 }
-function $JSCompiler_StaticMethods_formatField_$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$, $dateForDate$$1$$, $dateForTime$$1$$) {
-  var $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.length;
+function $JSCompiler_StaticMethods_formatField_$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$, $dateForDate$$1$$, $dateForTime$$1$$) {
+  var $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ = $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.length;
   switch($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.charAt(0)) {
     case "G":
-      return $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = 0 < $dateForDate$$1$$.getFullYear() ? 1 : 0, 4 <= $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? $goog$i18n$DateTimeSymbols_en$$.$ERANAMES$[$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$] : $goog$i18n$DateTimeSymbols_en$$.$ERAS$[$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$];
+      return $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = 0 < $dateForDate$$1$$.getFullYear() ? 1 : 0, 4 <= $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ ? $goog$i18n$DateTimeSymbols_en$$.$ERANAMES$[$date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$] : $goog$i18n$DateTimeSymbols_en$$.$ERAS$[$date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$];
     case "y":
-      return $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = $dateForDate$$1$$.getFullYear(), 0 > $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ && ($date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = -$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$), 
-      2 == $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? $goog$string$padNumber$$($date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ % 100, 2) : "" + $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$;
+      return $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = $dateForDate$$1$$.getFullYear(), 0 > $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ && ($date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = -$date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$), 
+      2 == $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ ? $goog$string$padNumber$$($date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ % 100, 2) : "" + $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$;
     case "M":
-      return $JSCompiler_StaticMethods_formatMonth_$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$, $dateForDate$$1$$);
+      return $JSCompiler_StaticMethods_formatMonth_$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$, $dateForDate$$1$$);
     case "k":
-      return $goog$string$padNumber$$($dateForTime$$1$$.getHours() || 24, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
+      return $goog$string$padNumber$$($dateForTime$$1$$.getHours() || 24, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$);
     case "S":
-      return($dateForTime$$1$$.getTime() % 1E3 / 1E3).toFixed(Math.min(3, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$)).substr(2) + (3 < $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? $goog$string$padNumber$$(0, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ - 3) : "");
+      return($dateForTime$$1$$.getTime() % 1E3 / 1E3).toFixed(Math.min(3, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$)).substr(2) + (3 < $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ ? $goog$string$padNumber$$(0, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ - 3) : "");
     case "E":
-      return $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = $dateForDate$$1$$.getDay(), 4 <= $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? $goog$i18n$DateTimeSymbols_en$$.$WEEKDAYS$[$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$] : $goog$i18n$DateTimeSymbols_en$$.$SHORTWEEKDAYS$[$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$];
+      return $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = $dateForDate$$1$$.getDay(), 4 <= $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ ? $goog$i18n$DateTimeSymbols_en$$.$WEEKDAYS$[$date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$] : $goog$i18n$DateTimeSymbols_en$$.$SHORTWEEKDAYS$[$date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$];
     case "a":
-      return $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = $dateForTime$$1$$.getHours(), $goog$i18n$DateTimeSymbols_en$$.$AMPMS$[12 <= $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ && 24 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? 1 : 0];
+      return $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ = $dateForTime$$1$$.getHours(), $goog$i18n$DateTimeSymbols_en$$.$AMPMS$[12 <= $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ && 24 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ ? 1 : 0];
     case "h":
-      return $goog$string$padNumber$$($dateForTime$$1$$.getHours() % 12 || 12, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
+      return $goog$string$padNumber$$($dateForTime$$1$$.getHours() % 12 || 12, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$);
     case "K":
-      return $goog$string$padNumber$$($dateForTime$$1$$.getHours() % 12, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
+      return $goog$string$padNumber$$($dateForTime$$1$$.getHours() % 12, $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$);
     case "H":
-      return $goog$string$padNumber$$($dateForTime$$1$$.getHours(), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
+      return $goog$string$padNumber$$($dateForTime$$1$$.getHours(), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$);
     case "c":
-      return $JSCompiler_StaticMethods_formatStandaloneDay_$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$, $dateForDate$$1$$);
+      return $JSCompiler_StaticMethods_formatStandaloneDay_$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$, $dateForDate$$1$$);
     case "L":
-      return $JSCompiler_StaticMethods_formatStandaloneMonth_$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$, $dateForDate$$1$$);
+      return $JSCompiler_StaticMethods_formatStandaloneMonth_$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$, $dateForDate$$1$$);
     case "Q":
-      return $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = Math.floor($dateForDate$$1$$.getMonth() / 3), 4 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? $goog$i18n$DateTimeSymbols_en$$.$SHORTQUARTERS$[$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$] : $goog$i18n$DateTimeSymbols_en$$.$QUARTERS$[$date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$];
+      return $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = Math.floor($dateForDate$$1$$.getMonth() / 3), 4 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ ? $goog$i18n$DateTimeSymbols_en$$.$SHORTQUARTERS$[$date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$] : $goog$i18n$DateTimeSymbols_en$$.$QUARTERS$[$date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$];
     case "d":
-      return $goog$string$padNumber$$($dateForDate$$1$$.getDate(), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
+      return $goog$string$padNumber$$($dateForDate$$1$$.getDate(), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$);
     case "m":
-      return $goog$string$padNumber$$($dateForTime$$1$$.getMinutes(), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
+      return $goog$string$padNumber$$($dateForTime$$1$$.getMinutes(), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$);
     case "s":
-      return $goog$string$padNumber$$($dateForTime$$1$$.getSeconds(), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$);
+      return $goog$string$padNumber$$($dateForTime$$1$$.getSeconds(), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$);
     case "v":
-      return $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.getTimezoneOffset()), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$.$timeZoneId_$;
+      return $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.getTimezoneOffset()), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$.$timeZoneId_$;
     case "z":
-      return $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.getTimezoneOffset()), 4 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.$tzNames_$[0 < $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, 
-      $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$) ? 2 : 0] : $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.$tzNames_$[0 < $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$) ? 3 : 1];
+      return $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.getTimezoneOffset()), 4 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ ? $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.$tzNames_$[0 < $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, 
+      $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$) ? 2 : 0] : $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.$tzNames_$[0 < $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$) ? 3 : 1];
     case "Z":
-      return $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.getTimezoneOffset()), 4 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? ($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = 
-      -($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.$standardOffset_$ - $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$)), $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = [0 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? 
-      "-" : "+"], $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = Math.abs($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$), $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.push($goog$string$padNumber$$(Math.floor($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ / 
-      60) % 100, 2), $goog$string$padNumber$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ % 60, 2))) : ($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.$standardOffset_$ - $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$), 
-      $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = ["GMT"], $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.push(0 >= $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ ? "+" : "-"), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = 
-      Math.abs($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$), $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.push($goog$string$padNumber$$(Math.floor($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ / 60) % 100, 2), ":", $goog$string$padNumber$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ % 
-      60, 2))), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_944_opt_timeZone$$inline_366$$ = $date$$40_parts$$inline_727_parts$$inline_945_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.join("");
+      return $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.getTimezoneOffset()), 4 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ ? ($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ = 
+      -($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.$standardOffset_$ - $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$)), $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = [0 > $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ ? 
+      "-" : "+"], $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ = Math.abs($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$), $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.push($goog$string$padNumber$$(Math.floor($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ / 
+      60) % 100, 2), $goog$string$padNumber$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ % 60, 2))) : ($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ = $opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$.$standardOffset_$ - $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_371_opt_timeZone$$inline_376_patternStr$$, $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$), 
+      $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$ = ["GMT"], $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.push(0 >= $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ ? "+" : "-"), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ = 
+      Math.abs($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$), $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.push($goog$string$padNumber$$(Math.floor($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ / 60) % 100, 2), ":", $goog$string$padNumber$$($JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ % 
+      60, 2))), $JSCompiler_temp$$669_count$$27_hours$$inline_357_offset$$inline_726_offset$$inline_942_opt_timeZone$$inline_366$$ = $date$$40_parts$$inline_727_parts$$inline_943_value$$inline_343_value$$inline_348_value$$inline_353_value$$inline_362$$.join("");
     default:
       return""
   }
@@ -2872,9 +2872,9 @@ $JSCompiler_prototypeAlias$$.$enterDocument$ = function $$JSCompiler_prototypeAl
   this.$buttonOptions_$.$decorate$(this.$dom_$.$getElement$("nb8"));
   $rflect$cal$TopPane$$.$superClass_$.$enterDocument$.call(this);
   $JSCompiler_StaticMethods_updateButtons_$$(this);
-  $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_getHandler$$(this), this.$buttonNewEvent_$, "action", function($aEvent$$) {
+  $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_getHandler$$(this), this.$buttonNewEvent_$, "action", function($aEvent$$1$$) {
     this.dispatchEvent("toppaneevent");
-    $JSCompiler_StaticMethods_setFocused$$($aEvent$$.target, $JSCompiler_alias_FALSE$$)
+    $JSCompiler_StaticMethods_setFocused$$($aEvent$$1$$.target, $JSCompiler_alias_FALSE$$)
   }, $JSCompiler_alias_FALSE$$, this)
 };
 function $JSCompiler_StaticMethods_getDateHeader$$($JSCompiler_StaticMethods_getDateHeader$self_formatStart$$) {
@@ -2973,14 +2973,14 @@ function $rflect$date$getTomorrow$$($aGivenDate_cutoff$$2$$) {
   return $dateObject_year$$15$$
 }
 function $rflect$date$DateShim$$($dateObj$$1_opt_year_or_date$$, $opt_month$$2$$, $opt_date$$3$$, $opt_hours$$3$$, $opt_minutes$$2$$, $opt_seconds$$2$$, $opt_milliseconds$$1$$) {
-  $goog$isNumber$$($dateObj$$1_opt_year_or_date$$) ? (this.setYear($dateObj$$1_opt_year_or_date$$ || 0), this.setMonth($opt_month$$2$$ || 0), this.setDate($opt_date$$3$$ || 0), this.setHours($opt_hours$$3$$ || 0), this.setMinutes($opt_minutes$$2$$ || 0), this.setSeconds($opt_seconds$$2$$ || 0), this.setMilliseconds($opt_milliseconds$$1$$ || 0)) : ($dateObj$$1_opt_year_or_date$$ = $goog$isObject$$($dateObj$$1_opt_year_or_date$$) ? $dateObj$$1_opt_year_or_date$$ : new Date, this.setYear($dateObj$$1_opt_year_or_date$$.getFullYear()), 
+  $goog$isNumber$$($dateObj$$1_opt_year_or_date$$) ? (this.setYear($dateObj$$1_opt_year_or_date$$ || 0), this.setMonth($opt_month$$2$$ || 0), this.setDate($opt_date$$3$$ || 1), this.setHours($opt_hours$$3$$ || 0), this.setMinutes($opt_minutes$$2$$ || 0), this.setSeconds($opt_seconds$$2$$ || 0), this.setMilliseconds($opt_milliseconds$$1$$ || 0)) : ($dateObj$$1_opt_year_or_date$$ = $goog$isObject$$($dateObj$$1_opt_year_or_date$$) ? $dateObj$$1_opt_year_or_date$$ : new Date, this.setYear($dateObj$$1_opt_year_or_date$$.getFullYear()), 
   this.setMonth($dateObj$$1_opt_year_or_date$$.getMonth()), this.setDate($dateObj$$1_opt_year_or_date$$.getDate()), this.$day_$ = $dateObj$$1_opt_year_or_date$$.getDay(), $dateObj$$1_opt_year_or_date$$.setHours && (this.setHours($dateObj$$1_opt_year_or_date$$.getHours()), this.setMinutes($dateObj$$1_opt_year_or_date$$.getMinutes()), this.setSeconds($dateObj$$1_opt_year_or_date$$.getSeconds()), this.setMilliseconds($dateObj$$1_opt_year_or_date$$.getMilliseconds())))
 }
 $goog$inherits$$($rflect$date$DateShim$$, $goog$date$DateTime$$);
 $JSCompiler_prototypeAlias$$ = $rflect$date$DateShim$$.prototype;
 $JSCompiler_prototypeAlias$$.$year_$ = 0;
 $JSCompiler_prototypeAlias$$.$month_$ = 0;
-$JSCompiler_prototypeAlias$$.$dayOfMonth_$ = 0;
+$JSCompiler_prototypeAlias$$.$dayOfMonth_$ = 1;
 $JSCompiler_prototypeAlias$$.$day_$ = 0;
 $JSCompiler_prototypeAlias$$.time = 0;
 $JSCompiler_prototypeAlias$$.$hours_$ = 0;
@@ -3254,8 +3254,8 @@ function $JSCompiler_StaticMethods_calculateDateAndSelectionType_$$($JSCompiler_
   var $numberOfDaysInMonth_tempDate$$1_year$$19$$ = $JSCompiler_StaticMethods_calculateDateAndSelectionType_$self$$.$timeManager_$.$daySeries$[$aMinCell$$1$$.x + 7 * $aMinCell$$1$$.y];
   $JSCompiler_StaticMethods_calculateDateAndSelectionType_$self$$.$startDate_$ = new $goog$date$DateTime$$($numberOfDaysInMonth_tempDate$$1_year$$19$$.getYear(), $numberOfDaysInMonth_tempDate$$1_year$$19$$.getMonth(), $numberOfDaysInMonth_tempDate$$1_year$$19$$.getDate());
   var $aMaxCell_duration$$1$$ = $JSCompiler_StaticMethods_calculateDateAndSelectionType_$self$$.$duration_$ = $aMaxCell_duration$$1$$.x + 7 * $aMaxCell_duration$$1$$.y - ($aMinCell$$1$$.x + 7 * $aMinCell$$1$$.y) + 1, $dayInMonth_indexOfFirstDayOfMonth$$ = $JSCompiler_StaticMethods_calculateDateAndSelectionType_$self$$.$timeManager_$.$daySeries$[6], $numberOfDaysInMonth_tempDate$$1_year$$19$$ = $dayInMonth_indexOfFirstDayOfMonth$$.getYear(), $month$$10$$ = $dayInMonth_indexOfFirstDayOfMonth$$.getMonth(), 
-  $dayInMonth_indexOfFirstDayOfMonth$$ = $goog$array$findIndex$$($JSCompiler_StaticMethods_calculateDateAndSelectionType_$self$$.$timeManager_$.$daySeries$, function($aDate$$5$$) {
-    return 1 == $aDate$$5$$.getDate()
+  $dayInMonth_indexOfFirstDayOfMonth$$ = $goog$array$findIndex$$($JSCompiler_StaticMethods_calculateDateAndSelectionType_$self$$.$timeManager_$.$daySeries$, function($aDate$$6$$) {
+    return 1 == $aDate$$6$$.getDate()
   }), $numberOfDaysInMonth_tempDate$$1_year$$19$$ = 0 == ($dayInMonth_indexOfFirstDayOfMonth$$ + $goog$date$getNumberOfDaysInMonth$$($numberOfDaysInMonth_tempDate$$1_year$$19$$, $month$$10$$)) % 7 ? $dayInMonth_indexOfFirstDayOfMonth$$ + $goog$date$getNumberOfDaysInMonth$$($numberOfDaysInMonth_tempDate$$1_year$$19$$, $month$$10$$) : $dayInMonth_indexOfFirstDayOfMonth$$ + $goog$date$getNumberOfDaysInMonth$$($numberOfDaysInMonth_tempDate$$1_year$$19$$, $month$$10$$) - ($dayInMonth_indexOfFirstDayOfMonth$$ + 
   $goog$date$getNumberOfDaysInMonth$$($numberOfDaysInMonth_tempDate$$1_year$$19$$, $month$$10$$)) % 7 + 7;
   0 == $aMaxCell_duration$$1$$ % 7 && 0 == $aMinCell$$1$$.x ? 0 == $aMinCell$$1$$.y && $aMaxCell_duration$$1$$ == $numberOfDaysInMonth_tempDate$$1_year$$19$$ ? ($JSCompiler_StaticMethods_calculateDateAndSelectionType_$self$$.$selectionConfiguration_$ = 5, $numberOfDaysInMonth_tempDate$$1_year$$19$$ = $JSCompiler_StaticMethods_calculateDateAndSelectionType_$self$$.$timeManager_$.$daySeries$[$dayInMonth_indexOfFirstDayOfMonth$$], $JSCompiler_StaticMethods_calculateDateAndSelectionType_$self$$.$firstDayInMonth_$ = 
@@ -3285,10 +3285,10 @@ function $JSCompiler_StaticMethods_initMask_$$($JSCompiler_StaticMethods_initMas
     var $overlap_startSelectionIndex$$1$$ = $JSCompiler_StaticMethods_overlap$$($JSCompiler_StaticMethods_initMask_$self$$.$timeManager_$.$interval$, $JSCompiler_StaticMethods_initMask_$self$$.$extTimeManager_$.$interval$), $endSelectionIndex$$1_startDate$$4$$ = new $goog$date$Date$$, $endDate$$4$$ = new $goog$date$Date$$;
     $endSelectionIndex$$1_startDate$$4$$.setTime($overlap_startSelectionIndex$$1$$.start);
     $endDate$$4$$.setTime($overlap_startSelectionIndex$$1$$.end);
-    var $startDateDay$$ = $endSelectionIndex$$1_startDate$$4$$.getDate(), $startDateMonth$$ = $endSelectionIndex$$1_startDate$$4$$.getMonth(), $endDateDay$$ = $endDate$$4$$.getDate(), $endDateMonth$$ = $endDate$$4$$.getMonth(), $overlap_startSelectionIndex$$1$$ = $goog$array$findIndex$$($JSCompiler_StaticMethods_initMask_$self$$.$timeManager_$.$daySeries$, function($aDate$$6$$) {
-      return $startDateMonth$$ == $aDate$$6$$.getMonth() && $startDateDay$$ == $aDate$$6$$.getDate()
-    }), $endSelectionIndex$$1_startDate$$4$$ = $goog$array$findIndexRight$$($JSCompiler_StaticMethods_initMask_$self$$.$timeManager_$.$daySeries$, function($aDate$$7$$) {
-      return $endDateMonth$$ == $aDate$$7$$.getMonth() && $endDateDay$$ == $aDate$$7$$.getDate()
+    var $startDateDay$$ = $endSelectionIndex$$1_startDate$$4$$.getDate(), $startDateMonth$$ = $endSelectionIndex$$1_startDate$$4$$.getMonth(), $endDateDay$$ = $endDate$$4$$.getDate(), $endDateMonth$$ = $endDate$$4$$.getMonth(), $overlap_startSelectionIndex$$1$$ = $goog$array$findIndex$$($JSCompiler_StaticMethods_initMask_$self$$.$timeManager_$.$daySeries$, function($aDate$$7$$) {
+      return $startDateMonth$$ == $aDate$$7$$.getMonth() && $startDateDay$$ == $aDate$$7$$.getDate()
+    }), $endSelectionIndex$$1_startDate$$4$$ = $goog$array$findIndexRight$$($JSCompiler_StaticMethods_initMask_$self$$.$timeManager_$.$daySeries$, function($aDate$$8$$) {
+      return $endDateMonth$$ == $aDate$$8$$.getMonth() && $endDateDay$$ == $aDate$$8$$.getDate()
     });
     0 <= $overlap_startSelectionIndex$$1$$ && (0 > $endSelectionIndex$$1_startDate$$4$$ ? $endSelectionIndex$$1_startDate$$4$$ = $JSCompiler_StaticMethods_initMask_$self$$.$timeManager_$.$daySeries$.length - 1 : $endSelectionIndex$$1_startDate$$4$$--)
   }
@@ -3308,17 +3308,17 @@ $JSCompiler_prototypeAlias$$.$enterDocument$ = function $$JSCompiler_prototypeAl
   $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_getHandler$$(this), this.$getElement$(), "click", this.$onClick_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mouseover", this.$onMouseOver_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mouseout", this.$onMouseOut_$, 
   $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mousedown", this.$onMouseDown_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "selectstart", this.$onSelectStart_$, $JSCompiler_alias_FALSE$$, this), document, "mousemove", this.$onMouseMove_$, $JSCompiler_alias_FALSE$$, this), document, "mouseup", this.$onMouseUp_$, $JSCompiler_alias_FALSE$$, this)
 };
-$JSCompiler_prototypeAlias$$.$onClick_$ = function $$JSCompiler_prototypeAlias$$$$onClick_$$($aEvent$$1_className$$26$$) {
-  var $aEvent$$1_className$$26$$ = $aEvent$$1_className$$26$$.target.className, $direction$$4$$ = 0;
-  $rflect$string$buildClassNameRe$$("month-sel-btn-forward").test($aEvent$$1_className$$26$$) ? $direction$$4$$ = 1 : $rflect$string$buildClassNameRe$$("month-sel-btn-back").test($aEvent$$1_className$$26$$) && ($direction$$4$$ = -1);
+$JSCompiler_prototypeAlias$$.$onClick_$ = function $$JSCompiler_prototypeAlias$$$$onClick_$$($aEvent$$2_className$$26$$) {
+  var $aEvent$$2_className$$26$$ = $aEvent$$2_className$$26$$.target.className, $direction$$4$$ = 0;
+  $rflect$string$buildClassNameRe$$("month-sel-btn-forward").test($aEvent$$2_className$$26$$) ? $direction$$4$$ = 1 : $rflect$string$buildClassNameRe$$("month-sel-btn-back").test($aEvent$$2_className$$26$$) && ($direction$$4$$ = -1);
   $direction$$4$$ && (this.$updateBeforeRedraw$($JSCompiler_alias_TRUE$$, $direction$$4$$), this.$updateByRedraw$())
 };
-$JSCompiler_prototypeAlias$$.$onMouseOver_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOver_$$($aEvent$$2_target$$43$$) {
-  $aEvent$$2_target$$43$$ = $aEvent$$2_target$$43$$.target;
-  $JSCompiler_StaticMethods_isField_$$(this, $aEvent$$2_target$$43$$.className) && $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $aEvent$$2_target$$43$$, "goog-date-picker-selected")
+$JSCompiler_prototypeAlias$$.$onMouseOver_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOver_$$($aEvent$$3_target$$43$$) {
+  $aEvent$$3_target$$43$$ = $aEvent$$3_target$$43$$.target;
+  $JSCompiler_StaticMethods_isField_$$(this, $aEvent$$3_target$$43$$.className) && $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $aEvent$$3_target$$43$$, "goog-date-picker-selected")
 };
-$JSCompiler_prototypeAlias$$.$onMouseOut_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOut_$$($aEvent$$3$$) {
-  $JSCompiler_StaticMethods_isField_$$(this, $aEvent$$3$$.target.className) && $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $JSCompiler_alias_NULL$$)
+$JSCompiler_prototypeAlias$$.$onMouseOut_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOut_$$($aEvent$$4$$) {
+  $JSCompiler_StaticMethods_isField_$$(this, $aEvent$$4$$.target.className) && $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $JSCompiler_alias_NULL$$)
 };
 function $JSCompiler_StaticMethods_isButton_$$($JSCompiler_StaticMethods_isButton_$self$$, $aClassName$$1$$) {
   return($JSCompiler_StaticMethods_isButton_$self$$.$buttonRe_$ || ($JSCompiler_StaticMethods_isButton_$self$$.$buttonRe_$ = $rflect$string$buildClassNameRe$$("goog-date-picker-btn"))).test($aClassName$$1$$)
@@ -3326,20 +3326,20 @@ function $JSCompiler_StaticMethods_isButton_$$($JSCompiler_StaticMethods_isButto
 function $JSCompiler_StaticMethods_isField_$$($JSCompiler_StaticMethods_isField_$self$$, $aClassName$$2$$) {
   return($JSCompiler_StaticMethods_isField_$self$$.$fieldRe_$ || ($JSCompiler_StaticMethods_isField_$self$$.$fieldRe_$ = $rflect$string$buildClassNameRe$$("goog-date-picker-date"))).test($aClassName$$2$$)
 }
-$JSCompiler_prototypeAlias$$.$onMouseDown_$ = function $$JSCompiler_prototypeAlias$$$$onMouseDown_$$($aEvent$$4$$) {
-  var $className$$29$$ = $aEvent$$4$$.target.className, $index$$60$$ = $rflect$string$getNumericIndex$$($aEvent$$4$$.target.id);
+$JSCompiler_prototypeAlias$$.$onMouseDown_$ = function $$JSCompiler_prototypeAlias$$$$onMouseDown_$$($aEvent$$5$$) {
+  var $className$$29$$ = $aEvent$$5$$.target.className, $index$$60$$ = $rflect$string$getNumericIndex$$($aEvent$$5$$.target.id);
   $JSCompiler_StaticMethods_isField_$$(this, $className$$29$$) && this.$selectionMask$.$init$(4, $index$$60$$, 0);
-  ($JSCompiler_StaticMethods_isButton_$$(this, $className$$29$$) || $JSCompiler_StaticMethods_isField_$$(this, $className$$29$$)) && $aEvent$$4$$.preventDefault()
+  ($JSCompiler_StaticMethods_isButton_$$(this, $className$$29$$) || $JSCompiler_StaticMethods_isField_$$(this, $className$$29$$)) && $aEvent$$5$$.preventDefault()
 };
-$JSCompiler_prototypeAlias$$.$onSelectStart_$ = function $$JSCompiler_prototypeAlias$$$$onSelectStart_$$($aEvent$$5$$) {
-  ($JSCompiler_StaticMethods_isButton_$$(this, $aEvent$$5$$.target.className) || $JSCompiler_StaticMethods_isField_$$(this, $aEvent$$5$$.target.className)) && $aEvent$$5$$.preventDefault()
+$JSCompiler_prototypeAlias$$.$onSelectStart_$ = function $$JSCompiler_prototypeAlias$$$$onSelectStart_$$($aEvent$$6$$) {
+  ($JSCompiler_StaticMethods_isButton_$$(this, $aEvent$$6$$.target.className) || $JSCompiler_StaticMethods_isField_$$(this, $aEvent$$6$$.target.className)) && $aEvent$$6$$.preventDefault()
 };
-$JSCompiler_prototypeAlias$$.$onMouseMove_$ = function $$JSCompiler_prototypeAlias$$$$onMouseMove_$$($aEvent$$6$$) {
-  var $className$$31_target$$45$$ = $aEvent$$6$$.target, $index$$61$$ = $rflect$string$getNumericIndex$$($className$$31_target$$45$$.id), $className$$31_target$$45$$ = $className$$31_target$$45$$.className;
-  this.$selectionMask$.$dragStarted_$ && $JSCompiler_StaticMethods_isField_$$(this, $className$$31_target$$45$$) && (this.$selectionMask$.update($index$$61$$), $aEvent$$6$$.preventDefault())
+$JSCompiler_prototypeAlias$$.$onMouseMove_$ = function $$JSCompiler_prototypeAlias$$$$onMouseMove_$$($aEvent$$7$$) {
+  var $className$$31_target$$45$$ = $aEvent$$7$$.target, $index$$61$$ = $rflect$string$getNumericIndex$$($className$$31_target$$45$$.id), $className$$31_target$$45$$ = $className$$31_target$$45$$.className;
+  this.$selectionMask$.$dragStarted_$ && $JSCompiler_StaticMethods_isField_$$(this, $className$$31_target$$45$$) && (this.$selectionMask$.update($index$$61$$), $aEvent$$7$$.preventDefault())
 };
-$JSCompiler_prototypeAlias$$.$onMouseUp_$ = function $$JSCompiler_prototypeAlias$$$$onMouseUp_$$($aEvent$$7$$) {
-  this.$selectionMask$.$dragStarted_$ && (this.$selectionMask$.close(), $aEvent$$7$$.preventDefault())
+$JSCompiler_prototypeAlias$$.$onMouseUp_$ = function $$JSCompiler_prototypeAlias$$$$onMouseUp_$$($aEvent$$8$$) {
+  this.$selectionMask$.$dragStarted_$ && (this.$selectionMask$.close(), $aEvent$$8$$.preventDefault())
 };
 $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototypeAlias$$$$disposeInternal$$() {
   $rflect$cal$MiniCal$$.$superClass_$.$disposeInternal$.call(this);
@@ -3397,14 +3397,14 @@ $JSCompiler_prototypeAlias$$.$enterDocument$ = function $$JSCompiler_prototypeAl
   $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_getHandler$$(this), this.$getElement$(), "mouseover", this.$onMouseOver_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mouseout", this.$onMouseOut_$, $JSCompiler_alias_FALSE$$, this);
   this.$scrollableEl_$ = $goog$dom$getChildren$$(this.$getElement$())[1]
 };
-$JSCompiler_prototypeAlias$$.$onMouseOut_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOut_$$($aEvent$$8$$) {
-  (!$aEvent$$8$$.relatedTarget || !this.$dom_$.contains(this.$getElement$(), $aEvent$$8$$.relatedTarget)) && $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistryForWhole_$, $JSCompiler_alias_NULL$$);
+$JSCompiler_prototypeAlias$$.$onMouseOut_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOut_$$($aEvent$$9$$) {
+  (!$aEvent$$9$$.relatedTarget || !this.$dom_$.contains(this.$getElement$(), $aEvent$$9$$.relatedTarget)) && $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistryForWhole_$, $JSCompiler_alias_NULL$$);
   $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistryForParts_$, $JSCompiler_alias_NULL$$)
 };
-$JSCompiler_prototypeAlias$$.$onMouseOver_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOver_$$($aEvent$$9_target$$47$$) {
-  var $aEvent$$9_target$$47$$ = $aEvent$$9_target$$47$$.target, $className$$33$$ = $aEvent$$9_target$$47$$.className;
+$JSCompiler_prototypeAlias$$.$onMouseOver_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOver_$$($aEvent$$10_target$$47$$) {
+  var $aEvent$$10_target$$47$$ = $aEvent$$10_target$$47$$.target, $className$$33$$ = $aEvent$$10_target$$47$$.className;
   $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistryForWhole_$, this.getHeader(), "list-label-cont-highlighted");
-  this.$isButton$($className$$33$$) && $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistryForParts_$, $aEvent$$9_target$$47$$, "list-selector-options-button-highlighted")
+  this.$isButton$($className$$33$$) && $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistryForParts_$, $aEvent$$10_target$$47$$, "list-selector-options-button-highlighted")
 };
 $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototypeAlias$$$$disposeInternal$$() {
   $rflect$cal$ListSelector$$.$superClass_$.$disposeInternal$.call(this);
@@ -3507,8 +3507,8 @@ function $JSCompiler_StaticMethods_getPosition_$$($aHead$$, $opt_today$$) {
   return $aHead$$ ? $pixelPos_today$$2$$ - 2.5 : $pixelPos_today$$2$$ - 0.5
 }
 function $JSCompiler_StaticMethods_getIndexOfTodayBlock_$$($JSCompiler_StaticMethods_getIndexOfTodayBlock_$self$$, $aToday$$) {
-  return $goog$array$findIndex$$($JSCompiler_StaticMethods_getIndexOfTodayBlock_$self$$.$timeManager_$.$daySeries$, function($aDate$$8$$) {
-    return $aDate$$8$$.$equals$($aToday$$, 7)
+  return $goog$array$findIndex$$($JSCompiler_StaticMethods_getIndexOfTodayBlock_$self$$.$timeManager_$.$daySeries$, function($aDate$$9$$) {
+    return $aDate$$9$$.$equals$($aToday$$, 7)
   })
 }
 $rflect$cal$TimeMarker$$.prototype.start = function $$rflect$cal$TimeMarker$$$$start$() {
@@ -3539,18 +3539,18 @@ $JSCompiler_prototypeAlias$$.close = function $$JSCompiler_prototypeAlias$$$clos
   this.$maskEl_$.style.display = "none";
   this.$initialized_$ = $JSCompiler_alias_FALSE$$
 };
-$JSCompiler_prototypeAlias$$.update = function $$JSCompiler_prototypeAlias$$$update$($aEvent$$10_currentCell$$1$$) {
-  var $pageScroll$$ = $JSCompiler_StaticMethods_getDocumentScroll$$($goog$dom$getDomHelper$$(this.$document_$)), $aEvent$$10_currentCell$$1$$ = $JSCompiler_StaticMethods_getCellByCoordinate_$$(this, $aEvent$$10_currentCell$$1$$.clientX + $pageScroll$$.x - this.$elementOffset_$.x + this.$scrollableEl_$.scrollLeft, $aEvent$$10_currentCell$$1$$.clientY + $pageScroll$$.y - this.$elementOffset_$.y + this.$scrollableEl_$.scrollTop);
-  $goog$math$Coordinate$equals$$(this.$currentCell_$, $aEvent$$10_currentCell$$1$$) || (this.$currentCell_$ = $aEvent$$10_currentCell$$1$$, this.$update_$())
+$JSCompiler_prototypeAlias$$.update = function $$JSCompiler_prototypeAlias$$$update$($aEvent$$11_currentCell$$1$$) {
+  var $pageScroll$$ = $JSCompiler_StaticMethods_getDocumentScroll$$($goog$dom$getDomHelper$$(this.$document_$)), $aEvent$$11_currentCell$$1$$ = $JSCompiler_StaticMethods_getCellByCoordinate_$$(this, $aEvent$$11_currentCell$$1$$.clientX + $pageScroll$$.x - this.$elementOffset_$.x + this.$scrollableEl_$.scrollLeft, $aEvent$$11_currentCell$$1$$.clientY + $pageScroll$$.y - this.$elementOffset_$.y + this.$scrollableEl_$.scrollTop);
+  $goog$math$Coordinate$equals$$(this.$currentCell_$, $aEvent$$11_currentCell$$1$$) || (this.$currentCell_$ = $aEvent$$11_currentCell$$1$$, this.$update_$())
 };
-$JSCompiler_prototypeAlias$$.$init$ = function $$JSCompiler_prototypeAlias$$$$init$$($aConfiguration$$2$$, $aEvent$$11$$) {
+$JSCompiler_prototypeAlias$$.$init$ = function $$JSCompiler_prototypeAlias$$$$init$$($aConfiguration$$2$$, $aEvent$$12$$) {
   $rflect$cal$SelectionMask$$.prototype.$init$.call(this, $aConfiguration$$2$$);
   var $doc$$33_pageScroll$$1$$ = this.$document_$ || (this.$document_$ = $goog$dom$getOwnerDocument$$(this.$component_$.$getElement$())), $doc$$33_pageScroll$$1$$ = $JSCompiler_StaticMethods_getDocumentScroll$$($goog$dom$getDomHelper$$($doc$$33_pageScroll$$1$$)), $coordX_coordXWithoutScroll$$ = 0, $coordYWithoutScroll$$ = 0, $coordY$$ = $coordX_coordXWithoutScroll$$ = 0;
   this.$elementOffset_$ = new $goog$math$Coordinate$$(0, 0);
   this.$isWeekOrAllday_$() ? (1 == this.$configuration_$ ? (this.$scrollableEl_$ = $goog$dom$getElement$$("main-pane-header-scrollable"), this.$maskEl_$ = $goog$dom$getElement$$("wk-ad-mask-cnt"), this.$elementOffset_$ = $goog$style$getRelativePosition$$(this.$scrollableEl_$), this.$elementOffset_$.x += 1) : (this.$scrollableEl_$ = $goog$dom$getElement$$("main-pane-body-scrollable-wk"), this.$maskEl_$ = $goog$dom$getElement$$("wk-mask-cnt"), this.$elementOffset_$ = $goog$style$getRelativePosition$$(this.$scrollableEl_$), 
   this.$elementOffset_$.x += 62), this.$elementOffset_$.y += 1) : 3 == this.$configuration_$ && (this.$scrollableEl_$ = $goog$dom$getElement$$("main-pane-body-scrollable-mn"), this.$maskEl_$ = $goog$dom$getElement$$("mn-mask-cnt"), this.$elementOffset_$ = $goog$style$getRelativePosition$$(this.$scrollableEl_$), this.$elementOffset_$.x += 17, this.$elementOffset_$.y += 1);
-  $coordX_coordXWithoutScroll$$ = $aEvent$$11$$.clientX + $doc$$33_pageScroll$$1$$.x - this.$elementOffset_$.x;
-  $coordYWithoutScroll$$ = $aEvent$$11$$.clientY + $doc$$33_pageScroll$$1$$.y - this.$elementOffset_$.y;
+  $coordX_coordXWithoutScroll$$ = $aEvent$$12$$.clientX + $doc$$33_pageScroll$$1$$.x - this.$elementOffset_$.x;
+  $coordYWithoutScroll$$ = $aEvent$$12$$.clientY + $doc$$33_pageScroll$$1$$.y - this.$elementOffset_$.y;
   $coordX_coordXWithoutScroll$$ += this.$scrollableEl_$.scrollLeft;
   $coordY$$ = $coordYWithoutScroll$$ + this.$scrollableEl_$.scrollTop;
   $coordYWithoutScroll$$ >= this.$scrollableEl_$.offsetHeight || 0 > $coordYWithoutScroll$$ || (this.$startCell_$ = $JSCompiler_StaticMethods_getCellByCoordinate_$$(this, $coordX_coordXWithoutScroll$$, $coordY$$), this.$currentCell_$ = this.$startCell_$.$clone$(), $_log$$("coord: ", new $goog$math$Coordinate$$($coordX_coordXWithoutScroll$$, $coordY$$)), $_log$$("this.startCell_", this.$startCell_$), $_log$$("this.currentCell_", this.$currentCell_$), this.$maskEl_$.style.display = "", this.$initialized_$ = 
@@ -3853,42 +3853,43 @@ $JSCompiler_prototypeAlias$$.$buildBodyInternal$ = function $$JSCompiler_prototy
               $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 7]);
               if($JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$timeManager_$.$currentDay_$ && $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$timeManager_$.$currentDay_$.$equals$($JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$timeManager_$.$daySeries$[$colCounter$$inline_858$$], 7)) {
                 $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 8]);
-                var $aSb$$inline_947$$ = $aSb$$inline_854$$;
-                $aSb$$inline_947$$.append($rflect$cal$TimeMarker$HEAD_PARTS_$$[2]);
-                $aSb$$inline_947$$.append($JSCompiler_StaticMethods_getPosition_$$($JSCompiler_alias_FALSE$$));
-                $aSb$$inline_947$$.append($rflect$cal$TimeMarker$HEAD_PARTS_$$[3])
+                var $aSb$$inline_945$$ = $aSb$$inline_854$$;
+                $aSb$$inline_945$$.append($rflect$cal$TimeMarker$HEAD_PARTS_$$[2]);
+                $aSb$$inline_945$$.append($JSCompiler_StaticMethods_getPosition_$$($JSCompiler_alias_FALSE$$));
+                $aSb$$inline_945$$.append($rflect$cal$TimeMarker$HEAD_PARTS_$$[3])
               }
-              for(var $aSb$$inline_950$$ = $aSb$$inline_854$$, $aOffset$$inline_951$$ = $aOffset$$inline_855$$ + 9, $block$$inline_953$$ = $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$blockPoolWeek_$.$blocks$[$colCounter$$inline_858$$], $counter$$inline_954$$ = 0;6 > $counter$$inline_954$$;$counter$$inline_954$$++) {
-                $aSb$$inline_950$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_951$$]), $aSb$$inline_950$$.append(!$block$$inline_953$$.$expanded$ && $block$$inline_953$$.$couldBeExpanded$ ? "expand-sign-wk-collapsed" : $block$$inline_953$$.$expanded$ && $block$$inline_953$$.$couldBeCollapsed$ ? "expand-sign-wk-expanded" : ""), $aSb$$inline_950$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_951$$ + 1])
+              for(var $aSb$$inline_948$$ = $aSb$$inline_854$$, $aOffset$$inline_949$$ = $aOffset$$inline_855$$ + 9, $block$$inline_951$$ = $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$blockPoolWeek_$.$blocks$[$colCounter$$inline_858$$], $counter$$inline_952$$ = 0;6 > $counter$$inline_952$$;$counter$$inline_952$$++) {
+                $aSb$$inline_948$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_949$$]), $aSb$$inline_948$$.append(!$block$$inline_951$$.$expanded$ && $block$$inline_951$$.$couldBeExpanded$ ? "expand-sign-wk-collapsed" : $block$$inline_951$$.$expanded$ && $block$$inline_951$$.$couldBeCollapsed$ ? "expand-sign-wk-expanded" : ""), $aSb$$inline_948$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_949$$ + 1])
               }
               $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 11]);
               $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 12]);
-              for(var $aSb$$inline_957$$ = $aSb$$inline_854$$, $aOffset$$inline_958$$ = $aOffset$$inline_855$$ + 14, $aEventManager$$inline_960$$ = $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$eventManager_$, $blobs$$inline_961$$ = $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$blockPoolWeek_$.$blocks$[$colCounter$$inline_858$$].$blobs$, $blobCounter$$inline_962$$ = 0, $blobLength$$inline_963$$ = $blobs$$inline_961$$.length;$blobCounter$$inline_962$$ < $blobLength$$inline_963$$;$blobCounter$$inline_962$$++) {
-                for(var $blob$$inline_964$$ = $blobs$$inline_961$$[$blobCounter$$inline_962$$].blob, $totalCols$$inline_965$$ = $blobs$$inline_961$$[$blobCounter$$inline_962$$].$totalCols$, $blobEntryCounter$$inline_966$$ = 0, $blobEntriesLength$$inline_967$$ = $blob$$inline_964$$.length;$blobEntryCounter$$inline_966$$ < $blobEntriesLength$$inline_967$$;$blobEntryCounter$$inline_966$$++) {
-                  var $blobEntry$$inline_968$$ = $blob$$inline_964$$[$blobEntryCounter$$inline_966$$], $aSb$$inline_969$$ = $aSb$$inline_957$$, $aOffset$$inline_970$$ = $aOffset$$inline_958$$, $aChip$$inline_971$$ = $blobEntry$$inline_968$$.$chip$, $aStartCol$$inline_972$$ = $blobEntry$$inline_968$$.$startCol$, $aColSpan$$inline_973$$ = $blobEntry$$inline_968$$.colSpan, $pixelStart$$inline_974$$ = 24 * $aChip$$inline_971$$.start / 30, $pixelHeight$$inline_975$$ = 24 * ($aChip$$inline_971$$.end - 
-                  $aChip$$inline_971$$.start) / 30, $widthQuant$$inline_976$$ = 100 / $totalCols$$inline_965$$, $event$$inline_977$$ = $aEventManager$$inline_960$$.$events_$[$aChip$$inline_971$$.$eventId$];
-                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$]);
-                  $aSb$$inline_969$$.append($pixelStart$$inline_974$$);
-                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 1]);
-                  $aSb$$inline_969$$.append($widthQuant$$inline_976$$ * $aStartCol$$inline_972$$);
-                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 2]);
-                  $aSb$$inline_969$$.append(100 - $widthQuant$$inline_976$$ * ($aStartCol$$inline_972$$ + $aColSpan$$inline_973$$));
-                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 3]);
-                  $aSb$$inline_969$$.append($pixelHeight$$inline_975$$);
-                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 4]);
-                  $aSb$$inline_969$$.append(-$pixelHeight$$inline_975$$);
-                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 5]);
-                  $aSb$$inline_969$$.append("");
-                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 6]);
-                  $rflect$cal$MainPaneBuilder$buildWeekChipsTimeLabel_$$($aSb$$inline_969$$, $aChip$$inline_971$$, $JSCompiler_alias_TRUE$$);
-                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 7]);
-                  $rflect$cal$MainPaneBuilder$buildWeekChipsTimeLabel_$$($aSb$$inline_969$$, $aChip$$inline_971$$, $JSCompiler_alias_FALSE$$);
-                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 8]);
-                  $aSb$$inline_969$$.append($event$$inline_977$$.summary);
-                  $aSb$$inline_969$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_970$$ + 9])
+              $aSb$$inline_854$$.append($colCounter$$inline_858$$);
+              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 13]);
+              for(var $aSb$$inline_955$$ = $aSb$$inline_854$$, $aOffset$$inline_956$$ = $aOffset$$inline_855$$ + 14, $aEventManager$$inline_958$$ = $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$eventManager_$, $blobs$$inline_959$$ = $JSCompiler_StaticMethods_buildWeekGridCols_$self$$inline_853$$.$blockPoolWeek_$.$blocks$[$colCounter$$inline_858$$].$blobs$, $blobCounter$$inline_960$$ = 0, $blobLength$$inline_961$$ = $blobs$$inline_959$$.length;$blobCounter$$inline_960$$ < $blobLength$$inline_961$$;$blobCounter$$inline_960$$++) {
+                for(var $blob$$inline_962$$ = $blobs$$inline_959$$[$blobCounter$$inline_960$$].blob, $totalCols$$inline_963$$ = $blobs$$inline_959$$[$blobCounter$$inline_960$$].$totalCols$, $blobEntryCounter$$inline_964$$ = 0, $blobEntriesLength$$inline_965$$ = $blob$$inline_962$$.length;$blobEntryCounter$$inline_964$$ < $blobEntriesLength$$inline_965$$;$blobEntryCounter$$inline_964$$++) {
+                  var $blobEntry$$inline_966$$ = $blob$$inline_962$$[$blobEntryCounter$$inline_964$$], $aSb$$inline_967$$ = $aSb$$inline_955$$, $aOffset$$inline_968$$ = $aOffset$$inline_956$$, $aChip$$inline_969$$ = $blobEntry$$inline_966$$.$chip$, $aStartCol$$inline_970$$ = $blobEntry$$inline_966$$.$startCol$, $aColSpan$$inline_971$$ = $blobEntry$$inline_966$$.colSpan, $pixelStart$$inline_972$$ = 24 * $aChip$$inline_969$$.start / 30, $pixelHeight$$inline_973$$ = 24 * ($aChip$$inline_969$$.end - 
+                  $aChip$$inline_969$$.start) / 30, $widthQuant$$inline_974$$ = 100 / $totalCols$$inline_963$$, $event$$inline_975$$ = $aEventManager$$inline_958$$.$events_$[$aChip$$inline_969$$.$eventId$];
+                  $aSb$$inline_967$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_968$$]);
+                  $aSb$$inline_967$$.append($pixelStart$$inline_972$$);
+                  $aSb$$inline_967$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_968$$ + 1]);
+                  $aSb$$inline_967$$.append($widthQuant$$inline_974$$ * $aStartCol$$inline_970$$);
+                  $aSb$$inline_967$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_968$$ + 2]);
+                  $aSb$$inline_967$$.append(100 - $widthQuant$$inline_974$$ * ($aStartCol$$inline_970$$ + $aColSpan$$inline_971$$));
+                  $aSb$$inline_967$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_968$$ + 3]);
+                  $aSb$$inline_967$$.append($pixelHeight$$inline_973$$);
+                  $aSb$$inline_967$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_968$$ + 4]);
+                  $aSb$$inline_967$$.append(-$pixelHeight$$inline_973$$);
+                  $aSb$$inline_967$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_968$$ + 5]);
+                  $aSb$$inline_967$$.append("");
+                  $aSb$$inline_967$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_968$$ + 6]);
+                  $rflect$cal$MainPaneBuilder$buildWeekChipsTimeLabel_$$($aSb$$inline_967$$, $aChip$$inline_969$$, $JSCompiler_alias_TRUE$$);
+                  $aSb$$inline_967$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_968$$ + 7]);
+                  $rflect$cal$MainPaneBuilder$buildWeekChipsTimeLabel_$$($aSb$$inline_967$$, $aChip$$inline_969$$, $JSCompiler_alias_FALSE$$);
+                  $aSb$$inline_967$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_968$$ + 8]);
+                  $aSb$$inline_967$$.append($event$$inline_975$$.summary);
+                  $aSb$$inline_967$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_968$$ + 9])
                 }
               }
-              $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 23]);
               $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 24]);
               $aSb$$inline_854$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$inline_855$$ + 25])
             }
@@ -3907,36 +3908,36 @@ $JSCompiler_prototypeAlias$$.$enterDocument$ = function $$JSCompiler_prototypeAl
   $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mousedown", this.$onMouseDown_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "selectstart", this.$onSelectStart_$, $JSCompiler_alias_FALSE$$, this), document, "mousemove", this.$onMouseMove_$, $JSCompiler_alias_FALSE$$, this), document, "mouseup", this.$onMouseUp_$, $JSCompiler_alias_FALSE$$, this);
   this.$timeMarker_$.start()
 };
-$JSCompiler_prototypeAlias$$.$onClick_$ = function $$JSCompiler_prototypeAlias$$$$onClick_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$) {
-  var $target$$48$$ = $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.target, $id$$12$$ = $target$$48$$.id, $className$$34$$ = $target$$48$$.className, $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = $JSCompiler_alias_FALSE$$, 
+$JSCompiler_prototypeAlias$$.$onClick_$ = function $$JSCompiler_prototypeAlias$$$$onClick_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$) {
+  var $target$$48$$ = $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$.target, $id$$12$$ = $target$$48$$.id, $className$$34$$ = $target$$48$$.className, $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$ = $JSCompiler_alias_FALSE$$, 
   $day$$inline_542_index$$65_index$$inline_541$$ = 0;
-  $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) ? /mn\-zippy\-row\d{1}/.test($id$$12$$) ? ($day$$inline_542_index$$65_index$$inline_541$$ = /\d{1}/.exec($id$$12$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = this.$blockManager_$.$blockPoolMonth$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.$blocks$[$day$$inline_542_index$$65_index$$inline_541$$].$expanded$ = 
-  !$JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.$blocks$[$day$$inline_542_index$$65_index$$inline_541$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$), this.$blockManager_$.$blockPoolMonth$.$expanded$ || 
-  (this.$blockManager_$.$blockPoolMonth$.scrollTop = 0), $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$34$$) ? $JSCompiler_StaticMethods_onDaynumLabelClick_$$(this, $id$$12$$) : $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $className$$34$$) && ($day$$inline_542_index$$65_index$$inline_541$$ = 
+  $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) ? /mn\-zippy\-row\d{1}/.test($id$$12$$) ? ($day$$inline_542_index$$65_index$$inline_541$$ = /\d{1}/.exec($id$$12$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$ = this.$blockManager_$.$blockPoolMonth$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$.$blocks$[$day$$inline_542_index$$65_index$$inline_541$$].$expanded$ = 
+  !$JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$.$blocks$[$day$$inline_542_index$$65_index$$inline_541$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$), this.$blockManager_$.$blockPoolMonth$.$expanded$ || 
+  (this.$blockManager_$.$blockPoolMonth$.scrollTop = 0), $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$34$$) ? $JSCompiler_StaticMethods_onDaynumLabelClick_$$(this, $id$$12$$) : $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $className$$34$$) && ($day$$inline_542_index$$65_index$$inline_541$$ = 
   $rflect$string$getNumericIndex$$($target$$48$$.parentNode.id), $_log$$("index", $day$$inline_542_index$$65_index$$inline_541$$), ($day$$inline_542_index$$65_index$$inline_541$$ = this.$timeManager_$.$daySeries$[7 * $day$$inline_542_index$$65_index$$inline_541$$]) && $JSCompiler_StaticMethods_switchView_$$(this, $day$$inline_542_index$$65_index$$inline_541$$, 3)) : $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) && (/wk\-zippy\-col\d{1}/.test($id$$12$$) ? ($day$$inline_542_index$$65_index$$inline_541$$ = 
-  /\d{1}/.exec($id$$12$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = this.$blockManager_$.$blockPoolWeek$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.$blocks$[$day$$inline_542_index$$65_index$$inline_541$$].$expanded$ = 
-  !$JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.$blocks$[$day$$inline_542_index$$65_index$$inline_541$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$), this.$blockManager_$.$blockPoolWeek$.$expanded$ || 
-  (this.$blockManager_$.$blockPoolWeek$.scrollLeft = 0), $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : /daynames\-zippy/.test($id$$12$$) ? ($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = 
-  this.$blockManager_$.$blockPoolAllday$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.$blocks$[0].$expanded$ = !$JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$.$blocks$[0].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$), 
-  $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$34$$) && $JSCompiler_StaticMethods_onDaynumLabelClick_$$(this, $target$$48$$.parentNode.id));
-  $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$12_zippyClicked$$ && (this.$updateBeforeRedraw$(), this.$updateByRedraw$())
+  /\d{1}/.exec($id$$12$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$ = this.$blockManager_$.$blockPoolWeek$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$.$blocks$[$day$$inline_542_index$$65_index$$inline_541$$].$expanded$ = 
+  !$JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$.$blocks$[$day$$inline_542_index$$65_index$$inline_541$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$), this.$blockManager_$.$blockPoolWeek$.$expanded$ || 
+  (this.$blockManager_$.$blockPoolWeek$.scrollLeft = 0), $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : /daynames\-zippy/.test($id$$12$$) ? ($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$ = 
+  this.$blockManager_$.$blockPoolAllday$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$.$blocks$[0].$expanded$ = !$JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$.$blocks$[0].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$), 
+  $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$34$$) && $JSCompiler_StaticMethods_onDaynumLabelClick_$$(this, $target$$48$$.parentNode.id));
+  $JSCompiler_StaticMethods_toggleBlock$self$$inline_536_JSCompiler_StaticMethods_toggleBlock$self$$inline_544_JSCompiler_StaticMethods_toggleBlock$self$$inline_547_aEvent$$13_zippyClicked$$ && (this.$updateBeforeRedraw$(), this.$updateByRedraw$())
 };
-$JSCompiler_prototypeAlias$$.$onMouseOut_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOut_$$($aEvent$$13_className$$35$$) {
-  $aEvent$$13_className$$35$$ = $aEvent$$13_className$$35$$.target.className;
-  ($JSCompiler_StaticMethods_isDaynumLabel_$$(this, $aEvent$$13_className$$35$$) || $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $aEvent$$13_className$$35$$) || $rflect$string$buildClassNameRe$$("zippy").test($aEvent$$13_className$$35$$)) && $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $JSCompiler_alias_NULL$$)
+$JSCompiler_prototypeAlias$$.$onMouseOut_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOut_$$($aEvent$$14_className$$35$$) {
+  $aEvent$$14_className$$35$$ = $aEvent$$14_className$$35$$.target.className;
+  ($JSCompiler_StaticMethods_isDaynumLabel_$$(this, $aEvent$$14_className$$35$$) || $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $aEvent$$14_className$$35$$) || $rflect$string$buildClassNameRe$$("zippy").test($aEvent$$14_className$$35$$)) && $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $JSCompiler_alias_NULL$$)
 };
-$JSCompiler_prototypeAlias$$.$onMouseOver_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOver_$$($aEvent$$14_target$$50$$) {
-  var $aEvent$$14_target$$50$$ = $aEvent$$14_target$$50$$.target, $className$$36$$ = $aEvent$$14_target$$50$$.className;
-  $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$36$$) || $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $className$$36$$) ? $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $aEvent$$14_target$$50$$, "label-underlined") : $rflect$string$buildClassNameRe$$("zippy").test($className$$36$$) ? $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $aEvent$$14_target$$50$$, "zippy-highlighted") : $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $JSCompiler_alias_NULL$$)
+$JSCompiler_prototypeAlias$$.$onMouseOver_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOver_$$($aEvent$$15_target$$50$$) {
+  var $aEvent$$15_target$$50$$ = $aEvent$$15_target$$50$$.target, $className$$36$$ = $aEvent$$15_target$$50$$.className;
+  $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$36$$) || $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $className$$36$$) ? $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $aEvent$$15_target$$50$$, "label-underlined") : $rflect$string$buildClassNameRe$$("zippy").test($className$$36$$) ? $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $aEvent$$15_target$$50$$, "zippy-highlighted") : $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $JSCompiler_alias_NULL$$)
 };
 function $JSCompiler_StaticMethods_onDaynumLabelClick_$$($JSCompiler_StaticMethods_onDaynumLabelClick_$self$$, $aId$$3$$) {
   var $day$$4_index$$66$$ = $rflect$string$getNumericIndex$$($aId$$3$$);
   $_log$$("index", $day$$4_index$$66$$);
   ($day$$4_index$$66$$ = $JSCompiler_StaticMethods_onDaynumLabelClick_$self$$.$timeManager_$.$daySeries$[$day$$4_index$$66$$]) && $JSCompiler_StaticMethods_switchView_$$($JSCompiler_StaticMethods_onDaynumLabelClick_$self$$, $day$$4_index$$66$$, 1)
 }
-function $JSCompiler_StaticMethods_switchView_$$($JSCompiler_StaticMethods_switchView_$self$$, $aDate$$9_opt_date$$inline_874$$, $aType$$) {
-  $aDate$$9_opt_date$$inline_874$$ = new $goog$date$DateTime$$($aDate$$9_opt_date$$inline_874$$.getYear(), $aDate$$9_opt_date$$inline_874$$.getMonth(), $aDate$$9_opt_date$$inline_874$$.getDate());
-  $JSCompiler_StaticMethods_switchView_$self$$.$timeManager_$.$basis$ = $aDate$$9_opt_date$$inline_874$$ || new $goog$date$Date$$;
+function $JSCompiler_StaticMethods_switchView_$$($JSCompiler_StaticMethods_switchView_$self$$, $aDate$$10_opt_date$$inline_874$$, $aType$$) {
+  $aDate$$10_opt_date$$inline_874$$ = new $goog$date$DateTime$$($aDate$$10_opt_date$$inline_874$$.getYear(), $aDate$$10_opt_date$$inline_874$$.getMonth(), $aDate$$10_opt_date$$inline_874$$.getDate());
+  $JSCompiler_StaticMethods_switchView_$self$$.$timeManager_$.$basis$ = $aDate$$10_opt_date$$inline_874$$ || new $goog$date$Date$$;
   $JSCompiler_StaticMethods_showView$$($JSCompiler_StaticMethods_switchView_$self$$.$viewManager_$, $aType$$, $JSCompiler_StaticMethods_switchView_$self$$)
 }
 function $JSCompiler_StaticMethods_isWeekGrid_$$($JSCompiler_StaticMethods_isWeekGrid_$self$$, $aClassName$$9$$) {
@@ -3957,26 +3958,26 @@ function $JSCompiler_StaticMethods_isDaynumLabel_$$($JSCompiler_StaticMethods_is
 function $JSCompiler_StaticMethods_isWeeknumLabel_$$($JSCompiler_StaticMethods_isWeeknumLabel_$self$$, $aClassName$$14$$) {
   return($JSCompiler_StaticMethods_isWeeknumLabel_$self$$.$weeknumLabelRe_$ || ($JSCompiler_StaticMethods_isWeeknumLabel_$self$$.$weeknumLabelRe_$ = $rflect$string$buildClassNameRe$$("weeknum-label-inner"))).test($aClassName$$14$$)
 }
-$JSCompiler_prototypeAlias$$.$onMouseDown_$ = function $$JSCompiler_prototypeAlias$$$$onMouseDown_$$($aEvent$$15$$) {
-  var $className$$37$$ = $aEvent$$15$$.target.className, $preventDefaultIsNeeded$$ = $JSCompiler_alias_FALSE$$;
-  $JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$37$$) ? (this.$selectionMask_$.$init$(2, $aEvent$$15$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$37$$) ? (this.$selectionMask_$.$init$(1, $aEvent$$15$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isMonthGrid_$$(this, $className$$37$$) && ($JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$37$$) || this.$selectionMask_$.$init$(3, 
-  $aEvent$$15$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$);
-  $preventDefaultIsNeeded$$ && $aEvent$$15$$.preventDefault()
+$JSCompiler_prototypeAlias$$.$onMouseDown_$ = function $$JSCompiler_prototypeAlias$$$$onMouseDown_$$($aEvent$$16$$) {
+  var $className$$37$$ = $aEvent$$16$$.target.className, $preventDefaultIsNeeded$$ = $JSCompiler_alias_FALSE$$;
+  $JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$37$$) ? (this.$selectionMask_$.$init$(2, $aEvent$$16$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$37$$) ? (this.$selectionMask_$.$init$(1, $aEvent$$16$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isMonthGrid_$$(this, $className$$37$$) && ($JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$37$$) || this.$selectionMask_$.$init$(3, 
+  $aEvent$$16$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$);
+  $preventDefaultIsNeeded$$ && $aEvent$$16$$.preventDefault()
 };
-$JSCompiler_prototypeAlias$$.$onSelectStart_$ = function $$JSCompiler_prototypeAlias$$$$onSelectStart_$$($aEvent$$16$$) {
-  var $className$$38$$ = $aEvent$$16$$.target.className;
-  ($JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$38$$) || $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$38$$) || $JSCompiler_StaticMethods_isMonthGrid_$$(this, $className$$38$$)) && $aEvent$$16$$.preventDefault()
+$JSCompiler_prototypeAlias$$.$onSelectStart_$ = function $$JSCompiler_prototypeAlias$$$$onSelectStart_$$($aEvent$$17$$) {
+  var $className$$38$$ = $aEvent$$17$$.target.className;
+  ($JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$38$$) || $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$38$$) || $JSCompiler_StaticMethods_isMonthGrid_$$(this, $className$$38$$)) && $aEvent$$17$$.preventDefault()
 };
-$JSCompiler_prototypeAlias$$.$onMouseMove_$ = function $$JSCompiler_prototypeAlias$$$$onMouseMove_$$($aEvent$$17$$) {
-  this.$selectionMask_$.$initialized_$ && (this.$selectionMask_$.update($aEvent$$17$$), $aEvent$$17$$.preventDefault())
+$JSCompiler_prototypeAlias$$.$onMouseMove_$ = function $$JSCompiler_prototypeAlias$$$$onMouseMove_$$($aEvent$$18$$) {
+  this.$selectionMask_$.$initialized_$ && (this.$selectionMask_$.update($aEvent$$18$$), $aEvent$$18$$.preventDefault())
 };
-$JSCompiler_prototypeAlias$$.$onMouseUp_$ = function $$JSCompiler_prototypeAlias$$$$onMouseUp_$$($aEvent$$18$$) {
-  this.$selectionMask_$.$initialized_$ && (this.$selectionMask_$.close(), $aEvent$$18$$.preventDefault())
+$JSCompiler_prototypeAlias$$.$onMouseUp_$ = function $$JSCompiler_prototypeAlias$$$$onMouseUp_$$($aEvent$$19$$) {
+  this.$selectionMask_$.$initialized_$ && (this.$selectionMask_$.close(), $aEvent$$19$$.preventDefault())
 };
-$JSCompiler_prototypeAlias$$.$onMainPaneScrollableScroll_$ = function $$JSCompiler_prototypeAlias$$$$onMainPaneScrollableScroll_$$($aEvent$$19_scrollable$$) {
-  var $aEvent$$19_scrollable$$ = $aEvent$$19_scrollable$$.target, $scrollPos$$ = 0;
-  $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) ? ($scrollPos$$ = $aEvent$$19_scrollable$$.scrollLeft, this.$blockManager_$.$blockPoolWeek$.scrollLeft = $scrollPos$$, this.$dom_$.$getElement$("weekmode-zippies-table").style.left = "-" + $scrollPos$$ + "px", this.$dom_$.$getElement$("weekmode-daynames-table").style.left = "-" + $scrollPos$$ + "px", this.$dom_$.$getElement$("main-pane-header-scrollable").scrollLeft = $scrollPos$$) : $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && 
-  ($scrollPos$$ = $aEvent$$19_scrollable$$.scrollTop, this.$blockManager_$.$blockPoolMonth$.scrollTop = $scrollPos$$, this.$dom_$.$getElement$("monthmode-zippies-table").style.top = "-" + $scrollPos$$ + "px")
+$JSCompiler_prototypeAlias$$.$onMainPaneScrollableScroll_$ = function $$JSCompiler_prototypeAlias$$$$onMainPaneScrollableScroll_$$($aEvent$$20_scrollable$$) {
+  var $aEvent$$20_scrollable$$ = $aEvent$$20_scrollable$$.target, $scrollPos$$ = 0;
+  $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) ? ($scrollPos$$ = $aEvent$$20_scrollable$$.scrollLeft, this.$blockManager_$.$blockPoolWeek$.scrollLeft = $scrollPos$$, this.$dom_$.$getElement$("weekmode-zippies-table").style.left = "-" + $scrollPos$$ + "px", this.$dom_$.$getElement$("weekmode-daynames-table").style.left = "-" + $scrollPos$$ + "px", this.$dom_$.$getElement$("main-pane-header-scrollable").scrollLeft = $scrollPos$$) : $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && 
+  ($scrollPos$$ = $aEvent$$20_scrollable$$.scrollTop, this.$blockManager_$.$blockPoolMonth$.scrollTop = $scrollPos$$, this.$dom_$.$getElement$("monthmode-zippies-table").style.top = "-" + $scrollPos$$ + "px")
 };
 $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototypeAlias$$$$disposeInternal$$() {
   $rflect$cal$MainPane$$.$superClass_$.$disposeInternal$.call(this);
@@ -4122,6 +4123,7 @@ function $rflect$cal$ViewManager$$() {
   $_inspect$$("timeManager", this.$timeManager$);
   $_inspect$$("blockManager", this.$blockManager_$);
   $_inspect$$("containerSizeMonitor_", this.$containerSizeMonitor_$);
+  $_inspect$$("eventManager_", this.$eventManager_$);
   $JSCompiler_StaticMethods_showView$$(this, this.$currentView$)
 }
 $goog$inherits$$($rflect$cal$ViewManager$$, $goog$events$EventHandler$$);
@@ -4139,16 +4141,16 @@ $JSCompiler_prototypeAlias$$.$onViewportResize_$ = function $$JSCompiler_prototy
   this.$mainBody_$.$updateBeforeRedraw$(0, 2);
   this.$mainBody_$.$updateByRedraw$(0, 2)
 };
-$JSCompiler_prototypeAlias$$.$onMainBodyAction_$ = function $$JSCompiler_prototypeAlias$$$$onMainBodyAction_$$($aEvent$$20$$) {
-  switch($JSCompiler_StaticMethods_getId$$($aEvent$$20$$.target)) {
+$JSCompiler_prototypeAlias$$.$onMainBodyAction_$ = function $$JSCompiler_prototypeAlias$$$$onMainBodyAction_$$($aEvent$$21$$) {
+  switch($JSCompiler_StaticMethods_getId$$($aEvent$$21$$.target)) {
     case "nb1":
-      $goog$events$dispatchEvent$$(this.$mainBody_$, "toppanenow") && ($JSCompiler_StaticMethods_shiftToPoint$$(this.$timeManager$), this.$mainBody_$.$updateBeforeRedraw$(), this.$mainBody_$.$updateByRedraw$());
+      $goog$events$dispatchEvent$$(this.$mainBody_$, "toppanenow") && ($JSCompiler_StaticMethods_shiftToPoint$$(this.$timeManager$), this.$eventManager_$.$run$(), this.$mainBody_$.$updateBeforeRedraw$(), this.$mainBody_$.$updateByRedraw$());
       break;
     case "nb2":
-      $goog$events$dispatchEvent$$(this.$mainBody_$, "toppaneprev") && (this.$timeManager$.shift(-1), this.$mainBody_$.$updateBeforeRedraw$(), this.$mainBody_$.$updateByRedraw$());
+      $goog$events$dispatchEvent$$(this.$mainBody_$, "toppaneprev") && $JSCompiler_StaticMethods_showNext_$$(this, -1);
       break;
     case "nb3":
-      $goog$events$dispatchEvent$$(this.$mainBody_$, "toppanenext") && (this.$timeManager$.shift(1), this.$mainBody_$.$updateBeforeRedraw$(), this.$mainBody_$.$updateByRedraw$());
+      $goog$events$dispatchEvent$$(this.$mainBody_$, "toppanenext") && $JSCompiler_StaticMethods_showNext_$$(this, 1);
       break;
     case "nb7":
       $goog$events$dispatchEvent$$(this.$mainBody_$, "toppaneevent");
@@ -4166,14 +4168,14 @@ $JSCompiler_prototypeAlias$$.$onMainBodyAction_$ = function $$JSCompiler_prototy
       $goog$events$dispatchEvent$$(this.$mainBody_$, "toppaneoptions")
   }
 };
-$JSCompiler_prototypeAlias$$.$onDateSelect_$ = function $$JSCompiler_prototypeAlias$$$$onDateSelect_$$($aEvent$$21$$) {
-  $_log$$("index is in mask", $aEvent$$21$$.$isInMask$);
-  $aEvent$$21$$.$isInMask$ || ($JSCompiler_StaticMethods_shiftToPoint$$(this.$timeManager$, $aEvent$$21$$.$date$), this.$mainBody_$.$miniCal$.$updateBeforeRedraw$(), this.$mainBody_$.$miniCal$.$updateByRedraw$(), this.$mainBody_$.$updateBeforeRedraw$(3, 4, 2), this.$mainBody_$.$updateByRedraw$(3, 4, 2))
+$JSCompiler_prototypeAlias$$.$onDateSelect_$ = function $$JSCompiler_prototypeAlias$$$$onDateSelect_$$($aEvent$$22$$) {
+  $_log$$("index is in mask", $aEvent$$22$$.$isInMask$);
+  $aEvent$$22$$.$isInMask$ || ($JSCompiler_StaticMethods_shiftToPoint$$(this.$timeManager$, $aEvent$$22$$.$date$), this.$mainBody_$.$miniCal$.$updateBeforeRedraw$(), this.$mainBody_$.$miniCal$.$updateByRedraw$(), this.$mainBody_$.$updateBeforeRedraw$(3, 4, 2), this.$mainBody_$.$updateByRedraw$(3, 4, 2))
 };
-$JSCompiler_prototypeAlias$$.$onDateDrag_$ = function $$JSCompiler_prototypeAlias$$$$onDateDrag_$$($aEvent$$22$$) {
-  this.$timeManager$.$basis$ = 5 == $aEvent$$22$$.$selectionConfiguration$ ? $aEvent$$22$$.$firstDayInMonth$ || new $goog$date$Date$$ : $aEvent$$22$$.$startDate$ || new $goog$date$Date$$;
-  this.$timeManager$.$daysNumber$ = $aEvent$$22$$.duration;
-  $JSCompiler_StaticMethods_showView$$(this, $aEvent$$22$$.$selectionConfiguration$, $aEvent$$22$$.target)
+$JSCompiler_prototypeAlias$$.$onDateDrag_$ = function $$JSCompiler_prototypeAlias$$$$onDateDrag_$$($aEvent$$23$$) {
+  this.$timeManager$.$basis$ = 5 == $aEvent$$23$$.$selectionConfiguration$ ? $aEvent$$23$$.$firstDayInMonth$ || new $goog$date$Date$$ : $aEvent$$23$$.$startDate$ || new $goog$date$Date$$;
+  this.$timeManager$.$daysNumber$ = $aEvent$$23$$.duration;
+  $JSCompiler_StaticMethods_showView$$(this, $aEvent$$23$$.$selectionConfiguration$, $aEvent$$23$$.target)
 };
 function $JSCompiler_StaticMethods_showView$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_preRender$self$$inline_578_JSCompiler_StaticMethods_render_$self$$inline_897_aType$$1$$, $container$$inline_580_opt_caller$$) {
   var $calledByMiniCal$$ = $container$$inline_580_opt_caller$$ == $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$miniCal$;
@@ -4186,6 +4188,12 @@ function $JSCompiler_StaticMethods_showView$$($JSCompiler_StaticMethods_showView
   $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "action", $JSCompiler_StaticMethods_showView$self$$.$onMainBodyAction_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "dateselect", $JSCompiler_StaticMethods_showView$self$$.$onDateSelect_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, 
   $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "datedrag", $JSCompiler_StaticMethods_showView$self$$.$onDateDrag_$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_showView$self$$.$mainBody_$, "datedragend", $goog$nullFunction$$, $JSCompiler_alias_FALSE$$, $JSCompiler_StaticMethods_showView$self$$), $JSCompiler_StaticMethods_showView$self$$.$isOnStartup_$ = $JSCompiler_alias_FALSE$$) : 
   $calledByMiniCal$$ ? ($JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateBeforeRedraw$(2, 3, 4), $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateByRedraw$(2, 3, 4)) : ($JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateBeforeRedraw$(3, 4), $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$updateByRedraw$(3, 4)))
+}
+function $JSCompiler_StaticMethods_showNext_$$($JSCompiler_StaticMethods_showNext_$self$$, $aDirection$$3$$) {
+  $JSCompiler_StaticMethods_showNext_$self$$.$timeManager$.shift($aDirection$$3$$);
+  $JSCompiler_StaticMethods_showNext_$self$$.$eventManager_$.$run$();
+  $JSCompiler_StaticMethods_showNext_$self$$.$mainBody_$.$updateBeforeRedraw$();
+  $JSCompiler_StaticMethods_showNext_$self$$.$mainBody_$.$updateByRedraw$()
 }
 $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototypeAlias$$$$disposeInternal$$() {
   $rflect$cal$ViewManager$$.$superClass_$.$disposeInternal$.call(this);

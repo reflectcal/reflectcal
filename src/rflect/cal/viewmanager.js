@@ -431,6 +431,7 @@ rflect.cal.ViewManager.prototype.showPrev = function() {
 rflect.cal.ViewManager.prototype.showNext_ = function(aDirection) {
   //  if (goog.DEBUG) _perf('next interval');
   this.timeManager.shift(aDirection);
+  this.eventManager_.run();
   this.mainBody_.updateBeforeRedraw();
   this.mainBody_.updateByRedraw();
   //  if (goog.DEBUG) _perf('next interval');
@@ -442,6 +443,7 @@ rflect.cal.ViewManager.prototype.showNext_ = function(aDirection) {
  */
 rflect.cal.ViewManager.prototype.showNow = function() {
   this.timeManager.shiftToNow();
+  this.eventManager_.run();
   this.mainBody_.updateBeforeRedraw();
   this.mainBody_.updateByRedraw();
 };

@@ -17,7 +17,7 @@
   border: 1px solid #d5d5d5;
   padding: 5px 6px;
   color: #2c2c2c;
-  font: normal 13px/18px "Trebuchet MS", Tahoma, Arial, sans-serif;
+  font: bold 13px/18px "Trebuchet MS", Tahoma, Arial, sans-serif;
   background-color: #efefef;
   background: -moz-linear-gradient(top, #ffffff 0, #efefef 100%);
   background: -webkit-gradient(linear, center top, center top, from(#ffffff), to(#efefef));

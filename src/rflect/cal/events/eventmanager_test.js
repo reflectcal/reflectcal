@@ -370,7 +370,7 @@ function testCreateEvent() {
   prepareDataStructures(-1);
 
   goog.array.forEach(eventsJSON, function(event, index) {
-    var event = rflect.cal.events.EventManager.createEvent(event);
+    var event = rflect.cal.events.EventManager.createEventFromArray(event);
 
     assertNotNull('event is not null', event);
     assertTrue('id equals control', event.longId == fields[index][0]);
@@ -404,7 +404,7 @@ function testChipCreation() {
     var em = makeEventManager();
     if (goog.DEBUG)
       _inspect('em', em);
-    em.processToChips([eventsJSON[index]]);
+    em.eventToChips([eventsJSON[index]]);
 
     assertTrue('chipsByDay year number is the same',
         goog.object.getCount(el.chipsByDay) ==
