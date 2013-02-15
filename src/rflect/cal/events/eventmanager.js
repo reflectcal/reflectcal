@@ -93,7 +93,7 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
   /**
    * Object for quick access to chip indexes (year, day), used for deleting of
    * chips.
-   * @type {Object.<number, Array.<number>>}
+   * @type {Object.<number, Array.<Array.<number>>>}
    * @private
    */
   this.tracksChipsByDay_ = {};
@@ -102,7 +102,7 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
   /**
    * Similar as <code>tracksChipsByDay_</code>, for week chips.
    * chips.
-   * @type {Object.<number, Array.<number>>}
+   * @type {Object.<number, Array.<Array.<number>>>}
    * @private
    */
   this.tracksChipsByWeek_ = {};
@@ -111,7 +111,7 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
   /**
    * Similar as <code>tracksChipsByDay_</code>, for all-day chips.
    * chips.
-   * @type {Object.<number, Array.<number>>}
+   * @type {Object.<number, Array.<Array.<number>>>}
    * @private
    */
   this.tracksAllDayChipsByDay_ = {};
@@ -370,6 +370,16 @@ rflect.cal.events.EventManager.prototype.addEvent =
 
 
 /**
+ * Removes event by its id.
+ * @param {number} aId Event id.
+ */
+rflect.cal.events.EventManager.prototype.removeEventById =
+    function(aId) {
+
+}
+
+
+/**
  * Saves day chip.
  * @param {rflect.cal.events.Chip} aChip Chip to save.
  * @param {rflect.date.DateShim} aDate Which date characterizes chip.
@@ -428,7 +438,8 @@ rflect.cal.events.EventManager.prototype.putWeekChip_ = function(aChip, aDate,
  * @param {number} aIndex2 Second index (day of year or week of year).
  * @param {Object.<number, Object.<number, Array.<rflect.cal.events.Chip>>>}
  * aDataStructure Data structure where to put chip.
- * @param {Object.<number, Array.<number>>} aTracks Tracks data structure.
+ * @param {Object.<number, Array.<Array.<number>>>} aTracks Tracks data
+ * structure.
  * @private
  */
 rflect.cal.events.EventManager.prototype.putChip_ = function(aChip, aIndex1,
@@ -439,7 +450,39 @@ rflect.cal.events.EventManager.prototype.putChip_ = function(aChip, aIndex1,
       aDataStructure[aIndex1][aIndex2] = [];
     aDataStructure[aIndex1][aIndex2].push(aChip);
 
-    aTracks[aChip.eventId] = [aIndex1, aIndex2];
+    if (!aTracks[aChip.eventId])
+      aTracks[aChip.eventId] = [[aIndex1, aIndex2]];
+    else
+      aTracks.push([aIndex1, aIndex2]);
+}
+
+
+rflect.cal.events.EventManager.prototype.removeChips_ = function(aEventId,
+    aDataStructure, aTracks) {
+  if (aTracks[aChip.eventId])
+    for (var counter = 0, length = aTracks[aChip.eventId].length, counter <
+        length; counter++){
+      var track = aTracks[aChip.eventId][counter];
+      var index1 = track[0];
+      var index2 = track[1];
+      if (index1 in aDataStructure)
+        if (index2 in aDataStructure[index1]) {
+          var chips = aDataStructure[index1][index2];
+          var chipIndex = goog.array.findIndex(chips, function(aChip){
+            aChip.eventId == aEventId;
+          });
+          if (chipIndex >= 0) {
+            // Chip is found, perform deletion
+            chips.splice(chipIndex, 1);
+            delete aTracks[aChip.eventId];
+            if (!chips.length){
+              delete aDataStructure[aIndex1][aIndex2];
+              if (!aDataStructure[aIndex1].length)
+                delete aDataStructure[aIndex1];
+            }
+          }
+        }
+    };
 }
 
 
