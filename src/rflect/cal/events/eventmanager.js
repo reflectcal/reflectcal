@@ -375,7 +375,22 @@ rflect.cal.events.EventManager.prototype.addEvent =
  */
 rflect.cal.events.EventManager.prototype.removeEventById =
     function(aId) {
+  delete this.events_[aId];
+  this.removeChips_(aId, this.chipsByDay_, this.tracksChipsByDay_);
+  this.removeChips_(aId, this.allDayChipsByDay_, this.tracksAllDayChipsByDay_);
+  this.removeChips_(aId, this.chipsByWeek_, this.tracksChipsByWeek_);
+}
 
+
+/**
+ * Edit event, actually deleting old event and creating new one with the same
+ * id.
+ * @param {rflect.cal.events.Event} aEvent Event.
+ */
+rflect.cal.events.EventManager.prototype.editEvent =
+    function(aEvent) {
+  this.removeEventById(aEvent.id);
+  this.addEvent(aEvent);
 }
 
 
@@ -453,36 +468,45 @@ rflect.cal.events.EventManager.prototype.putChip_ = function(aChip, aIndex1,
     if (!aTracks[aChip.eventId])
       aTracks[aChip.eventId] = [[aIndex1, aIndex2]];
     else
-      aTracks.push([aIndex1, aIndex2]);
+      aTracks[aChip.eventId].push([aIndex1, aIndex2]);
 }
 
 
+/**
+ * Removes chips from appropriate data structures.
+ * @param {number} aEventId Event id.
+ * @param {Object.<number, Object.<number, Array.<rflect.cal.events.Chip>>>}
+ * aDataStructure Data structure where to delete chips.
+ * @param {Object.<number, Array.<Array.<number>>>} aTracks Tracks where to
+ * delete chips.
+ */
 rflect.cal.events.EventManager.prototype.removeChips_ = function(aEventId,
     aDataStructure, aTracks) {
-  if (aTracks[aChip.eventId])
-    for (var counter = 0, length = aTracks[aChip.eventId].length, counter <
+  if (aTracks[aEventId]) {
+    for (var counter = 0, length = aTracks[aEventId].length; counter <
         length; counter++){
-      var track = aTracks[aChip.eventId][counter];
+      var track = aTracks[aEventId][counter];
       var index1 = track[0];
       var index2 = track[1];
       if (index1 in aDataStructure)
         if (index2 in aDataStructure[index1]) {
           var chips = aDataStructure[index1][index2];
           var chipIndex = goog.array.findIndex(chips, function(aChip){
-            aChip.eventId == aEventId;
+            return aChip.eventId == aEventId;
           });
           if (chipIndex >= 0) {
             // Chip is found, perform deletion
             chips.splice(chipIndex, 1);
-            delete aTracks[aChip.eventId];
+            delete aTracks[aEventId];
             if (!chips.length){
-              delete aDataStructure[aIndex1][aIndex2];
-              if (!aDataStructure[aIndex1].length)
-                delete aDataStructure[aIndex1];
+              delete aDataStructure[index1][index2];
+              if (!aDataStructure[index1].length)
+                delete aDataStructure[index1];
             }
           }
         }
     };
+  }
 }
 
 
