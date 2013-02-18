@@ -494,6 +494,19 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   /*Individual events layer id (0).*/
   '" class="mn-events-layer">',
   /*Events are placed here.*/
+  // Individual event chip.
+  '<div style="margin-left:',
+  /*margin-left in percent(0)*/
+  %; margin-right:
+  /*margin-right in percent(0)*/
+  %" class="event-rect-mn-outer">
+                      <div class="event-rect-mn">
+                          <div style="background-color: #7bce6d; color: #2c2c2c" class="event-rect-mn-inner">
+                              Week of Javascript optimization
+                          </div>
+                      </div>
+                  </div>
+  // Individual event chip.
   // End of individual events layer.
   '</div>',
   '</div>',
@@ -1422,10 +1435,10 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
   aSb.append(100 - widthQuant * (aStartCol + aColSpan));
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
   // Height.
-  aSb.append(pixelHeight);
+  aSb.append(pixelHeight - 2 * rflect.cal.predefined.DEFAULT_BORDER_WIDTH);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 4]);
   // margin-bottom.
-  aSb.append(-pixelHeight);
+  aSb.append(-pixelHeight + 2 * rflect.cal.predefined.DEFAULT_BORDER_WIDTH);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 5]);
   // Addition class.
   aSb.append('');
