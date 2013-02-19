@@ -497,16 +497,16 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   // Individual event chip.
   '<div style="margin-left:',
   /*margin-left in percent(0)*/
-  %; margin-right:
+  '%; margin-right:',
   /*margin-right in percent(0)*/
-  %" class="event-rect-mn-outer">
-                      <div class="event-rect-mn">
-                          <div style="background-color: #7bce6d; color: #2c2c2c" class="event-rect-mn-inner">
-                              Week of Javascript optimization
-                          </div>
-                      </div>
-                  </div>
-  // Individual event chip.
+  '%;top:',
+  /*top (17px)*/
+  'px" class="event-rect-mn-outer"><div class="event-rect-mn"><div class="event-rect-mn-inner ',
+  /*additional classes (event-rect-mn-inner-blue)*/
+  '">',
+  /*event description (week of javascript)*/
+  '</div></div></div>',
+  // End of individual event chip.
   // End of individual events layer.
   '</div>',
   '</div>',
@@ -639,7 +639,7 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalMonth_ = function(aSb) {
       };break;
       case 48: {
         this.buildMonthGridRows_(aSb, offset);
-        offset += 25;
+        offset += 31;
       };break;
       default: break;
     }
@@ -1456,6 +1456,61 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
 
 
 /**
+ * Builds html for individual month chip.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @param {number} aOffset Passed offset.
+ * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
+ * @param {rflect.cal.events.Chip} aChip Chip to build.
+ * @param {number} aTotalCols How many cols are in this chip's blob.
+ * @param {number} aStartCol In which col chip starts.
+ * @param {number} aColSpan How many cols chip spans.
+ * @private
+ *
+ * Individual event chip.
+ * '<div style="margin-left:',
+ * margin-left in percent(0)
+ * '%; margin-right:',
+ * margin-right in percent(0)
+ * '%;top:',
+ * top (17px)
+ * 'px" class="event-rect-mn-outer"><div class="event-rect-mn"><div class="event-rect-mn-inner ',
+ * additional classes (event-rect-mn-inner-blue)
+ * '">',
+ * event description (week of javascript)
+ * '</div></div></div>',
+ * // End of individual event chip.
+ */
+rflect.cal.MainPaneBuilder.buildMonthBlockChip_ =
+    function(aSb, aOffset, aEventManager, aChip, aTotalCols, aStartCol,
+    aColSpan) {
+  var cellStart = aChip.start;
+  var cellWidth = aChip.end - aChip.start;
+  /**@const*/
+  var widthQuant = 100 / 7;
+  var event = aEventManager.getEventById(aChip.eventId);
+  
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset]);
+  // margin-left.
+  aSb.append(widthQuant * cellStart);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 1]);
+  // margin-right.
+  aSb.append(100 - widthQuant * (cellStart + cellWidth));
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 2]);
+  // top.
+  aSb.append(aStartCol);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 3]);
+  // Addition class.
+  aSb.append('');
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 4]);
+  // Time.
+  //rflect.cal.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, true);
+  // Description.
+  aSb.append(event.summary);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 5]);
+  }
+
+
+/**
  * Builds time label for chip.
  * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @param {rflect.cal.events.Chip} aChip Chip.
@@ -1490,6 +1545,21 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekBlockChips_ =
   rflect.cal.MainPaneBuilder.forEachChip_(aSb, aOffset, this.eventManager_,
       this.blockPoolWeek_, aColCounter,
       rflect.cal.MainPaneBuilder.buildWeekBlockChip_);
+}
+
+
+/**
+ * Builds html for chips for particular block.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @param {number} aOffset Passed offset.
+ * @param {number} aRowCounter Number of row.
+ * @private
+ */
+rflect.cal.MainPaneBuilder.prototype.buildMonthBlockChips_ =
+    function(aSb, aOffset, aRowCounter) {
+  rflect.cal.MainPaneBuilder.forEachChip_(aSb, aOffset, this.eventManager_,
+      this.blockPoolMonth_, aRowCounter,
+      rflect.cal.MainPaneBuilder.buildMonthBlockChip_);
 }
 
 
@@ -1604,10 +1674,13 @@ rflect.cal.MainPaneBuilder.prototype.buildMonthGridRows_ = function(aSb, aOffset
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 21]);
     aSb.append(rowCounter);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 22]);
+    if (goog.DEBUG)
+      _log('rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 22]', rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 22]);
     // Events are placed here.
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 23]);
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 24]);
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 25]);
+    this.buildMonthBlockChips_(aSb, aOffset + 23, rowCounter);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 29]);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 30]);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 31]);
   }
 };
 

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="627" />
+    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="640" />
     <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="469" />
-    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1586" />
-    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1638" />
+    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1669" />
+    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1724" />
     <bookmark url="file://$PROJECT_DIR$/css/rflectcalendar.css" line="1215" />
     <bookmark url="file://$PROJECT_DIR$/css/rflectcalendar.css" line="1301" />
-    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1086" />
+    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1099" />
+    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1482" />
   </component>
   <component name="CCaseConfig">
     <option name="checkoutReserved" value="false" />
@@ -24,9 +25,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="94f59c91-c161-4423-a022-ed195e39c373" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js" afterPath="$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" afterPath="$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/outputcompiled.js.map" afterPath="$PROJECT_DIR$/src/outputcompiled.js.map" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/outputcompiled.js" afterPath="$PROJECT_DIR$/src/outputcompiled.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/viewmanager.js" afterPath="$PROJECT_DIR$/src/rflect/cal/viewmanager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Calendar.iws" />
@@ -91,7 +93,7 @@
     <file path="/DBLink.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356519310418" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/DBLink.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357805943294" ignored="false" />
     <file path="/env.properties" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742339458" ignored="false" />
-    <file path="/Dummy.txt" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361197373655" ignored="false" />
+    <file path="/Dummy.txt" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361270091967" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/.idea/workspace.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357920242430" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/request.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357915629834" ignored="false" />
     <file path="/eventmanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361179119599" ignored="false" />
@@ -100,7 +102,7 @@
     <file path="/CustomFromBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357736736033" ignored="false" />
     <file path="/fragment.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360754405708" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/CustomRefParamsBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357736985203" ignored="false" />
-    <file path="/a.dummy" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360837047549" ignored="false" />
+    <file path="/a.dummy" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361268813873" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/tefo2de/productcataloguedataservice/ProductCatalogueDataService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357742558891" ignored="false" />
     <file path="/ProductCatalogueDataService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357658153144" ignored="false" />
     <file path="/recurringevent.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357303959398" ignored="false" />
@@ -141,22 +143,22 @@
     <file path="$PROJECT_DIR$/../cat/cat-domain/src/main/java/de/o2/bic/cat/domain/pack/Benefit.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358415423298" ignored="false" />
     <file path="/Benefit.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358415419687" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-web/src/main/webapp/WEB-INF/jspx/pack/packBoltonDialog.jspx" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360073362541" ignored="false" />
-    <file path="/viewmanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360770196251" ignored="false" />
+    <file path="/viewmanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361263750973" ignored="false" />
     <file path="/build.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358432725049" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/ui/offers.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358762000691" ignored="false" />
     <file path="/offers.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358762000691" ignored="false" />
-    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/ui/css/default.css" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359975854507" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/ui/css/default.css" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361268576907" ignored="false" />
     <file path="/default.css" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359975854507" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/Offers.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359641931788" ignored="false" />
-    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/_resources.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359974662735" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/_resources.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361268576907" ignored="false" />
     <file path="/_resources.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359725588282" ignored="false" />
     <file path="/Offers.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358764247829" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/UsersView.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359541192205" ignored="false" />
-    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/LeadManagement.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359974342767" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/LeadManagement.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361268576907" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/Activities.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359732573712" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/java/de/o2/bic/nbaa/postpaid/web/ui/security/InfoscreenUserDetailsService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358768579864" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/UserFilter.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359458386941" ignored="false" />
-    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/ui/js/application.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359973167659" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/ui/js/application.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361268577788" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-service/src/main/java/de/o2/bic/nbaa/postpaid/advisoryservice/model/client/ClientType.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358768579864" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/templates-hidden/default.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359969417804" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/webapp/templates-hidden/leads-widget.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359979205874" ignored="false" />
@@ -217,8 +219,8 @@
     <file path="/UsersView.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359452343325" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/Admin.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359540865019" ignored="false" />
     <file path="/Admin.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359540772759" ignored="false" />
-    <file path="/NBAAPostpaidAssemblyFlow.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359459025929" ignored="false" />
-    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-assembly/src/main/java/de/o2/bic/nbaa/postpaid/assembly/NBAAPostpaidAssemblyFlow.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359706371000" ignored="false" />
+    <file path="/NBAAPostpaidAssemblyFlow.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269252699" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-assembly/src/main/java/de/o2/bic/nbaa/postpaid/assembly/NBAAPostpaidAssemblyFlow.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361270022877" ignored="false" />
     <file path="/CreateNewTeam.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359461522851" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/CreateNewTeam.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359541154356" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/EditUserAccount.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359458386941" ignored="false" />
@@ -256,7 +258,7 @@
     <file path="/ProductType.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359636185845" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-leadmgmt-model/src/main/java/de/o2/bic/nbaa/leadmgmt/model/ContactType.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359706371000" ignored="false" />
     <file path="/ContactType.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359636387095" ignored="false" />
-    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-leadmgmt-model/src/main/java/de/o2/bic/nbaa/leadmgmt/model/ContactTime.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359706371000" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-leadmgmt-model/src/main/java/de/o2/bic/nbaa/leadmgmt/model/ContactTime.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361268577788" ignored="false" />
     <file path="/ContactTime.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359636536399" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-assembly/src/main/java/de/o2/bic/nbaa/leadmgmt/dao/LeadDaoImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359706371000" ignored="false" />
     <file path="/LeadDaoImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359639132831" ignored="false" />
@@ -299,7 +301,7 @@
     <file path="/blockpool.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360662923153" ignored="false" />
     <file path="/block.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360665435008" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-schema/target/generated-sources/jaxb/de/o2/bic/cat/persistence/pack/xml/jaxb/ObjectFactory.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360581795513" ignored="false" />
-    <file path="/mainpanebuilder.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360769851817" ignored="false" />
+    <file path="/mainpanebuilder.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361266306315" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-persistence/src/main/java/de/o2/bic/cat/persistence/pack/sqlmap/BenefitSqlMapDao.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360839447209" ignored="false" />
     <file path="/BenefitSqlMapDao.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360758762168" ignored="false" />
     <file path="/mainpane.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360755616284" ignored="false" />
@@ -310,6 +312,32 @@
     <file path="$PROJECT_DIR$/../cat/cat-common/src/main/java/de/o2/bic/cat/common/Constants.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361182248888" ignored="false" />
     <file path="/BusinessBuildingBlock.xsd" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361195349902" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-web/src/main/webapp/WEB-INF/jspx/pack/includeDetails.jspx" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361197274142" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-rest/src/main/scala/de/o2/bic/nbaa/postpaid/web/rest/ActivitiesResource.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361268576907" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-rest/src/main/scala/de/o2/bic/nbaa/postpaid/web/rest/ContractResource.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361268576907" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-service/src/main/java/de/o2/bic/nbaa/postpaid/advisoryservice/model/client/Contract.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361268576907" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-rest/src/main/scala/de/o2/bic/nbaa/postpaid/web/rest/NBAARestEndpoint.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361270022877" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-rest/src/main/scala/de/o2/bic/nbaa/postpaid/web/assembly/NBAAAssembly.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361270022877" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-search-service/src/main/java/de/o2/bic/nbaa/postpaid/advisoryservice/model/dao/ClientDAOImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361271942426" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-rest/src/main/scala/de/o2/bic/nbaa/postpaid/web/util/PlaceholdersPopulator.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361268577788" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-service/src/main/java/de/o2/bic/nbaa/postpaid/advisoryservice/dao/DAOConstant.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269060450" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-rest/src/main/scala/de/o2/bic/nbaa/postpaid/web/rest/ContractHistoryResource.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361274689630" ignored="false" />
+    <file path="/ContractHistoryResource.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361274666484" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/resources/sqlmap/PKG_INTACT_HISTORY_SqlMap.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361268868794" ignored="false" />
+    <file path="/DAOConstant.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269059722" ignored="false" />
+    <file path="/ClientDAOImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269138971" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-search-service/src/main/java/de/o2/bic/nbaa/postpaid/advisoryservice/model/dao/mock/MockClientDAO.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269141014" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-search-service/src/main/java/de/o2/bic/nbaa/postpaid/searchservice/service/impl/SearchServiceImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269183604" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-search-service/src/main/java/de/o2/bic/nbaa/postpaid/advisoryservice/model/dao/ClientDAO.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269141014" ignored="false" />
+    <file path="/SearchServiceImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269170918" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/resources/spring/caching-config.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269183604" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-assembly/src/main/java/de/o2/bic/nbaa/postpaid/assembly/component/NBAAPostpaidSearchComponent.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269220762" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-search-service/src/main/java/de/o2/bic/nbaa/postpaid/searchservice/service/SearchService.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269183604" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-search-service/src/main/java/de/o2/bic/nbaa/postpaid/searchservice/service/mock/SearchServiceMock.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269183604" ignored="false" />
+    <file path="/NBAAPostpaidSearchComponent.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269219241" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-web-ui/src/main/scala/de/o2/bic/nbaa/postpaid/web/lift/snippet/ClientStats.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269254016" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-assembly/src/test/java/de/o2/bic/nbaa/postpaid/assembly/CachingTest.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361269254016" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-assembly/src/main/java/de/o2/bic/nbaa/postpaid/assembly/cache/CachingAspect.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361270022877" ignored="false" />
+    <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-assembly/src/main/java/de/o2/bic/nbaa/postpaid/assembly/component/NBAAPostpaidAdvisoryComponent.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361270022877" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -332,7 +360,7 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
+    <breakpoint_rules default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -367,7 +395,7 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <breakpoint_rules default_suspend_policy="SuspendAll" default_condition_enabled="true" />
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -377,10 +405,46 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="eventmanager.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="eventmanager.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="399" column="38" selection-start="10972" selection-end="10972" vertical-scroll-proportion="1.2003231">
+            <state line="399" column="38" selection-start="10972" selection-end="10972" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mainpanebuilder.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="1502" column="23" selection-start="50310" selection-end="50310" vertical-scroll-proportion="0.87246376">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="viewmanager.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/rflect/cal/viewmanager.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="46" column="46" selection-start="1246" selection-end="1246" vertical-scroll-proportion="-7.92">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rflectcalendar-mn-template.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/rflectcalendar-mn-template.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="586" column="16" selection-start="26715" selection-end="27147" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="predefined.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/rflect/cal/predefined.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="85" column="0" selection-start="1437" selection-end="1484" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -412,7 +476,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/rflect/date/date_test.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/events/chip.js" />
         <option value="$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/events/eventmanager_test.js" />
@@ -422,12 +485,13 @@
         <option value="$PROJECT_DIR$/src/rflect/cal/block.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/mainbody.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/mainpane.js" />
-        <option value="$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" />
         <option value="$PROJECT_DIR$/src/rflect/date/date.js" />
         <option value="$PROJECT_DIR$/css/flatbutton.css" />
-        <option value="$PROJECT_DIR$/src/rflect/cal/viewmanager.js" />
         <option value="$PROJECT_DIR$/css/rflectcalendar.css" />
         <option value="$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js" />
+        <option value="$PROJECT_DIR$/templates/rflectcalendar-mn-template.html" />
+        <option value="$PROJECT_DIR$/src/rflect/cal/viewmanager.js" />
+        <option value="$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" />
       </list>
     </option>
   </component>
@@ -498,6 +562,22 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane />
+        <subPane subId="Non-Project Files" />
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="rflectevents">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -669,34 +749,18 @@
       <pane id="PackagesPane">
         <subPane />
       </pane>
-      <pane id="Scope">
-        <subPane />
-        <subPane subId="Non-Project Files" />
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="rflectevents">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="Favorites" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="70" />
-    <property name="project.structure.last.edited" value="Project" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="52" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="42" />
-    <property name="project.structure.proportion" value="0.15" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="68" />
-    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder1" value="1" />
+    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder0" value="0" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder2" value="2" />
@@ -715,19 +779,19 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="123" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="721" />
     <property name="GoToClass.includeLibraries" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="721" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
     <property name="options.lastSelected" value="preferences.keymap" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder1" value="1" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
     <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
@@ -1227,7 +1291,15 @@
       <created>1360943695104</created>
       <updated>1360943695104</updated>
     </task>
-    <option name="localTasksCounter" value="108" />
+    <task id="LOCAL-00108" summary="Add/remove/edit event.">
+      <created>1361199292102</created>
+      <updated>1361199292102</updated>
+    </task>
+    <task id="LOCAL-00109" summary="Intermediate commit: before month chip.">
+      <created>1361202597102</created>
+      <updated>1361202597102</updated>
+    </task>
+    <option name="localTasksCounter" value="110" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1257,13 +1329,14 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27818447" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13110307" sideWeight="0.62957543" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="SBT Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6281113" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3704246" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3704246" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32896653" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21338156" sideWeight="0.3455344" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820976" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1278,7 +1351,6 @@
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27818447" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1322,7 +1394,7 @@
     <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="In-the middle: remove chips." />
+    <option name="LAST_COMMIT_MESSAGE" value="Intermediate commit: before month chip." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1335,8 +1407,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="Forming day chips." />
-    <MESSAGE value="Intermediate commit: week chips." />
     <MESSAGE value="Migrated event manager to events namespace. Test started for event manager. Event create function." />
     <MESSAGE value="Removed event manager and tests from old position." />
     <MESSAGE value="Fixed warnings from JS Compiler." />
@@ -1360,6 +1430,8 @@
     <MESSAGE value="main pane builder works with chips." />
     <MESSAGE value="Day chips are drawn." />
     <MESSAGE value="In-the middle: remove chips." />
+    <MESSAGE value="Add/remove/edit event." />
+    <MESSAGE value="Intermediate commit: before month chip." />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -1424,18 +1496,6 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/timemarker.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="111" column="2" selection-start="2837" selection-end="2905" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/rflectcalendar-wk-template.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="998" column="24" selection-start="41728" selection-end="41728" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainbody.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="51" column="12" selection-start="1363" selection-end="1363" vertical-scroll-proportion="0.0" />
@@ -1444,13 +1504,6 @@
     <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpane.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="57" column="12" selection-start="1581" selection-end="1581" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1364" column="47" selection-start="45143" selection-end="45143" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/block.js">
@@ -1483,11 +1536,6 @@
         <state line="19" column="2" selection-start="441" selection-end="441" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/viewmanager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="445" column="21" selection-start="12660" selection-end="12660" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/css/rflectcalendar.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="918" column="36" selection-start="17379" selection-end="17379" vertical-scroll-proportion="0.0">
@@ -1511,7 +1559,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="399" column="38" selection-start="10972" selection-end="10972" vertical-scroll-proportion="1.2003231">
+        <state line="399" column="38" selection-start="10972" selection-end="10972" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/predefined.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="85" column="0" selection-start="1437" selection-end="1484" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/rflectcalendar-mn-template.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="586" column="16" selection-start="26715" selection-end="27147" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/viewmanager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="46" selection-start="1246" selection-end="1246" vertical-scroll-proportion="-7.92">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1502" column="23" selection-start="50310" selection-end="50310" vertical-scroll-proportion="0.87246376">
           <folding />
         </state>
       </provider>
