@@ -962,7 +962,7 @@ body {
   height: 16px;
   /*margin: 0 40% 0 20%;*/
   /*these margins are used to set event rect dimensions*/
-  margin: 0 0 0 0;
+  margin-bottom: -17px;
   padding-top: 1px;
 }
 
@@ -994,12 +994,12 @@ body {
   vertical-align: top;
   cursor: pointer;
 
-  -moz-border-radius: 8px;
+  /*-moz-border-radius: 8px;
   -webkit-border-radius: 8px;
   border-radius: 8px;
   -moz-box-shadow: 1px 1px 1px #777777;
   -webkit-box-shadow: 1px 1px 1px #777777;
-  box-shadow: 1px 1px 1px #777777;
+  box-shadow: 1px 1px 1px #777777;*/
 }
 
 .event-rect-mn-inner-twoline {

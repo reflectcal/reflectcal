@@ -1497,7 +1497,7 @@ rflect.cal.MainPaneBuilder.buildMonthBlockChip_ =
   aSb.append(100 - widthQuant * (cellStart + cellWidth));
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 2]);
   // top.
-  aSb.append(aStartCol);
+  aSb.append(aStartCol * rflect.cal.predefined.MN_EVENT_HEIGHT);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 3]);
   // Addition class.
   aSb.append('');
