@@ -1424,15 +1424,19 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
       rflect.cal.predefined.HOUR_ROW_HEIGHT / 30;
   var widthQuant = 100 / aTotalCols;
   var event = aEventManager.getEventById(aChip.eventId);
+  var lastCol = aStartCol == aTotalCols - 1;
 
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
   aSb.append(pixelStart);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
   // margin-left.
-  aSb.append(widthQuant * aStartCol);
+  var shift = widthQuant * aStartCol;
+  aSb.append(lastCol || aStartCol == 0 ? shift : (shift - shift * 2 / 3));
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
   // margin-right.
-  aSb.append(100 - widthQuant * (aStartCol + aColSpan));
+  var width = widthQuant * (aStartCol + aColSpan);
+  aSb.append(lastCol ? 100 - width :
+      100 - width * 3 / 2);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
   // Height.
   aSb.append(pixelHeight - 2 * rflect.cal.predefined.DEFAULT_BORDER_WIDTH);
