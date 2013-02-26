@@ -1430,13 +1430,12 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
   aSb.append(pixelStart);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
   // margin-left.
-  var shift = widthQuant * aStartCol;
-  aSb.append(lastCol || aStartCol == 0 ? shift : (shift - shift * 2 / 3));
+  var shift = widthQuant * aStartCol ;
+  aSb.append(/*lastCol ? shift * 2  : */shift);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
   // margin-right.
-  var width = widthQuant * (aStartCol + aColSpan);
-  aSb.append(lastCol ? 100 - width :
-      100 - width * 3 / 2);
+  var width = shift + widthQuant * (lastCol ? 1 : 3/2);
+  aSb.append(100 - width);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
   // Height.
   aSb.append(pixelHeight - 2 * rflect.cal.predefined.DEFAULT_BORDER_WIDTH);

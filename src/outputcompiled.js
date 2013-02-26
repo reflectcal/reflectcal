@@ -3460,11 +3460,11 @@ function $rflect$cal$MainPaneBuilder$buildWeekBlockChip_$$($aSb$$44$$, $aOffset$
   $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$22$$]);
   $aSb$$44$$.append($pixelStart_shift$$);
   $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$22$$ + 1]);
-  $pixelStart_shift$$ = $widthQuant$$ * $aStartCol_width$$17$$;
-  $aSb$$44$$.append($aTotalCols_lastCol$$1$$ || 0 == $aStartCol_width$$17$$ ? $pixelStart_shift$$ : $pixelStart_shift$$ - 2 * $pixelStart_shift$$ / 3);
+  $pixelStart_shift$$ = 0.5 * $widthQuant$$ * $aStartCol_width$$17$$;
+  $aSb$$44$$.append($aTotalCols_lastCol$$1$$ ? 2 * $pixelStart_shift$$ : $pixelStart_shift$$);
   $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$22$$ + 2]);
   $aStartCol_width$$17$$ = $widthQuant$$ * ($aStartCol_width$$17$$ + $aColSpan$$);
-  $aSb$$44$$.append($aTotalCols_lastCol$$1$$ ? $aStartCol_width$$17$$ : 100 - 2 * $aStartCol_width$$17$$ / 3);
+  $aSb$$44$$.append($aTotalCols_lastCol$$1$$ ? 100 - $aStartCol_width$$17$$ : 100 - 3 * $aStartCol_width$$17$$ / 2);
   $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$22$$ + 3]);
   $aSb$$44$$.append($pixelHeight$$ - 2);
   $aSb$$44$$.append($rflect$cal$MainPaneBuilder$HTML_PARTS_WEEK_$$[$aOffset$$22$$ + 4]);
