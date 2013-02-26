@@ -96,3 +96,12 @@ rflect.cal.events.Chip.prototype.equals = function(aChip) {
       this.startIsCut == aChip.startIsCut &&
       this.endIsCut == aChip.endIsCut;
 };
+
+
+/**
+ * @returns {rflect.cal.events.Chip} Chip that equals this one.
+ */
+rflect.cal.events.Chip.prototype.clone = function() {
+  return new rflect.cal.events.Chip(this.eventId , this.start, this.end,
+      this.startIsCut, this.endIsCut);
+}
