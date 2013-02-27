@@ -24,9 +24,9 @@ goog.require('rflect.date');
  * @param {rflect.cal.MainPane} aMainPane Link to main pane.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
- * @param {rflect.cal.BlockPool} aBlockPoolWeek Link to week block pool.
- * @param {rflect.cal.BlockPool} aBlockPoolAllday Link to allday block pool.
- * @param {rflect.cal.BlockPool} aBlockPoolMonth Link to month block pool.
+ * @param {rflect.cal.blocks.BlockPool} aBlockPoolWeek Link to week block pool.
+ * @param {rflect.cal.blocks.BlockPool} aBlockPoolAllday Link to allday block pool.
+ * @param {rflect.cal.blocks.BlockPool} aBlockPoolMonth Link to month block pool.
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
  * @param {rflect.cal.TimeMarker} aTimeMarker Link to time marker.
@@ -65,21 +65,21 @@ rflect.cal.MainPaneBuilder = function(aViewManager, aMainPane, aTimeManager,
 
   /**
    * Link to week block pool.
-   * @type {rflect.cal.BlockPool}
+   * @type {rflect.cal.blocks.BlockPool}
    * @private
    */
   this.blockPoolWeek_ = aBlockPoolWeek;
 
   /**
    * Link to allday block pool.
-   * @type {rflect.cal.BlockPool}
+   * @type {rflect.cal.blocks.BlockPool}
    * @private
    */
   this.blockPoolAllday_ = aBlockPoolAllday;
 
   /**
    * Link to month block manager.
-   * @type {rflect.cal.BlockPool}
+   * @type {rflect.cal.blocks.BlockPool}
    * @private
    */
   this.blockPoolMonth_ = aBlockPoolMonth;
@@ -849,6 +849,7 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridAdCols_ =
     function(aSb, aOffset) {
   var prevColsCumulativeSize = 0;
   var gridWidth = this.blockPoolWeek_.gridSize.width;
+  var sparseArrays = this.blockPoolAllday_.blocks[0].sparseArrays;
 
   for (var colCounter = 0, blocksNumber = this.blockPoolWeek_.getBlocksNumber();
       colCounter < blocksNumber;
@@ -887,11 +888,39 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridAdCols_ =
     aSb.append(colCounter);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 14]);
     // Allday events are placed here.
+    rflect.cal.MainPaneBuilder.buildAdBlockChips_(aSb, sparseArrays[colCounter],
+        this.eventManager_);
+
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 15]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 16]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 17]);
   }
 };
+
+
+/**
+ * Builds html for chips for particular block.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @param {!Array.<rflect.cal.events.Chip|undefined>} aChips Chips for column in
+ * sparse array.
+ * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
+ * @private
+ */
+rflect.cal.MainPaneBuilder.buildAdBlockChips_ =
+    function(aSb, aChips, aEventManager) {
+  var chip;
+  for (var chipCounter = 0, length = aChips.length; chipCounter < length;
+      chipCounter++) {
+    if (chip = aChips[chipCounter]) {
+      // Zero parameters because they are currently irrelevant for month chip.
+      rflect.cal.MainPaneBuilder.buildMonthBlockChip_(aSb,
+          // Offset of month grid rows method and offset of month chip in that
+          // method.
+          48 + 23,
+          aEventManager, chip, 0, chipCounter, 0, true);
+    }
+  }
+}
 
 
 /**
@@ -1467,6 +1496,7 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
  * @param {number} aTotalCols How many cols are in this chip's blob.
  * @param {number} aStartCol In which col chip starts.
  * @param {number} aColSpan How many cols chip spans.
+ * @param {boolean=} opt_allDay Whether this is all-day chip.
  * @private
  *
  * Individual event chip.
@@ -1485,7 +1515,7 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
  */
 rflect.cal.MainPaneBuilder.buildMonthBlockChip_ =
     function(aSb, aOffset, aEventManager, aChip, aTotalCols, aStartCol,
-    aColSpan) {
+    aColSpan, opt_allDay) {
   var cellStart = aChip.start;
   var cellWidth = aChip.end - aChip.start;
   /**@const*/
@@ -1494,10 +1524,10 @@ rflect.cal.MainPaneBuilder.buildMonthBlockChip_ =
   
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset]);
   // margin-left.
-  aSb.append(widthQuant * cellStart);
+  aSb.append(!opt_allDay && widthQuant * cellStart);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 1]);
   // margin-right.
-  aSb.append(100 - widthQuant * (cellStart + cellWidth));
+  aSb.append(!opt_allDay && (100 - widthQuant * (cellStart + cellWidth)));
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 2]);
   // top.
   aSb.append(aStartCol * rflect.cal.predefined.MN_EVENT_HEIGHT);
@@ -1571,7 +1601,7 @@ rflect.cal.MainPaneBuilder.prototype.buildMonthBlockChips_ =
  * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @param {number} aOffset Passed offset.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
- * @param {rflect.cal.BlockPool} aBlockPool Block pool that contains for which
+ * @param {rflect.cal.blocks.BlockPool} aBlockPool Block pool that contains for which
  * to iterate.
  * @param {number} aColCounter Number of column to select block from block pool.
  * @param {function(goog.string.StringBuffer, number, rflect.cal.events.EventManager, rflect.cal.events.Chip, number, number, number)} aFn

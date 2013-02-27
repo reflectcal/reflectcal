@@ -7,9 +7,9 @@
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
-goog.provide('rflect.cal.BlockPool');
+goog.provide('rflect.cal.blocks.BlockPool');
 
-goog.require('rflect.cal.Block');
+goog.require('rflect.cal.blocks.Block');
 goog.require('rflect.cal.predefined');
 
 
@@ -20,13 +20,13 @@ goog.require('rflect.cal.predefined');
  * @param {boolean} aIsHorizontal Whether block pool is horizontal.
  * @constructor
  */
-rflect.cal.BlockPool = function(aIsHorizontal) {
+rflect.cal.blocks.BlockPool = function(aIsHorizontal) {
 
   this.isHorizontal_ = aIsHorizontal;
 
   /**
    * Collection of individual blocks.
-   * @type {Array.<rflect.cal.Block>}
+   * @type {Array.<rflect.cal.blocks.Block>}
    */
   this.blocks = [];
 };
@@ -38,7 +38,7 @@ rflect.cal.BlockPool = function(aIsHorizontal) {
  * @type {number}
  * @const
  */
-rflect.cal.BlockPool.MAXIMAL_NUMBER_OF_BLOCKS = 7;
+rflect.cal.blocks.BlockPool.MAXIMAL_NUMBER_OF_BLOCKS = 7;
 
 
 /**
@@ -47,7 +47,7 @@ rflect.cal.BlockPool.MAXIMAL_NUMBER_OF_BLOCKS = 7;
  * @type {number}
  * @const
  */
-rflect.cal.BlockPool.MINIMAL_NUMBER_OF_BLOCKS = 1;
+rflect.cal.blocks.BlockPool.MINIMAL_NUMBER_OF_BLOCKS = 1;
 
 
 /**
@@ -56,16 +56,16 @@ rflect.cal.BlockPool.MINIMAL_NUMBER_OF_BLOCKS = 1;
  * @type {boolean}
  * @private
  */
-rflect.cal.BlockPool.prototype.isHorizontal_ = false;
+rflect.cal.blocks.BlockPool.prototype.isHorizontal_ = false;
 
 
 /**
  * Number of used blocks, may be equal or less than
- * <code>rflect.cal.BlockPool#blocks.length</code>.
+ * <code>rflect.cal.blocks.BlockPool#blocks.length</code>.
  * @type {number}
  * @private
  */
-rflect.cal.BlockPool.prototype.blocksNumber_ = 0;
+rflect.cal.blocks.BlockPool.prototype.blocksNumber_ = 0;
 
 
 /**
@@ -73,28 +73,28 @@ rflect.cal.BlockPool.prototype.blocksNumber_ = 0;
  * expanded.
  * @type {boolean}
  */
-rflect.cal.BlockPool.prototype.expanded = false;
+rflect.cal.blocks.BlockPool.prototype.expanded = false;
 
 
 /**
  * Size of grid in which blocks are placed.
  * @type {goog.math.Size}
  */
-rflect.cal.BlockPool.prototype.gridSize = null;
+rflect.cal.blocks.BlockPool.prototype.gridSize = null;
 
 
 /**
  * Size of container in which grid is placed.
  * @type {goog.math.Size}
  */
-rflect.cal.BlockPool.prototype.gridContainerSize = null;
+rflect.cal.blocks.BlockPool.prototype.gridContainerSize = null;
 
 
 /**
  * Default size of block in this pool.
  * @type {number}
  */
-rflect.cal.BlockPool.prototype.nominalSize = 0;
+rflect.cal.blocks.BlockPool.prototype.nominalSize = 0;
 
 
 /**
@@ -102,7 +102,7 @@ rflect.cal.BlockPool.prototype.nominalSize = 0;
  * container.
  * @type {number}
  */
-rflect.cal.BlockPool.prototype.scrollTop = 0;
+rflect.cal.blocks.BlockPool.prototype.scrollTop = 0;
 
 
 /**
@@ -110,22 +110,22 @@ rflect.cal.BlockPool.prototype.scrollTop = 0;
  * container.
  * @type {number}
  */
-rflect.cal.BlockPool.prototype.scrollLeft = 0;
+rflect.cal.blocks.BlockPool.prototype.scrollLeft = 0;
 
 
 /**
  * Adds a new block at the end of collection.
- * @param {rflect.cal.Block=} opt_block Block to add.
+ * @param {rflect.cal.blocks.Block=} opt_block Block to add.
  */
-rflect.cal.BlockPool.prototype.add = function(opt_block) {
-  this.blocks[this.blocks.length] = opt_block || new rflect.cal.Block;
+rflect.cal.blocks.BlockPool.prototype.add = function(opt_block) {
+  this.blocks[this.blocks.length] = opt_block || new rflect.cal.blocks.Block;
 };
 
 
 /**
  * Clear all blocks.
  */
-rflect.cal.BlockPool.prototype.clear = function() {
+rflect.cal.blocks.BlockPool.prototype.clear = function() {
   this.blocks.length = 0;
 };
 
@@ -133,16 +133,16 @@ rflect.cal.BlockPool.prototype.clear = function() {
 /**
  * Pre-fills collection with equal blocks.
  * @param {number=} opt_number How many blocks to create.
- * @param {rflect.cal.Block=} opt_prototypeBlock Block to serve as prototype for
+ * @param {rflect.cal.blocks.Block=} opt_prototypeBlock Block to serve as prototype for
  * others.
  */
-rflect.cal.BlockPool.prototype.fill =
+rflect.cal.blocks.BlockPool.prototype.fill =
     function cal_BlockManager_fill(opt_number, opt_prototypeBlock) {
-  var number = opt_number || rflect.cal.BlockPool.MAXIMAL_NUMBER_OF_BLOCKS;
+  var number = opt_number || rflect.cal.blocks.BlockPool.MAXIMAL_NUMBER_OF_BLOCKS;
   var counter = 0;
   while (counter < number) {
     this.blocks[counter] = opt_prototypeBlock ? opt_prototypeBlock.clone() :
-        new rflect.cal.Block();
+        new rflect.cal.blocks.Block();
     counter++;
   }
 };
@@ -153,7 +153,7 @@ rflect.cal.BlockPool.prototype.fill =
  * @param {number|string} aIndex Index of block to expand.
  * @param {boolean} aExpand Whether to expand or collapse.
  */
-rflect.cal.BlockPool.prototype.expandBlock =
+rflect.cal.blocks.BlockPool.prototype.expandBlock =
     function cal_BlockManager_expandBlock(aIndex, aExpand) {
   this.blocks[aIndex].expanded = aExpand;
   // Check expand state of block pool.
@@ -162,11 +162,11 @@ rflect.cal.BlockPool.prototype.expandBlock =
 
 
 /**
- * Updates actual expand state in <code>rflect.cal.BlockPool#expanded</code>.
+ * Updates actual expand state in <code>rflect.cal.blocks.BlockPool#expanded</code>.
  * Should be called after blocks number is changed.
  * @private
  */
-rflect.cal.BlockPool.prototype.updateExpandState_ = function() {
+rflect.cal.blocks.BlockPool.prototype.updateExpandState_ = function() {
   for (var index = 0; index < this.blocksNumber_; index++) {
     if (this.blocks[index].expanded) {
       this.expanded = true;
@@ -180,7 +180,7 @@ rflect.cal.BlockPool.prototype.updateExpandState_ = function() {
 /**
  * @param {number} aBlocksNumber Number of blocks.
  */
-rflect.cal.BlockPool.prototype.setBlocksNumber = function(aBlocksNumber) {
+rflect.cal.blocks.BlockPool.prototype.setBlocksNumber = function(aBlocksNumber) {
   this.blocksNumber_ = aBlocksNumber;
   this.updateExpandState_();
 };
@@ -189,7 +189,7 @@ rflect.cal.BlockPool.prototype.setBlocksNumber = function(aBlocksNumber) {
 /**
  * @return {number} Number of blocks.
  */
-rflect.cal.BlockPool.prototype.getBlocksNumber = function() {
+rflect.cal.blocks.BlockPool.prototype.getBlocksNumber = function() {
   return this.blocksNumber_;
 };
 
@@ -198,7 +198,7 @@ rflect.cal.BlockPool.prototype.getBlocksNumber = function() {
  * Toggles expand state of given block.
  * @param {number|string} aIndex Index of block to expand.
  */
-rflect.cal.BlockPool.prototype.toggleBlock = function(aIndex) {
+rflect.cal.blocks.BlockPool.prototype.toggleBlock = function(aIndex) {
   this.expandBlock(aIndex, !this.blocks[aIndex].expanded);
 };
 
@@ -208,7 +208,7 @@ rflect.cal.BlockPool.prototype.toggleBlock = function(aIndex) {
  * before event manager pass, because in that case we could skip chips that
  * otherwise would be placed outside of block's bounds.
  */
-rflect.cal.BlockPool.prototype.updateCollapsedBlocks =
+rflect.cal.blocks.BlockPool.prototype.updateCollapsedBlocks =
     function cal_BlockManager_updateCollapsedBlocks() {
   var nominalSize = 0;
   var block;
@@ -240,10 +240,13 @@ rflect.cal.BlockPool.prototype.updateCollapsedBlocks =
 
 /**
  * Creates and nests series of chips - visual representation for events. Here
- * <code>rflect.cal.Block#couldBeExpanded</code> flag is set.
+ * <code>rflect.cal.blocks.Block#couldBeExpanded</code> flag is set.
  * @param {Array.<!Array.<rflect.cal.events.Chip>>} aChips chips for this block pool.
+ * @param {boolean=} opt_createArrays Whether sparse arrays should be created.
+ * @param {number=} opt_arraysLength Length of sparse arrays list.
  */
-rflect.cal.BlockPool.prototype.updateEventMap = function(aChips) {
+rflect.cal.blocks.BlockPool.prototype.updateEventMap = function(aChips, 
+    opt_createArrays, opt_arraysLength) {
   for (var counter = 0; counter < this.blocksNumber_; counter++) {
     // NOTE(alexk): Whether horizontal block could be expanded, depends on
     // optimal size of chips, too. Say, we could have no additional hidden cols
@@ -251,6 +254,8 @@ rflect.cal.BlockPool.prototype.updateEventMap = function(aChips) {
     // optimal. But maybe there's no need to show this case via expand sign.
 
     this.blocks[counter].computeEventMap(aChips[counter]);
+    if (opt_createArrays)
+      this.blocks[counter].createSparseArraysFromBlobs(opt_arraysLength || 0);
 
     if (!this.blocks[counter].expanded)
       this.blocks[counter].couldBeExpanded = true;
@@ -262,7 +267,7 @@ rflect.cal.BlockPool.prototype.updateEventMap = function(aChips) {
  * Updates block manager with actual sizes for expanded blocks, after event
  * manager pass.
  */
-rflect.cal.BlockPool.prototype.updateExpandedBlocks =
+rflect.cal.blocks.BlockPool.prototype.updateExpandedBlocks =
     function cal_BlockManager_updateExpandedBlocks() {
   var cumulativeSize = 0;
 
@@ -298,14 +303,14 @@ rflect.cal.BlockPool.prototype.updateExpandedBlocks =
  * @param {number} aSize Block size.
  * @return {number} Block capacity based on it's size.
  */
-rflect.cal.BlockPool.prototype.getCapacityFromSize =
+rflect.cal.blocks.BlockPool.prototype.getCapacityFromSize =
     function cal_BlockPool_getCapacityFromSize(aSize) {
   if (this.isHorizontal_) {
     return Math.floor((aSize - rflect.cal.predefined.WK_EVENT_LAYER_MARGIN -
         rflect.cal.predefined.DEFAULT_BORDER_WIDTH) /
         rflect.math.getScaledValue(this.blocksNumber_,
-        rflect.cal.BlockPool.MAXIMAL_NUMBER_OF_BLOCKS,
-        rflect.cal.BlockPool.MINIMAL_NUMBER_OF_BLOCKS,
+        rflect.cal.blocks.BlockPool.MAXIMAL_NUMBER_OF_BLOCKS,
+        rflect.cal.blocks.BlockPool.MINIMAL_NUMBER_OF_BLOCKS,
         rflect.cal.predefined.WK_EVENT_MINIMAL_WIDTH_LOWER_BOUND,
         rflect.cal.predefined.WK_EVENT_MINIMAL_WIDTH_UPPER_BOUND));
   }
@@ -319,12 +324,12 @@ rflect.cal.BlockPool.prototype.getCapacityFromSize =
  * @param {number} aCapacity Block capacity.
  * @return {number} Block size based on it's capacity.
  */
-rflect.cal.BlockPool.prototype.getSizeFromCapacity =
+rflect.cal.blocks.BlockPool.prototype.getSizeFromCapacity =
     function cal_BlockManager_update(aCapacity) {
   if (this.isHorizontal_) {
     return aCapacity * rflect.math.getScaledValue(this.blocksNumber_,
-        rflect.cal.BlockPool.MAXIMAL_NUMBER_OF_BLOCKS,
-        rflect.cal.BlockPool.MINIMAL_NUMBER_OF_BLOCKS,
+        rflect.cal.blocks.BlockPool.MAXIMAL_NUMBER_OF_BLOCKS,
+        rflect.cal.blocks.BlockPool.MINIMAL_NUMBER_OF_BLOCKS,
         rflect.cal.predefined.WK_EVENT_OPTIMAL_WIDTH_LOWER_BOUND,
         rflect.cal.predefined.WK_EVENT_OPTIMAL_WIDTH_UPPER_BOUND) +
         rflect.cal.predefined.WK_EVENT_LAYER_MARGIN +

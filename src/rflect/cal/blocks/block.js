@@ -8,7 +8,8 @@
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
-goog.provide('rflect.cal.Block');
+goog.provide('rflect.cal.blocks');
+goog.provide('rflect.cal.blocks.Block');
 
 goog.require('rflect.cal.predefined');
 
@@ -22,7 +23,7 @@ goog.require('rflect.cal.predefined');
  * @param {boolean=} opt_expanded Whether block should be expanded.
  * @constructor
  */
-rflect.cal.Block = function(opt_size, opt_capacity, opt_expanded) {
+rflect.cal.blocks.Block = function(opt_size, opt_capacity, opt_expanded) {
 
   this.size = opt_size || 0;
   this.capacity = opt_capacity || 0;
@@ -37,7 +38,7 @@ rflect.cal.Block = function(opt_size, opt_capacity, opt_expanded) {
  * @return {number} 1 if first arg is greater, 0 if equals, -1
  * otherwise.
  */
-rflect.cal.Block.sort = function(a, b) {
+rflect.cal.blocks.Block.sort = function(a, b) {
   // If you pass in tasks without both entry and due dates, I will
   // kill you
   //var aStart = a.event.startDate || a.event.entryDate;
@@ -69,7 +70,7 @@ rflect.cal.Block.sort = function(a, b) {
  * Whether block is expanded.
  * @type {boolean}
  */
-rflect.cal.Block.prototype.expanded = false;
+rflect.cal.blocks.Block.prototype.expanded = false;
 
 
 /**
@@ -79,7 +80,7 @@ rflect.cal.Block.prototype.expanded = false;
  * Makes sense only for blocks in collapsed mode.
  * @type {boolean}
  */
-rflect.cal.Block.prototype.couldBeExpanded = false;
+rflect.cal.blocks.Block.prototype.couldBeExpanded = false;
 
 
 /**
@@ -87,14 +88,14 @@ rflect.cal.Block.prototype.couldBeExpanded = false;
  * Makes sense only for blocks in expanded mode.
  * @type {boolean}
  */
-rflect.cal.Block.prototype.couldBeCollapsed = false;
+rflect.cal.blocks.Block.prototype.couldBeCollapsed = false;
 
 
 /**
  * Actual capacity of block - how many rows/cols are in it.
  * @type {number}
  */
-rflect.cal.Block.prototype.capacity = 0;
+rflect.cal.blocks.Block.prototype.capacity = 0;
 
 
 /**
@@ -102,7 +103,7 @@ rflect.cal.Block.prototype.capacity = 0;
  * month, in pixels.
  * @type {number}
  */
-rflect.cal.Block.prototype.size = 0;
+rflect.cal.blocks.Block.prototype.size = 0;
 
 
 /**
@@ -110,33 +111,40 @@ rflect.cal.Block.prototype.size = 0;
  * month, in pixels.
  * @type {number}
  */
-rflect.cal.Block.prototype.position = 0;
+rflect.cal.blocks.Block.prototype.position = 0;
 
 
 /**
  * @typedef {{chip: rflect.cal.events.Chip, startCol: number, colSpan: number}}
  */
-rflect.cal.Block.BlobEntry;
+rflect.cal.blocks.BlobEntry;
 
 
 /**
- * @typedef {{blob: Array.<rflect.cal.Block.BlobEntry>, totalCols: number}}
+ * @typedef {{blob: Array.<rflect.cal.blocks.BlobEntry>, totalCols: number}}
  */
-rflect.cal.Block.BlobsArrayEntry;
+rflect.cal.blocks.BlobsArrayEntry;
 
 
 /**
  * List of chips that share common space.
- * @type {!Array.<rflect.cal.Block.BlobsArrayEntry>}
+ * @type {!Array.<rflect.cal.blocks.BlobsArrayEntry>}
  */
-rflect.cal.Block.prototype.blobs;
+rflect.cal.blocks.Block.prototype.blobs;
 
 
 /**
- * @return {rflect.cal.Block} Block that equals this one.
+ * Sparse arrays of chips that is used in all-day block.
+ * @type {Array.<!Array.<rflect.cal.events.Chip|undefined>>}
  */
-rflect.cal.Block.prototype.clone = function() {
-  return new rflect.cal.Block(this.size, this.capacity, this.expanded);
+rflect.cal.blocks.Block.prototype.sparseArrays;
+
+
+/**
+ * @return {rflect.cal.blocks.Block} Block that equals this one.
+ */
+rflect.cal.blocks.Block.prototype.clone = function() {
+  return new rflect.cal.blocks.Block(this.size, this.capacity, this.expanded);
 };
 
 
@@ -144,7 +152,7 @@ rflect.cal.Block.prototype.clone = function() {
  * @param {!Array.<rflect.cal.events.Chip>} aChips Collection of chips for this
  * block.
  */
-rflect.cal.Block.prototype.computeEventMap = function(aChips) {
+rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips) {
   /* We're going to create a series of 'blobs'.  A blob is a series of
   * events that create a continuous block of busy time.  In other
   * words, a blob ends when there is some time such that no events
@@ -162,7 +170,7 @@ rflect.cal.Block.prototype.computeEventMap = function(aChips) {
   var length = 0;
   var blobs = [];
   var currentBlob = [];
-  var sort = rflect.cal.Block.sort;
+  var sort = rflect.cal.blocks.Block.sort;
 
   var startCol = 0;
   var maxCol = 0;
@@ -415,3 +423,39 @@ rflect.cal.Block.prototype.computeEventMap = function(aChips) {
 
   this.blobs = blobs;
 }
+
+
+/**
+ * Converts series of blobs to series of sparse arrays for all day view.
+ * @param {number} aDaysNumber How many cells to create.
+ */
+rflect.cal.blocks.Block.prototype.createSparseArraysFromBlobs = function(
+    aDaysNumber) {
+  var blobs = this.blobs;
+  var sparseArrays = [];
+
+  for (var counter = 0; counter < aDaysNumber; counter++)
+    sparseArrays[counter] = [];
+
+  for (var blobCounter = 0, blobLength = blobs.length; blobCounter <
+      blobLength; blobCounter++) {
+    var blob = blobs[blobCounter].blob;
+    var totalCols = blobs[blobCounter].totalCols;
+
+    for (var blobEntryCounter = 0, blobEntriesLength = blob.length;
+        blobEntryCounter < blobEntriesLength; blobEntryCounter++) {
+      var blobEntry = blob[blobEntryCounter];
+      var chip = blobEntry.chip;
+      var startCol = blobEntry.startCol;
+      var colSpan = blobEntry.colSpan;
+      for (var start = chip.start, chipCounter = chip.start, end = chip.end;
+          chipCounter < end; chipCounter++) {
+        var chipClone = chip.clone();
+        chipClone.startIsCut = chipClone.endIsCut = chipCounter > start &&
+            chipCounter < end - 1;
+        sparseArrays[chipCounter][startCol] = chipClone;
+      }
+    }
+  }
+  this.sparseArrays = sparseArrays;
+};

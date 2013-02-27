@@ -25,7 +25,7 @@ goog.require('rflect.cal.TaskSelector');
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
- * @param {rflect.cal.BlockManager} aBlockManager Link to block manager.
+ * @param {rflect.cal.blocks.BlockManager} aBlockManager Link to block manager.
  * @constructor
  * @extends {rflect.cal.Component}
  */
@@ -63,7 +63,7 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager, aEventManager,
 
   /**
    * Link to block manager.
-   * @type {rflect.cal.BlockManager}
+   * @type {rflect.cal.blocks.BlockManager}
    * @private
    */
   this.blockManager_ = aBlockManager;

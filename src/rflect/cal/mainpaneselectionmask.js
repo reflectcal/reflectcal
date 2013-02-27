@@ -24,9 +24,9 @@ goog.require('rflect.cal.SelectionMask');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.Component} aMainPane Link to main pane.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
- * @param {rflect.cal.BlockPool=} opt_blockPoolWeek Link to week block pool.
- * @param {rflect.cal.BlockPool=} opt_blockPoolAllday Link to allday block pool.
- * @param {rflect.cal.BlockPool=} opt_blockPoolMonth Link to month block pool.
+ * @param {rflect.cal.blocks.BlockPool=} opt_blockPoolWeek Link to week block pool.
+ * @param {rflect.cal.blocks.BlockPool=} opt_blockPoolAllday Link to allday block pool.
+ * @param {rflect.cal.blocks.BlockPool=} opt_blockPoolMonth Link to month block pool.
  * @extends {rflect.cal.SelectionMask}
  * @constructor
  */
@@ -37,21 +37,21 @@ rflect.cal.MainPaneSelectionMask = function(aViewManager, aMainPane, aTimeManage
 
   /**
    * Link to week block pool.
-   * @type {rflect.cal.BlockPool|undefined}
+   * @type {rflect.cal.blocks.BlockPool|undefined}
    * @private
    */
   this.blockPoolWeek_ = opt_blockPoolWeek;
 
   /**
    * Link to allday block pool.
-   * @type {rflect.cal.BlockPool|undefined}
+   * @type {rflect.cal.blocks.BlockPool|undefined}
    * @private
    */
   this.blockPoolAllday_ = opt_blockPoolAllday;
 
   /**
    * Link to month block manager.
-   * @type {rflect.cal.BlockPool|undefined}
+   * @type {rflect.cal.blocks.BlockPool|undefined}
    * @private
    */
   this.blockPoolMonth_ = opt_blockPoolMonth;
@@ -310,7 +310,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellByCoordinate_ =
 
 /**
  * @param {number} aCoord Pixel position.
- * @param {rflect.cal.BlockPool} aBlockPool Block pool.
+ * @param {rflect.cal.blocks.BlockPool} aBlockPool Block pool.
  * @return {number} Block index.
  * @private
  */
