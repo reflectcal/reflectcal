@@ -215,7 +215,7 @@ rflect.cal.events.EventManager.getNestedChips_ = function(
  * @param {number} aDayNumber Number of day in day grid.
  * @param {number} aTotalDays Length of day grid.
  */
-rflect.cal.events.EventManager.getNestedAllDayChips_ = function(
+rflect.cal.events.EventManager.pushNestedAllDayChips_ = function(
     aAllDayChipsInput, aAllDayChipsOutput, aYear, aDayOfYear, aDayNumber,
     aTotalDays) {
   var knownChipsIds = {};
@@ -532,7 +532,7 @@ rflect.cal.events.EventManager.prototype.run = function() {
       this.dayChips.push(
           rflect.cal.events.EventManager.getNestedChips_(
           this.chipsByDay_, yearKey, dayOfYearKey) || []);
-      rflect.cal.events.EventManager.getNestedAllDayChips_(
+      rflect.cal.events.EventManager.pushNestedAllDayChips_(
           this.allDayChipsByDay_, this.allDayChips, yearKey, dayOfYearKey,
           counter, length);
     } else if (this.viewManager_.isInMonthMode() && counter % 7 == 0) {

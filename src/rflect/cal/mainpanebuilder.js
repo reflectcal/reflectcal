@@ -1677,8 +1677,6 @@ rflect.cal.MainPaneBuilder.prototype.buildMonthGridRows_ = function(aSb, aOffset
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 21]);
     aSb.append(rowCounter);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 22]);
-    if (goog.DEBUG)
-      _log('rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 22]', rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 22]);
     // Events are placed here.
     this.buildMonthBlockChips_(aSb, aOffset + 23, rowCounter);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 29]);
