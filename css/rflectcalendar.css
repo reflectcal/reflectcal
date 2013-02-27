@@ -1022,16 +1022,16 @@ body {
 }
 
 .event-rect-mn-inner-collapse-left {
-  -moz-border-radius: 0 8px 8px 0;
+  /*-moz-border-radius: 0 8px 8px 0;
   -webkit-border-radius: 0 8px 8px 0;
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 8px 8px 0;*/
   border-left: 0;
 }
 
 .event-rect-mn-inner-collapse-right {
-  -moz-border-radius: 8px 0 0 8px;
+  /*-moz-border-radius: 8px 0 0 8px;
   -webkit-border-radius: 8px 0 0 8px;
-  border-radius: 8px 0 0 8px;
+  border-radius: 8px 0 0 8px;*/
   border-right: 0;
 }
 
@@ -1040,13 +1040,6 @@ body {
   -webkit-border-radius: 0;
   border-radius: 0;
   border-left: 0;
-  border-right: 0;
-}
-
-.event-rect-mn-inner-collapse-right {
-  -moz-border-radius: 8px 0 0 8px;
-  -webkit-border-radius: 8px 0 0 8px;
-  border-radius: 8px 0 0 8px;
   border-right: 0;
 }
 

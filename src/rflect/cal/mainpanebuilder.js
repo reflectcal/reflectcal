@@ -501,7 +501,9 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   /*margin-right in percent(0)*/
   '%;top:',
   /*top (17px)*/
-  'px" class="event-rect-mn-outer"><div class="event-rect-mn"><div class="event-rect-mn-inner ',
+  'px" class="event-rect-mn-outer"><div class="event-rect-mn ',
+  /*additional classes (event-rect-mn-collapse-left)*/
+  '"><div class="event-rect-mn-inner ',
   /*additional classes (event-rect-mn-inner-blue)*/
   '">',
   /*event description (week of javascript)*/
@@ -639,7 +641,7 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalMonth_ = function(aSb) {
       };break;
       case 48: {
         this.buildMonthGridRows_(aSb, offset);
-        offset += 31;
+        offset += 32;
       };break;
       default: break;
     }
@@ -1532,14 +1534,23 @@ rflect.cal.MainPaneBuilder.buildMonthBlockChip_ =
   // top.
   aSb.append(aStartCol * rflect.cal.predefined.MN_EVENT_HEIGHT);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 3]);
-  // Addition class.
-  aSb.append('');
+  // Additional class.
+  if (aChip.startIsCut) aSb.append(
+      goog.getCssName('event-rect-mn-collapse-left'));
+  if (aChip.endIsCut) aSb.append(' ' +
+      goog.getCssName('event-rect-mn-collapse-right'));
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 4]);
+  // Additional class.
+  if (aChip.startIsCut) aSb.append(
+      goog.getCssName('event-rect-mn-inner-collapse-left'));
+  if (aChip.endIsCut) aSb.append(' ' +
+      goog.getCssName('event-rect-mn-inner-collapse-right'));
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 5]);
   // Time.
   //rflect.cal.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, true);
   // Description.
   aSb.append(event.summary);
-  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 5]);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 6]);
   }
 
 
@@ -1709,9 +1720,9 @@ rflect.cal.MainPaneBuilder.prototype.buildMonthGridRows_ = function(aSb, aOffset
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 22]);
     // Events are placed here.
     this.buildMonthBlockChips_(aSb, aOffset + 23, rowCounter);
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 29]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 30]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 31]);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 32]);
   }
 };
 
