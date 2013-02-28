@@ -454,9 +454,9 @@ rflect.cal.blocks.Block.prototype.createSparseArraysFromBlobs = function(
         chipClone.startIsCut = chipClone.endIsCut = chipCounter > start &&
             chipCounter < end - 1;
         if (chipCounter == start && end - start > 1)
-          chipClone.startIsCut = true;
-        if (chipCounter == end - 1 && end - start > 1)
           chipClone.endIsCut = true;
+        if (chipCounter == end - 1 && end - start > 1)
+          chipClone.startIsCut = true;
         sparseArrays[chipCounter][startCol] = chipClone;
       }
     }

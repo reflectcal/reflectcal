@@ -11,6 +11,7 @@
 goog.require('rflect.cal.i18n.predefined');
 
 goog.provide('rflect.cal.predefined');
+goog.provide('rflect.cal.predefined.chips');
 
 
 //TODO(alexk): much of this file will go to cfg
@@ -578,3 +579,11 @@ rflect.cal.predefined.TIME_MARKER_HEAD_HEIGHT = 5;
  * @const
  */
 rflect.cal.predefined.TIME_MARKER_LINE_HEIGHT = 1;
+
+
+/**
+ * Coefficient that defines how much chip overlaps its neighbor.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.chips.OVERLAPPING_DEGREE = 0.75;

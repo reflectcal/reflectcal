@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="640" />
-    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="469" />
-    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1702" />
-    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1755" />
-    <bookmark url="file://$PROJECT_DIR$/css/rflectcalendar.css" line="1215" />
-    <bookmark url="file://$PROJECT_DIR$/css/rflectcalendar.css" line="1301" />
-    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1128" />
-    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1515" />
+    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="644" />
+    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="471" />
+    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1722" />
+    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1775" />
+    <bookmark url="file://$PROJECT_DIR$/css/rflectcalendar.css" line="1208" />
+    <bookmark url="file://$PROJECT_DIR$/css/rflectcalendar.css" line="1294" />
+    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1132" />
+    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1526" />
   </component>
   <component name="CCaseConfig">
     <option name="checkoutReserved" value="false" />
@@ -24,19 +24,14 @@
     <option name="historyRevisionsNumber" value="4" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="94f59c91-c161-4423-a022-ed195e39c373" name="Default" comment="Refactoring - created block package.">
+    <list default="true" readonly="true" id="94f59c91-c161-4423-a022-ed195e39c373" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/blocks/block.js" afterPath="$PROJECT_DIR$/src/rflect/cal/blocks/block.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/blocks/blockmanager.js" afterPath="$PROJECT_DIR$/src/rflect/cal/blocks/blockmanager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/blocks/blockpool.js" afterPath="$PROJECT_DIR$/src/rflect/cal/blocks/blockpool.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/deps.js" afterPath="$PROJECT_DIR$/src/deps.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/mainbody.js" afterPath="$PROJECT_DIR$/src/rflect/cal/mainbody.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/mainpane.js" afterPath="$PROJECT_DIR$/src/rflect/cal/mainpane.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js" afterPath="$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" afterPath="$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/mainpaneselectionmask.js" afterPath="$PROJECT_DIR$/src/rflect/cal/mainpaneselectionmask.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/outputcompiled.js.map" afterPath="$PROJECT_DIR$/src/outputcompiled.js.map" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/outputcompiled.js" afterPath="$PROJECT_DIR$/src/outputcompiled.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/rflectcalendar-mn-template.html" afterPath="$PROJECT_DIR$/templates/rflectcalendar-mn-template.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/viewmanager.js" afterPath="$PROJECT_DIR$/src/rflect/cal/viewmanager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/predefined.js" afterPath="$PROJECT_DIR$/src/rflect/cal/predefined.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Calendar.iws" />
@@ -101,10 +96,10 @@
     <file path="/DBLink.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1356519310418" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/DBLink.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357805943294" ignored="false" />
     <file path="/env.properties" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361968947307" ignored="false" />
-    <file path="/Dummy.txt" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361955888786" ignored="false" />
+    <file path="/Dummy.txt" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361980094459" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/.idea/workspace.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357920242430" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/request.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357915629834" ignored="false" />
-    <file path="/eventmanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361885383885" ignored="false" />
+    <file path="/eventmanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1362040809740" ignored="false" />
     <file path="/event.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1358427227647" ignored="false" />
     <file path="$PROJECT_DIR$/../Salcus client/src/CustomFromBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357737049220" ignored="false" />
     <file path="/CustomFromBean.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1357736736033" ignored="false" />
@@ -217,7 +212,7 @@
     <file path="/application.conf" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359109987632" ignored="false" />
     <file path="$PROJECT_DIR$/../mapsdemo/conf/application.conf" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359109987632" ignored="false" />
     <file path="$PROJECT_DIR$/../geo-data-push/src/main/scala/de/o2/geo/push/DataPush.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359112612748" ignored="false" />
-    <file path="/DataPush.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359548754957" ignored="false" />
+    <file path="/DataPush.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1362063228303" ignored="false" />
     <file path="/Application.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1359370833548" ignored="false" />
     <file path="$PROJECT_DIR$/../NBAAv2_newschema_intact/nbaa-advisory-assembly/src/main/java/de/o2/bic/nbaa/admin/dao/SqlMapAdministrationDaoImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361457182930" ignored="false" />
     <file path="/SqlMapAdministrationDaoImpl.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361456347594" ignored="false" />
@@ -307,9 +302,9 @@
     <file path="/PackOfferDialogHandler.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360241874950" ignored="false" />
     <file path="/blockmanager.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361963882295" ignored="false" />
     <file path="/blockpool.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361963553221" ignored="false" />
-    <file path="/block.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361962456664" ignored="false" />
+    <file path="/block.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1362041118326" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-schema/target/generated-sources/jaxb/de/o2/bic/cat/persistence/pack/xml/jaxb/ObjectFactory.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360581795513" ignored="false" />
-    <file path="/mainpanebuilder.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361970757028" ignored="false" />
+    <file path="/mainpanebuilder.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1362063320991" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-persistence/src/main/java/de/o2/bic/cat/persistence/pack/sqlmap/BenefitSqlMapDao.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360839447209" ignored="false" />
     <file path="/BenefitSqlMapDao.java" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360758762168" ignored="false" />
     <file path="/mainpane.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1360755616284" ignored="false" />
@@ -436,10 +431,12 @@
     <file path="$PROJECT_DIR$/../cat/cat-web/src/main/webapp/login.jspx" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361879669397" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/cat-web/src/main/webapp/resources/html/index.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361879669398" ignored="false" />
     <file path="$PROJECT_DIR$/../cat/pom.xml" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361879669398" ignored="false" />
-    <file path="$PROJECT_DIR$/../data-files-generator/src/main/scala/de/o2/geo/generator/DataPush.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361966794814" ignored="false" />
+    <file path="$PROJECT_DIR$/../data-files-generator/src/main/scala/de/o2/geo/generator/DataPush.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1362061636463" ignored="false" />
     <file path="/blockutils.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361961231437" ignored="false" />
     <file path="/rflectcalendar-mn-template.html" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361965350332" ignored="false" />
     <file path="$PROJECT_DIR$/../data-files-generator/src/main/resources/env.properties" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1361968947307" ignored="false" />
+    <file path="/predefined.js" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1362054292426" ignored="false" />
+    <file path="$PROJECT_DIR$/../data-files-processor/src/main/scala/de/o2/geo/generator/DataPush.scala" changelist="94f59c91-c161-4423-a022-ed195e39c373" time="1362063230797" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -496,8 +493,8 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules default_suspend_policy="SuspendAll" default_condition_enabled="true" />
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -510,7 +507,7 @@
       <file leaf-file-name="eventmanager.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="219" column="14" selection-start="5986" selection-end="5996" vertical-scroll-proportion="-2.92">
+            <state line="228" column="23" selection-start="6300" selection-end="6300" vertical-scroll-proportion="-7.08">
               <folding />
             </state>
           </provider>
@@ -528,7 +525,7 @@
       <file leaf-file-name="rflectcalendar.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/css/rflectcalendar.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="954" column="24" selection-start="18149" selection-end="18149" vertical-scroll-proportion="0.0">
+            <state line="1043" column="1" selection-start="20165" selection-end="20165" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -546,7 +543,7 @@
       <file leaf-file-name="blockpool.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/blocks/blockpool.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="248" column="22" selection-start="6385" selection-end="6385" vertical-scroll-proportion="-1.46">
+            <state line="248" column="22" selection-start="6385" selection-end="6385" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -555,7 +552,7 @@
       <file leaf-file-name="block.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/blocks/block.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="454" column="34" selection-start="14298" selection-end="14298" vertical-scroll-proportion="-16.68">
+            <state line="437" column="22" selection-start="13527" selection-end="13527" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -564,7 +561,7 @@
       <file leaf-file-name="mainpanebuilder.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="916" column="35" selection-start="29474" selection-end="29474" vertical-scroll-proportion="0.6704871">
+            <state line="1485" column="15" selection-start="49650" selection-end="49650" vertical-scroll-proportion="0.5880399">
               <folding />
             </state>
           </provider>
@@ -573,7 +570,7 @@
       <file leaf-file-name="math.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/math/math.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="346" column="18" selection-start="11061" selection-end="11061" vertical-scroll-proportion="-9.88">
+            <state line="346" column="18" selection-start="11061" selection-end="11061" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -591,7 +588,7 @@
       <file leaf-file-name="deps.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/deps.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="60" selection-start="415" selection-end="415" vertical-scroll-proportion="0.0">
+            <state line="5" column="60" selection-start="602" selection-end="602" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -618,7 +615,7 @@
       <file leaf-file-name="rflectcalendar-mn-template.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/rflectcalendar-mn-template.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="550" column="29" selection-start="24828" selection-end="24828" vertical-scroll-proportion="-4.0">
+            <state line="550" column="29" selection-start="24828" selection-end="24828" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -627,7 +624,7 @@
       <file leaf-file-name="rflectcalendar-wk-template.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/rflectcalendar-wk-template.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="476" column="84" selection-start="20244" selection-end="20244" vertical-scroll-proportion="-9.153846">
+            <state line="476" column="84" selection-start="20244" selection-end="20244" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -636,7 +633,7 @@
       <file leaf-file-name="predefined.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/predefined.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="156" column="37" selection-start="3179" selection-end="3216" vertical-scroll-proportion="0.0">
+            <state line="588" column="0" selection-start="12191" selection-end="12237" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -668,21 +665,21 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/rflect/cal/mainbody.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/mainpane.js" />
         <option value="$PROJECT_DIR$/src/rflect/date/date.js" />
         <option value="$PROJECT_DIR$/css/flatbutton.css" />
         <option value="$PROJECT_DIR$/src/rflect/cal/viewmanager.js" />
-        <option value="$PROJECT_DIR$/css/rflectcalendar.css" />
         <option value="$PROJECT_DIR$/src/rflect/cal/events/chip.js" />
-        <option value="$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js" />
         <option value="$PROJECT_DIR$/src/deps.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/blocks/blockutils.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/blocks/blocks.js" />
-        <option value="$PROJECT_DIR$/src/rflect/cal/blocks/block.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/blocks/blockmanager.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/blocks/blockpool.js" />
         <option value="$PROJECT_DIR$/templates/rflectcalendar-mn-template.html" />
+        <option value="$PROJECT_DIR$/css/rflectcalendar.css" />
+        <option value="$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js" />
+        <option value="$PROJECT_DIR$/src/rflect/cal/blocks/block.js" />
+        <option value="$PROJECT_DIR$/src/rflect/cal/predefined.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" />
       </list>
     </option>
@@ -754,6 +751,25 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane />
+        <subPane subId="Non-Project Files" />
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="rflectevents">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane />
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -974,37 +990,18 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope">
-        <subPane />
-        <subPane subId="Non-Project Files" />
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="rflectevents">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane />
-      </pane>
       <pane id="Favorites" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="70" />
-    <property name="project.structure.last.edited" value="Project" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="52" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="42" />
-    <property name="project.structure.proportion" value="0.15" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="68" />
-    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder1" value="1" />
+    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder0" value="0" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder2" value="2" />
@@ -1023,19 +1020,19 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="123" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="721" />
     <property name="GoToClass.includeLibraries" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="721" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
     <property name="options.lastSelected" value="preferences.keymap" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder1" value="1" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
     <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
@@ -1567,7 +1564,15 @@
       <created>1361955808106</created>
       <updated>1361955808106</updated>
     </task>
-    <option name="localTasksCounter" value="116" />
+    <task id="LOCAL-00116" summary="All day chips are shown.">
+      <created>1361973600104</created>
+      <updated>1361973600104</updated>
+    </task>
+    <task id="LOCAL-00117" summary="Intermediate commit - all-day chips length bug still here.">
+      <created>1361980097104</created>
+      <updated>1361980097104</updated>
+    </task>
+    <option name="localTasksCounter" value="118" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1604,8 +1609,8 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6281113" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3704246" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32896653" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3704246" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21338156" sideWeight="0.3455344" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820976" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1662,7 +1667,7 @@
     <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactoring - created block package." />
+    <option name="LAST_COMMIT_MESSAGE" value="Intermediate commit - all-day chips length bug still here." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1675,8 +1680,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="End of day commit. Before inlining forEach bodies in test." />
-    <MESSAGE value="First chip creation test passed." />
     <MESSAGE value="Before implementing equalsByWeek test." />
     <MESSAGE value="Added date test and event manager passes one more test for chip creation." />
     <MESSAGE value="Adding new test." />
@@ -1700,6 +1703,8 @@
     <MESSAGE value="Week chips nesting done." />
     <MESSAGE value="Output all day data structure chips now has 1 element." />
     <MESSAGE value="Refactoring - created block package." />
+    <MESSAGE value="All day chips are shown." />
+    <MESSAGE value="Intermediate commit - all-day chips length bug still here." />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -1778,23 +1783,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/predefined.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="156" column="37" selection-start="3179" selection-end="3216" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/rflectcalendar.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="954" column="24" selection-start="18149" selection-end="18149" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/deps.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="60" selection-start="415" selection-end="415" vertical-scroll-proportion="0.0">
+        <state line="5" column="60" selection-start="602" selection-end="602" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1815,14 +1806,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/math/math.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="346" column="18" selection-start="11061" selection-end="11061" vertical-scroll-proportion="-9.88">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="219" column="14" selection-start="5986" selection-end="5996" vertical-scroll-proportion="-2.92">
+        <state line="346" column="18" selection-start="11061" selection-end="11061" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1843,35 +1827,56 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/cal/blocks/blockpool.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="248" column="22" selection-start="6385" selection-end="6385" vertical-scroll-proportion="-1.46">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/rflectcalendar-wk-template.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="476" column="84" selection-start="20244" selection-end="20244" vertical-scroll-proportion="-9.153846">
+        <state line="248" column="22" selection-start="6385" selection-end="6385" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/rflectcalendar-mn-template.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="550" column="29" selection-start="24828" selection-end="24828" vertical-scroll-proportion="-4.0">
+        <state line="550" column="29" selection-start="24828" selection-end="24828" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/rflectcalendar-wk-template.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="476" column="84" selection-start="20244" selection-end="20244" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/rflectcalendar.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1043" column="1" selection-start="20165" selection-end="20165" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="228" column="23" selection-start="6300" selection-end="6300" vertical-scroll-proportion="-7.08">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/cal/blocks/block.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="454" column="34" selection-start="14298" selection-end="14298" vertical-scroll-proportion="-16.68">
+        <state line="437" column="22" selection-start="13527" selection-end="13527" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/predefined.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="588" column="0" selection-start="12191" selection-end="12237" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="916" column="35" selection-start="29474" selection-end="29474" vertical-scroll-proportion="0.6704871">
+        <state line="1485" column="15" selection-start="49650" selection-end="49650" vertical-scroll-proportion="0.5880399">
           <folding />
         </state>
       </provider>

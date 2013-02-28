@@ -335,7 +335,9 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   /*Chip height in pixels (30)*/
   'px; margin-bottom:',
   /*Chip margin-bottom in pixels (-30)*/
-  'px;"><div class="event-rect-wk-inner ',
+  'px;z-index:',
+  /*Chip z-index (1)*/
+  '"><div class="event-rect-wk-inner ',
   /*Chip inner class (event-rect-focused)*/
   '"><div class="event-wk-timelabel">',
   /*Chip start time (14:00)*/
@@ -590,7 +592,7 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb) {
       };break;
       case 80: {
         this.buildWeekGridCols_(aSb, offset);
-        offset += 25;
+        offset += 26;
       };break;
       default: break;
     }
@@ -1408,8 +1410,8 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridCols_ =
     // Events are placed here.
     this.buildWeekBlockChips_(aSb, aOffset + 14, colCounter);
 
-    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 24]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 25]);
+    aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 26]);
   }
 };
 
@@ -1436,7 +1438,9 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridCols_ =
  * Chip height in pixels (30)
  * 'px; margin-bottom:',
  * Chip margin-bottom in pixels (-30)
- * 'px;"><div class="event-rect-wk-inner ',
+ * 'px;z-index:',
+ * Chip z-index (1)
+ * '"><div class="event-rect-wk-inner ',
  * Chip inner class (event-rect-focused)
  * '"><div class="event-wk-timelabel">',
  * Chip start time (14:00)
@@ -1465,7 +1469,9 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
   aSb.append(/*lastCol ? shift * 2  : */shift);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
   // margin-right.
-  var width = shift + widthQuant * (lastCol ? 1 : 3/2);
+  var width = shift + widthQuant * (aColSpan * (lastCol ? 1 : (1 +
+      rflect.cal.predefined.chips.OVERLAPPING_DEGREE)) -
+      (aColSpan - 1) * rflect.cal.predefined.chips.OVERLAPPING_DEGREE);
   aSb.append(100 - width);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
   // Height.
@@ -1474,18 +1480,21 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
   // margin-bottom.
   aSb.append(-pixelHeight + 2 * rflect.cal.predefined.DEFAULT_BORDER_WIDTH);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 5]);
-  // Addition class.
-  aSb.append('');
+  // z-index.
+  aSb.append(aStartCol);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 6]);
+  // Additional class.
+  aSb.append('');
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
   // Start time.
   rflect.cal.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, true);
-  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
   // End time.
   rflect.cal.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, false);
-  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 9]);
   // Description.
   aSb.append(event.summary);
-  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 9]);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 10]);
 }
 
 
