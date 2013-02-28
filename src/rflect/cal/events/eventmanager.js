@@ -221,7 +221,7 @@ rflect.cal.events.EventManager.pushNestedAllDayChips_ = function(
     aAllDayChipsInput, aAllDayChipsOutput, aKnownChipIds, aYear, aDayOfYear, 
     aDayNumber, aTotalDays) {
   var allDayChips = aAllDayChipsOutput[0];
-  var allDayChipsCounter = 0;
+  var allDayChipsCounter = allDayChips.length;
   var chips;
 
   if (chips = rflect.cal.events.EventManager.getNestedChips_(
@@ -231,15 +231,11 @@ rflect.cal.events.EventManager.pushNestedAllDayChips_ = function(
     for (var counter = 0, length = chips.length; counter < length; counter++) {
       var id = chips[counter].eventId;
       if (!aKnownChipIds[id]) {
-        if (goog.DEBUG)
-              _log('aDayNumber', aDayNumber);
-
-
         aKnownChipIds[id] = 1;
         var newChip = chips[counter].clone();
         newChip.start = aDayNumber;
         newChip.endIsCut = (aTotalDays - aDayNumber) < newChip.end;
-        newChip.end = newChip.endIsCut ? aDayNumber : aDayNumber + newChip.end;
+        newChip.end = newChip.endIsCut ? aTotalDays : aDayNumber + newChip.end;
         // This function must be fast.
         allDayChips[allDayChipsCounter++] = newChip;
       }

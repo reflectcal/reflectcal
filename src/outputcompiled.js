@@ -1099,8 +1099,8 @@ $rflect$cal$events$EventManager$$.prototype.$run$ = function $$rflect$cal$events
         $counter$$inline_121_yearKey$$ = 0;
         for($dayOfYearKey_length$$inline_122$$ = $chips$$inline_120$$.length;$counter$$inline_121_yearKey$$ < $dayOfYearKey_length$$inline_122$$;$counter$$inline_121_yearKey$$++) {
           var $id$$inline_123_newChip$$inline_124$$ = $chips$$inline_120$$[$counter$$inline_121_yearKey$$].$eventId$;
-          $aKnownChipIds$$inline_113_weekKey$$[$id$$inline_123_newChip$$inline_124$$] || ($_log$$("aDayNumber", $aDayNumber$$inline_116$$), $aKnownChipIds$$inline_113_weekKey$$[$id$$inline_123_newChip$$inline_124$$] = 1, $id$$inline_123_newChip$$inline_124$$ = $chips$$inline_120$$[$counter$$inline_121_yearKey$$].$clone$(), $id$$inline_123_newChip$$inline_124$$.start = $aDayNumber$$inline_116$$, $id$$inline_123_newChip$$inline_124$$.$endIsCut$ = $aTotalDays$$inline_117$$ - $aDayNumber$$inline_116$$ < 
-          $id$$inline_123_newChip$$inline_124$$.end, $id$$inline_123_newChip$$inline_124$$.end = $id$$inline_123_newChip$$inline_124$$.$endIsCut$ ? $aDayNumber$$inline_116$$ : $aDayNumber$$inline_116$$ + $id$$inline_123_newChip$$inline_124$$.end, $allDayChips$$inline_118$$[$allDayChipsCounter$$inline_119$$++] = $id$$inline_123_newChip$$inline_124$$)
+          $aKnownChipIds$$inline_113_weekKey$$[$id$$inline_123_newChip$$inline_124$$] || ($aKnownChipIds$$inline_113_weekKey$$[$id$$inline_123_newChip$$inline_124$$] = 1, $id$$inline_123_newChip$$inline_124$$ = $chips$$inline_120$$[$counter$$inline_121_yearKey$$].$clone$(), $id$$inline_123_newChip$$inline_124$$.start = $aDayNumber$$inline_116$$, $id$$inline_123_newChip$$inline_124$$.$endIsCut$ = $aTotalDays$$inline_117$$ - $aDayNumber$$inline_116$$ < $id$$inline_123_newChip$$inline_124$$.end, $id$$inline_123_newChip$$inline_124$$.end = 
+          $id$$inline_123_newChip$$inline_124$$.$endIsCut$ ? $aTotalDays$$inline_117$$ : $aDayNumber$$inline_116$$ + $id$$inline_123_newChip$$inline_124$$.end, $allDayChips$$inline_118$$[$allDayChipsCounter$$inline_119$$++] = $id$$inline_123_newChip$$inline_124$$)
         }
       }
     }else {
