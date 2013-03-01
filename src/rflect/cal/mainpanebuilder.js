@@ -1190,26 +1190,29 @@ rflect.cal.MainPaneBuilder.prototype.buildHoursAndGridRows_ =
   timeCounter.setMinutes(0);
   timeCounter.setSeconds(0);
 
-  for (var counter = 0; counter < 48; counter++,
-      timeCounter.add(timeIncrement)) {
+  for (var counter = 0; counter < rflect.cal.predefined.HOUR_ROWS_NUMBER;
+      counter++, timeCounter.add(timeIncrement)) {
     if (counter > 0)
       sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
     //if (counter != 47)
     sb.append(goog.getCssName('grid-table-row') + ' ');
     if (counter % 2 == 0) {
-      if (counter != 47)
+      if (counter != rflect.cal.predefined.HOUR_ROWS_NUMBER - 1)
         sb.append(goog.getCssName('grid-table-row-even'));
       sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
       sb.append(goog.getCssName('hl-even'));
     } else {
-      if (counter != 47)
+      if (counter != rflect.cal.predefined.HOUR_ROWS_NUMBER - 1)
         sb.append(goog.getCssName('grid-table-row-odd'));
       sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
       sb.append(goog.getCssName('hl-odd'));
     }
     sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
     // Formatted time string.
-    sb.append(timeFormat.format(timeCounter));
+    if (counter != rflect.cal.predefined.HOUR_ROWS_NUMBER - 1)
+      sb.append(timeFormat.format(timeCounter));
+    else
+      sb.append('&nbsp;');
     sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
   }
 
@@ -1227,16 +1230,15 @@ rflect.cal.MainPaneBuilder.prototype.buildHoursAndGridRows_ =
 
   sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
 
-  for (var counter = 0; counter < 48; counter++) {
+  for (var counter = 0; counter < rflect.cal.predefined.HOUR_ROWS_NUMBER;
+      counter++) {
     sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
     sb.append('grid-table-row ');
-    if (counter % 2 == 0) {
-      if (counter != 47)
+    if (counter != rflect.cal.predefined.HOUR_ROWS_NUMBER - 1)
+      if (counter % 2 == 0)
         sb.append('grid-table-row-even');
-    } else {
-      if (counter != 47)
+      else
         sb.append('grid-table-row-odd');
-    }
     sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 9]);
   }
   // Save to cache.
