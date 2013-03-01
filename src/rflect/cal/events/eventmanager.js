@@ -216,12 +216,15 @@ rflect.cal.events.EventManager.getNestedChips_ = function(
  * @param {number} aDayOfYear Day of year index.
  * @param {number} aDayNumber Number of day in day grid.
  * @param {number} aTotalDays Length of day grid.
+ * @param {number} aAllDayChipsLength Length of chips array, passed to avoid
+ * taking it on array.
+ * @return {number} Length of newly modified chip array.
  */
 rflect.cal.events.EventManager.pushNestedAllDayChips_ = function(
     aAllDayChipsInput, aAllDayChipsOutput, aKnownChipIds, aYear, aDayOfYear, 
-    aDayNumber, aTotalDays) {
+    aDayNumber, aTotalDays, aAllDayChipsLength) {
   var allDayChips = aAllDayChipsOutput[0];
-  var allDayChipsCounter = allDayChips.length;
+  var allDayChipsCounter = aAllDayChipsLength;
   var chips;
 
   if (chips = rflect.cal.events.EventManager.getNestedChips_(
@@ -241,6 +244,7 @@ rflect.cal.events.EventManager.pushNestedAllDayChips_ = function(
       }
     }
   }
+  return allDayChipsCounter;
 }
 
 
@@ -528,6 +532,8 @@ rflect.cal.events.EventManager.prototype.run = function() {
   this.allDayChips[0] = [];
   this.weekChips.length = 0;
 
+  var allDayChipsLength = 0;
+
   for (var counter = 0, length = daySeries.length;
       counter < length; counter++) {
     var yearKey = daySeries[counter].getFullYear();
@@ -536,9 +542,9 @@ rflect.cal.events.EventManager.prototype.run = function() {
       this.dayChips.push(
           rflect.cal.events.EventManager.getNestedChips_(
           this.chipsByDay_, yearKey, dayOfYearKey) || []);
-      rflect.cal.events.EventManager.pushNestedAllDayChips_(
+      allDayChipsLength = rflect.cal.events.EventManager.pushNestedAllDayChips_(
           this.allDayChipsByDay_, this.allDayChips, knownChipsIds, yearKey, 
-          dayOfYearKey, counter, length);
+          dayOfYearKey, counter, length, allDayChipsLength);
     } else if (this.viewManager_.isInMonthMode() && counter % 7 == 0) {
       var weekKey = daySeries[counter].getWeekNumber();
       this.weekChips.push(rflect.cal.events.EventManager.getNestedChips_(
