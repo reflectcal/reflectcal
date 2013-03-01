@@ -249,7 +249,10 @@ rflect.cal.TimeManager.prototype.shiftToPoint = function(opt_date) {
  * @private
  */
 rflect.cal.TimeManager.prototype.isInNowPoint_ = function() {
-  return this.interval.contains(goog.now());
+  var now = new Date;
+  return this.interval.contains(+now) &&
+      (this.configuration != rflect.cal.TimeManager.Configuration.MONTH ||
+      this.basis.getMonth() == now.getMonth());
 };
 
 
