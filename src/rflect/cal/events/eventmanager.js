@@ -12,6 +12,7 @@ goog.provide('rflect.cal.events.EventManager');
 goog.require('rflect.structs.IntervalTree');
 goog.require('rflect.cal.events.Chip');
 goog.require('rflect.cal.events.Event');
+goog.require('rflect.cal.predefined.chips');
 
 
 
@@ -337,6 +338,10 @@ rflect.cal.events.EventManager.prototype.addEvent =
          dayChipStartMins = 0;
       }
 
+      if (dayChipEndMins - dayChipStartMins <
+          rflect.cal.predefined.chips.MINIMAL_MINS)
+        dayChipEndMins = dayChipStartMins +
+          rflect.cal.predefined.chips.MINIMAL_MINS;
       chip = new rflect.cal.events.Chip(aEvent.id, dayChipStartMins,
           dayChipEndMins, hasPrev, hasNext);
       this.putDayChip_(chip, currentDate);

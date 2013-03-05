@@ -587,3 +587,11 @@ rflect.cal.predefined.TIME_MARKER_LINE_HEIGHT = 1;
  * @const
  */
 rflect.cal.predefined.chips.OVERLAPPING_DEGREE = 0.75;
+
+
+/**
+ * Minimal time that chips will occupy on UI.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.chips.MINIMAL_MINS = 20;
