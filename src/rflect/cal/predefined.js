@@ -397,7 +397,7 @@ rflect.cal.predefined.HOUR_ROW_HEIGHT = 24;
  * @type {number}
  * @const
  */
-rflect.cal.predefined.HOUR_ROWS_NUMBER = 49;
+rflect.cal.predefined.HOUR_ROWS_NUMBER = 48;
 
 
 /**

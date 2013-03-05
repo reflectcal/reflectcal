@@ -717,8 +717,14 @@ body {
   height: 100%;
 }
 
+.grid-table-wk-outer {
+position:relative;top:-1152px;margin-bottom:-1176px;height:1176px;
+overflow:hidden
+}
+
+
 .grid-table-wk {
-  position: relative;
+  /*position: relative;*/
   table-layout: fixed;
   width: 100%;
   vertical-align: top; /*for layers*/
@@ -729,7 +735,7 @@ body {
   height: 1152px;
   top: -1152px;
   margin-bottom: -1152px;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 .grid-table-row {
@@ -839,6 +845,8 @@ body {
 }
 
 .today-mask-wk {
+  position:relative;
+  top: -100%;
   height: 100%;
   width: 100%;
   background-color: #cecece;

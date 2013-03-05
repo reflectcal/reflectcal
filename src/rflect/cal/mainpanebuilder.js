@@ -290,7 +290,7 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   // End of grid rows container.
   '</div>',
   // Grid table.
-  '<div id="grid-table-wk" class="' + goog.getCssName('grid-table-wk') +
+  '<div class="grid-table-wk-outer"><div id="grid-table-wk" class="' + goog.getCssName('grid-table-wk') +
       '" style="width:',
   /* Width of grid table in percents (100%). */
   '%">' + // Masks.
@@ -312,12 +312,12 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   // Individual decoration layer.
   '<div id="wk-dec-layer-in-col',/*Id of individual decoration layer (wk-dec-layer-in-col0).*/
   '" class="wk-decoration-layer">',
-  // Today mask.
-  '<div class="' + goog.getCssName('today-mask-wk') + '"></div>',
   // Expand sign.
   '<div class="expand-sign-wk-cont"><div class="expand-sign-wk ',
   /* Expand sign state (expand-sign-wk-collapsed, expand-sign-wk-expanded).*/
   '"></div></div>',
+  // Today mask.
+  '<div class="' + goog.getCssName('today-mask-wk') + '"></div>',
   // End of decoration layer.
   '</div>',
   // Individual events layer.
@@ -352,7 +352,7 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   // End of individual weekgrid col.
   '</div>',
   // End of grid table.
-  '</div>',
+  '</div></div>',
   // End of grid table wrapper.
   '</div>',
   // End of main pane scrollable body.
@@ -1197,22 +1197,17 @@ rflect.cal.MainPaneBuilder.prototype.buildHoursAndGridRows_ =
     //if (counter != 47)
     sb.append(goog.getCssName('grid-table-row') + ' ');
     if (counter % 2 == 0) {
-      if (counter != rflect.cal.predefined.HOUR_ROWS_NUMBER - 1)
-        sb.append(goog.getCssName('grid-table-row-even'));
+      sb.append(goog.getCssName('grid-table-row-even'));
       sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
       sb.append(goog.getCssName('hl-even'));
     } else {
-      if (counter != rflect.cal.predefined.HOUR_ROWS_NUMBER - 1)
-        sb.append(goog.getCssName('grid-table-row-odd'));
+      sb.append(goog.getCssName('grid-table-row-odd'));
       sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
       sb.append(goog.getCssName('hl-odd'));
     }
     sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
     // Formatted time string.
-    if (counter != rflect.cal.predefined.HOUR_ROWS_NUMBER - 1)
-      sb.append(timeFormat.format(timeCounter));
-    else
-      sb.append('&nbsp;');
+    sb.append(timeFormat.format(timeCounter));
     sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
   }
 
@@ -1234,11 +1229,10 @@ rflect.cal.MainPaneBuilder.prototype.buildHoursAndGridRows_ =
       counter++) {
     sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
     sb.append('grid-table-row ');
-    if (counter != rflect.cal.predefined.HOUR_ROWS_NUMBER - 1)
-      if (counter % 2 == 0)
-        sb.append('grid-table-row-even');
-      else
-        sb.append('grid-table-row-odd');
+    if (counter % 2 == 0)
+      sb.append('grid-table-row-even');
+    else
+      sb.append('grid-table-row-odd');
     sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 9]);
   }
   // Save to cache.
@@ -1255,7 +1249,8 @@ rflect.cal.MainPaneBuilder.prototype.buildHoursAndGridRows_ =
  */
 rflect.cal.MainPaneBuilder.prototype.buildGridRows_ =
     function(aSb, aOffset) {
-  for (var counter = 0; counter < 48; counter++) {
+  for (var counter = 0; counter < rflect.cal.predefined.HOUR_ROWS_NUMBER;
+      counter++) {
     if (counter > 0)
       aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
     if (counter != 47)
@@ -1395,15 +1390,14 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridCols_ =
     aSb.append(colCounter);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
     // <- Decoration layer internals are here.
+    // Expand signs build.
+    this.buildWeekExpandSigns_(aSb, aOffset + 8, colCounter);
     // Today mask.
     if (this.timeManager_.isCurrentDay(
         this.timeManager_.daySeries[colCounter])){
-      aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
+      aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 10]);
       this.timeMarker_.buildLine(aSb);
     }
-
-    // Expand signs build.
-    this.buildWeekExpandSigns_(aSb, aOffset + 9, colCounter);
 
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 11]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 12]);
