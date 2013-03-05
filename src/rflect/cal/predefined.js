@@ -590,7 +590,7 @@ rflect.cal.predefined.chips.OVERLAPPING_DEGREE = 0.75;
 
 
 /**
- * Minimal time that chips will occupy on UI.
+ * Minimal time that week chips will occupy on UI.
  * @type {number}
  * @const
  */
