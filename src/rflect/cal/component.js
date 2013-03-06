@@ -43,14 +43,6 @@ rflect.cal.Component.indexIsInExclusions_ = function(aContainer, aIndex) {
 
 
 /**
- * Reusable string buffer for component.
- * @type {goog.string.StringBuffer}
- * @private
- */
-rflect.cal.Component.prototype.sb_ = null;
-
-
-/**
  * Creates component on an empty div element.
  */
 rflect.cal.Component.prototype.createDom = function() {
@@ -75,15 +67,6 @@ rflect.cal.Component.prototype.decorateInternal = function(aElement,
 
 
 /**
- * @return {goog.string.StringBuffer} String buffer, which is created once for
- * component and is reused each time it's needed.
- */
-rflect.cal.Component.prototype.getStringBuffer = function() {
-  return this.sb_ || (this.sb_ = new goog.string.StringBuffer());
-};
-
-
-/**
  * Builds body of component. We could use either given string buffer and append
  * parts to it, or use one that belongs to this particular component and, in
  * that case, return ready string.
@@ -93,12 +76,10 @@ rflect.cal.Component.prototype.getStringBuffer = function() {
  */
 // TODO(alexk): Is it really better for GC? Strings are allocated twice.
 rflect.cal.Component.prototype.buildBody = function(aSb) {
-  var sb = aSb || this.getStringBuffer();
+  var sb = aSb || new goog.string.StringBuffer();
   this.buildBodyInternal(sb);
   if (!aSb) {
-    var str = sb.toString();
-    sb.clear();
-    return str;
+    return sb.toString();;
   }
 };
 
@@ -157,9 +138,4 @@ rflect.cal.Component.prototype.updateByRedraw =
  */
 rflect.cal.Component.prototype.disposeInternal = function() {
   rflect.cal.Component.superClass_.disposeInternal.call(this);
-
-  if (this.sb_) {
-    this.sb_.clear();
-    this.sb_ = null;
-  }
 };

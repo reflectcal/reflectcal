@@ -14,6 +14,7 @@ goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
+goog.require('goog.ui.Bubble');
 goog.require('rflect.cal.Component');
 goog.require('rflect.cal.MainPaneBuilder');
 goog.require('rflect.cal.MainPaneSelectionMask');
@@ -153,6 +154,16 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager, aEventManager,
    * @private
    */
    this.moRegistry_ = new rflect.cal.MouseOverRegistry();
+
+   /**
+    * Popup dialog.
+    * @type {goog.ui.Dialog}
+    * @private
+    */
+   this.bubble_ = new goog.ui.Bubble();
+   this.bubble_.setTitle('new event');
+   this.bubble_.setContent('<input/>');
+   this.addChild(this.bubble_);
 
 };
 goog.inherits(rflect.cal.MainPane, rflect.cal.Component);
@@ -800,6 +811,7 @@ rflect.cal.MainPane.prototype.onMouseMove_ = function(aEvent) {
 rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
   if (this.selectionMask_.isInitialized()){
     this.selectionMask_.close();
+    this.bubble_.setVisible(true);
     aEvent.preventDefault();
   }
 };
