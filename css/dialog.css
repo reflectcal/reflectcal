@@ -10,15 +10,19 @@
  *
  * @author ssaviano@google.com (Steven Saviano)
  * @author attila@google.com (Attila Bodis)
+ * @author alexeykofficial@gmail.com (Alex K)
  */
 
 
 .modal-dialog {
   background: #c1d9ff;
-  border: 1px solid #3a5774;
+  border: 1px solid #d5d5d5;
   color: #000;
-  padding: 4px;
+  /*padding: 4px;*/
   position: absolute;
+  z-index: 100;
+  border-radius: 3px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .modal-dialog a,
@@ -29,14 +33,15 @@
 }
 
 .modal-dialog-bg {
-  background: #666;
+  background: #fff;
   left: 0;
   position: absolute;
   top: 0;
+  z-index: 1;
 }
 
 .modal-dialog-title {
-  background: #e0edfe;
+  background: #fff;
   color: #000;
   cursor: pointer;
   font-size: 120%;
@@ -46,6 +51,8 @@
   padding: 8px 31px 8px 8px;
 
   position: relative;
+  border-bottom: 1px solid #DDDDDD;
+  border-radius: 3px 3px 0 0;
   _zoom: 1; /* Ensures proper width in IE6 RTL. */
 }
 
@@ -65,6 +72,10 @@
 .modal-dialog-content {
   background-color: #fff;
   padding: 8px;
+}
+
+.modal-dialog-buttons {
+  border-radius: 0 3px 3px 0;
 }
 
 .goog-buttonset-default {

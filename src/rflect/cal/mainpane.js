@@ -14,6 +14,7 @@ goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
+goog.require('goog.ui.Dialog');
 goog.require('goog.ui.Bubble');
 goog.require('rflect.cal.Component');
 goog.require('rflect.cal.MainPaneBuilder');
@@ -160,10 +161,17 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager, aEventManager,
     * @type {goog.ui.Dialog}
     * @private
     */
-   this.bubble_ = new goog.ui.Bubble();
-   this.bubble_.setTitle('new event');
-   this.bubble_.setContent('<input/>');
-   this.addChild(this.bubble_);
+   this.dialog_ = new goog.ui.Dialog();
+   this.dialog_.setTitle('new event');
+   this.dialog_.setContent('<input/>');
+   this.dialog_.setButtonSet(
+       new goog.ui.Dialog.ButtonSet().
+       addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE).
+       addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true)
+   );
+   this.addChild(this.dialog_);
+
+   this.bubble_ = new goog.ui.Bubble('<div>New event</div>');
 
 };
 goog.inherits(rflect.cal.MainPane, rflect.cal.Component);
@@ -811,6 +819,11 @@ rflect.cal.MainPane.prototype.onMouseMove_ = function(aEvent) {
 rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
   if (this.selectionMask_.isInitialized()){
     this.selectionMask_.close();
+    //this.dialog_.setVisible(true);
+    this.bubble_.setAutoHide(false);
+    this.bubble_.setPinnedCorner(goog.positioning.Corner.TOP_RIGHT);
+    this.bubble_.setPosition(new goog.positioning.AbsolutePosition(500, 100));
+    this.bubble_.render();
     this.bubble_.setVisible(true);
     aEvent.preventDefault();
   }
