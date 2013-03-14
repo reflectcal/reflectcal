@@ -154,24 +154,28 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager, aEventManager,
    * @type {rflect.cal.MouseOverRegistry}
    * @private
    */
-   this.moRegistry_ = new rflect.cal.MouseOverRegistry();
+  this.moRegistry_ = new rflect.cal.MouseOverRegistry();
 
-   /**
-    * Popup dialog.
-    * @type {goog.ui.Dialog}
-    * @private
-    */
-   this.dialog_ = new goog.ui.Dialog();
-   this.dialog_.setTitle('new event');
-   this.dialog_.setContent('<input/>');
-   this.dialog_.setButtonSet(
-       new goog.ui.Dialog.ButtonSet().
-       addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE).
-       addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true)
-   );
-   this.addChild(this.dialog_);
+  /**
+   * Popup dialog.
+   * @type {goog.ui.Dialog}
+   * @private
+   */
+  this.dialog_ = new goog.ui.Dialog();
+  this.dialog_.setTitle('new event');
+  this.dialog_.setModal(false);
 
-   this.bubble_ = new goog.ui.Bubble('<div>New event</div>');
+  var btn1 = new goog.ui.Button('Lalalalalallal',
+    goog.ui.FlatButtonRenderer.getInstance());
+  this.dialog_.addChild(new goog.ui.Button('Lalalalalallal',
+      goog.ui.FlatButtonRenderer.getInstance()));
+  this.dialog_.addChild(new goog.ui.Button('Cancel',
+      goog.ui.FlatButtonRenderer.getInstance()));
+  this.dialog_.setBackgroundElementOpacity(0);
+
+  this.addChild(this.dialog_);
+
+  this.bubble_ = new goog.ui.Bubble('<div>New event</div>');
 
 };
 goog.inherits(rflect.cal.MainPane, rflect.cal.Component);
@@ -819,12 +823,7 @@ rflect.cal.MainPane.prototype.onMouseMove_ = function(aEvent) {
 rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
   if (this.selectionMask_.isInitialized()){
     this.selectionMask_.close();
-    //this.dialog_.setVisible(true);
-    this.bubble_.setAutoHide(false);
-    this.bubble_.setPinnedCorner(goog.positioning.Corner.TOP_RIGHT);
-    this.bubble_.setPosition(new goog.positioning.AbsolutePosition(500, 100));
-    this.bubble_.render();
-    this.bubble_.setVisible(true);
+    this.dialog_.setVisible(true);
     aEvent.preventDefault();
   }
 };
