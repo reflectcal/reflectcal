@@ -11,7 +11,7 @@ goog.provide('rflect.cal.MiniCal');
 
 goog.require('goog.array');
 goog.require('goog.events.EventType');
-goog.require('rflect.cal.Component');
+goog.require('rflect.ui.Component');
 goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.MiniCalBuilder');
 goog.require('rflect.cal.MiniCalSelectionMask');
@@ -28,11 +28,11 @@ goog.require('rflect.string');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aExternalTimeManager Link to external time
  * manager.
- * @extends {rflect.cal.Component}
+ * @extends {rflect.ui.Component}
  * @constructor
  */
 rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
-  rflect.cal.Component.call(this);
+  rflect.ui.Component.call(this);
 
   /**
    * Link to view manager.
@@ -84,7 +84,7 @@ rflect.cal.MiniCal = function(aViewManager, aExternalTimeManager) {
    this.moRegistry_ = new rflect.cal.MouseOverRegistry();
 
 };
-goog.inherits(rflect.cal.MiniCal, rflect.cal.Component);
+goog.inherits(rflect.cal.MiniCal, rflect.ui.Component);
 
 
 /**
@@ -183,7 +183,7 @@ rflect.cal.MiniCal.prototype.updateByRedraw = function() {
  * Builds body of component.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
- * @see rflect.cal.Component#buildBody
+ * @see rflect.ui.Component#buildBody
  * @protected
  */
 rflect.cal.MiniCal.prototype.buildBodyInternal = function(aSb) {

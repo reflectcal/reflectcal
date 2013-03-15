@@ -9,7 +9,7 @@
 
 goog.provide('rflect.cal.MainBody');
 
-goog.require('rflect.cal.Component');
+goog.require('rflect.ui.Component');
 goog.require('rflect.cal.MainPane');
 goog.require('rflect.cal.MiniCal');
 goog.require('rflect.cal.TopPane');
@@ -27,11 +27,11 @@ goog.require('rflect.cal.TaskSelector');
  * container size monitor.
  * @param {rflect.cal.blocks.BlockManager} aBlockManager Link to block manager.
  * @constructor
- * @extends {rflect.cal.Component}
+ * @extends {rflect.ui.Component}
  */
 rflect.cal.MainBody = function(aViewManager, aTimeManager, aEventManager,
     aContainerSizeMonitor, aBlockManager) {
-  rflect.cal.Component.call(this);
+  rflect.ui.Component.call(this);
 
   /**
    * Link to view manager.
@@ -90,7 +90,7 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager, aEventManager,
     _inspect('calSelector_', this.calSelector_);
   }
 };
-goog.inherits(rflect.cal.MainBody, rflect.cal.Component);
+goog.inherits(rflect.cal.MainBody, rflect.ui.Component);
 
 
 /**
@@ -171,7 +171,7 @@ rflect.cal.MainBody.prototype.decorateInternal = function(aElement,
  * Builds body of component.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
- * @see rflect.cal.Component#buildBody
+ * @see rflect.ui.Component#buildBody
  * @protected
  */
 rflect.cal.MainBody.prototype.buildBodyInternal = function(aSb) {

@@ -16,7 +16,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('goog.ui.Dialog');
 goog.require('goog.ui.Bubble');
-goog.require('rflect.cal.Component');
+goog.require('rflect.ui.Component');
 goog.require('rflect.cal.MainPaneBuilder');
 goog.require('rflect.cal.MainPaneSelectionMask');
 goog.require('rflect.cal.MouseOverRegistry');
@@ -35,11 +35,11 @@ goog.require('rflect.string');
  * container size monitor.
  * @param {rflect.cal.blocks.BlockManager} aBlockManager Link to block manager.
  * @constructor
- * @extends {rflect.cal.Component}
+ * @extends {rflect.ui.Component}
  */
 rflect.cal.MainPane = function(aViewManager, aTimeManager, aEventManager,
     aContainerSizeMonitor, aBlockManager) {
-  rflect.cal.Component.call(this);
+  rflect.ui.Component.call(this);
 
   /**
    * Link to view manager.
@@ -178,7 +178,7 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager, aEventManager,
   this.bubble_ = new goog.ui.Bubble('<div>New event</div>');
 
 };
-goog.inherits(rflect.cal.MainPane, rflect.cal.Component);
+goog.inherits(rflect.cal.MainPane, rflect.ui.Component);
 
 
 /**
@@ -483,7 +483,7 @@ rflect.cal.MainPane.prototype.updateByRedraw = function() {
  * Builds body of component.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
- * @see rflect.cal.Component#buildBody
+ * @see rflect.ui.Component#buildBody
  * @protected
  */
 rflect.cal.MainPane.prototype.buildBodyInternal = function(aSb) {

@@ -22,7 +22,7 @@ goog.require('rflect.cal.SelectionMask');
 /**
  * Selection mask main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
- * @param {rflect.cal.Component} aMiniCal Link mini cal.
+ * @param {rflect.ui.Component} aMiniCal Link mini cal.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @extends {rflect.cal.SelectionMask}
  * @constructor

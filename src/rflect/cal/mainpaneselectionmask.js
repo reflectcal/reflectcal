@@ -22,7 +22,7 @@ goog.require('rflect.cal.SelectionMask');
 /**
  * Selection mask main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
- * @param {rflect.cal.Component} aMainPane Link to main pane.
+ * @param {rflect.ui.Component} aMainPane Link to main pane.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.blocks.BlockPool=} opt_blockPoolWeek Link to week block pool.
  * @param {rflect.cal.blocks.BlockPool=} opt_blockPoolAllday Link to allday block pool.

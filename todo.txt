@@ -21,7 +21,7 @@ arbitrary container in which cal component may be placed.
 * bug: IE7 wk-mask-cnt has non-zero size when empty.
 * bug: make hours labels unselectable.
 * Store in HTML_PARTS indexes of common subparts, like '</div>'.
-And this common parts could be stored at rflect.cal.Component.HTML_PARTS by
+And this common parts could be stored at rflect.ui.Component.HTML_PARTS by
 theese indexes.
 * it seems that scrollbar appears when we reducing height of viewport. It
 disappears in a moment, but monitor sees that size with scroll.

@@ -19,7 +19,7 @@ goog.require('goog.ui.Component.State');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('goog.ui.ToggleButton');
 goog.require('rflect.cal.Button');
-goog.require('rflect.cal.Component');
+goog.require('rflect.ui.Component');
 goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.predefined');
@@ -31,10 +31,10 @@ goog.require('rflect.cal.predefined');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @constructor
- * @extends {rflect.cal.Component}
+ * @extends {rflect.ui.Component}
  */
 rflect.cal.TopPane = function(aViewManager, aTimeManager) {
-  rflect.cal.Component.call(this);
+  rflect.ui.Component.call(this);
 
   this.viewManager_ = aViewManager;
   this.timeManager_ = aTimeManager;
@@ -58,7 +58,7 @@ rflect.cal.TopPane = function(aViewManager, aTimeManager) {
   this.addChild(this.buttonOptions_ = new goog.ui.Button(null,
       goog.ui.FlatButtonRenderer.getInstance()));
 };
-goog.inherits(rflect.cal.TopPane, rflect.cal.Component);
+goog.inherits(rflect.cal.TopPane, rflect.ui.Component);
 
 
 /**
@@ -109,7 +109,7 @@ rflect.cal.TopPane.prototype.decorateInternal = function(aElement,
  * Builds body of component.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
- * @see rflect.cal.Component#buildBody
+ * @see rflect.ui.Component#buildBody
  * @protected
  */
 rflect.cal.TopPane.prototype.buildBodyInternal = function(aSb) {

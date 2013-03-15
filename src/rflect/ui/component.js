@@ -8,7 +8,7 @@
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
-goog.provide('rflect.cal.Component');
+goog.provide('rflect.ui.Component');
 
 goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.Component');
@@ -23,11 +23,11 @@ goog.require('goog.ui.Component');
  * @constructor
  * @extends {goog.ui.Component}
  */
-rflect.cal.Component = function(opt_domHelper) {
+rflect.ui.Component = function(opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
 
 };
-goog.inherits(rflect.cal.Component, goog.ui.Component);
+goog.inherits(rflect.ui.Component, goog.ui.Component);
 
 
 /**
@@ -36,7 +36,7 @@ goog.inherits(rflect.cal.Component, goog.ui.Component);
  * @return {boolean} Whether index is within array of indexes to be excluded
  * from update.
  */
-rflect.cal.Component.indexIsInExclusions_ = function(aContainer, aIndex) {
+rflect.ui.Component.indexIsInExclusions_ = function(aContainer, aIndex) {
   return /**@type {boolean}*/ (aContainer.length) &&
       goog.array.contains(aContainer, aIndex)
 }
@@ -45,7 +45,7 @@ rflect.cal.Component.indexIsInExclusions_ = function(aContainer, aIndex) {
 /**
  * Creates component on an empty div element.
  */
-rflect.cal.Component.prototype.createDom = function() {
+rflect.ui.Component.prototype.createDom = function() {
   this.decorateInternal(this.dom_.createElement('div'));
 };
 
@@ -55,10 +55,10 @@ rflect.cal.Component.prototype.createDom = function() {
  * @param {Element} aElement The div element to decorate.
  * @param {boolean=} opt_doNotBuildBody Whether to build body or not.
  */
-rflect.cal.Component.prototype.decorateInternal = function(aElement,
+rflect.ui.Component.prototype.decorateInternal = function(aElement,
                                                            opt_doNotBuildBody) {
   // Set this.element_.
-  rflect.cal.Component.superClass_.decorateInternal.call(this, aElement);
+  rflect.ui.Component.superClass_.decorateInternal.call(this, aElement);
   // Build body.
   if (!opt_doNotBuildBody) {
     this.getElement().innerHTML = this.buildBody();
@@ -74,7 +74,7 @@ rflect.cal.Component.prototype.decorateInternal = function(aElement,
  * to.
  * @return {string|undefined} HTML of component or none.
  */
-rflect.cal.Component.prototype.buildBody = function(aSb) {
+rflect.ui.Component.prototype.buildBody = function(aSb) {
   var sb = aSb || new goog.string.StringBuffer();
   this.buildBodyInternal(sb);
   if (!aSb) {
@@ -89,7 +89,7 @@ rflect.cal.Component.prototype.buildBody = function(aSb) {
  * to. Must be overridden.
  * @protected
  */
-rflect.cal.Component.prototype.buildBodyInternal = function(aSb) {
+rflect.ui.Component.prototype.buildBodyInternal = function(aSb) {
   goog.abstractMethod();
 };
 
@@ -102,11 +102,11 @@ rflect.cal.Component.prototype.buildBodyInternal = function(aSb) {
  * @param {...number} var_args Index(es) of
  * component's children which should be excluded from update.
  */
-rflect.cal.Component.prototype.updateBeforeRedraw =
+rflect.ui.Component.prototype.updateBeforeRedraw =
     function(var_args) {
   var args = arguments;
   this.forEachChild(function(aChild, aIndex) {
-    if (!rflect.cal.Component.indexIsInExclusions_(args, aIndex))
+    if (!rflect.ui.Component.indexIsInExclusions_(args, aIndex))
       aChild.updateBeforeRedraw();
   });
 };
@@ -119,13 +119,13 @@ rflect.cal.Component.prototype.updateBeforeRedraw =
  * component's children which should be excluded from update.
  * @see {rflect.cal.MainBody#updateBeforeRedraw}.
  */
-rflect.cal.Component.prototype.updateByRedraw =
+rflect.ui.Component.prototype.updateByRedraw =
     function(var_args) {
   var args = arguments;
   // Propagate call to child components that have a DOM, if any.
   this.forEachChild(function(aChild, aIndex) {
     if (aChild.isInDocument() && aChild.getElement() &&
-        !rflect.cal.Component.indexIsInExclusions_(args, aIndex)) {
+        !rflect.ui.Component.indexIsInExclusions_(args, aIndex)) {
       aChild.updateByRedraw();
     }
   });
@@ -135,6 +135,6 @@ rflect.cal.Component.prototype.updateByRedraw =
 /**
  * Disposes of component.
  */
-rflect.cal.Component.prototype.disposeInternal = function() {
-  rflect.cal.Component.superClass_.disposeInternal.call(this);
+rflect.ui.Component.prototype.disposeInternal = function() {
+  rflect.ui.Component.superClass_.disposeInternal.call(this);
 };

@@ -12,7 +12,7 @@ goog.provide('rflect.cal.ListSelector');
 
 goog.require('goog.events');
 goog.require('goog.events.EventType');
-goog.require('rflect.cal.Component');
+goog.require('rflect.ui.Component');
 goog.require('rflect.cal.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.string');
@@ -25,10 +25,10 @@ goog.require('rflect.string');
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
  * @constructor
- * @extends {rflect.cal.Component}
+ * @extends {rflect.ui.Component}
  */
 rflect.cal.ListSelector = function(aViewManager, aContainerSizeMonitor) {
-  rflect.cal.Component.call(this);
+  rflect.ui.Component.call(this);
 
   /**
    * Link to view manager.
@@ -66,7 +66,7 @@ rflect.cal.ListSelector = function(aViewManager, aContainerSizeMonitor) {
    this.moRegistryForParts_ = new rflect.cal.MouseOverRegistry();
 
 };
-goog.inherits(rflect.cal.ListSelector, rflect.cal.Component);
+goog.inherits(rflect.cal.ListSelector, rflect.ui.Component);
 
 
 /**

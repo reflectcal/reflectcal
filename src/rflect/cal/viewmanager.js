@@ -78,7 +78,7 @@ rflect.cal.ViewManager = function(aMainInstance) {
 
   /**
    * Main body component.
-   * @type {rflect.cal.Component}
+   * @type {rflect.ui.Component}
    * @private
    */
   this.mainBody_ = new rflect.cal.MainBody(this, this.timeManager,
@@ -360,7 +360,7 @@ rflect.cal.ViewManager.prototype.onDateDrag_ = function(aEvent) {
 /**
  * Shows particular view, main sequence method.
  * @param {rflect.cal.ViewType} aType Type of view to show.
- * @param {rflect.cal.Component=} opt_caller What component initiated view
+ * @param {rflect.ui.Component=} opt_caller What component initiated view
  * change.
  */
 rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
