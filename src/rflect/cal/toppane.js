@@ -163,7 +163,7 @@ rflect.cal.TopPane.prototype.buildBodyInternal = function(aSb) {
     '</div></div>',
     '<div id="main-pane-controls-left"><div id="main-pane-controls-left-left">',
     // New event button.
-    '<div id="' + rflect.cal.predefined.BUTTON_NEW_EVENT_ID + '" class="cal-menu-button cal-menu-button-new-event ',
+    '<div id="' + rflect.cal.predefined.BUTTON_NEW_EVENT_ID + '" class="cal-menu-button cal-menu-button-new-event emphasis-button',
     'cal-menu-leftmost-button">',
     rflect.cal.i18n.Symbols.NEW_EVENT,
     '</div></div>',

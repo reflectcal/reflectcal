@@ -119,3 +119,10 @@
   border-radius: 0;
 }
 
+/*Button with more important-meaning*/
+.emphasis-button {
+  background: -moz-linear-gradient(center top , #3399FF 0px, #44AAFF 100%) repeat scroll 0 0 transparent;
+  border-color: #3399ff;
+  color: white;
+}
+
