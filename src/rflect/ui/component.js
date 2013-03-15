@@ -3,8 +3,8 @@
  */
 
 /**
- * @fileoverview Calendar basic component, implementation of UI component,
- * adapted for calendar.
+ * @fileoverview Implementation of UI component, that can be built with string
+ * builder.
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 

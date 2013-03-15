@@ -256,7 +256,7 @@ rflect.cal.MiniCal.prototype.onClick_ = function(aEvent) {
  * @private
  */
 rflect.cal.MiniCal.prototype.onMouseOver_ = function(aEvent) {
-  var target = /** @type {Element} */ aEvent.target;
+  var target = /** @type {Element} */ (aEvent.target);
   var className = target.className;
 
   if (this.isField_(className))

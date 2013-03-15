@@ -14,8 +14,6 @@ goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
-goog.require('goog.ui.Dialog');
-goog.require('goog.ui.Bubble');
 goog.require('rflect.ui.Component');
 goog.require('rflect.cal.MainPaneBuilder');
 goog.require('rflect.cal.MainPaneSelectionMask');
@@ -23,6 +21,7 @@ goog.require('rflect.cal.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.TimeMarker');
 goog.require('rflect.string');
+goog.require('rflect.ui.Dialog');
 
 
 
@@ -158,24 +157,15 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager, aEventManager,
 
   /**
    * Popup dialog.
-   * @type {goog.ui.Dialog}
+   * @type {rflect.ui.Dialog}
    * @private
    */
-  this.dialog_ = new goog.ui.Dialog();
+  this.dialog_ = new rflect.ui.Dialog();
   this.dialog_.setTitle('new event');
   this.dialog_.setModal(false);
-
-  var btn1 = new goog.ui.Button('Lalalalalallal',
-    goog.ui.FlatButtonRenderer.getInstance());
-  this.dialog_.addChild(new goog.ui.Button('Lalalalalallal',
-      goog.ui.FlatButtonRenderer.getInstance()));
-  this.dialog_.addChild(new goog.ui.Button('Cancel',
-      goog.ui.FlatButtonRenderer.getInstance()));
   this.dialog_.setBackgroundElementOpacity(0);
 
   this.addChild(this.dialog_);
-
-  this.bubble_ = new goog.ui.Bubble('<div>New event</div>');
 
 };
 goog.inherits(rflect.cal.MainPane, rflect.ui.Component);

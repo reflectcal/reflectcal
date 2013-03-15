@@ -36,7 +36,18 @@ goog.require('rflect.cal.predefined');
 rflect.cal.TopPane = function(aViewManager, aTimeManager) {
   rflect.ui.Component.call(this);
 
+  /**
+   * Link to view manager.
+   * @type {rflect.cal.ViewManager}
+   * @private
+   */
   this.viewManager_ = aViewManager;
+
+  /**
+   * Link to time manager.
+   * @type {rflect.cal.TimeManager}
+   * @private
+   */
   this.timeManager_ = aTimeManager;
 
   // Add buttons. No need for captions or content here, because we've decorated
@@ -59,22 +70,6 @@ rflect.cal.TopPane = function(aViewManager, aTimeManager) {
       goog.ui.FlatButtonRenderer.getInstance()));
 };
 goog.inherits(rflect.cal.TopPane, rflect.ui.Component);
-
-
-/**
- * Link to view manager.
- * @type {rflect.cal.ViewManager}
- * @private
- */
-rflect.cal.MainPane.prototype.viewManager_ = null;
-
-
-/**
- * Link to time manager.
- * @type {rflect.cal.TimeManager}
- * @private
- */
-rflect.cal.MainPane.prototype.timeManager_ = null;
 
 
 /**
@@ -163,7 +158,7 @@ rflect.cal.TopPane.prototype.buildBodyInternal = function(aSb) {
     '</div></div>',
     '<div id="main-pane-controls-left"><div id="main-pane-controls-left-left">',
     // New event button.
-    '<div id="' + rflect.cal.predefined.BUTTON_NEW_EVENT_ID + '" class="cal-menu-button cal-menu-button-new-event emphasis-button',
+    '<div id="' + rflect.cal.predefined.BUTTON_NEW_EVENT_ID + '" class="cal-menu-button cal-menu-button-new-event emphasis-button ',
     'cal-menu-leftmost-button">',
     rflect.cal.i18n.Symbols.NEW_EVENT,
     '</div></div>',

@@ -51,6 +51,7 @@
             <arg line="--output_file=&quot;${basedir}\src\outputcompiled.js&quot;"/>
             <arg line="--compiler_flags=&quot;--compilation_level=ADVANCED_OPTIMIZATIONS&quot;"/>
             <arg line="--compiler_flags=&quot;--summary_detail_level=3&quot;"/>
+            <arg line="--compiler_flags=&quot;--jscomp_off=accessControls&quot;"/>
             <arg line="--compiler_flags=&quot;--warning_level=VERBOSE&quot;"/>
             <!--To prevent warnings from compiler.-->
             <arg line="--compiler_flags=&quot;--js=${basedir}\src\deps.js&quot;"/>

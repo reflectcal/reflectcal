@@ -15,6 +15,7 @@
 
 goog.provide('rflect.ui.Dialog');
 
+goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Dialog');
 
 
@@ -47,10 +48,11 @@ goog.require('goog.ui.Dialog');
  *     issue by using an iframe instead of a div for bg element.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
  *     goog.ui.Component} for semantics.
- * @extends {goog.ui.ModalPopup}
+ * @param {goog.ui.ButtonRenderer=} opt_buttonRenderer Optional button renderer.
+ * @extends {goog.ui.Dialog}
  */
 rflect.ui.Dialog = function(opt_class, opt_useIframeMask, opt_domHelper,
-    opt_renderer) {
+    opt_buttonRenderer) {
   goog.ui.Dialog.call(this, opt_class, opt_useIframeMask, opt_domHelper);
   /**
    * CSS class name for the dialog element, also used as a class name prefix for
@@ -62,14 +64,35 @@ rflect.ui.Dialog = function(opt_class, opt_useIframeMask, opt_domHelper,
 
   this.buttons_ = rflect.ui.Dialog.ButtonSet.createOkCancel();
 
-  this.buttonRenderer_ = opt_renderer ||
+  /**
+   * Renderer for buttons.
+   * @type {goog.ui.ButtonRenderer}
+   * @private
+   */
+  this.buttonRenderer_ = opt_buttonRenderer ||
       goog.ui.NativeButtonRenderer.getInstance();
 };
 goog.inherits(rflect.ui.Dialog, goog.ui.Dialog);
 
 
 /**
- * Button set.  Default to Ok/Cancel.
+ * Dialog event class.
+ * @param {goog.ui.Button} key Key identifier for the button.
+ * @param {goog.ui.ControlContent} caption Caption on the button (might be 
+ * i18nlized).
+ * @constructor
+ * @extends {goog.events.Event}
+ */
+rflect.ui.Dialog.Event = function(key, caption) {
+  this.type = goog.ui.Dialog.EventType.SELECT;
+  this.key = key;
+  this.caption = caption;
+};
+goog.inherits(rflect.ui.Dialog.Event, goog.events.Event);
+
+
+/**
+ * Button set. Default to Ok/Cancel.
  * @type {rflect.ui.Dialog.ButtonSet}
  * @private
  */
@@ -109,7 +132,7 @@ rflect.ui.Dialog.prototype.createDom = function() {
   // Render the buttons.
   if (this.buttons_) {
     // Appending button set dom to parent.
-    this.dom.appendChild(this.buttonEl_, this.buttons_.createDom(element));
+    this.dom.appendChild(this.buttonEl_, this.buttons_.createDom());
   }
   goog.style.showElement(this.buttonEl_, !!this.buttons_);
   this.setBackgroundElementOpacity(this.backgroundElementOpacity_);
@@ -184,15 +207,17 @@ rflect.ui.Dialog.prototype.decorateInternal = function(element) {
   var buttonsClass = goog.getCssName(this.class_, 'buttons');
   this.buttonEl_ = goog.dom.getElementsByTagNameAndClass(
       null, buttonsClass, dialogElement)[0];
-  this.buttons_ = new rflect.ui.Dialog.ButtonSet(this.getDomHelper());
+  this.buttons_ = new rflect.ui.Dialog.ButtonSet(this.getDomHelper(),
+      this.buttonRenderer_);
   if (this.buttonEl_) {
     // Button container element found.  Create empty button set and use it to
     // decorate the button container.
     this.buttons_.decorateInternal(this.buttonEl_);
   } else {
     // Create new button container element, and render a button set into it.
-    this.buttons_.createDom(dialogElement, buttonsClass);
-    this.buttonEl_ = this.buttons_.getElement();
+    this.buttonEl_ = this.getDomHelper.createDom('div',
+        goog.getCssName(this.class_, 'buttons'));
+    this.buttons_.createDom(this.buttonEl_);
     goog.style.showElement(this.buttonEl_, !!this.buttons_);
   }
   this.setBackgroundElementOpacity(this.backgroundElementOpacity_);
@@ -216,7 +241,7 @@ rflect.ui.Dialog.prototype.enterDocument = function() {
   //
   // This could be worked around by attaching the onButtonClick_ handler in a
   // setTimeout, but that was deemed undesirable.
-  this.getHandler().listen(this.buttons_, goog.events.EventType.CLICK,
+  this.getHandler().listen(this.buttons_, goog.ui.Component.EventType.ACTION,
       this.onButtonClick_);
 
   // Add drag support.
@@ -252,7 +277,7 @@ rflect.ui.Dialog.prototype.focus = function() {
   if (this.getButtonSet()) {
     var defaultButton = this.getButtonSet().getDefault();
     if (defaultButton) {
-      defaultButton.setFocused();
+      defaultButton.setFocused(true);
     }
   }
 };
@@ -290,7 +315,7 @@ rflect.ui.Dialog.prototype.onTitleCloseClick_ = function(e) {
 rflect.ui.Dialog.prototype.setButtonSet = function(buttons) {
   if (this.buttonEl_) {
     if (buttons) {
-      this.dom_.appendChild(this.buttonEl_, buttons_.getElement());
+      this.dom_.appendChild(this.buttonEl_, buttons.getElement());
     } else {
       if (this.buttons_)
         this.buttons_.dispose();
@@ -303,13 +328,23 @@ rflect.ui.Dialog.prototype.setButtonSet = function(buttons) {
 
 
 /**
+ * Returns the button set being used.
+ * @return {rflect.ui.Dialog.ButtonSet?} The button set being used.
+ */
+rflect.ui.Dialog.prototype.getButtonSet = function() {
+  return this.buttons_;
+};
+
+
+/**
  * Handles a click on the button container.
  * @param {goog.events.BrowserEvent} e Browser's event object.
  * @private
  */
 rflect.ui.Dialog.prototype.onButtonClick_ = function(e) {
   var key = e.target;
-  var caption = /** @type {Element|string} */(key.getContent());
+  if (key instanceof goog.ui.Button) {
+    var caption = /** @type {Element|string} */(key.getContent());
     if (this.dispatchEvent(new rflect.ui.Dialog.Event(key, caption))) {
       this.setVisible(false);
     }
@@ -401,11 +436,20 @@ rflect.ui.Dialog.prototype.onKey_ = function(e) {
  * show.  Uses the {@link goog.structs.Map} interface.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
  *    goog.ui.Component} for semantics.
+ * @param {goog.ui.ButtonRenderer=} opt_buttonRenderer Optional button renderer.
  * @constructor
- * @extends {goog.structs.Map}
+ * @extends {goog.ui.Component}
  */
-rflect.ui.Dialog.ButtonSet = function(opt_domHelper) {
+rflect.ui.Dialog.ButtonSet = function(opt_domHelper, opt_buttonRenderer) {
   goog.ui.Component.call(this, opt_domHelper);
+
+  /**
+   * Renderer for buttons.
+   * @type {goog.ui.ButtonRenderer}
+   * @private
+   */
+  this.buttonRenderer_ = opt_buttonRenderer ||
+      goog.ui.NativeButtonRenderer.getInstance();
 };
 goog.inherits(rflect.ui.Dialog.ButtonSet, goog.ui.Component);
 
@@ -464,10 +508,9 @@ rflect.ui.Dialog.ButtonSet.prototype.addButton = function(button, opt_isDefault,
  */
 rflect.ui.Dialog.ButtonSet.prototype.createDom = function() {
   var container = this.dom_.createDom('div');
-    this.forEachChild(function(child) {
-      this.dom_.appendChild(container, child.createDom());
-    }, this);
-  }
+  this.forEachChild(function(child) {
+    this.dom_.appendChild(container, child.createDom());
+  }, this);
   rflect.ui.Dialog.ButtonSet.superClass_.setElementInternal(container);
 };
 
@@ -487,7 +530,7 @@ rflect.ui.Dialog.ButtonSet.prototype.decorateInternal = function(element) {
   }
   var buttons = this.dom_.getChildren(this.element_);
   for (var i = 0, buttonEl, key, caption; buttonEl = buttons[i]; i++) {
-    var button = = new goog.ui.Button(null, this.buttonRenderer_);
+    var button = new goog.ui.Button(null, this.buttonRenderer_);
     var isDefault = i == 0;
     // Buttons should have a "name" attribute and have their caption defined by
     // their innerHTML, but not everyone knows this, and we should play nice.
@@ -509,7 +552,7 @@ rflect.ui.Dialog.ButtonSet.prototype.decorateInternal = function(element) {
  * @param {number} aIndex Index of default button.
  */
 rflect.ui.Dialog.ButtonSet.prototype.setDefault = function(aIndex) {
-  this.defaultButton_ = this.getChildAt(aIndex);
+  this.defaultButton_ = /**@type {goog.ui.Button}*/ (this.getChildAt(aIndex));
 };
 
 
@@ -527,7 +570,7 @@ rflect.ui.Dialog.ButtonSet.prototype.getDefault = function() {
  * @param {number} aIndex Index of cancel button.
  */
 rflect.ui.Dialog.ButtonSet.prototype.setCancel = function(aIndex) {
-  this.cancelButton_ = this.getChildAt(aIndex);
+  this.cancelButton_ = /**@type {goog.ui.Button}*/ (this.getChildAt(aIndex));
 };
 
 
@@ -548,7 +591,7 @@ rflect.ui.Dialog.ButtonSet.prototype.getCancel = function() {
 rflect.ui.Dialog.ButtonSet.prototype.getButton = function(aIndex) {
   var button = this.getChildAt(aIndex);
   if (button)
-    return button;
+    return /**@type {goog.ui.Button}*/ (button);
   return null;
 };
 
@@ -556,14 +599,14 @@ rflect.ui.Dialog.ButtonSet.prototype.getButton = function(aIndex) {
 /**
  * Enables or disables a button in this set by key. If the button is not found,
  * does nothing.
- * @param {string} key The button to enable or disable.
+ * @param {number} aIndex Index of button to enable or disable.
  * @param {boolean} enabled True to enable; false to disable.
  */
 rflect.ui.Dialog.ButtonSet.prototype.setButtonEnabled = function(aIndex,
     enabled) {
   var button = this.getButton(aIndex);
   if (button) {
-    button.setDisabled(!enabled);
+    button.setEnabled(enabled);
   }
 };
 
@@ -573,7 +616,6 @@ rflect.ui.Dialog.ButtonSet.prototype.setButtonEnabled = function(aIndex,
  * @param {boolean} enabled True to enable; false to disable.
  */
 rflect.ui.Dialog.ButtonSet.prototype.setAllButtonsEnabled = function(enabled) {
-  var allButtons = this.getAllButtons();
   this.forEachChild(function(button){
     button.disabled = !enabled;
   });
