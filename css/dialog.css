@@ -1,8 +1,5 @@
 /*
- * Copyright 2009 The Closure Library Authors. All Rights Reserved.
- *
- * Use of this source code is governed by the Apache License, Version 2.0.
- * See the COPYING file for details.
+ * Copyright (c) 2013. Rflect, Alex K.
  */
 
 /*
@@ -23,6 +20,8 @@
   z-index: 100;
   border-radius: 3px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+
+  outline: none;
 }
 
 .modal-dialog a,
@@ -30,6 +29,11 @@
 .modal-dialog a:visited  {
   color: #06c;
   cursor: pointer;
+  text-decoration: none;
+}
+
+.modal-dialog a:hover {
+  text-decoration: underline;
 }
 
 .modal-dialog-bg {

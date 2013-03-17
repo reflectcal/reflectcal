@@ -5,12 +5,7 @@
 /**
  * @fileoverview Dialog widget subclassing, which permits flat buttons.
  * @author alexeykofficial@gmail.com (Alex K.)
- * TODO(user):
- * Standardize CSS class names with other components
- * Add functionality to "host" other components in content area
- * Abstract out ButtonSet and make it more general
- * For now, no buttonset is used, and two specific buttons are added as
- * children.
+ * TODO(alexk): this is abstracted buttonset version, commit go closure repo.
  */
 
 goog.provide('rflect.ui.Dialog');
@@ -101,7 +96,7 @@ rflect.ui.Dialog.prototype.buttons_;
 
 /** @override */
 rflect.ui.Dialog.prototype.createDom = function() {
-  goog.base(this, 'createDom');
+  goog.ui.ModalPopup.prototype.createDom.call(this);
   var element = this.getElement();
   goog.asserts.assert(element, 'getElement() returns null');
 
@@ -132,7 +127,8 @@ rflect.ui.Dialog.prototype.createDom = function() {
   // Render the buttons.
   if (this.buttons_) {
     // Appending button set dom to parent.
-    this.dom.appendChild(this.buttonEl_, this.buttons_.createDom());
+    this.buttons_.createDom();
+    this.getDomHelper().appendChild(this.buttonEl_, this.buttons_.getElement());
   }
   goog.style.showElement(this.buttonEl_, !!this.buttons_);
   this.setBackgroundElementOpacity(this.backgroundElementOpacity_);
@@ -141,7 +137,7 @@ rflect.ui.Dialog.prototype.createDom = function() {
 
 /** @override */
 rflect.ui.Dialog.prototype.decorateInternal = function(element) {
-  goog.base(this, 'decorateInternal', element);
+  goog.ui.ModalPopup.prototype.decorateInternal.call(this, element);
   var dialogElement = this.getElement();
   goog.asserts.assert(dialogElement,
       'The DOM element for dialog cannot be null.');
@@ -215,9 +211,10 @@ rflect.ui.Dialog.prototype.decorateInternal = function(element) {
     this.buttons_.decorateInternal(this.buttonEl_);
   } else {
     // Create new button container element, and render a button set into it.
-    this.buttonEl_ = this.getDomHelper.createDom('div',
+    this.buttonEl_ = this.getDomHelper().createDom('div',
         goog.getCssName(this.class_, 'buttons'));
-    this.buttons_.createDom(this.buttonEl_);
+    this.buttons_.createDom();
+    this.getDomHelper().appendChild(this.buttonEl_, this.buttons_.getElement());
     goog.style.showElement(this.buttonEl_, !!this.buttons_);
   }
   this.setBackgroundElementOpacity(this.backgroundElementOpacity_);
@@ -226,7 +223,7 @@ rflect.ui.Dialog.prototype.decorateInternal = function(element) {
 
 /** @override */
 rflect.ui.Dialog.prototype.enterDocument = function() {
-  goog.base(this, 'enterDocument');
+  goog.ui.Dialog.prototype.enterDocument.call(this);
 
   // Listen for keyboard events while the dialog is visible.
   this.getHandler().
@@ -313,15 +310,15 @@ rflect.ui.Dialog.prototype.onTitleCloseClick_ = function(e) {
  * @param {rflect.ui.Dialog.ButtonSet?} buttons The button set to use.
  */
 rflect.ui.Dialog.prototype.setButtonSet = function(buttons) {
-  if (this.buttonEl_) {
-    if (buttons) {
+  if (buttons) {
+    this.addChild(buttons);
+    if (this.buttonEl_) {
       this.dom_.appendChild(this.buttonEl_, buttons.getElement());
-    } else {
-      if (this.buttons_)
-        this.buttons_.dispose();
-      this.buttonEl_.innerHTML = '';
+      goog.style.showElement(this.buttonEl_, true);
     }
-    goog.style.showElement(this.buttonEl_, !!this.buttons_);
+  } else {
+    this.removeChild(this.buttons_, !!this.buttonEl_);
+    this.buttons_.dispose();
   }
   this.buttons_ = buttons;
 };
@@ -480,6 +477,14 @@ rflect.ui.Dialog.ButtonSet.prototype.cancelButton_ = null;
 
 
 /**
+ * The button that should have an "important" look.
+ * @type {?goog.ui.Button}
+ * @private
+ */
+rflect.ui.Dialog.ButtonSet.prototype.emphasisButton_ = null;
+
+
+/**
  * Adds a button to this button set. Buttons will be displayed in the order they
  * are added.
  * @see goog.ui.Dialog.DefaultButtons
@@ -488,16 +493,19 @@ rflect.ui.Dialog.ButtonSet.prototype.cancelButton_ = null;
  *     Dialog will dispatch for this button if enter is pressed.
  * @param {boolean=} opt_isCancel Whether this button has the same behavior as
  *     cancel. If escape is pressed this button will fire.
+ * @param {boolean=} opt_isEmphasis Whether this should have "important" look.
  * @return {!rflect.ui.Dialog.ButtonSet} The button set, to make it easy to chain
  *     "addButton" calls and build new ButtonSets.
  */
 rflect.ui.Dialog.ButtonSet.prototype.addButton = function(button, opt_isDefault,
-    opt_isCancel) {
+    opt_isCancel, opt_isEmphasis) {
   this.addChild(button);
   if (opt_isDefault)
     this.defaultButton_ = button;
   if (opt_isCancel)
     this.cancelButton_ = button;
+  if (opt_isEmphasis)
+    this.emphasisButton_ = button;
   return this;
 };
 
@@ -507,9 +515,13 @@ rflect.ui.Dialog.ButtonSet.prototype.addButton = function(button, opt_isDefault,
  * @override
  */
 rflect.ui.Dialog.ButtonSet.prototype.createDom = function() {
-  var container = this.dom_.createDom('div');
+  var container = this.getDomHelper().createDom('div');
   this.forEachChild(function(child) {
-    this.dom_.appendChild(container, child.createDom());
+    child.createDom();
+    if (child == this.emphasisButton_)
+      goog.dom.classes.add(child.getElement(),
+          goog.getCssName('emphasis-button'))
+    this.getDomHelper().appendChild(container, child.getElement());
   }, this);
   rflect.ui.Dialog.ButtonSet.superClass_.setElementInternal(container);
 };
@@ -636,7 +648,7 @@ rflect.ui.Dialog.ButtonSet.createOk = function() {
   var ok = rflect.ui.Dialog.ButtonSet.getButton(
         goog.ui.Dialog.DefaultButtonCaptions.OK);
   return new rflect.ui.Dialog.ButtonSet().
-      addButton(ok, true, true);
+      addButton(ok, true, true, true);
 };
 
 
@@ -650,7 +662,7 @@ rflect.ui.Dialog.ButtonSet.createOkCancel = function() {
   var cancel = rflect.ui.Dialog.ButtonSet.getButton(
       goog.ui.Dialog.DefaultButtonCaptions.CANCEL);
   return new rflect.ui.Dialog.ButtonSet().
-      addButton(ok, true).addButton(cancel, false, true);
+      addButton(ok, true, false, true).addButton(cancel, false, true);
 };
 
 
@@ -664,5 +676,5 @@ rflect.ui.Dialog.ButtonSet.createSaveCancel = function() {
   var cancel = rflect.ui.Dialog.ButtonSet.getButton(
       goog.ui.Dialog.DefaultButtonCaptions.CANCEL);
   return new rflect.ui.Dialog.ButtonSet().
-      addButton(save, true).addButton(cancel, false, true);
+      addButton(save, true, false, true).addButton(cancel, false, true);
 };

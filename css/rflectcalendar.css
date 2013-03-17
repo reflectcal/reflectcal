@@ -32,6 +32,8 @@ body {
   width: auto;
   float: none;
   overflow: hidden;
+  /*This is for possible highlight shadow of nested button.*/
+  padding-left: 5px;
 }
 
 #main-pane-controls-left-left {

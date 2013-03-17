@@ -21,7 +21,7 @@ goog.require('rflect.cal.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.TimeMarker');
 goog.require('rflect.string');
-goog.require('rflect.ui.Dialog');
+goog.require('rflect.cal.ui.SaveDialog');
 
 
 
@@ -156,16 +156,15 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager, aEventManager,
   this.moRegistry_ = new rflect.cal.MouseOverRegistry();
 
   /**
-   * Popup dialog.
-   * @type {rflect.ui.Dialog}
+   * Popup save dialog.
+   * @type {rflect.cal.ui.SaveDialog}
    * @private
    */
-  this.dialog_ = new rflect.ui.Dialog();
-  this.dialog_.setTitle('new event');
-  this.dialog_.setModal(false);
-  this.dialog_.setBackgroundElementOpacity(0);
+  this.saveDialog_ = new rflect.cal.ui.SaveDialog();
+  if (goog.DEBUG)
+    _inspect('saveDialog_', this.saveDialog_);
 
-  this.addChild(this.dialog_);
+  this.addChild(this.saveDialog_);
 
 };
 goog.inherits(rflect.cal.MainPane, rflect.ui.Component);
@@ -813,7 +812,7 @@ rflect.cal.MainPane.prototype.onMouseMove_ = function(aEvent) {
 rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
   if (this.selectionMask_.isInitialized()){
     this.selectionMask_.close();
-    this.dialog_.setVisible(true);
+    this.saveDialog_.setVisible(true);
     aEvent.preventDefault();
   }
 };

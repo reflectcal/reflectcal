@@ -60,7 +60,7 @@ rflect.cal.TimeMarker.HEAD_PARTS_ = [
 
 /**
  * Key for visibilitychange listener.
- * @type {number|null}
+ * @type {goog.events.Key}
  * @private
  */
 rflect.cal.TimeMarker.prototype.evKey_;
