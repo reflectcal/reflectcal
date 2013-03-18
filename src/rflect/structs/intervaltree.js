@@ -522,7 +522,7 @@ rflect.structs.IntervalTree.Node_.prototype.search = function(aInterval) {
 /**
  * @return {string} String representation of node.
  */
-rflect.structs.IntervalTree.Node_.prototype.toString = function(aInterval) {
+rflect.structs.IntervalTree.Node_.prototype.toString = function() {
   return '[' + (this.sortedBySP_ && this.sortedBySP_.length ?
       this.sortedBySP_[0].start : '-') + ';' + this.midPoint_ + ';' +
       (this.sortedByEP_ && this.sortedByEP_.length ?

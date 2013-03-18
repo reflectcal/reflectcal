@@ -514,7 +514,11 @@ rflect.cal.MainPane.prototype.enterDocument = function() {
       .listen(document, goog.events.EventType.MOUSEMOVE,
       this.onMouseMove_, false, this)
       .listen(document, goog.events.EventType.MOUSEUP,
-      this.onMouseUp_, false, this);
+      this.onMouseUp_, false, this)
+      .listen(this.saveDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
+      this.onEventEdit_, false, this)
+      .listen(this.saveDialog_, goog.ui.Dialog.EventType.SELECT,
+      this.onSaveDialogSave_, false, this);
 
   this.timeMarker_.start();
 };
@@ -637,6 +641,28 @@ rflect.cal.MainPane.prototype.onWeeknumLabelClick_ = function(aId) {
 
 
 /**
+ * Event edit listener. Called when edit link is clicked from "save" dialog.
+ * @param {{type: string}} aEvent Event object.
+ */
+rflect.cal.MainPane.prototype.onEventEdit_ = function(aEvent) {
+  if (goog.DEBUG)
+    _log('edit clicked');
+}
+
+
+/**
+ * Save dialog button listener.
+ * @param {rflect.ui.Dialog.Event} aEvent Event object.
+ */
+rflect.cal.MainPane.prototype.onSaveDialogSave_ = function(aEvent) {
+  if (aEvent.key == this.saveDialog_.getButtonSet().getDefault())
+    if (goog.DEBUG)
+      _log('save clicked');
+}
+
+
+
+/**
  * Switches view from main pane ui, like from daylabel click.
  * @param {rflect.date.DateShim} aDate Date to set basis to.
  * @param {rflect.cal.ViewType} aType Type to stitch to.
@@ -754,19 +780,22 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
   // Whether we clicked on hollow space.
   if (this.isWeekGrid_(className)) {
     this.selectionMask_.init(
-        rflect.cal.MainPaneSelectionMask.Configuration.WEEK,
+        /**@type {number}*/
+        (rflect.cal.MainPaneSelectionMask.Configuration.WEEK),
         aEvent);
     preventDefaultIsNeeded = true;
   } else if (this.isAlldayGrid_(className)) {
     this.selectionMask_.init(
-        rflect.cal.MainPaneSelectionMask.Configuration.ALLDAY,
+        /**@type {number}*/
+        (rflect.cal.MainPaneSelectionMask.Configuration.ALLDAY),
         aEvent);
     preventDefaultIsNeeded = true;
   } else if (this.isMonthGrid_(className)) {
 
     if (!this.isDaynumLabel_(className))
       this.selectionMask_.init(
-          rflect.cal.MainPaneSelectionMask.Configuration.MONTH, aEvent);
+          /**@type {number}*/
+          (rflect.cal.MainPaneSelectionMask.Configuration.MONTH), aEvent);
     preventDefaultIsNeeded = true;
   }
   if (preventDefaultIsNeeded)

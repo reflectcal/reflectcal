@@ -4491,7 +4491,7 @@ function $rflect$ui$Dialog$ButtonSet$createSaveCancel$$() {
 $goog$inherits$$($rflect$cal$ui$SaveDialog$$, $rflect$ui$Dialog$$);
 $rflect$cal$ui$SaveDialog$$.prototype.focus = function $$rflect$cal$ui$SaveDialog$$$$focus$() {
   $goog$ui$ModalPopup$$.prototype.focus.call(this);
-  this.$input_$ && this.$input_$.focus()
+  this.$input_$ && (this.$input_$.value = "", this.$input_$.focus())
 };
 $rflect$cal$ui$SaveDialog$$.prototype.$enterDocument$ = function $$rflect$cal$ui$SaveDialog$$$$$enterDocument$$() {
   var $link$$ = this.$getDomHelper$().$getElement$("event-edit");
@@ -4664,14 +4664,14 @@ $JSCompiler_prototypeAlias$$.update = function $$JSCompiler_prototypeAlias$$$upd
   $aEvent$$13_currentCell$$1$$ = $JSCompiler_StaticMethods_getCellByCoordinate_$$(this, $aEvent$$13_currentCell$$1$$.clientX + $pageScroll$$1$$.x - this.$elementOffset_$.x + this.$scrollableEl_$.scrollLeft, $aEvent$$13_currentCell$$1$$.clientY + $pageScroll$$1$$.y - this.$elementOffset_$.y + this.$scrollableEl_$.scrollTop);
   $goog$math$Coordinate$equals$$(this.$currentCell_$, $aEvent$$13_currentCell$$1$$) || (this.$currentCell_$ = $aEvent$$13_currentCell$$1$$, this.$update_$())
 };
-$JSCompiler_prototypeAlias$$.$init$ = function $$JSCompiler_prototypeAlias$$$$init$$($aConfiguration$$2$$, $aEvent$$14$$) {
+$JSCompiler_prototypeAlias$$.$init$ = function $$JSCompiler_prototypeAlias$$$$init$$($aConfiguration$$2$$, $opt_event$$1$$) {
   $rflect$cal$SelectionMask$$.prototype.$init$.call(this, $aConfiguration$$2$$);
   var $doc$$43_pageScroll$$2$$ = this.$document_$ || (this.$document_$ = $goog$dom$getOwnerDocument$$(this.$component_$.$getElement$())), $doc$$43_pageScroll$$2$$ = $JSCompiler_StaticMethods_getDocumentScroll$$($goog$dom$getDomHelper$$($doc$$43_pageScroll$$2$$)), $coordX_coordXWithoutScroll$$ = 0, $coordYWithoutScroll$$ = 0, $coordY$$ = $coordX_coordXWithoutScroll$$ = 0;
   this.$elementOffset_$ = new $goog$math$Coordinate$$(0, 0);
   this.$isWeekOrAllday_$() ? (1 == this.$configuration_$ ? (this.$scrollableEl_$ = $goog$dom$getElement$$("main-pane-header-scrollable"), this.$maskEl_$ = $goog$dom$getElement$$("wk-ad-mask-cnt"), this.$elementOffset_$ = $goog$style$getRelativePosition$$(this.$scrollableEl_$), this.$elementOffset_$.x += 1) : (this.$scrollableEl_$ = $goog$dom$getElement$$("main-pane-body-scrollable-wk"), this.$maskEl_$ = $goog$dom$getElement$$("wk-mask-cnt"), this.$elementOffset_$ = $goog$style$getRelativePosition$$(this.$scrollableEl_$), 
   this.$elementOffset_$.x += 62), this.$elementOffset_$.y += 1) : 3 == this.$configuration_$ && (this.$scrollableEl_$ = $goog$dom$getElement$$("main-pane-body-scrollable-mn"), this.$maskEl_$ = $goog$dom$getElement$$("mn-mask-cnt"), this.$elementOffset_$ = $goog$style$getRelativePosition$$(this.$scrollableEl_$), this.$elementOffset_$.x += 17, this.$elementOffset_$.y += 1);
-  $coordX_coordXWithoutScroll$$ = $aEvent$$14$$.clientX + $doc$$43_pageScroll$$2$$.x - this.$elementOffset_$.x;
-  $coordYWithoutScroll$$ = $aEvent$$14$$.clientY + $doc$$43_pageScroll$$2$$.y - this.$elementOffset_$.y;
+  $coordX_coordXWithoutScroll$$ = $opt_event$$1$$.clientX + $doc$$43_pageScroll$$2$$.x - this.$elementOffset_$.x;
+  $coordYWithoutScroll$$ = $opt_event$$1$$.clientY + $doc$$43_pageScroll$$2$$.y - this.$elementOffset_$.y;
   $coordX_coordXWithoutScroll$$ += this.$scrollableEl_$.scrollLeft;
   $coordY$$ = $coordYWithoutScroll$$ + this.$scrollableEl_$.scrollTop;
   $coordYWithoutScroll$$ >= this.$scrollableEl_$.offsetHeight || 0 > $coordYWithoutScroll$$ || (this.$startCell_$ = $JSCompiler_StaticMethods_getCellByCoordinate_$$(this, $coordX_coordXWithoutScroll$$, $coordY$$), this.$currentCell_$ = this.$startCell_$.$clone$(), $_log$$("coord: ", new $goog$math$Coordinate$$($coordX_coordXWithoutScroll$$, $coordY$$)), $_log$$("this.startCell_", this.$startCell_$), $_log$$("this.currentCell_", this.$currentCell_$), $goog$style$showElement$$(this.$maskEl_$, $JSCompiler_alias_TRUE$$), 
@@ -4743,9 +4743,9 @@ function $rflect$cal$MainPane$$($aViewManager$$11$$, $aTimeManager$$8$$, $aEvent
   this.$alldayGridSize$ = this.$alldayGridContainerSize$ = this.$gridSize$ = this.$gridContainerSize$ = this.$scrollablesCombinedWkSize_$ = $JSCompiler_alias_NULL$$;
   this.$scrollListenersKeys_$ = [];
   this.$moRegistry_$ = new $rflect$cal$MouseOverRegistry$$;
-  this.$dialog_$ = new $rflect$cal$ui$SaveDialog$$;
-  $_inspect$$("saveDialog_", this.$dialog_$);
-  $JSCompiler_StaticMethods_addChild$$(this, this.$dialog_$)
+  this.$saveDialog_$ = new $rflect$cal$ui$SaveDialog$$;
+  $_inspect$$("saveDialog_", this.$saveDialog_$);
+  $JSCompiler_StaticMethods_addChild$$(this, this.$saveDialog_$)
 }
 $goog$inherits$$($rflect$cal$MainPane$$, $rflect$ui$Component$$);
 $JSCompiler_prototypeAlias$$ = $rflect$cal$MainPane$$.prototype;
@@ -5181,39 +5181,46 @@ $JSCompiler_prototypeAlias$$.$decorateInternal$ = function $$JSCompiler_prototyp
 };
 $JSCompiler_prototypeAlias$$.$enterDocument$ = function $$JSCompiler_prototypeAlias$$$$enterDocument$$() {
   $rflect$cal$MainPane$$.$superClass_$.$enterDocument$.call(this);
-  $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$(this.$getHandler$(), this.$getElement$(), "click", this.$onClick_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mouseover", this.$onMouseOver_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mouseout", this.$onMouseOut_$, $JSCompiler_alias_FALSE$$, 
-  this), this.$getElement$(), "mousedown", this.$onMouseDown_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "selectstart", this.$onSelectStart_$, $JSCompiler_alias_FALSE$$, this), document, "mousemove", this.$onMouseMove_$, $JSCompiler_alias_FALSE$$, this), document, "mouseup", this.$onMouseUp_$, $JSCompiler_alias_FALSE$$, this);
+  $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$(this.$getHandler$(), this.$getElement$(), "click", this.$onClick_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mouseover", this.$onMouseOver_$, $JSCompiler_alias_FALSE$$, 
+  this), this.$getElement$(), "mouseout", this.$onMouseOut_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "mousedown", this.$onMouseDown_$, $JSCompiler_alias_FALSE$$, this), this.$getElement$(), "selectstart", this.$onSelectStart_$, $JSCompiler_alias_FALSE$$, this), document, "mousemove", this.$onMouseMove_$, $JSCompiler_alias_FALSE$$, this), document, "mouseup", this.$onMouseUp_$, $JSCompiler_alias_FALSE$$, this), this.$saveDialog_$, "editevent", this.$onEventEdit_$, $JSCompiler_alias_FALSE$$, 
+  this), this.$saveDialog_$, $goog$ui$Dialog$EventType$SELECT$$, this.$onSaveDialogSave_$, $JSCompiler_alias_FALSE$$, this);
   this.$timeMarker_$.start()
 };
-$JSCompiler_prototypeAlias$$.$onClick_$ = function $$JSCompiler_prototypeAlias$$$$onClick_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$) {
-  var $target$$55$$ = $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$.target, $id$$12$$ = $target$$55$$.id, $className$$34$$ = $target$$55$$.className;
-  $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$ = $JSCompiler_alias_FALSE$$;
+$JSCompiler_prototypeAlias$$.$onClick_$ = function $$JSCompiler_prototypeAlias$$$$onClick_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$) {
+  var $target$$55$$ = $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$.target, $id$$12$$ = $target$$55$$.id, $className$$34$$ = $target$$55$$.className;
+  $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$ = $JSCompiler_alias_FALSE$$;
   var $day$$inline_635_index$$69_index$$inline_634$$ = 0;
-  $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) ? /mn\-zippy\-row\d{1}/.test($id$$12$$) ? ($day$$inline_635_index$$69_index$$inline_634$$ = /\d{1}/.exec($id$$12$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$ = this.$blockManager_$.$blockPoolMonth$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$.$blocks$[$day$$inline_635_index$$69_index$$inline_634$$].$expanded$ = 
-  !$JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$.$blocks$[$day$$inline_635_index$$69_index$$inline_634$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$), this.$blockManager_$.$blockPoolMonth$.$expanded$ || 
-  (this.$blockManager_$.$blockPoolMonth$.scrollTop = 0), $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$34$$) ? $JSCompiler_StaticMethods_onDaynumLabelClick_$$(this, $id$$12$$) : $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $className$$34$$) && ($day$$inline_635_index$$69_index$$inline_634$$ = 
+  $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) ? /mn\-zippy\-row\d{1}/.test($id$$12$$) ? ($day$$inline_635_index$$69_index$$inline_634$$ = /\d{1}/.exec($id$$12$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$ = this.$blockManager_$.$blockPoolMonth$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$.$blocks$[$day$$inline_635_index$$69_index$$inline_634$$].$expanded$ = 
+  !$JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$.$blocks$[$day$$inline_635_index$$69_index$$inline_634$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$), this.$blockManager_$.$blockPoolMonth$.$expanded$ || 
+  (this.$blockManager_$.$blockPoolMonth$.scrollTop = 0), $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$34$$) ? $JSCompiler_StaticMethods_onDaynumLabelClick_$$(this, $id$$12$$) : $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $className$$34$$) && ($day$$inline_635_index$$69_index$$inline_634$$ = 
   $rflect$string$getNumericIndex$$($target$$55$$.parentNode.id), $_log$$("index", $day$$inline_635_index$$69_index$$inline_634$$), ($day$$inline_635_index$$69_index$$inline_634$$ = this.$timeManager_$.$daySeries$[7 * $day$$inline_635_index$$69_index$$inline_634$$]) && $JSCompiler_StaticMethods_switchView_$$(this, $day$$inline_635_index$$69_index$$inline_634$$, 3)) : $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) && (/wk\-zippy\-col\d{1}/.test($id$$12$$) ? ($day$$inline_635_index$$69_index$$inline_634$$ = 
-  /\d{1}/.exec($id$$12$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$ = this.$blockManager_$.$blockPoolWeek$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$.$blocks$[$day$$inline_635_index$$69_index$$inline_634$$].$expanded$ = 
-  !$JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$.$blocks$[$day$$inline_635_index$$69_index$$inline_634$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$), this.$blockManager_$.$blockPoolWeek$.$expanded$ || 
-  (this.$blockManager_$.$blockPoolWeek$.scrollLeft = 0), $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : /daynames\-zippy/.test($id$$12$$) ? ($JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$ = 
-  this.$blockManager_$.$blockPoolAllday$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$.$blocks$[0].$expanded$ = !$JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$.$blocks$[0].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$), 
-  $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$34$$) && $JSCompiler_StaticMethods_onDaynumLabelClick_$$(this, $target$$55$$.parentNode.id));
-  $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$15_zippyClicked$$ && (this.$updateBeforeRedraw$(), this.$updateByRedraw$())
+  /\d{1}/.exec($id$$12$$)[0], $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$ = this.$blockManager_$.$blockPoolWeek$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$.$blocks$[$day$$inline_635_index$$69_index$$inline_634$$].$expanded$ = 
+  !$JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$.$blocks$[$day$$inline_635_index$$69_index$$inline_634$$].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$), this.$blockManager_$.$blockPoolWeek$.$expanded$ || 
+  (this.$blockManager_$.$blockPoolWeek$.scrollLeft = 0), $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : /daynames\-zippy/.test($id$$12$$) ? ($JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$ = 
+  this.$blockManager_$.$blockPoolAllday$, $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$.$blocks$[0].$expanded$ = !$JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$.$blocks$[0].$expanded$, $JSCompiler_StaticMethods_updateExpandState_$$($JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$), 
+  $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$34$$) && $JSCompiler_StaticMethods_onDaynumLabelClick_$$(this, $target$$55$$.parentNode.id));
+  $JSCompiler_StaticMethods_toggleBlock$self$$inline_629_JSCompiler_StaticMethods_toggleBlock$self$$inline_637_JSCompiler_StaticMethods_toggleBlock$self$$inline_640_aEvent$$14_zippyClicked$$ && (this.$updateBeforeRedraw$(), this.$updateByRedraw$())
 };
-$JSCompiler_prototypeAlias$$.$onMouseOut_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOut_$$($aEvent$$16_className$$35$$) {
-  $aEvent$$16_className$$35$$ = $aEvent$$16_className$$35$$.target.className;
-  ($JSCompiler_StaticMethods_isDaynumLabel_$$(this, $aEvent$$16_className$$35$$) || $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $aEvent$$16_className$$35$$) || $rflect$string$buildClassNameRe$$("zippy").test($aEvent$$16_className$$35$$)) && $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $JSCompiler_alias_NULL$$)
+$JSCompiler_prototypeAlias$$.$onMouseOut_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOut_$$($aEvent$$15_className$$35$$) {
+  $aEvent$$15_className$$35$$ = $aEvent$$15_className$$35$$.target.className;
+  ($JSCompiler_StaticMethods_isDaynumLabel_$$(this, $aEvent$$15_className$$35$$) || $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $aEvent$$15_className$$35$$) || $rflect$string$buildClassNameRe$$("zippy").test($aEvent$$15_className$$35$$)) && $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $JSCompiler_alias_NULL$$)
 };
-$JSCompiler_prototypeAlias$$.$onMouseOver_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOver_$$($aEvent$$17_target$$57$$) {
-  $aEvent$$17_target$$57$$ = $aEvent$$17_target$$57$$.target;
-  var $className$$36$$ = $aEvent$$17_target$$57$$.className;
-  $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$36$$) || $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $className$$36$$) ? $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $aEvent$$17_target$$57$$, "label-underlined") : $rflect$string$buildClassNameRe$$("zippy").test($className$$36$$) ? $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $aEvent$$17_target$$57$$, "zippy-highlighted") : $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $JSCompiler_alias_NULL$$)
+$JSCompiler_prototypeAlias$$.$onMouseOver_$ = function $$JSCompiler_prototypeAlias$$$$onMouseOver_$$($aEvent$$16_target$$57$$) {
+  $aEvent$$16_target$$57$$ = $aEvent$$16_target$$57$$.target;
+  var $className$$36$$ = $aEvent$$16_target$$57$$.className;
+  $JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$36$$) || $JSCompiler_StaticMethods_isWeeknumLabel_$$(this, $className$$36$$) ? $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $aEvent$$16_target$$57$$, "label-underlined") : $rflect$string$buildClassNameRe$$("zippy").test($className$$36$$) ? $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $aEvent$$16_target$$57$$, "zippy-highlighted") : $JSCompiler_StaticMethods_registerTarget$$(this.$moRegistry_$, $JSCompiler_alias_NULL$$)
 };
 function $JSCompiler_StaticMethods_onDaynumLabelClick_$$($JSCompiler_StaticMethods_onDaynumLabelClick_$self$$, $aId$$4$$) {
   var $day$$4_index$$70$$ = $rflect$string$getNumericIndex$$($aId$$4$$);
   $_log$$("index", $day$$4_index$$70$$);
   ($day$$4_index$$70$$ = $JSCompiler_StaticMethods_onDaynumLabelClick_$self$$.$timeManager_$.$daySeries$[$day$$4_index$$70$$]) && $JSCompiler_StaticMethods_switchView_$$($JSCompiler_StaticMethods_onDaynumLabelClick_$self$$, $day$$4_index$$70$$, 1)
 }
+$JSCompiler_prototypeAlias$$.$onEventEdit_$ = function $$JSCompiler_prototypeAlias$$$$onEventEdit_$$() {
+  $_log$$("edit clicked")
+};
+$JSCompiler_prototypeAlias$$.$onSaveDialogSave_$ = function $$JSCompiler_prototypeAlias$$$$onSaveDialogSave_$$($aEvent$$18$$) {
+  $aEvent$$18$$.key == this.$saveDialog_$.$buttons_$.$defaultButton_$ && $_log$$("save clicked")
+};
 function $JSCompiler_StaticMethods_switchView_$$($JSCompiler_StaticMethods_switchView_$self$$, $aDate$$10_opt_date$$inline_1031$$, $aType$$) {
   $aDate$$10_opt_date$$inline_1031$$ = new $goog$date$DateTime$$($aDate$$10_opt_date$$inline_1031$$.getYear(), $aDate$$10_opt_date$$inline_1031$$.getMonth(), $aDate$$10_opt_date$$inline_1031$$.getDate());
   $JSCompiler_StaticMethods_switchView_$self$$.$timeManager_$.$basis$ = $aDate$$10_opt_date$$inline_1031$$ || new $goog$date$Date$$;
@@ -5237,27 +5244,27 @@ function $JSCompiler_StaticMethods_isDaynumLabel_$$($JSCompiler_StaticMethods_is
 function $JSCompiler_StaticMethods_isWeeknumLabel_$$($JSCompiler_StaticMethods_isWeeknumLabel_$self$$, $aClassName$$14$$) {
   return($JSCompiler_StaticMethods_isWeeknumLabel_$self$$.$weeknumLabelRe_$ || ($JSCompiler_StaticMethods_isWeeknumLabel_$self$$.$weeknumLabelRe_$ = $rflect$string$buildClassNameRe$$("weeknum-label-inner"))).test($aClassName$$14$$)
 }
-$JSCompiler_prototypeAlias$$.$onMouseDown_$ = function $$JSCompiler_prototypeAlias$$$$onMouseDown_$$($aEvent$$18$$) {
-  var $className$$37$$ = $aEvent$$18$$.target.className, $preventDefaultIsNeeded$$ = $JSCompiler_alias_FALSE$$;
-  $JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$37$$) ? (this.$selectionMask_$.$init$(2, $aEvent$$18$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$37$$) ? (this.$selectionMask_$.$init$(1, $aEvent$$18$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isMonthGrid_$$(this, $className$$37$$) && ($JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$37$$) || this.$selectionMask_$.$init$(3, 
-  $aEvent$$18$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$);
-  $preventDefaultIsNeeded$$ && $aEvent$$18$$.preventDefault()
+$JSCompiler_prototypeAlias$$.$onMouseDown_$ = function $$JSCompiler_prototypeAlias$$$$onMouseDown_$$($aEvent$$19$$) {
+  var $className$$37$$ = $aEvent$$19$$.target.className, $preventDefaultIsNeeded$$ = $JSCompiler_alias_FALSE$$;
+  $JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$37$$) ? (this.$selectionMask_$.$init$(2, $aEvent$$19$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$37$$) ? (this.$selectionMask_$.$init$(1, $aEvent$$19$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$) : $JSCompiler_StaticMethods_isMonthGrid_$$(this, $className$$37$$) && ($JSCompiler_StaticMethods_isDaynumLabel_$$(this, $className$$37$$) || this.$selectionMask_$.$init$(3, 
+  $aEvent$$19$$), $preventDefaultIsNeeded$$ = $JSCompiler_alias_TRUE$$);
+  $preventDefaultIsNeeded$$ && $aEvent$$19$$.preventDefault()
 };
-$JSCompiler_prototypeAlias$$.$onSelectStart_$ = function $$JSCompiler_prototypeAlias$$$$onSelectStart_$$($aEvent$$19$$) {
-  var $className$$38$$ = $aEvent$$19$$.target.className;
-  ($JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$38$$) || $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$38$$) || $JSCompiler_StaticMethods_isMonthGrid_$$(this, $className$$38$$)) && $aEvent$$19$$.preventDefault()
+$JSCompiler_prototypeAlias$$.$onSelectStart_$ = function $$JSCompiler_prototypeAlias$$$$onSelectStart_$$($aEvent$$20$$) {
+  var $className$$38$$ = $aEvent$$20$$.target.className;
+  ($JSCompiler_StaticMethods_isWeekGrid_$$(this, $className$$38$$) || $JSCompiler_StaticMethods_isAlldayGrid_$$(this, $className$$38$$) || $JSCompiler_StaticMethods_isMonthGrid_$$(this, $className$$38$$)) && $aEvent$$20$$.preventDefault()
 };
-$JSCompiler_prototypeAlias$$.$onMouseMove_$ = function $$JSCompiler_prototypeAlias$$$$onMouseMove_$$($aEvent$$20$$) {
-  this.$selectionMask_$.$initialized_$ && (this.$selectionMask_$.update($aEvent$$20$$), $aEvent$$20$$.preventDefault())
+$JSCompiler_prototypeAlias$$.$onMouseMove_$ = function $$JSCompiler_prototypeAlias$$$$onMouseMove_$$($aEvent$$21$$) {
+  this.$selectionMask_$.$initialized_$ && (this.$selectionMask_$.update($aEvent$$21$$), $aEvent$$21$$.preventDefault())
 };
-$JSCompiler_prototypeAlias$$.$onMouseUp_$ = function $$JSCompiler_prototypeAlias$$$$onMouseUp_$$($aEvent$$21$$) {
-  this.$selectionMask_$.$initialized_$ && (this.$selectionMask_$.close(), this.$dialog_$.$setVisible$($JSCompiler_alias_TRUE$$), $aEvent$$21$$.preventDefault())
+$JSCompiler_prototypeAlias$$.$onMouseUp_$ = function $$JSCompiler_prototypeAlias$$$$onMouseUp_$$($aEvent$$22$$) {
+  this.$selectionMask_$.$initialized_$ && (this.$selectionMask_$.close(), this.$saveDialog_$.$setVisible$($JSCompiler_alias_TRUE$$), $aEvent$$22$$.preventDefault())
 };
-$JSCompiler_prototypeAlias$$.$onMainPaneScrollableScroll_$ = function $$JSCompiler_prototypeAlias$$$$onMainPaneScrollableScroll_$$($aEvent$$22_scrollable$$) {
-  $aEvent$$22_scrollable$$ = $aEvent$$22_scrollable$$.target;
+$JSCompiler_prototypeAlias$$.$onMainPaneScrollableScroll_$ = function $$JSCompiler_prototypeAlias$$$$onMainPaneScrollableScroll_$$($aEvent$$23_scrollable$$) {
+  $aEvent$$23_scrollable$$ = $aEvent$$23_scrollable$$.target;
   var $scrollPos$$ = 0;
-  $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) ? ($scrollPos$$ = $aEvent$$22_scrollable$$.scrollLeft, this.$blockManager_$.$blockPoolWeek$.scrollLeft = $scrollPos$$, this.$dom_$.$getElement$("weekmode-zippies-table").style.left = "-" + $scrollPos$$ + "px", this.$dom_$.$getElement$("weekmode-daynames-table").style.left = "-" + $scrollPos$$ + "px", this.$dom_$.$getElement$("main-pane-header-scrollable").scrollLeft = $scrollPos$$) : $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && 
-  ($scrollPos$$ = $aEvent$$22_scrollable$$.scrollTop, this.$blockManager_$.$blockPoolMonth$.scrollTop = $scrollPos$$, this.$dom_$.$getElement$("monthmode-zippies-table").style.top = "-" + $scrollPos$$ + "px")
+  $JSCompiler_StaticMethods_isInWeekMode$$(this.$viewManager_$) ? ($scrollPos$$ = $aEvent$$23_scrollable$$.scrollLeft, this.$blockManager_$.$blockPoolWeek$.scrollLeft = $scrollPos$$, this.$dom_$.$getElement$("weekmode-zippies-table").style.left = "-" + $scrollPos$$ + "px", this.$dom_$.$getElement$("weekmode-daynames-table").style.left = "-" + $scrollPos$$ + "px", this.$dom_$.$getElement$("main-pane-header-scrollable").scrollLeft = $scrollPos$$) : $JSCompiler_StaticMethods_isInMonthMode$$(this.$viewManager_$) && 
+  ($scrollPos$$ = $aEvent$$23_scrollable$$.scrollTop, this.$blockManager_$.$blockPoolMonth$.scrollTop = $scrollPos$$, this.$dom_$.$getElement$("monthmode-zippies-table").style.top = "-" + $scrollPos$$ + "px")
 };
 $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototypeAlias$$$$disposeInternal$$() {
   $rflect$cal$MainPane$$.$superClass_$.$disposeInternal$.call(this);
@@ -5617,8 +5624,8 @@ $JSCompiler_prototypeAlias$$.$onViewportResize_$ = function $$JSCompiler_prototy
   this.$mainBody_$.$updateBeforeRedraw$(0, 2);
   this.$mainBody_$.$updateByRedraw$(0, 2)
 };
-$JSCompiler_prototypeAlias$$.$onMainBodyAction_$ = function $$JSCompiler_prototypeAlias$$$$onMainBodyAction_$$($aEvent$$23$$) {
-  switch($JSCompiler_StaticMethods_getId$$($aEvent$$23$$.target)) {
+$JSCompiler_prototypeAlias$$.$onMainBodyAction_$ = function $$JSCompiler_prototypeAlias$$$$onMainBodyAction_$$($aEvent$$24$$) {
+  switch($JSCompiler_StaticMethods_getId$$($aEvent$$24$$.target)) {
     case "nb1":
       $goog$events$dispatchEvent$$(this.$mainBody_$, "toppanenow") && ($JSCompiler_StaticMethods_shiftToPoint$$(this.$timeManager$), this.$eventManager_$.$run$(), this.$mainBody_$.$updateBeforeRedraw$(), this.$mainBody_$.$updateByRedraw$());
       break;
@@ -5644,14 +5651,14 @@ $JSCompiler_prototypeAlias$$.$onMainBodyAction_$ = function $$JSCompiler_prototy
       $goog$events$dispatchEvent$$(this.$mainBody_$, "toppaneoptions")
   }
 };
-$JSCompiler_prototypeAlias$$.$onDateSelect_$ = function $$JSCompiler_prototypeAlias$$$$onDateSelect_$$($aEvent$$24$$) {
-  $_log$$("index is in mask", $aEvent$$24$$.$isInMask$);
-  $aEvent$$24$$.$isInMask$ || ($JSCompiler_StaticMethods_shiftToPoint$$(this.$timeManager$, $aEvent$$24$$.$date$), this.$mainBody_$.$miniCal$.$updateBeforeRedraw$(), this.$mainBody_$.$miniCal$.$updateByRedraw$(), this.$mainBody_$.$updateBeforeRedraw$(3, 4, 2), this.$mainBody_$.$updateByRedraw$(3, 4, 2))
+$JSCompiler_prototypeAlias$$.$onDateSelect_$ = function $$JSCompiler_prototypeAlias$$$$onDateSelect_$$($aEvent$$25$$) {
+  $_log$$("index is in mask", $aEvent$$25$$.$isInMask$);
+  $aEvent$$25$$.$isInMask$ || ($JSCompiler_StaticMethods_shiftToPoint$$(this.$timeManager$, $aEvent$$25$$.$date$), this.$mainBody_$.$miniCal$.$updateBeforeRedraw$(), this.$mainBody_$.$miniCal$.$updateByRedraw$(), this.$mainBody_$.$updateBeforeRedraw$(3, 4, 2), this.$mainBody_$.$updateByRedraw$(3, 4, 2))
 };
-$JSCompiler_prototypeAlias$$.$onDateDrag_$ = function $$JSCompiler_prototypeAlias$$$$onDateDrag_$$($aEvent$$25$$) {
-  this.$timeManager$.$basis$ = 5 == $aEvent$$25$$.$selectionConfiguration$ ? $aEvent$$25$$.$firstDayInMonth$ || new $goog$date$Date$$ : $aEvent$$25$$.$startDate$ || new $goog$date$Date$$;
-  this.$timeManager$.$daysNumber$ = $aEvent$$25$$.duration;
-  $JSCompiler_StaticMethods_showView$$(this, $aEvent$$25$$.$selectionConfiguration$, $aEvent$$25$$.target)
+$JSCompiler_prototypeAlias$$.$onDateDrag_$ = function $$JSCompiler_prototypeAlias$$$$onDateDrag_$$($aEvent$$26$$) {
+  this.$timeManager$.$basis$ = 5 == $aEvent$$26$$.$selectionConfiguration$ ? $aEvent$$26$$.$firstDayInMonth$ || new $goog$date$Date$$ : $aEvent$$26$$.$startDate$ || new $goog$date$Date$$;
+  this.$timeManager$.$daysNumber$ = $aEvent$$26$$.duration;
+  $JSCompiler_StaticMethods_showView$$(this, $aEvent$$26$$.$selectionConfiguration$, $aEvent$$26$$.target)
 };
 function $JSCompiler_StaticMethods_showView$$($JSCompiler_StaticMethods_showView$self$$, $JSCompiler_StaticMethods_preRender$self$$inline_726_aType$$1$$, $container$$inline_728_opt_caller$$) {
   var $calledByMiniCal$$ = $container$$inline_728_opt_caller$$ == $JSCompiler_StaticMethods_showView$self$$.$mainBody_$.$miniCal$;

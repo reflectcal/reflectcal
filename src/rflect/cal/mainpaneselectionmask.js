@@ -182,12 +182,12 @@ rflect.cal.MainPaneSelectionMask.prototype.update = function(aEvent) {
 
 /**
  * Sets up mask.
- * @param {rflect.cal.MainPaneSelectionMask.Configuration} aConfiguration Configuration
+ * @param {number} aConfiguration Configuration
  * of mask.
- * @param {goog.events.Event} aEvent Event object.
+ * @param {goog.events.Event=} opt_event Event object.
  */
 rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
-    aEvent) {
+    opt_event) {
   rflect.cal.SelectionMask.prototype.init.call(this, aConfiguration);
 
     //TODO(alexk): when in multiple scrollables goog.style.getOffsetPosition.
@@ -237,9 +237,9 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
 
     }
 
-    coordXWithoutScroll = aEvent.clientX + pageScroll.x -
+    coordXWithoutScroll = opt_event.clientX + pageScroll.x -
         this.elementOffset_.x;
-    coordYWithoutScroll = aEvent.clientY + pageScroll.y -
+    coordYWithoutScroll = opt_event.clientY + pageScroll.y -
         this.elementOffset_.y;
 
     coordX = coordXWithoutScroll + this.scrollableEl_.scrollLeft;
