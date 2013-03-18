@@ -621,7 +621,7 @@ rflect.cal.events.EventCreationHelper.prototype.setEndDate =
  */
 rflect.cal.events.EventCreationHelper.prototype.setSummary =
     function(aSummary) {
-  this.temporaryEvent_.summar
+  this.temporaryEvent_.summary = aSummary;
 }
 
 
@@ -630,6 +630,7 @@ rflect.cal.events.EventCreationHelper.prototype.setSummary =
  */
 rflect.cal.events.EventCreationHelper.prototype.setDescription =
     function(aDescription) {
+  this.temporaryEvent_.description = aDescription;
 }
 
 
@@ -638,6 +639,7 @@ rflect.cal.events.EventCreationHelper.prototype.setDescription =
  */
 rflect.cal.events.EventCreationHelper.prototype.setLongId =
     function(aLongId) {
+  this.temporaryEvent_.longId = aLongId;
 }
 
 
@@ -646,6 +648,7 @@ rflect.cal.events.EventCreationHelper.prototype.setLongId =
  */
 rflect.cal.events.EventCreationHelper.prototype.setAllDay =
     function(aAllDay) {
+  this.temporaryEvent_.allDay = aAllDay;
 }
 
 
