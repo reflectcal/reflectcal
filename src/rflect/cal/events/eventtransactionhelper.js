@@ -9,8 +9,8 @@
 
 goog.provide('rflect.cal.events.EventTransactionHelper');
 
+goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.date.DateShim');
-
 
 
 /**
@@ -77,7 +77,8 @@ rflect.cal.events.EventTransactionHelper.prototype.setEndDate =
  */
 rflect.cal.events.EventTransactionHelper.prototype.setSummary =
     function(aSummary) {
-  this.temporaryEvent_.summary = aSummary;
+  this.temporaryEvent_.summary = aSummary ||
+      rflect.cal.i18n.Symbols.NO_NAME_EVENT;
 }
 
 
@@ -86,7 +87,7 @@ rflect.cal.events.EventTransactionHelper.prototype.setSummary =
  */
 rflect.cal.events.EventTransactionHelper.prototype.setDescription =
     function(aDescription) {
-  this.temporaryEvent_.description = aDescription;
+  this.temporaryEvent_.description = aDescription || '';
 }
 
 

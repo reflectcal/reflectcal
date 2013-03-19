@@ -290,10 +290,9 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   // End of grid rows container.
   '</div>',
   // Grid table.
-  '<div class="grid-table-wk-outer"><div id="grid-table-wk" class="' + goog.getCssName('grid-table-wk') +
-      '" style="width:',
+  '<div class="grid-table-wk-outer" style="width:',
   /* Width of grid table in percents (100%). */
-  '%">',
+  '%"><div id="grid-table-wk" class="' + goog.getCssName('grid-table-wk') + '">',
   // Masks.
   '<div id="wk-mask-cnt"></div>',
   // Individual weekgrid col.
@@ -1342,9 +1341,9 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekExpandSigns_ =
  * @private
  *
  * Grid table.
- * '<div class="' + goog.getCssName('grid-table-wk') + '" style="width:',
- *  Width of grid table in percents (100%).
- * '%">',
+ * '<div class="grid-table-wk-outer" style="width:',
+ * Width of grid table in percents (100%). 
+ * '%"><div id="grid-table-wk" class="' + goog.getCssName('grid-table-wk') + '">',
  */
 rflect.cal.MainPaneBuilder.prototype.buildGridTableWeek_ =
     function(aSb, aOffset) {
