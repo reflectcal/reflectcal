@@ -107,9 +107,8 @@ rflect.cal.MainPaneSelectionMask.prototype.gridEl_;
 
 /**
  * @return {boolean} Whether mask is allday.
- * @private
  */
-rflect.cal.MainPaneSelectionMask.prototype.isAllday_ = function() {
+rflect.cal.MainPaneSelectionMask.prototype.isAllDay = function() {
   return this.configuration_ ==
       rflect.cal.MainPaneSelectionMask.Configuration.ALLDAY;
 };
@@ -119,7 +118,7 @@ rflect.cal.MainPaneSelectionMask.prototype.isAllday_ = function() {
  * @return {boolean} Whether mask is week.
  * @private
  */
-rflect.cal.MainPaneSelectionMask.prototype.isWeek_ = function() {
+rflect.cal.MainPaneSelectionMask.prototype.isWeek = function() {
   return this.configuration_ ==
       rflect.cal.MainPaneSelectionMask.Configuration.WEEK;
 };
@@ -130,7 +129,7 @@ rflect.cal.MainPaneSelectionMask.prototype.isWeek_ = function() {
  * @private
  */
 rflect.cal.MainPaneSelectionMask.prototype.isWeekOrAllday_ = function() {
-  return this.isWeek_() || this.isAllday_();
+  return this.isWeek() || this.isAllDay();
 };
 
 
@@ -146,7 +145,7 @@ rflect.cal.MainPaneSelectionMask.prototype.isHorizontal =
  * @return {boolean} Whether mask is month.
  * @private
  */
-rflect.cal.MainPaneSelectionMask.prototype.isMonth_ = function() {
+rflect.cal.MainPaneSelectionMask.prototype.isMonth = function() {
   return this.configuration_ ==
       rflect.cal.MainPaneSelectionMask.Configuration.MONTH;
 };
@@ -204,7 +203,7 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
 
     if (this.isWeekOrAllday_()) {
 
-      if (this.isAllday_()) {
+      if (this.isAllDay()) {
 
         //TODO(alexk): shorten this method, enclose repeating parts in function.
         this.scrollableEl_ = goog.dom.getElement('main-pane-header-scrollable');
@@ -225,7 +224,7 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
       }
         this.elementOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
 
-    } else if (this.isMonth_()) {
+    } else if (this.isMonth()) {
 
       this.scrollableEl_ = goog.dom.getElement('main-pane-body-scrollable-mn');
       this.maskEl_ = goog.dom.getElement('mn-mask-cnt');
@@ -282,7 +281,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellByCoordinate_ =
     cell.x = this.getBlockIndexByCoordinate_(aX, this.blockPoolWeek_);
 
     // Allday mask always have zero y index.
-    if (this.isAllday_()) {
+    if (this.isAllDay()) {
       maxY = 0;
       cell.y = 0;
     }
@@ -439,9 +438,9 @@ rflect.cal.MainPaneSelectionMask.prototype.
  */
 rflect.cal.MainPaneSelectionMask.prototype.getDefaultStep_ = function() {
   var step = 0;
-  if (this.isAllday_())
+  if (this.isAllDay())
     step = this.blockPoolAllday_.gridSize.height;
-  else if (this.isWeek_())
+  else if (this.isWeek())
     step = rflect.cal.predefined.HOUR_ROW_HEIGHT;
   else
     step = this.blockPoolMonth_.gridSize.width / 7;
@@ -455,9 +454,9 @@ rflect.cal.MainPaneSelectionMask.prototype.getDefaultStep_ = function() {
  */
 rflect.cal.MainPaneSelectionMask.prototype.getMaxSize_ = function() {
   var size = 0;
-  if (this.isAllday_())
+  if (this.isAllDay())
     size = this.blockPoolAllday_.gridSize.height;
-  else if (this.isWeek_())
+  else if (this.isWeek())
     size = rflect.cal.predefined.WEEK_GRID_HEIGHT;
   else
     size = this.blockPoolMonth_.gridSize.width;
@@ -476,9 +475,9 @@ rflect.cal.MainPaneSelectionMask.prototype.getMaxSize_ = function() {
 rflect.cal.MainPaneSelectionMask.prototype.getRect_ =
     function(aX, aY, aDx, aDy) {
   var rect;
-  if (this.isAllday_())
+  if (this.isAllDay())
     rect = new goog.math.Rect(aX, aY, aDx, aDy);
-  else if (this.isMonth_())
+  else if (this.isMonth())
     rect = new goog.math.Rect(aY, aX, aDy, aDx);
   else
     rect = new goog.math.Rect(aX, aY, aDx, aDy);

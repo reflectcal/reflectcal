@@ -334,7 +334,7 @@ rflect.cal.ListSelector.prototype.onMouseOut_ = function(aEvent) {
  * @private 
  */
 rflect.cal.ListSelector.prototype.onMouseOver_ = function(aEvent) {
-  var target = /**@type {Element}*/aEvent.target;
+  var target = /**@type {Element}*/ (aEvent.target);
   var id = target.id;
   var className = target.className;
   // Highlight of whole element.

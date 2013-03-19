@@ -188,9 +188,9 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   in pixels (200).*/
   'px;width:',
   /*Allday grid width in percents (120).*/
-  '%">' +
-      // Masks.
-      '<div id="wk-ad-mask-cnt"></div>',
+  '%">',
+  // Masks.
+  '<div id="wk-ad-mask-cnt"></div>',
   // Individual weekgrid col.
   '<div id="weekgrid-ad-col',
   /*Weekgrid ad col id is here (weekgrid-ad-col0).*/
@@ -293,8 +293,9 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   '<div class="grid-table-wk-outer"><div id="grid-table-wk" class="' + goog.getCssName('grid-table-wk') +
       '" style="width:',
   /* Width of grid table in percents (100%). */
-  '%">' + // Masks.
-      '<div id="wk-mask-cnt"></div>',
+  '%">',
+  // Masks.
+  '<div id="wk-mask-cnt"></div>',
   // Individual weekgrid col.
   '<div id="weekgrid-col',
   /*Id of weekgrid col (0).*/
@@ -453,7 +454,8 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '</div>',
   // Grid table.
   '<table id="grid-table-mn" cellspacing="0" cellpadding="0" class="' +
-      goog.getCssName('grid-table-mn') + '"><tbody>',
+      goog.getCssName('grid-table-mn') + '">',
+  '<tbody>',
   // Individual monthgrid row.
   '<tr><td id="monthgrid-row',
   /*Individual monthgrid row id (0).*/
@@ -516,8 +518,9 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '</div>',
   // End of individual monthgrid row.
   '</td></tr>',
+  '</tbody>',
   // End of grid table.
-  '</tbody></table>',
+  '</table>',
   // End of grid table wrapper.
   '</div>',
   // End of grid table wrapper outer.
@@ -567,30 +570,30 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb) {
         this.buildAllDayGrid_(aSb, offset);
         offset += 2;
       };break;
-      case 26: {
+      case 27: {
         this.buildWeekGridAdCols_(aSb, offset);
         offset += 17;
       };break;
-      case 48: {
+      case 49: {
         this.buildWeekColZippies_(aSb, offset);
         offset += 9;
       };break;
-      case 62: {
+      case 63: {
         this.buildScrollableWeek_(aSb, offset);
         offset++;
       };break;
-      case 66: {
+      case 67: {
         this.timeMarker_.buildHead(aSb);
       };break;
-      case 67: {
+      case 68: {
         this.buildHoursAndGridRows_(aSb, offset);
         offset += 9;
       };break;
-      case 78: {
+      case 79: {
         this.buildGridTableWeek_(aSb, offset);
         offset++;
       };break;
-      case 80: {
+      case 82: {
         this.buildWeekGridCols_(aSb, offset);
         offset += 26;
       };break;
@@ -598,6 +601,43 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb) {
     }
   }
 };
+
+
+/**
+ * Builds internals of week grid.
+ * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
+ * to.
+ */
+rflect.cal.MainPaneBuilder.prototype.buildWeekGrid = function(aSb) {
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[81]);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[82]);
+  this.buildWeekGridCols_(aSb, 82);
+}
+
+
+/**
+ * Builds internals of all day grid.
+ * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
+ * to.
+ */
+rflect.cal.MainPaneBuilder.prototype.buildAllDayGrid = function(aSb) {
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[26]);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[27]);
+  this.buildWeekGridAdCols_(aSb, 27);
+}
+
+
+/**
+ * Builds internals of all day grid.
+ * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
+ * to.
+ */
+rflect.cal.MainPaneBuilder.prototype.buildMonthGrid = function(aSb) {
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[48]);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[49]);
+  this.buildMonthGridRows_(aSb, 49);
+  aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[81]);
+}
 
 
 /**
@@ -641,7 +681,7 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalMonth_ = function(aSb) {
         this.buildMonthGridCols_(aSb, offset);
         offset++;
       };break;
-      case 48: {
+      case 49: {
         this.buildMonthGridRows_(aSb, offset);
         offset += 32;
       };break;
@@ -920,7 +960,7 @@ rflect.cal.MainPaneBuilder.buildAdBlockChips_ =
       rflect.cal.MainPaneBuilder.buildMonthBlockChip_(aSb,
           // Offset of month grid rows method and offset of month chip in that
           // method.
-          48 + 23,
+          49 + 23,
           aEventManager, chip, 0, chipCounter, 0, true);
     }
   }

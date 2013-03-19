@@ -12,6 +12,7 @@ goog.provide('rflect.cal.events.EventManager');
 goog.require('rflect.structs.IntervalTree');
 goog.require('rflect.cal.events.Chip');
 goog.require('rflect.cal.events.Event');
+goog.require('rflect.cal.events.EventTransactionHelper');
 goog.require('rflect.cal.predefined.chips');
 
 
@@ -39,12 +40,18 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
   this.timeManager_ = aTimeManager;
 
   /**
+   * Event transaction helper.
+   * @type {rflect.cal.events.EventTransactionHelper}
+   */
+  this.eventTransactionHelper =
+      new rflect.cal.events.EventTransactionHelper(this);
+
+  /**
    * Map of event id to event.
    * @type {Object.<number, rflect.cal.events.Event|rflect.cal.events.RecurringEvent>}
    * @private
    */
   this.events_ = {};
-
 
   /**
    * Map of year -> {dayOfYear -> chip}.
@@ -565,96 +572,4 @@ rflect.cal.events.EventManager.prototype.run = function() {
  */
 rflect.cal.events.EventManager.prototype.getEventById = function(aId) {
   return this.events_[aId];
-}
-
-
-/**
- * Class that helps to create events in steps, managing event state between
- * them, also abstracts away this work from generic event manager.
- * @constructor
- */
-rflect.cal.events.EventCreationHelper = function() {
-}
-
-
-/**
- * Event which creation is pending.
- * @type {rflect.cal.events.Event}
- * @private
- */
-rflect.cal.events.EventCreationHelper.prototype.temporaryEvent_;
-
-
-/**
- * Begins creation of event in case when creation requires separate steps, as
- * when creating event from ui, with dialog.
- */
-rflect.cal.events.EventCreationHelper.prototype.beginEventCreation = function() {
-  this.temporaryEvent_ = rflect.cal.events.EventManager.createEvent('', null,
-      null, false));
-}
-
-/**
- * @param {goog.date.DateTime|rflect.date.DateShim} aStartDate Start date.
- */
-rflect.cal.events.EventCreationHelper.prototype.setStartDate =
-    function(aStartDate) {
-  this.temporaryEvent_.startDate = rflect.date.createDateShim(
-      aStartDate.getYear, aStartDate.getMonth, aStartDate.getDate, 
-      aStartDate.getHours, aStartDate.getMinutes, aStartDate.getSeconds, true);
-}
-
-
-/**
- * @param {goog.date.DateTime|rflect.date.DateShim} aEndDate End date.
- */
-rflect.cal.events.EventCreationHelper.prototype.setEndDate =
-    function(aEndDate) {
-  this.temporaryEvent_.startDate = rflect.date.createDateShim(
-      aEndDate.getYear, aEndDate.getMonth, aEndDate.getDate, 
-      aEndDate.getHours, aEndDate.getMinutes, aEndDate.getSeconds);
-}
-
-
-/**
- * @param {string} aSummary Event name.
- */
-rflect.cal.events.EventCreationHelper.prototype.setSummary =
-    function(aSummary) {
-  this.temporaryEvent_.summary = aSummary;
-}
-
-
-/**
- * @param {string} aDescription Event description.
- */
-rflect.cal.events.EventCreationHelper.prototype.setDescription =
-    function(aDescription) {
-  this.temporaryEvent_.description = aDescription;
-}
-
-
-/**
- * @param {string} aLongId Event long id.
- */
-rflect.cal.events.EventCreationHelper.prototype.setLongId =
-    function(aLongId) {
-  this.temporaryEvent_.longId = aLongId;
-}
-
-
-/**
- * @param {boolean} aAllDay Whether event is all-day.
- */
-rflect.cal.events.EventCreationHelper.prototype.setAllDay =
-    function(aAllDay) {
-  this.temporaryEvent_.allDay = aAllDay;
-}
-
-
-/**
- * @return {rflect.cal.events.Event}
- */
-rflect.cal.events.EventManager.prototype.endEventCreation = function() {
-  return this.temporaryEvent_;
 }

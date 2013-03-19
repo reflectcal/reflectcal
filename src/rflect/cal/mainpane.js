@@ -294,6 +294,7 @@ rflect.cal.MainPane.prototype.isScrollableExpandedVer = function() {
 
 /**
  * Updates main pane with new data before redraw. Includes size adjustment.
+ * TODO(alexk): this is too complex and error-prone. Maybe recalculate just when sizes are needed.
  */
 rflect.cal.MainPane.prototype.updateBeforeRedraw = function() {
   // Take current viewport size.
@@ -484,6 +485,38 @@ rflect.cal.MainPane.prototype.buildBodyInternal = function(aSb) {
 
 
 /**
+ *  Redraws just week grid.
+ */
+rflect.cal.MainPane.prototype.updateByRedrawWeekGrid = function() {
+  if (goog.DEBUG)
+    _log('updateByRedrawWeekGrid');
+  var sb = new goog.string.StringBuffer();
+  this.mainPaneBuilder_.buildWeekGrid(sb);
+  this.getDomHelper().getElement('grid-table-wk').innerHTML = sb.toString();
+}
+
+
+/**
+ *  Redraws just week grid.
+ */
+rflect.cal.MainPane.prototype.updateByRedrawAllDayGrid = function() {
+  var sb = new goog.string.StringBuffer();
+  this.mainPaneBuilder_.buildAllDayGrid(sb);
+  this.getDomHelper().getElement('alldayevents-grid').innerHTML = sb.toString();
+}
+
+
+/**
+ *  Redraws just week grid.
+ */
+rflect.cal.MainPane.prototype.updateByRedrawMonthGrid = function() {
+  var sb = new goog.string.StringBuffer();
+  this.mainPaneBuilder_.buildMonthGrid(sb);
+  this.getDomHelper().getElement('grid-table-mn').innerHTML = sb.toString();
+}
+
+
+/**
  * Decorates an existing html div element as a Main Pane.
  * @override
  */
@@ -638,28 +671,6 @@ rflect.cal.MainPane.prototype.onWeeknumLabelClick_ = function(aId) {
   if (day)
     this.switchView_(day, rflect.cal.ViewType.WEEK);
 }
-
-
-/**
- * Event edit listener. Called when edit link is clicked from "save" dialog.
- * @param {{type: string}} aEvent Event object.
- */
-rflect.cal.MainPane.prototype.onEventEdit_ = function(aEvent) {
-  if (goog.DEBUG)
-    _log('edit clicked');
-}
-
-
-/**
- * Save dialog button listener.
- * @param {rflect.ui.Dialog.Event} aEvent Event object.
- */
-rflect.cal.MainPane.prototype.onSaveDialogSave_ = function(aEvent) {
-  if (aEvent.key == this.saveDialog_.getButtonSet().getDefault())
-    if (goog.DEBUG)
-      _log('save clicked');
-}
-
 
 
 /**
@@ -842,9 +853,52 @@ rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
   if (this.selectionMask_.isInitialized()){
     this.selectionMask_.close();
     this.saveDialog_.setVisible(true);
+
+    this.eventManager_.eventTransactionHelper.beginEventCreation();
+    this.eventManager_.eventTransactionHelper.setStartDate(
+        this.selectionMask_.startDate);
+    this.eventManager_.eventTransactionHelper.setEndDate(
+        this.selectionMask_.endDate);
+    this.eventManager_.eventTransactionHelper.setAllDay(
+        this.selectionMask_.isAllDay() || this.selectionMask_.isMonth());
+
     aEvent.preventDefault();
   }
 };
+
+
+/**
+ * Event edit listener. Called when edit link is clicked from "save" dialog.
+ * @param {{type: string}} aEvent Event object.
+ */
+rflect.cal.MainPane.prototype.onEventEdit_ = function(aEvent) {
+  if (goog.DEBUG)
+    _log('edit clicked');
+}
+
+
+/**
+ * Save dialog button listener.
+ * @param {rflect.ui.Dialog.Event} aEvent Event object.
+ */
+rflect.cal.MainPane.prototype.onSaveDialogSave_ = function(aEvent) {
+  if (aEvent.key == this.saveDialog_.getButtonSet().getDefault()) {
+    this.eventManager_.eventTransactionHelper.setSummary(
+        this.saveDialog_.getEventName());
+    this.eventManager_.eventTransactionHelper.endEventCreation();
+
+    this.eventManager_.run();
+
+    this.updateBlockManager();
+
+    if (this.selectionMask_.isWeek())
+      this.updateByRedrawWeekGrid();
+    if (this.selectionMask_.isAllDay())
+      this.updateByRedrawAllDayGrid();
+    if (this.selectionMask_.isMonth())
+      this.updateByRedrawMonthGrid();
+  }
+}
 
 
 /**
