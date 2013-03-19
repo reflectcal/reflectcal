@@ -1518,7 +1518,10 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
   // z-index.
   aSb.append(aStartCol);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 6]);
-  // Additional class.
+  // Class that identify event.
+  aSb.append(aChip.eventId);
+  aSb.append(rflect.cal.predefined.chips.CHIP_EVENT_CLASS + ' ');
+  // TODO: Additional class.
   aSb.append('');
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
   // Start time.
@@ -1578,13 +1581,18 @@ rflect.cal.MainPaneBuilder.buildMonthBlockChip_ =
   // top.
   aSb.append(aStartCol * rflect.cal.predefined.MN_EVENT_HEIGHT);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 3]);
+
   // Additional class.
   if (aChip.startIsCut) aSb.append(
       goog.getCssName('event-rect-mn-collapse-left'));
   if (aChip.endIsCut) aSb.append(' ' +
       goog.getCssName('event-rect-mn-collapse-right'));
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 4]);
-  // Additional class.
+  // Class that identify event.
+  aSb.append(aChip.eventId);
+  aSb.append(rflect.cal.predefined.chips.CHIP_EVENT_CLASS + ' ');
+
+  // TODO: Additional class.
   if (aChip.startIsCut) aSb.append(
       goog.getCssName('event-rect-mn-inner-collapse-left'));
   if (aChip.endIsCut) aSb.append(' ' +

@@ -31,10 +31,20 @@ rflect.cal.ui.EditDialog = function(opt_class, opt_useIframeMask, opt_domHelper)
   this.setTitle('Edit event');
   this.setModal(false);
   this.setBackgroundElementOpacity(0);
-  this.setButtonSet(rflect.ui.Dialog.ButtonSet.createSaveCancel());
+  this.setButtonSet(rflect.cal.ui.EditDialog.createButtonSet());
   this.setContent(rflect.cal.ui.EditDialog.HTML_PARTS_);
 };
 goog.inherits(rflect.cal.ui.EditDialog, rflect.ui.Dialog);
+
+
+/**
+ * Captions for the edit dialog.
+ * @enum {string}
+ */
+rflect.cal.ui.EditDialog.ButtonCaptions = {
+  EDIT: 'Edit',
+  DELETE: 'Delete'
+};
 
 
 /**
@@ -44,10 +54,19 @@ goog.inherits(rflect.cal.ui.EditDialog, rflect.ui.Dialog);
 rflect.cal.ui.EditDialog.createButtonSet = function() {
   var save = rflect.ui.Dialog.ButtonSet.getButton(
       goog.ui.Dialog.DefaultButtonCaptions.SAVE);
+  var edit = rflect.ui.Dialog.ButtonSet.getButton(
+      rflect.cal.ui.EditDialog.ButtonCaptions.EDIT);
+  var del = rflect.ui.Dialog.ButtonSet.getButton(
+      rflect.cal.ui.EditDialog.ButtonCaptions.DELETE);
   var cancel = rflect.ui.Dialog.ButtonSet.getButton(
       goog.ui.Dialog.DefaultButtonCaptions.CANCEL);
+
+
   return new rflect.ui.Dialog.ButtonSet().
-      addButton(save, true, false, true).addButton(cancel, false, true);
+      addButton(edit, true, false, true)
+      .addButton(save, false, true)
+      .addButton(del, false, true)
+      .addButton(cancel, false, true);
 };
 
 
@@ -74,20 +93,6 @@ rflect.cal.ui.EditDialog.HTML_PARTS_ =
         '<a id="event-edit" class="event-edit-link goog-inline-block" ' +
         'href="javascript:void(0)">' +
         'Edit options</a>';
-
-
-/**
- * Focuses the dialog contents and the default dialog button if there is one.
- * @override
- */
-rflect.cal.ui.EditDialog.prototype.focus = function () {
-  goog.ui.ModalPopup.prototype.focus.call(this);
-  // Move focus to input field.
-  if (this.input_) {
-    this.input_.value = '';
-    this.input_.focus();
-  }
-};
 
 
 /**
@@ -124,9 +129,3 @@ rflect.cal.ui.EditDialog.prototype.onEditClick_ = function (aEvent) {
     this.setVisible(false);
 }
 
-
-/**
- * Event types for save dialog.
- * @const {string}
- */
-rflect.cal.ui.EditDialog.EVENT_EDIT = 'editevent';

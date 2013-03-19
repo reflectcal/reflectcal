@@ -595,3 +595,12 @@ rflect.cal.predefined.chips.OVERLAPPING_DEGREE = 0.75;
  * @const
  */
 rflect.cal.predefined.chips.MINIMAL_MINS = 20;
+
+
+/**
+ * Class name addition that together with event id forms event id for chip.
+ * Example: 100ev
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.chips.CHIP_EVENT_CLASS = 'ev';

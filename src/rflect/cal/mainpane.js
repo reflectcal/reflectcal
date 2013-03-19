@@ -21,6 +21,7 @@ goog.require('rflect.cal.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.TimeMarker');
 goog.require('rflect.string');
+goog.require('rflect.cal.ui.EditDialog');
 goog.require('rflect.cal.ui.SaveDialog');
 
 
@@ -165,6 +166,17 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager, aEventManager,
     _inspect('saveDialog_', this.saveDialog_);
 
   this.addChild(this.saveDialog_);
+
+  /**
+   * Popup edit dialog.
+   * @type {rflect.cal.ui.EditDialog}
+   * @private
+   */
+  this.editDialog_ = new rflect.cal.ui.EditDialog();
+  if (goog.DEBUG)
+    _inspect('editDialog_', this.editDialog_);
+
+  this.addChild(this.editDialog_);
 
 };
 goog.inherits(rflect.cal.MainPane, rflect.ui.Component);
@@ -568,6 +580,7 @@ rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
   var className = target.className;
   var zippyClicked = false;
   var index = 0;
+
   if (this.viewManager_.isInMonthMode()) {
     // We clicked on zippy.
     if (/mn\-zippy\-row\d{1}/.test(id)) {
@@ -851,6 +864,7 @@ rflect.cal.MainPane.prototype.onMouseMove_ = function(aEvent) {
  */
 rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
   if (this.selectionMask_.isInitialized()){
+
     this.selectionMask_.close();
     this.saveDialog_.setVisible(true);
 

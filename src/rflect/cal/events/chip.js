@@ -13,6 +13,7 @@ goog.provide('rflect.cal.events.Chip');
 
 /**
  * Chip - visual rectangle that represent event or event's part.
+ * @param {number} aEventId Corresponding event id.
  * @param {number} aStart Chip start.
  * @param {number} aEnd Chip end.
  * @param {boolean} aStartIsCut Whether chip starts before block's start.
