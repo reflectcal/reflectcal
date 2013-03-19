@@ -339,11 +339,11 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   /*Chip z-index (1)*/
   '"><div class="event-rect-wk-inner ',
   /*Chip inner class (event-rect-focused)*/
-  '"><div class="event-wk-timelabel">',
+  '"><span class="event-wk-timelabel">',
   /*Chip start time (14:00)*/
   ' - ',
   /*Chip end time (00:00)*/
-  '</div>',
+  '</span>&nbsp;',
   /*Chip description (Conference)*/
   '</div></div>',
   // End of individual event chip.
