@@ -1591,7 +1591,9 @@ rflect.cal.MainPaneBuilder.buildMonthBlockChip_ =
   // Class that identify event.
   aSb.append(aChip.eventId);
   aSb.append(rflect.cal.predefined.chips.CHIP_EVENT_CLASS + ' ');
-
+  if (opt_allDay)
+    // Class to differ all-day events from ordinary month ones.
+    aSb.append(goog.getCssName('event-rect-all-day') + ' ');
   // TODO: Additional class.
   if (aChip.startIsCut) aSb.append(
       goog.getCssName('event-rect-mn-inner-collapse-left'));

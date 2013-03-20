@@ -19,6 +19,7 @@ goog.require('rflect.cal.MainPaneBuilder');
 goog.require('rflect.cal.MainPaneSelectionMask');
 goog.require('rflect.cal.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
+goog.require('rflect.cal.predefined.chips');
 goog.require('rflect.cal.TimeMarker');
 goog.require('rflect.string');
 goog.require('rflect.cal.ui.EditDialog');
@@ -621,8 +622,27 @@ rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
   if (zippyClicked) {
     this.updateBeforeRedraw();
     this.updateByRedraw();
+  } else if (this.isChip_(className)) {
+    this.showEditDialog_(className);
   }
 };
+
+
+/**
+ * @param {string} aChipClassName Class name of chip.
+ */
+rflect.cal.MainPane.prototype.showEditDialog_ = function(aChipClassName) {
+  var eventId = rflect.string.getNumericIndexWithPostfix(aChipClassName,
+      rflect.cal.predefined.chips.CHIP_EVENT_CLASS);
+    
+  if (!isNaN(eventId)) {
+    var event = this.eventManager_.getEventById(eventId);
+  
+    this.editDialog_.setEventTime(event.startDate, event.endDate);
+    this.editDialog_.setEventName(event.summary);
+    this.editDialog_.setVisible(true);
+  }
+}
 
 
 /**
@@ -789,6 +809,53 @@ rflect.cal.MainPane.prototype.isWeeknumLabel_ = function(aClassName) {
   var weeknumLabelRe_ = this.weeknumLabelRe_ || (this.weeknumLabelRe_ =
       rflect.string.buildClassNameRe(goog.getCssName('weeknum-label-inner')));
   return weeknumLabelRe_.test(aClassName);
+};
+
+
+/**
+ * @param {string} aClassName Class name of element.
+ * @return {boolean} Whether this is a week chip.
+ * @private
+ */
+rflect.cal.MainPane.prototype.isWeekChip_ = function(aClassName) {
+  var chipWeekRe_ = this.chipWeekRe_ || (this.chipWeekRe_ =
+      rflect.string.buildClassNameRe(goog.getCssName('event-rect-wk-inner'),
+          goog.getCssName('event-wk-timelabel')));
+  return chipWeekRe_.test(aClassName);
+};
+
+
+/**
+ * @param {string} aClassName Class name of element.
+ * @return {boolean} Whether this is a month chip.
+ * @private
+ */
+rflect.cal.MainPane.prototype.isMonthChip_ = function(aClassName) {
+  var chipMonthRe_ = this.chipMonthRe_ || (this.chipMonthRe_ =
+      rflect.string.buildClassNameRe(goog.getCssName('event-rect-mn-inner')));
+  return chipMonthRe_.test(aClassName);
+};
+
+
+/**
+ * @param {string} aClassName Class name of element.
+ * @return {boolean} Whether this is some chip.
+ * @private
+ */
+rflect.cal.MainPane.prototype.isChip_ = function(aClassName) {
+  return this.isWeekChip_(aClassName) || this.isMonthChip_(aClassName);
+};
+
+
+/**
+ * @param {string} aClassName Class name of element.
+ * @return {boolean} Whether this is an all-day chip.
+ * @private
+ */
+rflect.cal.MainPane.prototype.isAllDayChip_ = function(aClassName) {
+  var chipAllDayRe_ = this.chipAllDayRe_ || (this.chipAllDayRe_ =
+      rflect.string.buildClassNameRe(goog.getCssName('event-rect-all-day')));
+  return chipAllDayRe_.test(aClassName);
 };
 
 

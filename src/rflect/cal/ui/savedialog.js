@@ -116,3 +116,14 @@ rflect.cal.ui.SaveDialog.prototype.onEditClick_ = function (aEvent) {
  * @const {string}
  */
 rflect.cal.ui.SaveDialog.EVENT_EDIT = 'editevent';
+
+
+/**
+ * Dispose method.
+ * @override
+ */
+rflect.cal.ui.SaveDialog.prototype.dispose = function () {
+  rflect.cal.ui.SaveDialog.superClass_.dispose.call(this);
+
+  this.input_ = null;
+}

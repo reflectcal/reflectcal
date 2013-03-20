@@ -86,7 +86,7 @@ rflect.string.getNumericIndexWithPostfix = function(aStr, aPostfix) {
   var matches = re.exec(aStr);
   if (matches) {
     var len = matches[0].length;
-    return matches[0].substring(0, len - aPostfix.length);
+    return +matches[0].substring(0, len - aPostfix.length);
   }
   return NaN;
 }

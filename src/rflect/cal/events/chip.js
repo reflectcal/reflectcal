@@ -18,7 +18,6 @@ goog.provide('rflect.cal.events.Chip');
  * @param {number} aEnd Chip end.
  * @param {boolean} aStartIsCut Whether chip starts before block's start.
  * @param {boolean} aEndIsCut Whether chip ends after block's end.
- * @param {number} aEventId Corresponding event id.
  * @constructor
  */
 rflect.cal.events.Chip = function(aEventId, aStart, aEnd, aStartIsCut,
