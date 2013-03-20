@@ -545,8 +545,6 @@ rflect.ui.Dialog.prototype.setDraggingEnabled_ = function(enabled) {
 
 /** @override */
 rflect.ui.Dialog.prototype.createDom = function() {
-  if (goog.DEBUG)
-    _log('createDom');
   rflect.ui.Dialog.superClass_.createDom.call(this);
   var element = this.getElement();
   goog.asserts.assert(element, 'getElement() returns null');
