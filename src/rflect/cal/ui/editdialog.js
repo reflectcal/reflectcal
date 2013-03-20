@@ -59,7 +59,7 @@ rflect.cal.ui.EditDialog.createButtonSet = function() {
   var del = rflect.ui.Dialog.ButtonSet.getButton(
       rflect.cal.ui.EditDialog.ButtonCaptions.DELETE);
   var cancel = rflect.ui.Dialog.ButtonSet.getButton(
-      goog.ui.Dialog.DefaultButtonCaptions.CANCEL);
+      rflect.ui.Dialog.DefaultButtonCaptions.CANCEL);
 
 
   return new rflect.ui.Dialog.ButtonSet()

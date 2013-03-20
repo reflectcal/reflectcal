@@ -638,9 +638,9 @@ rflect.cal.MainPane.prototype.showEditDialog_ = function(aChipClassName) {
   if (!isNaN(eventId)) {
     var event = this.eventManager_.getEventById(eventId);
   
-    this.editDialog_.setEventTime(event.startDate, event.endDate);
-    this.editDialog_.setEventName(event.summary);
     this.editDialog_.setVisible(true);
+    this.editDialog_.setEventName(event.summary);
+    this.editDialog_.setEventTime(event.startDate, event.endDate);
   }
 }
 

@@ -24,7 +24,6 @@
 
 goog.provide('rflect.ui.Dialog');
 goog.provide('rflect.ui.Dialog.ButtonSet');
-goog.provide('rflect.ui.Dialog.ButtonSet.DefaultButtons');
 goog.provide('rflect.ui.Dialog.DefaultButtonCaptions');
 goog.provide('rflect.ui.Dialog.DefaultButtonKeys');
 goog.provide('rflect.ui.Dialog.Event');
@@ -675,7 +674,7 @@ rflect.ui.Dialog.prototype.decorateInternal = function(element) {
 
 /** @override */
 rflect.ui.Dialog.prototype.enterDocument = function() {
-  goog.ui.Dialog.prototype.enterDocument.call(this);
+  rflect.ui.Dialog.superClass_.enterDocument.call(this);
 
   // Listen for keyboard events while the dialog is visible.
   this.getHandler().
@@ -1054,7 +1053,7 @@ rflect.ui.Dialog.prototype.onKey_ = function(e) {
  * @extends {goog.events.Event}
  */
 rflect.ui.Dialog.Event = function(key, caption) {
-  this.type = goog.ui.Dialog.EventType.SELECT;
+  this.type = rflect.ui.Dialog.EventType.SELECT;
   this.key = key;
   this.caption = caption;
 };
@@ -1094,6 +1093,74 @@ rflect.ui.Dialog.EventType = {
   AFTER_SHOW: 'aftershow'
 };
 
+/**
+ * The keys used to identify standard buttons in events.
+ * @enum {string}
+ */
+rflect.ui.Dialog.DefaultButtonKeys = {
+  OK: 'ok',
+  CANCEL: 'cancel',
+  YES: 'yes',
+  NO: 'no',
+  SAVE: 'save',
+  CONTINUE: 'continue'
+};
+
+
+/**
+ * @desc Standard caption for the dialog 'OK' button.
+ * @private
+ */
+rflect.ui.Dialog.MSG_DIALOG_OK_ = goog.getMsg('OK');
+
+
+/**
+ * @desc Standard caption for the dialog 'Cancel' button.
+ * @private
+ */
+rflect.ui.Dialog.MSG_DIALOG_CANCEL_ = goog.getMsg('Cancel');
+
+
+/**
+ * @desc Standard caption for the dialog 'Yes' button.
+ * @private
+ */
+rflect.ui.Dialog.MSG_DIALOG_YES_ = goog.getMsg('Yes');
+
+
+/**
+ * @desc Standard caption for the dialog 'No' button.
+ * @private
+ */
+rflect.ui.Dialog.MSG_DIALOG_NO_ = goog.getMsg('No');
+
+
+/**
+ * @desc Standard caption for the dialog 'Save' button.
+ * @private
+ */
+rflect.ui.Dialog.MSG_DIALOG_SAVE_ = goog.getMsg('Save');
+
+
+/**
+ * @desc Standard caption for the dialog 'Continue' button.
+ * @private
+ */
+rflect.ui.Dialog.MSG_DIALOG_CONTINUE_ = goog.getMsg('Continue');
+
+
+/**
+ * The default captions for the default buttons.
+ * @enum {string}
+ */
+rflect.ui.Dialog.DefaultButtonCaptions = {
+  OK: rflect.ui.Dialog.MSG_DIALOG_OK_,
+  CANCEL: rflect.ui.Dialog.MSG_DIALOG_CANCEL_,
+  YES: rflect.ui.Dialog.MSG_DIALOG_YES_,
+  NO: rflect.ui.Dialog.MSG_DIALOG_NO_,
+  SAVE: rflect.ui.Dialog.MSG_DIALOG_SAVE_,
+  CONTINUE: rflect.ui.Dialog.MSG_DIALOG_CONTINUE_
+};
 
 
 /**
@@ -1155,7 +1222,7 @@ rflect.ui.Dialog.ButtonSet.prototype.emphasisButton_ = null;
 /**
  * Adds a button to this button set. Buttons will be displayed in the order they
  * are added.
- * @see goog.ui.Dialog.DefaultButtons
+ * @see rflect.ui.Dialog.DefaultButtons
  * @param {!goog.ui.Button} button The button.
  * @param {boolean=} opt_isDefault Whether this button is the default button.
  *     Dialog will dispatch for this button if enter is pressed.
@@ -1191,7 +1258,8 @@ rflect.ui.Dialog.ButtonSet.prototype.createDom = function() {
           goog.getCssName('emphasis-button'))
     this.getDomHelper().appendChild(container, child.getElement());
   }, this);
-  rflect.ui.Dialog.ButtonSet.superClass_.setElementInternal(container);
+  rflect.ui.Dialog.ButtonSet.superClass_.setElementInternal.call(this,
+      container);
 };
 
 
@@ -1199,7 +1267,7 @@ rflect.ui.Dialog.ButtonSet.prototype.createDom = function() {
  * Decorates the given element by adding any button-decorable elements found
  * among its descendants to the button set.  The first button found is assumed
  * to be the default and will receive focus when the button set is rendered.
- * If a button with a name of {@link goog.ui.Dialog.DefaultButtonKeys.CANCEL}
+ * If a button with a name of {@link rflect.ui.Dialog.DefaultButtonKeys.CANCEL}
  * is found, it is assumed to have "Cancel" semantics.
  * @param {Element} element The element to decorate; should contain buttons.
  */
@@ -1216,7 +1284,7 @@ rflect.ui.Dialog.ButtonSet.prototype.decorateInternal = function(element) {
     // their innerHTML, but not everyone knows this, and we should play nice.
     //key = button.name || button.id;
     caption = goog.dom.getTextContent(buttonEl) || buttonEl.value;
-    var isCancel = caption == goog.ui.Dialog.DefaultButtonKeys.CANCEL;
+    var isCancel = caption == rflect.ui.Dialog.DefaultButtonKeys.CANCEL;
     this.addButton(button, isDefault, isCancel);
     button.decorateInternal(buttonEl);
     if (isDefault) {
@@ -1314,7 +1382,7 @@ rflect.ui.Dialog.ButtonSet.getButton = function(caption) {
  */
 rflect.ui.Dialog.ButtonSet.createOk = function() {
   var ok = rflect.ui.Dialog.ButtonSet.getButton(
-        goog.ui.Dialog.DefaultButtonCaptions.OK);
+        rflect.ui.Dialog.DefaultButtonCaptions.OK);
   return new rflect.ui.Dialog.ButtonSet().
       addButton(ok, true, true, true);
 };
@@ -1326,9 +1394,9 @@ rflect.ui.Dialog.ButtonSet.createOk = function() {
  */
 rflect.ui.Dialog.ButtonSet.createOkCancel = function() {
   var ok = rflect.ui.Dialog.ButtonSet.getButton(
-      goog.ui.Dialog.DefaultButtonCaptions.OK);
+      rflect.ui.Dialog.DefaultButtonCaptions.OK);
   var cancel = rflect.ui.Dialog.ButtonSet.getButton(
-      goog.ui.Dialog.DefaultButtonCaptions.CANCEL);
+      rflect.ui.Dialog.DefaultButtonCaptions.CANCEL);
   return new rflect.ui.Dialog.ButtonSet().
       addButton(ok, true, false, true).addButton(cancel, false, true);
 };
@@ -1340,9 +1408,9 @@ rflect.ui.Dialog.ButtonSet.createOkCancel = function() {
  */
 rflect.ui.Dialog.ButtonSet.createSaveCancel = function() {
   var save = rflect.ui.Dialog.ButtonSet.getButton(
-      goog.ui.Dialog.DefaultButtonCaptions.SAVE);
+      rflect.ui.Dialog.DefaultButtonCaptions.SAVE);
   var cancel = rflect.ui.Dialog.ButtonSet.getButton(
-      goog.ui.Dialog.DefaultButtonCaptions.CANCEL);
+      rflect.ui.Dialog.DefaultButtonCaptions.CANCEL);
   return new rflect.ui.Dialog.ButtonSet().
       addButton(save, true, false, true).addButton(cancel, false, true);
 };

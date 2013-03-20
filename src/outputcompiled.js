@@ -3824,7 +3824,6 @@ $JSCompiler_prototypeAlias$$.$createDom$ = function $$JSCompiler_prototypeAlias$
   $JSCompiler_StaticMethods_createTabCatcher_$$(this)
 };
 function $JSCompiler_StaticMethods_manageBackgroundDom_$$($JSCompiler_StaticMethods_manageBackgroundDom_$self$$) {
-  $_log$$("manageBackgroundDom_");
   if($JSCompiler_StaticMethods_manageBackgroundDom_$self$$.$useIframeMask_$ && !$JSCompiler_StaticMethods_manageBackgroundDom_$self$$.$bgIframeEl_$) {
     var $JSCompiler_inline_result$$56$$;
     $JSCompiler_inline_result$$56$$ = $JSCompiler_StaticMethods_manageBackgroundDom_$self$$.$getDomHelper$().$createDom$("iframe", {frameborder:0, style:"border:0;vertical-align:bottom;", src:'javascript:""'});
@@ -3952,8 +3951,8 @@ $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototype
 function $rflect$ui$Dialog$$($ok$$inline_526_opt_class$$4$$, $cancel$$inline_527_opt_useIframeMask$$1$$, $opt_domHelper$$7$$, $opt_buttonRenderer$$) {
   $goog$ui$ModalPopup$$.call(this, $cancel$$inline_527_opt_useIframeMask$$1$$, $opt_domHelper$$7$$);
   this.$class_$ = $ok$$inline_526_opt_class$$4$$ || "modal-dialog";
-  $ok$$inline_526_opt_class$$4$$ = $rflect$ui$Dialog$ButtonSet$getButton$$($goog$ui$$.$Dialog$.$DefaultButtonCaptions$.$OK$);
-  $cancel$$inline_527_opt_useIframeMask$$1$$ = $rflect$ui$Dialog$ButtonSet$getButton$$($goog$ui$$.$Dialog$.$DefaultButtonCaptions$.$CANCEL$);
+  $ok$$inline_526_opt_class$$4$$ = $rflect$ui$Dialog$ButtonSet$getButton$$("OK");
+  $cancel$$inline_527_opt_useIframeMask$$1$$ = $rflect$ui$Dialog$ButtonSet$getButton$$("Cancel");
   this.$buttons_$ = $JSCompiler_StaticMethods_addButton$$($JSCompiler_StaticMethods_addButton$$(new $rflect$ui$Dialog$ButtonSet$$, $ok$$inline_526_opt_class$$4$$, $JSCompiler_alias_TRUE$$, $JSCompiler_alias_FALSE$$, $JSCompiler_alias_TRUE$$), $cancel$$inline_527_opt_useIframeMask$$1$$, $JSCompiler_alias_FALSE$$, $JSCompiler_alias_TRUE$$);
   this.$buttonRenderer_$ = $opt_buttonRenderer$$ || $goog$ui$NativeButtonRenderer$$.$getInstance$()
 }
@@ -4048,7 +4047,7 @@ $JSCompiler_prototypeAlias$$.$decorateInternal$ = function $$JSCompiler_prototyp
   $JSCompiler_StaticMethods_setBackgroundElementOpacity$$(this, this.$backgroundElementOpacity_$)
 };
 $JSCompiler_prototypeAlias$$.$enterDocument$ = function $$JSCompiler_prototypeAlias$$$$enterDocument$$() {
-  $goog$ui$$.$Dialog$.prototype.$enterDocument$.call(this);
+  $rflect$ui$Dialog$$.$superClass_$.$enterDocument$.call(this);
   $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$$(this.$getHandler$(), this.$getElement$(), "keydown", this.$onKey_$), this.$getElement$(), "keypress", this.$onKey_$);
   $JSCompiler_StaticMethods_listen$$(this.$getHandler$(), this.$buttons_$, "action", this.$onButtonClick_$);
   $JSCompiler_StaticMethods_setDraggingEnabled_$$(this, this.$draggable_$);
@@ -4142,12 +4141,12 @@ $JSCompiler_prototypeAlias$$.$onKey_$ = function $$JSCompiler_prototypeAlias$$$$
   $close$$ && this.$setVisible$($JSCompiler_alias_FALSE$$)
 };
 function $rflect$ui$Dialog$Event$$($key$$73$$, $caption$$5$$) {
-  this.type = $goog$ui$$.$Dialog$.$EventType$.$SELECT$;
+  this.type = $rflect$ui$Dialog$EventType$SELECT$$;
   this.key = $key$$73$$;
   this.caption = $caption$$5$$
 }
 $goog$inherits$$($rflect$ui$Dialog$Event$$, $goog$events$Event$$);
-var $rflect$ui$Dialog$EventType$AFTER_HIDE$$ = "afterhide", $rflect$ui$Dialog$EventType$AFTER_SHOW$$ = "aftershow";
+var $rflect$ui$Dialog$EventType$SELECT$$ = "dialogselect", $rflect$ui$Dialog$EventType$AFTER_HIDE$$ = "afterhide", $rflect$ui$Dialog$EventType$AFTER_SHOW$$ = "aftershow";
 function $rflect$ui$Dialog$ButtonSet$$($opt_domHelper$$8$$, $opt_buttonRenderer$$1$$) {
   $goog$ui$Component$$.call(this, $opt_domHelper$$8$$);
   this.$buttonRenderer_$ = $opt_buttonRenderer$$1$$ || $goog$ui$NativeButtonRenderer$$.$getInstance$()
@@ -4180,7 +4179,7 @@ $JSCompiler_prototypeAlias$$.$decorateInternal$ = function $$JSCompiler_prototyp
     for(var $i$$108$$ = 0, $buttonEl$$, $caption$$6$$;$buttonEl$$ = $buttons$$1_element$$134$$[$i$$108$$];$i$$108$$++) {
       var $button$$17$$ = new $goog$ui$Button$$($JSCompiler_alias_NULL$$, this.$buttonRenderer_$), $isDefault$$ = 0 == $i$$108$$;
       $caption$$6$$ = $goog$dom$getTextContent$$($buttonEl$$) || $buttonEl$$.value;
-      $JSCompiler_StaticMethods_addButton$$(this, $button$$17$$, $isDefault$$, $caption$$6$$ == $goog$ui$$.$Dialog$.$DefaultButtonKeys$.$CANCEL$);
+      $JSCompiler_StaticMethods_addButton$$(this, $button$$17$$, $isDefault$$, "cancel" == $caption$$6$$);
       $button$$17$$.$decorateInternal$($buttonEl$$);
       $isDefault$$ && $goog$dom$classes$add$$($buttonEl$$, this.$class_$ + "-default")
     }
@@ -4196,8 +4195,8 @@ function $rflect$ui$Dialog$ButtonSet$getButton$$($caption$$7$$) {
   $JSCompiler_alias_FALSE$$ != this.$modal_$ && $JSCompiler_StaticMethods_setModalInternal_$$(this);
   $JSCompiler_StaticMethods_setBackgroundElementOpacity$$(this, 0);
   var $JSCompiler_inline_result$$52_save$$inline_564$$;
-  $JSCompiler_inline_result$$52_save$$inline_564$$ = $rflect$ui$Dialog$ButtonSet$getButton$$($goog$ui$$.$Dialog$.$DefaultButtonCaptions$.$SAVE$);
-  var $cancel$$inline_565$$ = $rflect$ui$Dialog$ButtonSet$getButton$$($goog$ui$$.$Dialog$.$DefaultButtonCaptions$.$CANCEL$);
+  $JSCompiler_inline_result$$52_save$$inline_564$$ = $rflect$ui$Dialog$ButtonSet$getButton$$("Save");
+  var $cancel$$inline_565$$ = $rflect$ui$Dialog$ButtonSet$getButton$$("Cancel");
   $JSCompiler_inline_result$$52_save$$inline_564$$ = $JSCompiler_StaticMethods_addButton$$($JSCompiler_StaticMethods_addButton$$(new $rflect$ui$Dialog$ButtonSet$$, $JSCompiler_inline_result$$52_save$$inline_564$$, $JSCompiler_alias_TRUE$$, $JSCompiler_alias_FALSE$$, $JSCompiler_alias_TRUE$$), $cancel$$inline_565$$, $JSCompiler_alias_FALSE$$, $JSCompiler_alias_TRUE$$);
   $JSCompiler_StaticMethods_setButtonSet$$(this, $JSCompiler_inline_result$$52_save$$inline_564$$);
   this.$setContent$('<div class="event-name-cont"><label for="event-name" class="event-name-label">Event name</label><input type="text" value="" id="event-name" name="event-name" class="event-name-input" spellcheck="false"/></div><a id="event-edit" class="event-edit-link goog-inline-block" href="javascript:void(0)">Edit options</a>')
@@ -4392,7 +4391,7 @@ function $rflect$cal$ui$EditDialog$$() {
   $JSCompiler_StaticMethods_setBackgroundElementOpacity$$(this, 0);
   var $JSCompiler_inline_result$$60_edit$$inline_605$$;
   $JSCompiler_inline_result$$60_edit$$inline_605$$ = $rflect$ui$Dialog$ButtonSet$getButton$$("Edit");
-  var $del$$inline_606$$ = $rflect$ui$Dialog$ButtonSet$getButton$$("Delete"), $cancel$$inline_607$$ = $rflect$ui$Dialog$ButtonSet$getButton$$($goog$ui$$.$Dialog$.$DefaultButtonCaptions$.$CANCEL$);
+  var $del$$inline_606$$ = $rflect$ui$Dialog$ButtonSet$getButton$$("Delete"), $cancel$$inline_607$$ = $rflect$ui$Dialog$ButtonSet$getButton$$("Cancel");
   $JSCompiler_inline_result$$60_edit$$inline_605$$ = $JSCompiler_StaticMethods_addButton$$($JSCompiler_StaticMethods_addButton$$($JSCompiler_StaticMethods_addButton$$(new $rflect$ui$Dialog$ButtonSet$$, $JSCompiler_inline_result$$60_edit$$inline_605$$, $JSCompiler_alias_TRUE$$, $JSCompiler_alias_FALSE$$, $JSCompiler_alias_TRUE$$), $del$$inline_606$$, $JSCompiler_alias_FALSE$$, $JSCompiler_alias_TRUE$$), $cancel$$inline_607$$, $JSCompiler_alias_FALSE$$, $JSCompiler_alias_TRUE$$);
   $JSCompiler_StaticMethods_setButtonSet$$(this, $JSCompiler_inline_result$$60_edit$$inline_605$$);
   this.$setContent$('<div id="ed-event-time" class="event-time"></div><a id="ed-event-edit" class="event-edit-link goog-inline-block" href="javascript:void(0)"></a>')
