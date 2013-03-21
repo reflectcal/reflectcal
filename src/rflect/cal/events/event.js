@@ -7,6 +7,10 @@
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
+goog.require('goog.date.Interval');
+goog.require('goog.i18n.DateTimeSymbols');
+goog.require('goog.i18n.DateTimeFormat');
+goog.require('goog.i18n.DateTimePatterns');
 goog.require('rflect.cal.i18n.Symbols');
 
 goog.provide('rflect.cal.events.Event');
@@ -132,4 +136,63 @@ rflect.cal.events.Event.prototype.endDate;
 rflect.cal.events.Event.prototype.allDay;
 
 
+/**
+ * @return {string} Human-comfortable string representation.
+ */
+rflect.cal.events.Event.prototype.toHumanString = function() {
+  var startDate = this.startDate;
+  var endDate = this.endDate;
+  var result;
+  var formatStart;
+  var formatEnd;
+  var formatStringStart;
+  var formatStringEnd;
+  var allDay = this.allDay ||
+      (startDate.getHours() == 0 &&
+      startDate.getMinutes() == 0 &&
+      endDate.getHours() == 0 &&
+      endDate.getMinutes() == 0);
 
+  var timeFormatString = ' ' + goog.i18n.DateTimeSymbols.TIMEFORMATS[3];
+
+  if (allDay) {
+    // To make date more human readable, we change exclusive endDate to
+    // inclusive, thus subtracting 1 day from end.
+    endDate.add(new goog.date.Interval(goog.date.Interval.DAYS, -1));
+    timeFormatString = '';
+  }
+
+  if (startDate.getFullYear() != endDate.getFullYear()) {
+    // All fields are not equal.
+    formatStringStart = goog.i18n.DateTimePatterns.MONTH_DAY_ABBR + ', yyyy' +
+        timeFormatString;
+    formatStart = new goog.i18n.DateTimeFormat(formatStringStart +  ' -');
+    formatEnd = new goog.i18n.DateTimeFormat(' ' + formatStringStart);
+    result = formatStart.format(startDate) + formatEnd.format(endDate);
+
+  } else if (startDate.getMonth() != endDate.getMonth() ||
+      (startDate.getMonth() == endDate.getMonth() &&
+          startDate.getDate() != endDate.getDate())) {
+    // Year is equal.
+    formatStringStart = goog.i18n.DateTimePatterns.MONTH_DAY_ABBR +
+        timeFormatString;
+    formatStart = new goog.i18n.DateTimeFormat(formatStringStart + ' -');
+    formatEnd = new goog.i18n.DateTimeFormat(' ' + formatStringStart +
+        ', yyyy');
+    result = formatStart.format(startDate) + formatEnd.format(endDate);
+
+  } else {
+    // Single day case.
+    formatStringStart = 'EEEE, ' +
+        goog.i18n.DateTimePatterns.MONTH_DAY_FULL + ', yyyy' +
+        (allDay ? '' : (timeFormatString + ' -'));
+    formatStart = new goog.i18n.DateTimeFormat(formatStringStart);
+    result = formatStart.format(startDate);
+    if (!allDay) {
+      formatEnd = new goog.i18n.DateTimeFormat(timeFormatString);
+      result += formatEnd.format(endDate);
+    }
+
+  }
+  return result;
+};

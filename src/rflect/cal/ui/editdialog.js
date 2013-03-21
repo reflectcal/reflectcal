@@ -94,7 +94,7 @@ rflect.cal.ui.EditDialog.prototype.eventNameLink_;
 rflect.cal.ui.EditDialog.HTML_PARTS_ =
     '<div id="ed-event-time" class="event-time">' +
         '</div>' +
-        '<a id="ed-event-edit" class="event-edit-link goog-inline-block" ' +
+        '<a id="ed-event-edit" class="event-edit-link edit-dialog-link goog-inline-block" ' +
         'href="javascript:void(0)">' +
         '</a>';
 
@@ -122,12 +122,11 @@ rflect.cal.ui.EditDialog.prototype.setEventName = function(aEventName) {
 
 
 /**
- * @param {rflect.date.DateShim} aStartDate Event start date.
- * @param {rflect.date.DateShim} aEndDate Event end date.
+ * @param {string} aEventTimeString Event string representation.
  */
-rflect.cal.ui.EditDialog.prototype.setEventTime = function (aStartDate,
-    aEndDate) {
-  this.eventTimeCont_.innerHTML = aStartDate + ' - ' + aEndDate;
+rflect.cal.ui.EditDialog.prototype.setEventTimeString =
+    function(aEventTimeString) {
+  this.eventTimeCont_.innerHTML = aEventTimeString;
 }
 
 
@@ -154,3 +153,6 @@ rflect.cal.ui.EditDialog.prototype.dispose = function () {
   this.eventTimeCont_ = null;
   this.eventNameLink_ = null;
 }
+
+
+

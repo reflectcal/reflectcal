@@ -640,7 +640,7 @@ rflect.cal.MainPane.prototype.showEditDialog_ = function(aChipClassName) {
   
     this.editDialog_.setVisible(true);
     this.editDialog_.setEventName(event.summary);
-    this.editDialog_.setEventTime(event.startDate, event.endDate);
+    this.editDialog_.setEventTimeString(event.toHumanString());
   }
 }
 
@@ -935,13 +935,7 @@ rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
     this.selectionMask_.close();
     this.saveDialog_.setVisible(true);
 
-    this.eventManager_.eventTransactionHelper.beginEventCreation();
-    this.eventManager_.eventTransactionHelper.setStartDate(
-        this.selectionMask_.startDate);
-    this.eventManager_.eventTransactionHelper.setEndDate(
-        this.selectionMask_.endDate);
-    this.eventManager_.eventTransactionHelper.setAllDay(
-        this.selectionMask_.isAllDay() || this.selectionMask_.isMonth());
+    this.beginEventCreation_();
 
     aEvent.preventDefault();
   }
@@ -955,6 +949,21 @@ rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
 rflect.cal.MainPane.prototype.onEventEdit_ = function(aEvent) {
   if (goog.DEBUG)
     _log('edit clicked');
+}
+
+
+/**
+ * Begins phase of event creation.
+ * @private
+ */
+rflect.cal.MainPane.prototype.beginEventCreation_ = function() {
+  this.eventManager_.eventTransactionHelper.beginEventCreation();
+  this.eventManager_.eventTransactionHelper.setStartDate(
+      this.selectionMask_.startDate);
+  this.eventManager_.eventTransactionHelper.setEndDate(
+      this.selectionMask_.endDate);
+  this.eventManager_.eventTransactionHelper.setAllDay(
+      this.selectionMask_.isAllDay() || this.selectionMask_.isMonth());
 }
 
 

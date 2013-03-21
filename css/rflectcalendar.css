@@ -1419,3 +1419,11 @@ overflow:hidden
   ,teal:"#008080",thistle:"#d8bfd8",tomato:"#ff6347",turquoise:"#40e0d0",violet:"#ee82ee",wheat:"#f5deb3"
 
   ,white:ba,whitesmoke:"#f5f5f5",yellow:"#ffff00",yellowgreen:"#9acd32"}*/
+
+.edit-dialog-link {
+  display: block;
+  font-weight: bold;
+  max-height: 50px;
+  overflow: hidden;
+  width: 330px;
+}
