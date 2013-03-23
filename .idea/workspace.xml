@@ -11,7 +11,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" line="1564" />
     <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js" line="353" />
     <bookmark url="file://$PROJECT_DIR$/build.xml" line="53" />
-    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpane.js" line="546" />
+    <bookmark url="file://$PROJECT_DIR$/src/rflect/cal/mainpane.js" line="544" />
     <bookmark url="file://$PROJECT_DIR$/src/rflect/ui/dialog.js" line="587" />
     <bookmark url="file://$PROJECT_DIR$/src/rflect/ui/dialog.js" line="673" />
     <bookmark url="file://$PROJECT_DIR$/src/rflect/ui/dialog.js" line="546" />
@@ -31,14 +31,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="94f59c91-c161-4423-a022-ed195e39c373" name="Default" comment="Removed _log call.">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trac/db/trac.db" afterPath="$PROJECT_DIR$/trac/db/trac.db" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/rflectcalendar.css" afterPath="$PROJECT_DIR$/css/rflectcalendar.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/outputcompiled.js.map" afterPath="$PROJECT_DIR$/src/outputcompiled.js.map" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/outputcompiled.js" afterPath="$PROJECT_DIR$/src/outputcompiled.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/events/event.js" afterPath="$PROJECT_DIR$/src/rflect/cal/events/event.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/mainpane.js" afterPath="$PROJECT_DIR$/src/rflect/cal/mainpane.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/ui/editdialog.js" afterPath="$PROJECT_DIR$/src/rflect/cal/ui/editdialog.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/rflect/cal/mainpaneselectionmask.js" afterPath="$PROJECT_DIR$/src/rflect/cal/mainpaneselectionmask.js" />
     </list>
     <ignored path="Calendar.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -569,6 +567,7 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <ui_properties default_suspend_policy="SuspendAll" />
     <breakpoint_any default_suspend_policy="SuspendAll">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -601,7 +600,6 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <ui_properties default_suspend_policy="SuspendAll" />
     <breakpoint_rules default_suspend_policy="SuspendAll" />
     <breakpoint_rules />
     <ui_properties />
@@ -612,19 +610,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="editdialog.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/rflect/cal/ui/editdialog.js">
+      <file leaf-file-name="mainpane.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpane.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="96" column="54" selection-start="2540" selection-end="2540" vertical-scroll-proportion="0.0">
+            <state line="969" column="25" selection-start="28650" selection-end="28650" vertical-scroll-proportion="0.7781065">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="event.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/event.js">
+      <file leaf-file-name="mainpaneselectionmask.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpaneselectionmask.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="141" column="34" selection-start="2719" selection-end="2719" vertical-scroll-proportion="0.0">
+            <state line="253" column="4" selection-start="7166" selection-end="7166" vertical-scroll-proportion="-4.0">
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -632,19 +630,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mainpane.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpane.js">
+      <file leaf-file-name="event.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/event.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="642" column="58" selection-start="18981" selection-end="18981" vertical-scroll-proportion="0.0">
+            <state line="166" column="57" selection-start="3551" selection-end="3552" vertical-scroll-proportion="-4.68">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="eventtransactionhelper.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="selectionmask.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/rflect/cal/selectionmask.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="132" column="41" selection-start="2540" selection-end="2540" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="eventtransactionhelper.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/eventtransactionhelper.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="116" column="52" selection-start="3009" selection-end="3009" vertical-scroll-proportion="0.7348353">
+            <state line="113" column="23" selection-start="2869" selection-end="2869" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -654,9 +661,7 @@
         <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
           <provider selected="true" editor-type-id="text-editor">
             <state line="326" column="67" selection-start="9824" selection-end="9887" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -674,9 +679,7 @@
         <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/i18n/datetimepatterns.js">
           <provider selected="true" editor-type-id="text-editor">
             <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -684,10 +687,8 @@
       <file leaf-file-name="datetimesymbols.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/i18n/datetimesymbols.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3548" column="2" selection-start="151126" selection-end="151151" vertical-scroll-proportion="-10.96">
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+            <state line="3548" column="2" selection-start="151126" selection-end="151151" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -696,9 +697,7 @@
         <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/i18n/timezone.js">
           <provider selected="true" editor-type-id="text-editor">
             <state line="35" column="39" selection-start="1429" selection-end="1429" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -816,7 +815,6 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/src/rflect/cal/events/eventmanager.js" />
-        <option value="$PROJECT_DIR$/src/rflect/cal/mainpaneselectionmask.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/listselector.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/mainpanebuilder.js" />
         <option value="$PROJECT_DIR$/src/rflect/string/string.js" />
@@ -826,11 +824,12 @@
         <option value="$PROJECT_DIR$/src/closure-library/closure/goog/ui/modalpopup.js" />
         <option value="$PROJECT_DIR$/src/closure-library/closure/goog/base.js" />
         <option value="$PROJECT_DIR$/src/rflect/ui/dialog.js" />
-        <option value="$PROJECT_DIR$/src/rflect/cal/events/event.js" />
-        <option value="$PROJECT_DIR$/src/rflect/cal/mainpane.js" />
         <option value="$PROJECT_DIR$/src/rflect/cal/ui/editdialog.js" />
         <option value="$PROJECT_DIR$/css/rflectcalendar.css" />
         <option value="$PROJECT_DIR$/src/rflect/cal/events/eventtransactionhelper.js" />
+        <option value="$PROJECT_DIR$/src/rflect/cal/events/event.js" />
+        <option value="$PROJECT_DIR$/src/rflect/cal/mainpaneselectionmask.js" />
+        <option value="$PROJECT_DIR$/src/rflect/cal/mainpane.js" />
       </list>
     </option>
   </component>
@@ -901,25 +900,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane />
-        <subPane subId="Non-Project Files" />
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="rflectevents">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane />
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1214,6 +1194,25 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane />
+      </pane>
+      <pane id="Scope">
+        <subPane />
+        <subPane subId="Non-Project Files" />
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="rflectevents">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -1906,10 +1905,10 @@
     <editor active="true" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32551318" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3240469" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26246333" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.10235507" sideWeight="0.59970677" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26099706" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.10235507" sideWeight="0.6759531" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -1919,10 +1918,10 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40029326" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23641305" sideWeight="0.35630497" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23460145" sideWeight="0.35923752" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32789856" sideWeight="0.59970677" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23641305" sideWeight="0.6334311" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23460145" sideWeight="0.30645162" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32849365" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SBT Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329429" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -2071,42 +2070,24 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/rflect/string/string.js">
+    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/ui/modalpopup.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="0" selection-start="1722" selection-end="1722" vertical-scroll-proportion="0.0">
+        <state line="190" column="19" selection-start="5024" selection-end="5024" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/i18n/datetimepatternsext.js">
+    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/ui/component.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="446" column="26" selection-start="22077" selection-end="22077" vertical-scroll-proportion="0.0">
+        <state line="470" column="28" selection-start="13793" selection-end="13793" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/i18n/datetimesymbols.js">
+    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/base.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3548" column="2" selection-start="151126" selection-end="151151" vertical-scroll-proportion="-10.96">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/predefined.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="592" column="48" selection-start="12300" selection-end="12300" vertical-scroll-proportion="0.0">
+        <state line="429" column="27" selection-start="14270" selection-end="14274" vertical-scroll-proportion="0.0">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/date/date.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="326" column="67" selection-start="9824" selection-end="9887" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2117,59 +2098,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/ui/dialog.js">
+    <entry file="file://$PROJECT_DIR$/build.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1434" column="72" selection-start="41419" selection-end="41419" vertical-scroll-proportion="0.0">
+        <state line="53" column="48" selection-start="2364" selection-end="2364" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/ui/dialog.js">
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/minical.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="560" column="19" selection-start="14923" selection-end="14923" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/i18n/datetimeformat.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="227" column="45" selection-start="8805" selection-end="8805" vertical-scroll-proportion="-7.917923">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/i18n/timezone.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="39" selection-start="1429" selection-end="1429" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/closure-library/closure/goog/i18n/datetimepatterns.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpane.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="642" column="58" selection-start="18981" selection-end="18981" vertical-scroll-proportion="0.0">
+        <state line="114" column="33" selection-start="2829" selection-end="2829" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/ui/editdialog.js">
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainbody.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="96" column="54" selection-start="2540" selection-end="2540" vertical-scroll-proportion="0.0">
+        <state line="77" column="25" selection-start="2174" selection-end="2174" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/viewmanager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="455" column="16" selection-start="12785" selection-end="12810" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/minicalselectionmask.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="121" column="33" selection-start="2969" selection-end="2969" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -2181,18 +2140,46 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/ui/editdialog.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="96" column="54" selection-start="2540" selection-end="2540" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/selectionmask.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="132" column="41" selection-start="2540" selection-end="2540" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/string/string.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="14" selection-start="648" selection-end="648" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/event.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="141" column="34" selection-start="2719" selection-end="2719" vertical-scroll-proportion="0.0">
+        <state line="166" column="57" selection-start="3551" selection-end="3552" vertical-scroll-proportion="-4.68">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpaneselectionmask.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="253" column="4" selection-start="7166" selection-end="7166" vertical-scroll-proportion="-4.0">
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/rflect/cal/events/eventtransactionhelper.js">
+    <entry file="file://$PROJECT_DIR$/src/rflect/cal/mainpane.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="116" column="52" selection-start="3009" selection-end="3009" vertical-scroll-proportion="0.7348353">
+        <state line="969" column="25" selection-start="28650" selection-end="28650" vertical-scroll-proportion="0.7781065">
           <folding />
         </state>
       </provider>

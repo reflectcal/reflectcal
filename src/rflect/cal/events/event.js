@@ -141,7 +141,7 @@ rflect.cal.events.Event.prototype.allDay;
  */
 rflect.cal.events.Event.prototype.toHumanString = function() {
   var startDate = this.startDate;
-  var endDate = this.endDate;
+  var endDate = this.endDate.clone();
   var result;
   var formatStart;
   var formatEnd;

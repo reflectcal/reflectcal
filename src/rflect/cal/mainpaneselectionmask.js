@@ -138,7 +138,7 @@ rflect.cal.MainPaneSelectionMask.prototype.isWeekOrAllday_ = function() {
  * @protected
  */
 rflect.cal.MainPaneSelectionMask.prototype.isHorizontal =
-    rflect.cal.MainPaneSelectionMask.prototype.isWeekOrAllday_
+    rflect.cal.MainPaneSelectionMask.prototype.isWeek
 
 
 /**
@@ -250,12 +250,6 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
 
     this.startCell_ = this.getCellByCoordinate_(coordX, coordY);
     this.currentCell_ = this.startCell_.clone();
-
-    if (goog.DEBUG){
-      _log('coord: ', new goog.math.Coordinate(coordX, coordY));
-      _log('this.startCell_', this.startCell_);
-      _log('this.currentCell_', this.currentCell_);
-    }
 
     goog.style.showElement(this.maskEl_, true);
 

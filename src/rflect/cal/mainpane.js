@@ -501,8 +501,6 @@ rflect.cal.MainPane.prototype.buildBodyInternal = function(aSb) {
  *  Redraws just week grid.
  */
 rflect.cal.MainPane.prototype.updateByRedrawWeekGrid = function() {
-  if (goog.DEBUG)
-    _log('updateByRedrawWeekGrid');
   var sb = new goog.string.StringBuffer();
   this.mainPaneBuilder_.buildWeekGrid(sb);
   this.getDomHelper().getElement('grid-table-wk').innerHTML = sb.toString();
@@ -576,7 +574,7 @@ rflect.cal.MainPane.prototype.enterDocument = function() {
  * @private
  */
 rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
-  var target = aEvent.target;
+  var target = /** @type {Element}*/ (aEvent.target);
   var id = target.id;
   var className = target.className;
   var zippyClicked = false;
@@ -623,16 +621,21 @@ rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
     this.updateBeforeRedraw();
     this.updateByRedraw();
   } else if (this.isChip_(className)) {
-    this.showEditDialog_(className);
+    this.showEditDialog_(target, className);
   }
 };
 
 
 /**
+ * @param {Element} aTarget Element that was clicked to invoke dialog.
  * @param {string} aChipClassName Class name of chip.
  */
-rflect.cal.MainPane.prototype.showEditDialog_ = function(aChipClassName) {
-  var eventId = rflect.string.getNumericIndexWithPostfix(aChipClassName,
+rflect.cal.MainPane.prototype.showEditDialog_ = function(aTarget,
+                                                         aChipClassName) {
+  var className = aChipClassName;
+  if (aTarget.className == goog.getCssName('event-wk-timelabel'))
+    className = aTarget.parentNode.className;
+  var eventId = rflect.string.getNumericIndexWithPostfix(className,
       rflect.cal.predefined.chips.CHIP_EVENT_CLASS);
     
   if (!isNaN(eventId)) {
@@ -683,8 +686,6 @@ rflect.cal.MainPane.prototype.onMouseOver_ = function(aEvent) {
  */
 rflect.cal.MainPane.prototype.onDaynumLabelClick_ = function(aId) {
   var index = rflect.string.get2DigitIndex(aId);
-  if (goog.DEBUG)
-    _log('index', index);
   var day = this.timeManager_.daySeries[index];
   if (day)
     this.switchView_(day, rflect.cal.ViewType.DAY);
@@ -698,8 +699,6 @@ rflect.cal.MainPane.prototype.onDaynumLabelClick_ = function(aId) {
  */
 rflect.cal.MainPane.prototype.onWeeknumLabelClick_ = function(aId) {
   var index = rflect.string.get2DigitIndex(aId);
-  if (goog.DEBUG)
-    _log('index', index);
   var day = this.timeManager_.daySeries[7 * index];
   if (day)
     this.switchView_(day, rflect.cal.ViewType.WEEK);
@@ -821,6 +820,7 @@ rflect.cal.MainPane.prototype.isWeekChip_ = function(aClassName) {
   var chipWeekRe_ = this.chipWeekRe_ || (this.chipWeekRe_ =
       rflect.string.buildClassNameRe(goog.getCssName('event-rect-wk-inner'),
           goog.getCssName('event-wk-timelabel')));
+
   return chipWeekRe_.test(aClassName);
 };
 
@@ -957,6 +957,7 @@ rflect.cal.MainPane.prototype.onEventEdit_ = function(aEvent) {
  * @private
  */
 rflect.cal.MainPane.prototype.beginEventCreation_ = function() {
+
   this.eventManager_.eventTransactionHelper.beginEventCreation();
   this.eventManager_.eventTransactionHelper.setStartDate(
       this.selectionMask_.startDate);
