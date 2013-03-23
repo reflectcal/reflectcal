@@ -557,7 +557,9 @@ rflect.cal.events.EventManager.prototype.run = function() {
       allDayChipsLength = rflect.cal.events.EventManager.pushNestedAllDayChips_(
           this.allDayChipsByDay_, this.allDayChips, knownChipsIds, yearKey, 
           dayOfYearKey, counter, length, allDayChipsLength);
-    } else if (this.viewManager_.isInMonthMode() && counter % 7 == 0) {
+    } else if (this.viewManager_.isInMonthMode() &&
+        // We should check year in cutoff day.
+        counter % 7 == goog.i18n.DateTimeSymbols.FIRSTWEEKCUTOFFDAY) {
       var weekKey = daySeries[counter].getWeekNumber();
       this.weekChips.push(rflect.cal.events.EventManager.getNestedChips_(
           this.chipsByWeek_, yearKey, weekKey) || []);
