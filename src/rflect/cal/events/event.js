@@ -196,3 +196,14 @@ rflect.cal.events.Event.prototype.toHumanString = function() {
   }
   return result;
 };
+
+
+/**
+ * @return {rflect.cal.events.Event} Clone of this event.
+ */
+rflect.cal.events.Event.prototype.clone = function() {
+  var clone = new rflect.cal.events.Event(this.id, this.longId, this.startDate,
+      this.endDate, this.allDay, this.summary, this.description);
+
+  return clone;
+};

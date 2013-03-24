@@ -8,9 +8,9 @@ goog.addDependency('../../../rflect/cal/button.js', ['rflect.cal.Button'], ['goo
 goog.addDependency('../../../rflect/cal/calselector.js', ['rflect.cal.CalSelector'], ['rflect.cal.ListSelector', 'rflect.cal.i18n.Symbols']);
 goog.addDependency('../../../rflect/cal/containersizemonitor.js', ['rflect.cal.ContainerSizeMonitor'], ['goog.dom.ViewportSizeMonitor', 'goog.style', 'rflect.cal.predefined']);
 goog.addDependency('../../../rflect/cal/events/chip.js', ['rflect.cal.events.Chip'], []);
-goog.addDependency('../../../rflect/cal/events/event.js', ['rflect.cal.events.Event'], ['rflect.cal.i18n.Symbols']);
+goog.addDependency('../../../rflect/cal/events/event.js', ['rflect.cal.events.Event'], ['goog.date.Interval', 'goog.i18n.DateTimeFormat', 'goog.i18n.DateTimePatterns', 'goog.i18n.DateTimeSymbols', 'rflect.cal.i18n.Symbols']);
+goog.addDependency('../../../rflect/cal/events/eventholder.js', ['rflect.cal.events.EventHolder'], ['rflect.cal.i18n.Symbols', 'rflect.date.DateShim']);
 goog.addDependency('../../../rflect/cal/events/eventmanager.js', ['rflect.cal.events.EventManager'], ['rflect.cal.events.Chip', 'rflect.cal.events.Event', 'rflect.cal.events.EventHolder', 'rflect.cal.predefined.chips', 'rflect.structs.IntervalTree']);
-goog.addDependency('../../../rflect/cal/events/eventtransactionhelper.js', ['rflect.cal.events.EventHolder'], ['rflect.cal.i18n.Symbols', 'rflect.date.DateShim']);
 goog.addDependency('../../../rflect/cal/events/recurringevent.js', ['rflect.cal.events.RecurringEvent'], []);
 goog.addDependency('../../../rflect/cal/eventtype.js', ['rflect.cal.EventType'], []);
 goog.addDependency('../../../rflect/cal/i18n/predefined.js', ['rflect.cal.i18n.predefined', 'rflect.cal.i18n.predefined_by', 'rflect.cal.i18n.predefined_en', 'rflect.cal.i18n.predefined_ru'], []);
@@ -44,4 +44,4 @@ goog.addDependency('../../../rflect/pagevis/pagevisibility.js', ['rflect.pagevis
 goog.addDependency('../../../rflect/string/string.js', ['rflect.string'], ['goog.string']);
 goog.addDependency('../../../rflect/structs/intervaltree.js', ['rflect.structs.IntervalTree'], ['goog.array', 'rflect.array', 'rflect.date.Interval']);
 goog.addDependency('../../../rflect/ui/component.js', ['rflect.ui.Component'], ['goog.string.StringBuffer', 'goog.ui.Component']);
-goog.addDependency('../../../rflect/ui/dialog.js', ['rflect.ui.Dialog'], ['goog.ui.Component.EventType', 'goog.ui.Dialog']);
+goog.addDependency('../../../rflect/ui/dialog.js', ['rflect.ui.Dialog', 'rflect.ui.Dialog.ButtonSet', 'rflect.ui.Dialog.DefaultButtonCaptions', 'rflect.ui.Dialog.DefaultButtonKeys', 'rflect.ui.Dialog.Event', 'rflect.ui.Dialog.EventType'], ['goog.a11y.aria', 'goog.a11y.aria.Role', 'goog.a11y.aria.State', 'goog.asserts', 'goog.dom', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.dom.classes', 'goog.events', 'goog.events.Event', 'goog.events.EventType', 'goog.events.KeyCodes', 'goog.fx.Dragger', 'goog.math.Rect', 'goog.structs', 'goog.structs.Map', 'goog.style', 'goog.ui.ModalPopup', 'goog.userAgent']);

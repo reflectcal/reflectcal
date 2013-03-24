@@ -562,7 +562,7 @@ rflect.cal.MainPane.prototype.enterDocument = function() {
       .listen(this.saveDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
       this.onEventEdit_, false, this)
       .listen(this.saveDialog_, rflect.ui.Dialog.EventType.SELECT,
-      this.onSaveDialogSave_, false, this)
+      this.onSaveDialogButtonSelect_, false, this)
       .listen(this.editDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
       this.onEventEdit_, false, this)
       .listen(this.editDialog_, rflect.ui.Dialog.EventType.SELECT,
@@ -648,6 +648,8 @@ rflect.cal.MainPane.prototype.showEditDialog_ = function(aTarget,
     this.editDialog_.setVisible(true);
     this.editDialog_.setEventName(event.summary);
     this.editDialog_.setEventTimeString(event.toHumanString());
+
+    this.eventManager_.eventHolder.openSession(event);
   }
 }
 
@@ -947,6 +949,46 @@ rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
 
 
 /**
+ * Begins phase of event creation.
+ * @private
+ */
+rflect.cal.MainPane.prototype.beginEventCreation_ = function() {
+
+  this.eventManager_.eventHolder.openSession();
+  this.eventManager_.eventHolder.setStartDate(
+      this.selectionMask_.startDate);
+  this.eventManager_.eventHolder.setEndDate(
+      this.selectionMask_.endDate);
+  this.eventManager_.eventHolder.setAllDay(
+      this.selectionMask_.isAllDay() || this.selectionMask_.isMonth());
+}
+
+
+/**
+ * Save dialog button listener.
+ * @param {rflect.ui.Dialog.Event} aEvent Event object.
+ */
+rflect.cal.MainPane.prototype.onSaveDialogButtonSelect_ = function(aEvent) {
+  if (aEvent.key == this.saveDialog_.getButtonSet().getDefault()) {
+    this.eventManager_.eventHolder.setSummary(
+        this.saveDialog_.getEventName());
+    this.eventManager_.eventHolder.endWithAdd();
+
+    this.eventManager_.run();
+
+    this.updateBlockManager();
+
+    if (this.selectionMask_.isWeek())
+      this.updateByRedrawWeekGrid();
+    if (this.selectionMask_.isAllDay())
+      this.updateByRedrawAllDayGrid();
+    if (this.selectionMask_.isMonth())
+      this.updateByRedrawMonthGrid();
+  }
+}
+
+
+/**
  * Event edit listener. Called when edit link is clicked from save or edit
  * dialog.
  * @param {{type: string}} aEvent Event object.
@@ -962,47 +1004,25 @@ rflect.cal.MainPane.prototype.onEventEdit_ = function(aEvent) {
  * @param {{type: string}} aEvent Event object.
  */
 rflect.cal.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
-  if (goog.DEBUG)
-    _log('edit dialog button');
-}
 
-
-/**
- * Begins phase of event creation.
- * @private
- */
-rflect.cal.MainPane.prototype.beginEventCreation_ = function() {
-
-  this.eventManager_.eventTransactionHelper.beginEventCreation();
-  this.eventManager_.eventTransactionHelper.setStartDate(
-      this.selectionMask_.startDate);
-  this.eventManager_.eventTransactionHelper.setEndDate(
-      this.selectionMask_.endDate);
-  this.eventManager_.eventTransactionHelper.setAllDay(
-      this.selectionMask_.isAllDay() || this.selectionMask_.isMonth());
-}
-
-
-/**
- * Save dialog button listener.
- * @param {rflect.ui.Dialog.Event} aEvent Event object.
- */
-rflect.cal.MainPane.prototype.onSaveDialogSave_ = function(aEvent) {
   if (aEvent.key == this.saveDialog_.getButtonSet().getDefault()) {
-    this.eventManager_.eventTransactionHelper.setSummary(
-        this.saveDialog_.getEventName());
-    this.eventManager_.eventTransactionHelper.endEventCreation();
+
+  } else if (aEvent.key != this.saveDialog_.getButtonSet().getCancel()) {
+    this.eventManager_.eventHolder.endWithDelete();
 
     this.eventManager_.run();
 
     this.updateBlockManager();
 
-    if (this.selectionMask_.isWeek())
-      this.updateByRedrawWeekGrid();
-    if (this.selectionMask_.isAllDay())
-      this.updateByRedrawAllDayGrid();
-    if (this.selectionMask_.isMonth())
+    if (this.viewManager_.isInWeekMode()) {
+      if (this.eventManager_.eventHolder.getBackUpEvent().allDay)
+        this.updateByRedrawAllDayGrid();
+      else
+        this.updateByRedrawWeekGrid();
+    } else if (this.viewManager_.isInMonthMode()) {
       this.updateByRedrawMonthGrid();
+
+    }
   }
 }
 

@@ -43,7 +43,7 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
    * Event transaction helper.
    * @type {rflect.cal.events.EventHolder}
    */
-  this.eventTransactionHelper =
+  this.eventHolder =
       new rflect.cal.events.EventHolder(this);
 
   /**
@@ -404,14 +404,12 @@ rflect.cal.events.EventManager.prototype.removeEventById =
 
 
 /**
- * Edit event, actually deleting old event and creating new one with the same
- * id.
+ * Deletes event.
  * @param {rflect.cal.events.Event} aEvent Event.
  */
-rflect.cal.events.EventManager.prototype.editEvent =
+rflect.cal.events.EventManager.prototype.deleteEvent =
     function(aEvent) {
   this.removeEventById(aEvent.id);
-  this.addEvent(aEvent);
 }
 
 

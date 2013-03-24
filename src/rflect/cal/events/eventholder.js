@@ -14,8 +14,18 @@ goog.require('rflect.date.DateShim');
 
 
 /**
- * Class that helps to create events in steps, managing event state between
- * them, also abstracts away this work from generic event manager.
+ * Class that holds event state between separate operations, such as create or
+ * edit. Also abstracts away this work from generic event manager.
+ *
+ * Lifecycle:
+ * 1. openSession with or without event
+ * 2. add some parameters
+ * 3. end session
+ *   a. if delete - deletes only if event was specified at open
+ *   b. if edit - edits only if event was specified at open
+ *   c. if add - adds new one when event wasn't specified at open
+ *   d. if add - adds duplicate when event was specified at open
+ *
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @constructor
  */
@@ -32,29 +42,66 @@ rflect.cal.events.EventHolder = function(aEventManager) {
 
 
 /**
+ * Session types/
+ * @enum {number}
+ */
+rflect.cal.events.EventHolder.SessionTypes = {
+  CREATE: 0,
+  EDIT: 1
+}
+
+
+/**
+ * Type of this session.
+ * @type {rflect.cal.events.EventHolder.SessionTypes}
+ * @private
+ */
+rflect.cal.events.EventHolder.prototype.sessionType_;
+
+
+/**
  * Event which creation is pending.
  * @type {rflect.cal.events.Event}
  * @private
  */
-rflect.cal.events.EventHolder.prototype.temporaryEvent_;
+rflect.cal.events.EventHolder.prototype.newTemporaryEvent_;
+
+
+/**
+ * Old version of event.
+ * @type {rflect.cal.events.Event|undefined}
+ * @private
+ */
+rflect.cal.events.EventHolder.prototype.backUpEvent_;
 
 
 /**
  * Begins creation of event in case when creation requires separate steps, as
  * when creating event from ui, with dialog.
+ * @param {rflect.cal.events.Event=} opt_event Event to work with in this
+ * session. If omitted, new one will be created.
  */
-rflect.cal.events.EventHolder.prototype.beginEventCreation =
-    function() {
-  this.temporaryEvent_ = rflect.cal.events.EventManager.createEvent('', null,
-      null, false);
+rflect.cal.events.EventHolder.prototype.openSession =
+    function(opt_event) {
+  if (opt_event) {
+    this.newTemporaryEvent_ = opt_event.clone();
+    this.newTemporaryEvent_.id = rflect.cal.events.EventManager.createEventId();
+  }
+  else
+    this.newTemporaryEvent_ = rflect.cal.events.EventManager.createEvent('',
+        null, null, false);
+
+  this.backUpEvent_ = opt_event && opt_event.clone();
+
 }
+
 
 /**
  * @param {goog.date.DateTime|rflect.date.DateShim} aStartDate Start date.
  */
 rflect.cal.events.EventHolder.prototype.setStartDate =
     function(aStartDate) {
-  this.temporaryEvent_.startDate = rflect.date.createDateShim(
+  this.newTemporaryEvent_.startDate = rflect.date.createDateShim(
       aStartDate.getYear(), aStartDate.getMonth(), aStartDate.getDate(),
       aStartDate.getHours(), aStartDate.getMinutes(), aStartDate.getSeconds(),
       true);
@@ -66,7 +113,7 @@ rflect.cal.events.EventHolder.prototype.setStartDate =
  */
 rflect.cal.events.EventHolder.prototype.setEndDate =
     function(aEndDate) {
-  this.temporaryEvent_.endDate = rflect.date.createDateShim(
+  this.newTemporaryEvent_.endDate = rflect.date.createDateShim(
       aEndDate.getYear(), aEndDate.getMonth(), aEndDate.getDate(),
       aEndDate.getHours(), aEndDate.getMinutes(), aEndDate.getSeconds());
 }
@@ -77,7 +124,7 @@ rflect.cal.events.EventHolder.prototype.setEndDate =
  */
 rflect.cal.events.EventHolder.prototype.setSummary =
     function(aSummary) {
-  this.temporaryEvent_.summary = aSummary ||
+  this.newTemporaryEvent_.summary = aSummary ||
       rflect.cal.i18n.Symbols.NO_NAME_EVENT;
 }
 
@@ -87,7 +134,7 @@ rflect.cal.events.EventHolder.prototype.setSummary =
  */
 rflect.cal.events.EventHolder.prototype.setDescription =
     function(aDescription) {
-  this.temporaryEvent_.description = aDescription || '';
+  this.newTemporaryEvent_.description = aDescription || '';
 }
 
 
@@ -96,7 +143,7 @@ rflect.cal.events.EventHolder.prototype.setDescription =
  */
 rflect.cal.events.EventHolder.prototype.setLongId =
     function(aLongId) {
-  this.temporaryEvent_.longId = aLongId;
+  this.newTemporaryEvent_.longId = aLongId;
 }
 
 
@@ -105,15 +152,46 @@ rflect.cal.events.EventHolder.prototype.setLongId =
  */
 rflect.cal.events.EventHolder.prototype.setAllDay =
     function(aAllDay) {
-  this.temporaryEvent_.allDay = aAllDay;
+  this.newTemporaryEvent_.allDay = aAllDay;
+}
+
+
+/**
+ * @return {rflect.cal.events.Event|undefined} Backup event.
+ */
+rflect.cal.events.EventHolder.prototype.getBackUpEvent =
+    function() {
+  return this.backUpEvent_;
+}
+
+
+/**
+ * Ends event creation with adding new event.
+ */
+rflect.cal.events.EventHolder.prototype.endWithAdd = function() {
+  this.eventManager_.addEvent(this.newTemporaryEvent_);
+    //this.backUpId_
 }
 
 
 /**
  * Ends event creation.
  */
-rflect.cal.events.EventHolder.prototype.endEventCreation =
-    function() {
-  this.eventManager_.addEvent(this.temporaryEvent_);
-  this.temporaryEvent_ = null;
+rflect.cal.events.EventHolder.prototype.endWithEdit = function() {
+  if (this.backUpEvent_) {
+    this.eventManager_.deleteEvent(this.backUpEvent_);
+    this.eventManager_.addEvent(this.newTemporaryEvent_);
+  }
 }
+
+
+/**
+ * Ends event creation.
+ */
+rflect.cal.events.EventHolder.prototype.endWithDelete = function() {
+  if (this.backUpEvent_) {
+    this.eventManager_.deleteEvent(this.backUpEvent_);
+  }
+}
+
+
