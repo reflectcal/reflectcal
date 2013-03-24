@@ -561,8 +561,12 @@ rflect.cal.MainPane.prototype.enterDocument = function() {
       this.onMouseUp_, false, this)
       .listen(this.saveDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
       this.onEventEdit_, false, this)
-      .listen(this.saveDialog_, goog.ui.Dialog.EventType.SELECT,
-      this.onSaveDialogSave_, false, this);
+      .listen(this.saveDialog_, rflect.ui.Dialog.EventType.SELECT,
+      this.onSaveDialogSave_, false, this)
+      .listen(this.editDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
+      this.onEventEdit_, false, this)
+      .listen(this.editDialog_, rflect.ui.Dialog.EventType.SELECT,
+      this.onEditDialogButtonSelect_, false, this);
 
   this.timeMarker_.start();
 };
@@ -943,12 +947,23 @@ rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
 
 
 /**
- * Event edit listener. Called when edit link is clicked from "save" dialog.
+ * Event edit listener. Called when edit link is clicked from save or edit
+ * dialog.
  * @param {{type: string}} aEvent Event object.
  */
 rflect.cal.MainPane.prototype.onEventEdit_ = function(aEvent) {
   if (goog.DEBUG)
     _log('edit clicked');
+}
+
+
+/**
+ * Edit dialog button listener.
+ * @param {{type: string}} aEvent Event object.
+ */
+rflect.cal.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
+  if (goog.DEBUG)
+    _log('edit dialog button');
 }
 
 

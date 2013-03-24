@@ -12,7 +12,7 @@ goog.provide('rflect.cal.events.EventManager');
 goog.require('rflect.structs.IntervalTree');
 goog.require('rflect.cal.events.Chip');
 goog.require('rflect.cal.events.Event');
-goog.require('rflect.cal.events.EventTransactionHelper');
+goog.require('rflect.cal.events.EventHolder');
 goog.require('rflect.cal.predefined.chips');
 
 
@@ -41,10 +41,10 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
 
   /**
    * Event transaction helper.
-   * @type {rflect.cal.events.EventTransactionHelper}
+   * @type {rflect.cal.events.EventHolder}
    */
   this.eventTransactionHelper =
-      new rflect.cal.events.EventTransactionHelper(this);
+      new rflect.cal.events.EventHolder(this);
 
   /**
    * Map of event id to event.
