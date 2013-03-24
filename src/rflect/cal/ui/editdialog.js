@@ -35,6 +35,7 @@ rflect.cal.ui.EditDialog = function(opt_class, opt_useIframeMask,
   this.setBackgroundElementOpacity(0);
   this.setButtonSet(rflect.cal.ui.EditDialog.createButtonSet());
   this.setContent(rflect.cal.ui.EditDialog.HTML_PARTS_);
+  this.setMouseMissToCancel(true);
 };
 goog.inherits(rflect.cal.ui.EditDialog, rflect.ui.Dialog);
 

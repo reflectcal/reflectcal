@@ -103,8 +103,40 @@ rflect.ui.Dialog = function(opt_class, opt_useIframeMask, opt_domHelper,
    */
   this.buttonRenderer_ = opt_buttonRenderer ||
       goog.ui.NativeButtonRenderer.getInstance();
+
+  this.uid_ = rflect.ui.Dialog.uidCounter++;
 };
 goog.inherits(rflect.ui.Dialog, goog.ui.ModalPopup);
+
+
+/**
+ * Counter used for generating dialog uids.
+ * @type {number}
+ */
+rflect.ui.Dialog.uidCounter = 0;
+
+
+/**
+ * Tracked instances of dialog. Used for closing behavior.
+ * @type {Array.<rflect.ui.Dialog>}
+ */
+rflect.ui.Dialog.instances_ = [];
+
+
+/**
+ * Key for global mousedown listener.
+ * {@type} goog.events.Key
+ * @private
+ */
+rflect.ui.Dialog.globalMouseDownKey_;
+
+
+/**
+ * Key mousedown listener for this dialog.
+ * {@type} goog.events.Key
+ * @private
+ */
+rflect.ui.Dialog.prototype.mouseMissKey_;
 
 
 /**
@@ -121,6 +153,21 @@ rflect.ui.Dialog.prototype.buttons_;
  * @private
  */
 rflect.ui.Dialog.prototype.escapeToCancel_ = true;
+
+
+/**
+ * Whether the mouse outside closes this dialog.
+ * @type {boolean}
+ * @private
+ */
+rflect.ui.Dialog.prototype.mouseMissToCancel_ = true;
+
+
+/**
+ * Whether this dialog should not be closed in mouse miss closing behavior.
+ * @type {boolean}
+ */
+rflect.ui.Dialog.prototype.doNotClose = false;
 
 
 /**
@@ -247,6 +294,33 @@ rflect.ui.Dialog.prototype.preferredAriaRole_ = goog.a11y.aria.Role.DIALOG;
 rflect.ui.Dialog.prototype.getCssClass = function() {
   return this.class_;
 };
+
+
+/**
+ * Enables behaviour when dialog is closed when mouse misses it.
+ * @param {boolean} aEnabled Whether to enable behaviour.
+ */
+rflect.ui.Dialog.prototype.setMouseMissToCancel = function(aEnabled) {
+  this.mouseMissToCancel_ = aEnabled;
+  if (aEnabled) {
+    rflect.ui.Dialog.instances_.push(this);
+    if (this.isInDocument())
+      this.attachMouseMissListeners_();
+  }
+  else {
+    goog.array.remove(rflect.ui.Dialog.instances_, this);
+    if (this.isInDocument())
+      this.detachMouseMissListeners_();
+  }
+}
+
+
+/**
+ * @return {boolean} Whether mouse miss close is enabled.
+ */
+rflect.ui.Dialog.prototype.getMouseMissToCancel = function() {
+  return this.mouseMissToCancel_;
+}
 
 
 /**
@@ -670,6 +744,32 @@ rflect.ui.Dialog.prototype.decorateInternal = function(element) {
 };
 
 
+/**
+ * Attaches listeners to implement mouse miss behavior.
+ */
+rflect.ui.Dialog.prototype.attachMouseMissListeners_ = function() {
+  if (!goog.isDefAndNotNull(this.mouseMissKey_))
+    this.mouseMissKey_ = goog.events.listen(this.getElement(),
+        goog.events.EventType.MOUSEDOWN, this.onMouseDown_, false, this);
+  if (!goog.isDefAndNotNull(rflect.ui.Dialog.globalMouseDownKey_))
+    rflect.ui.Dialog.globalMouseDownKey_ = goog.events.listen(document,
+        goog.events.EventType.MOUSEDOWN,
+        this.onMouseDownGlobal_, false, this);
+}
+
+
+/**
+ * Detaches listeners to implement mouse miss behavior.
+ */
+rflect.ui.Dialog.prototype.detachMouseMissListeners_ = function() {
+  goog.events.unlistenByKey(this.mouseMissKey_);
+  if (rflect.ui.Dialog.instances_.length == 0) {
+    goog.events.unlistenByKey(rflect.ui.Dialog.globalMouseDownKey_);
+    rflect.ui.Dialog.globalMouseDownKey_ = null;
+  }
+}
+
+
 /** @override */
 rflect.ui.Dialog.prototype.enterDocument = function() {
   rflect.ui.Dialog.superClass_.enterDocument.call(this);
@@ -678,6 +778,9 @@ rflect.ui.Dialog.prototype.enterDocument = function() {
   this.getHandler().
       listen(this.getElement(), goog.events.EventType.KEYDOWN, this.onKey_).
       listen(this.getElement(), goog.events.EventType.KEYPRESS, this.onKey_);
+
+  if (this.mouseMissToCancel_)
+    this.attachMouseMissListeners_();
 
   // NOTE: see bug 1163154 for an example of an edge case where making the
   // dialog visible in response to a KEYDOWN will result in a CLICK event
@@ -710,6 +813,27 @@ rflect.ui.Dialog.prototype.enterDocument = function() {
     this.setModalInternal_(false);
   }
 };
+
+
+/**
+ * Informs that dialog was mousedowned.
+ */
+rflect.ui.Dialog.prototype.onMouseDown_ = function() {
+  this.doNotClose = true;
+}
+
+
+/**
+ * Document-level mouse listener.
+ */
+rflect.ui.Dialog.prototype.onMouseDownGlobal_ = function() {
+  for (var counter = 0, length = rflect.ui.Dialog.instances_.length;
+       counter < length; counter++)
+    if (rflect.ui.Dialog.instances_[counter].doNotClose)
+      rflect.ui.Dialog.instances_[counter].doNotClose = false;
+    else
+      rflect.ui.Dialog.instances_[counter].setVisible(false);
+}
 
 
 /** @override */
@@ -894,6 +1018,7 @@ rflect.ui.Dialog.prototype.getDisposeOnHide = function() {
 rflect.ui.Dialog.prototype.disposeInternal = function() {
   this.titleCloseEl_ = null;
   this.buttonEl_ = null;
+  this.setMouseMissToCancel(false);
   goog.base(this, 'disposeInternal');
 };
 

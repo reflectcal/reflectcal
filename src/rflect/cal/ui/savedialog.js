@@ -33,6 +33,7 @@ rflect.cal.ui.SaveDialog = function (opt_class, opt_useIframeMask, opt_domHelper
   this.setBackgroundElementOpacity(0);
   this.setButtonSet(rflect.ui.Dialog.ButtonSet.createSaveCancel());
   this.setContent(rflect.cal.ui.SaveDialog.HTML_PARTS_);
+  this.setMouseMissToCancel(true);
 };
 goog.inherits(rflect.cal.ui.SaveDialog, rflect.ui.Dialog);
 

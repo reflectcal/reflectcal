@@ -58,3 +58,13 @@ input[type="text"]:hover {
   padding-top: 10px;
   font-weight: bold;
 }
+
+.edit-dialog-link {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+.edit-dialog-link:hover {
+  background-color: #dae5ed;
+}
