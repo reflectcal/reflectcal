@@ -170,7 +170,7 @@ rflect.cal.events.EventHolder.prototype.getBackUpEvent =
  */
 rflect.cal.events.EventHolder.prototype.endWithAdd = function() {
   this.eventManager_.addEvent(this.newTemporaryEvent_);
-    //this.backUpId_
+  //TODO(alexk): use back up id here
 }
 
 
@@ -181,7 +181,10 @@ rflect.cal.events.EventHolder.prototype.endWithEdit = function() {
   if (this.backUpEvent_) {
     this.eventManager_.deleteEvent(this.backUpEvent_);
     this.eventManager_.addEvent(this.newTemporaryEvent_);
-  }
+  } else
+  // Edit without specifying event at the beginning is effectively equals to
+  // add.
+    this.endWithAdd();
 }
 
 

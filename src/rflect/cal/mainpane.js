@@ -1005,9 +1005,10 @@ rflect.cal.MainPane.prototype.onEventEdit_ = function(aEvent) {
  */
 rflect.cal.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
 
-  if (aEvent.key == this.saveDialog_.getButtonSet().getDefault()) {
+  if (aEvent.key == this.editDialog_.getButtonSet().getDefault()) {
 
-  } else if (aEvent.key != this.saveDialog_.getButtonSet().getCancel()) {
+  } else if (aEvent.key != this.editDialog_.getButtonSet().getCancel()) {
+    // The only spare button - delete.
     this.eventManager_.eventHolder.endWithDelete();
 
     this.eventManager_.run();

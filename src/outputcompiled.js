@@ -1086,31 +1086,260 @@ $JSCompiler_prototypeAlias$$.toString = function $$JSCompiler_prototypeAlias$$$t
 $JSCompiler_prototypeAlias$$.valueOf = function $$JSCompiler_prototypeAlias$$$valueOf$() {
   return this.length()
 };
-var $rflect$cal$i18n$Symbols$$ = {$NOW$:"Now", $NEW_EVENT$:"New event", $DAY$:"Day", $WEEK$:"Week", $MONTH$:"Month", $CALENDARS_LABEL$:"Calendars", $TASKS_LABEL$:"Tasks", $NO_NAME_EVENT$:"(Untitled)"};
-function $rflect$date$moveToDayOfWeekIfNeeded$$($aDate$$1_date$$inline_143$$) {
-  var $JSCompiler_temp$$36_diff$$inline_142$$;
-  0 != $JSCompiler_StaticMethods_getWeekday$$($aDate$$1_date$$inline_143$$) && ($JSCompiler_temp$$36_diff$$inline_142$$ = (($goog$i18n$DateTimeSymbols_en$$.$FIRSTDAYOFWEEK$ + 0 + 1) % 7 - $aDate$$1_date$$inline_143$$.getDay() + -7) % 7, $aDate$$1_date$$inline_143$$ = $aDate$$1_date$$inline_143$$.$clone$(), $aDate$$1_date$$inline_143$$.add(new $goog$date$Interval$$(0, 0, 0 === $JSCompiler_temp$$36_diff$$inline_142$$ ? $JSCompiler_temp$$36_diff$$inline_142$$ + -7 : $JSCompiler_temp$$36_diff$$inline_142$$)));
-  return $JSCompiler_temp$$36_diff$$inline_142$$ = $aDate$$1_date$$inline_143$$
+var $goog$i18n$DateTimePatterns_en$$ = {$YEAR_FULL$:"yyyy", $YEAR_MONTH_ABBR$:"MMM y", $YEAR_MONTH_FULL$:"MMMM yyyy", $MONTH_DAY_ABBR$:"MMM d", $MONTH_DAY_FULL$:"MMMM dd", $MONTH_DAY_SHORT$:"M/d", $MONTH_DAY_MEDIUM$:"MMMM d", $DAY_ABBR$:"d"}, $goog$i18n$DateTimePatterns$$ = $goog$i18n$DateTimePatterns_en$$, $goog$i18n$DateTimePatterns$$ = $goog$i18n$DateTimePatterns_en$$;
+function $goog$i18n$TimeZone$$() {
+}
+function $goog$i18n$TimeZone$createTimeZone$$($offset$$inline_864_str$$inline_141_timeZoneData$$) {
+  if("number" == typeof $offset$$inline_864_str$$inline_141_timeZoneData$$) {
+    var $tz$$1_tz$$inline_140$$ = new $goog$i18n$TimeZone$$;
+    $tz$$1_tz$$inline_140$$.$standardOffset_$ = $offset$$inline_864_str$$inline_141_timeZoneData$$;
+    var $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$;
+    $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ = $offset$$inline_864_str$$inline_141_timeZoneData$$;
+    if(0 == $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$) {
+      $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ = "Etc/GMT"
+    }else {
+      var $parts$$inline_862$$ = ["Etc/GMT", 0 > $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ ? "-" : "+"];
+      $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ = Math.abs($JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$);
+      $parts$$inline_862$$.push(Math.floor($JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ / 60) % 100);
+      $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ %= 60;
+      0 != $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ && $parts$$inline_862$$.push(":", $goog$string$padNumber$$($JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$, 2));
+      $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ = $parts$$inline_862$$.join("")
+    }
+    $tz$$1_tz$$inline_140$$.$timeZoneId_$ = $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$;
+    0 == $offset$$inline_864_str$$inline_141_timeZoneData$$ ? $offset$$inline_864_str$$inline_141_timeZoneData$$ = "UTC" : ($JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ = ["UTC", 0 > $offset$$inline_864_str$$inline_141_timeZoneData$$ ? "+" : "-"], $offset$$inline_864_str$$inline_141_timeZoneData$$ = Math.abs($offset$$inline_864_str$$inline_141_timeZoneData$$), $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$.push(Math.floor($offset$$inline_864_str$$inline_141_timeZoneData$$ / 
+    60) % 100), $offset$$inline_864_str$$inline_141_timeZoneData$$ %= 60, 0 != $offset$$inline_864_str$$inline_141_timeZoneData$$ && $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$.push(":", $offset$$inline_864_str$$inline_141_timeZoneData$$), $offset$$inline_864_str$$inline_141_timeZoneData$$ = $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$.join(""));
+    $tz$$1_tz$$inline_140$$.$tzNames_$ = [$offset$$inline_864_str$$inline_141_timeZoneData$$, $offset$$inline_864_str$$inline_141_timeZoneData$$];
+    $tz$$1_tz$$inline_140$$.$transitions_$ = [];
+    return $tz$$1_tz$$inline_140$$
+  }
+  $tz$$1_tz$$inline_140$$ = new $goog$i18n$TimeZone$$;
+  $tz$$1_tz$$inline_140$$.$timeZoneId_$ = $offset$$inline_864_str$$inline_141_timeZoneData$$.id;
+  $tz$$1_tz$$inline_140$$.$standardOffset_$ = -$offset$$inline_864_str$$inline_141_timeZoneData$$.std_offset;
+  $tz$$1_tz$$inline_140$$.$tzNames_$ = $offset$$inline_864_str$$inline_141_timeZoneData$$.names;
+  $tz$$1_tz$$inline_140$$.$transitions_$ = $offset$$inline_864_str$$inline_141_timeZoneData$$.transitions;
+  return $tz$$1_tz$$inline_140$$
+}
+function $JSCompiler_StaticMethods_getDaylightAdjustment$$($JSCompiler_StaticMethods_getDaylightAdjustment$self$$, $date$$13$$) {
+  for(var $timeInHours$$ = Date.UTC($date$$13$$.getUTCFullYear(), $date$$13$$.getUTCMonth(), $date$$13$$.getUTCDate(), $date$$13$$.getUTCHours(), $date$$13$$.getUTCMinutes()) / 36E5, $index$$56$$ = 0;$index$$56$$ < $JSCompiler_StaticMethods_getDaylightAdjustment$self$$.$transitions_$.length && $timeInHours$$ >= $JSCompiler_StaticMethods_getDaylightAdjustment$self$$.$transitions_$[$index$$56$$];) {
+    $index$$56$$ += 2
+  }
+  return 0 == $index$$56$$ ? 0 : $JSCompiler_StaticMethods_getDaylightAdjustment$self$$.$transitions_$[$index$$56$$ - 1]
+}
+;function $goog$i18n$DateTimeFormat$$($pattern$$1$$) {
+  $goog$asserts$assert$$($goog$isDef$$($pattern$$1$$), "Pattern must be defined");
+  this.$patternParts_$ = [];
+  "number" == typeof $pattern$$1$$ ? $JSCompiler_StaticMethods_applyStandardPattern_$$(this, $pattern$$1$$) : $JSCompiler_StaticMethods_applyPattern_$$(this, $pattern$$1$$)
+}
+var $goog$i18n$DateTimeFormat$TOKENS_$$ = [/^\'(?:[^\']|\'\')*\'/, /^(?:G+|y+|M+|k+|S+|E+|a+|h+|K+|H+|c+|L+|Q+|d+|m+|s+|v+|z+|Z+)/, /^[^\'GyMkSEahKHcLQdmsvzZ]+/];
+function $JSCompiler_StaticMethods_applyPattern_$$($JSCompiler_StaticMethods_applyPattern_$self$$, $pattern$$2$$) {
+  for(;$pattern$$2$$;) {
+    for(var $i$$61$$ = 0;$i$$61$$ < $goog$i18n$DateTimeFormat$TOKENS_$$.length;++$i$$61$$) {
+      var $m$$2_part$$2$$ = $pattern$$2$$.match($goog$i18n$DateTimeFormat$TOKENS_$$[$i$$61$$]);
+      if($m$$2_part$$2$$) {
+        $m$$2_part$$2$$ = $m$$2_part$$2$$[0];
+        $pattern$$2$$ = $pattern$$2$$.substring($m$$2_part$$2$$.length);
+        0 == $i$$61$$ && ("''" == $m$$2_part$$2$$ ? $m$$2_part$$2$$ = "'" : ($m$$2_part$$2$$ = $m$$2_part$$2$$.substring(1, $m$$2_part$$2$$.length - 1), $m$$2_part$$2$$ = $m$$2_part$$2$$.replace(/\'\'/, "'")));
+        $JSCompiler_StaticMethods_applyPattern_$self$$.$patternParts_$.push({text:$m$$2_part$$2$$, type:$i$$61$$});
+        break
+      }
+    }
+  }
+}
+function $JSCompiler_StaticMethods_format$$($JSCompiler_StaticMethods_format$self$$, $date$$20$$) {
+  for(var $out$$ = [], $i$$62$$ = 0;$i$$62$$ < $JSCompiler_StaticMethods_format$self$$.$patternParts_$.length;++$i$$62$$) {
+    var $text$$7$$ = $JSCompiler_StaticMethods_format$self$$.$patternParts_$[$i$$62$$].text;
+    1 == $JSCompiler_StaticMethods_format$self$$.$patternParts_$[$i$$62$$].type ? $out$$.push($JSCompiler_StaticMethods_formatField_$$($text$$7$$, $date$$20$$, $date$$20$$, $date$$20$$)) : $out$$.push($text$$7$$)
+  }
+  return $out$$.join("")
+}
+function $JSCompiler_StaticMethods_applyStandardPattern_$$($JSCompiler_StaticMethods_applyStandardPattern_$self$$, $formatType$$) {
+  var $pattern$$3$$;
+  if(4 > $formatType$$) {
+    $pattern$$3$$ = $goog$i18n$DateTimeSymbols_en$$.$DATEFORMATS$[$formatType$$]
+  }else {
+    if(8 > $formatType$$) {
+      $pattern$$3$$ = $goog$i18n$DateTimeSymbols_en$$.$TIMEFORMATS$[$formatType$$ - 4]
+    }else {
+      if(12 > $formatType$$) {
+        $pattern$$3$$ = $goog$i18n$DateTimeSymbols_en$$.$DATEFORMATS$[$formatType$$ - 8] + " " + $goog$i18n$DateTimeSymbols_en$$.$TIMEFORMATS$[$formatType$$ - 8]
+      }else {
+        $JSCompiler_StaticMethods_applyStandardPattern_$$($JSCompiler_StaticMethods_applyStandardPattern_$self$$, 10);
+        return
+      }
+    }
+  }
+  $JSCompiler_StaticMethods_applyPattern_$$($JSCompiler_StaticMethods_applyStandardPattern_$self$$, $pattern$$3$$)
+}
+function $JSCompiler_StaticMethods_localizeNumbers_$$($input$$) {
+  if($goog$i18n$DateTimeSymbols_en$$.$ZERODIGIT$ === $JSCompiler_alias_VOID$$) {
+    return $input$$
+  }
+  for(var $parts$$11$$ = [], $i$$63$$ = 0;$i$$63$$ < $input$$.length;$i$$63$$++) {
+    var $c$$1$$ = $input$$.charCodeAt($i$$63$$);
+    $parts$$11$$.push(48 <= $c$$1$$ && 57 >= $c$$1$$ ? String.fromCharCode($goog$i18n$DateTimeSymbols_en$$.$ZERODIGIT$ + $c$$1$$ - 48) : $input$$.charAt($i$$63$$))
+  }
+  return $parts$$11$$.join("")
+}
+function $JSCompiler_StaticMethods_formatField_$$($opt_timeZone$$inline_183_opt_timeZone$$inline_188_patternStr$$, $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$, $dateForDate$$1$$, $dateForTime$$1$$) {
+  var $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $opt_timeZone$$inline_183_opt_timeZone$$inline_188_patternStr$$.length;
+  switch($opt_timeZone$$inline_183_opt_timeZone$$inline_188_patternStr$$.charAt(0)) {
+    case "G":
+      return $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ = 0 < $dateForDate$$1$$.getFullYear() ? 1 : 0, 4 <= $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ ? $goog$i18n$DateTimeSymbols_en$$.$ERANAMES$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$] : 
+      $goog$i18n$DateTimeSymbols_en$$.$ERAS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$];
+    case "y":
+      return $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ = $dateForDate$$1$$.getFullYear(), 0 > $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ && ($date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ = 
+      -$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$), $JSCompiler_StaticMethods_localizeNumbers_$$(2 == $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ ? $goog$string$padNumber$$($date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ % 
+      100, 2) : String($date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$));
+    case "M":
+      a: {
+        switch($date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ = $dateForDate$$1$$.getMonth(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$) {
+          case 5:
+            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $goog$i18n$DateTimeSymbols_en$$.$NARROWMONTHS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$];
+            break a;
+          case 4:
+            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $goog$i18n$DateTimeSymbols_en$$.$MONTHS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$];
+            break a;
+          case 3:
+            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $goog$i18n$DateTimeSymbols_en$$.$SHORTMONTHS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$];
+            break a;
+          default:
+            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ + 1, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$))
+        }
+      }
+      return $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$;
+    case "k":
+      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForTime$$1$$.getHours() || 24, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$));
+    case "S":
+      return $JSCompiler_StaticMethods_localizeNumbers_$$(($dateForTime$$1$$.getTime() % 1E3 / 1E3).toFixed(Math.min(3, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$)).substr(2) + (3 < $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ ? 
+      $goog$string$padNumber$$(0, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ - 3) : ""));
+    case "E":
+      return $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ = $dateForDate$$1$$.getDay(), 4 <= $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ ? $goog$i18n$DateTimeSymbols_en$$.$WEEKDAYS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$] : 
+      $goog$i18n$DateTimeSymbols_en$$.$SHORTWEEKDAYS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$];
+    case "a":
+      return $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $dateForTime$$1$$.getHours(), $goog$i18n$DateTimeSymbols_en$$.$AMPMS$[12 <= $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ && 24 > 
+      $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ ? 1 : 0];
+    case "h":
+      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForTime$$1$$.getHours() % 12 || 12, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$));
+    case "K":
+      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForTime$$1$$.getHours() % 12, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$));
+    case "H":
+      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForTime$$1$$.getHours(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$));
+    case "c":
+      a: {
+        switch($date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ = $dateForDate$$1$$.getDay(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$) {
+          case 5:
+            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $goog$i18n$DateTimeSymbols_en$$.$STANDALONENARROWWEEKDAYS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$];
+            break a;
+          case 4:
+            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $goog$i18n$DateTimeSymbols_en$$.$STANDALONEWEEKDAYS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$];
+            break a;
+          case 3:
+            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $goog$i18n$DateTimeSymbols_en$$.$STANDALONESHORTWEEKDAYS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$];
+            break a;
+          default:
+            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$, 1))
+        }
+      }
+      return $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$;
+    case "L":
+      a: {
+        switch($date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ = $dateForDate$$1$$.getMonth(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$) {
+          case 5:
+            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $goog$i18n$DateTimeSymbols_en$$.$STANDALONENARROWMONTHS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$];
+            break a;
+          case 4:
+            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $goog$i18n$DateTimeSymbols_en$$.$STANDALONEMONTHS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$];
+            break a;
+          case 3:
+            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $goog$i18n$DateTimeSymbols_en$$.$STANDALONESHORTMONTHS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$];
+            break a;
+          default:
+            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ + 1, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$))
+        }
+      }
+      return $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$;
+    case "Q":
+      return $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ = Math.floor($dateForDate$$1$$.getMonth() / 3), 4 > $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ ? $goog$i18n$DateTimeSymbols_en$$.$SHORTQUARTERS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$] : 
+      $goog$i18n$DateTimeSymbols_en$$.$QUARTERS$[$date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$];
+    case "d":
+      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForDate$$1$$.getDate(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$));
+    case "m":
+      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForTime$$1$$.getMinutes(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$));
+    case "s":
+      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForTime$$1$$.getSeconds(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$));
+    case "v":
+      return $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$.getTimezoneOffset()), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$.$timeZoneId_$;
+    case "z":
+      return $opt_timeZone$$inline_183_opt_timeZone$$inline_188_patternStr$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$.getTimezoneOffset()), 4 > $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ ? 
+      $opt_timeZone$$inline_183_opt_timeZone$$inline_188_patternStr$$.$tzNames_$[0 < $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_183_opt_timeZone$$inline_188_patternStr$$, $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$) ? 2 : 0] : $opt_timeZone$$inline_183_opt_timeZone$$inline_188_patternStr$$.$tzNames_$[0 < $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_183_opt_timeZone$$inline_188_patternStr$$, 
+      $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$) ? 3 : 1];
+    case "Z":
+      return $opt_timeZone$$inline_183_opt_timeZone$$inline_188_patternStr$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$.getTimezoneOffset()), 4 > $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ ? 
+      ($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = -($opt_timeZone$$inline_183_opt_timeZone$$inline_188_patternStr$$.$standardOffset_$ - $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_183_opt_timeZone$$inline_188_patternStr$$, $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$)), 
+      $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ = [0 > $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ ? "-" : "+"], $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = 
+      Math.abs($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$), $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$.push($goog$string$padNumber$$(Math.floor($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ / 
+      60) % 100, 2), $goog$string$padNumber$$($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ % 60, 2)), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$.join("")) : 
+      ($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $opt_timeZone$$inline_183_opt_timeZone$$inline_188_patternStr$$.$standardOffset_$ - $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_183_opt_timeZone$$inline_188_patternStr$$, $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$), 
+      $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$ = ["GMT"], $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$.push(0 >= $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ ? 
+      "+" : "-"), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = Math.abs($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$), $date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$.push($goog$string$padNumber$$(Math.floor($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ / 
+      60) % 100, 2), ":", $goog$string$padNumber$$($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ % 60, 2)), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$ = $JSCompiler_StaticMethods_localizeNumbers_$$($date$$40_parts$$inline_1152_parts$$inline_870_value$$inline_145_value$$inline_150_value$$inline_155_value$$inline_159_value$$inline_167_value$$inline_172_value$$inline_176$$.join(""))), 
+      $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_162_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_179$$;
+    default:
+      return""
+  }
+}
+;var $rflect$cal$i18n$Symbols$$ = {$NOW$:"Now", $NEW_EVENT$:"New event", $DAY$:"Day", $WEEK$:"Week", $MONTH$:"Month", $CALENDARS_LABEL$:"Calendars", $TASKS_LABEL$:"Tasks", $NO_NAME_EVENT$:"(Untitled)"};
+function $rflect$cal$events$Event$$($aUid$$2$$, $aLongId$$, $aStartDate$$, $aEndDate$$, $aAllDay$$, $opt_summary$$, $opt_description$$1$$) {
+  this.id = $aUid$$2$$;
+  this.$longId$ = $aLongId$$;
+  this.$startDate$ = $aStartDate$$;
+  this.$endDate$ = $aEndDate$$;
+  this.$allDay$ = $aAllDay$$;
+  this.summary = $opt_summary$$ || $rflect$cal$i18n$Symbols$$.$NO_NAME_EVENT$;
+  this.description = $opt_description$$1$$ || ""
+}
+$rflect$cal$events$Event$$.prototype.$clone$ = function $$rflect$cal$events$Event$$$$$clone$$() {
+  return new $rflect$cal$events$Event$$(this.id, this.$longId$, this.$startDate$, this.$endDate$, this.$allDay$, this.summary, this.description)
+};
+function $rflect$cal$events$Chip$$($aEventId$$, $aStart$$, $aEnd$$, $aStartIsCut$$, $aEndIsCut$$) {
+  this.$eventId$ = $aEventId$$;
+  this.start = $aStart$$;
+  this.end = $aEnd$$;
+  this.$startIsCut$ = $aStartIsCut$$;
+  this.$endIsCut$ = $aEndIsCut$$
+}
+$rflect$cal$events$Chip$$.prototype.start = 0;
+$rflect$cal$events$Chip$$.prototype.end = 0;
+$rflect$cal$events$Chip$$.prototype.$equals$ = function $$rflect$cal$events$Chip$$$$$equals$$($aChip$$) {
+  return this.start == $aChip$$.start && this.end == $aChip$$.end && this.$startIsCut$ == $aChip$$.$startIsCut$ && this.$endIsCut$ == $aChip$$.$endIsCut$
+};
+$rflect$cal$events$Chip$$.prototype.$clone$ = function $$rflect$cal$events$Chip$$$$$clone$$() {
+  return new $rflect$cal$events$Chip$$(this.$eventId$, this.start, this.end, this.$startIsCut$, this.$endIsCut$)
+};
+function $rflect$date$moveToDayOfWeekIfNeeded$$($aDate$$1_date$$inline_194$$) {
+  var $JSCompiler_temp$$36_diff$$inline_193$$;
+  0 != $JSCompiler_StaticMethods_getWeekday$$($aDate$$1_date$$inline_194$$) && ($JSCompiler_temp$$36_diff$$inline_193$$ = (($goog$i18n$DateTimeSymbols_en$$.$FIRSTDAYOFWEEK$ + 0 + 1) % 7 - $aDate$$1_date$$inline_194$$.getDay() + -7) % 7, $aDate$$1_date$$inline_194$$ = $aDate$$1_date$$inline_194$$.$clone$(), $aDate$$1_date$$inline_194$$.add(new $goog$date$Interval$$(0, 0, 0 === $JSCompiler_temp$$36_diff$$inline_193$$ ? $JSCompiler_temp$$36_diff$$inline_193$$ + -7 : $JSCompiler_temp$$36_diff$$inline_193$$)));
+  return $JSCompiler_temp$$36_diff$$inline_193$$ = $aDate$$1_date$$inline_194$$
 }
 function $rflect$date$getTomorrow$$($aGivenDate_cutoff$$1$$) {
-  var $dateObject_year$$12$$ = $JSCompiler_alias_NULL$$, $dateObject_year$$12$$ = $aGivenDate_cutoff$$1$$.getFullYear(), $month$$7$$ = $aGivenDate_cutoff$$1$$.getMonth(), $date$$14$$ = $aGivenDate_cutoff$$1$$.getDate(), $dayOfWeek$$3_previousDayOfWeek$$;
+  var $dateObject_year$$12$$ = $JSCompiler_alias_NULL$$, $dateObject_year$$12$$ = $aGivenDate_cutoff$$1$$.getFullYear(), $month$$7$$ = $aGivenDate_cutoff$$1$$.getMonth(), $date$$42$$ = $aGivenDate_cutoff$$1$$.getDate(), $dayOfWeek$$3_previousDayOfWeek$$;
   $dayOfWeek$$3_previousDayOfWeek$$ = $aGivenDate_cutoff$$1$$.getDay();
   var $dayOfYear$$2$$ = $aGivenDate_cutoff$$1$$.$getDayOfYear$(), $previousDayOfYear$$ = $dayOfYear$$2$$, $weekNumber$$ = $aGivenDate_cutoff$$1$$.$getWeekNumber$(), $firstDayOfWeek$$ = $aGivenDate_cutoff$$1$$.$firstDayOfWeek_$;
   $aGivenDate_cutoff$$1$$ = $aGivenDate_cutoff$$1$$.$firstWeekCutOffDay_$;
   var $numberOfDaysInCurrentYear$$ = $goog$date$isLeapYear$$($dateObject_year$$12$$) ? 366 : 365;
-  $date$$14$$ == $goog$date$getNumberOfDaysInMonth$$($dateObject_year$$12$$, $month$$7$$) ? 11 == $month$$7$$ ? ($dateObject_year$$12$$++, $month$$7$$ = 0, $dayOfYear$$2$$ = $date$$14$$ = 1) : ($month$$7$$++, $date$$14$$ = 1, $dayOfYear$$2$$++) : ($date$$14$$++, $dayOfYear$$2$$++);
+  $date$$42$$ == $goog$date$getNumberOfDaysInMonth$$($dateObject_year$$12$$, $month$$7$$) ? 11 == $month$$7$$ ? ($dateObject_year$$12$$++, $month$$7$$ = 0, $dayOfYear$$2$$ = $date$$42$$ = 1) : ($month$$7$$++, $date$$42$$ = 1, $dayOfYear$$2$$++) : ($date$$42$$++, $dayOfYear$$2$$++);
   $dayOfWeek$$3_previousDayOfWeek$$ = ($dayOfWeek$$3_previousDayOfWeek$$ + 1 + 7) % 7;
   ($dayOfWeek$$3_previousDayOfWeek$$ + 6) % 7 == $firstDayOfWeek$$ && (52 > $weekNumber$$ || 52 == $weekNumber$$ && $previousDayOfYear$$ + 1 + ($aGivenDate_cutoff$$1$$ - $firstDayOfWeek$$ + 7) % 7 < $numberOfDaysInCurrentYear$$ + 1 ? $weekNumber$$++ : $weekNumber$$ = 1);
-  $dateObject_year$$12$$ = new $rflect$date$DateShim$$($dateObject_year$$12$$, $month$$7$$, $date$$14$$);
+  $dateObject_year$$12$$ = new $rflect$date$DateShim$$($dateObject_year$$12$$, $month$$7$$, $date$$42$$);
   $dateObject_year$$12$$.$day_$ = $dayOfWeek$$3_previousDayOfWeek$$;
   $dateObject_year$$12$$.$dayOfYear_$ = $dayOfYear$$2$$;
   $dateObject_year$$12$$.$weekNumber_$ = $weekNumber$$;
   return $dateObject_year$$12$$
 }
-function $rflect$date$createDateShim$$($aYear$$1_dateShim$$, $aMonth$$1$$, $aDate$$2$$, $aHours$$, $aMinutes$$, $aSeconds$$, $aWeekNumber$$inline_161_opt_full$$) {
+function $rflect$date$createDateShim$$($aYear$$1_dateShim$$, $aMonth$$1$$, $aDate$$2$$, $aHours$$, $aMinutes$$, $aSeconds$$, $aWeekNumber$$inline_212_opt_full$$) {
   var $dateObj$$;
-  $aWeekNumber$$inline_161_opt_full$$ ? ($dateObj$$ = new $goog$date$DateTime$$($aYear$$1_dateShim$$, $aMonth$$1$$, $aDate$$2$$, $aHours$$, $aMinutes$$, $aSeconds$$), $aYear$$1_dateShim$$ = new $rflect$date$DateShim$$($dateObj$$)) : $aYear$$1_dateShim$$ = new $rflect$date$DateShim$$($aYear$$1_dateShim$$, $aMonth$$1$$, $aDate$$2$$, $aHours$$, $aMinutes$$, $aSeconds$$);
-  $aWeekNumber$$inline_161_opt_full$$ && ($aYear$$1_dateShim$$.$day_$ = $dateObj$$.getDay(), $aYear$$1_dateShim$$.$dayOfYear_$ = $dateObj$$.$getDayOfYear$(), $aWeekNumber$$inline_161_opt_full$$ = $dateObj$$.$getWeekNumber$(), $aYear$$1_dateShim$$.$weekNumber_$ = $aWeekNumber$$inline_161_opt_full$$);
+  $aWeekNumber$$inline_212_opt_full$$ ? ($dateObj$$ = new $goog$date$DateTime$$($aYear$$1_dateShim$$, $aMonth$$1$$, $aDate$$2$$, $aHours$$, $aMinutes$$, $aSeconds$$), $aYear$$1_dateShim$$ = new $rflect$date$DateShim$$($dateObj$$)) : $aYear$$1_dateShim$$ = new $rflect$date$DateShim$$($aYear$$1_dateShim$$, $aMonth$$1$$, $aDate$$2$$, $aHours$$, $aMinutes$$, $aSeconds$$);
+  $aWeekNumber$$inline_212_opt_full$$ && ($aYear$$1_dateShim$$.$day_$ = $dateObj$$.getDay(), $aYear$$1_dateShim$$.$dayOfYear_$ = $dateObj$$.$getDayOfYear$(), $aWeekNumber$$inline_212_opt_full$$ = $dateObj$$.$getWeekNumber$(), $aYear$$1_dateShim$$.$weekNumber_$ = $aWeekNumber$$inline_212_opt_full$$);
   return $aYear$$1_dateShim$$
 }
 function $rflect$date$DateShim$$($dateObj$$1_opt_year_or_date$$, $opt_month$$2$$, $opt_date$$3$$, $opt_hours$$3$$, $opt_minutes$$2$$, $opt_seconds$$2$$, $opt_milliseconds$$1$$) {
@@ -1154,28 +1383,28 @@ $JSCompiler_prototypeAlias$$.$equals$ = function $$JSCompiler_prototypeAlias$$$$
   return 0 == $JSCompiler_StaticMethods_compare$$(this, $aOther$$, $opt_bitmask$$)
 };
 function $JSCompiler_StaticMethods_compare$$($JSCompiler_StaticMethods_compare$self$$, $aOther$$1$$, $bitmask_opt_bitmask$$1$$) {
-  var $diff$$1$$ = 0;
+  var $diff$$2$$ = 0;
   $bitmask_opt_bitmask$$1$$ = $bitmask_opt_bitmask$$1$$ || 63;
-  $bitmask_opt_bitmask$$1$$ & 1 && ($diff$$1$$ = $JSCompiler_StaticMethods_compare$self$$.getYear() - $aOther$$1$$.getFullYear());
-  0 == $diff$$1$$ && $bitmask_opt_bitmask$$1$$ & 2 && ($diff$$1$$ = $JSCompiler_StaticMethods_compare$self$$.getMonth() - $aOther$$1$$.getMonth());
-  0 == $diff$$1$$ && $bitmask_opt_bitmask$$1$$ & 4 && ($diff$$1$$ = $JSCompiler_StaticMethods_compare$self$$.getDate() - $aOther$$1$$.getDate());
-  0 == $diff$$1$$ && $bitmask_opt_bitmask$$1$$ & 8 && ($diff$$1$$ = $JSCompiler_StaticMethods_compare$self$$.getHours() - $aOther$$1$$.getHours());
-  0 == $diff$$1$$ && $bitmask_opt_bitmask$$1$$ & 16 && ($diff$$1$$ = $JSCompiler_StaticMethods_compare$self$$.getMinutes() - $aOther$$1$$.getMinutes());
-  0 == $diff$$1$$ && $bitmask_opt_bitmask$$1$$ & 32 && ($diff$$1$$ = $JSCompiler_StaticMethods_compare$self$$.getSeconds() - $aOther$$1$$.getSeconds());
-  $bitmask_opt_bitmask$$1$$ & 128 && ($diff$$1$$ = $JSCompiler_StaticMethods_compare$self$$.$getWeekNumber$() - $aOther$$1$$.$getWeekNumber$());
-  return 0 < $diff$$1$$ ? 1 : 0 == $diff$$1$$ ? 0 : -1
+  $bitmask_opt_bitmask$$1$$ & 1 && ($diff$$2$$ = $JSCompiler_StaticMethods_compare$self$$.getYear() - $aOther$$1$$.getFullYear());
+  0 == $diff$$2$$ && $bitmask_opt_bitmask$$1$$ & 2 && ($diff$$2$$ = $JSCompiler_StaticMethods_compare$self$$.getMonth() - $aOther$$1$$.getMonth());
+  0 == $diff$$2$$ && $bitmask_opt_bitmask$$1$$ & 4 && ($diff$$2$$ = $JSCompiler_StaticMethods_compare$self$$.getDate() - $aOther$$1$$.getDate());
+  0 == $diff$$2$$ && $bitmask_opt_bitmask$$1$$ & 8 && ($diff$$2$$ = $JSCompiler_StaticMethods_compare$self$$.getHours() - $aOther$$1$$.getHours());
+  0 == $diff$$2$$ && $bitmask_opt_bitmask$$1$$ & 16 && ($diff$$2$$ = $JSCompiler_StaticMethods_compare$self$$.getMinutes() - $aOther$$1$$.getMinutes());
+  0 == $diff$$2$$ && $bitmask_opt_bitmask$$1$$ & 32 && ($diff$$2$$ = $JSCompiler_StaticMethods_compare$self$$.getSeconds() - $aOther$$1$$.getSeconds());
+  $bitmask_opt_bitmask$$1$$ & 128 && ($diff$$2$$ = $JSCompiler_StaticMethods_compare$self$$.$getWeekNumber$() - $aOther$$1$$.$getWeekNumber$());
+  return 0 < $diff$$2$$ ? 1 : 0 == $diff$$2$$ ? 0 : -1
 }
 $JSCompiler_prototypeAlias$$.valueOf = function $$JSCompiler_prototypeAlias$$$valueOf$() {
   return+[this.$year_$, this.$month_$, this.$dayOfMonth_$, this.$hours_$, this.$minutes_$, this.$seconds_$, this.$milliseconds_$].join("")
 };
 $JSCompiler_prototypeAlias$$.$clone$ = function $$JSCompiler_prototypeAlias$$$$clone$$() {
-  var $date$$17$$ = new $rflect$date$DateShim$$(this);
-  $date$$17$$.$firstDayOfWeek_$ = this.$firstDayOfWeek_$;
-  $date$$17$$.$firstWeekCutOffDay_$ = this.$firstWeekCutOffDay_$;
-  $date$$17$$.$dayOfYear_$ = this.$getDayOfYear$();
-  var $aWeekNumber$$inline_176$$ = this.$getWeekNumber$();
-  $date$$17$$.$weekNumber_$ = $aWeekNumber$$inline_176$$;
-  return $date$$17$$
+  var $date$$45$$ = new $rflect$date$DateShim$$(this);
+  $date$$45$$.$firstDayOfWeek_$ = this.$firstDayOfWeek_$;
+  $date$$45$$.$firstWeekCutOffDay_$ = this.$firstWeekCutOffDay_$;
+  $date$$45$$.$dayOfYear_$ = this.$getDayOfYear$();
+  var $aWeekNumber$$inline_227$$ = this.$getWeekNumber$();
+  $date$$45$$.$weekNumber_$ = $aWeekNumber$$inline_227$$;
+  return $date$$45$$
 };
 function $rflect$cal$events$EventHolder$$($aEventManager$$) {
   this.$eventManager_$ = $aEventManager$$
@@ -1184,241 +1413,20 @@ function $JSCompiler_StaticMethods_openSession$$($JSCompiler_StaticMethods_openS
   if($opt_event$$) {
     $JSCompiler_StaticMethods_openSession$self$$.$newTemporaryEvent_$ = $opt_event$$.$clone$(), $JSCompiler_StaticMethods_openSession$self$$.$newTemporaryEvent_$.id = $rflect$cal$events$EventManager$eventUid_$$++
   }else {
-    var $uid$$inline_184$$ = $rflect$cal$events$EventManager$eventUid_$$++;
-    $JSCompiler_StaticMethods_openSession$self$$.$newTemporaryEvent_$ = new $rflect$cal$events$Event$$($uid$$inline_184$$, "", $JSCompiler_alias_NULL$$, $JSCompiler_alias_NULL$$, $JSCompiler_alias_FALSE$$, $JSCompiler_alias_VOID$$, $JSCompiler_alias_VOID$$)
+    var $uid$$inline_235$$ = $rflect$cal$events$EventManager$eventUid_$$++;
+    $JSCompiler_StaticMethods_openSession$self$$.$newTemporaryEvent_$ = new $rflect$cal$events$Event$$($uid$$inline_235$$, "", $JSCompiler_alias_NULL$$, $JSCompiler_alias_NULL$$, $JSCompiler_alias_FALSE$$, $JSCompiler_alias_VOID$$, $JSCompiler_alias_VOID$$)
   }
   $JSCompiler_StaticMethods_openSession$self$$.$backUpEvent_$ = $opt_event$$ && $opt_event$$.$clone$()
 }
-;var $goog$i18n$DateTimePatterns_en$$ = {$YEAR_FULL$:"yyyy", $YEAR_MONTH_ABBR$:"MMM y", $YEAR_MONTH_FULL$:"MMMM yyyy", $MONTH_DAY_ABBR$:"MMM d", $MONTH_DAY_FULL$:"MMMM dd", $MONTH_DAY_SHORT$:"M/d", $MONTH_DAY_MEDIUM$:"MMMM d", $DAY_ABBR$:"d"}, $goog$i18n$DateTimePatterns$$ = $goog$i18n$DateTimePatterns_en$$, $goog$i18n$DateTimePatterns$$ = $goog$i18n$DateTimePatterns_en$$;
-function $goog$i18n$TimeZone$$() {
-}
-function $goog$i18n$TimeZone$createTimeZone$$($offset$$inline_864_str$$inline_188_timeZoneData$$) {
-  if("number" == typeof $offset$$inline_864_str$$inline_188_timeZoneData$$) {
-    var $tz$$1_tz$$inline_187$$ = new $goog$i18n$TimeZone$$;
-    $tz$$1_tz$$inline_187$$.$standardOffset_$ = $offset$$inline_864_str$$inline_188_timeZoneData$$;
-    var $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$;
-    $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ = $offset$$inline_864_str$$inline_188_timeZoneData$$;
-    if(0 == $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$) {
-      $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ = "Etc/GMT"
-    }else {
-      var $parts$$inline_862$$ = ["Etc/GMT", 0 > $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ ? "-" : "+"];
-      $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ = Math.abs($JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$);
-      $parts$$inline_862$$.push(Math.floor($JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ / 60) % 100);
-      $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ %= 60;
-      0 != $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ && $parts$$inline_862$$.push(":", $goog$string$padNumber$$($JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$, 2));
-      $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ = $parts$$inline_862$$.join("")
-    }
-    $tz$$1_tz$$inline_187$$.$timeZoneId_$ = $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$;
-    0 == $offset$$inline_864_str$$inline_188_timeZoneData$$ ? $offset$$inline_864_str$$inline_188_timeZoneData$$ = "UTC" : ($JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$ = ["UTC", 0 > $offset$$inline_864_str$$inline_188_timeZoneData$$ ? "+" : "-"], $offset$$inline_864_str$$inline_188_timeZoneData$$ = Math.abs($offset$$inline_864_str$$inline_188_timeZoneData$$), $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$.push(Math.floor($offset$$inline_864_str$$inline_188_timeZoneData$$ / 
-    60) % 100), $offset$$inline_864_str$$inline_188_timeZoneData$$ %= 60, 0 != $offset$$inline_864_str$$inline_188_timeZoneData$$ && $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$.push(":", $offset$$inline_864_str$$inline_188_timeZoneData$$), $offset$$inline_864_str$$inline_188_timeZoneData$$ = $JSCompiler_inline_result$$860_offset$$inline_861_parts$$inline_865$$.join(""));
-    $tz$$1_tz$$inline_187$$.$tzNames_$ = [$offset$$inline_864_str$$inline_188_timeZoneData$$, $offset$$inline_864_str$$inline_188_timeZoneData$$];
-    $tz$$1_tz$$inline_187$$.$transitions_$ = [];
-    return $tz$$1_tz$$inline_187$$
-  }
-  $tz$$1_tz$$inline_187$$ = new $goog$i18n$TimeZone$$;
-  $tz$$1_tz$$inline_187$$.$timeZoneId_$ = $offset$$inline_864_str$$inline_188_timeZoneData$$.id;
-  $tz$$1_tz$$inline_187$$.$standardOffset_$ = -$offset$$inline_864_str$$inline_188_timeZoneData$$.std_offset;
-  $tz$$1_tz$$inline_187$$.$tzNames_$ = $offset$$inline_864_str$$inline_188_timeZoneData$$.names;
-  $tz$$1_tz$$inline_187$$.$transitions_$ = $offset$$inline_864_str$$inline_188_timeZoneData$$.transitions;
-  return $tz$$1_tz$$inline_187$$
-}
-function $JSCompiler_StaticMethods_getDaylightAdjustment$$($JSCompiler_StaticMethods_getDaylightAdjustment$self$$, $date$$18$$) {
-  for(var $timeInHours$$ = Date.UTC($date$$18$$.getUTCFullYear(), $date$$18$$.getUTCMonth(), $date$$18$$.getUTCDate(), $date$$18$$.getUTCHours(), $date$$18$$.getUTCMinutes()) / 36E5, $index$$56$$ = 0;$index$$56$$ < $JSCompiler_StaticMethods_getDaylightAdjustment$self$$.$transitions_$.length && $timeInHours$$ >= $JSCompiler_StaticMethods_getDaylightAdjustment$self$$.$transitions_$[$index$$56$$];) {
-    $index$$56$$ += 2
-  }
-  return 0 == $index$$56$$ ? 0 : $JSCompiler_StaticMethods_getDaylightAdjustment$self$$.$transitions_$[$index$$56$$ - 1]
-}
-;function $goog$i18n$DateTimeFormat$$($pattern$$1$$) {
-  $goog$asserts$assert$$($goog$isDef$$($pattern$$1$$), "Pattern must be defined");
-  this.$patternParts_$ = [];
-  "number" == typeof $pattern$$1$$ ? $JSCompiler_StaticMethods_applyStandardPattern_$$(this, $pattern$$1$$) : $JSCompiler_StaticMethods_applyPattern_$$(this, $pattern$$1$$)
-}
-var $goog$i18n$DateTimeFormat$TOKENS_$$ = [/^\'(?:[^\']|\'\')*\'/, /^(?:G+|y+|M+|k+|S+|E+|a+|h+|K+|H+|c+|L+|Q+|d+|m+|s+|v+|z+|Z+)/, /^[^\'GyMkSEahKHcLQdmsvzZ]+/];
-function $JSCompiler_StaticMethods_applyPattern_$$($JSCompiler_StaticMethods_applyPattern_$self$$, $pattern$$2$$) {
-  for(;$pattern$$2$$;) {
-    for(var $i$$61$$ = 0;$i$$61$$ < $goog$i18n$DateTimeFormat$TOKENS_$$.length;++$i$$61$$) {
-      var $m$$2_part$$2$$ = $pattern$$2$$.match($goog$i18n$DateTimeFormat$TOKENS_$$[$i$$61$$]);
-      if($m$$2_part$$2$$) {
-        $m$$2_part$$2$$ = $m$$2_part$$2$$[0];
-        $pattern$$2$$ = $pattern$$2$$.substring($m$$2_part$$2$$.length);
-        0 == $i$$61$$ && ("''" == $m$$2_part$$2$$ ? $m$$2_part$$2$$ = "'" : ($m$$2_part$$2$$ = $m$$2_part$$2$$.substring(1, $m$$2_part$$2$$.length - 1), $m$$2_part$$2$$ = $m$$2_part$$2$$.replace(/\'\'/, "'")));
-        $JSCompiler_StaticMethods_applyPattern_$self$$.$patternParts_$.push({text:$m$$2_part$$2$$, type:$i$$61$$});
-        break
-      }
+;function $rflect$object$hasNumericKey$$($obj$$70$$) {
+  for(var $key$$48$$ in $obj$$70$$) {
+    if(!isNaN(+$key$$48$$)) {
+      return $JSCompiler_alias_TRUE$$
     }
   }
+  return $JSCompiler_alias_FALSE$$
 }
-function $JSCompiler_StaticMethods_format$$($JSCompiler_StaticMethods_format$self$$, $date$$25$$) {
-  for(var $out$$ = [], $i$$62$$ = 0;$i$$62$$ < $JSCompiler_StaticMethods_format$self$$.$patternParts_$.length;++$i$$62$$) {
-    var $text$$7$$ = $JSCompiler_StaticMethods_format$self$$.$patternParts_$[$i$$62$$].text;
-    1 == $JSCompiler_StaticMethods_format$self$$.$patternParts_$[$i$$62$$].type ? $out$$.push($JSCompiler_StaticMethods_formatField_$$($text$$7$$, $date$$25$$, $date$$25$$, $date$$25$$)) : $out$$.push($text$$7$$)
-  }
-  return $out$$.join("")
-}
-function $JSCompiler_StaticMethods_applyStandardPattern_$$($JSCompiler_StaticMethods_applyStandardPattern_$self$$, $formatType$$) {
-  var $pattern$$3$$;
-  if(4 > $formatType$$) {
-    $pattern$$3$$ = $goog$i18n$DateTimeSymbols_en$$.$DATEFORMATS$[$formatType$$]
-  }else {
-    if(8 > $formatType$$) {
-      $pattern$$3$$ = $goog$i18n$DateTimeSymbols_en$$.$TIMEFORMATS$[$formatType$$ - 4]
-    }else {
-      if(12 > $formatType$$) {
-        $pattern$$3$$ = $goog$i18n$DateTimeSymbols_en$$.$DATEFORMATS$[$formatType$$ - 8] + " " + $goog$i18n$DateTimeSymbols_en$$.$TIMEFORMATS$[$formatType$$ - 8]
-      }else {
-        $JSCompiler_StaticMethods_applyStandardPattern_$$($JSCompiler_StaticMethods_applyStandardPattern_$self$$, 10);
-        return
-      }
-    }
-  }
-  $JSCompiler_StaticMethods_applyPattern_$$($JSCompiler_StaticMethods_applyStandardPattern_$self$$, $pattern$$3$$)
-}
-function $JSCompiler_StaticMethods_localizeNumbers_$$($input$$) {
-  if($goog$i18n$DateTimeSymbols_en$$.$ZERODIGIT$ === $JSCompiler_alias_VOID$$) {
-    return $input$$
-  }
-  for(var $parts$$11$$ = [], $i$$63$$ = 0;$i$$63$$ < $input$$.length;$i$$63$$++) {
-    var $c$$1$$ = $input$$.charCodeAt($i$$63$$);
-    $parts$$11$$.push(48 <= $c$$1$$ && 57 >= $c$$1$$ ? String.fromCharCode($goog$i18n$DateTimeSymbols_en$$.$ZERODIGIT$ + $c$$1$$ - 48) : $input$$.charAt($i$$63$$))
-  }
-  return $parts$$11$$.join("")
-}
-function $JSCompiler_StaticMethods_formatField_$$($opt_timeZone$$inline_230_opt_timeZone$$inline_235_patternStr$$, $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$, $dateForDate$$1$$, $dateForTime$$1$$) {
-  var $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $opt_timeZone$$inline_230_opt_timeZone$$inline_235_patternStr$$.length;
-  switch($opt_timeZone$$inline_230_opt_timeZone$$inline_235_patternStr$$.charAt(0)) {
-    case "G":
-      return $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ = 0 < $dateForDate$$1$$.getFullYear() ? 1 : 0, 4 <= $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ ? $goog$i18n$DateTimeSymbols_en$$.$ERANAMES$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$] : 
-      $goog$i18n$DateTimeSymbols_en$$.$ERAS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$];
-    case "y":
-      return $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ = $dateForDate$$1$$.getFullYear(), 0 > $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ && ($date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ = 
-      -$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$), $JSCompiler_StaticMethods_localizeNumbers_$$(2 == $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ ? $goog$string$padNumber$$($date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ % 
-      100, 2) : String($date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$));
-    case "M":
-      a: {
-        switch($date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ = $dateForDate$$1$$.getMonth(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$) {
-          case 5:
-            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $goog$i18n$DateTimeSymbols_en$$.$NARROWMONTHS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$];
-            break a;
-          case 4:
-            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $goog$i18n$DateTimeSymbols_en$$.$MONTHS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$];
-            break a;
-          case 3:
-            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $goog$i18n$DateTimeSymbols_en$$.$SHORTMONTHS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$];
-            break a;
-          default:
-            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ + 1, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$))
-        }
-      }
-      return $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$;
-    case "k":
-      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForTime$$1$$.getHours() || 24, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$));
-    case "S":
-      return $JSCompiler_StaticMethods_localizeNumbers_$$(($dateForTime$$1$$.getTime() % 1E3 / 1E3).toFixed(Math.min(3, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$)).substr(2) + (3 < $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ ? 
-      $goog$string$padNumber$$(0, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ - 3) : ""));
-    case "E":
-      return $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ = $dateForDate$$1$$.getDay(), 4 <= $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ ? $goog$i18n$DateTimeSymbols_en$$.$WEEKDAYS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$] : 
-      $goog$i18n$DateTimeSymbols_en$$.$SHORTWEEKDAYS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$];
-    case "a":
-      return $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $dateForTime$$1$$.getHours(), $goog$i18n$DateTimeSymbols_en$$.$AMPMS$[12 <= $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ && 24 > 
-      $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ ? 1 : 0];
-    case "h":
-      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForTime$$1$$.getHours() % 12 || 12, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$));
-    case "K":
-      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForTime$$1$$.getHours() % 12, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$));
-    case "H":
-      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForTime$$1$$.getHours(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$));
-    case "c":
-      a: {
-        switch($date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ = $dateForDate$$1$$.getDay(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$) {
-          case 5:
-            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $goog$i18n$DateTimeSymbols_en$$.$STANDALONENARROWWEEKDAYS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$];
-            break a;
-          case 4:
-            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $goog$i18n$DateTimeSymbols_en$$.$STANDALONEWEEKDAYS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$];
-            break a;
-          case 3:
-            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $goog$i18n$DateTimeSymbols_en$$.$STANDALONESHORTWEEKDAYS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$];
-            break a;
-          default:
-            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$, 1))
-        }
-      }
-      return $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$;
-    case "L":
-      a: {
-        switch($date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ = $dateForDate$$1$$.getMonth(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$) {
-          case 5:
-            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $goog$i18n$DateTimeSymbols_en$$.$STANDALONENARROWMONTHS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$];
-            break a;
-          case 4:
-            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $goog$i18n$DateTimeSymbols_en$$.$STANDALONEMONTHS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$];
-            break a;
-          case 3:
-            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $goog$i18n$DateTimeSymbols_en$$.$STANDALONESHORTMONTHS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$];
-            break a;
-          default:
-            $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ + 1, $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$))
-        }
-      }
-      return $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$;
-    case "Q":
-      return $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ = Math.floor($dateForDate$$1$$.getMonth() / 3), 4 > $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ ? $goog$i18n$DateTimeSymbols_en$$.$SHORTQUARTERS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$] : 
-      $goog$i18n$DateTimeSymbols_en$$.$QUARTERS$[$date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$];
-    case "d":
-      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForDate$$1$$.getDate(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$));
-    case "m":
-      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForTime$$1$$.getMinutes(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$));
-    case "s":
-      return $JSCompiler_StaticMethods_localizeNumbers_$$($goog$string$padNumber$$($dateForTime$$1$$.getSeconds(), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$));
-    case "v":
-      return $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$.getTimezoneOffset()), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$.$timeZoneId_$;
-    case "z":
-      return $opt_timeZone$$inline_230_opt_timeZone$$inline_235_patternStr$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$.getTimezoneOffset()), 4 > $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ ? 
-      $opt_timeZone$$inline_230_opt_timeZone$$inline_235_patternStr$$.$tzNames_$[0 < $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_230_opt_timeZone$$inline_235_patternStr$$, $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$) ? 2 : 0] : $opt_timeZone$$inline_230_opt_timeZone$$inline_235_patternStr$$.$tzNames_$[0 < $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_230_opt_timeZone$$inline_235_patternStr$$, 
-      $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$) ? 3 : 1];
-    case "Z":
-      return $opt_timeZone$$inline_230_opt_timeZone$$inline_235_patternStr$$ = $JSCompiler_alias_VOID$$ || $goog$i18n$TimeZone$createTimeZone$$($date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$.getTimezoneOffset()), 4 > $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ ? 
-      ($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = -($opt_timeZone$$inline_230_opt_timeZone$$inline_235_patternStr$$.$standardOffset_$ - $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_230_opt_timeZone$$inline_235_patternStr$$, $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$)), 
-      $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ = [0 > $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ ? "-" : "+"], $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = 
-      Math.abs($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$), $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$.push($goog$string$padNumber$$(Math.floor($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ / 
-      60) % 100, 2), $goog$string$padNumber$$($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ % 60, 2)), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$.join("")) : 
-      ($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $opt_timeZone$$inline_230_opt_timeZone$$inline_235_patternStr$$.$standardOffset_$ - $JSCompiler_StaticMethods_getDaylightAdjustment$$($opt_timeZone$$inline_230_opt_timeZone$$inline_235_patternStr$$, $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$), 
-      $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$ = ["GMT"], $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$.push(0 >= $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ ? 
-      "+" : "-"), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = Math.abs($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$), $date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$.push($goog$string$padNumber$$(Math.floor($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ / 
-      60) % 100, 2), ":", $goog$string$padNumber$$($JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ % 60, 2)), $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$ = $JSCompiler_StaticMethods_localizeNumbers_$$($date$$45_parts$$inline_1152_parts$$inline_870_value$$inline_192_value$$inline_197_value$$inline_202_value$$inline_206_value$$inline_214_value$$inline_219_value$$inline_223$$.join(""))), 
-      $JSCompiler_inline_result$$0_JSCompiler_inline_result$$17_JSCompiler_inline_result$$38_JSCompiler_temp$$853_count$$27_hours$$inline_209_offset$$inline_1151_offset$$inline_869_opt_timeZone$$inline_226$$;
-    default:
-      return""
-  }
-}
-;function $rflect$cal$events$Event$$($aUid$$2$$, $aLongId$$1$$, $aStartDate$$1$$, $aEndDate$$1$$, $aAllDay$$1$$, $opt_summary$$, $opt_description$$1$$) {
-  this.id = $aUid$$2$$;
-  this.$longId$ = $aLongId$$1$$;
-  this.$startDate$ = $aStartDate$$1$$;
-  this.$endDate$ = $aEndDate$$1$$;
-  this.$allDay$ = $aAllDay$$1$$;
-  this.summary = $opt_summary$$ || $rflect$cal$i18n$Symbols$$.$NO_NAME_EVENT$;
-  this.description = $opt_description$$1$$ || ""
-}
-$rflect$cal$events$Event$$.prototype.$clone$ = function $$rflect$cal$events$Event$$$$$clone$$() {
-  return new $rflect$cal$events$Event$$(this.id, this.$longId$, this.$startDate$, this.$endDate$, this.$allDay$, this.summary, this.description)
-};
-function $rflect$cal$events$Chip$$($aEventId$$, $aStart$$, $aEnd$$, $aStartIsCut$$, $aEndIsCut$$) {
-  this.$eventId$ = $aEventId$$;
-  this.start = $aStart$$;
-  this.end = $aEnd$$;
-  this.$startIsCut$ = $aStartIsCut$$;
-  this.$endIsCut$ = $aEndIsCut$$
-}
-$rflect$cal$events$Chip$$.prototype.start = 0;
-$rflect$cal$events$Chip$$.prototype.end = 0;
-$rflect$cal$events$Chip$$.prototype.$equals$ = function $$rflect$cal$events$Chip$$$$$equals$$($aChip$$) {
-  return this.start == $aChip$$.start && this.end == $aChip$$.end && this.$startIsCut$ == $aChip$$.$startIsCut$ && this.$endIsCut$ == $aChip$$.$endIsCut$
-};
-$rflect$cal$events$Chip$$.prototype.$clone$ = function $$rflect$cal$events$Chip$$$$$clone$$() {
-  return new $rflect$cal$events$Chip$$(this.$eventId$, this.start, this.end, this.$startIsCut$, this.$endIsCut$)
-};
-function $rflect$cal$events$EventManager$$($aViewManager$$, $aTimeManager$$) {
+;function $rflect$cal$events$EventManager$$($aViewManager$$, $aTimeManager$$) {
   this.$viewManager_$ = $aViewManager$$;
   this.$timeManager_$ = $aTimeManager$$;
   this.$eventHolder$ = new $rflect$cal$events$EventHolder$$(this);
@@ -1450,9 +1458,10 @@ function $JSCompiler_StaticMethods_removeChips_$$($aEventId$$2$$, $aDataStructur
         var $chips$$1$$ = $aDataStructure$$2$$[$index1$$][$index2_track$$], $chipIndex$$ = $goog$array$findIndex$$($chips$$1$$, function($aChip$$4$$) {
           return $aChip$$4$$.$eventId$ == $aEventId$$2$$
         });
-        0 <= $chipIndex$$ && ($chips$$1$$.splice($chipIndex$$, 1), delete $aTracks$$1$$[$aEventId$$2$$], $chips$$1$$.length || (delete $aDataStructure$$2$$[$index1$$][$index2_track$$], $aDataStructure$$2$$[$index1$$].length || delete $aDataStructure$$2$$[$index1$$]))
+        0 <= $chipIndex$$ && ($chips$$1$$.splice($chipIndex$$, 1), $chips$$1$$.length || (delete $aDataStructure$$2$$[$index1$$][$index2_track$$], $rflect$object$hasNumericKey$$($aDataStructure$$2$$[$index1$$]) || delete $aDataStructure$$2$$[$index1$$]))
       }
     }
+    delete $aTracks$$1$$[$aEventId$$2$$]
   }
 }
 $rflect$cal$events$EventManager$$.prototype.$run$ = function $$rflect$cal$events$EventManager$$$$$run$$() {
@@ -1490,32 +1499,32 @@ var $goog$events$EventHandler$typeArray_$$ = [];
 function $JSCompiler_StaticMethods_listen$$($JSCompiler_StaticMethods_listen$self$$, $src$$16$$, $type$$76$$, $opt_fn$$, $opt_capture$$1$$, $opt_handler$$9$$) {
   $goog$isArray$$($type$$76$$) || ($goog$events$EventHandler$typeArray_$$[0] = $type$$76$$, $type$$76$$ = $goog$events$EventHandler$typeArray_$$);
   for(var $i$$64$$ = 0;$i$$64$$ < $type$$76$$.length;$i$$64$$++) {
-    var $key$$48$$ = $goog$events$listen$$($src$$16$$, $type$$76$$[$i$$64$$], $opt_fn$$ || $JSCompiler_StaticMethods_listen$self$$, $opt_capture$$1$$ || $JSCompiler_alias_FALSE$$, $opt_handler$$9$$ || $JSCompiler_StaticMethods_listen$self$$.$handler_$ || $JSCompiler_StaticMethods_listen$self$$);
-    $JSCompiler_StaticMethods_listen$self$$.$keys_$.push($key$$48$$)
+    var $key$$49$$ = $goog$events$listen$$($src$$16$$, $type$$76$$[$i$$64$$], $opt_fn$$ || $JSCompiler_StaticMethods_listen$self$$, $opt_capture$$1$$ || $JSCompiler_alias_FALSE$$, $opt_handler$$9$$ || $JSCompiler_StaticMethods_listen$self$$.$handler_$ || $JSCompiler_StaticMethods_listen$self$$);
+    $JSCompiler_StaticMethods_listen$self$$.$keys_$.push($key$$49$$)
   }
   return $JSCompiler_StaticMethods_listen$self$$
 }
-function $JSCompiler_StaticMethods_unlisten$$($JSCompiler_StaticMethods_unlisten$self$$, $key$$50_listener$$51_listenerArray$$inline_262_src$$19$$, $i$$inline_263_type$$78$$, $listener$$inline_258_opt_fn$$2$$, $capture$$inline_261_opt_capture$$3$$, $opt_handler$$12_opt_handler$$inline_260$$) {
+function $JSCompiler_StaticMethods_unlisten$$($JSCompiler_StaticMethods_unlisten$self$$, $key$$51_listener$$51_listenerArray$$inline_262_src$$19$$, $i$$inline_263_type$$78$$, $listener$$inline_258_opt_fn$$2$$, $capture$$inline_261_opt_capture$$3$$, $opt_handler$$12_opt_handler$$inline_260$$) {
   if($goog$isArray$$($i$$inline_263_type$$78$$)) {
     for(var $i$$66$$ = 0;$i$$66$$ < $i$$inline_263_type$$78$$.length;$i$$66$$++) {
-      $JSCompiler_StaticMethods_unlisten$$($JSCompiler_StaticMethods_unlisten$self$$, $key$$50_listener$$51_listenerArray$$inline_262_src$$19$$, $i$$inline_263_type$$78$$[$i$$66$$], $listener$$inline_258_opt_fn$$2$$, $capture$$inline_261_opt_capture$$3$$, $opt_handler$$12_opt_handler$$inline_260$$)
+      $JSCompiler_StaticMethods_unlisten$$($JSCompiler_StaticMethods_unlisten$self$$, $key$$51_listener$$51_listenerArray$$inline_262_src$$19$$, $i$$inline_263_type$$78$$[$i$$66$$], $listener$$inline_258_opt_fn$$2$$, $capture$$inline_261_opt_capture$$3$$, $opt_handler$$12_opt_handler$$inline_260$$)
     }
   }else {
     a: {
       $listener$$inline_258_opt_fn$$2$$ = $listener$$inline_258_opt_fn$$2$$ || $JSCompiler_StaticMethods_unlisten$self$$;
       $opt_handler$$12_opt_handler$$inline_260$$ = $opt_handler$$12_opt_handler$$inline_260$$ || $JSCompiler_StaticMethods_unlisten$self$$.$handler_$ || $JSCompiler_StaticMethods_unlisten$self$$;
       $capture$$inline_261_opt_capture$$3$$ = !!$capture$$inline_261_opt_capture$$3$$;
-      if($key$$50_listener$$51_listenerArray$$inline_262_src$$19$$ = $goog$events$getListeners_$$($key$$50_listener$$51_listenerArray$$inline_262_src$$19$$, $i$$inline_263_type$$78$$, $capture$$inline_261_opt_capture$$3$$)) {
-        for($i$$inline_263_type$$78$$ = 0;$i$$inline_263_type$$78$$ < $key$$50_listener$$51_listenerArray$$inline_262_src$$19$$.length;$i$$inline_263_type$$78$$++) {
-          if(!$key$$50_listener$$51_listenerArray$$inline_262_src$$19$$[$i$$inline_263_type$$78$$].$removed$ && $key$$50_listener$$51_listenerArray$$inline_262_src$$19$$[$i$$inline_263_type$$78$$].$listener$ == $listener$$inline_258_opt_fn$$2$$ && $key$$50_listener$$51_listenerArray$$inline_262_src$$19$$[$i$$inline_263_type$$78$$].capture == $capture$$inline_261_opt_capture$$3$$ && $key$$50_listener$$51_listenerArray$$inline_262_src$$19$$[$i$$inline_263_type$$78$$].$handler$ == $opt_handler$$12_opt_handler$$inline_260$$) {
-            $key$$50_listener$$51_listenerArray$$inline_262_src$$19$$ = $key$$50_listener$$51_listenerArray$$inline_262_src$$19$$[$i$$inline_263_type$$78$$];
+      if($key$$51_listener$$51_listenerArray$$inline_262_src$$19$$ = $goog$events$getListeners_$$($key$$51_listener$$51_listenerArray$$inline_262_src$$19$$, $i$$inline_263_type$$78$$, $capture$$inline_261_opt_capture$$3$$)) {
+        for($i$$inline_263_type$$78$$ = 0;$i$$inline_263_type$$78$$ < $key$$51_listener$$51_listenerArray$$inline_262_src$$19$$.length;$i$$inline_263_type$$78$$++) {
+          if(!$key$$51_listener$$51_listenerArray$$inline_262_src$$19$$[$i$$inline_263_type$$78$$].$removed$ && $key$$51_listener$$51_listenerArray$$inline_262_src$$19$$[$i$$inline_263_type$$78$$].$listener$ == $listener$$inline_258_opt_fn$$2$$ && $key$$51_listener$$51_listenerArray$$inline_262_src$$19$$[$i$$inline_263_type$$78$$].capture == $capture$$inline_261_opt_capture$$3$$ && $key$$51_listener$$51_listenerArray$$inline_262_src$$19$$[$i$$inline_263_type$$78$$].$handler$ == $opt_handler$$12_opt_handler$$inline_260$$) {
+            $key$$51_listener$$51_listenerArray$$inline_262_src$$19$$ = $key$$51_listener$$51_listenerArray$$inline_262_src$$19$$[$i$$inline_263_type$$78$$];
             break a
           }
         }
       }
-      $key$$50_listener$$51_listenerArray$$inline_262_src$$19$$ = $JSCompiler_alias_NULL$$
+      $key$$51_listener$$51_listenerArray$$inline_262_src$$19$$ = $JSCompiler_alias_NULL$$
     }
-    $key$$50_listener$$51_listenerArray$$inline_262_src$$19$$ && ($key$$50_listener$$51_listenerArray$$inline_262_src$$19$$ = $key$$50_listener$$51_listenerArray$$inline_262_src$$19$$.key, $goog$events$unlistenByKey$$($key$$50_listener$$51_listenerArray$$inline_262_src$$19$$), $goog$array$remove$$($JSCompiler_StaticMethods_unlisten$self$$.$keys_$, $key$$50_listener$$51_listenerArray$$inline_262_src$$19$$))
+    $key$$51_listener$$51_listenerArray$$inline_262_src$$19$$ && ($key$$51_listener$$51_listenerArray$$inline_262_src$$19$$ = $key$$51_listener$$51_listenerArray$$inline_262_src$$19$$.key, $goog$events$unlistenByKey$$($key$$51_listener$$51_listenerArray$$inline_262_src$$19$$), $goog$array$remove$$($JSCompiler_StaticMethods_unlisten$self$$.$keys_$, $key$$51_listener$$51_listenerArray$$inline_262_src$$19$$))
   }
   return $JSCompiler_StaticMethods_unlisten$self$$
 }
@@ -1739,8 +1748,8 @@ function $goog$dom$getElementsByTagNameAndClass_$$($opt_class$$1$$, $opt_el$$3$$
   return $els$$
 }
 function $goog$dom$setProperties$$($element$$17$$, $properties$$) {
-  $goog$object$forEach$$($properties$$, function($val$$20$$, $key$$51$$) {
-    "style" == $key$$51$$ ? $element$$17$$.style.cssText = $val$$20$$ : "class" == $key$$51$$ ? $element$$17$$.className = $val$$20$$ : "for" == $key$$51$$ ? $element$$17$$.htmlFor = $val$$20$$ : $key$$51$$ in $goog$dom$DIRECT_ATTRIBUTE_MAP_$$ ? $element$$17$$.setAttribute($goog$dom$DIRECT_ATTRIBUTE_MAP_$$[$key$$51$$], $val$$20$$) : 0 == $key$$51$$.lastIndexOf("aria-", 0) || 0 == $key$$51$$.lastIndexOf("data-", 0) ? $element$$17$$.setAttribute($key$$51$$, $val$$20$$) : $element$$17$$[$key$$51$$] = 
+  $goog$object$forEach$$($properties$$, function($val$$20$$, $key$$52$$) {
+    "style" == $key$$52$$ ? $element$$17$$.style.cssText = $val$$20$$ : "class" == $key$$52$$ ? $element$$17$$.className = $val$$20$$ : "for" == $key$$52$$ ? $element$$17$$.htmlFor = $val$$20$$ : $key$$52$$ in $goog$dom$DIRECT_ATTRIBUTE_MAP_$$ ? $element$$17$$.setAttribute($goog$dom$DIRECT_ATTRIBUTE_MAP_$$[$key$$52$$], $val$$20$$) : 0 == $key$$52$$.lastIndexOf("aria-", 0) || 0 == $key$$52$$.lastIndexOf("data-", 0) ? $element$$17$$.setAttribute($key$$52$$, $val$$20$$) : $element$$17$$[$key$$52$$] = 
     $val$$20$$
   })
 }
@@ -2705,11 +2714,11 @@ $JSCompiler_prototypeAlias$$.handleEvent = function $$JSCompiler_prototypeAlias$
   var $be$$2_event$$4$$ = $e$$30_repeat$$.$event_$, $keyCode$$3$$, $charCode$$, $altKey$$2$$ = $be$$2_event$$4$$.altKey;
   $goog$userAgent$IE$$ && "keypress" == $e$$30_repeat$$.type ? ($keyCode$$3$$ = this.$keyCode_$, $charCode$$ = 13 != $keyCode$$3$$ && 27 != $keyCode$$3$$ ? $be$$2_event$$4$$.keyCode : 0) : $goog$userAgent$WEBKIT$$ && "keypress" == $e$$30_repeat$$.type ? ($keyCode$$3$$ = this.$keyCode_$, $charCode$$ = 0 <= $be$$2_event$$4$$.charCode && 63232 > $be$$2_event$$4$$.charCode && $goog$events$KeyCodes$isCharacterKey$$($keyCode$$3$$) ? $be$$2_event$$4$$.charCode : 0) : $goog$userAgent$OPERA$$ ? ($keyCode$$3$$ = 
   this.$keyCode_$, $charCode$$ = $goog$events$KeyCodes$isCharacterKey$$($keyCode$$3$$) ? $be$$2_event$$4$$.keyCode : 0) : ($keyCode$$3$$ = $be$$2_event$$4$$.keyCode || this.$keyCode_$, $charCode$$ = $be$$2_event$$4$$.charCode || 0, $goog$events$KeyHandler$SAVE_ALT_FOR_KEYPRESS_$$ && ($altKey$$2$$ = this.$altKey_$), $goog$userAgent$detectedMac_$$ && (63 == $charCode$$ && 224 == $keyCode$$3$$) && ($keyCode$$3$$ = 191));
-  var $key$$57$$ = $keyCode$$3$$, $keyIdentifier$$ = $be$$2_event$$4$$.keyIdentifier;
-  $keyCode$$3$$ ? 63232 <= $keyCode$$3$$ && $keyCode$$3$$ in $goog$events$KeyHandler$safariKey_$$ ? $key$$57$$ = $goog$events$KeyHandler$safariKey_$$[$keyCode$$3$$] : 25 == $keyCode$$3$$ && $e$$30_repeat$$.shiftKey && ($key$$57$$ = 9) : $keyIdentifier$$ && $keyIdentifier$$ in $goog$events$KeyHandler$keyIdentifier_$$ && ($key$$57$$ = $goog$events$KeyHandler$keyIdentifier_$$[$keyIdentifier$$]);
-  $e$$30_repeat$$ = $key$$57$$ == this.$lastKey_$;
-  this.$lastKey_$ = $key$$57$$;
-  $be$$2_event$$4$$ = new $goog$events$KeyEvent$$($key$$57$$, $charCode$$, $e$$30_repeat$$, $be$$2_event$$4$$);
+  var $key$$58$$ = $keyCode$$3$$, $keyIdentifier$$ = $be$$2_event$$4$$.keyIdentifier;
+  $keyCode$$3$$ ? 63232 <= $keyCode$$3$$ && $keyCode$$3$$ in $goog$events$KeyHandler$safariKey_$$ ? $key$$58$$ = $goog$events$KeyHandler$safariKey_$$[$keyCode$$3$$] : 25 == $keyCode$$3$$ && $e$$30_repeat$$.shiftKey && ($key$$58$$ = 9) : $keyIdentifier$$ && $keyIdentifier$$ in $goog$events$KeyHandler$keyIdentifier_$$ && ($key$$58$$ = $goog$events$KeyHandler$keyIdentifier_$$[$keyIdentifier$$]);
+  $e$$30_repeat$$ = $key$$58$$ == this.$lastKey_$;
+  this.$lastKey_$ = $key$$58$$;
+  $be$$2_event$$4$$ = new $goog$events$KeyEvent$$($key$$58$$, $charCode$$, $e$$30_repeat$$, $be$$2_event$$4$$);
   $be$$2_event$$4$$.altKey = $altKey$$2$$;
   this.dispatchEvent($be$$2_event$$4$$)
 };
@@ -4138,8 +4147,8 @@ $JSCompiler_prototypeAlias$$.$setDraggerLimits_$ = function $$JSCompiler_prototy
 };
 $JSCompiler_prototypeAlias$$.$onTitleCloseClick_$ = function $$JSCompiler_prototypeAlias$$$$onTitleCloseClick_$$() {
   if(this.$hasTitleCloseButton_$) {
-    var $bs_key$$70$$ = this.$buttons_$;
-    ($bs_key$$70$$ = $bs_key$$70$$ && $bs_key$$70$$.$cancelButton_$) ? this.dispatchEvent(new $rflect$ui$Dialog$Event$$($bs_key$$70$$, $bs_key$$70$$.$content_$)) && this.$setVisible$($JSCompiler_alias_FALSE$$) : this.$setVisible$($JSCompiler_alias_FALSE$$)
+    var $bs_key$$71$$ = this.$buttons_$;
+    ($bs_key$$71$$ = $bs_key$$71$$ && $bs_key$$71$$.$cancelButton_$) ? this.dispatchEvent(new $rflect$ui$Dialog$Event$$($bs_key$$71$$, $bs_key$$71$$.$content_$)) && this.$setVisible$($JSCompiler_alias_FALSE$$) : this.$setVisible$($JSCompiler_alias_FALSE$$)
   }
 };
 $JSCompiler_prototypeAlias$$.$disposeInternal$ = function $$JSCompiler_prototypeAlias$$$$disposeInternal$$() {
@@ -4152,9 +4161,9 @@ function $JSCompiler_StaticMethods_setButtonSet$$($JSCompiler_StaticMethods_setB
   !!$JSCompiler_StaticMethods_setButtonSet$self$$.$buttonEl_$), $JSCompiler_StaticMethods_setButtonSet$self$$.$buttons_$.$dispose$());
   $JSCompiler_StaticMethods_setButtonSet$self$$.$buttons_$ = $buttons$$
 }
-$JSCompiler_prototypeAlias$$.$onButtonClick_$ = function $$JSCompiler_prototypeAlias$$$$onButtonClick_$$($e$$64_key$$71$$) {
-  $e$$64_key$$71$$ = $e$$64_key$$71$$.target;
-  $e$$64_key$$71$$ instanceof $goog$ui$Button$$ && this.dispatchEvent(new $rflect$ui$Dialog$Event$$($e$$64_key$$71$$, $e$$64_key$$71$$.$content_$)) && this.$setVisible$($JSCompiler_alias_FALSE$$)
+$JSCompiler_prototypeAlias$$.$onButtonClick_$ = function $$JSCompiler_prototypeAlias$$$$onButtonClick_$$($e$$64_key$$72$$) {
+  $e$$64_key$$72$$ = $e$$64_key$$72$$.target;
+  $e$$64_key$$72$$ instanceof $goog$ui$Button$$ && this.dispatchEvent(new $rflect$ui$Dialog$Event$$($e$$64_key$$72$$, $e$$64_key$$72$$.$content_$)) && this.$setVisible$($JSCompiler_alias_FALSE$$)
 };
 $JSCompiler_prototypeAlias$$.$onKey_$ = function $$JSCompiler_prototypeAlias$$$$onKey_$$($e$$65$$) {
   var $close$$ = $JSCompiler_alias_FALSE$$, $hasHandler$$ = $JSCompiler_alias_FALSE$$, $buttonSet_cancel$$ = this.$buttons_$, $isSpecialFormElement_target$$53$$ = $e$$65$$.target;
@@ -4173,16 +4182,16 @@ $JSCompiler_prototypeAlias$$.$onKey_$ = function $$JSCompiler_prototypeAlias$$$$
     }
   }else {
     if(13 == $e$$65$$.keyCode) {
-      var $key$$72$$;
+      var $key$$73$$;
       if("BUTTON" == $isSpecialFormElement_target$$53$$.tagName) {
-        $key$$72$$ = $isSpecialFormElement_target$$53$$.name
+        $key$$73$$ = $isSpecialFormElement_target$$53$$.name
       }else {
         if($buttonSet_cancel$$) {
           var $defaultKey$$ = $buttonSet_cancel$$.$defaultButton_$, $isSpecialFormElement_target$$53$$ = ("TEXTAREA" == $isSpecialFormElement_target$$53$$.tagName || "SELECT" == $isSpecialFormElement_target$$53$$.tagName || "A" == $isSpecialFormElement_target$$53$$.tagName) && !$isSpecialFormElement_target$$53$$.disabled;
-          $defaultKey$$ && ($defaultKey$$.isEnabled() && !$isSpecialFormElement_target$$53$$) && ($key$$72$$ = $defaultKey$$)
+          $defaultKey$$ && ($defaultKey$$.isEnabled() && !$isSpecialFormElement_target$$53$$) && ($key$$73$$ = $defaultKey$$)
         }
       }
-      $key$$72$$ && $buttonSet_cancel$$ && ($hasHandler$$ = $JSCompiler_alias_TRUE$$, $close$$ = this.dispatchEvent(new $rflect$ui$Dialog$Event$$($key$$72$$, String($key$$72$$.$content_$))))
+      $key$$73$$ && $buttonSet_cancel$$ && ($hasHandler$$ = $JSCompiler_alias_TRUE$$, $close$$ = this.dispatchEvent(new $rflect$ui$Dialog$Event$$($key$$73$$, String($key$$73$$.$content_$))))
     }
   }
   if($close$$ || $hasHandler$$) {
@@ -4190,9 +4199,9 @@ $JSCompiler_prototypeAlias$$.$onKey_$ = function $$JSCompiler_prototypeAlias$$$$
   }
   $close$$ && this.$setVisible$($JSCompiler_alias_FALSE$$)
 };
-function $rflect$ui$Dialog$Event$$($key$$73$$, $caption$$5$$) {
+function $rflect$ui$Dialog$Event$$($key$$74$$, $caption$$5$$) {
   this.type = $rflect$ui$Dialog$EventType$SELECT$$;
-  this.key = $key$$73$$;
+  this.key = $key$$74$$;
   this.caption = $caption$$5$$
 }
 $goog$inherits$$($rflect$ui$Dialog$Event$$, $goog$events$Event$$);
@@ -4230,7 +4239,7 @@ $JSCompiler_prototypeAlias$$.$decorateInternal$ = function $$JSCompiler_prototyp
     for(var $i$$108$$ = 0, $buttonEl$$, $caption$$6$$;$buttonEl$$ = $buttons$$1_element$$134$$[$i$$108$$];$i$$108$$++) {
       var $button$$17$$ = new $goog$ui$Button$$($JSCompiler_alias_NULL$$, this.$buttonRenderer_$), $isDefault$$ = 0 == $i$$108$$;
       $caption$$6$$ = $goog$dom$getTextContent$$($buttonEl$$) || $buttonEl$$.value;
-      $JSCompiler_StaticMethods_addButton$$(this, $button$$17$$, $isDefault$$, "cancel" == $caption$$6$$);
+      $JSCompiler_StaticMethods_addButton$$(this, $button$$17$$, $isDefault$$, "Cancel" == $caption$$6$$);
       $button$$17$$.$decorateInternal$($buttonEl$$);
       $isDefault$$ && $goog$dom$classes$add$$($buttonEl$$, this.$class_$ + "-default")
     }
@@ -5096,9 +5105,9 @@ $JSCompiler_prototypeAlias$$.$onEventEdit_$ = function $$JSCompiler_prototypeAli
   $_log$$("edit clicked")
 };
 $JSCompiler_prototypeAlias$$.$onEditDialogButtonSelect_$ = function $$JSCompiler_prototypeAlias$$$$onEditDialogButtonSelect_$$($JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$) {
-  if($JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$.key != this.$saveDialog_$.$buttons_$.$defaultButton_$ && $JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$.key != this.$saveDialog_$.$buttons_$.$cancelButton_$) {
+  if($JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$.key != this.$editDialog_$.$buttons_$.$defaultButton_$ && $JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$.key != this.$editDialog_$.$buttons_$.$cancelButton_$) {
     var $JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$ = this.$eventManager_$.$eventHolder$;
-    $JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$.$backUpEvent_$ && ($JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$ = $JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$.$eventManager_$, $JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$ = $JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$.$newTemporaryEvent_$.id, delete $JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$.$events_$[$JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$], 
+    $JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$.$backUpEvent_$ && ($JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$ = $JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$.$eventManager_$, $JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$ = $JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$.$backUpEvent_$.id, delete $JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$.$events_$[$JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$], 
     $JSCompiler_StaticMethods_removeChips_$$($JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$, $JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$.$chipsByDay_$, $JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$.$tracksChipsByDay_$), $JSCompiler_StaticMethods_removeChips_$$($JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$, $JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$.$allDayChipsByDay_$, 
     $JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$.$tracksAllDayChipsByDay_$), $JSCompiler_StaticMethods_removeChips_$$($JSCompiler_StaticMethods_endWithDelete$self$$inline_679_aId$$inline_1092$$, $JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$.$chipsByWeek_$, $JSCompiler_StaticMethods_deleteEvent$self$$inline_1090_aEvent$$24$$.$tracksChipsByWeek_$));
     this.$eventManager_$.$run$();
@@ -5906,15 +5915,15 @@ $JSCompiler_prototypeAlias$$.$getStyleRules$ = $JSCompiler_returnArg$$("*{font:n
 $JSCompiler_prototypeAlias$$.$writeInitialDocument$ = function $$JSCompiler_prototypeAlias$$$$writeInitialDocument$$() {
   $JSCompiler_StaticMethods_hasActiveWindow$$(this) && (this.$win_$.document.open(), $JSCompiler_StaticMethods_writeToLog_$$(this, "<style>" + this.$getStyleRules$() + '</style><hr><div class="dbg-ev" style="text-align:center">' + this.$welcomeMessage$ + "<br><small>Logger: " + this.$identifier_$ + "</small></div><hr>"), $JSCompiler_StaticMethods_writeSavedMessages_$$(this))
 };
-function $JSCompiler_StaticMethods_setCookie_$$($JSCompiler_StaticMethods_setCookie_$self_fullKey$$, $key$$76$$, $value$$87$$) {
-  $JSCompiler_StaticMethods_setCookie_$self_fullKey$$ = ($key$$76$$ + $JSCompiler_StaticMethods_setCookie_$self_fullKey$$.$identifier_$).replace(/[;=\s]/g, "_");
+function $JSCompiler_StaticMethods_setCookie_$$($JSCompiler_StaticMethods_setCookie_$self_fullKey$$, $key$$77$$, $value$$87$$) {
+  $JSCompiler_StaticMethods_setCookie_$self_fullKey$$ = ($key$$77$$ + $JSCompiler_StaticMethods_setCookie_$self_fullKey$$.$identifier_$).replace(/[;=\s]/g, "_");
   document.cookie = $JSCompiler_StaticMethods_setCookie_$self_fullKey$$ + "=" + encodeURIComponent($value$$87$$) + ";path=/;expires=" + (new Date($goog$now$$() + 2592E6)).toUTCString()
 }
-function $goog$debug$DebugWindow$getCookieValue_$$($fullKey$$2_identifier$$3$$, $cookie_key$$79$$, $end$$5_opt_default$$1$$) {
-  $fullKey$$2_identifier$$3$$ = ($cookie_key$$79$$ + $fullKey$$2_identifier$$3$$).replace(/[;=\s]/g, "_");
-  $cookie_key$$79$$ = String(document.cookie);
-  var $start$$11$$ = $cookie_key$$79$$.indexOf($fullKey$$2_identifier$$3$$ + "=");
-  return-1 != $start$$11$$ ? ($end$$5_opt_default$$1$$ = $cookie_key$$79$$.indexOf(";", $start$$11$$), decodeURIComponent($cookie_key$$79$$.substring($start$$11$$ + $fullKey$$2_identifier$$3$$.length + 1, -1 == $end$$5_opt_default$$1$$ ? $cookie_key$$79$$.length : $end$$5_opt_default$$1$$))) : $end$$5_opt_default$$1$$ || ""
+function $goog$debug$DebugWindow$getCookieValue_$$($fullKey$$2_identifier$$3$$, $cookie_key$$80$$, $end$$5_opt_default$$1$$) {
+  $fullKey$$2_identifier$$3$$ = ($cookie_key$$80$$ + $fullKey$$2_identifier$$3$$).replace(/[;=\s]/g, "_");
+  $cookie_key$$80$$ = String(document.cookie);
+  var $start$$11$$ = $cookie_key$$80$$.indexOf($fullKey$$2_identifier$$3$$ + "=");
+  return-1 != $start$$11$$ ? ($end$$5_opt_default$$1$$ = $cookie_key$$80$$.indexOf(";", $start$$11$$), decodeURIComponent($cookie_key$$80$$.substring($start$$11$$ + $fullKey$$2_identifier$$3$$.length + 1, -1 == $end$$5_opt_default$$1$$ ? $cookie_key$$80$$.length : $end$$5_opt_default$$1$$))) : $end$$5_opt_default$$1$$ || ""
 }
 $JSCompiler_prototypeAlias$$.$saveWindowPositionSize_$ = function $$JSCompiler_prototypeAlias$$$$saveWindowPositionSize_$$() {
   $JSCompiler_StaticMethods_hasActiveWindow$$(this) && $JSCompiler_StaticMethods_setCookie_$$(this, "dbg", (this.$win_$.screenX || this.$win_$.screenLeft || 0) + "," + (this.$win_$.screenY || this.$win_$.screenTop || 0) + "," + (this.$win_$.outerWidth || 800) + "," + (this.$win_$.outerHeight || 500))
@@ -6019,8 +6028,8 @@ $JSCompiler_prototypeAlias$$.$getStyleRules$ = function $$JSCompiler_prototypeAl
 };
 function $goog$debug$FancyWindow$getStoredKeys_$$() {
   for(var $storedKeys$$2$$ = {}, $i$$129$$ = 0, $len$$4$$ = window.localStorage.length;$i$$129$$ < $len$$4$$;$i$$129$$++) {
-    var $key$$82$$ = window.localStorage.key($i$$129$$);
-    $key$$82$$ != $JSCompiler_alias_NULL$$ && 0 == $key$$82$$.lastIndexOf("fancywindow.sel.", 0) && ($storedKeys$$2$$[$key$$82$$] = $JSCompiler_alias_TRUE$$)
+    var $key$$83$$ = window.localStorage.key($i$$129$$);
+    $key$$83$$ != $JSCompiler_alias_NULL$$ && 0 == $key$$83$$.lastIndexOf("fancywindow.sel.", 0) && ($storedKeys$$2$$[$key$$83$$] = $JSCompiler_alias_TRUE$$)
   }
   return $storedKeys$$2$$
 }
@@ -6033,8 +6042,8 @@ function $goog$debug$FancyWindow$getLoggers_$$() {
   return $res$$inline_835$$
 }
 ;var $rflect$Debug$theLogger$$;
-function $_inspect$$($name$$72$$, $obj$$81$$) {
-  window["_inspect_" + $name$$72$$] = $obj$$81$$
+function $_inspect$$($name$$72$$, $obj$$82$$) {
+  window["_inspect_" + $name$$72$$] = $obj$$82$$
 }
 function $_log$$($str$$54$$, $opt_var$$) {
   var $number$$1$$ = arguments.length;

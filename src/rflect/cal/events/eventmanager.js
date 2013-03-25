@@ -14,6 +14,7 @@ goog.require('rflect.cal.events.Chip');
 goog.require('rflect.cal.events.Event');
 goog.require('rflect.cal.events.EventHolder');
 goog.require('rflect.cal.predefined.chips');
+goog.require('rflect.object');
 
 
 
@@ -516,15 +517,15 @@ rflect.cal.events.EventManager.prototype.removeChips_ = function(aEventId,
           if (chipIndex >= 0) {
             // Chip is found, perform deletion
             chips.splice(chipIndex, 1);
-            delete aTracks[aEventId];
             if (!chips.length){
               delete aDataStructure[index1][index2];
-              if (!aDataStructure[index1].length)
+              if (!rflect.object.hasNumericKey(aDataStructure[index1]))
                 delete aDataStructure[index1];
             }
           }
         }
-    };
+    }
+    delete aTracks[aEventId];
   }
 }
 

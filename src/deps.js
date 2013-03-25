@@ -10,7 +10,7 @@ goog.addDependency('../../../rflect/cal/containersizemonitor.js', ['rflect.cal.C
 goog.addDependency('../../../rflect/cal/events/chip.js', ['rflect.cal.events.Chip'], []);
 goog.addDependency('../../../rflect/cal/events/event.js', ['rflect.cal.events.Event'], ['goog.date.Interval', 'goog.i18n.DateTimeFormat', 'goog.i18n.DateTimePatterns', 'goog.i18n.DateTimeSymbols', 'rflect.cal.i18n.Symbols']);
 goog.addDependency('../../../rflect/cal/events/eventholder.js', ['rflect.cal.events.EventHolder'], ['rflect.cal.i18n.Symbols', 'rflect.date.DateShim']);
-goog.addDependency('../../../rflect/cal/events/eventmanager.js', ['rflect.cal.events.EventManager'], ['rflect.cal.events.Chip', 'rflect.cal.events.Event', 'rflect.cal.events.EventHolder', 'rflect.cal.predefined.chips', 'rflect.structs.IntervalTree']);
+goog.addDependency('../../../rflect/cal/events/eventmanager.js', ['rflect.cal.events.EventManager'], ['rflect.cal.events.Chip', 'rflect.cal.events.Event', 'rflect.cal.events.EventHolder', 'rflect.cal.predefined.chips', 'rflect.object', 'rflect.structs.IntervalTree']);
 goog.addDependency('../../../rflect/cal/events/recurringevent.js', ['rflect.cal.events.RecurringEvent'], []);
 goog.addDependency('../../../rflect/cal/eventtype.js', ['rflect.cal.EventType'], []);
 goog.addDependency('../../../rflect/cal/i18n/predefined.js', ['rflect.cal.i18n.predefined', 'rflect.cal.i18n.predefined_by', 'rflect.cal.i18n.predefined_en', 'rflect.cal.i18n.predefined_ru'], []);
@@ -40,6 +40,7 @@ goog.addDependency('../../../rflect/date/date.js', ['rflect.date', 'rflect.date.
 goog.addDependency('../../../rflect/date/interval.js', ['rflect.date.Interval'], ['goog.date.Date']);
 goog.addDependency('../../../rflect/debug/debug.js', ['rflect.Debug'], ['goog.debug.FancyWindow', 'goog.debug.Logger', 'goog.userAgent']);
 goog.addDependency('../../../rflect/math/math.js', ['rflect.math'], []);
+goog.addDependency('../../../rflect/object/object.js', ['rflect.object'], []);
 goog.addDependency('../../../rflect/pagevis/pagevisibility.js', ['rflect.pagevis'], []);
 goog.addDependency('../../../rflect/string/string.js', ['rflect.string'], ['goog.string']);
 goog.addDependency('../../../rflect/structs/intervaltree.js', ['rflect.structs.IntervalTree'], ['goog.array', 'rflect.array', 'rflect.date.Interval']);

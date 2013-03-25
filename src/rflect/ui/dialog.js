@@ -1407,7 +1407,7 @@ rflect.ui.Dialog.ButtonSet.prototype.decorateInternal = function(element) {
     // their innerHTML, but not everyone knows this, and we should play nice.
     //key = button.name || button.id;
     caption = goog.dom.getTextContent(buttonEl) || buttonEl.value;
-    var isCancel = caption == rflect.ui.Dialog.DefaultButtonKeys.CANCEL;
+    var isCancel = caption == rflect.ui.Dialog.MSG_DIALOG_CANCEL_;
     this.addButton(button, isDefault, isCancel);
     button.decorateInternal(buttonEl);
     if (isDefault) {
