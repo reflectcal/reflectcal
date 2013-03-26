@@ -583,6 +583,9 @@ rflect.cal.predefined.TIME_MARKER_LINE_HEIGHT = 1;
 
 /**
  * Coefficient that defines how much chip overlaps its neighbor.
+ * For consistent results on ui, should be in [0;1) interval;
+ * If it's 1, chip goes as much as the middle of neighbor.
+ * If it's 0, chips do not overlap.
  * @type {number}
  * @const
  */

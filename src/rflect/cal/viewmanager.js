@@ -44,7 +44,7 @@ rflect.cal.ViewManager = function(aMainInstance) {
   this.isOnStartup_ = true;
 
   // Set initial view.
-  this.currentView = rflect.cal.ViewType.MONTH;
+  this.currentView = rflect.cal.ViewType.WEEK;
 
   /**
    * Time manager instance.

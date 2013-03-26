@@ -1494,7 +1494,7 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
       rflect.cal.predefined.HOUR_ROW_HEIGHT / 30;
   var widthQuant = 100 / aTotalCols;
   var event = aEventManager.getEventById(aChip.eventId);
-  var lastCol = aStartCol == aTotalCols - 1;
+  var coversLastCol = aStartCol + aColSpan == aTotalCols;
 
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
   aSb.append(pixelStart);
@@ -1504,9 +1504,11 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
   aSb.append(/*lastCol ? shift * 2  : */shift);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
   // margin-right.
-  var width = shift + widthQuant * (aColSpan * (lastCol ? 1 : (1 +
-      rflect.cal.predefined.chips.OVERLAPPING_DEGREE)) -
-      (aColSpan - 1) * rflect.cal.predefined.chips.OVERLAPPING_DEGREE);
+  var width = shift + widthQuant * aColSpan * (1 +
+      rflect.cal.predefined.chips.OVERLAPPING_DEGREE);
+  if (coversLastCol)
+    width -= widthQuant * rflect.cal.predefined.chips.OVERLAPPING_DEGREE *
+        aColSpan;
   aSb.append(100 - width);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
   // Height.
