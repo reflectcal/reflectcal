@@ -22,8 +22,9 @@
 
 }
 
-.event-name-input {
-
+.ep-event-name-input {
+  height: 35px;
+  line-height: 35px;
 }
 
 .date-input-cont {
