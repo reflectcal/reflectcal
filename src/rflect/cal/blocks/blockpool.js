@@ -241,7 +241,8 @@ rflect.cal.blocks.BlockPool.prototype.updateCollapsedBlocks =
 /**
  * Creates and nests series of chips - visual representation for events. Here
  * <code>rflect.cal.blocks.Block#couldBeExpanded</code> flag is set.
- * @param {Array.<!Array.<rflect.cal.events.Chip>>} aChips chips for this block pool.
+ * @param {Array.<!Array.<rflect.cal.events.Chip>>} aChips chips for this block
+ * pool.
  * @param {boolean=} opt_createArrays Whether sparse arrays should be created.
  * @param {number=} opt_arraysLength Length of sparse arrays list.
  */

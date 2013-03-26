@@ -451,11 +451,12 @@ rflect.cal.blocks.Block.prototype.createSparseArraysFromBlobs = function(
       for (var start = chip.start, chipCounter = chip.start, end = chip.end;
           chipCounter < end; chipCounter++) {
         var chipClone = chip.clone();
-        chipClone.startIsCut = chipClone.endIsCut = chipCounter > start &&
-            chipCounter < end - 1;
-        if (chipCounter == start && end - start > 1)
+        if (chipCounter > start && chipCounter < end - 1) {
+          chipClone.startIsCut = chipClone.endIsCut = true;
+        };
+        if ((chipCounter == start) && (end - start > 1))
           chipClone.endIsCut = true;
-        if (chipCounter == end - 1 && end - start > 1)
+        if ((chipCounter == end - 1) && (end - start > 1))
           chipClone.startIsCut = true;
         sparseArrays[chipCounter][startCol] = chipClone;
       }
