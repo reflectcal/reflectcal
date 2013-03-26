@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<!--
+  ~ Copyright (c) 2013. Rflect, Alex K.
+  -->
+
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>Rflect calendar</title>
+  <link href="../css/common.css" rel="stylesheet" type="text/css">
+  <link href="../css/flatbutton.css" rel="stylesheet" type="text/css">
+  <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
+  <link href="../css/rflectcalendar.css" rel="stylesheet" type="text/css">
+  <link href="../css/checkbox.css" rel="stylesheet" type="text/css">
+  <link href="../css/savedialog.css" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+<div class="main-container">
+  <div id="event-edit-pane">
+
+    <div class="event-edit-pane-buttons">
+
+      <div class="goog-flat-button goog-inline-block" id="epb1"
+           role="button" style="-moz-user-select: none;" tabindex="0">
+        Cancel
+      </div>
+      <div class="goog-flat-button goog-inline-block emphasis-button"
+           id="epb2"
+           role="button" style="-moz-user-select: none;" tabindex="0">
+        Save
+      </div>
+      <div class="goog-flat-button goog-inline-block" id="epb3"
+           role="button" style="-moz-user-select: none;" tabindex="0">
+        Delete
+      </div>
+    </div>
+
+    <div class="event-name-input-cont">
+      Name
+      <input class="event-name-input" type="text"/>
+    </div>
+
+    <div class="date-input-cont">
+      <div class="start-input-cont">
+        Start date
+        <input id="event-start-date" class="event-date-input" type="text"/>
+        <input id="event-start-time" class="event-time-input" type="text"/>
+      </div>
+      <div class="end-input-cont">
+        End date
+        <input id="event-end-date" class="event-date-input" type="text"/>
+        <input id="event-end-time" class="event-time-input" type="text"/>
+      </div>
+      <div class="all-day-input-cont">
+        All-day event
+        <span class="goog-checkbox goog-checkbox-unchecked" aria-checked="false"
+              role="checkbox" style="-moz-user-select: none;"
+              tabindex="0"></span>
+      </div>
+    </div>
+
+    <div class="description-cont">
+      Description
+      <textarea class="event-name-input"></textarea>
+    </div>
+
+    <div class="event-edit-pane-buttons">
+      <div class="goog-flat-button goog-inline-block" id="epb4"
+           role="button" style="-moz-user-select: none;" tabindex="0">
+        Cancel
+      </div>
+      <div class="goog-flat-button goog-inline-block emphasis-button"
+           id="epb5"
+           role="button" style="-moz-user-select: none;" tabindex="0">
+        Save
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
