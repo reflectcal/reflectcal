@@ -13,11 +13,12 @@
   <link href="../css/rflectcalendar.css" rel="stylesheet" type="text/css">
   <link href="../css/checkbox.css" rel="stylesheet" type="text/css">
   <link href="../css/savedialog.css" rel="stylesheet" type="text/css">
+  <link href="../css/eventpane.css" rel="stylesheet" type="text/css">
 
 </head>
 <body>
 <div class="main-container">
-  <div id="event-edit-pane">
+  <div id="event-edit-pane" class="event-edit-pane">
 
     <div class="event-edit-pane-buttons">
 
@@ -36,23 +37,23 @@
       </div>
     </div>
 
-    <div class="event-name-input-cont">
+    <div class="event-name-input-cont event-edit-pane-cont">
       Name
       <input class="event-name-input" type="text"/>
     </div>
 
-    <div class="date-input-cont">
-      <div class="start-input-cont">
+    <div class="date-input-cont event-edit-pane-cont">
+      <div class="start-input-cont event-edit-pane-cont">
         Start date
         <input id="event-start-date" class="event-date-input" type="text"/>
         <input id="event-start-time" class="event-time-input" type="text"/>
       </div>
-      <div class="end-input-cont">
+      <div class="end-input-cont event-edit-pane-cont">
         End date
         <input id="event-end-date" class="event-date-input" type="text"/>
         <input id="event-end-time" class="event-time-input" type="text"/>
       </div>
-      <div class="all-day-input-cont">
+      <div class="all-day-input-cont event-edit-pane-cont">
         All-day event
         <span class="goog-checkbox goog-checkbox-unchecked" aria-checked="false"
               role="checkbox" style="-moz-user-select: none;"
@@ -60,7 +61,7 @@
       </div>
     </div>
 
-    <div class="description-cont">
+    <div class="description-cont event-edit-pane-cont">
       Description
       <textarea class="event-name-input"></textarea>
     </div>

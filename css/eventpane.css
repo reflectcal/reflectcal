@@ -6,8 +6,16 @@
 
 /* Styles for event edit pane. */
 
-.event-edit-pane-buttons {
+.event-edit-pane {
+  padding: 10px;
+}
 
+.event-edit-pane-buttons {
+  margin: 10px;
+}
+
+.event-edit-pane-cont {
+  margin: 25px;
 }
 
 .event-name-input-cont {
