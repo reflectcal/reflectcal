@@ -10,12 +10,27 @@
   padding: 10px;
 }
 
+.event-edit-pane-header-cont {
+  width: 600px;
+  margin-left: 25px;
+}
+
+.event-edit-pane-header {
+  margin-top: 0;
+}
+
 .event-edit-pane-buttons {
   margin: 10px;
+  margin-left: 20px;
 }
 
 .event-edit-pane-cont {
   margin: 25px;
+}
+
+.event-edit-pane-cont-inner {
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .event-name-input-cont {
@@ -23,8 +38,12 @@
 }
 
 .ep-event-name-input {
-  height: 35px;
-  line-height: 35px;
+  width: 500px;
+  height: 35px !important;
+  line-height: 35px !important;
+  font-family: arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .date-input-cont {
@@ -44,7 +63,7 @@
 }
 
 .event-time-input {
-
+  width: 90px;
 }
 
 .all-day-input-cont {
@@ -53,4 +72,28 @@
 
 .description-cont {
 
+}
+
+.event-description-label {
+  vertical-align: top;
+}
+
+.event-description {
+  width: 500px;
+  height: 200px;
+}
+
+.event-edit-pane-label {
+  width: 100px;
+}
+
+.event-edit-pane-button {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.event-edit-pane-button-delete {
+  margin-left: 100px;
 }

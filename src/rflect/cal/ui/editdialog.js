@@ -8,6 +8,7 @@
  */
 
 goog.provide('rflect.cal.ui.EditDialog');
+goog.provide('rflect.cal.ui.EditDialog.ButtonCaptions');
 
 goog.require('rflect.ui.Dialog');
 goog.require('rflect.cal.ui.SaveDialog');
@@ -41,12 +42,26 @@ goog.inherits(rflect.cal.ui.EditDialog, rflect.ui.Dialog);
 
 
 /**
+ * @desc Standard caption for the dialog 'Edit' button.
+ * @private
+ */
+rflect.ui.EditDialog.MSG_DIALOG_EDIT_ = goog.getMsg('Edit');
+
+
+/**
+ * @desc Standard caption for the dialog 'Edit' button.
+ * @private
+ */
+rflect.ui.EditDialog.MSG_DIALOG_DELETE_ = goog.getMsg('Delete');
+
+
+/**
  * Captions for the edit dialog.
  * @enum {string}
  */
 rflect.cal.ui.EditDialog.ButtonCaptions = {
-  EDIT: 'Edit',
-  DELETE: 'Delete'
+  EDIT: rflect.ui.EditDialog.MSG_DIALOG_EDIT_,
+  DELETE: rflect.ui.EditDialog.MSG_DIALOG_DELETE_
 };
 
 
