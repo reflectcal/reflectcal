@@ -106,7 +106,8 @@ rflect.ui.Component.prototype.updateBeforeRedraw =
     function(var_args) {
   var args = arguments;
   this.forEachChild(function(aChild, aIndex) {
-    if (!rflect.ui.Component.indexIsInExclusions_(args, aIndex))
+    if (aChild.updateBeforeRedraw &&
+        !rflect.ui.Component.indexIsInExclusions_(args, aIndex))
       aChild.updateBeforeRedraw();
   });
 };
@@ -124,7 +125,7 @@ rflect.ui.Component.prototype.updateByRedraw =
   var args = arguments;
   // Propagate call to child components that have a DOM, if any.
   this.forEachChild(function(aChild, aIndex) {
-    if (aChild.isInDocument() && aChild.getElement() &&
+    if (aChild.updateByRedraw && aChild.isInDocument() && aChild.getElement() &&
         !rflect.ui.Component.indexIsInExclusions_(args, aIndex)) {
       aChild.updateByRedraw();
     }

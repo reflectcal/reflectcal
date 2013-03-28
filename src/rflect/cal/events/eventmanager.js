@@ -574,3 +574,18 @@ rflect.cal.events.EventManager.prototype.run = function() {
 rflect.cal.events.EventManager.prototype.getEventById = function(aId) {
   return this.events_[aId];
 }
+
+
+/**
+ * @return {rflect.cal.events.Event} Template event for further editing,
+ * relevant to current view.
+ */
+rflect.cal.events.EventManager.prototype.createTypicalEvent = function() {
+  if (this.viewManager_.isInWeekMode())
+
+  else if (this.viewManager_.isInMonthMode())
+
+}
+
+
+

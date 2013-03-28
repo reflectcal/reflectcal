@@ -258,6 +258,9 @@ rflect.cal.ViewManager.prototype.onMenuCommandNext_ = function() {
  * @private
  */
 rflect.cal.ViewManager.prototype.onMenuCommandNewEvent_ = function() {
+  //TODO(alexk): add logic to load module.
+  // is moduleLoaded_ viewmanager just sets this variable to true, while main
+  // body actually shows pane when module loaded, showing alert if not.
 };
 
 

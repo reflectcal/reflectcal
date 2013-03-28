@@ -9,7 +9,10 @@
  */
 
 goog.provide('rflect.cal.ui.EventPane');
+goog.provide('rflect.cal.ui.EventPane.EventTypes');
 
+goog.require('goog.events.Event');
+goog.require('goog.style');
 goog.require('goog.ui.Checkbox');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Button');
@@ -20,17 +23,16 @@ goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 
 /**
  * Event pane main class.
+ * TODO(alexk): Currently only creation through render is supported. Add decorate.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
- * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
- * container size monitor.
- * @param {rflect.cal.blocks.BlockManager} aBlockManager Link to block manager.
+ * @param {Element} aParentElement Element in which pane will be rendered.
  * @constructor
  * @extends {goog.ui.Component}
  */
-rflect.cal.EventPane = function(aViewManager, aTimeManager, aEventManager,
-    aContainerSizeMonitor, aBlockManager) {
+rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
+    aParentElement) {
   goog.ui.Component.call(this);
 
   /**
@@ -54,6 +56,8 @@ rflect.cal.EventPane = function(aViewManager, aTimeManager, aEventManager,
    */
   this.eventManager_ = aEventManager;
 
+  this.parentEl_ = aParentElement;
+
   this.addChild(this.buttonCancel1_ = new goog.ui.Button(
       rflect.ui.Dialog.DefaultButtonCaptions.CANCEL,
       goog.ui.FlatButtonRenderer.getInstance()));
@@ -71,26 +75,58 @@ rflect.cal.EventPane = function(aViewManager, aTimeManager, aEventManager,
       rflect.ui.Dialog.DefaultButtonCaptions.SAVE,
       goog.ui.FlatButtonRenderer.getInstance()));
 
-
-
 };
-goog.inherits(rflect.cal.EventPane, goog.ui.Component);
+goog.inherits(rflect.cal.ui.EventPane, goog.ui.Component);
+
+
+/**
+ * @enum {string}
+ */
+rflect.cal.ui.EventPane.EventTypes = {
+  CANCEL: 'cancel',
+  SAVE: 'save',
+  DELETE: 'delete'
+};
+
+
+/**
+ * Whether the component is visible.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.visible_ = false;
+
+
+/**
+ * Element in which event pane will be rendered.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.parentEl_;
+
+
+/**
+ * @return {boolean} Whether the component is visible.
+ */
+rflect.cal.ui.EventPane.prototype.isVisible = function() {
+  return this.visible_;
+};
 
 
 /**
  * @override
  */
-rflect.cal.EventPane.prototype.createDom = function() {
+rflect.cal.ui.EventPane.prototype.createDom = function() {
   var dom = this.getDomHelper();
 
   /**@const*/
   var labelClassName = goog.getCssName('goog-inline-block') + ' ' +
       goog.getCssName('event-edit-pane-label');
 
-  var headerCont = dom.createDom('div',
+  /*var headerCont = dom.createDom('div',
       goog.getCssName('event-edit-pane-header-cont'),
       dom.createDom('h3', goog.getCssName('event-edit-pane-header'),
-      'Event edit'));
+      'Event edit'));*/
 
   this.forEachChild(function(child){
     child.createDom();
@@ -118,24 +154,22 @@ rflect.cal.EventPane.prototype.createDom = function() {
 
   var labelName = dom.createDom('label', {
     'for': 'ep-event-name-input',
-    className: labelClassName,
-    'Name'
-  });
+    className: labelClassName
+  }, 'Name');
   var inputName = dom.createDom('input', {
     'type': 'text',
     id: 'ep-event-name-input',
     className: 'ep-event-name-input'
   });
-  var inputNameCont = dom.createDom('div',
+  var nameCont = dom.createDom('div',
     [goog.getCssName('event-name-input-cont'),
       goog.getCssName('event-edit-pane-cont')],
     labelName, inputName);
 
   var labelStartDate = dom.createDom('label', {
     'for': 'event-start-date',
-    className: labelClassName,
-    'StartDate'
-  });
+    className: labelClassName
+  }, 'Start date');
   var inputStartDate = dom.createDom('input', {
     'type': 'text',
     id: 'event-start-date',
@@ -152,9 +186,8 @@ rflect.cal.EventPane.prototype.createDom = function() {
     labelStartDate, inputStartDate, inputStartTime);
   var labelEndDate = dom.createDom('label', {
     'for': 'event-end-date',
-    className: labelClassName,
-    'EndDate'
-  });
+    className: labelClassName
+  }, 'End date');
   var inputEndDate = dom.createDom('input', {
     'type': 'text',
     id: 'event-end-date',
@@ -170,18 +203,17 @@ rflect.cal.EventPane.prototype.createDom = function() {
       goog.getCssName('event-edit-pane-cont-inner')],
     labelEndDate, inputEndDate, inputEndTime);
 
-  var dateInputCont = dom.createDom('div',
+  var dateCont = dom.createDom('div',
     [goog.getCssName('date-input-cont'),
       goog.getCssName('event-edit-pane-cont')],
     startInputCont, endInputCont);
 
   var labelAllDay = dom.createDom('label', {
     'for': 'event-all-day',
-    className: labelClassName,
-    'All-day event'
-  });
+    className: labelClassName
+  }, 'All-day event');
   var allDayCont = dom.createDom('div', {
-    id: 'all-day-label'
+    id: 'all-day-label',
     className: goog.getCssName('description-cont') + ' ' +
       goog.getCssName('event-edit-pane-cont')
     }, labelAllDay, this.checkboxAllDay_.getElement());
@@ -189,57 +221,79 @@ rflect.cal.EventPane.prototype.createDom = function() {
   var labelDesc = dom.createDom('label', {
     'for': 'event-description',
     className: labelClassName + ' ' +
-      goog.getCssName('event-description-label'),
-    'Description'
-  });
+      goog.getCssName('event-description-label')
+  }, 'Description');
   var textAreaDesc = dom.createDom('textarea', {
     id: 'event-description',
       className: goog.getCssName('event-description')
   });
   var descCont = dom.createDom('div', [
     goog.getCssName('description-cont'),
-      goog.getCssName('event-edit-pane-cont')]
+      goog.getCssName('event-edit-pane-cont')],
     labelDesc, textAreaDesc);
 
-  dom.createDom('div', {
+  var root = dom.createDom('div', {
     className: goog.getCssName('event-edit-pane'),
     id: 'event-edit-pane'
-    }, headerCont, buttonsCont1, dateInputCont, allDayCont, descCont,
+    }, buttonsCont1, nameCont, dateCont, allDayCont, descCont,
       buttonsCont2);
 
+  this.setElementInternal(root);
 }
 
 
 /**
  * @override
  */
-rflect.cal.EventPane.prototype.enterDocument = function() {
-  rflect.cal.EventPane.superClass_.enterDocument.call(this);
+rflect.cal.ui.EventPane.prototype.enterDocument = function() {
+  rflect.cal.ui.EventPane.superClass_.enterDocument.call(this);
 
-  this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
-      this.onClick_, false, this)
-      .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
-      this.onMouseOver_, false, this)
-      .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
-      this.onMouseOut_, false, this)
-      .listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
-      this.onMouseDown_, false, this)
-      .listen(this.getElement(), goog.events.EventType.SELECTSTART,
-      this.onSelectStart_, false, this)
-      .listen(document, goog.events.EventType.MOUSEMOVE,
-      this.onMouseMove_, false, this)
-      .listen(document, goog.events.EventType.MOUSEUP,
-      this.onMouseUp_, false, this)
-      .listen(this.saveDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
-      this.onEventEdit_, false, this)
-      .listen(this.saveDialog_, rflect.ui.Dialog.EventType.SELECT,
-      this.onSaveDialogButtonSelect_, false, this)
-      .listen(this.editDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
-      this.onEventEdit_, false, this)
-      .listen(this.editDialog_, rflect.ui.Dialog.EventType.SELECT,
-      this.onEditDialogButtonSelect_, false, this);
+  // Menu commands.
+  this.getHandler().listen(this.buttonCancel1_, goog.ui.Component.EventType.ACTION,
+      this.onCancel_, false, this)
+      .listen(this.buttonCancel2_, goog.ui.Component.EventType.ACTION,
+      this.onCancel_, false, this);
+};
 
-  this.timeMarker_.start();
+
+/**
+ * Cancel action listener.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.ui.EventPane.prototype.onCancel_ = function(aEvent) {
+  if (this.dispatchEvent(new goog.events.Event(
+      rflect.cal.ui.EventPane.EventTypes.CANCEL))) {
+    this.setVisible(false);
+  }
+}
+
+
+/**
+ * Sets the visibility of the event pane and moves focus to the
+ * event name input. Lazily renders the component if needed.
+ * @param {boolean} visible Whether the pane should be visible.
+ */
+rflect.cal.ui.EventPane.prototype.setVisible = function(visible) {
+  if (visible == this.visible_) {
+    return;
+  }
+
+  // If the pane hasn't been rendered yet, render it now.
+  if (!this.isInDocument()) {
+    this.render(this.parentEl_);
+  }
+  this.showElement_(visible);
+  this.visible_ = visible;
+};
+
+
+/**
+ * Shows or hides the pane element.
+ * @param {boolean} visible Shows the element if true, hides if false.
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.showElement_ = function(visible) {
+  goog.style.showElement(this.getElement(), visible);
 };
 
 
@@ -248,12 +302,7 @@ rflect.cal.EventPane.prototype.enterDocument = function() {
  * @override
  * @protected
  */
-rflect.cal.EventPane.prototype.disposeInternal = function() {
-  rflect.cal.EventPane.superClass_.disposeInternal.call(this);
+rflect.cal.ui.EventPane.prototype.disposeInternal = function() {
+  rflect.cal.ui.EventPane.superClass_.disposeInternal.call(this);
 
-  this.removeScrollListeners_();
-
-  this.viewManager_ = null;
-  this.timeManager_ = null;
-  this.containerSizeMonitor_ = null;
 };

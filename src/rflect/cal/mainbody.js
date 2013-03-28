@@ -9,7 +9,11 @@
 
 goog.provide('rflect.cal.MainBody');
 
+goog.require('goog.style');
 goog.require('rflect.ui.Component');
+goog.require('rflect.cal.predefined');
+goog.require('rflect.cal.ui.EventPane');
+goog.require('rflect.cal.ui.EventPane.EventTypes');
 goog.require('rflect.cal.MainPane');
 goog.require('rflect.cal.MiniCal');
 goog.require('rflect.cal.TopPane');
@@ -102,7 +106,7 @@ goog.inherits(rflect.cal.MainBody, rflect.ui.Component);
 rflect.cal.MainBody.HTML_PARTS_ = [
   '<div id="main-container">',
 
-  '<div class="cal-container">',
+  '<div id="cal-container" class="cal-container">',
   '<div id="top-pane">',
   '</div>',
   '<div id="main-body">',
@@ -140,6 +144,14 @@ rflect.cal.MainBody.ComponentsIndexes = {
   CAL_SELECTOR: 3,
   TASK_SELECTOR: 4
 }
+
+
+/**
+ * Event pane.
+ * @type {rflect.cal.ui.EventPane}
+ * @private
+ */
+rflect.cal.MainBody.prototype.eventPane_;
 
 
 /**
@@ -241,7 +253,63 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
   // Propagate call to children.
   rflect.cal.MainBody.superClass_.enterDocument.call(this);
 
+  this.getHandler().listen(this.topPane_, goog.ui.Component.EventType.ACTION,
+      this.onTopPaneAction_, false, this);
 };
+
+
+/**
+ * Top pane action handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.MainBody.prototype.onTopPaneAction_ = function(aEvent) {
+  var id = aEvent.target.getId();
+
+  if (id == rflect.cal.predefined.BUTTON_NEW_EVENT_ID)
+    // TODO(alexk): check whether module is loaded
+    this.showEventPane(true);
+}
+
+
+/**
+ * Shows event pane when possible and lazily instantiates it at the first time.
+ * @param {boolean} aShow Whether to show event pane.
+ */
+rflect.cal.MainBody.prototype.showEventPane = function(aShow) {
+  if (!this.eventPane_) {
+    this.eventPane_ = new rflect.cal.ui.EventPane(this.viewManager_,
+        this.timeManager_, this.eventManager_,
+        this.getDomHelper().getElement('main-container'));
+    this.addChild(this.eventPane_);
+
+    this.getHandler().listen(this.eventPane_,
+        rflect.cal.ui.EventPane.EventTypes.CANCEL, this.onEventPaneCancel_,
+        false, this);
+  }
+
+  this.eventPane_.setVisible(aShow);
+  //NOTE(alexk): do we need smarter logic here than just hide calendar?
+  this.showCalendar_(!aShow);
+}
+
+
+/**
+ * @param {boolean} aShow Whether to show calendar element.
+ * @private
+ */
+rflect.cal.MainBody.prototype.showCalendar_ = function(aShow) {
+  goog.style.showElement(this.getDomHelper().getElement('cal-container'),
+      aShow);
+}
+
+
+/**
+ * Event pane cancel listener.
+ */
+rflect.cal.MainBody.prototype.onEventPaneCancel_ = function() {
+  this.showEventPane(false);
+}
 
 
 /**
@@ -258,4 +326,5 @@ rflect.cal.MainBody.prototype.disposeInternal = function() {
   this.viewManager_ = null;
   this.timeManager_ = null;
   this.blockManager_ = null;
+  this.eventPane_ = null;
 };

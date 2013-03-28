@@ -15,7 +15,6 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('rflect.ui.Component');
-goog.require('rflect.cal.ui.EventPane');
 goog.require('rflect.cal.MainPaneBuilder');
 goog.require('rflect.cal.MainPaneSelectionMask');
 goog.require('rflect.cal.MouseOverRegistry');
