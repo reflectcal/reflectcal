@@ -9,6 +9,7 @@
 
 goog.provide('rflect.cal.events.EventManager');
 
+goog.require('goog.date.DateTime');
 goog.require('rflect.structs.IntervalTree');
 goog.require('rflect.cal.events.Chip');
 goog.require('rflect.cal.events.Event');
@@ -577,13 +578,52 @@ rflect.cal.events.EventManager.prototype.getEventById = function(aId) {
 
 
 /**
- * @return {rflect.cal.events.Event} Template event for further editing,
+ * Starts event creation session with template event for further editing,
  * relevant to current view.
  */
-rflect.cal.events.EventManager.prototype.createTypicalEvent = function() {
-  if (this.viewManager_.isInWeekMode())
+rflect.cal.events.EventManager.prototype.startEventCreationSession =
+    function() {
+  var basis = this.timeManager_.basis;
+  var now = new goog.date.DateTime();
 
-  else if (this.viewManager_.isInMonthMode())
+  now.setFirstDayOfWeek(basis.getFirstDayOfWeek());
+  now.setFirstWeekCutOffDay(basis.getFirstWeekCutOffDay());
+  now.setYear(basis.getYear());
+  now.setMonth(basis.getMonth());
+  now.setDate(basis.getDate());
+  now.setMinutes(0);
+  now.setSeconds(0);
+  now.setMilliseconds(0);
+
+  var allDay = false;
+
+  if (this.viewManager_.isInWeekMode()){
+    now.add(new goog.date.Interval(goog.date.Interval.HOURS, 1));
+    var start = now.clone();
+    now.add(new goog.date.Interval(goog.date.Interval.HOURS, 1));
+    var end = now.clone();
+
+  } // In case we adding in list mode.
+  else {
+    now.setHours(0);
+
+    now.add(new goog.date.Interval(goog.date.Interval.DAYS, 1));
+    start = now.clone();
+    now.add(new goog.date.Interval(goog.date.Interval.DAYS, 1));
+    end = now.clone();
+    allDay = true;
+
+  }
+
+  start = rflect.date.createDateShim(start.getYear(), start.getMonth(),
+      start.getDate(), start.getHours(), 0, 0, true);
+  end = rflect.date.createDateShim(end.getYear(), end.getMonth(),
+      end.getDate(), end.getHours(), 0, 0);
+
+  var event =
+      rflect.cal.events.EventManager.createEvent('', start, end, allDay);
+
+  this.eventHolder.openSession(event);
 
 }
 

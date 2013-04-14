@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012. Rflect, Alex K.
+ * Copyright (c) 2013. Rflect, Alex K.
  */
 
 /**
@@ -12,6 +12,7 @@ goog.provide('rflect.cal.ui.EventPane');
 goog.provide('rflect.cal.ui.EventPane.EventTypes');
 
 goog.require('goog.events.Event');
+goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.style');
 goog.require('goog.ui.Checkbox');
 goog.require('goog.ui.Component');
@@ -156,7 +157,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     'for': 'ep-event-name-input',
     className: labelClassName
   }, 'Name');
-  var inputName = dom.createDom('input', {
+  this.inputName_ = dom.createDom('input', {
     'type': 'text',
     id: 'ep-event-name-input',
     className: 'ep-event-name-input'
@@ -164,18 +165,18 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   var nameCont = dom.createDom('div',
     [goog.getCssName('event-name-input-cont'),
       goog.getCssName('event-edit-pane-cont')],
-    labelName, inputName);
+    labelName, this.inputName_);
 
   var labelStartDate = dom.createDom('label', {
     'for': 'event-start-date',
     className: labelClassName
   }, 'Start date');
-  var inputStartDate = dom.createDom('input', {
+  this.inputStartDate_ = dom.createDom('input', {
     'type': 'text',
     id: 'event-start-date',
     className: goog.getCssName('event-date-input')
   });
-  var inputStartTime = dom.createDom('input', {
+  this.inputStartTime_ = dom.createDom('input', {
     'type': 'text',
     id: 'event-start-time',
     className: goog.getCssName('event-time-input')
@@ -183,17 +184,17 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   var startInputCont = dom.createDom('div',
     [goog.getCssName('start-input-cont'),
       goog.getCssName('event-edit-pane-cont-inner')],
-    labelStartDate, inputStartDate, inputStartTime);
+    labelStartDate, this.inputStartDate_, this.inputStartTime_);
   var labelEndDate = dom.createDom('label', {
     'for': 'event-end-date',
     className: labelClassName
   }, 'End date');
-  var inputEndDate = dom.createDom('input', {
+  this.inputEndDate_ = dom.createDom('input', {
     'type': 'text',
     id: 'event-end-date',
     className: goog.getCssName('event-date-input')
   });
-  var inputEndTime = dom.createDom('input', {
+  this.inputEndTime_ = dom.createDom('input', {
     'type': 'text',
     id: 'event-end-time',
     className: goog.getCssName('event-time-input')
@@ -201,7 +202,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   var endInputCont = dom.createDom('div',
     [goog.getCssName('end-input-cont'),
       goog.getCssName('event-edit-pane-cont-inner')],
-    labelEndDate, inputEndDate, inputEndTime);
+    labelEndDate, this.inputEndDate_, this.inputEndTime_);
 
   var dateCont = dom.createDom('div',
     [goog.getCssName('date-input-cont'),
@@ -249,10 +250,14 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
   rflect.cal.ui.EventPane.superClass_.enterDocument.call(this);
 
   // Menu commands.
-  this.getHandler().listen(this.buttonCancel1_, goog.ui.Component.EventType.ACTION,
-      this.onCancel_, false, this)
+  this.getHandler().listen(this.buttonCancel1_,
+      goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
       .listen(this.buttonCancel2_, goog.ui.Component.EventType.ACTION,
-      this.onCancel_, false, this);
+      this.onCancel_, false, this).listen(this.buttonSave1_,
+      goog.ui.Component.EventType.ACTION, this.onSave_, false, this)
+      .listen(this.buttonSave2_, goog.ui.Component.EventType.ACTION,
+      this.onSave_, false, this).listen(this.buttonDelete_,
+      goog.ui.Component.EventType.ACTION, this.onDelete_, false, this);
 };
 
 
@@ -263,6 +268,30 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
 rflect.cal.ui.EventPane.prototype.onCancel_ = function(aEvent) {
   if (this.dispatchEvent(new goog.events.Event(
       rflect.cal.ui.EventPane.EventTypes.CANCEL))) {
+    this.setVisible(false);
+  }
+}
+
+
+/**
+ * Save action listener.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.ui.EventPane.prototype.onSave_ = function(aEvent) {
+  if (this.dispatchEvent(new goog.events.Event(
+      rflect.cal.ui.EventPane.EventTypes.SAVE))) {
+    this.setVisible(false);
+  }
+}
+
+
+/**
+ * Delete action listener.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.ui.EventPane.prototype.onDelete_ = function(aEvent) {
+  if (this.dispatchEvent(new goog.events.Event(
+      rflect.cal.ui.EventPane.EventTypes.DELETE))) {
     this.setVisible(false);
   }
 }
@@ -282,6 +311,10 @@ rflect.cal.ui.EventPane.prototype.setVisible = function(visible) {
   if (!this.isInDocument()) {
     this.render(this.parentEl_);
   }
+
+  this.displayValues();
+  this.inputName_.focus();
+
   this.showElement_(visible);
   this.visible_ = visible;
 };
@@ -294,6 +327,35 @@ rflect.cal.ui.EventPane.prototype.setVisible = function(visible) {
  */
 rflect.cal.ui.EventPane.prototype.showElement_ = function(visible) {
   goog.style.showElement(this.getElement(), visible);
+};
+
+
+/**
+ * Displays event properties in form.
+ */
+rflect.cal.ui.EventPane.prototype.displayValues = function() {
+  var eh = this.eventManager_.eventHolder;
+
+  var startDate = eh.getStartDate();
+  var endDate = eh.getEndDate();
+  
+  var formatStringDate = goog.i18n.DateTimeSymbols.DATEFORMATS[3];
+  var formatStringTime = goog.i18n.DateTimeSymbols.TIMEFORMATS[3];
+  var formatDate = new goog.i18n.DateTimeFormat(formatStringDate);
+  var formatTime = new goog.i18n.DateTimeFormat(formatStringTime);
+  var startDateFormatted = formatDate.format(startDate);
+  var startTimeFormatted = formatTime.format(startDate);
+  var endDateFormatted = formatDate.format(endDate);
+  var endTimeFormatted = formatTime.format(endDate);
+
+  this.inputStartDate_.value = startDateFormatted;
+  this.inputStartTime_.value = startTimeFormatted;
+  this.inputEndDate_.value = endDateFormatted;
+  this.inputEndTime_.value = endTimeFormatted;
+
+  this.inputName_.value = eh.getSummary() ||
+      rflect.cal.i18n.Symbols.NO_NAME_EVENT;
+  
 };
 
 

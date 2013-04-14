@@ -157,6 +157,54 @@ rflect.cal.events.EventHolder.prototype.setAllDay =
 
 
 /**
+ * @return {goog.date.DateTime|rflect.date.DateShim} aStartDate Start date.
+ */
+rflect.cal.events.EventHolder.prototype.getStartDate = function() {
+  return this.newTemporaryEvent_.startDate;
+}
+
+
+/**
+ * @return {goog.date.DateTime|rflect.date.DateShim} aEndDate End date.
+ */
+rflect.cal.events.EventHolder.prototype.getEndDate = function() {
+  return this.newTemporaryEvent_.endDate;
+}
+
+
+/**
+ * @return {string} aSummary Event name.
+ */
+rflect.cal.events.EventHolder.prototype.getSummary = function() {
+  return this.newTemporaryEvent_.summary;
+}
+
+
+/**
+ * @return {string} aDescription Event description.
+ */
+rflect.cal.events.EventHolder.prototype.getDescription = function() {
+  return this.newTemporaryEvent_.description;
+}
+
+
+/**
+ * @return {string} aLongId Event long id.
+ */
+rflect.cal.events.EventHolder.prototype.getLongId = function() {
+  return this.newTemporaryEvent_.longId;
+}
+
+
+/**
+ * @return {boolean} aAllDay Whether event is all-day.
+ */
+rflect.cal.events.EventHolder.prototype.getAllDay = function() {
+  return this.newTemporaryEvent_.allDay;
+}
+    
+    
+/**
  * @return {rflect.cal.events.Event|undefined} Backup event.
  */
 rflect.cal.events.EventHolder.prototype.getBackUpEvent =

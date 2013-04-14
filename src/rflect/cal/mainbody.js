@@ -266,9 +266,13 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
 rflect.cal.MainBody.prototype.onTopPaneAction_ = function(aEvent) {
   var id = aEvent.target.getId();
 
-  if (id == rflect.cal.predefined.BUTTON_NEW_EVENT_ID)
+  if (id == rflect.cal.predefined.BUTTON_NEW_EVENT_ID) {
     // TODO(alexk): check whether module is loaded
+
+    this.eventManager_.startEventCreationSession();
+
     this.showEventPane(true);
+  }
 }
 
 
@@ -285,7 +289,11 @@ rflect.cal.MainBody.prototype.showEventPane = function(aShow) {
 
     this.getHandler().listen(this.eventPane_,
         rflect.cal.ui.EventPane.EventTypes.CANCEL, this.onEventPaneCancel_,
-        false, this);
+        false, this).listen(this.eventPane_,
+        rflect.cal.ui.EventPane.EventTypes.SAVE, this.onEventPaneSave_,
+        false, this).listen(this.eventPane_,
+        rflect.cal.ui.EventPane.EventTypes.DELETE, this.onEventPaneDelete_,
+        false, this)
   }
 
   this.eventPane_.setVisible(aShow);
@@ -310,6 +318,51 @@ rflect.cal.MainBody.prototype.showCalendar_ = function(aShow) {
 rflect.cal.MainBody.prototype.onEventPaneCancel_ = function() {
   this.showEventPane(false);
 }
+
+
+/**
+ * Event pane save listener.
+ * @param {Event} aEvent Event object.
+ */
+rflect.cal.MainBody.prototype.onEventPaneSave_ = function(aEvent) {
+  aEvent.preventDefault();
+
+  this.updateMainPane_();
+
+  this.showEventPane(false);
+}
+
+
+/**
+ * Event pane delete listener.
+ * @param {Event} aEvent Event object.
+ */
+rflect.cal.MainBody.prototype.onEventPaneDelete_ = function(aEvent) {
+  aEvent.preventDefault();
+
+  this.updateMainPane_();
+
+  this.showEventPane(false);
+}
+
+/**
+ * Updates just main pane.
+ */
+rflect.cal.MainBody.prototype.updateMainPane_ = function() {
+  this.updateBeforeRedraw(
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR),
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.MINI_CAL),
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TOP_PANE)
+  );
+  this.updateByRedraw(
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR),
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.MINI_CAL),
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TOP_PANE)
+  );
+}
+
 
 
 /**

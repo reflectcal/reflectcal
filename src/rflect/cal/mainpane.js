@@ -994,9 +994,7 @@ rflect.cal.MainPane.prototype.onSaveDialogButtonSelect_ = function(aEvent) {
  * @param {{type: string}} aEvent Event object.
  */
 rflect.cal.MainPane.prototype.onEventEdit_ = function(aEvent) {
-  if (goog.DEBUG)
-    _log('edit clicked');
-  this.eventManager_.eventHolder.endWithEdit();
+  this.getParent().showEventPane(true);
 }
 
 
