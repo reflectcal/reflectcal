@@ -19,6 +19,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
+goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 
 
@@ -160,7 +161,8 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   this.inputName_ = dom.createDom('input', {
     'type': 'text',
     id: 'ep-event-name-input',
-    className: 'ep-event-name-input'
+    className: 'ep-event-name-input',
+    placeholder: rflect.cal.i18n.Symbols.NO_NAME_EVENT
   });
   var nameCont = dom.createDom('div',
     [goog.getCssName('event-name-input-cont'),
@@ -353,8 +355,7 @@ rflect.cal.ui.EventPane.prototype.displayValues = function() {
   this.inputEndDate_.value = endDateFormatted;
   this.inputEndTime_.value = endTimeFormatted;
 
-  this.inputName_.value = eh.getSummary() ||
-      rflect.cal.i18n.Symbols.NO_NAME_EVENT;
+  this.inputName_.value = eh.getSummary();
   
 };
 

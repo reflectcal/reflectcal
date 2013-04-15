@@ -11,7 +11,6 @@ goog.require('goog.date.Interval');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimePatterns');
-goog.require('rflect.cal.i18n.Symbols');
 
 goog.provide('rflect.cal.events.Event');
 
@@ -35,8 +34,8 @@ rflect.cal.events.Event = function(aUid, aLongId, aStartDate, aEndDate, aAllDay,
   this.startDate = aStartDate;
   this.endDate = aEndDate;
   this.allDay = aAllDay;
-  this.summary = opt_summary ||  rflect.cal.i18n.Symbols.NO_NAME_EVENT;
-  this.description = opt_description ||  '';
+  this.summary = opt_summary || '';
+  this.description = opt_description || '';
 };
 
 

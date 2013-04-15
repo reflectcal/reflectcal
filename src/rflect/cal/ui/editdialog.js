@@ -11,6 +11,7 @@ goog.provide('rflect.cal.ui.EditDialog');
 goog.provide('rflect.cal.ui.EditDialog.ButtonCaptions');
 
 goog.require('rflect.ui.Dialog');
+goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.SaveDialog');
 
 
@@ -133,7 +134,8 @@ rflect.cal.ui.EditDialog.prototype.enterDocument = function () {
  * @param {string} aEventName Event name for link.
  */
 rflect.cal.ui.EditDialog.prototype.setEventName = function(aEventName) {
-  this.eventNameLink_.innerHTML = aEventName;
+  this.eventNameLink_.innerHTML = aEventName ||
+      rflect.cal.i18n.Symbols.NO_NAME_EVENT;
 }
 
 

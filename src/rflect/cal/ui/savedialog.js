@@ -10,6 +10,7 @@
 
 goog.provide('rflect.cal.ui.SaveDialog');
 
+goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.ui.Dialog');
 
 
@@ -56,7 +57,9 @@ rflect.cal.ui.SaveDialog.HTML_PARTS_ =
     '<div class="event-name-cont">' +
         '<label for="event-name" class="event-name-label">Event name</label>' +
         '<input type="text" value="" id="event-name" name="event-name" ' +
-        'class="event-name-input" spellcheck="false"/>' +
+        'class="event-name-input" spellcheck="false" placeholder="' +
+        rflect.cal.i18n.Symbols.NO_NAME_EVENT +
+        '"/>' +
         '</div>' +
         '<a id="event-edit" class="event-edit-link goog-inline-block" ' +
         'href="javascript:void(0)">' +
