@@ -11,7 +11,10 @@
 goog.provide('rflect.cal.ui.EventPane');
 goog.provide('rflect.cal.ui.EventPane.EventTypes');
 
+goog.require('goog.dom.classes');
 goog.require('goog.events.Event');
+goog.require('goog.events.EventType');
+goog.require('goog.i18n.DateTimeParse');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.style');
 goog.require('goog.ui.Button');
@@ -89,6 +92,28 @@ rflect.cal.ui.EventPane.EventTypes = {
   SAVE: 'save',
   DELETE: 'delete'
 };
+
+
+/**
+ * Displays dates in form.
+ * @return {string} Date format with 4 digit year.
+ */
+rflect.cal.ui.EventPane.getDateFormatString = function() {
+  return goog.i18n.DateTimeSymbols.DATEFORMATS[3].replace(/y+/, 'yyyy');
+}
+
+
+/**
+ * Marks input as invalid or removes that mark.
+ * @param {boolean} aValid Whether input is valid.
+ * @param {Element} aInputEl Input element.
+ */
+rflect.cal.ui.EventPane.markInput = function(aValid, aInputEl) {
+  if (!aValid)
+    goog.dom.classes.add(aInputEl, goog.getCssName('input-invalid'));
+  else
+    goog.dom.classes.remove(aInputEl, goog.getCssName('input-invalid'));
+}
 
 
 /**
@@ -263,8 +288,28 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
       .listen(this.buttonDelete_,
       goog.ui.Component.EventType.ACTION, this.onDelete_, false, this)
       .listen(this.checkboxAllDay_,
-      goog.ui.Component.EventType.CHANGE, this.onCheck_, false, this);
+      goog.ui.Component.EventType.CHANGE, this.onCheck_, false, this)
+
+      .listen(this.inputStartDate_,
+      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
+      .listen(this.inputStartTime_,
+      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
+      .listen(this.inputEndDate_,
+      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
+      .listen(this.inputEndTime_,
+      goog.events.EventType.FOCUS, this.onInputFocus_, false, this);
 };
+
+
+/**
+ * Input focus listener.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.onInputFocus_ = function(aEvent) {
+  goog.dom.classes.remove(/**@type {Element}*/(aEvent.target),
+      goog.getCssName('input-invalid'));
+}
 
 
 /**
@@ -284,11 +329,12 @@ rflect.cal.ui.EventPane.prototype.onCancel_ = function(aEvent) {
  * @param {goog.events.Event} aEvent Event object.
  */
 rflect.cal.ui.EventPane.prototype.onSave_ = function(aEvent) {
-  this.scanValues();
-  this.eventManager_.eventHolder.endWithEdit();
-  if (this.dispatchEvent(new goog.events.Event(
-      rflect.cal.ui.EventPane.EventTypes.SAVE))) {
-    this.setVisible(false);
+  if (this.scanValues()) {
+    this.eventManager_.eventHolder.endWithEdit();
+    if (this.dispatchEvent(new goog.events.Event(
+        rflect.cal.ui.EventPane.EventTypes.SAVE))) {
+      this.setVisible(false);
+    }
   }
 }
 
@@ -375,7 +421,7 @@ rflect.cal.ui.EventPane.prototype.displayValues = function() {
   this.displayDates_();
 
   this.inputName_.value = eh.getSummary();
-  
+
   this.textAreaDesc_.innerHTML = eh.getDescription();
 
   this.checkboxAllDay_.setChecked(eh.getAllDay());
@@ -402,7 +448,7 @@ rflect.cal.ui.EventPane.prototype.displayDates_ = function() {
       uiEndDate.getMinutes() == 0)
     uiEndDate.add(new goog.date.Interval(goog.date.Interval.DAYS, -1));
 
-  var formatStringDate = goog.i18n.DateTimeSymbols.DATEFORMATS[3];
+  var formatStringDate = rflect.cal.ui.EventPane.getDateFormatString();
   var formatStringTime = goog.i18n.DateTimeSymbols.TIMEFORMATS[3];
   var formatDate = new goog.i18n.DateTimeFormat(formatStringDate);
   var formatTime = new goog.i18n.DateTimeFormat(formatStringTime);
@@ -415,46 +461,84 @@ rflect.cal.ui.EventPane.prototype.displayDates_ = function() {
   this.inputStartTime_.value = startTimeFormatted;
   this.inputEndDate_.value = endDateFormatted;
   this.inputEndTime_.value = endTimeFormatted;
+
+  rflect.cal.ui.EventPane.markInput(true, this.inputStartDate_);
+  rflect.cal.ui.EventPane.markInput(true, this.inputEndDate_);
+  rflect.cal.ui.EventPane.markInput(true, this.inputStartTime_);
+  rflect.cal.ui.EventPane.markInput(true, this.inputEndTime_);
 }
 
 
 /**
  * Scans values from form.
+ * @return {boolean} Whether input is valid.
  */
 rflect.cal.ui.EventPane.prototype.scanValues = function() {
+  var valid = false;
+
   var eh = this.eventManager_.eventHolder;
-
-  /*var startDate = eh.getStartDate();
-  var endDate = eh.getEndDate();
-
-  var formatStringDate = goog.i18n.DateTimeSymbols.DATEFORMATS[3];
-  var formatStringTime = goog.i18n.DateTimeSymbols.TIMEFORMATS[3];
-  var formatDate = new goog.i18n.DateTimeFormat(formatStringDate);
-  var formatTime = new goog.i18n.DateTimeFormat(formatStringTime);
-  var startDateFormatted = formatDate.format(startDate);
-  var startTimeFormatted = formatTime.format(startDate);
-  var endDateFormatted = formatDate.format(endDate);
-  var endTimeFormatted = formatTime.format(endDate);
-
-  this.inputStartDate_.value = startDateFormatted;
-  this.inputStartTime_.value = startTimeFormatted;
-  this.inputEndDate_.value = endDateFormatted;
-  this.inputEndTime_.value = endTimeFormatted;*/
-
-  if (eh.getAllDay()) {
-    eh.getStartDate().setHours(0);
-    eh.getStartDate().setMinutes(0);
-    if (!(eh.getEndDate().getHours() == 0 &&
-        eh.getEndDate().getMinutes() == 0)) {
-      eh.getEndDate().setHours(0);
-      eh.getEndDate().setMinutes(0);
-      eh.setEndDate(eh.getEndDate().getTomorrow());
-    }
-  }
 
   eh.setSummary(this.inputName_.value);
 
   eh.setDescription(this.textAreaDesc_.innerHTML);
+
+  var startDate = new goog.date.DateTime();
+  var startTime = new goog.date.DateTime();
+  var endDate = new goog.date.DateTime();
+  var endTime = new goog.date.DateTime();
+
+  var parserDate = new goog.i18n.DateTimeParse(
+      rflect.cal.ui.EventPane.getDateFormatString());
+  var parserTime = new goog.i18n.DateTimeParse(
+      goog.i18n.DateTimeSymbols.TIMEFORMATS[3]);
+
+  var validStartDate = parserDate.parse(this.inputStartDate_.value, startDate)
+      != 0;
+  var validEndDate = parserDate.parse(this.inputEndDate_.value, endDate) != 0;
+  var validStartTime = parserTime.parse(this.inputStartTime_.value, startTime)
+      != 0;
+  var validEndTime = parserTime.parse(this.inputEndTime_.value, endTime) != 0;
+
+  if (valid = (validStartDate && validEndDate && validStartTime &&
+      validEndTime)) {
+    startDate.setHours(startTime.getHours());
+    startDate.setMinutes(startTime.getMinutes());
+    endDate.setHours(endTime.getHours());
+    endDate.setMinutes(endTime.getMinutes());
+  }
+  
+  if (valid && startDate.getTime() > endDate.getTime())
+    valid = validEndDate = validEndTime = false;
+
+  rflect.cal.ui.EventPane.markInput(validStartDate, this.inputStartDate_);
+  rflect.cal.ui.EventPane.markInput(validEndDate, this.inputEndDate_);
+  rflect.cal.ui.EventPane.markInput(validStartTime, this.inputStartTime_);
+  rflect.cal.ui.EventPane.markInput(validEndTime, this.inputEndTime_);
+
+  if (valid) {
+    var startDateShim = rflect.date.createDateShim(startDate.getYear(),
+        startDate.getMonth(), startDate.getDate(), startDate.getHours(),
+        startDate.getMinutes(), 0, true);
+    var endDateShim = rflect.date.createDateShim(endDate.getYear(),
+        endDate.getMonth(), endDate.getDate(), endDate.getHours(),
+        endDate.getMinutes(), 0);
+
+    if (eh.getAllDay()) {
+      startDateShim.setHours(0);
+      startDateShim.setMinutes(0);
+      if (!(endDateShim.getHours() == 0 &&
+          endDateShim.getMinutes() == 0)) {
+        endDateShim.setHours(0);
+        endDateShim.setMinutes(0);
+        endDateShim = endDateShim.getTomorrow();
+      }
+    }
+
+    eh.setStartDate(startDateShim);
+    eh.setEndDate(endDateShim);
+  }
+
+  return valid;
 };
 
 
