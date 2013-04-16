@@ -547,6 +547,8 @@ rflect.cal.MainPane.prototype.enterDocument = function() {
 
   this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
       this.onClick_, false, this)
+      .listen(this.getElement(), goog.events.EventType.DBLCLICK,
+      this.onDoubleClick_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
       this.onMouseOver_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
@@ -625,7 +627,23 @@ rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
     this.updateBeforeRedraw();
     this.updateByRedraw();
   } else if (this.isChip_(className)) {
-    this.showEditDialog_(target, className);
+    this.showEventEditComponent_(target, className);
+  }
+};
+
+
+/**
+ * Main pane double click handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.MainPane.prototype.onDoubleClick_ = function(aEvent) {
+  var target = /** @type {Element}*/ (aEvent.target);
+  var id = target.id;
+  var className = target.className;
+
+  if (this.isChip_(className)) {
+    this.showEventEditComponent_(target, className, true);
   }
 };
 
@@ -633,9 +651,11 @@ rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
 /**
  * @param {Element} aTarget Element that was clicked to invoke dialog.
  * @param {string} aChipClassName Class name of chip.
+ * @param {boolean=} aShowPane Whether to show event edit pane.
  */
-rflect.cal.MainPane.prototype.showEditDialog_ = function(aTarget,
-                                                         aChipClassName) {
+rflect.cal.MainPane.prototype.showEventEditComponent_ = function(aTarget,
+                                                         aChipClassName,
+                                                         aShowPane) {
   var className = aChipClassName;
   if (aTarget.className == goog.getCssName('event-wk-timelabel'))
     className = aTarget.parentNode.className;
@@ -644,10 +664,15 @@ rflect.cal.MainPane.prototype.showEditDialog_ = function(aTarget,
     
   if (!isNaN(eventId)) {
     var event = this.eventManager_.getEventById(eventId);
-  
-    this.editDialog_.setVisible(true);
-    this.editDialog_.setEventName(event.summary);
-    this.editDialog_.setEventTimeString(event.toHumanString());
+
+    if (aShowPane) {
+      this.getParent().showEventPane(true);
+      this.editDialog_.setVisible(false);
+    } else {
+      this.editDialog_.setVisible(true);
+      this.editDialog_.setEventName(event.summary);
+      this.editDialog_.setEventTimeString(event.toHumanString());
+    }
 
     this.eventManager_.eventHolder.openSession(event);
   }

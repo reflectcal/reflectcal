@@ -124,8 +124,7 @@ rflect.cal.events.EventHolder.prototype.setEndDate =
  */
 rflect.cal.events.EventHolder.prototype.setSummary =
     function(aSummary) {
-  this.newTemporaryEvent_.summary = aSummary ||
-      rflect.cal.i18n.Symbols.NO_NAME_EVENT;
+  this.newTemporaryEvent_.summary = aSummary || '';
 }
 
 

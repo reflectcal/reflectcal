@@ -14,6 +14,7 @@ goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.string.StringBuffer');
 goog.require('rflect.cal.i18n.predefined');
+goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.date');
 
 
@@ -1533,7 +1534,7 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
   rflect.cal.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, false);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 9]);
   // Description.
-  aSb.append(event.summary);
+  aSb.append(event.summary || rflect.cal.i18n.Symbols.NO_NAME_EVENT);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 10]);
 }
 
@@ -1605,7 +1606,7 @@ rflect.cal.MainPaneBuilder.buildMonthBlockChip_ =
   // Time.
   //rflect.cal.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, true);
   // Description.
-  aSb.append(event.summary);
+  aSb.append(event.summary || rflect.cal.i18n.Symbols.NO_NAME_EVENT);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 6]);
   }
 

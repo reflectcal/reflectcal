@@ -14,13 +14,13 @@ goog.provide('rflect.cal.ui.EventPane.EventTypes');
 goog.require('goog.events.Event');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.style');
+goog.require('goog.ui.Button');
 goog.require('goog.ui.Checkbox');
 goog.require('goog.ui.Component');
-goog.require('goog.ui.Button');
 goog.require('goog.ui.FlatButtonRenderer');
-goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
+goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
 
 
 /**
@@ -226,14 +226,14 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     className: labelClassName + ' ' +
       goog.getCssName('event-description-label')
   }, 'Description');
-  var textAreaDesc = dom.createDom('textarea', {
+  this.textAreaDesc_ = dom.createDom('textarea', {
     id: 'event-description',
       className: goog.getCssName('event-description')
   });
   var descCont = dom.createDom('div', [
     goog.getCssName('description-cont'),
       goog.getCssName('event-edit-pane-cont')],
-    labelDesc, textAreaDesc);
+    labelDesc, this.textAreaDesc_);
 
   var root = dom.createDom('div', {
     className: goog.getCssName('event-edit-pane'),
@@ -255,11 +255,15 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
   this.getHandler().listen(this.buttonCancel1_,
       goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
       .listen(this.buttonCancel2_, goog.ui.Component.EventType.ACTION,
-      this.onCancel_, false, this).listen(this.buttonSave1_,
+      this.onCancel_, false, this)
+      .listen(this.buttonSave1_,
       goog.ui.Component.EventType.ACTION, this.onSave_, false, this)
       .listen(this.buttonSave2_, goog.ui.Component.EventType.ACTION,
-      this.onSave_, false, this).listen(this.buttonDelete_,
-      goog.ui.Component.EventType.ACTION, this.onDelete_, false, this);
+      this.onSave_, false, this)
+      .listen(this.buttonDelete_,
+      goog.ui.Component.EventType.ACTION, this.onDelete_, false, this)
+      .listen(this.checkboxAllDay_,
+      goog.ui.Component.EventType.CHANGE, this.onCheck_, false, this);
 };
 
 
@@ -280,6 +284,8 @@ rflect.cal.ui.EventPane.prototype.onCancel_ = function(aEvent) {
  * @param {goog.events.Event} aEvent Event object.
  */
 rflect.cal.ui.EventPane.prototype.onSave_ = function(aEvent) {
+  this.scanValues();
+  this.eventManager_.eventHolder.endWithEdit();
   if (this.dispatchEvent(new goog.events.Event(
       rflect.cal.ui.EventPane.EventTypes.SAVE))) {
     this.setVisible(false);
@@ -292,10 +298,38 @@ rflect.cal.ui.EventPane.prototype.onSave_ = function(aEvent) {
  * @param {goog.events.Event} aEvent Event object.
  */
 rflect.cal.ui.EventPane.prototype.onDelete_ = function(aEvent) {
+  this.eventManager_.eventHolder.endWithDelete();
   if (this.dispatchEvent(new goog.events.Event(
       rflect.cal.ui.EventPane.EventTypes.DELETE))) {
     this.setVisible(false);
   }
+}
+
+
+/**
+ * Checkbox action listener.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.ui.EventPane.prototype.onCheck_ = function(aEvent) {
+  var eh = this.eventManager_.eventHolder;
+  var checked;
+  if (aEvent.target == this.checkboxAllDay_) {
+    checked = this.checkboxAllDay_.isChecked();
+    this.showTimeInputs_(!checked);
+    eh.setAllDay(checked);
+
+    this.displayDates_();
+  }
+}
+
+
+/**
+ * @param {boolean} aShow Whether to show time inputs.
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.showTimeInputs_ = function(aShow) {
+  goog.style.showElement(this.inputStartTime_, aShow);
+  goog.style.showElement(this.inputEndTime_, aShow);
 }
 
 
@@ -338,9 +372,61 @@ rflect.cal.ui.EventPane.prototype.showElement_ = function(visible) {
 rflect.cal.ui.EventPane.prototype.displayValues = function() {
   var eh = this.eventManager_.eventHolder;
 
+  this.displayDates_();
+
+  this.inputName_.value = eh.getSummary();
+  
+  this.textAreaDesc_.innerHTML = eh.getDescription();
+
+  this.checkboxAllDay_.setChecked(eh.getAllDay());
+
+  this.showTimeInputs_(!eh.getAllDay());
+};
+
+
+/**
+ * Displays dates in form.
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.displayDates_ = function() {
+  var eh = this.eventManager_.eventHolder;
+
   var startDate = eh.getStartDate();
   var endDate = eh.getEndDate();
-  
+  // We need human-adjusted end date for all-day events.
+  // Our interlal end dates are exclusive, and it's more natural for all-day
+  // events to have inclusive end.
+  var uiEndDate = endDate.clone();
+
+  if (eh.getAllDay() && uiEndDate.getHours() == 0 &&
+      uiEndDate.getMinutes() == 0)
+    uiEndDate.add(new goog.date.Interval(goog.date.Interval.DAYS, -1));
+
+  var formatStringDate = goog.i18n.DateTimeSymbols.DATEFORMATS[3];
+  var formatStringTime = goog.i18n.DateTimeSymbols.TIMEFORMATS[3];
+  var formatDate = new goog.i18n.DateTimeFormat(formatStringDate);
+  var formatTime = new goog.i18n.DateTimeFormat(formatStringTime);
+  var startDateFormatted = formatDate.format(startDate);
+  var startTimeFormatted = formatTime.format(startDate);
+  var endDateFormatted = formatDate.format(uiEndDate);
+  var endTimeFormatted = formatTime.format(uiEndDate);
+
+  this.inputStartDate_.value = startDateFormatted;
+  this.inputStartTime_.value = startTimeFormatted;
+  this.inputEndDate_.value = endDateFormatted;
+  this.inputEndTime_.value = endTimeFormatted;
+}
+
+
+/**
+ * Scans values from form.
+ */
+rflect.cal.ui.EventPane.prototype.scanValues = function() {
+  var eh = this.eventManager_.eventHolder;
+
+  /*var startDate = eh.getStartDate();
+  var endDate = eh.getEndDate();
+
   var formatStringDate = goog.i18n.DateTimeSymbols.DATEFORMATS[3];
   var formatStringTime = goog.i18n.DateTimeSymbols.TIMEFORMATS[3];
   var formatDate = new goog.i18n.DateTimeFormat(formatStringDate);
@@ -353,10 +439,22 @@ rflect.cal.ui.EventPane.prototype.displayValues = function() {
   this.inputStartDate_.value = startDateFormatted;
   this.inputStartTime_.value = startTimeFormatted;
   this.inputEndDate_.value = endDateFormatted;
-  this.inputEndTime_.value = endTimeFormatted;
+  this.inputEndTime_.value = endTimeFormatted;*/
 
-  this.inputName_.value = eh.getSummary();
-  
+  if (eh.getAllDay()) {
+    eh.getStartDate().setHours(0);
+    eh.getStartDate().setMinutes(0);
+    if (!(eh.getEndDate().getHours() == 0 &&
+        eh.getEndDate().getMinutes() == 0)) {
+      eh.getEndDate().setHours(0);
+      eh.getEndDate().setMinutes(0);
+      eh.setEndDate(eh.getEndDate().getTomorrow());
+    }
+  }
+
+  eh.setSummary(this.inputName_.value);
+
+  eh.setDescription(this.textAreaDesc_.innerHTML);
 };
 
 

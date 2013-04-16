@@ -349,6 +349,7 @@ rflect.cal.MainBody.prototype.onEventPaneDelete_ = function(aEvent) {
  * Updates just main pane.
  */
 rflect.cal.MainBody.prototype.updateMainPane_ = function() {
+  this.eventManager_.run();
   this.updateBeforeRedraw(
       /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
       /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR),
