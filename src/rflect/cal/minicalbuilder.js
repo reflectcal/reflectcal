@@ -16,14 +16,14 @@ goog.require('rflect.cal.i18n.predefined');
 
 /**
  * Main pane builder main class.
- * @param {rflect.cal.MiniCal} aMiniCal Link to mini cal.
+ * @param {rflect.cal.ui.DatePicker} aMiniCal Link to mini cal.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @constructor
  */
 rflect.cal.MiniCalBuilder = function(aMiniCal, aTimeManager) {
   /**
    * Link to mini cal.
-   * @type {rflect.cal.MiniCal}
+   * @type {rflect.cal.ui.DatePicker}
    * @private
    */
   this.miniCal_ = aMiniCal;
@@ -115,7 +115,7 @@ rflect.cal.MiniCalBuilder.prototype.buildBodyInternal = function(aSb) {
         this.buildMainClassName_(aSb);
       };break;
       case 2: {
-        this.miniCal_.selectionMask.build(aSb);
+        this.miniCal_.selectionMask && this.miniCal_.selectionMask.build(aSb);
       };break;
       case 3: {
         this.buildHeader_(aSb);

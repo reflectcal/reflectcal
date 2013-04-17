@@ -116,7 +116,7 @@ rflect.cal.ui.SaveDialog.prototype.onEditClick_ = function (aEvent) {
 
 
 /**
- * Event types for save dialog.
+ * Edit event.
  * @const {string}
  */
 rflect.cal.ui.SaveDialog.EVENT_EDIT = 'editevent';
