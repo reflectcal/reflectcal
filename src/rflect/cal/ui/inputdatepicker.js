@@ -72,3 +72,12 @@ rflect.cal.ui.InputDatePicker.prototype.onMouseDown_ = function(aEvent) {
 rflect.cal.ui.InputDatePicker.prototype.addInput = function(aInput) {
 
 }
+
+
+/**
+ * Removes input.
+ * @param {Element} aInput Input to add.
+ */
+rflect.cal.ui.InputDatePicker.prototype.removeInput = function(aInput) {
+
+}
