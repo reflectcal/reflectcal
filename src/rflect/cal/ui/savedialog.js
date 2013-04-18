@@ -11,7 +11,8 @@
 goog.provide('rflect.cal.ui.SaveDialog');
 
 goog.require('rflect.cal.i18n.Symbols');
-goog.require('rflect.ui.Dialog');
+goog.require('rflect.ui.DialogMouseMissBehavior');
+
 
 
 /**
@@ -23,20 +24,18 @@ goog.require('rflect.ui.Dialog');
  *     issue by using an iframe instead of a div for bg element.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
  *     goog.ui.Component} for semantics.
- * @extends {rflect.ui.Dialog}
+ * @extends {rflect.ui.DialogMouseMissBehavior}
  */
 rflect.cal.ui.SaveDialog = function (opt_class, opt_useIframeMask, opt_domHelper) {
-  rflect.ui.Dialog.call(this, undefined, undefined, undefined,
-      goog.ui.FlatButtonRenderer.getInstance());
+  rflect.ui.DialogMouseMissBehavior.call(this, undefined, undefined, undefined);
 
   this.setTitle('New event');
   this.setModal(false);
   this.setBackgroundElementOpacity(0);
   this.setButtonSet(rflect.ui.Dialog.ButtonSet.createSaveCancel());
   this.setContent(rflect.cal.ui.SaveDialog.HTML_PARTS_);
-  this.setMouseMissToCancel(true);
 };
-goog.inherits(rflect.cal.ui.SaveDialog, rflect.ui.Dialog);
+goog.inherits(rflect.cal.ui.SaveDialog, rflect.ui.DialogMouseMissBehavior);
 
 
 /**
@@ -126,8 +125,8 @@ rflect.cal.ui.SaveDialog.EVENT_EDIT = 'editevent';
  * Dispose method.
  * @override
  */
-rflect.cal.ui.SaveDialog.prototype.dispose = function () {
-  rflect.cal.ui.SaveDialog.superClass_.dispose.call(this);
-
+rflect.cal.ui.SaveDialog.prototype.disposeInternal = function () {
   this.input_ = null;
+  rflect.cal.ui.SaveDialog.superClass_.disposeInternal.call(this);
+
 }

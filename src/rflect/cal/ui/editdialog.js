@@ -10,7 +10,7 @@
 goog.provide('rflect.cal.ui.EditDialog');
 goog.provide('rflect.cal.ui.EditDialog.ButtonCaptions');
 
-goog.require('rflect.ui.Dialog');
+goog.require('rflect.ui.DialogMouseMissBehavior');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.SaveDialog');
 
@@ -25,21 +25,19 @@ goog.require('rflect.cal.ui.SaveDialog');
  *     issue by using an iframe instead of a div for bg element.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
  *     goog.ui.Component} for semantics.
- * @extends {rflect.ui.Dialog}
+ * @extends {rflect.ui.DialogMouseMissBehavior}
  */
 rflect.cal.ui.EditDialog = function(opt_class, opt_useIframeMask,
     opt_domHelper) {
-  rflect.ui.Dialog.call(this, undefined, undefined, undefined,
-      goog.ui.FlatButtonRenderer.getInstance());
+  rflect.ui.DialogMouseMissBehavior.call(this, undefined, undefined, undefined);
 
   this.setTitle('Edit event');
   this.setModal(false);
   this.setBackgroundElementOpacity(0);
   this.setButtonSet(rflect.cal.ui.EditDialog.createButtonSet());
   this.setContent(rflect.cal.ui.EditDialog.HTML_PARTS_);
-  this.setMouseMissToCancel(true);
 };
-goog.inherits(rflect.cal.ui.EditDialog, rflect.ui.Dialog);
+goog.inherits(rflect.cal.ui.EditDialog, rflect.ui.DialogMouseMissBehavior);
 
 
 /**
@@ -165,11 +163,12 @@ rflect.cal.ui.EditDialog.prototype.onEditClick_ = function (aEvent) {
  * Dispose method.
  * @override
  */
-rflect.cal.ui.EditDialog.prototype.dispose = function () {
-  rflect.cal.ui.EditDialog.superClass_.dispose.call(this);
+rflect.cal.ui.EditDialog.prototype.disposeInternal = function () {
 
   this.eventTimeCont_ = null;
   this.eventNameLink_ = null;
+
+  rflect.cal.ui.EditDialog.superClass_.disposeInternal.call(this);
 }
 
 

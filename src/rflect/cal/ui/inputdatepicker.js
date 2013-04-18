@@ -9,24 +9,27 @@
 
 goog.provide('rflect.cal.ui.InputDatePicker');
 
-goog.require('goog.events.EventType');
-goog.require('rflect.ui.Component');
-goog.require('rflect.cal.MiniCalBuilder');
-goog.require('rflect.cal.MouseOverRegistry');
-goog.require('rflect.cal.TimeManager');
-goog.require('rflect.cal.TimeManager.Direction');
-goog.require('rflect.string');
+goog.require('rflect.ui.MouseMissBehavior');
+goog.require('rflect.cal.ui.DatePicker');
 
 
 
 /**
  * Date picker main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
- * @extends {rflect.ui.Component}
+ * @extends {rflect.cal.ui.DatePicker}
  * @constructor
  */
 rflect.cal.ui.InputDatePicker = function(aViewManager) {
   rflect.cal.ui.DatePicker.call(this, aViewManager);
+
+
+  /**
+   * @type {rflect.ui.MouseMissBehavior}
+   * @private
+   */
+  this.mmBehavior_ = new rflect.ui.MouseMissBehavior(this);
+  this.mmBehavior_.enable(true);
 };
 goog.inherits(rflect.cal.ui.InputDatePicker, rflect.cal.ui.DatePicker);
 
@@ -38,17 +41,9 @@ rflect.cal.ui.InputDatePicker.prototype.enterDocument = function() {
   rflect.cal.ui.InputDatePicker.superClass_.enterDocument.call(this);
 
   this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
-      this.onClick_, false, this)
-      .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
-      this.onMouseOver_, false, this)
-      .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
-      this.onMouseOut_, false, this)
-      .listen(this.getElement(), goog.events.EventType.SELECTSTART,
-      this.onSelectStart_, false, this)
-      .listen(document, goog.events.EventType.MOUSEDOWN,
-      this.onMouseDown_, false, this)
-      .listen(document, goog.events.EventType.MOUSEUP,
-      this.onMouseUp_, false, this);
+      this.onClick_, false, this);
+
+  this.mmBehavior_.enterDocument();
 };
 
 
@@ -80,4 +75,14 @@ rflect.cal.ui.InputDatePicker.prototype.addInput = function(aInput) {
  */
 rflect.cal.ui.InputDatePicker.prototype.removeInput = function(aInput) {
 
+}
+
+
+/**
+ * Dispose method.
+ * @override
+ */
+rflect.cal.ui.InputDatePicker.prototype.disposeInternal = function () {
+  this.mmBehavior_.dispose();
+  rflect.cal.ui.InputDatePicker.superClass_.disposeInternal.call(this);
 }

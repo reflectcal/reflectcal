@@ -1091,11 +1091,13 @@ rflect.cal.MainPane.prototype.onMainPaneScrollableScroll_ = function(aEvent) {
  * @protected
  */
 rflect.cal.MainPane.prototype.disposeInternal = function() {
-  rflect.cal.MainPane.superClass_.disposeInternal.call(this);
 
   this.removeScrollListeners_();
 
   this.viewManager_ = null;
   this.timeManager_ = null;
   this.containerSizeMonitor_ = null;
+
+
+  rflect.cal.MainPane.superClass_.disposeInternal.call(this);
 };
