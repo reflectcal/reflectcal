@@ -204,3 +204,8 @@ td.goog-date-picker-selected {
   border-color: #246 #9bd #9bd #246;
   color: #fff;
 }
+
+.rflect-input-datepicker {
+  position: absolute;
+  width: 150px;
+}

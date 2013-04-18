@@ -9,6 +9,7 @@
 
 goog.provide('rflect.cal.ui.DatePicker');
 
+goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('rflect.ui.Component');
 goog.require('rflect.cal.MiniCalBuilder');
@@ -295,9 +296,24 @@ rflect.cal.ui.DatePicker.prototype.onMouseUp_ = function(aEvent) {
   var index = rflect.string.get2DigitIndex(aEvent.target.id);
 
   if (this.isField_(className))
-    goog.events.dispatchEvent(this, {
-      type: rflect.cal.ui.DatePicker.EVENT_DATE_CHANGE,
-      date: this.timeManager_.daySeries[index]
-    });
+    goog.events.dispatchEvent(this,
+      new rflect.cal.ui.DatePicker.Event(this.timeManager_.daySeries[index]));
+};
+
+
+/**
+ * Date picker event.
+ * @param {rflect.date.DateShim} aDate Date that was set in date picker.
+ * @constructor
+ */
+rflect.cal.ui.DatePicker.Event = function(aDate) {
+
+  this.type = rflect.cal.ui.DatePicker.EVENT_DATE_CHANGE;
+
+  /**
+   * Date that was set in date picker.
+   * @type {rflect.date.DateShim}
+   */
+  this.date = aDate;
 };
 

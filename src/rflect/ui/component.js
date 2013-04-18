@@ -46,7 +46,7 @@ rflect.ui.Component.indexIsInExclusions_ = function(aContainer, aIndex) {
  * Creates component on an empty div element.
  */
 rflect.ui.Component.prototype.createDom = function() {
-  this.decorateInternal(this.dom_.createElement('div'));
+  this.decorateInternal(this.getDomHelper().createDom('div'));
 };
 
 

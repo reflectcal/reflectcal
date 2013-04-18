@@ -17,12 +17,15 @@ goog.require('goog.events.EventType');
 goog.require('goog.i18n.DateTimeParse');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.style');
+goog.require('goog.ui.ac');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.Checkbox');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
+goog.require('rflect.cal.ui.InputDatePicker');
+goog.require('rflect.date.util');
 goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
 
 
@@ -79,6 +82,13 @@ rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
   this.addChild(this.buttonSave2_ = new goog.ui.Button(
       rflect.ui.Dialog.DefaultButtonCaptions.SAVE,
       goog.ui.FlatButtonRenderer.getInstance()));
+
+  /**
+   * @type {rflect.cal.ui.InputDatePicker}
+   * @private
+   */
+  this.inputDatePicker_ = new rflect.cal.ui.InputDatePicker(this.viewManager_,
+      rflect.cal.ui.EventPane.getDateFormatString());
 
 };
 goog.inherits(rflect.cal.ui.EventPane, goog.ui.Component);
@@ -197,7 +207,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   var labelStartDate = dom.createDom('label', {
     'for': 'event-start-date',
     className: labelClassName
-  }, 'Start date');
+  }, 'Date');
   this.inputStartDate_ = dom.createDom('input', {
     'type': 'text',
     id: 'event-start-date',
@@ -208,14 +218,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     id: 'event-start-time',
     className: goog.getCssName('event-time-input')
   });
-  var startInputCont = dom.createDom('div',
-    [goog.getCssName('start-input-cont'),
-      goog.getCssName('event-edit-pane-cont-inner')],
-    labelStartDate, this.inputStartDate_, this.inputStartTime_);
-  var labelEndDate = dom.createDom('label', {
-    'for': 'event-end-date',
-    className: labelClassName
-  }, 'End date');
+
   this.inputEndDate_ = dom.createDom('input', {
     'type': 'text',
     id: 'event-end-date',
@@ -226,15 +229,17 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     id: 'event-end-time',
     className: goog.getCssName('event-time-input')
   });
-  var endInputCont = dom.createDom('div',
-    [goog.getCssName('end-input-cont'),
-      goog.getCssName('event-edit-pane-cont-inner')],
-    labelEndDate, this.inputEndDate_, this.inputEndTime_);
+
+  var startInputCont = dom.createDom('div',
+      [goog.getCssName('start-input-cont'),
+        goog.getCssName('event-edit-pane-cont-inner')],
+      labelStartDate, this.inputStartDate_, this.inputStartTime_,
+      ' - ', this.inputEndDate_, this.inputEndTime_);
 
   var dateCont = dom.createDom('div',
     [goog.getCssName('date-input-cont'),
       goog.getCssName('event-edit-pane-cont')],
-    startInputCont, endInputCont);
+    startInputCont);
 
   var labelAllDay = dom.createDom('label', {
     'for': 'event-all-day',
@@ -267,6 +272,12 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
       buttonsCont2);
 
   this.setElementInternal(root);
+
+  var timeLabels = rflect.date.util.getTimeLabels();
+  var timeAutoComplete1 = goog.ui.ac.createSimpleAutoComplete(
+      timeLabels, this.inputStartTime_, false);
+  var timeAutoComplete2 = goog.ui.ac.createSimpleAutoComplete(
+      timeLabels, this.inputEndTime_, false);
 }
 
 
@@ -298,6 +309,9 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
       goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
       .listen(this.inputEndTime_,
       goog.events.EventType.FOCUS, this.onInputFocus_, false, this);
+
+  this.inputDatePicker_.addInput(this.inputStartDate_);
+  this.inputDatePicker_.addInput(this.inputEndDate_);
 };
 
 
@@ -440,7 +454,7 @@ rflect.cal.ui.EventPane.prototype.displayDates_ = function() {
   var startDate = eh.getStartDate();
   var endDate = eh.getEndDate();
   // We need human-adjusted end date for all-day events.
-  // Our interlal end dates are exclusive, and it's more natural for all-day
+  // Our interval end dates are exclusive, and it's more natural for all-day
   // events to have inclusive end.
   var uiEndDate = endDate.clone();
 
@@ -548,6 +562,7 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
  * @protected
  */
 rflect.cal.ui.EventPane.prototype.disposeInternal = function() {
-  rflect.cal.ui.EventPane.superClass_.disposeInternal.call(this);
+  this.inputDatePicker_.dispose();
 
+  rflect.cal.ui.EventPane.superClass_.disposeInternal.call(this);
 };

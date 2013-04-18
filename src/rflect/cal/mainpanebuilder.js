@@ -16,6 +16,7 @@ goog.require('goog.string.StringBuffer');
 goog.require('rflect.cal.i18n.predefined');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.date');
+goog.require('rflect.date.util');
 
 
 
@@ -1222,16 +1223,10 @@ rflect.cal.MainPaneBuilder.prototype.buildHoursAndGridRows_ =
 
   // First run, without cache.
   var sb = new goog.string.StringBuffer();
-  var timeFormat = new goog.i18n.DateTimeFormat(
-      goog.i18n.DateTimeSymbols.TIMEFORMATS[3]);
-  var timeCounter = new goog.date.DateTime();
-  var timeIncrement = new goog.date.Interval(0, 0, 0, 0, 30);
-  timeCounter.setHours(0);
-  timeCounter.setMinutes(0);
-  timeCounter.setSeconds(0);
+  var timeLabels = rflect.date.util.getTimeLabels();
 
-  for (var counter = 0; counter < rflect.cal.predefined.HOUR_ROWS_NUMBER;
-      counter++, timeCounter.add(timeIncrement)) {
+  for (var counter = 0; counter < timeLabels.length;
+      counter++) {
     if (counter > 0)
       sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
     //if (counter != 47)
@@ -1247,7 +1242,7 @@ rflect.cal.MainPaneBuilder.prototype.buildHoursAndGridRows_ =
     }
     sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
     // Formatted time string.
-    sb.append(timeFormat.format(timeCounter));
+    sb.append(timeLabels[counter]);
     sb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
   }
 
