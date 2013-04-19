@@ -168,7 +168,7 @@ rflect.cal.ui.DatePicker.prototype.enterDocument = function() {
       this.onMouseOut_, false, this)
       .listen(this.getElement(), goog.events.EventType.SELECTSTART,
       this.onSelectStart_, false, this)
-      .listen(document, goog.events.EventType.MOUSEDOWN,
+      .listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
       this.onMouseDown_, false, this)
       .listen(document, goog.events.EventType.MOUSEUP,
       this.onMouseUp_, false, this);
@@ -295,7 +295,7 @@ rflect.cal.ui.DatePicker.prototype.onMouseUp_ = function(aEvent) {
   var className = aEvent.target.className;
   var index = rflect.string.get2DigitIndex(aEvent.target.id);
 
-  if (this.isField_(className))
+  if (this.isField_(className) && !isNaN(index))
     goog.events.dispatchEvent(this,
       new rflect.cal.ui.DatePicker.Event(this.timeManager_.daySeries[index]));
 };

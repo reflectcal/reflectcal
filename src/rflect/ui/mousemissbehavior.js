@@ -139,6 +139,8 @@ rflect.ui.MouseMissBehavior.prototype.enterDocument = function() {
  * Informs that component was mousedowned.
  */
 rflect.ui.MouseMissBehavior.prototype.onMouseDown_ = function() {
+  if (goog.DEBUG)
+    _log('onMouseDown_');
   this.doNotClose = true;
 }
 
@@ -147,13 +149,19 @@ rflect.ui.MouseMissBehavior.prototype.onMouseDown_ = function() {
  * Document-level mouse listener.
  */
 rflect.ui.MouseMissBehavior.onMouseDownGlobal_ = function() {
+  if (goog.DEBUG)
+    _log('onMouseDownGlobal_');
   for (var counter = 0, length = rflect.ui.MouseMissBehavior.instances_.length;
-       counter < length; counter++)
+       counter < length; counter++) {
+    if (goog.DEBUG)
+        _log('rflect.ui.MouseMissBehavior.instances_[counter].doNotClose',
+        rflect.ui.MouseMissBehavior.instances_[counter].doNotClose);
     if (rflect.ui.MouseMissBehavior.instances_[counter].doNotClose)
       rflect.ui.MouseMissBehavior.instances_[counter].doNotClose = false;
     else
       rflect.ui.MouseMissBehavior.instances_[counter].component
       .setVisible(false);
+  }
 }
 
 

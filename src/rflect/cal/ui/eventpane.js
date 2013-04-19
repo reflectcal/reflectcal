@@ -198,6 +198,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     'type': 'text',
     id: 'ep-event-name-input',
     className: 'ep-event-name-input',
+    autofocus: 'autofocus',
     placeholder: rflect.cal.i18n.Symbols.NO_NAME_EVENT
   });
   var nameCont = dom.createDom('div',
@@ -431,9 +432,10 @@ rflect.cal.ui.EventPane.prototype.setVisible = function(visible) {
   }
 
   this.displayValues();
-  this.inputName_.focus();
 
   this.showElement_(visible);
+  this.inputName_.focus();
+
   this.visible_ = visible;
 };
 

@@ -33,7 +33,7 @@ rflect.cal.ui.InputDatePicker = function(aViewManager, aParseFormat) {
    * @private
    */
   this.mmBehavior_ = new rflect.ui.MouseMissBehavior(this);
-  this.mmBehavior_.enable(true);
+  this.mmBehavior_.enable(0);
 
 
   this.parser_ =  new goog.i18n.DateTimeParse(aParseFormat);
@@ -91,10 +91,9 @@ rflect.cal.ui.InputDatePicker.prototype.enterDocument = function() {
  * @private
  */
 rflect.cal.ui.InputDatePicker.prototype.onMouseDown_ = function(aEvent) {
-  var className = aEvent.target.className;
-  if (this.isInteractiveArea_(className))
-    aEvent.preventDefault();
-
+  // Very important! Does not allow input to loose focus, and, therefore, close
+  // picker.
+  aEvent.preventDefault();
 };
 
 
@@ -146,6 +145,8 @@ rflect.cal.ui.InputDatePicker.prototype.onInputFocus_ = function(aEvent) {
 
 
 /**
+ * This will close input on blur, but we do not allow input to loose focus when
+ * clicking on date picker.
  * @param {goog.events.Event} aEvent Event object.
  */
 rflect.cal.ui.InputDatePicker.prototype.onInputBlur_ = function(aEvent) {
@@ -173,6 +174,7 @@ rflect.cal.ui.InputDatePicker.prototype.onDateChanged_ = function(aEvent) {
   var date = aEvent.date;
   if (this.currentInput_)
     this.currentInput_.value = this.formatter_.format(date);
+  this.setVisible(false);
 }
 
 
