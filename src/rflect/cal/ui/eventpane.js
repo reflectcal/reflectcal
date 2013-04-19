@@ -23,6 +23,7 @@ goog.require('goog.ui.Checkbox');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('rflect.cal.i18n.Symbols');
+goog.require('rflect.cal.ui.ac');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.InputDatePicker');
 goog.require('rflect.date.util');
@@ -274,10 +275,17 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   this.setElementInternal(root);
 
   var timeLabels = rflect.date.util.getTimeLabels();
-  var timeAutoComplete1 = goog.ui.ac.createSimpleAutoComplete(
+  this.startTimeAC_ = rflect.cal.ui.ac.createTimeAutoComplete(
       timeLabels, this.inputStartTime_, false);
-  var timeAutoComplete2 = goog.ui.ac.createSimpleAutoComplete(
+
+  this.endTimeAC_ = rflect.cal.ui.ac.createTimeAutoComplete(
       timeLabels, this.inputEndTime_, false);
+
+  //Adding custom class name to renderer.
+  this.startTimeAC_.getRenderer().className += ' ' +
+      goog.getCssName('ac-renderer-time');
+  this.endTimeAC_.getRenderer().className += ' ' +
+      goog.getCssName('ac-renderer-time');
 }
 
 
@@ -312,6 +320,8 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
 
   this.inputDatePicker_.addInput(this.inputStartDate_);
   this.inputDatePicker_.addInput(this.inputEndDate_);
+
+
 };
 
 
@@ -323,6 +333,18 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
 rflect.cal.ui.EventPane.prototype.onInputFocus_ = function(aEvent) {
   goog.dom.classes.remove(/**@type {Element}*/(aEvent.target),
       goog.getCssName('input-invalid'));
+
+  var target = /**@type{Element}*/(aEvent.target);
+  if (target == this.inputStartTime_)
+    this.startTimeAC_.update(true);
+  else if (target == this.inputEndTime_)
+    this.endTimeAC_.update(true);
+  else {
+    this.startTimeAC_.dismiss();
+    this.endTimeAC_.dismiss();
+  }
+
+
 }
 
 
@@ -563,6 +585,8 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
  */
 rflect.cal.ui.EventPane.prototype.disposeInternal = function() {
   this.inputDatePicker_.dispose();
+  this.startTimeAC_.dispose();
+  this.endTimeAC_.dispose();
 
   rflect.cal.ui.EventPane.superClass_.disposeInternal.call(this);
 };
