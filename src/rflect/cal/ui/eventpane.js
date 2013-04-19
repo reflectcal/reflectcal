@@ -434,7 +434,6 @@ rflect.cal.ui.EventPane.prototype.setVisible = function(visible) {
   this.displayValues();
 
   this.showElement_(visible);
-  this.inputName_.focus();
 
   this.visible_ = visible;
 };

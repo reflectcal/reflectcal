@@ -77,7 +77,7 @@ goog.DEBUG = true;
  * this rule: the Hebrew language. For legacy reasons the old code (iw) should
  * be used instead of the new code (he), see http://wiki/Main/IIISynonyms.
  */
-goog.LOCALE = 'en';  // default to en
+goog.LOCALE = 'ru';  // default to en
 
 
 /**

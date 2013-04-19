@@ -28,14 +28,6 @@ rflect.cal.ui.InputDatePicker = function(aViewManager, aParseFormat) {
   rflect.cal.ui.DatePicker.call(this, aViewManager);
 
 
-  /**
-   * @type {rflect.ui.MouseMissBehavior}
-   * @private
-   */
-  this.mmBehavior_ = new rflect.ui.MouseMissBehavior(this);
-  this.mmBehavior_.enable(0);
-
-
   this.parser_ =  new goog.i18n.DateTimeParse(aParseFormat);
   this.formatter_ =  new goog.i18n.DateTimeFormat(aParseFormat);
 };
@@ -75,13 +67,20 @@ rflect.cal.ui.InputDatePicker.prototype.formatter_;
 
 
 /**
+ * Whether mouse down was registered on date picker.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.ui.InputDatePicker.prototype.mouseDownOnPicker_ = false;
+
+
+/**
  * @inheritDoc
  */
 rflect.cal.ui.InputDatePicker.prototype.enterDocument = function() {
   rflect.cal.ui.InputDatePicker.superClass_.enterDocument.call(this);
   this.getHandler().listen(this, rflect.cal.ui.DatePicker.EVENT_DATE_CHANGE,
       this.onDateChanged_, false, this);
-  this.mmBehavior_.enterDocument();
 };
 
 
@@ -94,6 +93,7 @@ rflect.cal.ui.InputDatePicker.prototype.onMouseDown_ = function(aEvent) {
   // Very important! Does not allow input to loose focus, and, therefore, close
   // picker.
   aEvent.preventDefault();
+  this.mouseDownOnPicker_ = true;
 };
 
 
@@ -104,8 +104,6 @@ rflect.cal.ui.InputDatePicker.prototype.onMouseDown_ = function(aEvent) {
 rflect.cal.ui.InputDatePicker.prototype.addInput = function(aInput) {
   this.getHandler().listen(aInput, goog.events.EventType.FOCUS,
       this.onInputFocus_, false)
-      .listen(aInput, goog.events.EventType.MOUSEDOWN,
-      this.onInputMouseDown_, false)
       .listen(aInput, goog.events.EventType.BLUR,
       this.onInputBlur_, false);
 }
@@ -118,8 +116,6 @@ rflect.cal.ui.InputDatePicker.prototype.addInput = function(aInput) {
 rflect.cal.ui.InputDatePicker.prototype.removeInput = function(aInput) {
   this.getHandler().unlisten(aInput, goog.events.EventType.FOCUS,
       this.onInputFocus_, false);
-  this.getHandler().unlisten(aInput, goog.events.EventType.MOUSEDOWN,
-      this.onInputMouseDown_, false);
   this.getHandler().unlisten(aInput, goog.events.EventType.BLUR,
       this.onInputBlur_, false);
 }
@@ -151,18 +147,12 @@ rflect.cal.ui.InputDatePicker.prototype.onInputFocus_ = function(aEvent) {
  */
 rflect.cal.ui.InputDatePicker.prototype.onInputBlur_ = function(aEvent) {
   var input = /**@type{Element}*/(aEvent.target);
-  if (this.currentInput_ == input) {
-    this.setVisible(false);
-  }
-}
-
-
-/**
- * Mouse down listener - prevents date picker from being closed by mm
- * behavior.
- */
-rflect.cal.ui.InputDatePicker.prototype.onInputMouseDown_ = function() {
-  this.mmBehavior_.doNotClose = true;
+  if (this.currentInput_ == input)
+    if (this.mouseDownOnPicker_) {
+      this.currentInput_.focus();
+      this.mouseDownOnPicker_ = false;
+    } else
+      this.setVisible(false);
 }
 
 
@@ -234,6 +224,5 @@ rflect.cal.ui.InputDatePicker.prototype.showElement_ = function(visible) {
  * @override
  */
 rflect.cal.ui.InputDatePicker.prototype.disposeInternal = function () {
-  this.mmBehavior_.dispose();
   rflect.cal.ui.InputDatePicker.superClass_.disposeInternal.call(this);
 }

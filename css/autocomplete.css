@@ -21,8 +21,6 @@
   position: absolute;
   background: #fff;
   border: 1px solid #d5d5d5;
-  -moz-box-shadow: 2px 2px 2px rgba(102, 102, 102, .4);
-  -webkit-box-shadow: 2px 2px 2px rgba(102, 102, 102, .4);
   width: 300px;
 }
 
