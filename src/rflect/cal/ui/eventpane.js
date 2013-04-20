@@ -336,10 +336,23 @@ rflect.cal.ui.EventPane.prototype.onInputFocus_ = function(aEvent) {
       goog.getCssName('input-invalid'));
 
   var target = /**@type{Element}*/(aEvent.target);
-  if (target == this.inputStartTime_)
+  if (target == this.inputStartTime_) {
+    // IE8 hack.
+    if (goog.userAgent.IE) {
+      if (goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0)
+        setTimeout(goog.bind(function(){this.startTimeAC_.update(true)}, this),
+            0);
+    } else
     this.startTimeAC_.update(true);
-  else if (target == this.inputEndTime_)
-    this.endTimeAC_.update(true);
+  }
+  else if (target == this.inputEndTime_){
+    if (goog.userAgent.IE) {
+      if (goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0)
+        setTimeout(goog.bind(function(){this.endTimeAC_.update(true)}, this),
+            0);
+    } else
+      this.endTimeAC_.update(true);
+  }
   else {
     this.startTimeAC_.dismiss();
     this.endTimeAC_.dismiss();
