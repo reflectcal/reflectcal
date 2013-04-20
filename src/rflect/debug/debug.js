@@ -58,11 +58,11 @@ if (goog.DEBUG) {
   var _log = function(str, opt_var) {
     var number = arguments.length;
     var theLogger = null;
-    if (!goog.userAgent.IE) {
+    //if (!goog.userAgent.IE) {
       if ('console' in window && 'log' in window['console'])
         window['console'].log(rflect.Debug.printOneOrTwoArgs_(str, number,
             opt_var));
-    } else {
+    /*} else {
       if (!rflect.Debug.theLogger) {
         // Create the debug window.
         var debugWindow = new goog.debug.FancyWindow('main');
@@ -77,7 +77,7 @@ if (goog.DEBUG) {
       } else
         rflect.Debug.theLogger.info(
             rflect.Debug.printOneOrTwoArgs_(str, number, opt_var));
-    }
+    }*/
 
   };
 

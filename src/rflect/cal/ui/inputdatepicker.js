@@ -11,10 +11,10 @@ goog.provide('rflect.cal.ui.InputDatePicker');
 
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeParse');
+goog.require('goog.string');
 goog.require('goog.style');
 goog.require('rflect.ui.MouseMissBehavior');
 goog.require('rflect.cal.ui.DatePicker');
-
 
 
 /**
@@ -24,12 +24,12 @@ goog.require('rflect.cal.ui.DatePicker');
  * @extends {rflect.cal.ui.DatePicker}
  * @constructor
  */
-rflect.cal.ui.InputDatePicker = function(aViewManager, aParseFormat) {
+rflect.cal.ui.InputDatePicker = function (aViewManager, aParseFormat) {
   rflect.cal.ui.DatePicker.call(this, aViewManager);
 
 
-  this.parser_ =  new goog.i18n.DateTimeParse(aParseFormat);
-  this.formatter_ =  new goog.i18n.DateTimeFormat(aParseFormat);
+  this.parser_ = new goog.i18n.DateTimeParse(aParseFormat);
+  this.formatter_ = new goog.i18n.DateTimeFormat(aParseFormat);
 };
 goog.inherits(rflect.cal.ui.InputDatePicker, rflect.cal.ui.DatePicker);
 
@@ -77,7 +77,7 @@ rflect.cal.ui.InputDatePicker.prototype.mouseDownOnPicker_ = false;
 /**
  * @inheritDoc
  */
-rflect.cal.ui.InputDatePicker.prototype.enterDocument = function() {
+rflect.cal.ui.InputDatePicker.prototype.enterDocument = function () {
   rflect.cal.ui.InputDatePicker.superClass_.enterDocument.call(this);
   this.getHandler().listen(this, rflect.cal.ui.DatePicker.EVENT_DATE_CHANGE,
       this.onDateChanged_, false, this);
@@ -89,11 +89,14 @@ rflect.cal.ui.InputDatePicker.prototype.enterDocument = function() {
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
-rflect.cal.ui.InputDatePicker.prototype.onMouseDown_ = function(aEvent) {
+rflect.cal.ui.InputDatePicker.prototype.onMouseDown_ = function (aEvent) {
   // Very important! Does not allow input to loose focus, and, therefore, close
   // picker.
   aEvent.preventDefault();
-  this.mouseDownOnPicker_ = true;
+  // But IE8- lets input loose focus even in this case, so we apply hack.
+  if (goog.userAgent.IE)
+    if (goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0)
+      this.mouseDownOnPicker_ = true;
 };
 
 
@@ -101,7 +104,7 @@ rflect.cal.ui.InputDatePicker.prototype.onMouseDown_ = function(aEvent) {
  * Adds one more input to track.
  * @param {Element} aInput Input to add.
  */
-rflect.cal.ui.InputDatePicker.prototype.addInput = function(aInput) {
+rflect.cal.ui.InputDatePicker.prototype.addInput = function (aInput) {
   this.getHandler().listen(aInput, goog.events.EventType.FOCUS,
       this.onInputFocus_, false)
       .listen(aInput, goog.events.EventType.BLUR,
@@ -113,7 +116,7 @@ rflect.cal.ui.InputDatePicker.prototype.addInput = function(aInput) {
  * Removes input.
  * @param {Element} aInput Input to add.
  */
-rflect.cal.ui.InputDatePicker.prototype.removeInput = function(aInput) {
+rflect.cal.ui.InputDatePicker.prototype.removeInput = function (aInput) {
   this.getHandler().unlisten(aInput, goog.events.EventType.FOCUS,
       this.onInputFocus_, false);
   this.getHandler().unlisten(aInput, goog.events.EventType.BLUR,
@@ -124,7 +127,7 @@ rflect.cal.ui.InputDatePicker.prototype.removeInput = function(aInput) {
 /**
  * @param {goog.events.Event} aEvent Event object.
  */
-rflect.cal.ui.InputDatePicker.prototype.onInputFocus_ = function(aEvent) {
+rflect.cal.ui.InputDatePicker.prototype.onInputFocus_ = function (aEvent) {
 
   var input = /**@type{Element}*/ (aEvent.target);
   this.currentInput_ = input;
@@ -145,14 +148,21 @@ rflect.cal.ui.InputDatePicker.prototype.onInputFocus_ = function(aEvent) {
  * clicking on date picker.
  * @param {goog.events.Event} aEvent Event object.
  */
-rflect.cal.ui.InputDatePicker.prototype.onInputBlur_ = function(aEvent) {
+rflect.cal.ui.InputDatePicker.prototype.onInputBlur_ = function (aEvent) {
   var input = /**@type{Element}*/(aEvent.target);
   if (this.currentInput_ == input)
-    if (this.mouseDownOnPicker_) {
-      this.currentInput_.focus();
-      this.mouseDownOnPicker_ = false;
+    if (goog.userAgent.IE) {
+      if (goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0)
+        if (this.mouseDownOnPicker_) {
+          this.mouseDownOnPicker_ = false;
+          this.currentInput_.focus();
+        }
+        else
+          this.setVisible(false);
+
     } else
       this.setVisible(false);
+
 }
 
 
@@ -160,7 +170,7 @@ rflect.cal.ui.InputDatePicker.prototype.onInputBlur_ = function(aEvent) {
  * Date change listener.
  * @param {rflect.cal.ui.DatePicker.Event} aEvent Event object.
  */
-rflect.cal.ui.InputDatePicker.prototype.onDateChanged_ = function(aEvent) {
+rflect.cal.ui.InputDatePicker.prototype.onDateChanged_ = function (aEvent) {
   var date = aEvent.date;
   if (this.currentInput_)
     this.currentInput_.value = this.formatter_.format(date);
@@ -172,7 +182,7 @@ rflect.cal.ui.InputDatePicker.prototype.onDateChanged_ = function(aEvent) {
  * Creates component on an empty div element.
  * @override
  */
-rflect.cal.ui.InputDatePicker.prototype.createDom = function() {
+rflect.cal.ui.InputDatePicker.prototype.createDom = function () {
   var cont = this.getDomHelper().createDom('div',
       goog.getCssName('rflect-input-datepicker'));
   this.decorateInternal(cont);
@@ -183,7 +193,7 @@ rflect.cal.ui.InputDatePicker.prototype.createDom = function() {
  * Sets the visibility. Lazily renders the component if needed.
  * @param {boolean} visible Whether the component should be visible.
  */
-rflect.cal.ui.InputDatePicker.prototype.setVisible = function(visible) {
+rflect.cal.ui.InputDatePicker.prototype.setVisible = function (visible) {
   if (goog.DEBUG)
     _log('setVisible');
 
@@ -213,10 +223,9 @@ rflect.cal.ui.InputDatePicker.prototype.setVisible = function(visible) {
  * @param {boolean} visible Shows the element if true, hides if false.
  * @private
  */
-rflect.cal.ui.InputDatePicker.prototype.showElement_ = function(visible) {
+rflect.cal.ui.InputDatePicker.prototype.showElement_ = function (visible) {
   goog.style.showElement(this.getElement(), visible);
 };
-
 
 
 /**
