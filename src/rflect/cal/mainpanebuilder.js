@@ -1500,7 +1500,7 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
   aSb.append(/*lastCol ? shift * 2  : */shift);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
   // margin-right.
-  var width = shift + widthQuant * aColSpan * (1 +
+  var width = shift + widthQuant * (aColSpan +
       rflect.cal.predefined.chips.OVERLAPPING_DEGREE);
   if (coversLastCol)
     width -= widthQuant * rflect.cal.predefined.chips.OVERLAPPING_DEGREE *
