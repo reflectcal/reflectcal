@@ -14,6 +14,7 @@ goog.provide('rflect.cal.ui.EventPane.EventTypes');
 goog.require('goog.dom.classes');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
+goog.require('goog.events.KeyCodes');
 goog.require('goog.i18n.DateTimeParse');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.style');
@@ -317,13 +318,32 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
       .listen(this.inputEndDate_,
       goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
       .listen(this.inputEndTime_,
-      goog.events.EventType.FOCUS, this.onInputFocus_, false, this);
+      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
+
+      .listen(document,
+      goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this);
 
   this.inputDatePicker_.addInput(this.inputStartDate_);
   this.inputDatePicker_.addInput(this.inputEndDate_);
 
 
 };
+
+
+/**
+ * Component key listener.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.onKeyDown_ = function(aEvent) {
+  if (this.visible_ &&
+      !this.startTimeAC_.getRenderer().isVisible() &&
+      !this.endTimeAC_.getRenderer().isVisible() &&
+      aEvent.keyCode == goog.events.KeyCodes.ESC) {
+    aEvent.stopPropagation();
+    this.onCancel_();
+  }
+}
 
 
 /**
@@ -364,9 +384,8 @@ rflect.cal.ui.EventPane.prototype.onInputFocus_ = function(aEvent) {
 
 /**
  * Cancel action listener.
- * @param {goog.events.Event} aEvent Event object.
  */
-rflect.cal.ui.EventPane.prototype.onCancel_ = function(aEvent) {
+rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
   if (this.dispatchEvent(new goog.events.Event(
       rflect.cal.ui.EventPane.EventTypes.CANCEL))) {
     this.setVisible(false);
@@ -447,6 +466,12 @@ rflect.cal.ui.EventPane.prototype.setVisible = function(visible) {
   this.displayValues();
 
   this.showElement_(visible);
+
+  try {
+    this.inputName_.focus();
+  } catch(e) {
+    // IE8- shows error that it couldn't set focus but nevertheless, it sets it.
+  }
 
   this.visible_ = visible;
 };
@@ -593,7 +618,7 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
 
 
 /**
- * Disposes of the Main Pane.
+ * Disposes of the event pane.
  * @override
  * @protected
  */

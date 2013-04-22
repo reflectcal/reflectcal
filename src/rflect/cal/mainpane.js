@@ -645,6 +645,8 @@ rflect.cal.MainPane.prototype.onDoubleClick_ = function(aEvent) {
   if (this.isChip_(className)) {
     this.showEventEditComponent_(target, className, true);
   }
+
+  aEvent.preventDefault();
 };
 
 

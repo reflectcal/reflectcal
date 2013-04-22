@@ -194,7 +194,7 @@ td.goog-date-picker-none-cont {
 }
 
 /** Use td.className instead of !important */
-td.goog-date-picker-selected {
+td.goog-date-picker-selected, td.goog-date-picker-selected-pre{
   background: #e6e6e6;
 }
 

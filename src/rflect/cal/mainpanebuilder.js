@@ -1503,8 +1503,7 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
   var width = shift + widthQuant * (aColSpan +
       rflect.cal.predefined.chips.OVERLAPPING_DEGREE);
   if (coversLastCol)
-    width -= widthQuant * rflect.cal.predefined.chips.OVERLAPPING_DEGREE *
-        aColSpan;
+    width -= widthQuant * rflect.cal.predefined.chips.OVERLAPPING_DEGREE;
   aSb.append(100 - width);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
   // Height.

@@ -282,6 +282,8 @@ rflect.cal.MiniCalBuilder.prototype.buildDayCells_ = function(aSb, aOffset,
     // Show days from another month differently.
     if (this.timeManager_.basis.getMonth() != (day = daySeries[id]).getMonth())
       aSb.append(goog.getCssName('dl-other-month'));
+    if (id == this.miniCal_.basisIndex)
+      aSb.append(' ' + goog.getCssName('goog-date-picker-selected-pre'));
     aSb.append(rflect.cal.MiniCalBuilder.HTML_PARTS_[aOffset + 2]);
     // Build daycell day number.
     aSb.append(day.getDate());

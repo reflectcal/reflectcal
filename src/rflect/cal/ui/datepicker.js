@@ -9,6 +9,7 @@
 
 goog.provide('rflect.cal.ui.DatePicker');
 
+goog.require('goog.array');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('rflect.ui.Component');
@@ -16,6 +17,7 @@ goog.require('rflect.cal.MiniCalBuilder');
 goog.require('rflect.cal.MouseOverRegistry');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
+goog.require('rflect.date');
 goog.require('rflect.string');
 
 
@@ -72,6 +74,17 @@ rflect.cal.ui.DatePicker.EVENT_DATE_CHANGE = 'datechange';
 
 
 /**
+ * @param {rflect.date.DateShim} aBasis Basis to compare to.
+ * @param {rflect.date.DateShim} aEl Element for comparing.
+ * @return {boolean} True if basis found.
+ * @private
+ */
+rflect.cal.ui.DatePicker.dateFinder_ = function(aBasis, aEl) {
+  return aBasis.equalsByDate(aEl);
+}
+
+
+/**
  * RegExp for detection of minical button.
  * @type {RegExp}
  * @private
@@ -95,6 +108,20 @@ rflect.cal.ui.DatePicker.prototype.basis_;
 
 
 /**
+ * Shim basis, for quick basis index search.
+ * @type {rflect.date.DateShim}
+ */
+rflect.cal.ui.DatePicker.prototype.basisShim_;
+
+
+/**
+ * Index of basis in time manager.
+ * @type {number}
+ */
+rflect.cal.ui.DatePicker.prototype.basisIndex = -1;
+
+
+/**
  * Updates mini cal with new data before redraw.
  * If called parameterless, takes basis from external time manager, otherwise
  * we should use internal one.
@@ -110,6 +137,9 @@ rflect.cal.ui.DatePicker.prototype.updateBeforeRedraw = function(opt_internal,
   } else {
     this.timeManager_.shiftToPoint(this.basis_);
   }
+
+  this.basisIndex = goog.array.findIndex(this.timeManager_.daySeries,
+      goog.partial(rflect.cal.ui.DatePicker.dateFinder_, this.basisShim_));
 };
 
 
@@ -119,6 +149,8 @@ rflect.cal.ui.DatePicker.prototype.updateBeforeRedraw = function(opt_internal,
  */
 rflect.cal.ui.DatePicker.prototype.setBasis = function(aDate) {
   this.basis_ = aDate;
+  this.basisShim_ = rflect.date.createDateShim(aDate.getYear(),
+      aDate.getMonth(), aDate.getDate(), 0, 0, 0);
 };
 
 

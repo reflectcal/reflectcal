@@ -278,8 +278,6 @@ rflect.cal.blocks.BlockPool.prototype.updateExpandedBlocks =
 
     if (block.expanded) {
 
-      block.capacity = 10;
-
       block.size = this.getSizeFromCapacity(
           block.capacity);
 

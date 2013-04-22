@@ -149,6 +149,7 @@ rflect.cal.blocks.Block.prototype.clone = function() {
 
 
 /**
+ * Taken from Mozilla Lightning.
  * @param {!Array.<rflect.cal.events.Chip>} aChips Collection of chips for this
  * block.
  */
@@ -422,6 +423,7 @@ rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips) {
   //this._potentialCapacity = maxCol + 1;
 
   this.blobs = blobs;
+  this.capacity = maxCol;
 }
 
 

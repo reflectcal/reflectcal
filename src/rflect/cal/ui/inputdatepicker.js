@@ -9,6 +9,7 @@
 
 goog.provide('rflect.cal.ui.InputDatePicker');
 
+goog.require('goog.events.KeyCodes');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeParse');
 goog.require('goog.string');
@@ -108,7 +109,9 @@ rflect.cal.ui.InputDatePicker.prototype.addInput = function (aInput) {
   this.getHandler().listen(aInput, goog.events.EventType.FOCUS,
       this.onInputFocus_, false)
       .listen(aInput, goog.events.EventType.BLUR,
-      this.onInputBlur_, false);
+      this.onInputBlur_, false)
+      .listen(aInput, goog.events.EventType.KEYDOWN,
+      this.onInputKeyDown_, false);
 }
 
 
@@ -121,6 +124,8 @@ rflect.cal.ui.InputDatePicker.prototype.removeInput = function (aInput) {
       this.onInputFocus_, false);
   this.getHandler().unlisten(aInput, goog.events.EventType.BLUR,
       this.onInputBlur_, false);
+  this.getHandler().listen(aInput, goog.events.EventType.KEYDOWN,
+      this.onInputKeyDown_, false);
 }
 
 
@@ -163,6 +168,19 @@ rflect.cal.ui.InputDatePicker.prototype.onInputBlur_ = function (aEvent) {
     } else
       this.setVisible(false);
 
+}
+
+
+/**
+ * Input key listener.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.InputDatePicker.prototype.onInputKeyDown_ = function(aEvent) {
+  if (this.visible_ && aEvent.keyCode == goog.events.KeyCodes.ESC) {
+    this.setVisible(false);
+    aEvent.stopPropagation();
+  }
 }
 
 
