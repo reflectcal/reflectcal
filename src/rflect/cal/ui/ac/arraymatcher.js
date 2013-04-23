@@ -20,6 +20,7 @@
 
 goog.provide('rflect.cal.ui.ac.NoFilterMatcher');
 
+goog.require('goog.array');
 goog.require('goog.ui.ac.ArrayMatcher');
 
 
@@ -40,6 +41,13 @@ goog.inherits(rflect.cal.ui.ac.NoFilterMatcher, goog.ui.ac.ArrayMatcher);
 
 
 /**
+ * Index of first matched row.
+ * @type {number}
+ */
+rflect.cal.ui.ac.NoFilterMatcher.prototype.firstMatchedIndex = -1;
+
+
+/**
  * Returns just rows unfiltered.
  * Matches the token against the start of words in the row.
  * @param {string} token Token to match.
@@ -48,5 +56,50 @@ goog.inherits(rflect.cal.ui.ac.NoFilterMatcher, goog.ui.ac.ArrayMatcher);
  */
 rflect.cal.ui.ac.NoFilterMatcher.prototype.getPrefixMatches =
     function(token, maxMatches) {
+  var matches = [];
+
+  this.firstMatchedIndex = -1;
+
+  if (token != '') {
+    var escapedToken = goog.string.regExpEscape(token);
+    var matcher = new RegExp('(^|\\W+)' + escapedToken, 'i');
+
+    for (var index = 0, length = this.rows_.length; index < length; index++) {
+      var row = this.rows_[index];
+      if (String(row).match(matcher)) {
+        this.firstMatchedIndex = index;
+        break;
+      }
+    };
+  }
+
   return this.rows_.slice();
 };
+
+
+/**
+ * Matches the token against the start of words in the row.
+ * @param {string} token Token to match.
+ * @param {number} maxMatches Max number of matches to return.
+ * @return {Array} Rows that match.
+ */
+goog.ui.ac.ArrayMatcher.prototype.getPrefixMatches =
+    function(token, maxMatches) {
+  var matches = [];
+
+  if (token != '') {
+    var escapedToken = goog.string.regExpEscape(token);
+    var matcher = new RegExp('(^|\\W+)' + escapedToken, 'i');
+
+    goog.iter.some(this.rows_, function(row) {
+      if (String(row).match(matcher)) {
+        matches.push(row);
+      }
+      return matches.length >= maxMatches;
+    });
+  }
+  return matches;
+};
+
+
+

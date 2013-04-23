@@ -21,9 +21,9 @@
 goog.provide('rflect.cal.ui.ac');
 
 goog.require('rflect.cal.ui.ac.NoFilterMatcher');
-goog.require('goog.ui.ac.AutoComplete');
+goog.require('rflect.cal.ui.ac.TimeAutoComplete');
 goog.require('goog.ui.ac.InputHandler');
-goog.require('goog.ui.ac.Renderer');
+goog.require('rflect.cal.ui.ac.RendererScrollSupport');
 
 
 /**
@@ -35,15 +35,15 @@ goog.require('goog.ui.ac.Renderer');
  * @param {boolean=} opt_multi Whether to allow multiple entries separated with
  *     semi-colons or commas.
  * @param {boolean=} opt_useSimilar use similar matches. e.g. "gost" => "ghost".
- * @return {!goog.ui.ac.AutoComplete} A new autocomplete object.
+ * @return {!rflect.cal.ui.ac.TimeAutoComplete} A new autocomplete object.
  */
 rflect.cal.ui.ac.createTimeAutoComplete =
     function(data, input, opt_multi, opt_useSimilar) {
   var matcher = new rflect.cal.ui.ac.NoFilterMatcher(data, !opt_useSimilar);
-  var renderer = new goog.ui.ac.Renderer();
+  var renderer = new rflect.cal.ui.ac.RendererScrollSupport();
   var inputHandler = new goog.ui.ac.InputHandler(null, null, !!opt_multi);
 
-  var autoComplete = new goog.ui.ac.AutoComplete(
+  var autoComplete = new rflect.cal.ui.ac.TimeAutoComplete(
       matcher, renderer, inputHandler);
   inputHandler.attachAutoComplete(autoComplete);
   inputHandler.attachInputs(input);
