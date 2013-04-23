@@ -1070,10 +1070,10 @@ rflect.cal.MainPane.prototype.onSaveDialogButtonSelect_ = function(aEvent) {
 /**
  * Event edit listener. Called when edit link is clicked from save or edit
  * dialog.
- * @param {{type: string}} aEvent Event object.
+ * @param {Event} aEvent Event object.
  */
 rflect.cal.MainPane.prototype.onEventEdit_ = function(aEvent) {
-  this.getParent().showEventPane(true);
+  this.getParent().showEventPane(true, aEvent.target == this.saveDialog_);
 }
 
 
