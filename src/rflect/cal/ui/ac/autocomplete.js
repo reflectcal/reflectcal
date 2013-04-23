@@ -44,10 +44,10 @@ goog.require('goog.ui.ac.AutoComplete');
  *        </code>.
  *
  * @constructor
- * @extends {goog.events.EventTarget}
+ * @extends {goog.ui.ac.AutoComplete}
  */
 rflect.cal.ui.ac.TimeAutoComplete = function(matcher, renderer, selectionHandler) {
-  goog.ui.ac.AutoComplete(this, matcher, renderer, selectionHandler);
+  goog.ui.ac.AutoComplete.call(this, matcher, renderer, selectionHandler);
 };
 goog.inherits(rflect.cal.ui.ac.TimeAutoComplete, goog.ui.ac.AutoComplete);
 

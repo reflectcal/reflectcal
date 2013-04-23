@@ -77,29 +77,5 @@ rflect.cal.ui.ac.NoFilterMatcher.prototype.getPrefixMatches =
 };
 
 
-/**
- * Matches the token against the start of words in the row.
- * @param {string} token Token to match.
- * @param {number} maxMatches Max number of matches to return.
- * @return {Array} Rows that match.
- */
-goog.ui.ac.ArrayMatcher.prototype.getPrefixMatches =
-    function(token, maxMatches) {
-  var matches = [];
-
-  if (token != '') {
-    var escapedToken = goog.string.regExpEscape(token);
-    var matcher = new RegExp('(^|\\W+)' + escapedToken, 'i');
-
-    goog.iter.some(this.rows_, function(row) {
-      if (String(row).match(matcher)) {
-        matches.push(row);
-      }
-      return matches.length >= maxMatches;
-    });
-  }
-  return matches;
-};
-
 
 
