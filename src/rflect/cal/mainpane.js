@@ -341,12 +341,9 @@ rflect.cal.MainPane.prototype.updateBeforeRedraw = function() {
     // No need to subtract scrollbar width here because layout already takes
     // it into account.
 
-    // Case when allday scrollable is collapsed.
-    if (!this.isAlldayScrollableExpandedVer()) {
-      this.alldayGridContainerSize.height =
-          rflect.cal.predefined.ALLDAY_SCROLLABLE_MINIMAL_HEIGHT;
-      this.alldayGridSize = this.alldayGridContainerSize.clone();
-    }
+    this.alldayGridContainerSize.height =
+        rflect.cal.predefined.ALLDAY_SCROLLABLE_MINIMAL_HEIGHT;
+    this.alldayGridSize = this.alldayGridContainerSize.clone();
 
     // ... else, in case when allday scrollable is expanded, we should
     // calculate it's size depending on block capacity, so pass on for now.
@@ -415,7 +412,7 @@ rflect.cal.MainPane.prototype.addScrollListeners_ = function() {
 
     if (this.blockManager_.blockPoolWeek.expanded)
       this.scrollListenersKeys_.push(goog.events.listen(
-          this.dom_.getElement('main-pane-body-scrollable-wk'),
+          this.getDomHelper().getElement('main-pane-body-scrollable-wk'),
           goog.events.EventType.SCROLL, this.onMainPaneScrollableScroll_, false,
           this));
     //TODO(alexk): implement focus before introducing both scrollable controls.
@@ -498,9 +495,10 @@ rflect.cal.MainPane.prototype.buildBodyInternal = function(aSb) {
 
 
 /**
- *  Redraws just week grid.
+ * Redraws just week grid.
+ * @private
  */
-rflect.cal.MainPane.prototype.updateByRedrawWeekGrid = function() {
+rflect.cal.MainPane.prototype.updateByRedrawWeekGrid_ = function() {
   var sb = new goog.string.StringBuffer();
   this.mainPaneBuilder_.buildWeekGrid(sb);
   this.getDomHelper().getElement('grid-table-wk').innerHTML = sb.toString();
@@ -508,9 +506,10 @@ rflect.cal.MainPane.prototype.updateByRedrawWeekGrid = function() {
 
 
 /**
- *  Redraws just week grid.
+ * Redraws just all-day grid.
+ * @private
  */
-rflect.cal.MainPane.prototype.updateByRedrawAllDayGrid = function() {
+rflect.cal.MainPane.prototype.updateByRedrawAllDayGrid_ = function() {
   var sb = new goog.string.StringBuffer();
   this.mainPaneBuilder_.buildAllDayGrid(sb);
   this.getDomHelper().getElement('alldayevents-grid').innerHTML = sb.toString();
@@ -518,12 +517,74 @@ rflect.cal.MainPane.prototype.updateByRedrawAllDayGrid = function() {
 
 
 /**
- *  Redraws just week grid.
+ * Redraws just week grid.
+ * @private
  */
-rflect.cal.MainPane.prototype.updateByRedrawMonthGrid = function() {
+rflect.cal.MainPane.prototype.updateByRedrawMonthGrid_ = function() {
   var sb = new goog.string.StringBuffer();
   this.mainPaneBuilder_.buildMonthGrid(sb);
   this.getDomHelper().getElement('grid-table-mn').innerHTML = sb.toString();
+}
+
+
+/**
+ * Redraws only some components.
+ * If grid corresponding current view is expanded (for week mode this means 
+ * either all-day or week is expanded), redraw all main pane.
+ *
+ * @param {boolean} aConditionToUpdateAllDay Whether to update all-day grid.
+ * @param {boolean} aConditionToUpdateWeek Whether to update week.
+ * @param {boolean} aConditionToUpdateMonth Whether to update month grid.
+ * @private
+ */
+rflect.cal.MainPane.prototype.updateConditionally_ = function(
+    aConditionToUpdateAllDay, aConditionToUpdateWeek, aConditionToUpdateMonth) {
+
+  this.eventManager_.run();
+
+  this.updateBeforeRedraw();
+
+  if (this.viewManager_.isInWeekMode() &&
+      !this.blockManager_.blockPoolWeek.expanded &&
+      !this.blockManager_.blockPoolAllday.expanded) {
+
+    if (aConditionToUpdateAllDay)
+      this.updateByRedrawAllDayGrid_();
+
+    if (aConditionToUpdateWeek)
+      this.updateByRedrawWeekGrid_();
+
+  } else if (this.viewManager_.isInMonthMode() &&
+      !this.blockManager_.blockPoolMonth.expanded) {
+
+    if (aConditionToUpdateMonth)
+      this.updateByRedrawMonthGrid_();
+
+  } else
+
+    this.updateByRedraw();
+}
+
+
+/**
+ * Redraws component after event was deleted.
+ * @private
+ */
+rflect.cal.MainPane.prototype.updateAfterDelete_ = function() {
+  var allDay = this.eventManager_.eventHolder.getBackUpEvent().allDay;
+
+  this.updateConditionally_(allDay, !allDay, true);
+}
+
+
+/**
+ * Redraws component after event was added.
+ * @private
+ */
+rflect.cal.MainPane.prototype.updateAfterSave_ = function() {
+  this.updateConditionally_(
+      this.selectionMask_.isAllDay(), this.selectionMask_.isWeek(),
+      this.selectionMask_.isMonth());
 }
 
 
@@ -1001,16 +1062,7 @@ rflect.cal.MainPane.prototype.onSaveDialogButtonSelect_ = function(aEvent) {
         this.saveDialog_.getEventName());
     this.eventManager_.eventHolder.endWithAdd();
 
-    this.eventManager_.run();
-
-    this.updateBlockManager();
-
-    if (this.selectionMask_.isWeek())
-      this.updateByRedrawWeekGrid();
-    if (this.selectionMask_.isAllDay())
-      this.updateByRedrawAllDayGrid();
-    if (this.selectionMask_.isMonth())
-      this.updateByRedrawMonthGrid();
+    this.updateAfterSave_();
   }
 }
 
@@ -1040,19 +1092,7 @@ rflect.cal.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
     // The only spare button - delete.
     this.eventManager_.eventHolder.endWithDelete();
 
-    this.eventManager_.run();
-
-    this.updateBlockManager();
-
-    if (this.viewManager_.isInWeekMode()) {
-      if (this.eventManager_.eventHolder.getBackUpEvent().allDay)
-        this.updateByRedrawAllDayGrid();
-      else
-        this.updateByRedrawWeekGrid();
-    } else if (this.viewManager_.isInMonthMode()) {
-      this.updateByRedrawMonthGrid();
-
-    }
+    this.updateAfterDelete_();
   }
 }
 

@@ -259,7 +259,8 @@ rflect.cal.blocks.BlockPool.prototype.updateEventMap = function(aChips,
       this.blocks[counter].createSparseArraysFromBlobs(opt_arraysLength || 0);
 
     if (!this.blocks[counter].expanded)
-      this.blocks[counter].couldBeExpanded = true;
+      this.blocks[counter].couldBeExpanded = this.blocks[counter].capacity >
+          this.nominalCapacity;
   }
 };
 
@@ -271,18 +272,27 @@ rflect.cal.blocks.BlockPool.prototype.updateEventMap = function(aChips,
 rflect.cal.blocks.BlockPool.prototype.updateExpandedBlocks =
     function cal_BlockManager_updateExpandedBlocks() {
   var cumulativeSize = 0;
+  var nominalSize = 0;
+
+  if (this.isHorizontal_) {
+    nominalSize = this.gridContainerSize.width / this.blocksNumber_;
+  } else {
+    nominalSize = this.gridContainerSize.height / this.blocksNumber_;
+  }
 
   for (var counter = 0; counter < this.blocksNumber_;
       counter++) {
     var block = this.blocks[counter];
+    var capacity = block.capacity;
 
     if (block.expanded) {
 
-      block.size = this.getSizeFromCapacity(
-          block.capacity);
+      var sizeFromCapacity = this.getSizeFromCapacity(capacity)
+      block.size = sizeFromCapacity < nominalSize ? nominalSize :
+          sizeFromCapacity;
 
       // Whether block could be collapsed interests us only for expanded blocks.
-      block.couldBeCollapsed = block.capacity >
+      block.couldBeCollapsed = capacity >
           this.nominalCapacity;
       block.couldBeExpanded = false;
 
@@ -336,5 +346,5 @@ rflect.cal.blocks.BlockPool.prototype.getSizeFromCapacity =
   }
   return aCapacity * rflect.cal.predefined.MN_EVENT_HEIGHT +
       rflect.cal.predefined.MN_EVENT_LAYER_MARGIN_TOP +
-      rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+      rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2;
 };

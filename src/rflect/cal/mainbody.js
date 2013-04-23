@@ -271,7 +271,7 @@ rflect.cal.MainBody.prototype.onTopPaneAction_ = function(aEvent) {
 
     this.eventManager_.startEventCreationSession();
 
-    this.showEventPane(true);
+    this.showEventPane(true, true);
   }
 }
 
@@ -279,8 +279,10 @@ rflect.cal.MainBody.prototype.onTopPaneAction_ = function(aEvent) {
 /**
  * Shows event pane when possible and lazily instantiates it at the first time.
  * @param {boolean} aShow Whether to show event pane.
+ * @param {boolean=} opt_creatingNewEvent Whether we're creating new event.
  */
-rflect.cal.MainBody.prototype.showEventPane = function(aShow) {
+rflect.cal.MainBody.prototype.showEventPane = function(aShow,
+    opt_creatingNewEvent) {
   if (!this.eventPane_) {
     this.eventPane_ = new rflect.cal.ui.EventPane(this.viewManager_,
         this.timeManager_, this.eventManager_,
@@ -296,7 +298,7 @@ rflect.cal.MainBody.prototype.showEventPane = function(aShow) {
         false, this)
   }
 
-  this.eventPane_.setVisible(aShow);
+  this.eventPane_.setVisible(aShow, opt_creatingNewEvent);
   //NOTE(alexk): do we need smarter logic here than just hide calendar?
   this.showCalendar_(!aShow);
 }

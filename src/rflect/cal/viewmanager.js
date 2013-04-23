@@ -320,8 +320,6 @@ rflect.cal.ViewManager.prototype.onMenuCommandOptions_ = function() {
  * @private
  */
 rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
-  if (goog.DEBUG)
-    _log('index is in mask', aEvent.isInMask);
 
   if (!aEvent.isInMask){
 

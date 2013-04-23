@@ -212,8 +212,6 @@ rflect.cal.ui.InputDatePicker.prototype.createDom = function () {
  * @param {boolean} visible Whether the component should be visible.
  */
 rflect.cal.ui.InputDatePicker.prototype.setVisible = function (visible) {
-  if (goog.DEBUG)
-    _log('setVisible');
 
   if (visible == this.visible_) {
     return;

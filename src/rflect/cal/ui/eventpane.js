@@ -137,6 +137,14 @@ rflect.cal.ui.EventPane.prototype.visible_ = false;
 
 
 /**
+ * Whether event pane is in state when we're creating new event.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.newEventMode_ = false;
+
+
+/**
  * Element in which event pane will be rendered.
  * @type {Element}
  * @private
@@ -452,11 +460,15 @@ rflect.cal.ui.EventPane.prototype.showTimeInputs_ = function(aShow) {
  * Sets the visibility of the event pane and moves focus to the
  * event name input. Lazily renders the component if needed.
  * @param {boolean} visible Whether the pane should be visible.
+ * @param {boolean=} opt_creatingNewEvent Whether we're creating new event.
  */
-rflect.cal.ui.EventPane.prototype.setVisible = function(visible) {
+rflect.cal.ui.EventPane.prototype.setVisible = function(visible,
+    opt_creatingNewEvent) {
   if (visible == this.visible_) {
     return;
   }
+
+  this.newEventMode_ = opt_creatingNewEvent || false;
 
   // If the pane hasn't been rendered yet, render it now.
   if (!this.isInDocument()) {
@@ -492,6 +504,8 @@ rflect.cal.ui.EventPane.prototype.showElement_ = function(visible) {
  */
 rflect.cal.ui.EventPane.prototype.displayValues = function() {
   var eh = this.eventManager_.eventHolder;
+
+  this.buttonDelete_.setVisible(!this.newEventMode_);
 
   this.displayDates_();
 

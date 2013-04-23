@@ -99,11 +99,6 @@ rflect.cal.SelectionMask.prototype.isDragStarted = function() {
  * Clears mask state.
  */
 rflect.cal.MiniCalSelectionMask.prototype.close = function() {
-
-  if (goog.DEBUG)
-    _log('close called');
-
-
   if (this.draggedAtLeastOnce_) {
     this.currentCell_ = this.visibleCurrentCell_;
     this.startCell_ = this.visibleStartCell_;
@@ -165,9 +160,6 @@ rflect.cal.MiniCalSelectionMask.prototype.init = function(aConfiguration,
   this.draggedAtLeastOnce_ = false;
   this.indexIsInMask_ = false;
 
-  if (goog.DEBUG)
-    _log('this.configuration_', this.configuration_);
-
   if (this.isMiniMonthExt_()) {
     // When in external configuration, we don't need to know whether mask was
     // previously initialized.
@@ -205,11 +197,7 @@ rflect.cal.MiniCalSelectionMask.prototype.getIndexIsInMask = function(aIndex) {
   var cell = this.getCellBySelectionIndex_(aIndex);
   var minCell = this.getMinCell_(this.visibleStartCell_, this.visibleCurrentCell_);
   var maxCell = this.getMaxCell_(this.visibleStartCell_, this.visibleCurrentCell_);
-  if (goog.DEBUG) {
-    _log('cell', cell);
-    _log('minCell', minCell);
-    _log('maxCell', maxCell);
-  }
+
   return this.compareCells_(cell, minCell) >= 0 &&
       this.compareCells_(cell, maxCell) <= 0;
 }

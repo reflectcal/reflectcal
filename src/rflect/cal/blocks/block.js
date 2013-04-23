@@ -176,6 +176,8 @@ rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips) {
   var startCol = 0;
   var maxCol = 0;
 
+  this.capacity = 0;
+
   //dump("\n aChips before sort: " + objectToString(aChips, 2));
 
   //aChips.sort(sortByStart);
@@ -423,7 +425,10 @@ rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips) {
   //this._potentialCapacity = maxCol + 1;
 
   this.blobs = blobs;
-  this.capacity = maxCol;
+
+  if (this.capacity < maxCol + 1)
+    this.capacity = maxCol + 1;
+
 }
 
 
@@ -435,6 +440,7 @@ rflect.cal.blocks.Block.prototype.createSparseArraysFromBlobs = function(
     aDaysNumber) {
   var blobs = this.blobs;
   var sparseArrays = [];
+  var capacity = 0;
 
   for (var counter = 0; counter < aDaysNumber; counter++)
     sparseArrays[counter] = [];
@@ -462,7 +468,10 @@ rflect.cal.blocks.Block.prototype.createSparseArraysFromBlobs = function(
           chipClone.startIsCut = true;
         sparseArrays[chipCounter][startCol] = chipClone;
       }
+      if (capacity < startCol + 1)
+        capacity = startCol + 1;
     }
   }
+  this.capacity = capacity;
   this.sparseArrays = sparseArrays;
 };

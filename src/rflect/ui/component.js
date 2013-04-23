@@ -10,6 +10,7 @@
 
 goog.provide('rflect.ui.Component');
 
+goog.require('goog.array');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.Component');
 
@@ -130,6 +131,20 @@ rflect.ui.Component.prototype.updateByRedraw =
       aChild.updateByRedraw();
     }
   });
+};
+
+
+/**
+ * Updates component in whole update sequence.
+ * @param {...number} var_args Index(es) of
+ * component's children which should be excluded from update.
+ * @see {rflect.cal.MainBody#updateBeforeRedraw}.
+ */
+rflect.ui.Component.prototype.update =
+    function(var_args) {
+  var args = goog.array.slice(arguments, 0);
+  rflect.ui.Component.prototype.updateBeforeRedraw.apply(this, args);
+  rflect.ui.Component.prototype.updateByRedraw.apply(this, args);
 };
 
 
