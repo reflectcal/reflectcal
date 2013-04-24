@@ -421,9 +421,6 @@ rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips) {
 
   //dump("blobs: " + objectToString(blobs, 5));
 
-  //TODO(alexk): look into this, how to update capacity from this info.
-  //this._potentialCapacity = maxCol + 1;
-
   this.blobs = blobs;
 
   if (this.capacity < maxCol + 1)
