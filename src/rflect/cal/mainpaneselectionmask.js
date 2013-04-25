@@ -106,6 +106,38 @@ rflect.cal.MainPaneSelectionMask.prototype.gridEl_;
 
 
 /**
+ * Coordinate where mask ends.
+ * @type {goog.math.Coordinate}
+ * @private
+ */
+rflect.cal.SelectionMask.prototype.endCoordinate_;
+
+
+/**
+ * Relative timestamp where we started drag.
+ * @type {number}
+ * @private
+ */
+rflect.cal.MainPaneSelectionMask.prototype.startTimestamp_;
+
+
+/**
+ * Relative timestamp where we're currently dragging.
+ * @type {number}
+ * @private
+ */
+rflect.cal.MainPaneSelectionMask.prototype.currentTimestamp_;
+
+
+/**
+ * Whether we're dragging chip.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.MainPaneSelectionMask.prototype.isDraggingChip_;
+
+
+/**
  * @return {boolean} Whether mask is allday.
  */
 rflect.cal.MainPaneSelectionMask.prototype.isAllDay = function() {
@@ -162,17 +194,17 @@ rflect.cal.MainPaneSelectionMask.prototype.close = function() {
 
 /**
  * Updates mask and redraws it, if necessary.
- * @param {goog.events.Event} aEvent Event object or cell index.
+ * @param {goog.events.Event} aEvent Event object or coord index.
  */
 rflect.cal.MainPaneSelectionMask.prototype.update = function(aEvent) {
 
   var pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
-  var currentCell = this.getCellByCoordinate_(aEvent.clientX + pageScroll.x -
+  var currentCell = this.snapCoordinate_(aEvent.clientX + pageScroll.x -
       this.elementOffset_.x + this.scrollableEl_.scrollLeft, aEvent.clientY +
       pageScroll.y - this.elementOffset_.y + this.scrollableEl_.scrollTop);
 
-  if (!goog.math.Coordinate.equals(this.currentCell_, currentCell)) {
-    this.currentCell_ = currentCell;
+  if (!goog.math.Coordinate.equals(this.currentCoordinate_, currentCell)) {
+    this.currentCoordinate_ = currentCell;
     this.update_();
   }
 
@@ -184,9 +216,10 @@ rflect.cal.MainPaneSelectionMask.prototype.update = function(aEvent) {
  * @param {number} aConfiguration Configuration
  * of mask.
  * @param {goog.events.Event=} opt_event Event object.
+ * @param {boolean=} opt_draggingChip Whether we're dragging chip.
  */
 rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
-    opt_event) {
+    opt_event, opt_draggingChip) {
   rflect.cal.SelectionMask.prototype.init.call(this, aConfiguration);
 
     //TODO(alexk): when in multiple scrollables goog.style.getOffsetPosition.
@@ -200,6 +233,8 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
     var coordY = 0;
 
     this.elementOffset_ = new goog.math.Coordinate(0, 0);
+
+    this.isDraggingChip_ = opt_draggingChip || false;
 
     if (this.isWeekOrAllday_()) {
 
@@ -248,14 +283,65 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
         coordYWithoutScroll < 0)
       return;
 
-    this.startCell_ = this.getCellByCoordinate_(coordX, coordY);
-    this.currentCell_ = this.startCell_.clone();
+    if (opt_draggingChip) {
 
-    goog.style.showElement(this.maskEl_, true);
+      this.calculatePointAndTimestamp(coordX, coordY);
+
+    } else {
+
+      this.startCoordinate_ = this.snapCoordinate_(coordX, coordY);
+      this.currentCoordinate_ = this.startCoordinate_.clone();
+
+      goog.style.showElement(this.maskEl_, true);
+      this.visible_ = true;
+
+      this.update_();
+    }
 
   this.initialized_ = true;
-  this.update_();
 
+};
+
+
+/**
+ * @param {number} aX X pixel position.
+ * @param {number} aY Y pixel position.
+ */
+rflect.cal.MainPaneSelectionMask.prototype.calculatePointAndTimestamp =
+    function(aX, aY) {
+  var coord = new goog.math.Coordinate(0, 0);
+  var maxX = 0;
+  var maxY = 0;
+
+  if (this.isWeekOrAllday_()) {
+    maxX = this.blockPoolWeek_.getBlocksNumber() - 1;
+    // TODO(alexk): simplify this in case of chip drag
+    coord.x = this.getBlockIndexByCoordinate_(aX, this.blockPoolWeek_);
+
+    // Allday mask always have zero y index.
+    if (this.isAllDay()) {
+      maxY = 0;
+      coord.y = 0;
+    }
+    else {
+      maxY = rflect.cal.predefined.WEEK_GRID_HEIGHT;
+      coord.y = Math.floor(aY / rflect.cal.predefined.HOUR_ROW_HEIGHT);
+    }
+
+  } else {
+    maxX = 6;
+    maxY = this.blockPoolMonth_.getBlocksNumber() - 1;
+    coord.y = this.getBlockIndexByCoordinate_(aY, this.blockPoolMonth_);
+    coord.x = Math.floor(aX / (this.blockPoolMonth_.gridSize.width / 7));
+  }
+
+  // Safe checks.
+  if (coord.x < 0) coord.x = 0;
+  if (coord.x > maxX) coord.x = maxX;
+  if (coord.y < 0) coord.y = 0;
+  if (coord.y > maxY) coord.y = maxY;
+
+  return coord;
 };
 
 
@@ -264,40 +350,42 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
  * @param {number} aY Y pixel position.
  * @return {goog.math.Coordinate} Cell position.
  */
-rflect.cal.MainPaneSelectionMask.prototype.getCellByCoordinate_ =
+rflect.cal.MainPaneSelectionMask.prototype.snapCoordinate_ =
     function(aX, aY) {
-  var cell = new goog.math.Coordinate(0, 0);
+  var coord = new goog.math.Coordinate(0, 0);
   var maxX = 0;
   var maxY = 0;
 
   if (this.isWeekOrAllday_()) {
     maxX = this.blockPoolWeek_.getBlocksNumber() - 1;
-    cell.x = this.getBlockIndexByCoordinate_(aX, this.blockPoolWeek_);
+    coord.x = this.getBlockIndexByCoordinate_(aX, this.blockPoolWeek_);
 
     // Allday mask always have zero y index.
     if (this.isAllDay()) {
       maxY = 0;
-      cell.y = 0;
+      coord.y = 0;
     }
     else {
-      maxY = rflect.cal.predefined.HOUR_ROWS_NUMBER - 1;
-      cell.y = Math.floor(aY / rflect.cal.predefined.HOUR_ROW_HEIGHT);
+      maxY = rflect.cal.predefined.HOUR_ROWS_NUMBER * 
+          rflect.cal.predefined.HOUR_ROW_HEIGHT;
+      coord.y = Math.floor(aY / rflect.cal.predefined.HOUR_ROW_HEIGHT) *
+          rflect.cal.predefined.HOUR_ROW_HEIGHT;
     }
 
   } else {
     maxX = 6;
     maxY = this.blockPoolMonth_.getBlocksNumber() - 1;
-    cell.y = this.getBlockIndexByCoordinate_(aY, this.blockPoolMonth_);
-    cell.x = Math.floor(aX / (this.blockPoolMonth_.gridSize.width / 7));
+    coord.y = this.getBlockIndexByCoordinate_(aY, this.blockPoolMonth_);
+    coord.x = Math.floor(aX / (this.blockPoolMonth_.gridSize.width / 7));
   }
 
   // Safe checks.
-  if (cell.x < 0) cell.x = 0;
-  if (cell.x > maxX) cell.x = maxX;
-  if (cell.y < 0) cell.y = 0;
-  if (cell.y > maxY) cell.y = maxY;
+  if (coord.x < 0) coord.x = 0;
+  if (coord.x > maxX) coord.x = maxX;
+  if (coord.y < 0) coord.y = 0;
+  if (coord.y > maxY) coord.y = maxY;
 
-  return cell;
+  return coord;
 };
 
 
@@ -326,42 +414,42 @@ rflect.cal.MainPaneSelectionMask.prototype.getBlockIndexByCoordinate_ =
 
 
 /**
- * @return {number} Block-dependent coordinate for start cell.
+ * @return {number} Block-dependent coordinate for start coord.
  * @private
  */
 rflect.cal.MainPaneSelectionMask.prototype.getStartCellPrimaryCoord_ =
     function() {
-  return this.getCellCoord_(this.startCell_, true);
+  return this.getCellCoord_(this.startCoordinate_, true);
 };
 
 
 /**
- * @return {number} Block-independent coordinate for start cell.
+ * @return {number} Block-independent coordinate for start coord.
  * @private
  */
 rflect.cal.MainPaneSelectionMask.prototype.getStartCellSecondaryCoord_ =
     function() {
-  return this.getCellCoord_(this.startCell_, false);
+  return this.getCellCoord_(this.startCoordinate_, false);
 };
 
 
 /**
- * @return {number} Block-dependent coordinate for current cell.
+ * @return {number} Block-dependent coordinate for current coord.
  * @private
  */
 rflect.cal.MainPaneSelectionMask.prototype.getCurrentCellPrimaryCoord_ =
     function() {
-  return this.getCellCoord_(this.currentCell_, true);
+  return this.getCellCoord_(this.currentCoordinate_, true);
 };
 
 
 /**
- * @return {number} Block-independent coordinate for current cell.
+ * @return {number} Block-independent coordinate for current coord.
  * @private
  */
 rflect.cal.MainPaneSelectionMask.prototype.getCurrentCellSecondaryCoord_ =
     function() {
-  return this.getCellCoord_(this.currentCell_, false);
+  return this.getCellCoord_(this.currentCoordinate_, false);
 };
 
 
@@ -369,7 +457,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getCurrentCellSecondaryCoord_ =
  * @param {goog.math.Coordinate} aCellOrIndex Cell to get coordinate for.
  * @param {boolean} aBlockDependent Whether to get block dependent or
  * block-independent coordinate.
- * @return {number} Appropriate cell coordinate.
+ * @return {number} Appropriate coord coordinate.
  * @private
  */
 rflect.cal.MainPaneSelectionMask.prototype.getCellCoord_ = function(aCellOrIndex,
@@ -384,7 +472,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoord_ = function(aCellOrIndex
 
 
 /**
- * Gets position or size for block defined by cell.
+ * Gets position or size for block defined by coord.
  * @param {goog.math.Coordinate|number} aCellOrIndex Cell to get index from or
  * direct index.
  * @param {boolean} aPosition Whether to get position (true) or size (false).
@@ -403,26 +491,26 @@ rflect.cal.MainPaneSelectionMask.prototype.getBlockPositionOrSize_ = function(
 
 
 /**
- * Gets position or size for block defined by start cell.
+ * Gets position or size for block defined by start coord.
  * @param {boolean} aPosition Whether to get position (true) or size (false).
  * @return {number} Position or size for block.
  * @private
  */
 rflect.cal.MainPaneSelectionMask.prototype.getBlockPositionOrSizeForStartCell_ =
     function(aPosition) {
-  return this.getBlockPositionOrSize_(this.startCell_, aPosition);
+  return this.getBlockPositionOrSize_(this.startCoordinate_, aPosition);
 };
 
 
 /**
- * Gets position or size for block defined by current cell.
+ * Gets position or size for block defined by current coord.
  * @param {boolean} aPosition Whether to get position (true) or size (false).
  * @return {number} Position or size for block.
  * @private
  */
 rflect.cal.MainPaneSelectionMask.prototype.
     getBlockPositionOrSizeForCurrentCell_ = function(aPosition) {
-  return this.getBlockPositionOrSize_(this.currentCell_, aPosition);
+  return this.getBlockPositionOrSize_(this.currentCoordinate_, aPosition);
 };
 
 
@@ -435,7 +523,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getDefaultStep_ = function() {
   if (this.isAllDay())
     step = this.blockPoolAllday_.gridSize.height;
   else if (this.isWeek())
-    step = rflect.cal.predefined.HOUR_ROW_HEIGHT;
+    step = 1;
   else
     step = this.blockPoolMonth_.gridSize.width / 7;
   return step;
@@ -451,7 +539,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getMaxSize_ = function() {
   if (this.isAllDay())
     size = this.blockPoolAllday_.gridSize.height;
   else if (this.isWeek())
-    size = rflect.cal.predefined.WEEK_GRID_HEIGHT;
+    size = 1440;
   else
     size = this.blockPoolMonth_.gridSize.width;
   return size;
@@ -495,8 +583,8 @@ rflect.cal.MainPaneSelectionMask.prototype.update_ = function() {
     return;
 
 
-    minCell = this.getMinCell_(this.startCell_, this.currentCell_);
-    maxCell = this.getMaxCell_(this.startCell_, this.currentCell_);
+    minCell = this.getMinCell_(this.startCoordinate_, this.currentCoordinate_);
+    maxCell = this.getMaxCell_(this.startCoordinate_, this.currentCoordinate_);
 
     var startCellPrimaryCoord = this.getStartCellPrimaryCoord_();
     var startCellSecondaryCoord = this.getStartCellSecondaryCoord_();
@@ -533,7 +621,7 @@ rflect.cal.MainPaneSelectionMask.prototype.update_ = function() {
 
     } else {
 
-      // Start cell rect.
+      // Start coord rect.
       this.rects_.push(this.getRect_(
           blockPositionForStartCell,
           currentCellPrimaryCoord > startCellPrimaryCoord ?
@@ -543,7 +631,7 @@ rflect.cal.MainPaneSelectionMask.prototype.update_ = function() {
           maxSize - startCellSecondaryCoord * defaultStep :
           (startCellSecondaryCoord + 1) * defaultStep
           ));
-      // Current cell rect.
+      // Current coord rect.
       this.rects_.push(this.getRect_(
           blockPositionForCurrentCell,
           currentCellPrimaryCoord > startCellPrimaryCoord ?

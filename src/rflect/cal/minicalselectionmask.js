@@ -100,8 +100,8 @@ rflect.cal.SelectionMask.prototype.isDragStarted = function() {
  */
 rflect.cal.MiniCalSelectionMask.prototype.close = function() {
   if (this.draggedAtLeastOnce_) {
-    this.currentCell_ = this.visibleCurrentCell_;
-    this.startCell_ = this.visibleStartCell_;
+    this.currentCoordinate_ = this.visibleCurrentCell_;
+    this.startCoordinate_ = this.visibleStartCell_;
 
     this.draggedAtLeastOnce_ = this.dragStarted_ = false;
 
@@ -132,12 +132,12 @@ rflect.cal.MiniCalSelectionMask.prototype.update = function(aIndex) {
   if (!this.dragStarted_)
     return;
 
-  if (!goog.math.Coordinate.equals(this.currentCell_, currentCell)) {
+  if (!goog.math.Coordinate.equals(this.currentCoordinate_, currentCell)) {
 
     this.draggedAtLeastOnce_ = true;
     this.initialized_ = true;
 
-    this.currentCell_ = currentCell;
+    this.currentCoordinate_ = currentCell;
 
     this.update_();
   }
@@ -165,8 +165,8 @@ rflect.cal.MiniCalSelectionMask.prototype.init = function(aConfiguration,
     // previously initialized.
     this.initialized_ = false;
 
-    this.startCell_ = this.getCellBySelectionIndex_(startSelectionIndex);
-    this.currentCell_ = this.getCellBySelectionIndex_(endSelectionIndex);
+    this.startCoordinate_ = this.getCellBySelectionIndex_(startSelectionIndex);
+    this.currentCoordinate_ = this.getCellBySelectionIndex_(endSelectionIndex);
 
     // Update mask for external mode.
     this.update_();
@@ -178,9 +178,9 @@ rflect.cal.MiniCalSelectionMask.prototype.init = function(aConfiguration,
 
     // Whether mask was previously initialized.
     this.indexIsInMask_ = this.getIndexIsInMask(startSelectionIndex);
-    this.calculateDates_(this.startCell_ = this.getCellBySelectionIndex_(
+    this.calculateDates_(this.startCoordinate_ = this.getCellBySelectionIndex_(
         startSelectionIndex));
-    this.currentCell_ = this.startCell_.clone();
+    this.currentCoordinate_ = this.startCoordinate_.clone();
 
   }
 
@@ -236,8 +236,8 @@ rflect.cal.MiniCalSelectionMask.prototype.update_ = function() {
   // Rectangles to pass to builder.
   this.rects_.length = 0;
 
-  if (this.startCell_.x < 0 || this.startCell_.y < 0 ||
-      this.currentCell_.x < 0 || this.currentCell_.y < 0)
+  if (this.startCoordinate_.x < 0 || this.startCoordinate_.y < 0 ||
+      this.currentCoordinate_.x < 0 || this.currentCoordinate_.y < 0)
     return;
 
   // If cells are valid, we're initialized.
@@ -248,8 +248,8 @@ rflect.cal.MiniCalSelectionMask.prototype.update_ = function() {
   var defaultStepY = rflect.cal.predefined.MINICAL_MASK_HEIGHT / 6;
     
   // We need clone cells before modifying originals.
-  this.visibleStartCell_ = this.startCell_.clone();
-  this.visibleCurrentCell_ = this.currentCell_.clone();
+  this.visibleStartCell_ = this.startCoordinate_.clone();
+  this.visibleCurrentCell_ = this.currentCoordinate_.clone();
     
   minCell = this.getMinCell_(this.visibleStartCell_, this.visibleCurrentCell_);
   maxCell = this.getMaxCell_(this.visibleStartCell_, this.visibleCurrentCell_);

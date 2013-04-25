@@ -961,17 +961,18 @@ rflect.cal.MainPane.prototype.isAllDayChip_ = function(aClassName) {
 rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
   var className = aEvent.target.className;
   var preventDefaultIsNeeded = false;
+  var maskConfiguration;
 
   // Whether we clicked on hollow space.
   if (this.isWeekGrid_(className)) {
     this.selectionMask_.init(
-        /**@type {number}*/
+        maskConfiguration = /**@type {number}*/
         (rflect.cal.MainPaneSelectionMask.Configuration.WEEK),
         aEvent);
     preventDefaultIsNeeded = true;
   } else if (this.isAlldayGrid_(className)) {
     this.selectionMask_.init(
-        /**@type {number}*/
+        maskConfiguration = /**@type {number}*/
         (rflect.cal.MainPaneSelectionMask.Configuration.ALLDAY),
         aEvent);
     preventDefaultIsNeeded = true;
@@ -979,14 +980,36 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
     if (!this.isDaynumLabel_(className))
       this.selectionMask_.init(
-          /**@type {number}*/
+          maskConfiguration = /**@type {number}*/
           (rflect.cal.MainPaneSelectionMask.Configuration.MONTH), aEvent);
+    preventDefaultIsNeeded = true;
+  } else if (this.isChip_(className)) {
+    this.startChipDrag_(maskConfiguration, aEvent, className);
     preventDefaultIsNeeded = true;
   }
   if (preventDefaultIsNeeded)
     aEvent.preventDefault();
 
 };
+
+
+/**
+ * @param {number} aMaskConfiguration Mask configuration.
+ * @param {Event} aEvent Event object.
+ * @param {string} aClassName Chip class name.
+ */
+rflect.cal.MainPane.prototype.chipDragStart_ = function(aMaskConfiguration,
+    aEvent, aClassName) {
+  this.selectionMask_.init(aMaskConfiguration, aEvent, true);
+}
+
+
+/**
+ * @param {Event} aEvent Event object.
+ * @param {string} aClassName Chip class name.
+ */
+rflect.cal.MainPane.prototype.chipDrag_ = function(aEvent) {
+}
 
 
 /**

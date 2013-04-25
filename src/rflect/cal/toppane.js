@@ -18,7 +18,6 @@ goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('goog.ui.ToggleButton');
-goog.require('rflect.cal.Button');
 goog.require('rflect.ui.Component');
 goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.i18n.Symbols');

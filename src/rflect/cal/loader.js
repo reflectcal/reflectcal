@@ -4,6 +4,8 @@
 
 /**
  * @fileoverview Application entry point.
+ * Theoretically, this class may be loaded at startup and manage loading of
+ * calendar via module.
  * @author alexeykofficial@gmail.com (Alex K)
  * Class that creates cal instance when appropriate event is fired.
  */

@@ -73,19 +73,19 @@ rflect.cal.SelectionMask.prototype.maskEl_;
 
 
 /**
- * Cell where mask was started.
+ * Coordinate where mask was started.
  * @type {goog.math.Coordinate}
  * @private
  */
-rflect.cal.SelectionMask.prototype.startCell_;
+rflect.cal.SelectionMask.prototype.startCoordinate_;
 
 
 /**
- * Cell where mask is now.
+ * Coordinate where mask is now.
  * @type {goog.math.Coordinate}
  * @private
  */
-rflect.cal.SelectionMask.prototype.currentCell_;
+rflect.cal.SelectionMask.prototype.currentCoordinate_;
 
 
 /**
