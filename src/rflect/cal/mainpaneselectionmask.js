@@ -199,7 +199,7 @@ rflect.cal.MainPaneSelectionMask.prototype.close = function() {
 rflect.cal.MainPaneSelectionMask.prototype.update = function(aEvent) {
 
   var pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
-  var currentCell = this.snapCoordinate_(aEvent.clientX + pageScroll.x -
+  var currentCell = this.getSnappedCoordinate_(aEvent.clientX + pageScroll.x -
       this.elementOffset_.x + this.scrollableEl_.scrollLeft, aEvent.clientY +
       pageScroll.y - this.elementOffset_.y + this.scrollableEl_.scrollTop);
 
@@ -289,8 +289,9 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
 
     } else {
 
-      this.startCoordinate_ = this.snapCoordinate_(coordX, coordY);
-      this.currentCoordinate_ = this.startCoordinate_.clone();
+      this.startCoordinate_ = this.getSnappedCoordinate_(coordX, coordY);
+      this.endCoordinate_ = this.startCoordinate_.clone();
+      this.endCoordinate_.y += this.getDefaultStep_();
 
       goog.style.showElement(this.maskEl_, true);
       this.visible_ = true;
@@ -350,7 +351,7 @@ rflect.cal.MainPaneSelectionMask.prototype.calculatePointAndTimestamp =
  * @param {number} aY Y pixel position.
  * @return {goog.math.Coordinate} Cell position.
  */
-rflect.cal.MainPaneSelectionMask.prototype.snapCoordinate_ =
+rflect.cal.MainPaneSelectionMask.prototype.getSnappedCoordinate_ =
     function(aX, aY) {
   var coord = new goog.math.Coordinate(0, 0);
   var maxX = 0;
@@ -523,7 +524,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getDefaultStep_ = function() {
   if (this.isAllDay())
     step = this.blockPoolAllday_.gridSize.height;
   else if (this.isWeek())
-    step = 1;
+    step = 24;
   else
     step = this.blockPoolMonth_.gridSize.width / 7;
   return step;
