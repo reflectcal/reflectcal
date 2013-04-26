@@ -65,9 +65,9 @@ rflect.cal.blocks.BlockManager = function(aViewManager, aTimeManager, aEventMana
    * Block pool for allday.
    * @type {rflect.cal.blocks.BlockPool}
    */
-  this.blockPoolAllday = new rflect.cal.blocks.BlockPool(false);
-  this.blockPoolAllday.fill(1);
-  this.blockPoolAllday.setBlocksNumber(1);
+  this.blockPoolAllDay = new rflect.cal.blocks.BlockPool(false);
+  this.blockPoolAllDay.fill(1);
+  this.blockPoolAllDay.setBlocksNumber(1);
 
 
 };
@@ -80,19 +80,19 @@ rflect.cal.blocks.BlockManager.prototype.update = function() {
 
   if (this.viewManager_.isInWeekMode()) {
     this.blockPoolWeek.setBlocksNumber(this.timeManager_.daySeries.length);
-    this.blockPoolAllday.setBlocksNumber(1);
+    this.blockPoolAllDay.setBlocksNumber(1);
 
     this.blockPoolWeek.updateCollapsedBlocks();
-    this.blockPoolAllday.updateCollapsedBlocks();
+    this.blockPoolAllDay.updateCollapsedBlocks();
 
     // Event manager calculations and nesting is here.
     this.blockPoolWeek.updateEventMap(this.eventManager_.dayChips);
     // All-day event block should calculate sparse arrays.
-    this.blockPoolAllday.updateEventMap(this.eventManager_.allDayChips, true,
+    this.blockPoolAllDay.updateEventMap(this.eventManager_.allDayChips, true,
         this.blockPoolWeek.getBlocksNumber());
 
     this.blockPoolWeek.updateExpandedBlocks();
-    this.blockPoolAllday.updateExpandedBlocks();
+    this.blockPoolAllDay.updateExpandedBlocks();
   } else if (this.viewManager_.isInMonthMode()) {
     this.blockPoolMonth.setBlocksNumber(this.timeManager_.daySeries.length / 7);
 
@@ -122,8 +122,8 @@ rflect.cal.blocks.BlockManager.prototype.setSizes = function(aGridSize,
     this.blockPoolWeek.gridContainerSize = aGridContainerSize;
     this.blockPoolWeek.gridSize = aGridSize;
 
-    this.blockPoolAllday.gridSize = opt_alldayGridSize;
-    this.blockPoolAllday.gridContainerSize = opt_alldayGridContainerSize;
+    this.blockPoolAllDay.gridSize = opt_alldayGridSize;
+    this.blockPoolAllDay.gridContainerSize = opt_alldayGridContainerSize;
 
   } else if (this.viewManager_.isInMonthMode()) {
 

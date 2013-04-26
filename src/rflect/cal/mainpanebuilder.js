@@ -77,7 +77,7 @@ rflect.cal.MainPaneBuilder = function(aViewManager, aMainPane, aTimeManager,
    * @type {rflect.cal.blocks.BlockPool}
    * @private
    */
-  this.blockPoolAllday_ = aBlockPoolAllday;
+  this.blockPoolAllDay_ = aBlockPoolAllday;
 
   /**
    * Link to month block manager.
@@ -702,7 +702,7 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalMonth_ = function(aSb) {
  */
 rflect.cal.MainPaneBuilder.prototype.buildDayNamesZippy_ =
     function(aSb, aOffset) {
-  aSb.append(this.blockPoolAllday_.expanded ? 'goog-zippy-expanded' :
+  aSb.append(this.blockPoolAllDay_.expanded ? 'goog-zippy-expanded' :
       'goog-zippy-collapsed');
 };
 
@@ -729,7 +729,7 @@ rflect.cal.MainPaneBuilder.prototype.buildDayNamesWeek_ =
 
   // Daynames table width.
   aSb.append(rflect.math.pixelToPercent(gridWidth,
-      this.blockPoolAllday_.gridContainerSize.width).toFixed(4));
+      this.blockPoolAllDay_.gridContainerSize.width).toFixed(4));
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
 
   for (var colCounter = 0, blocksNumber = this.blockPoolWeek_.getBlocksNumber();
@@ -815,7 +815,7 @@ rflect.cal.MainPaneBuilder.prototype.buildDayNamesMonth_ = function(aSb, aOffset
  */
 rflect.cal.MainPaneBuilder.prototype.buildScrollableAllday_ =
     function(aSb, aOffset) {
-  if (this.blockPoolAllday_.expanded)
+  if (this.blockPoolAllDay_.expanded)
     aSb.append(goog.getCssName('mphs-scroll-vert-on') + ' ');
   else
     aSb.append(goog.getCssName('mphs-scroll-vert-off') + ' ');
@@ -825,7 +825,7 @@ rflect.cal.MainPaneBuilder.prototype.buildScrollableAllday_ =
     aSb.append(goog.getCssName('mphs-scroll-horz-off'));
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
   // Size off allday scrollable.
-  aSb.append(this.blockPoolAllday_.gridContainerSize.height);
+  aSb.append(this.blockPoolAllDay_.gridContainerSize.height);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
 };
 
@@ -852,12 +852,12 @@ rflect.cal.MainPaneBuilder.prototype.buildScrollableWrapperMn_ =
  */
 rflect.cal.MainPaneBuilder.prototype.buildAllDayGrid_ = function(aSb, aOffset) {
   // Height of allday grid.
-  aSb.append(this.blockPoolAllday_.gridSize.height);
+  aSb.append(this.blockPoolAllDay_.gridSize.height);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
   // Width of allday grid.
   aSb.append(rflect.math.pixelToPercent(
       this.blockPoolWeek_.gridSize.width,
-      this.blockPoolAllday_.gridContainerSize.width)
+      this.blockPoolAllDay_.gridContainerSize.width)
       .toFixed(4));
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
 };
@@ -894,7 +894,7 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridAdCols_ =
     function(aSb, aOffset) {
   var prevColsCumulativeSize = 0;
   var gridWidth = this.blockPoolWeek_.gridSize.width;
-  var sparseArrays = this.blockPoolAllday_.blocks[0].sparseArrays;
+  var sparseArrays = this.blockPoolAllDay_.blocks[0].sparseArrays;
 
   for (var colCounter = 0, blocksNumber = this.blockPoolWeek_.getBlocksNumber();
       colCounter < blocksNumber;
@@ -977,7 +977,7 @@ rflect.cal.MainPaneBuilder.buildAdBlockChips_ =
  */
 rflect.cal.MainPaneBuilder.prototype.buildWkAdExpandSign_ =
     function(aSb, aOffset) {
-  var block = this.blockPoolAllday_.blocks[0];
+  var block = this.blockPoolAllDay_.blocks[0];
 
   // Expand signs build.
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);

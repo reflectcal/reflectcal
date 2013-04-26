@@ -91,7 +91,7 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager, aEventManager,
    */
   this.mainPaneBuilder_ = new rflect.cal.MainPaneBuilder(this.viewManager_,
       this, aTimeManager, this.eventManager_, this.blockManager_.blockPoolWeek,
-      this.blockManager_.blockPoolAllday, this.blockManager_.blockPoolMonth,
+      this.blockManager_.blockPoolAllDay, this.blockManager_.blockPoolMonth,
       this.containerSizeMonitor_, this.timeMarker_);
   if (goog.DEBUG)
     _inspect('mainPaneBuilder', this.mainPaneBuilder_);
@@ -104,7 +104,7 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager, aEventManager,
    */
   this.selectionMask_ = new rflect.cal.MainPaneSelectionMask(aViewManager, this,
       aTimeManager, this.blockManager_.blockPoolWeek,
-      this.blockManager_.blockPoolAllday, this.blockManager_.blockPoolMonth);
+      this.blockManager_.blockPoolAllDay, this.blockManager_.blockPoolMonth);
   if (goog.DEBUG)
     _inspect('selectionMask', this.selectionMask_);
 
@@ -275,7 +275,7 @@ rflect.cal.MainPane.prototype.isAlldayScrollableExpandedHor = function() {
  * @return {boolean} Whether allday scrollable is expanded vertically.
  */
 rflect.cal.MainPane.prototype.isAlldayScrollableExpandedVer = function() {
-  return this.blockManager_.blockPoolAllday.expanded;
+  return this.blockManager_.blockPoolAllDay.expanded;
 };
 
 
@@ -416,7 +416,7 @@ rflect.cal.MainPane.prototype.addScrollListeners_ = function() {
           goog.events.EventType.SCROLL, this.onMainPaneScrollableScroll_, false,
           this));
     //TODO(alexk): implement focus before introducing both scrollable controls.
-    /*if (this.blockManager_.blockPoolAllday.expanded)
+    /*if (this.blockManager_.blockPoolAllDay.expanded)
       this.scrollListenersKeys_.push(goog.events.listen(
           this.dom_.getElement('main-pane-header-scrollable'),
           goog.events.EventType.SCROLL, this.onMainPaneScrollableScroll_, false,
@@ -546,7 +546,7 @@ rflect.cal.MainPane.prototype.updateConditionally_ = function(
 
   if (this.viewManager_.isInWeekMode() &&
       !this.blockManager_.blockPoolWeek.expanded &&
-      !this.blockManager_.blockPoolAllday.expanded) {
+      !this.blockManager_.blockPoolAllDay.expanded) {
 
     if (aConditionToUpdateAllDay)
       this.updateByRedrawAllDayGrid_();
@@ -677,7 +677,7 @@ rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
       zippyClicked = true;
     } else if (/daynames\-zippy/.test(id)) {
       // We clicked on allday zippy.
-      this.blockManager_.blockPoolAllday.toggleBlock(0);
+      this.blockManager_.blockPoolAllDay.toggleBlock(0);
 
       zippyClicked = true;
     } else if (this.isDaynumLabel_(className))
@@ -984,7 +984,7 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
           (rflect.cal.MainPaneSelectionMask.Configuration.MONTH), aEvent);
     preventDefaultIsNeeded = true;
   } else if (this.isChip_(className)) {
-    this.startChipDrag_(maskConfiguration, aEvent, className);
+    this.chipDragStart_(1, aEvent, className);
     preventDefaultIsNeeded = true;
   }
   if (preventDefaultIsNeeded)
@@ -995,7 +995,7 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
 /**
  * @param {number} aMaskConfiguration Mask configuration.
- * @param {Event} aEvent Event object.
+ * @param {goog.events.Event} aEvent Event object.
  * @param {string} aClassName Chip class name.
  */
 rflect.cal.MainPane.prototype.chipDragStart_ = function(aMaskConfiguration,
@@ -1006,7 +1006,6 @@ rflect.cal.MainPane.prototype.chipDragStart_ = function(aMaskConfiguration,
 
 /**
  * @param {Event} aEvent Event object.
- * @param {string} aClassName Chip class name.
  */
 rflect.cal.MainPane.prototype.chipDrag_ = function(aEvent) {
 }
