@@ -201,7 +201,8 @@ rflect.cal.MainPaneSelectionMask.prototype.update = function(aEvent) {
   var pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
   var currentCoord = this.getCellCoordinate_(aEvent.clientX + pageScroll.x -
       this.elementOffset_.x + this.scrollableEl_.scrollLeft, aEvent.clientY +
-      pageScroll.y - this.elementOffset_.y + this.scrollableEl_.scrollTop);
+      pageScroll.y - this.elementOffset_.y + this.scrollableEl_.scrollTop,
+      true, false);
 
   var snappedCoord1 = this.snapCoordinate_(this.currentCoordinate_, true);
   var snappedCoord2 = this.snapCoordinate_(currentCoord, true);
@@ -303,7 +304,8 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
 
     } else {
 
-      this.startCoordinate_ = this.getCellCoordinate_(coordX, coordY);
+      this.startCoordinate_ = this.getCellCoordinate_(coordX, coordY, true,
+          false);
       this.currentCoordinate_ = this.startCoordinate_.clone();
 
       if (goog.DEBUG)
@@ -371,10 +373,14 @@ rflect.cal.MainPaneSelectionMask.prototype.calculatePointAndTimestamp =
  * Month and all day: y axis is block dependent, x is not.
  * @param {number} aX X pixel position.
  * @param {number} aY Y pixel position.
+ * @param {boolean} changePrimaryComponent Whether to change block-dependent
+ * component of coordinate.
+ * @param {boolean} changeSecondaryComponent Whether to change block-independent
+ * component of coordinate.
  * @return {goog.math.Coordinate} Cell position.
  */
 rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
-    function(aX, aY, opt_changeSecondaryComponent) {
+    function(aX, aY, changePrimaryComponent, changeSecondaryComponent) {
   var coord = new goog.math.Coordinate(aX, aY);
   var maxX = 0;
   var maxY = 0;
@@ -384,10 +390,10 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
     maxX = this.blockPoolMonth_.gridSize.width - 1;
     maxY = this.blockPoolMonth_.getBlocksNumber() - 1;
 
-    if (opt_changeSecondaryComponent)
-      coord.x = Math.floor(aX / 7);
-    else
+    if (changePrimaryComponent)
       coord.y = this.getBlockIndexByCoordinate_(aY, this.blockPoolMonth_);
+    if (changeSecondaryComponent)
+      coord.x = Math.floor(aX / 7);
 
   } else if (this.isAllDay()) {
 
@@ -395,17 +401,21 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
     maxX = this.blockPoolAllDay_.gridSize.width - 1;
     maxY = 0;
 
-    if (opt_changeSecondaryComponent)
+    if (changePrimaryComponent)
       coord.y = 0;
-    else
-      coord.y = 0;
+    if (changeSecondaryComponent)
+      coord.x = Math.floor(aX / this.blockPoolAllDay_.getBlocksNumber());
 
   } else if (this.isWeek()) {
 
     maxY = rflect.cal.predefined.HOUR_ROWS_NUMBER *
         rflect.cal.predefined.HOUR_ROW_HEIGHT - 1;
     maxX = this.blockPoolWeek_.getBlocksNumber() - 1;
-    coord.x = this.getBlockIndexByCoordinate_(aX, this.blockPoolWeek_);
+
+    if (changePrimaryComponent)
+      coord.x = this.getBlockIndexByCoordinate_(aX, this.blockPoolWeek_);
+    if (changeSecondaryComponent)
+      coord.y = Math.floor(aY / rflect.cal.predefined.HOUR_ROW_HEIGHT);
 
   }
 
@@ -786,10 +796,12 @@ rflect.cal.MainPaneSelectionMask.prototype.calculateDates = function(aMinCell,
   if (this.draggingChip_) {
 
   } else {
-    var minCell =
-    var maxCell =
+    var minCell = this.getCellCoordinate_(aMinCell.x, aMinCell.y, false, true);
+    var maxCell = this.getCellCoordinate_(opt_maxCell.x, opt_maxCell.y, false,
+        true);
 
-    rflect.cal.MainPaneSelectionMask.superClass_.call(this, minCell, maxCell);
+    rflect.cal.MainPaneSelectionMask.superClass_.calculateDates
+        .call(this, minCell, maxCell);
   }
 
 }
