@@ -178,7 +178,7 @@ rflect.cal.MiniCalSelectionMask.prototype.init = function(aConfiguration,
 
     // Whether mask was previously initialized.
     this.indexIsInMask_ = this.getIndexIsInMask(startSelectionIndex);
-    this.calculateDates_(this.startCoordinate_ = this.getCellBySelectionIndex_(
+    this.calculateDates(this.startCoordinate_ = this.getCellBySelectionIndex_(
         startSelectionIndex));
     this.currentCoordinate_ = this.startCoordinate_.clone();
 

@@ -374,7 +374,7 @@ rflect.cal.MainPaneSelectionMask.prototype.calculatePointAndTimestamp =
  * @return {goog.math.Coordinate} Cell position.
  */
 rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
-    function(aX, aY) {
+    function(aX, aY, opt_changeSecondaryComponent) {
   var coord = new goog.math.Coordinate(aX, aY);
   var maxX = 0;
   var maxY = 0;
@@ -383,14 +383,22 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
 
     maxX = this.blockPoolMonth_.gridSize.width - 1;
     maxY = this.blockPoolMonth_.getBlocksNumber() - 1;
-    coord.y = this.getBlockIndexByCoordinate_(aY, this.blockPoolMonth_);
+
+    if (opt_changeSecondaryComponent)
+      coord.x = Math.floor(aX / 7);
+    else
+      coord.y = this.getBlockIndexByCoordinate_(aY, this.blockPoolMonth_);
 
   } else if (this.isAllDay()) {
 
     // Allday mask always have zero y index.
     maxX = this.blockPoolAllDay_.gridSize.width - 1;
     maxY = 0;
-    coord.y = 0;
+
+    if (opt_changeSecondaryComponent)
+      coord.y = 0;
+    else
+      coord.y = 0;
 
   } else if (this.isWeek()) {
 
@@ -433,7 +441,7 @@ rflect.cal.MainPaneSelectionMask.prototype.snapCoordinate_ =
         this.blockPoolMonth_.gridSize.width / 7, aUp);
   } else if (this.isAllDay()) {
     coord.x = this.floorOrCeil_(aCoord.x, this.blockPoolAllDay_.gridSize.width /
-        this.blockPoolAllDay_.getBlocksNumber(), aUp);
+        this.blockPoolWeek_.getBlocksNumber(), aUp);
   }
 
   return coord;
@@ -606,9 +614,10 @@ rflect.cal.MainPaneSelectionMask.prototype.getDefaultStep_ = function() {
 rflect.cal.MainPaneSelectionMask.prototype.getMaxSize_ = function() {
   var size = 0;
   if (this.isAllDay())
-    size = this.blockPoolAllDay_.gridSize.height;
+    size = this.blockPoolAllDay_.gridSize.width;
   else if (this.isWeek())
-    size = 1440;
+    size = rflect.cal.predefined.HOUR_ROW_HEIGHT *
+        rflect.cal.predefined.HOUR_ROWS_NUMBER;
   else
     size = this.blockPoolMonth_.gridSize.width;
   return size;
@@ -626,9 +635,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getMaxSize_ = function() {
 rflect.cal.MainPaneSelectionMask.prototype.getRect_ =
     function(aX, aY, aDx, aDy) {
   var rect;
-  if (this.isAllDay())
-    rect = new goog.math.Rect(aX, aY, aDx, aDy);
-  else if (this.isMonth())
+  if (this.isAllDay() || this.isMonth())
     rect = new goog.math.Rect(aY, aX, aDy, aDx);
   else
     rect = new goog.math.Rect(aX, aY, aDx, aDy);
@@ -679,85 +686,110 @@ rflect.cal.MainPaneSelectionMask.prototype.update_ = function() {
   if (!this.initialized_)
     return;
 
-    startCoord = this.getMinCoordSnapped_(this.startCoordinate_);
-    endCoord = this.getMaxCoordSnapped_(this.currentCoordinate_);
+  startCoord = this.getMinCoordSnapped_(this.startCoordinate_,
+      this.currentCoordinate_);
+  endCoord = this.getMaxCoordSnapped_(this.startCoordinate_,
+      this.currentCoordinate_);
+
+  if (goog.DEBUG)
+    _log('minCoord', startCoord);
+  if (goog.DEBUG)
+    _log('maxCoord', endCoord);
+
+  var minComponent = 0;
+  var maxComponent = 0;
+
+  var startCellPrimaryComponent = this.getComponent_(startCoord, true);
+  var startCellSecondaryComponent = this.getComponent_(startCoord, false);
+  var endCellPrimaryComponent = this.getComponent_(endCoord, true);
+  var endCellSecondaryComponent = this.getComponent_(endCoord, false);
+
+  var blockPositionForStartCell = this.getBlockPositionOrSize_(
+      startCoord, true);
+  var blockPositionForCurrentCell = this.getBlockPositionOrSize_(
+      endCoord, true);
+  var blockSizeForStartCell = this.getBlockPositionOrSize_(
+      startCoord, false);
+  var blockSizeForCurrentCell = this.getBlockPositionOrSize_(
+      endCoord, false);
+
+  var defaultStep = this.getDefaultStep_();
+  var maxSize = this.getMaxSize_();
+
+  if (startCellPrimaryComponent == endCellPrimaryComponent) {
+    minComponent = Math.min(startCellSecondaryComponent,
+        endCellSecondaryComponent);
+    maxComponent = Math.max(startCellSecondaryComponent,
+        endCellSecondaryComponent);
+    // Single rect.
+    this.rects_.push(this.getRect_(
+        blockPositionForStartCell,
+        minComponent,
+        blockSizeForStartCell,
+        maxComponent - minComponent
+        ));
+
+  } else {
 
     if (goog.DEBUG)
-      _log('minCoord', minCoord);
-    if (goog.DEBUG)
-      _log('maxCoord', maxCoord);
+      _log('startCellSecondaryComponent', startCellSecondaryComponent);
 
-    var minComponent = 0;
-    var maxComponent = 0;
+    // Start coord rect.
+    this.rects_.push(this.getRect_(
+        blockPositionForStartCell,
+        endCellPrimaryComponent > startCellPrimaryComponent ?
+        startCellSecondaryComponent: 0,
+        blockSizeForStartCell,
+        endCellPrimaryComponent > startCellPrimaryComponent ?
+        maxSize - startCellSecondaryComponent:
+        startCellSecondaryComponent));
+    // Current coord rect.
+    this.rects_.push(this.getRect_(
+        blockPositionForCurrentCell,
+        endCellPrimaryComponent > startCellPrimaryComponent ?
+        0 : endCellSecondaryComponent,
+        blockSizeForCurrentCell,
+        endCellPrimaryComponent > startCellPrimaryComponent ?
+        endCellSecondaryComponent:
+        maxSize - endCellSecondaryComponent
+        ));
 
-    var startCellPrimaryComponent = this.getComponent_(startCoord, true);
-    var startCellSecondaryComponent = this.getComponent_(startCoord, false);
-    var currentCellPrimaryComponent = this.getComponent_(endCoord, true);
-    var currentCellSecondaryComponent = this.getComponent_(endCoord, false);
-
-    var blockPositionForStartCell = this.
-        getBlockPositionOrSizeForStartCell_(true);
-    var blockPositionForCurrentCell = this.
-        getBlockPositionOrSizeForCurrentCell_(true);
-    var blockSizeForStartCell = this.getBlockPositionOrSizeForStartCell_(false);
-    var blockSizeForCurrentCell = this.
-        getBlockPositionOrSizeForCurrentCell_(false);
-
-    var defaultStep = this.getDefaultStep_();
-    var maxSize = this.getMaxSize_();
-
-    if (startCellPrimaryComponent == currentCellPrimaryComponent) {
-      minComponent = Math.min(startCellSecondaryComponent,
-          currentCellSecondaryComponent);
-      maxComponent = Math.max(startCellSecondaryComponent,
-          currentCellSecondaryComponent);
-      // Single rect.
+    if (Math.abs(endCellPrimaryComponent - startCellPrimaryComponent) > 1) {
+      minComponent = Math.min(startCellPrimaryComponent, endCellPrimaryComponent);
+      maxComponent = Math.max(startCellPrimaryComponent, endCellPrimaryComponent);
+      // Middle rect.
       this.rects_.push(this.getRect_(
-          blockPositionForStartCell,
-          minComponent,
-          blockSizeForStartCell,
-          maxComponent - minComponent
+          this.getBlockPositionOrSize_(minComponent + 1, true),
+          0,
+          this.getBlockPositionOrSize_(maxComponent, true) -
+          this.getBlockPositionOrSize_(minComponent + 1, true),
+          maxSize
           ));
-
-    } else {
-
-      // Start coord rect.
-      this.rects_.push(this.getRect_(
-          blockPositionForStartCell,
-          currentCellPrimaryComponent > startCellPrimaryComponent ?
-          startCellSecondaryComponent: 0,
-          blockSizeForStartCell,
-          currentCellPrimaryComponent > startCellPrimaryComponent ?
-          maxSize - startCellSecondaryComponent :
-          startCellSecondaryComponent);
-      // Current coord rect.
-      this.rects_.push(this.getRect_(
-          blockPositionForCurrentCell,
-          currentCellPrimaryComponent > startCellPrimaryComponent ?
-          0 : currentCellSecondaryComponent * defaultStep,
-          blockSizeForCurrentCell,
-          currentCellPrimaryComponent > startCellPrimaryComponent ?
-          (currentCellSecondaryComponent + 1) * defaultStep :
-          maxSize - currentCellSecondaryComponent * defaultStep
-          ));
-
-      if (Math.abs(currentCellPrimaryComponent - startCellPrimaryComponent) > 1) {
-        minCoord = Math.min(startCellPrimaryComponent, currentCellPrimaryComponent);
-        maxCoord = Math.max(startCellPrimaryComponent, currentCellPrimaryComponent);
-        // Middle rect.
-        this.rects_.push(this.getRect_(
-            this.getBlockPositionOrSize_(minCoord + 1, true),
-            0,
-            this.getBlockPositionOrSize_(maxCoord, true) -
-            this.getBlockPositionOrSize_(minCoord + 1, true),
-            maxSize
-            ));
-      }
     }
+  }
 
-
-  this.calculateDates_(minCoord, maxCoord);
   this.maskEl_.innerHTML = this.build_();
+  this.calculateDates(startCoord, endCoord);
 
 };
 
+
+/**
+ * Calculates dates from cell selection.
+ * @param {goog.math.Coordinate} aMinCell Lesser of cells.
+ * @param {goog.math.Coordinate=} opt_maxCell Greater of cells.
+ * @protected
+ * @override
+ */
+rflect.cal.MainPaneSelectionMask.prototype.calculateDates = function(aMinCell,
+    opt_maxCell) {
+  if (this.draggingChip_) {
+
+  } else {
+    var minCell =
+    var maxCell =
+
+    rflect.cal.MainPaneSelectionMask.superClass_.call(this, minCell, maxCell);
+  }
+
+}

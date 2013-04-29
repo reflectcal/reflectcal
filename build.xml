@@ -48,7 +48,7 @@
             <arg value="--root=${basedir}\src\rflect"/>
             <arg value="--output_mode=compiled"/>
             <arg line="--compiler_jar=&quot;${basedir}\bin\compiler.jar&quot;"/>
-            <arg line="--output_file=&quot;${basedir}\src\outputcompiled.js&quot;"/>
+            <arg line="--output_file=&quot;${basedir}\build\outputcompiled.js&quot;"/>
             <arg line="--compiler_flags=&quot;--compilation_level=ADVANCED_OPTIMIZATIONS&quot;"/>
             <arg line="--compiler_flags=&quot;--summary_detail_level=3&quot;"/>
             <arg line="--compiler_flags=&quot;--jscomp_off=accessControls&quot;"/>
@@ -60,7 +60,7 @@
             <arg line="--compiler_flags=&quot;--define=&quot;goog.DEBUG=true&quot;&quot;"/>
             <arg line="--compiler_flags=&quot;--debug&quot;"/>
             <arg line="--compiler_flags=&quot;--source_map_format=V1&quot;"/>
-            <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\src\outputcompiled.js.map&quot;"/>
+            <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\build\outputcompiled.js.map&quot;"/>
             <arg line="--compiler_flags=&quot;--formatting=PRETTY_PRINT&quot;"/>
             <arg line="--compiler_flags=&quot;--closure_entry_point=rflect.cal.Loader&quot;"/>
         </exec>
@@ -75,7 +75,7 @@
             <arg value="--root=${basedir}\src\rflect"/>
             <arg value="--output_mode=compiled"/>
             <arg line="--compiler_jar=&quot;${basedir}\bin\compiler.jar&quot;"/>
-            <arg line="--output_file=&quot;${basedir}\src\outputcompiled.js&quot;"/>
+            <arg line="--output_file=&quot;${basedir}\build\outputcompiled.js&quot;"/>
             <arg line="--compiler_flags=&quot;--compilation_level=ADVANCED_OPTIMIZATIONS&quot;"/>
             <arg line="--compiler_flags=&quot;--summary_detail_level=3&quot;"/>
             <arg line="--compiler_flags=&quot;--warning_level=VERBOSE&quot;"/>
@@ -85,7 +85,7 @@
             <arg value="--namespace=rflect.cal.Loader"/>
             <arg line="--compiler_flags=&quot;--define=&quot;goog.DEBUG=true&quot;&quot;"/>
             <arg line="--compiler_flags=&quot;--source_map_format=V1&quot;"/>
-            <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\src\outputcompiled.js.map&quot;"/>
+            <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\build\outputcompiled.js.map&quot;"/>
             <arg line="--compiler_flags=&quot;--formatting=PRETTY_PRINT&quot;"/>
         </exec>
     </target>
@@ -99,7 +99,7 @@
             <arg value="--root=${basedir}\src\rflect"/>
             <arg value="--output_mode=compiled"/>
             <arg line="--compiler_jar=&quot;${basedir}\bin\compiler.jar&quot;"/>
-            <arg line="--output_file=&quot;${basedir}\src\outputcompiled.js&quot;"/>
+            <arg line="--output_file=&quot;${basedir}\build\outputcompiled.js&quot;"/>
             <arg line="--compiler_flags=&quot;--compilation_level=ADVANCED_OPTIMIZATIONS&quot;"/>
             <arg line="--compiler_flags=&quot;--summary_detail_level=3&quot;"/>
             <arg line="--compiler_flags=&quot;--warning_level=VERBOSE&quot;"/>

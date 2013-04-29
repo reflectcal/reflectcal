@@ -205,9 +205,9 @@ rflect.cal.SelectionMask.prototype.getMinCell_ = function(aCellA, aCellB){
  * Calculates dates from cell selection.
  * @param {goog.math.Coordinate} aMinCell Lesser of cells.
  * @param {goog.math.Coordinate=} opt_maxCell Greater of cells.
- * @private
+ * @protected
  */
-rflect.cal.SelectionMask.prototype.calculateDates_ = function(aMinCell,
+rflect.cal.SelectionMask.prototype.calculateDates = function(aMinCell,
     opt_maxCell) {
   var startDate = null;
   var endDate = null;
