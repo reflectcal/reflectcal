@@ -183,9 +183,9 @@ rflect.cal.SelectionMask.prototype.compareCells_ = function(aCellA, aCellB){
  * @param {goog.math.Coordinate} aCellA First cell to compare.
  * @param {goog.math.Coordinate} aCellB Second cell to compare.
  * @return {goog.math.Coordinate} Maximal of given cells.
- * @private
+ * @protected
  */
-rflect.cal.SelectionMask.prototype.getMaxCell_ = function(aCellA, aCellB){
+rflect.cal.SelectionMask.prototype.getMaxCoordinate = function(aCellA, aCellB){
   return this.compareCells_(aCellA, aCellB) == 1 ? aCellA : aCellB;
 }
 
@@ -194,9 +194,9 @@ rflect.cal.SelectionMask.prototype.getMaxCell_ = function(aCellA, aCellB){
  * @param {goog.math.Coordinate} aCellA First cell to compare.
  * @param {goog.math.Coordinate} aCellB Second cell to compare.
  * @return {goog.math.Coordinate} Minimal of given cells.
- * @private
+ * @protected
  */
-rflect.cal.SelectionMask.prototype.getMinCell_ = function(aCellA, aCellB){
+rflect.cal.SelectionMask.prototype.getMinCoordinate = function(aCellA, aCellB){
   return this.compareCells_(aCellA, aCellB) == -1 ? aCellA : aCellB;
 }
 

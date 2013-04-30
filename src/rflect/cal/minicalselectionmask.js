@@ -195,8 +195,8 @@ rflect.cal.MiniCalSelectionMask.prototype.getIndexIsInMask = function(aIndex) {
   if (!this.initialized_)
     return false;
   var cell = this.getCellBySelectionIndex_(aIndex);
-  var minCell = this.getMinCell_(this.visibleStartCell_, this.visibleCurrentCell_);
-  var maxCell = this.getMaxCell_(this.visibleStartCell_, this.visibleCurrentCell_);
+  var minCell = this.getMinCoordinate(this.visibleStartCell_, this.visibleCurrentCell_);
+  var maxCell = this.getMaxCoordinate(this.visibleStartCell_, this.visibleCurrentCell_);
 
   return this.compareCells_(cell, minCell) >= 0 &&
       this.compareCells_(cell, maxCell) <= 0;
@@ -251,8 +251,8 @@ rflect.cal.MiniCalSelectionMask.prototype.update_ = function() {
   this.visibleStartCell_ = this.startCoordinate_.clone();
   this.visibleCurrentCell_ = this.currentCoordinate_.clone();
     
-  minCell = this.getMinCell_(this.visibleStartCell_, this.visibleCurrentCell_);
-  maxCell = this.getMaxCell_(this.visibleStartCell_, this.visibleCurrentCell_);
+  minCell = this.getMinCoordinate(this.visibleStartCell_, this.visibleCurrentCell_);
+  maxCell = this.getMaxCoordinate(this.visibleStartCell_, this.visibleCurrentCell_);
 
   var range = this.getSelectionIndexByCell_(maxCell) -
       this.getSelectionIndexByCell_(minCell) + 1;

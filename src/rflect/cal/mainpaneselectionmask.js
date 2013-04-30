@@ -301,12 +301,22 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
     if (opt_draggingChip) {
 
       this.calculatePointAndTimestamp(coordX, coordY);
+      var startTs = this.timeManager_.interval.start;
+      var currentCoord = this.getCellCoordinate_(coordX, coordY, true, false);
+
+      var startTime = this.getTimeStampForPoint_(currentCoord);
+
+
 
     } else {
 
       this.startCoordinate_ = this.getCellCoordinate_(coordX, coordY, true,
           false);
       this.currentCoordinate_ = this.startCoordinate_.clone();
+
+      if (this.isWeek())
+        this.currentCoordinate_.y += rflect.cal.predefined.HOUR_ROW_HEIGHT;
+
 
       if (goog.DEBUG)
         _log('this.startCoordinate_', this.startCoordinate_);
@@ -381,30 +391,35 @@ rflect.cal.MainPaneSelectionMask.prototype.calculatePointAndTimestamp =
  */
 rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
     function(aX, aY, changePrimaryComponent, changeSecondaryComponent) {
+
   var coord = new goog.math.Coordinate(aX, aY);
   var maxX = 0;
   var maxY = 0;
+  var gridSize = 0;
 
   if (this.isMonth()) {
 
-    maxX = this.blockPoolMonth_.gridSize.width - 1;
+    gridSize = this.blockPoolMonth_.gridSize.width;
+    maxX = gridSize - 1;
     maxY = this.blockPoolMonth_.getBlocksNumber() - 1;
 
     if (changePrimaryComponent)
       coord.y = this.getBlockIndexByCoordinate_(aY, this.blockPoolMonth_);
     if (changeSecondaryComponent)
-      coord.x = Math.floor(aX / 7);
+      coord.x = Math.floor(aX / (gridSize / 7));
 
   } else if (this.isAllDay()) {
 
+    gridSize = this.blockPoolAllDay_.gridSize.width;
     // Allday mask always have zero y index.
-    maxX = this.blockPoolAllDay_.gridSize.width - 1;
+    maxX = gridSize - 1;
     maxY = 0;
 
     if (changePrimaryComponent)
       coord.y = 0;
     if (changeSecondaryComponent)
-      coord.x = Math.floor(aX / this.blockPoolAllDay_.getBlocksNumber());
+      coord.x = Math.floor(aX / (gridSize /
+          this.blockPoolWeek_.getBlocksNumber()));
 
   } else if (this.isWeek()) {
 
@@ -662,7 +677,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getRect_ =
  */
 rflect.cal.SelectionMask.prototype.getMinCoordSnapped_ = function(aCoordA,
     aCoordB){
-  return this.snapCoordinate_(this.getMinCell_(aCoordA, aCoordB), true);
+  return this.snapCoordinate_(this.getMinCoordinate(aCoordA, aCoordB), true);
 }
 
 
@@ -674,7 +689,7 @@ rflect.cal.SelectionMask.prototype.getMinCoordSnapped_ = function(aCoordA,
  */
 rflect.cal.SelectionMask.prototype.getMaxCoordSnapped_ = function(aCoordA,
     aCoordB){
-  return this.snapCoordinate_(this.getMaxCell_(aCoordA, aCoordB), false);
+  return this.snapCoordinate_(this.getMaxCoordinate(aCoordA, aCoordB), false);
 }
 
 
@@ -687,8 +702,10 @@ rflect.cal.MainPaneSelectionMask.prototype.update_ = function() {
   if (goog.DEBUG)
     _log('update_');
 
-  var startCoord;
-  var endCoord;
+  var startCoordForDraw;
+  var endCoordForDraw;
+  var startCoordForDate;
+  var endCoordForDate;
 
   // Rectangles to pass to builder.
   this.rects_.length = 0;
@@ -696,32 +713,37 @@ rflect.cal.MainPaneSelectionMask.prototype.update_ = function() {
   if (!this.initialized_)
     return;
 
-  startCoord = this.getMinCoordSnapped_(this.startCoordinate_,
+  startCoordForDate = this.getMinCoordinate(this.startCoordinate_,
       this.currentCoordinate_);
-  endCoord = this.getMaxCoordSnapped_(this.startCoordinate_,
+  endCoordForDate = this.getMaxCoordinate(this.startCoordinate_,
+      this.currentCoordinate_);
+
+  startCoordForDraw = this.getMinCoordSnapped_(this.startCoordinate_,
+      this.currentCoordinate_);
+  endCoordForDraw = this.getMaxCoordSnapped_(this.startCoordinate_,
       this.currentCoordinate_);
 
   if (goog.DEBUG)
-    _log('minCoord', startCoord);
+    _log('minCoord', startCoordForDraw);
   if (goog.DEBUG)
-    _log('maxCoord', endCoord);
+    _log('maxCoord', endCoordForDraw);
 
   var minComponent = 0;
   var maxComponent = 0;
 
-  var startCellPrimaryComponent = this.getComponent_(startCoord, true);
-  var startCellSecondaryComponent = this.getComponent_(startCoord, false);
-  var endCellPrimaryComponent = this.getComponent_(endCoord, true);
-  var endCellSecondaryComponent = this.getComponent_(endCoord, false);
+  var startCellPrimaryComponent = this.getComponent_(startCoordForDraw, true);
+  var startCellSecondaryComponent = this.getComponent_(startCoordForDraw, false);
+  var endCellPrimaryComponent = this.getComponent_(endCoordForDraw, true);
+  var endCellSecondaryComponent = this.getComponent_(endCoordForDraw, false);
 
   var blockPositionForStartCell = this.getBlockPositionOrSize_(
-      startCoord, true);
+      startCoordForDraw, true);
   var blockPositionForCurrentCell = this.getBlockPositionOrSize_(
-      endCoord, true);
+      endCoordForDraw, true);
   var blockSizeForStartCell = this.getBlockPositionOrSize_(
-      startCoord, false);
+      startCoordForDraw, false);
   var blockSizeForCurrentCell = this.getBlockPositionOrSize_(
-      endCoord, false);
+      endCoordForDraw, false);
 
   var defaultStep = this.getDefaultStep_();
   var maxSize = this.getMaxSize_();
@@ -779,7 +801,7 @@ rflect.cal.MainPaneSelectionMask.prototype.update_ = function() {
   }
 
   this.maskEl_.innerHTML = this.build_();
-  this.calculateDates(startCoord, endCoord);
+  this.calculateDates(startCoordForDate, endCoordForDate);
 
 };
 
@@ -799,6 +821,11 @@ rflect.cal.MainPaneSelectionMask.prototype.calculateDates = function(aMinCell,
     var minCell = this.getCellCoordinate_(aMinCell.x, aMinCell.y, false, true);
     var maxCell = this.getCellCoordinate_(opt_maxCell.x, opt_maxCell.y, false,
         true);
+
+    if (goog.DEBUG)
+      _log('minCell', minCell);
+    if (goog.DEBUG)
+      _log('maxCell', maxCell);
 
     rflect.cal.MainPaneSelectionMask.superClass_.calculateDates
         .call(this, minCell, maxCell);
