@@ -196,34 +196,75 @@ rflect.cal.MainPaneSelectionMask.prototype.close = function() {
  * Updates mask and redraws it, if necessary.
  * @param {goog.events.Event} aEvent Event object or coord index.
  */
-rflect.cal.MainPaneSelectionMask.prototype.update = function(aEvent) {
+rflect.cal.MainPaneSelectionMask.prototype.update = function (aEvent) {
 
   var pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
-  var currentCoord = this.getCellCoordinate_(aEvent.clientX + pageScroll.x -
+  var currentCoord = new goog.math.Coordinate(aEvent.clientX + pageScroll.x -
       this.elementOffset_.x + this.scrollableEl_.scrollLeft, aEvent.clientY +
-      pageScroll.y - this.elementOffset_.y + this.scrollableEl_.scrollTop,
-      true, false);
+      pageScroll.y - this.elementOffset_.y + this.scrollableEl_.scrollTop);
+  var currentCellCoord;
 
-  var snappedCoord1 = this.snapCoordinate_(this.currentCoordinate_, true);
-  var snappedCoord2 = this.snapCoordinate_(currentCoord, true);
+  if (this.calendarEvent_) {
+    currentCellCoord = this.getCellCoordinate_(currentCoord.x,
+        currentCoord.y, true, true);
 
+    if (goog.math.Coordinate.distance(currentCoord, this.currentCoordinate_)
+        > 10 || !goog.math.Coordinate.equals(currentCellCoord,
+        this.currentCellCoordinate_)) {
 
-  if (!goog.math.Coordinate.equals(
-      this.snapCoordinate_(this.currentCoordinate_, true),
-      this.snapCoordinate_(currentCoord, true))) {
+      var pixelToTimeK = rflect.cal.predefined.WEEK_GRID_HEIGHT / 1440;
+      var timeToPixelK = 1 / pixelToTimeK;
 
-      if (goog.DEBUG)
-          _log('snappedCoord1', snappedCoord1);
-        if (goog.DEBUG)
-          _log('snappedCoord2', snappedCoord2);
+      var tempCellCoord = this.getCellCoordinate_(currentCoord.x,
+          currentCoord.y, true, false);
+      var startTs = this.timeManager_.interval.start;
 
-          if (goog.DEBUG)
-            _log('currentCoord', currentCoord);
-    this.currentCoordinate_ = currentCoord;
-    this.update_();
+      var pointRelativeTs = tempCellCoord.y * 24 * 60 * 60 * 1000 +
+          tempCellCoord.x * pixelToTimeK * 60 * 1000;
+      var pointAbsoluteTs = startTs + pointRelativeTs;
+
+      var timeDiffWithEventStart = this.calendarEvent_.startDate.getTime() -
+          pointAbsoluteTs;
+      var timeDiffWithEventEnd = pointAbsoluteTs -
+          this.calendarEvent_.startDate.getTime();
+      var pixelDiffWithEventStart = timeDiffWithEventStart * timeToPixelK;
+      var pixelDiffWithEventEnd = timeDiffWithEventEnd * timeToPixelK;
+
+      var currentPixelPosition = tempCellCoord.x *
+          rflect.cal.predefined.WEEK_GRID_HEIGHT + tempCellCoord.y;
+      var startPixelPosition = currentPixelPosition - pixelDiffWithEventStart;
+      var endPixelPosition = currentPixelPosition + pixelDiffWithEventEnd;
+
+      var startCoordinate = new goog.math.Coordinate(
+          Math.floor(startPixelPosition /
+              rflect.cal.predefined.WEEK_GRID_HEIGHT),
+          startPixelPosition % rflect.cal.predefined.WEEK_GRID_HEIGHT);
+      var endCoordinate = new goog.math.Coordinate(
+          Math.floor(endPixelPosition /
+              rflect.cal.predefined.WEEK_GRID_HEIGHT),
+          endPixelPosition % rflect.cal.predefined.WEEK_GRID_HEIGHT);
+
+      this.startCoordinate_ = this.getCellCoordinate_(startCoordinate.x,
+          startCoordinate.y, false, false);
+      this.endCoordinate_ = this.getCellCoordinate_(endCoordinate.x,
+          endCoordinate.y, false, false);
+
+    }
+  } else {
+    currentCellCoord = this.getCellCoordinate_(currentCoord.x,
+        currentCoord.y, true, false);
+
+    if (!goog.math.Coordinate.equals(
+        this.snapCoordinate_(this.currentCoordinate_, true),
+        this.snapCoordinate_(currentCellCoord, true))) {
+
+      this.currentCoordinate_ = currentCellCoord;
+      this.update_();
+    }
   }
 
-};
+}
+
 
 
 /**
@@ -231,10 +272,11 @@ rflect.cal.MainPaneSelectionMask.prototype.update = function(aEvent) {
  * @param {number} aConfiguration Configuration
  * of mask.
  * @param {goog.events.Event=} opt_event Event object.
- * @param {boolean=} opt_draggingChip Whether we're dragging chip.
+ * @param {rflect.cal.events.Event=} opt_calendarEvent
+ * Calendar event which we're dragging.
  */
 rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
-    opt_event, opt_draggingChip) {
+    opt_event, opt_calendarEvent) {
   rflect.cal.SelectionMask.prototype.init.call(this, aConfiguration);
 
     //TODO(alexk): when in multiple scrollables goog.style.getOffsetPosition.
@@ -298,15 +340,13 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
         coordYWithoutScroll < 0)
       return;
 
-    if (opt_draggingChip) {
+    if (opt_calendarEvent) {
 
-      this.calculatePointAndTimestamp(coordX, coordY);
-      var startTs = this.timeManager_.interval.start;
-      var currentCoord = this.getCellCoordinate_(coordX, coordY, true, false);
+      this.currentCoordinate_ = new goog.math.Coordinate(coordX, coordY);
+      this.currentCellCoordinate_ = this.getCellCoordinate_(
+          coordX, coordY, true, false);
 
-      var startTime = this.getTimeStampForPoint_(currentCoord);
-
-
+      this.calendarEvent_ = opt_calendarEvent;
 
     } else {
 
@@ -713,15 +753,20 @@ rflect.cal.MainPaneSelectionMask.prototype.update_ = function() {
   if (!this.initialized_)
     return;
 
-  startCoordForDate = this.getMinCoordinate(this.startCoordinate_,
-      this.currentCoordinate_);
-  endCoordForDate = this.getMaxCoordinate(this.startCoordinate_,
-      this.currentCoordinate_);
 
-  startCoordForDraw = this.getMinCoordSnapped_(this.startCoordinate_,
-      this.currentCoordinate_);
-  endCoordForDraw = this.getMaxCoordSnapped_(this.startCoordinate_,
-      this.currentCoordinate_);
+
+  if (this.calendarEvent_) {
+
+    startCoordForDraw = this.startCoordinate_;
+    endCoordForDraw = this.endCoordinate_;
+
+  } else {
+
+    startCoordForDraw = this.getMinCoordSnapped_(this.startCoordinate_,
+        this.currentCoordinate_);
+    endCoordForDraw = this.getMaxCoordSnapped_(this.startCoordinate_,
+        this.currentCoordinate_);
+  }
 
   if (goog.DEBUG)
     _log('minCoord', startCoordForDraw);
