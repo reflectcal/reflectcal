@@ -198,6 +198,26 @@ rflect.cal.events.Event.prototype.toHumanString = function() {
 
 
 /**
+ * @return String representation.
+ */
+rflect.cal.events.Event.prototype.toString = function() {
+  return 'id: ' +
+      this.id +
+      ', longId: ' +
+      this.longId +
+      ', startDate: ' +
+      this.startDate +
+      ', endDate: ' +
+      this.endDate +
+      ', allDay: ' +
+      this.allDay +
+      ', summary: ' +
+      this.summary +
+      ', description: ' +
+      this.description;
+};
+
+/**
  * @return {rflect.cal.events.Event} Clone of this event.
  */
 rflect.cal.events.Event.prototype.clone = function() {

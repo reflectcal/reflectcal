@@ -186,6 +186,7 @@ rflect.date.createDateShim = function(aYear, aMonth, aDate, aHours, aMinutes,
     dateShim.setDay(dateObj.getDay());
     dateShim.setDayOfYear(dateObj.getDayOfYear());
     dateShim.setWeekNumber(dateObj.getWeekNumber());
+    dateShim.setTime(dateObj.getTime());
   }
   return dateShim;
 }
@@ -310,8 +311,9 @@ rflect.date.DateShim.prototype.day_ = 0;
 /**
  * The number of milliseconds since 1 January 1970 00:00:00.
  * @type {number}
+ * @private
  */
-rflect.date.DateShim.prototype.time = 0;
+rflect.date.DateShim.prototype.time_ = 0;
 
 
 /**
@@ -446,7 +448,16 @@ rflect.date.DateShim.prototype.setDay = function(aDay) {
  * @return {number} The number of milliseconds since 1 January 1970 00:00:00.
  */
 rflect.date.DateShim.prototype.getTime = function() {
-  return this.time;
+  return this.time_;
+};
+
+
+/**
+ * @param {number} aTime The number of milliseconds since 1 January
+ * 1970 00:00:00.
+ */
+rflect.date.DateShim.prototype.setTime = function(aTime) {
+  this.time_ = aTime;
 };
 
 

@@ -711,6 +711,24 @@ rflect.cal.MainPane.prototype.onDoubleClick_ = function(aEvent) {
 };
 
 
+
+/**
+ * @param {Element} aTarget Element that was interacted with.
+ * @param {string} aChipClassName Class name of chip.
+ * @return {rflect.cal.events.Event=} Found event or null.
+ */
+rflect.cal.MainPane.prototype.getEventByTargetAndClassName_ = function(aTarget,
+    aChipClassName) {
+  var className = aChipClassName;
+  if (aTarget.className == goog.getCssName('event-wk-timelabel'))
+    className = aTarget.parentNode.className;
+  var eventId = rflect.string.getNumericIndexWithPostfix(className,
+      rflect.cal.predefined.chips.CHIP_EVENT_CLASS);
+  var event = this.eventManager_.getEventById(eventId);
+  return event;
+}
+
+
 /**
  * @param {Element} aTarget Element that was clicked to invoke dialog.
  * @param {string} aChipClassName Class name of chip.
@@ -719,14 +737,10 @@ rflect.cal.MainPane.prototype.onDoubleClick_ = function(aEvent) {
 rflect.cal.MainPane.prototype.showEventEditComponent_ = function(aTarget,
                                                          aChipClassName,
                                                          aShowPane) {
-  var className = aChipClassName;
-  if (aTarget.className == goog.getCssName('event-wk-timelabel'))
-    className = aTarget.parentNode.className;
-  var eventId = rflect.string.getNumericIndexWithPostfix(className,
-      rflect.cal.predefined.chips.CHIP_EVENT_CLASS);
-    
-  if (!isNaN(eventId)) {
-    var event = this.eventManager_.getEventById(eventId);
+
+  var event = this.getEventByTargetAndClassName_(aTarget, aChipClassName);
+
+  if (event) {
 
     if (aShowPane) {
       this.getParent().showEventPane(true);
@@ -984,7 +998,7 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
           (rflect.cal.MainPaneSelectionMask.Configuration.MONTH), aEvent);
     preventDefaultIsNeeded = true;
   } else if (this.isChip_(className)) {
-    this.chipDragStart_(1, aEvent, className);
+    this.chipDragStart_(2, aEvent, className);
     preventDefaultIsNeeded = true;
   }
   if (preventDefaultIsNeeded)
@@ -1000,14 +1014,17 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
  */
 rflect.cal.MainPane.prototype.chipDragStart_ = function(aMaskConfiguration,
     aEvent, aClassName) {
-  this.selectionMask_.init(aMaskConfiguration, aEvent, true);
-}
 
+  if (goog.DEBUG)
+    _log('aClassName', aClassName);
 
-/**
- * @param {Event} aEvent Event object.
- */
-rflect.cal.MainPane.prototype.chipDrag_ = function(aEvent) {
+  var calendarEvent = this.getEventByTargetAndClassName_(aEvent.target,
+      aClassName);
+
+  if (goog.DEBUG)
+    _log('calendarEvent', calendarEvent);
+
+  this.selectionMask_.init(aMaskConfiguration, aEvent, calendarEvent);
 }
 
 

@@ -172,7 +172,7 @@ rflect.cal.events.EventManager.createEventFromArray = function(aArray) {
   var startDate = rflect.date.parse(
       aArray[rflect.cal.events.Event.FIELD_START_DATE], true);
   var endDate = rflect.date.parse(
-      aArray[rflect.cal.events.Event.FIELD_END_DATE]);
+      aArray[rflect.cal.events.Event.FIELD_END_DATE], true);
   var summary = aArray[rflect.cal.events.Event.FIELD_SUMMARY];
   var description = aArray[rflect.cal.events.Event.FIELD_DESCRIPTION];
   var allDay = aArray[rflect.cal.events.Event.FIELD_ALL_DAY];
