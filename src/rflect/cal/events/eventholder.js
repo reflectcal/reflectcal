@@ -115,7 +115,8 @@ rflect.cal.events.EventHolder.prototype.setEndDate =
     function(aEndDate) {
   this.newTemporaryEvent_.endDate = rflect.date.createDateShim(
       aEndDate.getYear(), aEndDate.getMonth(), aEndDate.getDate(),
-      aEndDate.getHours(), aEndDate.getMinutes(), aEndDate.getSeconds());
+      aEndDate.getHours(), aEndDate.getMinutes(), aEndDate.getSeconds(),
+      true);
 }
 
 

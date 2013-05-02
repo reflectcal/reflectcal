@@ -226,35 +226,20 @@ rflect.cal.MainPaneSelectionMask.prototype.update = function (aEvent) {
       this.currentCellCoordinate_ = currentCellCoord;
       this.initialMove_ = false;
 
-    if (goog.DEBUG)
-      _log('this.initialMove_', this.initialMove_);
-    if (goog.DEBUG)
-        _log('currentCellCoord', currentCellCoord);
-    if (goog.DEBUG)
-        _log('this.currentCellCoordinate_', this.currentCellCoordinate_);
-
-      var pixelToTimeK = rflect.cal.predefined.WEEK_GRID_HEIGHT / 1440;
-      var timeToPixelK = 1 / pixelToTimeK;
-
       var tempCellCoord = this.getCellCoordinate_(currentCoord.x,
           currentCoord.y, true, false);
-      var startTs = this.timeManager_.interval.start;
 
-      var pointRelativeTs = tempCellCoord.y * 24 * 60 * 60 * 1000 +
-          tempCellCoord.x * pixelToTimeK * 60 * 1000;
-      var pointAbsoluteTs = startTs + pointRelativeTs;
-
-      var timeDiffWithEventStart = this.calendarEvent_.startDate.getTime() -
-          pointAbsoluteTs;
-      var timeDiffWithEventEnd = pointAbsoluteTs -
-          this.calendarEvent_.startDate.getTime();
-      var pixelDiffWithEventStart = timeDiffWithEventStart * timeToPixelK;
-      var pixelDiffWithEventEnd = timeDiffWithEventEnd * timeToPixelK;
+      if (goog.DEBUG) {
+        _log('pixelDiffWithEventStart', this.pixelDiffWithEventStart_);
+        _log('pixelDiffWithEventEnd', this.pixelDiffWithEventEnd_);
+      }
 
       var currentPixelPosition = tempCellCoord.x *
           rflect.cal.predefined.WEEK_GRID_HEIGHT + tempCellCoord.y;
-      var startPixelPosition = currentPixelPosition - pixelDiffWithEventStart;
-      var endPixelPosition = currentPixelPosition + pixelDiffWithEventEnd;
+      var startPixelPosition = currentPixelPosition -
+          this.pixelDiffWithEventStart_;
+      var endPixelPosition = currentPixelPosition +
+          this.pixelDiffWithEventEnd_;
 
       var startCoordinate = new goog.math.Coordinate(
           Math.floor(startPixelPosition /
@@ -265,6 +250,11 @@ rflect.cal.MainPaneSelectionMask.prototype.update = function (aEvent) {
               rflect.cal.predefined.WEEK_GRID_HEIGHT),
           endPixelPosition % rflect.cal.predefined.WEEK_GRID_HEIGHT);
 
+      if (goog.DEBUG) {
+        _log('startCoordinate', startCoordinate);
+        _log('endCoordinate', endCoordinate);
+      }
+
       this.startCoordinate_ = this.getCellCoordinate_(startCoordinate.x,
           startCoordinate.y, false, false);
       this.endCoordinate_ = this.getCellCoordinate_(endCoordinate.x,
@@ -272,6 +262,8 @@ rflect.cal.MainPaneSelectionMask.prototype.update = function (aEvent) {
 
       if (goog.DEBUG)
         _log('this.startCoordinate_', this.startCoordinate_);
+      if (goog.DEBUG)
+        _log('this.endCoordinate_', this.endCoordinate_);
 
       this.update_();
     }
@@ -374,6 +366,24 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
 
       this.calendarEvent_ = opt_calendarEvent;
       this.initialMove_ = true;
+
+      var pixelToTimeK = 1440 / rflect.cal.predefined.WEEK_GRID_HEIGHT * 60 * 1000;
+      var timeToPixelK = 1 / pixelToTimeK;
+
+      var tempCellCoord = this.getCellCoordinate_(this.currentCoordinate_.x,
+          this.currentCoordinate_.y, true, false);
+      var startTs = this.timeManager_.interval.start;
+
+      var pointRelativeTs = tempCellCoord.x * pixelToTimeK * 24 * 60 +
+          tempCellCoord.y * pixelToTimeK;
+      if (goog.DEBUG) _log('pointRelativeTs', pointRelativeTs);
+
+      var timeDiffWithEventStart = pointRelativeTs -
+          (this.calendarEvent_.startDate.getTime() - startTs);
+      var timeDiffWithEventEnd = (this.calendarEvent_.endDate.getTime() -
+          startTs) - pointRelativeTs;
+      this.pixelDiffWithEventStart_ = timeDiffWithEventStart * timeToPixelK;
+      this.pixelDiffWithEventEnd_ = timeDiffWithEventEnd * timeToPixelK;
 
       this.initialized_ = true;
 
