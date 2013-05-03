@@ -715,7 +715,7 @@ rflect.cal.MainPane.prototype.onDoubleClick_ = function(aEvent) {
 /**
  * @param {Element} aTarget Element that was interacted with.
  * @param {string} aChipClassName Class name of chip.
- * @return {rflect.cal.events.Event=} Found event or null.
+ * @return {rflect.cal.events.Event} Found event or null.
  */
 rflect.cal.MainPane.prototype.getEventByTargetAndClassName_ = function(aTarget,
     aChipClassName) {
@@ -997,10 +997,14 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
           maskConfiguration = /**@type {number}*/
           (rflect.cal.MainPaneSelectionMask.Configuration.MONTH), aEvent);
     preventDefaultIsNeeded = true;
+
   } else if (this.isChip_(className)) {
-    this.chipDragStart_(2, aEvent, className);
+
+    this.chipDragStart_(aEvent, className);
     preventDefaultIsNeeded = true;
+
   }
+
   if (preventDefaultIsNeeded)
     aEvent.preventDefault();
 
@@ -1008,23 +1012,25 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
 
 /**
- * @param {number} aMaskConfiguration Mask configuration.
  * @param {goog.events.Event} aEvent Event object.
  * @param {string} aClassName Chip class name.
  */
-rflect.cal.MainPane.prototype.chipDragStart_ = function(aMaskConfiguration,
-    aEvent, aClassName) {
+rflect.cal.MainPane.prototype.chipDragStart_ = function(aEvent, aClassName) {
 
-  if (goog.DEBUG)
-    _log('aClassName', aClassName);
+  var maskConfiguration;
+  var calendarEvent = this.getEventByTargetAndClassName_(
+      /**@type{Element}*/(aEvent.target), aClassName);
 
-  var calendarEvent = this.getEventByTargetAndClassName_(aEvent.target,
-      aClassName);
+  if (this.isWeekChip_(aClassName))
+    maskConfiguration = rflect.cal.MainPaneSelectionMask.Configuration.WEEK;
+  else if (this.isMonthChip_(aClassName))
+    maskConfiguration =
+        rflect.cal.MainPaneSelectionMask.Configuration.MONTH;
+  else if (this.isAllDayChip_(aClassName))
+    maskConfiguration =
+        rflect.cal.MainPaneSelectionMask.Configuration.ALLDAY;
 
-  if (goog.DEBUG)
-    _log('calendarEvent', calendarEvent);
-
-  this.selectionMask_.init(aMaskConfiguration, aEvent, calendarEvent);
+  this.selectionMask_.init(maskConfiguration, aEvent, calendarEvent);
 }
 
 

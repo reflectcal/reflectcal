@@ -207,69 +207,17 @@ rflect.cal.MainPaneSelectionMask.prototype.close = function() {
 rflect.cal.MainPaneSelectionMask.prototype.update = function (aEvent) {
 
   var pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
-  var currentCoord = new goog.math.Coordinate(aEvent.clientX + pageScroll.x -
+  var eventCoordinate = new goog.math.Coordinate(aEvent.clientX + pageScroll.x -
       this.elementOffset_.x + this.scrollableEl_.scrollLeft, aEvent.clientY +
       pageScroll.y - this.elementOffset_.y + this.scrollableEl_.scrollTop);
   var currentCellCoord;
 
   if (this.calendarEvent_) {
-    currentCellCoord = this.getCellCoordinate_(currentCoord.x,
-        currentCoord.y, true, true);
-
-    this.initialMove_ = this.initialMove_ && (goog.math.Coordinate.distance(
-        currentCoord, this.currentCoordinate_) > 10);
-
-
-    if (!goog.math.Coordinate.equals(currentCellCoord,
-        this.currentCellCoordinate_)) {
-
-      this.currentCellCoordinate_ = currentCellCoord;
-      this.initialMove_ = false;
-
-      var tempCellCoord = this.getCellCoordinate_(currentCoord.x,
-          currentCoord.y, true, false);
-
-      if (goog.DEBUG) {
-        _log('pixelDiffWithEventStart', this.pixelDiffWithEventStart_);
-        _log('pixelDiffWithEventEnd', this.pixelDiffWithEventEnd_);
-      }
-
-      var currentPixelPosition = tempCellCoord.x *
-          rflect.cal.predefined.WEEK_GRID_HEIGHT + tempCellCoord.y;
-      var startPixelPosition = currentPixelPosition -
-          this.pixelDiffWithEventStart_;
-      var endPixelPosition = currentPixelPosition +
-          this.pixelDiffWithEventEnd_;
-
-      var startCoordinate = new goog.math.Coordinate(
-          Math.floor(startPixelPosition /
-              rflect.cal.predefined.WEEK_GRID_HEIGHT),
-          startPixelPosition % rflect.cal.predefined.WEEK_GRID_HEIGHT);
-      var endCoordinate = new goog.math.Coordinate(
-          Math.floor(endPixelPosition /
-              rflect.cal.predefined.WEEK_GRID_HEIGHT),
-          endPixelPosition % rflect.cal.predefined.WEEK_GRID_HEIGHT);
-
-      if (goog.DEBUG) {
-        _log('startCoordinate', startCoordinate);
-        _log('endCoordinate', endCoordinate);
-      }
-
-      this.startCoordinate_ = this.getCellCoordinate_(startCoordinate.x,
-          startCoordinate.y, false, false);
-      this.endCoordinate_ = this.getCellCoordinate_(endCoordinate.x,
-          endCoordinate.y, false, false);
-
-      if (goog.DEBUG)
-        _log('this.startCoordinate_', this.startCoordinate_);
-      if (goog.DEBUG)
-        _log('this.endCoordinate_', this.endCoordinate_);
-
-      this.update_();
-    }
+    
+    this.updateDrag_(eventCoordinate);
+    
   } else {
-    currentCellCoord = this.getCellCoordinate_(currentCoord.x,
-        currentCoord.y, true, false);
+    currentCellCoord = this.getCellCoordinate_(eventCoordinate, true, false);
 
     if (!goog.math.Coordinate.equals(
         this.snapCoordinate_(this.currentCoordinate_, true),
@@ -277,11 +225,149 @@ rflect.cal.MainPaneSelectionMask.prototype.update = function (aEvent) {
 
       this.currentCoordinate_ = currentCellCoord;
       this.update_();
+
     }
   }
-
 }
 
+
+/**
+ * @param {goog.math.Coordinate} aCurrentCoordinate Current event coordinate.
+ * @private
+ */
+rflect.cal.MainPaneSelectionMask.prototype.updateDrag_ = function (
+    aCurrentCoordinate) {
+  var currentCellCoord = this.getCellCoordinate_(aCurrentCoordinate, true,
+      true);
+
+  this.initialMove_ = this.initialMove_ && (goog.math.Coordinate.distance(
+      aCurrentCoordinate, this.currentCoordinate_) > 10);
+
+  if (!goog.math.Coordinate.equals(currentCellCoord,
+      this.currentCellCoordinate_)) {
+
+    this.currentCellCoordinate_ = currentCellCoord;
+    this.initialMove_ = false;
+
+    var tempCellCoord = this.snapCoordinate_(this.getCellCoordinate_(
+        aCurrentCoordinate, true, false), true);
+
+    if (goog.DEBUG) {
+      _log('pixelDiffWithEventStart', this.pixelDiffWithEventStart_);
+      _log('pixelDiffWithEventEnd', this.pixelDiffWithEventEnd_);
+    }
+
+    var currentPixelPosition = tempCellCoord.x *
+        rflect.cal.predefined.WEEK_GRID_HEIGHT + tempCellCoord.y;
+    var startPixelPosition = currentPixelPosition -
+        this.pixelDiffWithEventStart_;
+    var endPixelPosition = currentPixelPosition +
+        this.pixelDiffWithEventEnd_;
+
+    this.startCoordinate_ = this.pixelPositionToCoordinate_(
+        startPixelPosition);
+    this.endCoordinate_ = this.pixelPositionToCoordinate_(
+        endPixelPosition);
+
+    if (goog.DEBUG)
+      _log('this.startCoordinate_', this.startCoordinate_);
+    if (goog.DEBUG)
+      _log('this.endCoordinate_', this.endCoordinate_);
+
+    this.update_();
+  }  
+}
+
+
+/**
+ * @param {number} aPixelPosition Pixel position to transform to coordinate.
+ * @return {goog.math.Coordinate} Coordinate.
+ */
+rflect.cal.MainPaneSelectionMask.prototype.pixelPositionToCoordinate_ =
+    function(aPixelPosition) {
+
+  var size = this.getMaxSize_();
+
+  var primaryComponent = Math.floor(aPixelPosition / size);
+  var secondaryComponent = aPixelPosition % size;
+  var coordinate = this.isHorizontal() ? new goog.math.Coordinate(
+      primaryComponent, secondaryComponent) :
+      new goog.math.Coordinate(secondaryComponent, primaryComponent);
+  return this.getCellCoordinate_(coordinate, false, false);
+}
+
+
+/**
+ * @param {goog.events.Event=} opt_event Event object.
+ * @return {goog.math.Coordinate} Coordinate of event.
+ */
+rflect.cal.MainPaneSelectionMask.prototype.getEventCoordinate_ =
+    function(opt_event) {
+
+  if (!opt_event)
+    return null;
+
+  //TODO(alexk): when in multiple scrollables goog.style.getOffsetPosition.
+  // But may we be under multiple scrollables?
+  var doc = this.document_ || (this.document_ =
+      goog.dom.getOwnerDocument(this.component_.getElement()));
+  var pageScroll = goog.dom.getDomHelper(doc).getDocumentScroll();
+  var coordXWithoutScroll = 0;
+  var coordYWithoutScroll = 0;
+  var coordX = 0;
+  var coordY = 0;
+
+  this.elementOffset_ = new goog.math.Coordinate(0, 0);
+
+  if (this.isWeekOrAllday_()) {
+
+    if (this.isAllDay()) {
+
+      //TODO(alexk): shorten this method, enclose repeating parts in function.
+      this.scrollableEl_ = goog.dom.getElement('main-pane-header-scrollable');
+      this.maskEl_ = goog.dom.getElement('wk-ad-mask-cnt');
+      this.elementOffset_ = goog.style.getRelativePosition(
+          this.scrollableEl_, document.documentElement);
+      this.elementOffset_.x += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+
+    } else {
+
+      this.scrollableEl_ =
+          goog.dom.getElement('main-pane-body-scrollable-wk');
+      this.maskEl_ = goog.dom.getElement('wk-mask-cnt');
+      this.elementOffset_ = goog.style.getRelativePosition(
+          this.scrollableEl_, document.documentElement);
+      this.elementOffset_.x +=
+          rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_WEEK;
+    }
+      this.elementOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+
+  } else if (this.isMonth()) {
+
+    this.scrollableEl_ = goog.dom.getElement('main-pane-body-scrollable-mn');
+    this.maskEl_ = goog.dom.getElement('mn-mask-cnt');
+    this.elementOffset_ = goog.style.getRelativePosition(
+        this.scrollableEl_, document.documentElement);
+    this.elementOffset_.x +=
+        rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_MONTH;
+    this.elementOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+
+  }
+
+  coordXWithoutScroll = opt_event.clientX + pageScroll.x -
+      this.elementOffset_.x;
+  coordYWithoutScroll = opt_event.clientY + pageScroll.y -
+      this.elementOffset_.y;
+
+  coordX = coordXWithoutScroll + this.scrollableEl_.scrollLeft;
+  coordY = coordYWithoutScroll + this.scrollableEl_.scrollTop;
+  // Safe check for IE7.
+  if (coordYWithoutScroll >= this.scrollableEl_.offsetHeight ||
+      coordYWithoutScroll < 0)
+    return null;
+
+  return new goog.math.Coordinate(coordX, coordY);
+}
 
 
 /**
@@ -296,163 +382,78 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
     opt_event, opt_calendarEvent) {
   rflect.cal.SelectionMask.prototype.init.call(this, aConfiguration);
 
-    //TODO(alexk): when in multiple scrollables goog.style.getOffsetPosition.
-    // But may we be under multiple scrollables?
-    var doc = this.document_ || (this.document_ =
-        goog.dom.getOwnerDocument(this.component_.getElement()));
-    var pageScroll = goog.dom.getDomHelper(doc).getDocumentScroll();
-    var coordXWithoutScroll = 0;
-    var coordYWithoutScroll = 0;
-    var coordX = 0;
-    var coordY = 0;
+  var eventCoordinate = this.getEventCoordinate_(opt_event);
+  if (!eventCoordinate)
+    return;
 
-    this.elementOffset_ = new goog.math.Coordinate(0, 0);
+  if (opt_calendarEvent) {
 
-    if (this.isWeekOrAllday_()) {
+    this.initDrag_(eventCoordinate, opt_calendarEvent);
 
-      if (this.isAllDay()) {
+  } else {
 
-        //TODO(alexk): shorten this method, enclose repeating parts in function.
-        this.scrollableEl_ = goog.dom.getElement('main-pane-header-scrollable');
-        this.maskEl_ = goog.dom.getElement('wk-ad-mask-cnt');
-        this.elementOffset_ = goog.style.getRelativePosition(
-            this.scrollableEl_, document.documentElement);
-        this.elementOffset_.x += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+    this.startCoordinate_ = this.getCellCoordinate_(eventCoordinate, true,
+        false);
+    this.currentCoordinate_ = this.startCoordinate_.clone();
 
-      } else {
+    if (this.isWeek())
+      this.currentCoordinate_.y += rflect.cal.predefined.HOUR_ROW_HEIGHT;
 
-        this.scrollableEl_ =
-            goog.dom.getElement('main-pane-body-scrollable-wk');
-        this.maskEl_ = goog.dom.getElement('wk-mask-cnt');
-        this.elementOffset_ = goog.style.getRelativePosition(
-            this.scrollableEl_, document.documentElement);
-        this.elementOffset_.x +=
-            rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_WEEK;
-      }
-        this.elementOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
+    goog.style.showElement(this.maskEl_, true);
+    this.visible_ = true;
 
-    } else if (this.isMonth()) {
-
-      this.scrollableEl_ = goog.dom.getElement('main-pane-body-scrollable-mn');
-      this.maskEl_ = goog.dom.getElement('mn-mask-cnt');
-      this.elementOffset_ = goog.style.getRelativePosition(
-          this.scrollableEl_, document.documentElement);
-      this.elementOffset_.x +=
-          rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_MONTH;
-      this.elementOffset_.y += rflect.cal.predefined.DEFAULT_BORDER_WIDTH;
-
-    }
-
-    coordXWithoutScroll = opt_event.clientX + pageScroll.x -
-        this.elementOffset_.x;
-    coordYWithoutScroll = opt_event.clientY + pageScroll.y -
-        this.elementOffset_.y;
-
-    coordX = coordXWithoutScroll + this.scrollableEl_.scrollLeft;
-    coordY = coordYWithoutScroll + this.scrollableEl_.scrollTop;
-    // Safe check for IE7.
-    if (coordYWithoutScroll >= this.scrollableEl_.offsetHeight ||
-        coordYWithoutScroll < 0)
-      return;
-
-    if (opt_calendarEvent) {
-
-      if (goog.DEBUG)
-        _log('drag');
-
-      this.currentCoordinate_ = new goog.math.Coordinate(coordX, coordY);
-      this.currentCellCoordinate_ = this.getCellCoordinate_(
-          coordX, coordY, true, true);
-
-      this.calendarEvent_ = opt_calendarEvent;
-      this.initialMove_ = true;
-
-      var pixelToTimeK = 1440 / rflect.cal.predefined.WEEK_GRID_HEIGHT * 60 * 1000;
-      var timeToPixelK = 1 / pixelToTimeK;
-
-      var tempCellCoord = this.getCellCoordinate_(this.currentCoordinate_.x,
-          this.currentCoordinate_.y, true, false);
-      var startTs = this.timeManager_.interval.start;
-
-      var pointRelativeTs = tempCellCoord.x * pixelToTimeK * 24 * 60 +
-          tempCellCoord.y * pixelToTimeK;
-      if (goog.DEBUG) _log('pointRelativeTs', pointRelativeTs);
-
-      var timeDiffWithEventStart = pointRelativeTs -
-          (this.calendarEvent_.startDate.getTime() - startTs);
-      var timeDiffWithEventEnd = (this.calendarEvent_.endDate.getTime() -
-          startTs) - pointRelativeTs;
-      this.pixelDiffWithEventStart_ = timeDiffWithEventStart * timeToPixelK;
-      this.pixelDiffWithEventEnd_ = timeDiffWithEventEnd * timeToPixelK;
-
-      this.initialized_ = true;
-
-    } else {
-
-      this.startCoordinate_ = this.getCellCoordinate_(coordX, coordY, true,
-          false);
-      this.currentCoordinate_ = this.startCoordinate_.clone();
-
-      if (this.isWeek())
-        this.currentCoordinate_.y += rflect.cal.predefined.HOUR_ROW_HEIGHT;
-
-
-      if (goog.DEBUG)
-        _log('this.startCoordinate_', this.startCoordinate_);
-      if (goog.DEBUG)
-        _log('this.currentCoordinate_', this.currentCoordinate_);
-
-      goog.style.showElement(this.maskEl_, true);
-      this.visible_ = true;
-
-      this.initialized_ = true;
-      this.update_();
-    }
-
+    this.initialized_ = true;
+    this.update_();
+  }
 
 };
 
 
 /**
- * @param {number} aX X pixel position.
- * @param {number} aY Y pixel position.
+ * @param {goog.math.Coordinate} aEventCoordinate Event coordinate.
+ * @param {rflect.cal.events.Event} aCalendarEvent.
  */
-rflect.cal.MainPaneSelectionMask.prototype.calculatePointAndTimestamp =
-    function(aX, aY) {
-  var coord = new goog.math.Coordinate(0, 0);
-  var maxX = 0;
-  var maxY = 0;
+rflect.cal.MainPaneSelectionMask.prototype.initDrag_ = function(
+    aEventCoordinate, aCalendarEvent) {
+  this.currentCoordinate_ = new goog.math.Coordinate(aEventCoordinate.x,
+      aEventCoordinate.y);
+  this.currentCellCoordinate_ = this.getCellCoordinate_(
+      aEventCoordinate, true, true);
 
-  if (this.isWeekOrAllday_()) {
-    maxX = this.blockPoolWeek_.getBlocksNumber() - 1;
-    // TODO(alexk): simplify this in case of chip drag
-    coord.x = this.getBlockIndexByCoordinate_(aX, this.blockPoolWeek_);
+  this.calendarEvent_ = aCalendarEvent;
+  this.initialMove_ = true;
 
-    // Allday mask always have zero y index.
-    if (this.isAllDay()) {
-      maxY = 0;
-      coord.y = 0;
-    }
-    else {
-      maxY = rflect.cal.predefined.WEEK_GRID_HEIGHT;
-      coord.y = Math.floor(aY / rflect.cal.predefined.HOUR_ROW_HEIGHT);
-    }
+  var pixelToTimeK = 1440 / rflect.cal.predefined.WEEK_GRID_HEIGHT * 60 *
+      1000;
+  var timeToPixelK = 1 / pixelToTimeK;
 
-  } else {
-    maxX = 6;
-    maxY = this.blockPoolMonth_.getBlocksNumber() - 1;
-    coord.y = this.getBlockIndexByCoordinate_(aY, this.blockPoolMonth_);
-    coord.x = Math.floor(aX / (this.blockPoolMonth_.gridSize.width / 7));
-  }
+  var tempCellCoord = this.snapCoordinate_(this.getCellCoordinate_(
+      this.currentCoordinate_, true, false), true);
+  var startTs = this.timeManager_.interval.start;
 
-  // Safe checks.
-  if (coord.x < 0) coord.x = 0;
-  if (coord.x > maxX) coord.x = maxX;
-  if (coord.y < 0) coord.y = 0;
-  if (coord.y > maxY) coord.y = maxY;
+  var pointRelativeTs =
+      // This is minutes.
+      tempCellCoord.x *
+      1440 * 60 * 1000 +
+      // But this is pixels!
+      tempCellCoord.y *
+      pixelToTimeK;
 
-  return coord;
-};
+  if (goog.DEBUG)
+    _log('pointRelativeTs mins', pointRelativeTs / 60000);
+
+  var timeDiffWithEventStart = pointRelativeTs -
+      (this.calendarEvent_.startDate.getTime() - startTs);
+  var timeDiffWithEventEnd = (this.calendarEvent_.endDate.getTime() -
+      startTs) - pointRelativeTs;
+  if (goog.DEBUG)
+    _log('timeDiffWithEventStart', timeDiffWithEventStart);
+
+  this.pixelDiffWithEventStart_ = timeDiffWithEventStart * timeToPixelK;
+  this.pixelDiffWithEventEnd_ = timeDiffWithEventEnd * timeToPixelK;
+
+  this.initialized_ = true;
+} 
 
 
 /**
@@ -460,18 +461,30 @@ rflect.cal.MainPaneSelectionMask.prototype.calculatePointAndTimestamp =
  * coordinate changed to block index and unchanged change block-independent one.
  * Week: x axis is block dependent. y is not.
  * Month and all day: y axis is block dependent, x is not.
- * @param {number} aX X pixel position.
- * @param {number} aY Y pixel position.
- * @param {boolean} changePrimaryComponent Whether to change block-dependent
- * component of coordinate.
- * @param {boolean} changeSecondaryComponent Whether to change block-independent
- * component of coordinate.
+ *
+ * Takes arguments: (x, y, changePrimary, changeSecondary)
+ * OR (coordinate, changePrimary, changeSecondary)
+ * @param {number|goog.math.Coordinate} aX X pixel position OR whole coordinate
+ * point for three-arg version.
+ * @param {number|boolean} aY Y pixel position OR whether to change
+ * block-dependent component of coordinate for three-arg version.
+ * @param {boolean} aChangePrimaryComponent Whether to change block-dependent
+ * component of coordinate OR whether to change block-independent component of
+ * coordinate for three arg version.
+ * @param {boolean=} opt_changeSecondaryComponent Whether to change block-independent
+ * component of coordinate OR null for three-arg version.
  * @return {goog.math.Coordinate} Cell position.
  */
 rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
-    function(aX, aY, changePrimaryComponent, changeSecondaryComponent) {
+    function(aX, aY, aChangePrimaryComponent, opt_changeSecondaryComponent) {
 
-  var coord = new goog.math.Coordinate(aX, aY);
+  var threeArgs = aX instanceof goog.math.Coordinate;
+  var coord = threeArgs ? aX.clone() : new goog.math.Coordinate(
+      /**@type{number}*/(aX), /**@type{number}*/(aY));
+  var changePrimaryComponent = threeArgs ? aY : aChangePrimaryComponent;
+  var changeSecondaryComponent = threeArgs ? aChangePrimaryComponent :
+      opt_changeSecondaryComponent;
+
   var maxX = 0;
   var maxY = 0;
   var gridSize = 0;
@@ -483,9 +496,9 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
     maxY = this.blockPoolMonth_.getBlocksNumber() - 1;
 
     if (changePrimaryComponent)
-      coord.y = this.getBlockIndexByCoordinate_(aY, this.blockPoolMonth_);
+      coord.y = this.getBlockIndexByCoordinate_(coord.y, this.blockPoolMonth_);
     if (changeSecondaryComponent)
-      coord.x = Math.floor(aX / (gridSize / 7));
+      coord.x = Math.floor(coord.x / (gridSize / 7));
 
   } else if (this.isAllDay()) {
 
@@ -497,7 +510,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
     if (changePrimaryComponent)
       coord.y = 0;
     if (changeSecondaryComponent)
-      coord.x = Math.floor(aX / (gridSize /
+      coord.x = Math.floor(coord.x / (gridSize /
           this.blockPoolWeek_.getBlocksNumber()));
 
   } else if (this.isWeek()) {
@@ -507,17 +520,24 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
     maxX = this.blockPoolWeek_.getBlocksNumber() - 1;
 
     if (changePrimaryComponent)
-      coord.x = this.getBlockIndexByCoordinate_(aX, this.blockPoolWeek_);
+      coord.x = this.getBlockIndexByCoordinate_(coord.x, this.blockPoolWeek_);
     if (changeSecondaryComponent)
-      coord.y = Math.floor(aY / rflect.cal.predefined.HOUR_ROW_HEIGHT);
+      coord.y = Math.floor(coord.y / rflect.cal.predefined.HOUR_ROW_HEIGHT);
 
   }
 
-  // Safe checks.
-  if (coord.x < 0) coord.x = 0;
-  if (coord.x > maxX) coord.x = maxX;
-  if (coord.y < 0) coord.y = 0;
-  if (coord.y > maxY) coord.y = maxY;
+  // Safety checks.
+  if (this.isHorizontal()) {
+    if (coord.x < 0) { coord.x = 0; coord.y = 0; }
+    if (coord.x > maxX) { coord.x = maxX; coord.y = maxY; }
+    if (coord.y < 0) coord.y = 0;
+    if (coord.y > maxY) coord.y = maxY;
+  } else {
+    if (coord.x < 0) coord.x = 0;
+    if (coord.x > maxX) coord.x = maxX;
+    if (coord.y < 0) { coord.y = 0; coord.x = 0; }
+    if (coord.y > maxY) { coord.y = maxY; coord.x = maxX; }
+  }
 
   return coord;
 };
@@ -895,9 +915,9 @@ rflect.cal.MainPaneSelectionMask.prototype.calculateDates = function(aMinCell,
   if (this.calendarEvent_) {
 
   } else {
-    var minCell = this.getCellCoordinate_(aMinCell.x, aMinCell.y, false, true);
-    var maxCell = this.getCellCoordinate_(opt_maxCell.x, opt_maxCell.y, false,
-        true);
+    var minCell = this.getCellCoordinate_(aMinCell, false, true);
+    var maxCell = this.getCellCoordinate_(
+        /**@type{goog.math.Coordinate}*/(opt_maxCell), false, true);
 
     rflect.cal.MainPaneSelectionMask.superClass_.calculateDates
         .call(this, minCell, maxCell);
