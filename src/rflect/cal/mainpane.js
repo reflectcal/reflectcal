@@ -223,7 +223,12 @@ rflect.cal.MainPane.prototype.daynumLabelRe_;
 rflect.cal.MainPane.prototype.daynumLabelRe_;
 
 
-
+/**
+ * Whether chip was dragged.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.MainPane.prototype.chipWasDragged_;
 
 
 /**
@@ -685,10 +690,14 @@ rflect.cal.MainPane.prototype.onClick_ = function(aEvent) {
   }
 
   if (zippyClicked) {
+
     this.updateBeforeRedraw();
     this.updateByRedraw();
-  } else if (this.isChip_(className)) {
+
+  } else if (this.isChip_(className) && !this.selectionMask_.wasDragged()) {
+
     this.showEventEditComponent_(target, className);
+
   }
 };
 
@@ -1000,7 +1009,7 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
   } else if (this.isChip_(className)) {
 
-    this.chipDragStart_(aEvent, className);
+    this.startChipDrag_(aEvent, className);
     preventDefaultIsNeeded = true;
 
   }
@@ -1012,10 +1021,52 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
 
 /**
+ * Main pane mousemove handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.MainPane.prototype.onMouseMove_ = function(aEvent) {
+  if (this.selectionMask_.isInitialized()) {
+    this.selectionMask_.update(aEvent);
+
+    this.chipWasDragged_ = this.selectionMask_.wasDragged();
+
+    aEvent.preventDefault();
+  }
+
+};
+
+
+/**
+ * Main pane mouseup handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.MainPane.prototype.onMouseUp_ = function (aEvent) {
+  if (this.selectionMask_.isInitialized()) {
+
+    if (this.selectionMask_.isDragType()) {
+      if (this.chipWasDragged_) {
+        if (goog.DEBUG)
+          _log('was dragged');
+        this.chipWasDragged_ = false;
+      }
+    } else {
+      this.saveDialog_.setVisible(true);
+      this.beginEventCreation_();
+    }
+
+    this.selectionMask_.close();
+    aEvent.preventDefault();
+  }
+}
+
+
+/**
  * @param {goog.events.Event} aEvent Event object.
  * @param {string} aClassName Chip class name.
  */
-rflect.cal.MainPane.prototype.chipDragStart_ = function(aEvent, aClassName) {
+rflect.cal.MainPane.prototype.startChipDrag_ = function(aEvent, aClassName) {
 
   var maskConfiguration;
   var calendarEvent = this.getEventByTargetAndClassName_(
@@ -1031,6 +1082,7 @@ rflect.cal.MainPane.prototype.chipDragStart_ = function(aEvent, aClassName) {
         rflect.cal.MainPaneSelectionMask.Configuration.ALLDAY;
 
   this.selectionMask_.init(maskConfiguration, aEvent, calendarEvent);
+  this.chipWasDragged_ = false;
 }
 
 
@@ -1046,38 +1098,6 @@ rflect.cal.MainPane.prototype.onSelectStart_ = function(aEvent) {
   if (this.isWeekGrid_(className) || this.isAlldayGrid_(className) ||
       this.isMonthGrid_(className))
     aEvent.preventDefault();
-};
-
-
-/**
- * Main pane mousemove handler.
- * @param {goog.events.Event} aEvent Event object.
- * @private
- */
-rflect.cal.MainPane.prototype.onMouseMove_ = function(aEvent) {
-  if (this.selectionMask_.isInitialized()) {
-    this.selectionMask_.update(aEvent);
-    aEvent.preventDefault();
-  }
-
-};
-
-
-/**
- * Main pane mouseup handler.
- * @param {goog.events.Event} aEvent Event object.
- * @private
- */
-rflect.cal.MainPane.prototype.onMouseUp_ = function(aEvent) {
-  if (this.selectionMask_.isInitialized()){
-
-    this.selectionMask_.close();
-    this.saveDialog_.setVisible(true);
-
-    this.beginEventCreation_();
-
-    aEvent.preventDefault();
-  }
 };
 
 
