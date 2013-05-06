@@ -1047,9 +1047,7 @@ rflect.cal.MainPane.prototype.onMouseUp_ = function (aEvent) {
 
     if (this.selectionMask_.isDragType()) {
       if (this.chipWasDragged_) {
-        if (goog.DEBUG)
-          _log('was dragged');
-        this.chipWasDragged_ = false;
+        this.endChipDrag_();
       }
     } else {
       this.saveDialog_.setVisible(true);
@@ -1065,6 +1063,7 @@ rflect.cal.MainPane.prototype.onMouseUp_ = function (aEvent) {
 /**
  * @param {goog.events.Event} aEvent Event object.
  * @param {string} aClassName Chip class name.
+ * @private
  */
 rflect.cal.MainPane.prototype.startChipDrag_ = function(aEvent, aClassName) {
 
@@ -1084,6 +1083,23 @@ rflect.cal.MainPane.prototype.startChipDrag_ = function(aEvent, aClassName) {
 
   this.selectionMask_.init(maskConfiguration, aEvent, calendarEvent);
   this.chipWasDragged_ = false;
+}
+
+
+/**
+ * @private
+ */
+rflect.cal.MainPane.prototype.endChipDrag_ = function() {
+  this.chipWasDragged_ = false;
+
+  this.eventManager_.eventHolder.openSession(
+      this.selectionMask_.getCalendarEvent());
+  this.eventManager_.eventHolder.setStartDate(
+      this.selectionMask_.startDate);
+  this.eventManager_.eventHolder.setEndDate(
+      this.selectionMask_.endDate);
+  this.eventManager_.eventHolder.endWithEdit();
+  this.updateAfterSave_();
 }
 
 

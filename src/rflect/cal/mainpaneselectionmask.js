@@ -229,6 +229,14 @@ rflect.cal.MainPaneSelectionMask.prototype.close = function() {
 
 
 /**
+ * @return {rflect.cal.events.Event} Calendar event, if present.
+ */
+rflect.cal.MainPaneSelectionMask.prototype.getCalendarEvent = function() {
+  return this.calendarEvent_;
+}
+
+
+/**
  * Sets up mask.
  * @param {number} aConfiguration Configuration
  * of mask.
@@ -358,8 +366,6 @@ rflect.cal.MainPaneSelectionMask.prototype.updateSelection_ = function (
  */
 rflect.cal.MainPaneSelectionMask.prototype.updateDrag_ = function (
     aEventCoordinate) {
-  var currentCoord = this.getCellCoordinate_(aEventCoordinate, false,
-      false);
   var currentCellCoord = this.getCellCoordinate_(aEventCoordinate, true,
       true);
 
@@ -373,7 +379,7 @@ rflect.cal.MainPaneSelectionMask.prototype.updateDrag_ = function (
     this.initialMove_ = false;
 
     this.currentCellCoordinate_ = currentCellCoord;
-    this.currentCoordinate_ = currentCoord;
+    this.currentCoordinate_ = aEventCoordinate;
 
     var currentPixelPosition = this.coordinateToPixelPosition_(
         aEventCoordinate);
@@ -903,9 +909,6 @@ rflect.cal.MainPaneSelectionMask.prototype.update_ = function(aStartCoordinate,
   if (!this.initialized_)
     return;
 
-  if (goog.DEBUG)
-    _log('update');
-
   if (this.calendarEvent_) {
 
     startCoordForDraw = startCoordForDate = aStartCoordinate;
@@ -1013,25 +1016,16 @@ rflect.cal.MainPaneSelectionMask.prototype.calculateDates = function(aMinCell,
 
     var currentRelativeTs = this.coordinateToRelativeTs_(
       this.currentCoordinate_);
-    if (goog.DEBUG)
-      _log('this.currentCoordinate_', this.currentCoordinate_);
-    if (goog.DEBUG)
-        _log('this.currentCellCoordinate_', this.currentCellCoordinate_);
-    if (goog.DEBUG)
-        _log('currentRelativeTs', currentRelativeTs);
     var startTs = this.timeManager_.interval.start;
     var startEventTs = currentRelativeTs - this.timeDiffWithEventStart_ +
         startTs;
     var endEventTs = currentRelativeTs + this.timeDiffWithEventEnd_ +
         startTs;
 
-    this.startDate = new goog.date.DateTime(startEventTs)
+    this.startDate = new goog.date.DateTime();
+    this.startDate.setTime(startEventTs);
     this.endDate = new goog.date.DateTime(endEventTs)
-
-    if (goog.DEBUG)
-      _log('this.startDate', this.startDate);
-    if (goog.DEBUG)
-      _log('this.endDate', this.endDate);
+    this.endDate.setTime(endEventTs);
 
   } else {
     var minCell = this.getCellCoordinate_(aMinCell, false, true);
