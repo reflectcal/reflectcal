@@ -153,6 +153,22 @@ rflect.cal.ui.EventPane.prototype.parentEl_;
 
 
 /**
+ * Start time ac.
+ * @type {rflect.cal.ui.ac.TimeAutoComplete}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.startTimeAC_;
+
+
+/**
+ * End time ac.
+ * @type {rflect.cal.ui.ac.TimeAutoComplete}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.endTimeAC_;
+
+
+/**
  * @return {boolean} Whether the component is visible.
  */
 rflect.cal.ui.EventPane.prototype.isVisible = function() {
@@ -328,6 +344,11 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
       .listen(this.inputEndTime_,
       goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
 
+      .listen(this.inputStartTime_, goog.events.EventType.MOUSEDOWN,
+          this.onTimeInputMouseDown_, false, this)
+      .listen(this.inputEndTime_, goog.events.EventType.MOUSEDOWN,
+          this.onTimeInputMouseDown_, false, this)
+
       .listen(document,
       goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this);
 
@@ -365,28 +386,41 @@ rflect.cal.ui.EventPane.prototype.onInputFocus_ = function(aEvent) {
 
   var target = /**@type{Element}*/(aEvent.target);
   if (target == this.inputStartTime_) {
-    // IE8 hack.
-    if (goog.userAgent.IE) {
-      if (goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0)
-        setTimeout(goog.bind(function(){this.startTimeAC_.update(true)}, this),
-            0);
-    } else
-    this.startTimeAC_.update(true);
-  }
-  else if (target == this.inputEndTime_){
-    if (goog.userAgent.IE) {
-      if (goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0)
-        setTimeout(goog.bind(function(){this.endTimeAC_.update(true)}, this),
-            0);
-    } else
-      this.endTimeAC_.update(true);
-  }
-  else {
+    this.updateAC_(this.startTimeAC_);
+  } else if (target == this.inputEndTime_) {
+    this.updateAC_(this.endTimeAC_);
+  }  else {
     this.startTimeAC_.dismiss();
     this.endTimeAC_.dismiss();
   }
+}
 
 
+/**
+ * Time input mousedown listener.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.onTimeInputMouseDown_ = function(aEvent) {
+  var target = /**@type{Element}*/(aEvent.target);
+  if (target == this.inputStartTime_) {
+    this.updateAC_(this.startTimeAC_);
+  } else if (target == this.inputEndTime_) {
+    this.updateAC_(this.endTimeAC_);
+  }
+}
+
+
+/**
+ * Updates ac for given input.
+ * @param {rflect.cal.ui.ac.TimeAutoComplete} aAC Autocomplete.
+ */
+rflect.cal.ui.EventPane.prototype.updateAC_ = function(aAC) {
+  if (goog.userAgent.IE) {
+    if (goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0)
+      setTimeout(goog.bind(function(){aAC.update(true)}, this), 0);
+  } else
+    aAC.update(true);
 }
 
 
