@@ -1074,12 +1074,13 @@ rflect.cal.MainPane.prototype.startChipDrag_ = function(aEvent, aClassName) {
 
   if (this.isWeekChip_(aClassName))
     maskConfiguration = rflect.cal.MainPaneSelectionMask.Configuration.WEEK;
-  else if (this.isMonthChip_(aClassName))
-    maskConfiguration =
-        rflect.cal.MainPaneSelectionMask.Configuration.MONTH;
+  // Test for all-day chip first, because it's a month chip, too.
   else if (this.isAllDayChip_(aClassName))
     maskConfiguration =
         rflect.cal.MainPaneSelectionMask.Configuration.ALLDAY;
+  else if (this.isMonthChip_(aClassName))
+    maskConfiguration =
+        rflect.cal.MainPaneSelectionMask.Configuration.MONTH;
 
   this.selectionMask_.init(maskConfiguration, aEvent, calendarEvent);
   this.chipWasDragged_ = false;
