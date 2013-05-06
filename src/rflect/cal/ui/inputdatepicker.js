@@ -111,7 +111,9 @@ rflect.cal.ui.InputDatePicker.prototype.addInput = function (aInput) {
       .listen(aInput, goog.events.EventType.BLUR,
       this.onInputBlur_, false)
       .listen(aInput, goog.events.EventType.KEYDOWN,
-      this.onInputKeyDown_, false);
+      this.onInputKeyDown_, false)
+      .listen(aInput, goog.events.EventType.MOUSEDOWN,
+      this.onInputMouseDown_, false);
 }
 
 
@@ -124,27 +126,52 @@ rflect.cal.ui.InputDatePicker.prototype.removeInput = function (aInput) {
       this.onInputFocus_, false);
   this.getHandler().unlisten(aInput, goog.events.EventType.BLUR,
       this.onInputBlur_, false);
-  this.getHandler().listen(aInput, goog.events.EventType.KEYDOWN,
+  this.getHandler().unlisten(aInput, goog.events.EventType.KEYDOWN,
       this.onInputKeyDown_, false);
+  this.getHandler().unlisten(aInput, goog.events.EventType.MOUSEDOWN,
+      this.onInputMouseDown_, false);
 }
 
 
 /**
  * @param {goog.events.Event} aEvent Event object.
+ * @private
  */
 rflect.cal.ui.InputDatePicker.prototype.onInputFocus_ = function (aEvent) {
 
   var input = /**@type{Element}*/ (aEvent.target);
-  this.currentInput_ = input;
 
-  var pos = goog.style.getPosition(input);
-  var size = goog.style.getSize(input);
+  this.showDatePicker_(input);
+}
+
+
+/**
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.InputDatePicker.prototype.onInputMouseDown_ = function (aEvent) {
+
+  var input = /**@type{Element}*/ (aEvent.target);
+
+  if (!this.visible_)
+    this.showDatePicker_(input);
+}
+
+
+/**
+ * @param {Element} aInput Input that was interacted with.
+ * @private
+ */
+rflect.cal.ui.InputDatePicker.prototype.showDatePicker_ = function (aInput) {
+  this.currentInput_ = aInput;
+
+  var pos = goog.style.getPosition(aInput);
+  var size = goog.style.getSize(aInput);
 
   pos.y += size.height;
 
   this.setVisible(true);
   goog.style.setPosition(this.getElement(), pos.x, pos.y);
-
 }
 
 
