@@ -607,3 +607,11 @@ rflect.cal.predefined.chips.MINIMAL_MINS = 20;
  * @const
  */
 rflect.cal.predefined.chips.CHIP_EVENT_CLASS = 'ev';
+
+
+/**
+ * Minimal distance a pointer should move with chip to consider this move as a drag.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.chips.DISTANCE_TO_START_DRAG = 10;

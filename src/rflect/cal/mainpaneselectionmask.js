@@ -155,6 +155,14 @@ rflect.cal.MainPaneSelectionMask.prototype.initialMove_;
 
 
 /**
+ * Where pointer is relative to grid.
+ * @type {goog.math.Coordinate}
+ * @private
+ */
+rflect.cal.MainPaneSelectionMask.prototype.currentCoordinate_;
+
+
+/**
  * @return {boolean} Whether mask is allday.
  */
 rflect.cal.MainPaneSelectionMask.prototype.isAllDay = function() {
@@ -372,7 +380,8 @@ rflect.cal.MainPaneSelectionMask.prototype.updateDrag_ = function (
   var distance = goog.math.Coordinate.distance(
       /**@type {!goog.math.Coordinate}*/(aEventCoordinate),
       /**@type {!goog.math.Coordinate}*/(this.currentCoordinate_));
-  var initialMove = this.initialMove_ && (distance > 10);
+  var initialMove = this.initialMove_ && (distance >
+      rflect.cal.predefined.chips.DISTANCE_TO_START_DRAG);
 
   if (initialMove || !goog.math.Coordinate.equals(currentCellCoord,
       this.currentCellCoordinate_)) {
