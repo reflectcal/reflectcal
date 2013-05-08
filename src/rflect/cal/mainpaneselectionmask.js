@@ -163,6 +163,14 @@ rflect.cal.MainPaneSelectionMask.prototype.currentCoordinate_;
 
 
 /**
+ * Cell where pointer is.
+ * @type {goog.math.Coordinate}
+ * @private
+ */
+rflect.cal.MainPaneSelectionMask.prototype.currentCellCoordinate_;
+
+
+/**
  * @return {boolean} Whether mask is allday.
  */
 rflect.cal.MainPaneSelectionMask.prototype.isAllDay = function() {
@@ -285,6 +293,7 @@ rflect.cal.MainPaneSelectionMask.prototype.initDrag_ = function(
       aEventCoordinate, true, true);
 
   this.calendarEvent_ = aCalendarEvent;
+
   this.initialMove_ = true;
 
   var startTs = this.timeManager_.interval.start;
@@ -573,16 +582,17 @@ rflect.cal.MainPaneSelectionMask.prototype.getEventCoordinate_ =
 
 
 /**
- * Returns cell coordinate, i.e. coordinate object that has block-dependent
- * coordinate changed to block index and unchanged change block-independent one.
+ * Returns cell coordinate, i.e. cell to which coordinate fits.
+ * 
+ * Note:
  * Week: x axis is block dependent. y is not.
  * Month and all day: y axis is block dependent, x is not.
  *
  * @param {goog.math.Coordinate} aCoordinate Coordinate.
  * @param {boolean} aChangePrimaryComponent Whether to change block-dependent
- * component of coordinate .
- * @param {boolean=} aChangeSecondaryComponent Whether to change block-independent
- * component of coordinate OR null for three-arg version.
+ * component of coordinate to block index.
+ * @param {boolean=} aChangeSecondaryComponent Whether to change 
+ * block-independent component of coordinate.
  * @return {goog.math.Coordinate} Cell position.
  */
 rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
@@ -608,8 +618,8 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
   } else if (this.isAllDay()) {
 
     gridSize = this.blockPoolAllDay_.gridSize.width;
-    // Allday mask always have zero y index.
     maxX = gridSize - 1;
+    // Allday mask always have zero y index.
     maxY = 0;
 
     if (aChangePrimaryComponent)
@@ -631,28 +641,44 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
 
   }
 
-  // Safety checks.
-  if (this.isHorizontal()) {
-    if (coord.x < 0) { coord.x = 0; coord.y = 0; }
-    if (coord.x > maxX) { coord.x = maxX; coord.y = maxY; }
-    if (coord.y < 0) coord.y = 0;
-    if (coord.y > maxY) coord.y = maxY;
-  } else {
-    if (coord.x < 0) coord.x = 0;
-    if (coord.x > maxX) coord.x = maxX;
-    if (coord.y < 0) { coord.y = 0; coord.x = 0; }
-    if (coord.y > maxY) { coord.y = maxY; coord.x = maxX; }
-  }
+  this.normalizeCoordinate_(coord, maxX, maxY);
 
   return coord;
 };
 
 
 /**
- * Snaps coordinate, i.e. if it's greater than cell upper bound, change it to
+ * Normalizes coordinate in-place.
+ *
+ * @param {goog.math.Coordinate} aCoordinate Coordinate to normalize.
+ * @param {number} aMaxX Maximal x value.
+ * @param {number} aMaxY Maximal y value.
+ */
+rflect.cal.MainPaneSelectionMask.prototype.normalizeCoordinate_ =
+    function(aCoordinate, aMaxX, aMaxY) {
+
+  // Safety checks.
+  if (this.isHorizontal()) {
+    if (aCoordinate.x < 0) { aCoordinate.x = 0; aCoordinate.y = 0; }
+    if (aCoordinate.x > aMaxX) { aCoordinate.x = aMaxX; aCoordinate.y = aMaxY; }
+    if (aCoordinate.y < 0) aCoordinate.y = 0;
+    if (aCoordinate.y > aMaxY) aCoordinate.y = aMaxY;
+  } else {
+    if (aCoordinate.x < 0) aCoordinate.x = 0;
+    if (aCoordinate.x > aMaxX) aCoordinate.x = aMaxX;
+    if (aCoordinate.y < 0) { aCoordinate.y = 0; aCoordinate.x = 0; }
+    if (aCoordinate.y > aMaxY) { aCoordinate.y = aMaxY; aCoordinate.x = aMaxX; }
+  }
+}
+
+
+/**
+ * Snaps coordinate, i.e. if it's greater than corresponding cell upper bound,
+ * change it to
  * upper bound. Or if it's lesser than cell lower bound, change it to lower
  * bound.
  *
+ * @see {rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_}
  * @param {goog.math.Coordinate} aCoord Coordinate object.
  * @param {boolean} aUp Whether to snap up, down otherwise.
  * @return {goog.math.Coordinate} Cell position.
@@ -661,16 +687,14 @@ rflect.cal.MainPaneSelectionMask.prototype.snapCoordinate_ =
     function(aCoord, aUp) {
 
   var coord = aCoord.clone();
+  var step = this.getDefaultStep_();
 
   if (this.isWeek()) {
-    coord.y = this.floorOrCeil_(aCoord.y,
-        rflect.cal.predefined.HOUR_ROW_HEIGHT, aUp);
+    coord.y = this.floorOrCeil_(aCoord.y, step, aUp);
   } else if (this.isMonth()) {
-    coord.x = this.floorOrCeil_(aCoord.x,
-        this.blockPoolMonth_.gridSize.width / 7, aUp);
+    coord.x = this.floorOrCeil_(aCoord.x, step, aUp);
   } else if (this.isAllDay()) {
-    coord.x = this.floorOrCeil_(aCoord.x, this.blockPoolAllDay_.gridSize.width /
-        this.blockPoolWeek_.getBlocksNumber(), aUp);
+    coord.x = this.floorOrCeil_(aCoord.x, step, aUp);
   }
 
   return coord;
