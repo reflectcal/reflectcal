@@ -905,7 +905,7 @@ overflow:hidden
 .event-rect-wk-inner {
   border: 1px solid #28518e;
   margin: 0 0 1px 0;
-  padding: 0 2px;
+  padding: 2px 2px 0 2px;
   width: auto;
   height: 100%;
   background-color: #6699ee;
@@ -931,17 +931,11 @@ overflow:hidden
 }
 
 .event-rect-wk-collapse-top {
-  -moz-border-radius: 0 0 6px 6px;
-  -webkit-border-radius: 0 0 6px 6px;
-  border-radius: 0 0 6px 6px;
-  border-top: 0;
+  border-top-width: 0;
 }
 
 .event-rect-wk-collapse-bottom {
-  -moz-border-radius: 6px 6px 0 0;
-  -webkit-border-radius: 6px 6px 0 0;
-  border-radius: 6px 6px 0 0;
-  border-bottom: 0;
+  border-bottom-width: 0;
 }
 
 .event-rect-wk-collapse-both {
@@ -1035,14 +1029,14 @@ overflow:hidden
   /*-moz-border-radius: 0 8px 8px 0;
   -webkit-border-radius: 0 8px 8px 0;
   border-radius: 0 8px 8px 0;*/
-  border-left: 0;
+  border-left-width: 0;
 }
 
 .event-rect-mn-inner-collapse-right {
   /*-moz-border-radius: 8px 0 0 8px;
   -webkit-border-radius: 8px 0 0 8px;
   border-radius: 8px 0 0 8px;*/
-  border-right: 0;
+  border-right-width: 0;
 }
 
 .event-rect-mn-inner-collapse-both {
@@ -1427,5 +1421,78 @@ overflow:hidden
   overflow: hidden;
   width: 330px;
 }
+
+.wk-event-grip-cont {
+  cursor: n-resize;
+  height: 5px;
+  left: 1px;
+  position: absolute;
+  width: 100%;
+  width: calc(100% - 1px);
+  border-color: inherit;
+}
+
+.wk-event-grip-cont-upper {
+  top: 1px;
+}
+
+.wk-event-grip-cont-lower {
+  bottom: -2px;
+}
+
+.wk-event-grip {
+  border-top-width: 1px;
+  border-top-style: dotted;
+  border-color: inherit;
+  height: 1px;
+  position: absolute;
+  width: 100%;
+  width: calc(100% - 1px);
+}
+
+.wk-event-grip-upper {
+  bottom: 2px;
+}
+
+.wk-event-grip-lower {
+  bottom: 0;
+}
+
+.mn-event-grip-cont {
+  cursor: w-resize;
+  width: 5px;
+  top: 1px;
+  position: absolute;
+  height: 100%;
+  height: calc(100% - 1px);
+  border-color: inherit;
+}
+
+.mn-event-grip-cont-left {
+  left: 1px;
+}
+
+.mn-event-grip-cont-right {
+  right: 1px;
+}
+
+.mn-event-grip {
+  border-right-width: 1px;
+  border-right-style: dotted;
+  border-color: inherit;
+  width: 1px;
+  position: absolute;
+  height: 100%;
+  height: calc(100% - 1px);
+}
+
+.mn-event-grip-left {
+  left: 0;
+}
+
+.mn-event-grip-right {
+  left: 2px;
+}
+
 
 

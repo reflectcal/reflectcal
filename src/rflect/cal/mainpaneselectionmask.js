@@ -147,6 +147,22 @@ rflect.cal.MainPaneSelectionMask.prototype.calendarEvent_;
 
 
 /**
+ * Whether we're resizing by start grip.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.MainPaneSelectionMask.prototype.resizingByStart_;
+
+
+/**
+ * Whether we're resizing by end grip.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.MainPaneSelectionMask.prototype.resizingByEnd_;
+
+
+/**
  * Whether we shifted mouse first time for minor amount (10px).
  * @type {boolean}
  * @private
@@ -241,6 +257,8 @@ rflect.cal.MainPaneSelectionMask.prototype.close = function() {
   this.initialized_ = false;
   this.calendarEvent_ = null;
   this.initialMove_ = false;
+  this.resizingByStart_ = false;
+  this.resizingByEnd_ = false;
 };
 
 
@@ -258,11 +276,16 @@ rflect.cal.MainPaneSelectionMask.prototype.getCalendarEvent = function() {
  * of mask.
  * @param {goog.events.Event=} opt_event Event object.
  * @param {rflect.cal.events.Event=} opt_calendarEvent
+ * @param {boolean=} opt_resizingByStart Whether we're resizing event by start
+ * grip.
+ * @param {boolean=} opt_resizingByEnd Whether we're resizing event by end grip.
  * Calendar event which we're dragging.
  */
 rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
                                                            opt_event,
-                                                           opt_calendarEvent) {
+                                                           opt_calendarEvent,
+                                                           opt_resizingByStart,
+                                                           opt_resizingByEnd) {
   rflect.cal.SelectionMask.prototype.init.call(this, aConfiguration);
 
   var eventCoordinate = this.getEventCoordinate_(opt_event);
@@ -271,7 +294,8 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
 
   if (opt_calendarEvent) {
 
-    this.initDrag_(eventCoordinate, opt_calendarEvent);
+    this.initDrag_(eventCoordinate, opt_calendarEvent, opt_resizingByStart,
+        opt_resizingByEnd);
 
   } else {
 
@@ -283,10 +307,33 @@ rflect.cal.MainPaneSelectionMask.prototype.init = function(aConfiguration,
 
 /**
  * @param {goog.math.Coordinate} aEventCoordinate Event coordinate.
+ */
+rflect.cal.MainPaneSelectionMask.prototype.initSelection_ = function(
+    aEventCoordinate) {
+  this.startCoordinate_ = this.getCellCoordinate_(aEventCoordinate, true,
+      false);
+  this.currentCoordinate_ = this.startCoordinate_.clone();
+
+  if (this.isWeek())
+    this.currentCoordinate_.y += rflect.cal.predefined.HOUR_ROW_HEIGHT;
+
+  goog.style.showElement(this.maskEl_, true);
+
+  this.initialized_ = true;
+
+  this.update_(this.startCoordinate_, this.currentCoordinate_);
+}
+
+
+/**
+ * @param {goog.math.Coordinate} aEventCoordinate Event coordinate.
  * @param {rflect.cal.events.Event} aCalendarEvent.
+ * @param {boolean=} opt_resizingByStart Whether we're resizing event by start
+ * grip.
+ * @param {boolean=} opt_resizingByEnd Whether we're resizing event by end grip.
  */
 rflect.cal.MainPaneSelectionMask.prototype.initDrag_ = function(
-    aEventCoordinate, aCalendarEvent) {
+    aEventCoordinate, aCalendarEvent, opt_resizingByStart, opt_resizingByEnd) {
   this.currentCoordinate_ = new goog.math.Coordinate(aEventCoordinate.x,
       aEventCoordinate.y);
   this.currentCellCoordinate_ = this.getCellCoordinate_(
@@ -311,28 +358,10 @@ rflect.cal.MainPaneSelectionMask.prototype.initDrag_ = function(
   this.pixelDiffWithEventStart_ = this.timeDiffWithEventStart_ * timeToPixelK;
   this.pixelDiffWithEventEnd_ = this.timeDiffWithEventEnd_ * timeToPixelK;
 
+  this.resizingByStart_ = /**@type {boolean}*/ (opt_resizingByStart);
+  this.resizingByEnd_ = /**@type {boolean}*/ (opt_resizingByEnd);
   this.initialized_ = true;
 
-}
-
-
-/**
- * @param {goog.math.Coordinate} aEventCoordinate Event coordinate.
- */
-rflect.cal.MainPaneSelectionMask.prototype.initSelection_ = function(
-    aEventCoordinate) {
-  this.startCoordinate_ = this.getCellCoordinate_(aEventCoordinate, true,
-      false);
-  this.currentCoordinate_ = this.startCoordinate_.clone();
-
-  if (this.isWeek())
-    this.currentCoordinate_.y += rflect.cal.predefined.HOUR_ROW_HEIGHT;
-
-  goog.style.showElement(this.maskEl_, true);
-
-  this.initialized_ = true;
-
-  this.update_(this.startCoordinate_, this.currentCoordinate_);
 }
 
 
@@ -399,6 +428,27 @@ rflect.cal.MainPaneSelectionMask.prototype.updateDrag_ = function (
     this.currentCellCoordinate_ = currentCellCoord;
     this.currentCoordinate_ = aEventCoordinate;
 
+    // Resizing part.
+    if (this.resizingByStart_ || this.resizingByEnd_) {
+      var startTs = this.timeManager_.interval.start;
+      var pixelToTimeK = this.getPixelToTimeK_();
+      var timeToPixelK = 1 / pixelToTimeK;
+
+      var pointRelativeTs = this.coordinateToRelativeTs_(
+          this.currentCoordinate_);
+
+      if (!this.resizingByStart_)
+        this.timeDiffWithEventStart_ = pointRelativeTs -
+            (this.calendarEvent_.startDate.getTime() - startTs);
+      if (!this.resizingByEnd_)
+        this.timeDiffWithEventEnd_ = (this.calendarEvent_.endDate.getTime() -
+            startTs) - pointRelativeTs;
+
+      this.pixelDiffWithEventStart_ = this.timeDiffWithEventStart_ *
+          timeToPixelK;
+      this.pixelDiffWithEventEnd_ = this.timeDiffWithEventEnd_ * timeToPixelK;
+    }
+
     var currentPixelPosition = this.coordinateToPixelPosition_(
         aEventCoordinate);
 
@@ -406,6 +456,8 @@ rflect.cal.MainPaneSelectionMask.prototype.updateDrag_ = function (
         this.pixelDiffWithEventStart_;
     var endPixelPosition = currentPixelPosition +
         this.pixelDiffWithEventEnd_;
+    if (startPixelPosition >= endPixelPosition)
+      return;
 
     var startCoordinate = this.pixelPositionToCoordinate_(
         startPixelPosition);
@@ -433,13 +485,17 @@ rflect.cal.MainPaneSelectionMask.prototype.updateDrag_ = function (
  */
 rflect.cal.MainPaneSelectionMask.prototype.getPixelToTimeK_ = function() {
   if (this.isWeek())
-    return 1440 / rflect.cal.predefined.WEEK_GRID_HEIGHT * 60 *
-      1000;
+    return rflect.cal.predefined.MINS_IN_DAY /
+        rflect.cal.predefined.WEEK_GRID_HEIGHT *
+        rflect.cal.predefined.MILLIS_IN_MINUTE;
   if (this.isAllDay())
-    return (this.blockPoolWeek_.getBlocksNumber() * 1440) /
-        this.blockPoolAllDay_.gridSize.width * 60 * 1000;
-  return (7 * 1440) /
-        this.blockPoolMonth_.gridSize.width * 60 * 1000;
+    return (this.blockPoolWeek_.getBlocksNumber() *
+        rflect.cal.predefined.MINS_IN_DAY) /
+        this.blockPoolAllDay_.gridSize.width *
+        rflect.cal.predefined.MILLIS_IN_MINUTE;
+  return (7 * rflect.cal.predefined.MINS_IN_DAY) /
+      this.blockPoolMonth_.gridSize.width *
+      rflect.cal.predefined.MILLIS_IN_MINUTE;
 }
 
 
@@ -457,14 +513,17 @@ rflect.cal.MainPaneSelectionMask.prototype.coordinateToRelativeTs_ =
         false), true);
 
     // This is minutes.
-    return coord.x *
-        1440 * 60 * 1000 +
+    return coord.x * rflect.cal.predefined.MINS_IN_DAY *
+        rflect.cal.predefined.MILLIS_IN_MINUTE +
         // But this is pixels!
         coord.y * pixelToTimeK;
   }
 
   coord = this.getCellCoordinate_(aCoordinate, true, true);
-  return coord.x * 1440 * 60 * 1000 + coord.y * 7 * 1440 * 60 * 1000;
+  return coord.x * rflect.cal.predefined.MINS_IN_DAY *
+      rflect.cal.predefined.MILLIS_IN_MINUTE + coord.y * 7 *
+      rflect.cal.predefined.MINS_IN_DAY *
+      rflect.cal.predefined.MILLIS_IN_MINUTE;
 }
 
 
@@ -599,14 +658,13 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
     function(aCoordinate, aChangePrimaryComponent, aChangeSecondaryComponent) {
 
   var coord = aCoordinate.clone();
+  var gridSize = this.getMaxSize_();
 
   var maxX = 0;
   var maxY = 0;
-  var gridSize = 0;
 
   if (this.isMonth()) {
 
-    gridSize = this.blockPoolMonth_.gridSize.width;
     maxX = gridSize - 1;
     maxY = this.blockPoolMonth_.getBlocksNumber() - 1;
 
@@ -617,7 +675,6 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
 
   } else if (this.isAllDay()) {
 
-    gridSize = this.blockPoolAllDay_.gridSize.width;
     maxX = gridSize - 1;
     // Allday mask always have zero y index.
     maxY = 0;
@@ -630,8 +687,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
 
   } else if (this.isWeek()) {
 
-    maxY = rflect.cal.predefined.HOUR_ROWS_NUMBER *
-        rflect.cal.predefined.HOUR_ROW_HEIGHT - 1;
+    maxY = gridSize - 1;
     maxX = this.blockPoolWeek_.getBlocksNumber() - 1;
 
     if (aChangePrimaryComponent)
@@ -648,7 +704,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
 
 
 /**
- * Normalizes coordinate in-place.
+ * Normalizes coordinate *in-place*.
  *
  * @param {goog.math.Coordinate} aCoordinate Coordinate to normalize.
  * @param {number} aMaxX Maximal x value.
@@ -1063,7 +1119,7 @@ rflect.cal.MainPaneSelectionMask.prototype.calculateDates = function(aMinCell,
   } else {
     var minCell = this.getCellCoordinate_(aMinCell, false, true);
     var maxCell = this.getCellCoordinate_(
-        /**@type{goog.math.Coordinate}*/(opt_maxCell), false, true);
+        /**@type {goog.math.Coordinate}*/(opt_maxCell), false, true);
 
     rflect.cal.MainPaneSelectionMask.superClass_.calculateDates
         .call(this, minCell, maxCell);

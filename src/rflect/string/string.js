@@ -75,18 +75,18 @@ rflect.string.get2DigitIndex = function(aId) {
 
 
 /**
- * Gets numeric index from string of type "100{postfix}" where {postfix} is
+ * Gets numeric index from string of type "{prefix}100" where {prefix} is
  * arbitrary string.
  * @param {string} aStr String to extract index.
- * @param {string} aPostfix Postfix string which used to identify numeric index.
+ * @param {string} aPrefix Prefix string which used to identify numeric index.
  * @return {number} Numeric index.
  */
-rflect.string.getNumericIndexWithPostfix = function(aStr, aPostfix) {
-  var re = new RegExp('\\d+' + aPostfix);
+rflect.string.getNumericIndexWithPrefix = function(aStr, aPrefix) {
+  var re = new RegExp(aPrefix + '\\d+');
   var matches = re.exec(aStr);
   if (matches) {
     var len = matches[0].length;
-    return +matches[0].substring(0, len - aPostfix.length);
+    return +matches[0].substring(aPrefix.length, len);
   }
   return NaN;
 }

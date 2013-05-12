@@ -615,3 +615,29 @@ rflect.cal.predefined.chips.CHIP_EVENT_CLASS = 'ev';
  * @const
  */
 rflect.cal.predefined.chips.DISTANCE_TO_START_DRAG = 10;
+
+
+/**
+ * Minutes in day.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MINS_IN_DAY = 1440;
+
+
+/**
+ * Milliseconds in minute.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MILLIS_IN_MINUTE = 60 * 1000;
+
+
+/**
+ * Padding-top of chip inner box (px).
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.chips.PADDING_TOP = 2;
+
+

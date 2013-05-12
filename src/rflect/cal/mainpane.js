@@ -232,6 +232,38 @@ rflect.cal.MainPane.prototype.chipWasDragged_;
 
 
 /**
+ * Grip container, week, upper.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.MainPane.prototype.upperContWk_;
+
+
+/**
+ * Grip container, week, lower.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.MainPane.prototype.lowerContWk_;
+
+
+/**
+ * Grip container, month, left.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.MainPane.prototype.leftContMn_;
+
+
+/**
+ * Grip container, month, right.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.MainPane.prototype.rightContMn_;
+
+
+/**
  * @return {number} Width of scrollbar below allday scrollable.
  */
 rflect.cal.MainPane.prototype.getScrollbarWidthBelowAllday = function() {
@@ -723,18 +755,42 @@ rflect.cal.MainPane.prototype.onDoubleClick_ = function(aEvent) {
 
 /**
  * @param {Element} aTarget Element that was interacted with.
- * @param {string} aChipClassName Class name of chip.
  * @return {rflect.cal.events.Event} Found event or null.
  */
-rflect.cal.MainPane.prototype.getEventByTargetAndClassName_ = function(aTarget,
-    aChipClassName) {
-  var className = aChipClassName;
-  if (aTarget.className == goog.getCssName('event-wk-timelabel'))
-    className = aTarget.parentNode.className;
-  var eventId = rflect.string.getNumericIndexWithPostfix(className,
+rflect.cal.MainPane.prototype.getEventByTarget_ =
+    function(aTarget) {
+  var chip = this.getChipElement_(aTarget);
+  var className = chip.className;
+
+  var eventId = rflect.string.getNumericIndexWithPrefix(className,
       rflect.cal.predefined.chips.CHIP_EVENT_CLASS);
   var event = this.eventManager_.getEventById(eventId);
   return event;
+}
+
+
+/**
+ * @param {Element} aTarget Element that was interacted with.
+ * @return {Element} Found chip or null.
+ */
+rflect.cal.MainPane.prototype.getChipElement_ = function(aTarget) {
+  var gripRe = rflect.string.buildClassNameRe(
+      goog.getCssName('wk-event-grip'),
+      goog.getCssName('mn-event-grip')
+  );
+  var gripContRe = rflect.string.buildClassNameRe(
+      goog.getCssName('wk-event-grip-cont'),
+      goog.getCssName('mn-event-grip-cont')
+  );
+
+  if (aTarget.className == goog.getCssName('event-wk-timelabel'))
+    return /**@type {Element}*/ (aTarget.parentNode);
+  if (gripContRe.test(aTarget.className))
+    return /**@type {Element}*/ (aTarget.parentNode);
+  if (gripRe.test(aTarget.className))
+    return /**@type {Element}*/ (aTarget.parentNode.parentNode);
+
+  return aTarget;
 }
 
 
@@ -747,7 +803,7 @@ rflect.cal.MainPane.prototype.showEventEditComponent_ = function(aTarget,
                                                          aChipClassName,
                                                          aShowPane) {
 
-  var event = this.getEventByTargetAndClassName_(aTarget, aChipClassName);
+  var event = this.getEventByTarget_(aTarget);
 
   if (event) {
 
@@ -793,6 +849,181 @@ rflect.cal.MainPane.prototype.onMouseOver_ = function(aEvent) {
         goog.getCssName('zippy-highlighted'));
   else
     this.moRegistry_.deregisterTarget();
+
+  if (this.isWeekChip_(className)) {
+    this.addChipGrip_(target, true);
+  } else if (this.isAllDayChip_(className)) {
+    this.addChipGrip_(target, false, true);
+  } else if (this.isMonthChip_(className)) {
+    this.addChipGrip_(target, false);
+  } else
+    this.removeChipGrip_();
+
+
+}
+
+
+/**
+ * Adds grip to one or more chips.
+ * @param {Element} aElement Chip element or its label.
+ * @param {boolean} aWeekChip Whether is of week type, if false - month type.
+ * @param {boolean=} opt_allDayChip Whether is of all-day type.
+ * @private
+ */
+rflect.cal.MainPane.prototype.addChipGrip_ = function(aElement, aWeekChip,
+                                                      opt_allDayChip) {
+  var chip = this.getChipElement_(aElement);
+
+  var startIsCutWkRe = rflect.string.buildClassNameRe(
+      goog.getCssName('event-rect-wk-collapse-top'));
+  var endIsCutWkRe = rflect.string.buildClassNameRe(
+      goog.getCssName('event-rect-wk-collapse-bottom'));
+  var startIsCutMnRe = rflect.string.buildClassNameRe(
+      goog.getCssName('event-rect-mn-inner-collapse-left'));
+  var endIsCutMnRe = rflect.string.buildClassNameRe(
+      goog.getCssName('event-rect-mn-inner-collapse-right'));
+
+  if (!this.upperContWk_) {
+    this.upperContWk_ = goog.dom.createDom('div', [
+      goog.getCssName('wk-event-grip-cont'),
+      goog.getCssName('wk-event-grip-cont-upper')])
+    this.attachGripChildren_(this.upperContWk_, true);
+  }
+  if (!this.lowerContWk_) {
+    this.lowerContWk_ = goog.dom.createDom('div', [
+      goog.getCssName('wk-event-grip-cont'),
+      goog.getCssName('wk-event-grip-cont-lower')])
+    this.attachGripChildren_(this.lowerContWk_, true);
+  }
+  if (!this.leftContMn_) {
+    this.leftContMn_ = goog.dom.createDom('div', [
+      goog.getCssName('mn-event-grip-cont'),
+      goog.getCssName('mn-event-grip-cont-left')])
+    this.attachGripChildren_(this.leftContMn_, false);
+  }
+  if (!this.rightContMn_) {
+    this.rightContMn_ = goog.dom.createDom('div', [
+      goog.getCssName('mn-event-grip-cont'),
+      goog.getCssName('mn-event-grip-cont-right')])
+    this.attachGripChildren_(this.rightContMn_, false);
+  }
+  if (!this.leftContAd_) {
+    this.leftContAd_ = this.leftContMn_.cloneNode(false);
+    goog.dom.classes.add(this.leftContAd_,
+        goog.getCssName('ad-event-grip-cont'));
+    this.attachGripChildren_(this.leftContAd_, false, true);
+  }
+  if (!this.rightContAd_) {
+    this.rightContAd_ = this.rightContMn_.cloneNode(false);
+    goog.dom.classes.add(this.rightContAd_,
+        goog.getCssName('ad-event-grip-cont'));
+    this.attachGripChildren_(this.rightContAd_, false, true);
+  }
+
+  if (opt_allDayChip) {
+    var chipClassName = chip.className;
+
+    var re = new RegExp(rflect.cal.predefined.chips.CHIP_EVENT_CLASS + '\\d+');
+    var chipIdClass = re.exec(chipClassName);
+
+    var chips = this.getDomHelper().getElement('alldayevents-grid')
+        .querySelectorAll('.' + chipIdClass);
+    goog.array.forEach(chips, goog.partial(this.addChipGripInner_, aWeekChip,
+        /**@type {boolean}*/(opt_allDayChip), startIsCutWkRe, endIsCutWkRe,
+        startIsCutMnRe, endIsCutMnRe, this.upperContWk_, this.lowerContWk_,
+        this.leftContMn_, this.rightContMn_, this.leftContAd_,
+        this.rightContAd_));
+  } else
+    this.addChipGripInner_(aWeekChip, /**@type {boolean}*/(opt_allDayChip),
+        startIsCutWkRe, endIsCutWkRe, startIsCutMnRe, endIsCutMnRe,
+        this.upperContWk_, this.lowerContWk_, this.leftContMn_,
+        this.rightContMn_, this.leftContAd_, this.rightContAd_, chip);
+
+}
+
+
+/**
+ * Adds grip to one chip.
+ * @param {boolean} aWeekChip Whether chip is of week type, if false - month
+ * type.
+ * @param {boolean} aAllDayChip Whether it's an all-day chip.
+ * @param {RegExp} aStartIsCutWkRe Whether week chip start is cut regexp.
+ * @param {RegExp} aEndIsCutWkRe Whether week chip end is cut regexp.
+ * @param {RegExp} aStartIsCutMnRe Whether month chip start is cut regexp.
+ * @param {RegExp} aEndIsCutMnRe Whether month chip end is cut regexp.
+ * @param {Element} aUpperContWk Week first grip cont.
+ * @param {Element} aLowerContWk Week second grip cont.
+ * @param {Element} aLeftContMn Month first grip cont.
+ * @param {Element} aRightContMn Month second grip cont.
+ * @param {Element} aLeftContAd All-day first grip cont.
+ * @param {Element} aRightContAd All-day second grip cont.
+ * @param {Element} aChip Chip element.
+ * @private
+ */
+rflect.cal.MainPane.prototype.addChipGripInner_ =
+    function(aWeekChip, aAllDayChip, aStartIsCutWkRe, aEndIsCutWkRe,
+             aStartIsCutMnRe, aEndIsCutMnRe, aUpperContWk, aLowerContWk,
+             aLeftContMn, aRightContMn, aLeftContAd, aRightContAd, aChip) {
+  var chipClassName = aChip.className;
+
+  if (aWeekChip) {
+    if (!aStartIsCutWkRe.test(chipClassName)) aChip.appendChild(aUpperContWk);
+    if (!aEndIsCutWkRe.test(chipClassName)) aChip.appendChild(aLowerContWk);
+  } else if (aAllDayChip) {
+    if (!aStartIsCutMnRe.test(chipClassName)) aChip.appendChild(aLeftContAd);
+    if (!aEndIsCutMnRe.test(chipClassName)) aChip.appendChild(aRightContAd);
+  } else {
+    if (!aStartIsCutMnRe.test(chipClassName)) aChip.appendChild(aLeftContMn);
+    if (!aEndIsCutMnRe.test(chipClassName)) aChip.appendChild(aRightContMn);
+  }
+}
+
+
+/**
+ * @param {Element} aContainer Grip container to attach children to.
+ * @param {boolean} aWeekType Whether generate week type grips, if false - month
+ * type will be created.
+ * @param {boolean=} opt_allDayType Whether add all-day class to elements.
+ * @private
+ */
+rflect.cal.MainPane.prototype.attachGripChildren_ = function(aContainer,
+    aWeekType, opt_allDayType) {
+
+  if (aWeekType) {
+
+    var firstEl = goog.dom.createDom('div', [goog.getCssName('wk-event-grip'),
+      goog.getCssName('wk-event-grip-lower')]);
+    var secondEl = goog.dom.createDom('div', [goog.getCssName('wk-event-grip'),
+      goog.getCssName('wk-event-grip-upper')]);
+
+  } else {
+
+    var firstEl = goog.dom.createDom('div', [goog.getCssName('mn-event-grip'),
+      goog.getCssName('mn-event-grip-left')]);
+    var secondEl = goog.dom.createDom('div', [goog.getCssName('mn-event-grip'),
+      goog.getCssName('mn-event-grip-right')]);
+    if (opt_allDayType) {
+      goog.dom.classes.add(firstEl, goog.getCssName('ad-event-grip'));
+      goog.dom.classes.add(secondEl, goog.getCssName('ad-event-grip'));
+    }
+  }
+
+  aContainer.appendChild(firstEl);
+  aContainer.appendChild(secondEl);
+}
+
+
+/**
+ * Removes grip from chip.
+ * @private
+ */
+rflect.cal.MainPane.prototype.removeChipGrip_ = function() {
+  goog.dom.removeNode(this.upperContWk_);
+  goog.dom.removeNode(this.lowerContWk_);
+  goog.dom.removeNode(this.leftContMn_);
+  goog.dom.removeNode(this.rightContMn_);
+  goog.dom.removeNode(this.leftContAd_);
+  goog.dom.removeNode(this.rightContAd_);
 }
 
 
@@ -936,7 +1167,10 @@ rflect.cal.MainPane.prototype.isWeeknumLabel_ = function(aClassName) {
 rflect.cal.MainPane.prototype.isWeekChip_ = function(aClassName) {
   var chipWeekRe_ = this.chipWeekRe_ || (this.chipWeekRe_ =
       rflect.string.buildClassNameRe(goog.getCssName('event-rect-wk-inner'),
-          goog.getCssName('event-wk-timelabel')));
+          goog.getCssName('event-wk-timelabel'),
+          goog.getCssName('wk-event-grip-cont'),
+          goog.getCssName('wk-event-grip')
+      ));
 
   return chipWeekRe_.test(aClassName);
 };
@@ -949,7 +1183,10 @@ rflect.cal.MainPane.prototype.isWeekChip_ = function(aClassName) {
  */
 rflect.cal.MainPane.prototype.isMonthChip_ = function(aClassName) {
   var chipMonthRe_ = this.chipMonthRe_ || (this.chipMonthRe_ =
-      rflect.string.buildClassNameRe(goog.getCssName('event-rect-mn-inner')));
+      rflect.string.buildClassNameRe(goog.getCssName('event-rect-mn-inner'),
+      goog.getCssName('mn-event-grip-cont'),
+      goog.getCssName('mn-event-grip')
+      ));
   return chipMonthRe_.test(aClassName);
 };
 
@@ -971,8 +1208,58 @@ rflect.cal.MainPane.prototype.isChip_ = function(aClassName) {
  */
 rflect.cal.MainPane.prototype.isAllDayChip_ = function(aClassName) {
   var chipAllDayRe_ = this.chipAllDayRe_ || (this.chipAllDayRe_ =
-      rflect.string.buildClassNameRe(goog.getCssName('event-rect-all-day')));
+      rflect.string.buildClassNameRe(goog.getCssName('event-rect-all-day'),
+          goog.getCssName('ad-event-grip-cont'),
+          goog.getCssName('ad-event-grip')));
   return chipAllDayRe_.test(aClassName);
+};
+
+
+/**
+ * @param {string} aTargetClassName Class name of element.
+ * @param {Element=} opt_target Element to test.
+ * @private
+ */
+rflect.cal.MainPane.prototype.isStartGripCont_ =
+    function(aTargetClassName, opt_target) {
+  var re = rflect.string.buildClassNameRe(
+      goog.getCssName('wk-event-grip-cont-upper'),
+      goog.getCssName('mn-event-grip-cont-left'));
+  if (re.test(aTargetClassName))
+    return true;
+  if (this.isGrip_(aTargetClassName))
+    return this.isStartGripCont_(opt_target.parentNode.className);
+  return false;
+};
+
+
+/**
+ * @param {string} aTargetClassName Class name of element.
+ * @param {Element=} opt_target Element to test.
+ * @private
+ */
+rflect.cal.MainPane.prototype.isEndGripCont_ =
+    function(aTargetClassName, opt_target) {
+  var re = rflect.string.buildClassNameRe(
+      goog.getCssName('wk-event-grip-cont-lower'),
+      goog.getCssName('mn-event-grip-cont-right'));
+  if (re.test(aTargetClassName))
+    return true;
+  if (this.isGrip_(aTargetClassName))
+    return this.isEndGripCont_(opt_target.parentNode.className);
+  return false;
+};
+
+
+/**
+ * @param {string} aTargetClassName Class name of element.
+ * @private
+ */
+rflect.cal.MainPane.prototype.isGrip_ =
+    function(aTargetClassName) {
+  var re = rflect.string.buildClassNameRe(goog.getCssName('wk-event-grip'),
+      goog.getCssName('mn-event-grip'));
+  return re.test(aTargetClassName);
 };
 
 
@@ -1068,8 +1355,13 @@ rflect.cal.MainPane.prototype.onMouseUp_ = function (aEvent) {
 rflect.cal.MainPane.prototype.startChipDrag_ = function(aEvent, aClassName) {
 
   var maskConfiguration;
-  var calendarEvent = this.getEventByTargetAndClassName_(
-      /**@type{Element}*/(aEvent.target), aClassName);
+  var calendarEvent = this.getEventByTarget_(
+      /**@type {Element}*/(aEvent.target));
+
+  var isStartGrip = this.isStartGripCont_(aClassName,
+      /**@type {Element}*/ (aEvent.target));
+  var isEndGrip = this.isEndGripCont_(aClassName,
+      /**@type {Element}*/ (aEvent.target));
 
   if (this.isWeekChip_(aClassName))
     maskConfiguration = rflect.cal.MainPaneSelectionMask.Configuration.WEEK;
@@ -1081,7 +1373,8 @@ rflect.cal.MainPane.prototype.startChipDrag_ = function(aEvent, aClassName) {
     maskConfiguration =
         rflect.cal.MainPaneSelectionMask.Configuration.MONTH;
 
-  this.selectionMask_.init(maskConfiguration, aEvent, calendarEvent);
+  this.selectionMask_.init(/**@type {number}*/ (maskConfiguration), aEvent,
+      calendarEvent, isStartGrip, isEndGrip);
   this.chipWasDragged_ = false;
 }
 
