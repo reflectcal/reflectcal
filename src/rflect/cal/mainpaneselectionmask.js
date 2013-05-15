@@ -314,9 +314,6 @@ rflect.cal.MainPaneSelectionMask.prototype.initSelection_ = function(
       false);
   this.currentCoordinate_ = this.startCoordinate_.clone();
 
-  if (this.isWeek())
-    this.currentCoordinate_.y += rflect.cal.predefined.HOUR_ROW_HEIGHT;
-
   goog.style.showElement(this.maskEl_, true);
 
   this.initialized_ = true;
