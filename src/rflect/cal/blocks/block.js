@@ -1,6 +1,9 @@
 /*
  * Copyright (c) 2012. Rflect, Alex K.
  */
+/*
+ * TODO: Copyright from Mozilla.
+ */
 
 /**
  * @fileoverview Individual block, could manage its state, capacity and event
