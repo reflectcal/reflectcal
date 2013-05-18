@@ -158,7 +158,7 @@ rflect.cal.ui.DatePicker.prototype.setBasis = function(aDate) {
  * Redraws mini cal with new data.
  */
 rflect.cal.ui.DatePicker.prototype.updateByRedraw = function() {
-  this.getElement().innerHTML = this.buildBody();
+  this.getElement().innerHTML = this.build();
 };
 
 
@@ -166,11 +166,11 @@ rflect.cal.ui.DatePicker.prototype.updateByRedraw = function() {
  * Builds body of component.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
- * @see rflect.ui.Component#buildBody
+ * @see rflect.ui.Component#build
  * @protected
  */
-rflect.cal.ui.DatePicker.prototype.buildBodyInternal = function(aSb) {
-  this.miniCalBuilder_.buildBodyInternal(aSb);
+rflect.cal.ui.DatePicker.prototype.buildInternal = function(aSb) {
+  this.miniCalBuilder_.buildInternal(aSb);
 };
 
 

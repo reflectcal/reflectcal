@@ -44,7 +44,7 @@ rflect.cal.ViewManager = function(aMainInstance) {
   this.isOnStartup_ = true;
 
   // Set initial view.
-  this.currentView = rflect.cal.ViewType.MONTH;
+  this.currentView = rflect.cal.ViewType.WEEK;
 
   /**
    * Time manager instance.
@@ -380,8 +380,6 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
   this.eventManager_.run();
 
   if (this.isOnStartup_) {
-    this.mainBody_.preRender();
-
     this.mainBody_.updateBeforeRedraw();
     // Render main body and places it in document.body.
     this.mainBody_.render();

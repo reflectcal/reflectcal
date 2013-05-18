@@ -103,10 +103,10 @@ rflect.cal.TopPane.prototype.decorateInternal = function(aElement,
  * Builds body of component.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
- * @see rflect.ui.Component#buildBody
+ * @see rflect.ui.Component#build
  * @protected
  */
-rflect.cal.TopPane.prototype.buildBodyInternal = function(aSb) {
+rflect.cal.TopPane.prototype.buildInternal = function(aSb) {
   // TODO(alexk): concatenate strings.
   var parts = [
     '<div id="top-pane">',

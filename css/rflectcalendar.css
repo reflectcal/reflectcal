@@ -1494,5 +1494,8 @@ overflow:hidden
   left: 2px;
 }
 
+#main-pane-placeholder {
+  border: 1px solid #d5d5d5;
+}
 
 

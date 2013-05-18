@@ -60,7 +60,7 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager, aEventManager,
 
   /**
    * Link to container size monitor.
-   * @type {goog.dom.ViewportSizeMonitor}
+   * @type {rflect.cal.ContainerSizeMonitor}
    * @private
    */
   this.containerSizeMonitor_ = aContainerSizeMonitor;
@@ -76,9 +76,6 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager, aEventManager,
   // string building and updating.
   this.addChild(this.topPane_ = new rflect.cal.TopPane(this.viewManager_,
       this.timeManager_));
-  this.addChild(this.mainPane_ = new rflect.cal.MainPane(this.viewManager_,
-        this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
-        this.blockManager_));
   this.addChild(this.miniCal = new rflect.cal.MiniCal(this.viewManager_,
       this.timeManager_));
   this.addChild(this.calSelector_ = new rflect.cal.CalSelector(this.viewManager_,
@@ -123,6 +120,11 @@ rflect.cal.MainBody.HTML_PARTS_ = [
   '</div>',
   '</div>',
   '<div id="main-pane" class="' + goog.getCssName('main-pane') + '">',
+  '<div id="main-pane-placeholder" style="width:' +
+      356 +
+      'px;height:' +
+      318 +
+      'px"></div>',
   '</div>',
   '</div>',
   '</div>',
@@ -139,10 +141,10 @@ rflect.cal.MainBody.HTML_PARTS_ = [
  */
 rflect.cal.MainBody.ComponentsIndexes = {
   TOP_PANE: 0,
-  MAIN_PANE: 1,
-  MINI_CAL: 2,
-  CAL_SELECTOR: 3,
-  TASK_SELECTOR: 4
+  MINI_CAL: 1,
+  CAL_SELECTOR: 2,
+  TASK_SELECTOR: 3,
+  MAIN_PANE: 4
 }
 
 
@@ -158,7 +160,7 @@ rflect.cal.MainBody.prototype.eventPane_;
  * Creates main body on an empty div element.
  */
 rflect.cal.MainBody.prototype.createDom = function() {
-  this.decorateInternal(this.dom_.createElement('div'));
+  this.decorateInternal(this.getDomHelper().createElement('div'));
 };
 
 
@@ -183,10 +185,10 @@ rflect.cal.MainBody.prototype.decorateInternal = function(aElement,
  * Builds body of component.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
- * @see rflect.ui.Component#buildBody
+ * @see rflect.ui.Component#build
  * @protected
  */
-rflect.cal.MainBody.prototype.buildBodyInternal = function(aSb) {
+rflect.cal.MainBody.prototype.buildInternal = function(aSb) {
   var parts = rflect.cal.MainBody.HTML_PARTS_;
   // Form html. From index 1, because 0 is the html of outer container, which
   // we don't create in that method but just decorate.
@@ -196,43 +198,21 @@ rflect.cal.MainBody.prototype.buildBodyInternal = function(aSb) {
     switch (counter) {
       // Include top pane in common buffer.
       case 2: {
-        this.topPane_.buildBody(aSb);
+        this.topPane_.build(aSb);
       };break;
       case 7: {
-        this.miniCal.buildBody(aSb);
+        this.miniCal.build(aSb);
       };break;
       case 9: {
-        this.calSelector_.buildBody(aSb);
+        this.calSelector_.build(aSb);
       };break;
       case 11: {
-        this.taskSelector_.buildBody(aSb);
-      };break;
-      // Include main pane in common buffer.
-      case 17: {
-        this.mainPane_.buildBody(aSb);
+        this.taskSelector_.build(aSb);
       };break;
 
       default: break;
     }
   }
-};
-
-
-/**
- * Places dummy element in container, then gets container size as if app was
- * present in it. This helps in situations when initially container had
- * different size than it would have after app is rendered, for example, because
- * scrollbars appear.
- * @param {Element} aContainer Container where component is to be placed.
- */
-rflect.cal.MainBody.prototype.preRender = function(aContainer) {
-  var container = aContainer || this.dom_.getDocument().body;
-  container.innerHTML = rflect.cal.MainBody.HTML_PARTS_[0] +
-      rflect.cal.MainBody.HTML_PARTS_[1] +
-      rflect.cal.MainBody.HTML_PARTS_[20] +
-      rflect.cal.MainBody.HTML_PARTS_[21];
-  this.containerSizeMonitor_.checkForViewportSizeChange();
-  container.innerHTML = '';
 };
 
 
@@ -243,19 +223,45 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
   // We could decorate children right after superclass decorateInternal call,
   // but to preserve pattern (that if we want reliable presence of component in
   // DOM, we should address it in enterDocument), we do it here.
-  this.topPane_.decorateInternal(this.dom_.getElement('top-pane'), true);
-  this.miniCal.decorateInternal(this.dom_.getElement('month-selector'), true);
-  this.mainPane_.decorateInternal(this.dom_.getElement('main-pane'), true);
-  this.calSelector_.decorateInternal(this.dom_.getElement('calendars-selector'),
+  this.topPane_.decorateInternal(this.getDomHelper().getElement('top-pane'), true);
+  this.miniCal.decorateInternal(this.getDomHelper().getElement('month-selector'), true);
+  this.calSelector_.decorateInternal(this.getDomHelper().getElement('calendars-selector'),
       true);
-  this.taskSelector_.decorateInternal(this.dom_.getElement('tasks-selector'),
+  this.taskSelector_.decorateInternal(this.getDomHelper().getElement('tasks-selector'),
       true);
   // Propagate call to children.
   rflect.cal.MainBody.superClass_.enterDocument.call(this);
 
   this.getHandler().listen(this.topPane_, goog.ui.Component.EventType.ACTION,
       this.onTopPaneAction_, false, this);
+      
+      
 };
+
+
+/**
+ * Measures sizes of already present elements.
+ */
+rflect.cal.MainBody.prototype.measureSizes_ = function() {
+
+}
+
+
+/**
+ * Creates main pane by decoration of empty canvas.
+ */
+rflect.cal.MainBody.prototype.createMainPane = function() {
+  this.addChild(this.mainPane_ = new rflect.cal.MainPane(this.viewManager_,
+      this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
+      this.blockManager_));
+
+  this.mainPane_.updateBeforeRedraw();
+
+  var mainPaneEl = this.getDomHelper().getElement('main-pane');
+  mainPaneEl.innerHTML = this.mainPane_.build();
+  this.mainPane_.decorateInternal(mainPaneEl, true);
+  this.mainPane_.enterDocument();
+}
 
 
 /**

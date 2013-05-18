@@ -149,7 +149,7 @@ rflect.cal.ListSelector.prototype.buttonRe_;
  * @protected
  * @see {rflect.cal.MainPaneBuilder#buildBodyInternalWeek_}
  */
-rflect.cal.ListSelector.prototype.buildBodyInternal = function(aSb) {
+rflect.cal.ListSelector.prototype.buildInternal = function(aSb) {
   var offset = 0;
   var length = rflect.cal.ListSelector.HTML_PARTS_.length;
   while (++offset < length - 1) {

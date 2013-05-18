@@ -498,7 +498,7 @@ rflect.cal.MainPane.prototype.updateBlockManager = function() {
  * Redraws main pane with new data.
  */
 rflect.cal.MainPane.prototype.updateByRedraw = function() {
-  this.getElement().innerHTML = this.buildBody();
+  this.getElement().innerHTML = this.build();
 
   // We add scroll listeners on freshly built content.
   this.addScrollListeners_();
@@ -520,10 +520,10 @@ rflect.cal.MainPane.prototype.updateByRedraw = function() {
  * Builds body of component.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
- * @see rflect.ui.Component#buildBody
+ * @see rflect.ui.Component#build
  * @protected
  */
-rflect.cal.MainPane.prototype.buildBodyInternal = function(aSb) {
+rflect.cal.MainPane.prototype.buildInternal = function(aSb) {
   if (this.viewManager_.isInMonthMode())
     this.mainPaneBuilder_.buildBodyInternalMonth_(aSb);
   else if (this.viewManager_.isInWeekMode())
@@ -1275,6 +1275,17 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
   // Whether we clicked on hollow space.
   if (this.isWeekGrid_(className)) {
+
+    /*this.gridSize = goog.style.getSize(this.getDomHelper().getElement('grid-rows-container'));
+    this.gridContainerSize = goog.style.getSize(this.getDomHelper().getElement('grid-table-wrapper-wk'));
+    this.gridContainerSize.width -= 1;
+    this.updateBlockManager();
+
+    if (goog.DEBUG)
+      _log('this.gridContainerSize', this.gridContainerSize);
+    if (goog.DEBUG)
+      _log('this.gridSize', this.gridSize);
+    */
     this.selectionMask_.init(
         maskConfiguration = /**@type {number}*/
         (rflect.cal.MainPaneSelectionMask.Configuration.WEEK),

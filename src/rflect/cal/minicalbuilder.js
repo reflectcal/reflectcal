@@ -105,7 +105,7 @@ rflect.cal.MiniCalBuilder.HTML_PARTS_ = [
  * @protected
  * @see {rflect.cal.MainPaneBuilder#buildBodyInternalWeek_}
  */
-rflect.cal.MiniCalBuilder.prototype.buildBodyInternal = function(aSb) {
+rflect.cal.MiniCalBuilder.prototype.buildInternal = function(aSb) {
   var offset = 0;
   var length = rflect.cal.MiniCalBuilder.HTML_PARTS_.length;
   while (++offset < length - 1) {

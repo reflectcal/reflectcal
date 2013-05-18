@@ -62,7 +62,7 @@ rflect.ui.Component.prototype.decorateInternal = function(aElement,
   rflect.ui.Component.superClass_.decorateInternal.call(this, aElement);
   // Build body.
   if (!opt_doNotBuildBody) {
-    this.getElement().innerHTML = this.buildBody();
+    this.getElement().innerHTML = this.build();
   }
 };
 
@@ -75,9 +75,9 @@ rflect.ui.Component.prototype.decorateInternal = function(aElement,
  * to.
  * @return {string|undefined} HTML of component or none.
  */
-rflect.ui.Component.prototype.buildBody = function(aSb) {
+rflect.ui.Component.prototype.build = function(aSb) {
   var sb = aSb || new goog.string.StringBuffer();
-  this.buildBodyInternal(sb);
+  this.buildInternal(sb);
   if (!aSb) {
     return sb.toString();
   }
@@ -90,7 +90,7 @@ rflect.ui.Component.prototype.buildBody = function(aSb) {
  * to. Must be overridden.
  * @protected
  */
-rflect.ui.Component.prototype.buildBodyInternal = function(aSb) {
+rflect.ui.Component.prototype.buildInternal = function(aSb) {
   goog.abstractMethod();
 };
 
