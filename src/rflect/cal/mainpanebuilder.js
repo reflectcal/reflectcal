@@ -539,9 +539,11 @@ rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_ = [
  * Builds body of component in week mode.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
+ * @param {boolean} aFirstBuild Whether we build for the fist time.
  * @protected
  */
-rflect.cal.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb) {
+rflect.cal.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb,
+                                                                       aFirstBuild) {
   // Form html. From index 1 (see offset increment before append), because 0
   // is the html of outer container, which we don't create in that method but
   // just decorate.
@@ -565,7 +567,10 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb) {
       };break;
       case 19: {
         this.buildScrollableAllday_(aSb, offset);
-        offset += 2;
+        if (aFirstBuild)
+          offset += 29;
+        else
+          offset += 2;
       };break;
       case 23: {
         this.buildAllDayGrid_(aSb, offset);
@@ -581,7 +586,10 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb) {
       };break;
       case 63: {
         this.buildScrollableWeek_(aSb, offset);
-        offset++;
+        if (aFirstBuild)
+          offset += 47;
+        else
+          offset++;
       };break;
       case 67: {
         this.timeMarker_.buildHead(aSb);
@@ -645,10 +653,12 @@ rflect.cal.MainPaneBuilder.prototype.buildMonthGrid = function(aSb) {
  * Builds body of component in month mode.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
+ * @param {boolean} aFirstBuild Whether we build for the fist time.
  * @see rflect.cal.MainPaneBuilder#buildBodyInternalWeek_
  * @protected
  */
-rflect.cal.MainPaneBuilder.prototype.buildBodyInternalMonth_ = function(aSb) {
+rflect.cal.MainPaneBuilder.prototype.buildBodyInternalMonth_ = function(aSb,
+    aFirstBuild) {
   var offset = 0;
   var length = rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_.length;
   while (++offset < length - 1) {

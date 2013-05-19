@@ -184,6 +184,14 @@ goog.inherits(rflect.cal.MainPane, rflect.ui.Component);
 
 
 /**
+ * Whether we're building main pane for the first time.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.MainPane.prototype.firstBuild_;
+
+
+/**
  * Regexp for detection of week grid.
  * @type {RegExp}
  * @private
@@ -524,10 +532,14 @@ rflect.cal.MainPane.prototype.updateByRedraw = function() {
  * @protected
  */
 rflect.cal.MainPane.prototype.buildInternal = function(aSb) {
+  var firstBuild = this.firstBuild_;
+
   if (this.viewManager_.isInMonthMode())
-    this.mainPaneBuilder_.buildBodyInternalMonth_(aSb);
+    this.mainPaneBuilder_.buildBodyInternalMonth_(aSb, firstBuild);
   else if (this.viewManager_.isInWeekMode())
-    this.mainPaneBuilder_.buildBodyInternalWeek_(aSb);
+    this.mainPaneBuilder_.buildBodyInternalWeek_(aSb, firstBuild);
+  if (firstBuild)
+    this.firstBuild_ = false;
 };
 
 

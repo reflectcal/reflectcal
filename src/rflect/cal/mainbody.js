@@ -76,6 +76,9 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager, aEventManager,
   // string building and updating.
   this.addChild(this.topPane_ = new rflect.cal.TopPane(this.viewManager_,
       this.timeManager_));
+  this.addChild(this.mainPane_ = new rflect.cal.MainPane(this.viewManager_,
+        this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
+        this.blockManager_));
   this.addChild(this.miniCal = new rflect.cal.MiniCal(this.viewManager_,
       this.timeManager_));
   this.addChild(this.calSelector_ = new rflect.cal.CalSelector(this.viewManager_,
@@ -120,11 +123,6 @@ rflect.cal.MainBody.HTML_PARTS_ = [
   '</div>',
   '</div>',
   '<div id="main-pane" class="' + goog.getCssName('main-pane') + '">',
-  '<div id="main-pane-placeholder" style="width:' +
-      356 +
-      'px;height:' +
-      318 +
-      'px"></div>',
   '</div>',
   '</div>',
   '</div>',
@@ -141,10 +139,10 @@ rflect.cal.MainBody.HTML_PARTS_ = [
  */
 rflect.cal.MainBody.ComponentsIndexes = {
   TOP_PANE: 0,
-  MINI_CAL: 1,
-  CAL_SELECTOR: 2,
-  TASK_SELECTOR: 3,
-  MAIN_PANE: 4
+  MAIN_PANE: 1,
+  MINI_CAL: 2,
+  CAL_SELECTOR: 3,
+  TASK_SELECTOR: 4
 }
 
 
@@ -209,6 +207,10 @@ rflect.cal.MainBody.prototype.buildInternal = function(aSb) {
       case 11: {
         this.taskSelector_.build(aSb);
       };break;
+      // Include main pane in common buffer.
+      case 17: {
+        this.mainPane_.build(aSb);
+      };break;
 
       default: break;
     }
@@ -237,31 +239,6 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
       
       
 };
-
-
-/**
- * Measures sizes of already present elements.
- */
-rflect.cal.MainBody.prototype.measureSizes_ = function() {
-
-}
-
-
-/**
- * Creates main pane by decoration of empty canvas.
- */
-rflect.cal.MainBody.prototype.createMainPane = function() {
-  this.addChild(this.mainPane_ = new rflect.cal.MainPane(this.viewManager_,
-      this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
-      this.blockManager_));
-
-  this.mainPane_.updateBeforeRedraw();
-
-  var mainPaneEl = this.getDomHelper().getElement('main-pane');
-  mainPaneEl.innerHTML = this.mainPane_.build();
-  this.mainPane_.decorateInternal(mainPaneEl, true);
-  this.mainPane_.enterDocument();
-}
 
 
 /**
