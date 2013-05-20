@@ -188,7 +188,7 @@ goog.inherits(rflect.cal.MainPane, rflect.ui.Component);
  * @type {boolean}
  * @private
  */
-rflect.cal.MainPane.prototype.firstBuild_;
+rflect.cal.MainPane.prototype.firstBuild_ = true;
 
 
 /**
@@ -351,43 +351,74 @@ rflect.cal.MainPane.prototype.isScrollableExpandedVer = function() {
 
 
 /**
+ * Normalizes size of app, do not letting it be less than minimum.
+ * @param {goog.math.Size} aSize Size to normalize.
+ * @param {goog.math.Size} aDefaultSize Minimal size.
+ */
+rflect.cal.MainPane.prototype.normalizeSize = function(aSize, aDefaultSize) {
+  if (aSize.x < aDefaultSize.x)
+    aSize.x = aDefaultSize.x;
+  if (aSize.y < aDefaultSize.y)
+    aSize.y = aDefaultSize.y;
+}
+
+
+/**
+ * Sets initial sizes for scrollables.
+ * @private
+ */
+rflect.cal.MainPane.prototype.setDefaultSizes_ = function() {
+  if (this.viewManager_.isInWeekMode()) {
+    this.alldayGridContainerSize =
+        rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE.clone();
+    this.alldayGridSize = this.alldayGridContainerSize.clone();
+    this.gridContainerSize =
+        rflect.cal.predefined.WEEK_SCROLLABLE_DEFAULT_SIZE.clone();
+    this.gridSize = this.gridContainerSize.clone();
+  } else if (this.viewManager_.isInMonthMode()) {
+    this.gridContainerSize =
+        rflect.cal.predefined.MONTH_SCROLLABLE_DEFAULT_SIZE.clone();
+    this.gridSize = this.gridContainerSize.clone();
+  }
+  // Update blocks, get their capacity and size.
+  this.updateBlockManager();
+}
+
+
+/**
  * Updates main pane with new data before redraw. Includes size adjustment.
  * TODO(alexk): this is too complex and error-prone. Maybe recalculate just when sizes are needed.
  */
 rflect.cal.MainPane.prototype.updateBeforeRedraw = function() {
+  if (this.firstBuild_)
+    return this.setDefaultSizes_();
+
   // Take current viewport size.
   var containerSize = this.containerSizeMonitor_.getSize();
-
-  // Check if app is in size bounds.
-  if (containerSize.width < rflect.cal.predefined.APP_MINIMAL_WIDTH)
-    containerSize.width = rflect.cal.predefined.APP_MINIMAL_WIDTH;
-  if (containerSize.height < rflect.cal.predefined.APP_MINIMAL_HEIGHT)
-    containerSize.height = rflect.cal.predefined.APP_MINIMAL_HEIGHT;
+  var staticsSizeWk = this.getParent().staticsSizeWk;
+  var appMinimalSize = this.getParent().getMinimalSize();
+  this.normalizeSize(containerSize, appMinimalSize);
 
   // Begin size adjustment phase.
   if (this.viewManager_.isInWeekMode()) {
 
     this.scrollablesCombinedWkSize_ = containerSize.clone();
     // We calculate combined height of two scrollables.
-    this.scrollablesCombinedWkSize_.height -=
-        rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_HEIGHT_DIFFERENCE_WEEK;
-    this.scrollablesCombinedWkSize_.width -=
-        rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_WIDTH_DIFFERENCE_WEEK;
-    this.scrollablesCombinedWkSize_.width -=
-        this.containerSizeMonitor_.scrollbarWidth;
+    this.scrollablesCombinedWkSize_.height -= staticsSizeWk.height;
+    this.scrollablesCombinedWkSize_.width -= staticsSizeWk.width;
 
     this.alldayGridContainerSize = this.scrollablesCombinedWkSize_.clone();
-
     this.gridContainerSize = this.scrollablesCombinedWkSize_.clone();
 
     // By default, grid has the same size as scrollable but fixed height.
     this.gridSize = this.gridContainerSize.clone();
-    this.gridSize.height = rflect.cal.predefined.WEEK_GRID_HEIGHT;
+    this.gridSize.height =
+        rflect.cal.predefined.WEEK_SCROLLABLE_DEFAULT_SIZE.height;
     // No need to subtract scrollbar width here because layout already takes
     // it into account.
 
     this.alldayGridContainerSize.height =
-        rflect.cal.predefined.ALLDAY_SCROLLABLE_MINIMAL_HEIGHT;
+        rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE.height;
     this.alldayGridSize = this.alldayGridContainerSize.clone();
 
     // ... else, in case when allday scrollable is expanded, we should
@@ -396,10 +427,8 @@ rflect.cal.MainPane.prototype.updateBeforeRedraw = function() {
   } else if (this.viewManager_.isInMonthMode()) {
 
     this.gridContainerSize = containerSize.clone();
-    this.gridContainerSize.height -=
-        rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_HEIGHT_DIFFERENCE_MONTH;
-    this.gridContainerSize.width -=
-        rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_WIDTH_DIFFERENCE_MONTH;
+    this.gridContainerSize.height -= staticsSizeWk.height;
+    this.gridContainerSize.width -= staticsSizeWk.width;
 
     // By default, grid has the same size as scrollable.
     this.gridSize = this.gridContainerSize.clone();
@@ -533,6 +562,8 @@ rflect.cal.MainPane.prototype.updateByRedraw = function() {
  */
 rflect.cal.MainPane.prototype.buildInternal = function(aSb) {
   var firstBuild = this.firstBuild_;
+  if (goog.DEBUG)
+    _log('firstBuild', firstBuild);
 
   if (this.viewManager_.isInMonthMode())
     this.mainPaneBuilder_.buildBodyInternalMonth_(aSb, firstBuild);

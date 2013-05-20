@@ -567,10 +567,11 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb,
       };break;
       case 19: {
         this.buildScrollableAllday_(aSb, offset);
-        if (aFirstBuild)
-          offset += 29;
-        else
           offset += 2;
+      };break;
+      case 21: {
+        if (aFirstBuild)
+          offset += 26;
       };break;
       case 23: {
         this.buildAllDayGrid_(aSb, offset);
@@ -586,10 +587,11 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb,
       };break;
       case 63: {
         this.buildScrollableWeek_(aSb, offset);
+        offset++;
+      };break;
+      case 65: {
         if (aFirstBuild)
-          offset += 47;
-        else
-          offset++;
+          offset += 45;
       };break;
       case 67: {
         this.timeMarker_.buildHead(aSb);
@@ -680,6 +682,10 @@ rflect.cal.MainPaneBuilder.prototype.buildBodyInternalMonth_ = function(aSb,
       };break;
       case 30: {
         this.buildScrollableMonth_(aSb, offset);
+      };break;
+      case 31: {
+        if (aFirstBuild)
+          offset += 55;
       };break;
       case 32: {
         this.buildGridTableWrapperOuter_(aSb, offset);

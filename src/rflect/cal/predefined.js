@@ -9,6 +9,7 @@
  */
 
 goog.require('rflect.cal.i18n.predefined');
+goog.require('goog.math.Size');
 
 goog.provide('rflect.cal.predefined');
 goog.provide('rflect.cal.predefined.chips');
@@ -641,3 +642,31 @@ rflect.cal.predefined.MILLIS_IN_MINUTE = 60 * 1000;
 rflect.cal.predefined.chips.PADDING_TOP = 2;
 
 
+/**
+ * Week scrollable default size.
+ * @type {goog.math.Size}
+ * @const
+ */
+rflect.cal.predefined.WEEK_SCROLLABLE_DEFAULT_SIZE =
+    new goog.math.Size(rflect.cal.predefined.MONTH_SCROLLABLE_MINIMAL_WIDTH,
+    rflect.cal.predefined.WEEK_SCROLLABLE_MINIMAL_HEIGHT);
+
+
+/**
+ * All-day scrollable default size.
+ * @type {goog.math.Size}
+ * @const
+ */
+rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE =
+    new goog.math.Size(rflect.cal.predefined.MONTH_SCROLLABLE_MINIMAL_WIDTH,
+    rflect.cal.predefined.ALLDAY_SCROLLABLE_MINIMAL_HEIGHT);
+
+
+/**
+ * Month scrollable default size.
+ * @type {goog.math.Size}
+ * @const
+ */
+rflect.cal.predefined.MONTH_SCROLLABLE_DEFAULT_SIZE =
+    new goog.math.Size(rflect.cal.predefined.MONTH_SCROLLABLE_MINIMAL_WIDTH,
+    rflect.cal.predefined.MONTH_SCROLLABLE_MINIMAL_HEIGHT);
