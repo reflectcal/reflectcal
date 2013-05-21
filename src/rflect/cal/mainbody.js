@@ -153,14 +153,28 @@ rflect.cal.MainBody.ComponentsIndexes = {
  * This version is for week mode.
  * @type {goog.math.Size}
  */
-rflect.cal.MainBody.prototype.staticsSizeWk;
+rflect.cal.MainBody.prototype.staticSizesWk;
 
 
 /**
  * Static sizes for month mode.
  * @type {goog.math.Size}
  */
-rflect.cal.MainBody.prototype.staticsSizeMn;
+rflect.cal.MainBody.prototype.staticSizesMn;
+
+
+/**
+ * Whether it's a first build in week mode.
+ * @type {boolean}
+ */
+rflect.cal.MainBody.prototype.firstBuildWk = true;
+
+
+/**
+ * Whether it's a first build in month mode.
+ * @type {boolean}
+ */
+rflect.cal.MainBody.prototype.firstBuildMn = true;
 
 
 /**
@@ -255,29 +269,35 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
   this.getHandler().listen(this.topPane_, goog.ui.Component.EventType.ACTION,
       this.onTopPaneAction_, false, this);
       
-  this.rebuildWithSizes_();
+  this.rebuildMPWithSizes();
 };
 
 
 /**
  * Rebuilds main pane after sizes of all static panes are known.
- * @private
  */
-rflect.cal.MainBody.prototype.rebuildWithSizes_ = function() {
-  this.measureStaticsSize_();
+rflect.cal.MainBody.prototype.rebuildMPWithSizes = function() {
+  if (goog.DEBUG)
+    _log('rebuildMPWithSizes called');
+  this.measureStaticSizes();
+  if (this.viewManager_.isInWeekMode())
+    this.firstBuildWk = false;
+  if (this.viewManager_.isInMonthMode())
+    this.firstBuildMn = false;
 
   this.mainPane_.updateBeforeRedraw();
   this.mainPane_.updateByRedraw();
+
 }
 
 
 /**
  * Rebuilds main pane after sizes of all static panes are known.
- * @private
  */
-rflect.cal.MainBody.prototype.measureStaticsSize_ = function() {
+rflect.cal.MainBody.prototype.measureStaticSizes = function() {
+  if (goog.DEBUG)
+    _log('measureStaticSizes called');
   var dom = this.getDomHelper();
-
   var totalSize = goog.style.getSize(dom.getElement('main-container'));
 
   if (this.viewManager_.isInWeekMode()) {
@@ -286,12 +306,9 @@ rflect.cal.MainBody.prototype.measureStaticsSize_ = function() {
     var weekPaneSize = goog.style.getSize(
         dom.getElement('main-pane-body-scrollable-wk'));
 
-    if (goog.DEBUG)
-      _log('weekPaneSize', weekPaneSize);
-
     // Border widths are present because they are also "static" relative to
     // pure sizes of grid containers.
-    this.staticsSizeWk = new goog.math.Size(totalSize.width -
+    this.staticSizesWk = new goog.math.Size(totalSize.width -
         allDayPaneSize.width - weekPaneSize.width +
         rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 4, totalSize.height -
         allDayPaneSize.height - weekPaneSize.height +
@@ -300,14 +317,13 @@ rflect.cal.MainBody.prototype.measureStaticsSize_ = function() {
     var monthPaneSize = goog.style.getSize(
         dom.getElement('main-pane-body-scrollable-mn'));
 
-    this.staticsSizeWk = new goog.math.Size(totalSize.width -
+    this.staticSizesMn = new goog.math.Size(totalSize.width -
         monthPaneSize.width +
         rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2
         , totalSize.height -
         monthPaneSize.height +
         rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2);
   }
-
 }
 
 
@@ -315,11 +331,11 @@ rflect.cal.MainBody.prototype.measureStaticsSize_ = function() {
  * @return {goog.math.Size} Minimal possible size of component.
  */
 rflect.cal.MainBody.prototype.getMinimalSize = function() {
-  return new goog.math.Size(this.staticsSizeWk.width + Math.max(
+  return new goog.math.Size(this.staticSizesWk.width + Math.max(
       rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE.width +
       rflect.cal.predefined.WEEK_SCROLLABLE_DEFAULT_SIZE.width,
       rflect.cal.predefined.MONTH_SCROLLABLE_DEFAULT_SIZE.width),
-      this.staticsSizeWk.height + Math.max(
+      this.staticSizesWk.height + Math.max(
       rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE.height +
       rflect.cal.predefined.WEEK_SCROLLABLE_DEFAULT_SIZE.height,
       rflect.cal.predefined.MONTH_SCROLLABLE_DEFAULT_SIZE.height));

@@ -14,7 +14,7 @@ body {
 }
 
 .main-container {
-  padding: 8px 8px 0 8px;
+  padding: 8px 0 0 8px;
 }
 
 .cal-container {
@@ -51,6 +51,7 @@ body {
 
 #main-pane-controls-right {
   float: right;
+  padding-right: 10px;
 }
 
 /**
@@ -543,6 +544,7 @@ body {
 .mphs-scroll-vert-on {
   overflow-y: scroll;
   margin-right: 0;
+  border-right: none !important;
 }
 
 .mphs-scroll-vert-off {
@@ -676,6 +678,7 @@ body {
   overflow-y: scroll;
   /*overflow-x: visible;*/
   border: 1px solid #d5d5d5;
+  border-right: none;
   height: 400px;
   position: relative;
 
@@ -1123,6 +1126,7 @@ overflow:hidden
 .mpbs-mn-scroll-vert-on {
   overflow-y: scroll;
   margin-right: 0;
+  border-right: none !important;
 }
 
 .mpbs-mn-scroll-vert-off {

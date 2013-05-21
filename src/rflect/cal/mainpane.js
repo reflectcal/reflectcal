@@ -184,14 +184,6 @@ goog.inherits(rflect.cal.MainPane, rflect.ui.Component);
 
 
 /**
- * Whether we're building main pane for the first time.
- * @type {boolean}
- * @private
- */
-rflect.cal.MainPane.prototype.firstBuild_ = true;
-
-
-/**
  * Regexp for detection of week grid.
  * @type {RegExp}
  * @private
@@ -387,25 +379,26 @@ rflect.cal.MainPane.prototype.setDefaultSizes_ = function() {
 
 /**
  * Updates main pane with new data before redraw. Includes size adjustment.
- * TODO(alexk): this is too complex and error-prone. Maybe recalculate just when sizes are needed.
  */
 rflect.cal.MainPane.prototype.updateBeforeRedraw = function() {
-  if (this.firstBuild_)
+  if (this.getParent().firstBuildWk && this.viewManager_.isInWeekMode() ||
+      this.getParent().firstBuildMn && this.viewManager_.isInMonthMode())
     return this.setDefaultSizes_();
 
   // Take current viewport size.
   var containerSize = this.containerSizeMonitor_.getSize();
-  var staticsSizeWk = this.getParent().staticsSizeWk;
+  var staticSizes;
   var appMinimalSize = this.getParent().getMinimalSize();
   this.normalizeSize(containerSize, appMinimalSize);
 
   // Begin size adjustment phase.
   if (this.viewManager_.isInWeekMode()) {
+    staticSizes = this.getParent().staticSizesWk;
 
     this.scrollablesCombinedWkSize_ = containerSize.clone();
     // We calculate combined height of two scrollables.
-    this.scrollablesCombinedWkSize_.height -= staticsSizeWk.height;
-    this.scrollablesCombinedWkSize_.width -= staticsSizeWk.width;
+    this.scrollablesCombinedWkSize_.height -= staticSizes.height;
+    this.scrollablesCombinedWkSize_.width -= staticSizes.width;
 
     this.alldayGridContainerSize = this.scrollablesCombinedWkSize_.clone();
     this.gridContainerSize = this.scrollablesCombinedWkSize_.clone();
@@ -425,10 +418,11 @@ rflect.cal.MainPane.prototype.updateBeforeRedraw = function() {
     // calculate it's size depending on block capacity, so pass on for now.
 
   } else if (this.viewManager_.isInMonthMode()) {
+    staticSizes = this.getParent().staticSizesMn;
 
     this.gridContainerSize = containerSize.clone();
-    this.gridContainerSize.height -= staticsSizeWk.height;
-    this.gridContainerSize.width -= staticsSizeWk.width;
+    this.gridContainerSize.height -= staticSizes.height;
+    this.gridContainerSize.width -= staticSizes.width;
 
     // By default, grid has the same size as scrollable.
     this.gridSize = this.gridContainerSize.clone();
@@ -537,6 +531,15 @@ rflect.cal.MainPane.prototype.updateBlockManager = function() {
 rflect.cal.MainPane.prototype.updateByRedraw = function() {
   this.getElement().innerHTML = this.build();
 
+  if (this.getParent().firstBuildWk && this.viewManager_.isInWeekMode()) {
+    this.getParent().rebuildMPWithSizes();
+    return;
+  }
+  if (this.getParent().firstBuildMn && this.viewManager_.isInMonthMode()) {
+    this.getParent().rebuildMPWithSizes();
+    return;
+  }
+
   // We add scroll listeners on freshly built content.
   this.addScrollListeners_();
   // Return to previous scrollTop, scrollLeft values, if any.
@@ -561,16 +564,15 @@ rflect.cal.MainPane.prototype.updateByRedraw = function() {
  * @protected
  */
 rflect.cal.MainPane.prototype.buildInternal = function(aSb) {
-  var firstBuild = this.firstBuild_;
-  if (goog.DEBUG)
-    _log('firstBuild', firstBuild);
+  var firstBuild;
 
-  if (this.viewManager_.isInMonthMode())
+  if (this.viewManager_.isInMonthMode()) {
+    firstBuild = this.getParent().firstBuildMn;
     this.mainPaneBuilder_.buildBodyInternalMonth_(aSb, firstBuild);
-  else if (this.viewManager_.isInWeekMode())
+  } else if (this.viewManager_.isInWeekMode()) {
+    firstBuild = this.getParent().firstBuildWk;
     this.mainPaneBuilder_.buildBodyInternalWeek_(aSb, firstBuild);
-  if (firstBuild)
-    this.firstBuild_ = false;
+  }
 };
 
 
