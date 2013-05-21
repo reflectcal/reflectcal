@@ -792,10 +792,14 @@ overflow:hidden
 #time-marker {
   position: absolute;
   width: 100%;
+  /*Event layer margin.*/
+  padding-right: 12px;
   height: 1px;
   background-color: #cf221a;
-  opacity: 0.2;
-  filter: alpha(opacity=20);
+  /*High enough number to cover chips with z-indexes 1, 2, etc.*/
+  z-index: 1000;
+  opacity: 0.4;
+  filter: alpha(opacity=40);
 
   -moz-border-radius: 0.5px;
   -webkit-border-radius: 0.5px;

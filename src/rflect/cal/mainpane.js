@@ -424,6 +424,10 @@ rflect.cal.MainPane.prototype.updateBeforeRedraw = function() {
     this.gridContainerSize.height -= staticSizes.height;
     this.gridContainerSize.width -= staticSizes.width;
 
+    //Subtract weeknum width. TODO(alexk): is it avoidable?
+    this.gridContainerSize.width -=
+        rflect.cal.predefined.WEEK_NUMBERS_CONTAINER_WIDTH;
+
     // By default, grid has the same size as scrollable.
     this.gridSize = this.gridContainerSize.clone();
     this.gridSize.width -= this.getScrollbarWidthNextToMain();
@@ -1124,6 +1128,8 @@ rflect.cal.MainPane.prototype.isWeekGrid_ = function(aClassName) {
       goog.getCssName('expand-sign-wk-cont'),
       goog.getCssName('expand-sign-wk'),
       goog.getCssName('grid-table-row'),
+      goog.getCssName('today-mask-wk'),
+      goog.getCssName('time-marker'),
       // In IE7, we could click on main-pane if we click near upper edge of
       //scrollable
       goog.getCssName('main-pane')));
@@ -1314,10 +1320,15 @@ rflect.cal.MainPane.prototype.isGrip_ =
  * @private
  */
 rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
+
+  this.containerSizeMonitor_.checkForContainerSizeChange();
+  this.updateBeforeRedraw();
+
   var className = aEvent.target.className;
   var preventDefaultIsNeeded = false;
   var maskConfiguration;
-
+  if (goog.DEBUG)
+    _log('className', className);
   // Whether we clicked on hollow space.
   if (this.isWeekGrid_(className)) {
 

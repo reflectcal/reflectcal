@@ -309,8 +309,8 @@ rflect.cal.MainBody.prototype.measureStaticSizes = function() {
     // Border widths are present because they are also "static" relative to
     // pure sizes of grid containers.
     this.staticSizesWk = new goog.math.Size(totalSize.width -
-        allDayPaneSize.width - weekPaneSize.width +
-        rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 4, totalSize.height -
+        allDayPaneSize.width +
+        rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2, totalSize.height -
         allDayPaneSize.height - weekPaneSize.height +
         rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 4);
   } else if (this.viewManager_.isInMonthMode()) {
