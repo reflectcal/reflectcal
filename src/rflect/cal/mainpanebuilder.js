@@ -1447,13 +1447,17 @@ rflect.cal.MainPaneBuilder.prototype.buildWeekGridCols_ =
     if (this.timeManager_.isCurrentDay(
         this.timeManager_.daySeries[colCounter])){
       aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 10]);
-      this.timeMarker_.buildLine(aSb);
     }
 
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 11]);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 12]);
     aSb.append(colCounter);
     aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 13]);
+    if (this.timeManager_.isCurrentDay(
+        this.timeManager_.daySeries[colCounter])){
+      this.timeMarker_.buildLine(aSb);
+    }
+
     // Events are placed here.
     this.buildWeekBlockChips_(aSb, aOffset + 14, colCounter);
 
@@ -1641,13 +1645,15 @@ rflect.cal.MainPaneBuilder.buildWeekChipsTimeLabel_ =
     function(aSb, aChip, aStart) {
   var edgeIsCut = aStart && aChip.startIsCut || !aStart && aChip.endIsCut;
   var totalMins = aStart ? aChip.start : aChip.end;
-  if (edgeIsCut)
+  if (edgeIsCut || totalMins >= 1440)
     aSb.append('00:00');
   else {
     var mins = totalMins % 60;
     var hours = (totalMins - mins) / 60;
+    if (hours < 10) aSb.append('0');
     aSb.append(hours);
     aSb.append(':');
+    if (mins < 10) aSb.append('0');
     aSb.append(mins);
   }
 }
