@@ -14,7 +14,7 @@ body {
 }
 
 .main-container {
-  padding: 8px 0 0 8px;
+  padding: 8px 0 0 0;
 }
 
 .cal-container {
@@ -132,7 +132,7 @@ body {
 }
 
 .cal-menu-leftmost-button {
-  margin-left: 0;
+  margin-left: 8px;
 }
 
 .cal-menu-rightmost-button {
@@ -151,7 +151,7 @@ body {
 
 #sidebar-controls {
   float: left;
-  width: 140px;
+  width: 148px;
   margin: 0;
 }
 
@@ -163,7 +163,7 @@ body {
 
 #left-main-pane {
   float: left;
-  width: 140px;
+  width: 148px;
   margin: 0;
 }
 
@@ -182,7 +182,7 @@ body {
 
 #main-pane {
   float: none;
-  margin-left: 150px;
+  margin-left: 160px;
   width: auto;
   cursor: default; /*IE7 shows text cursor.*/
 }
@@ -197,6 +197,7 @@ body {
 }
 
 .list-selector, #calendars-selector, #tasks-selector {
+  margin-left: 8px;
   margin-top: 10px;
   padding: 2px 1px 5px 2px;
   color: #2c2c2c;
@@ -1506,4 +1507,7 @@ overflow:hidden
   border: 1px solid #d5d5d5;
 }
 
+.minical {
+  border-left: none;
+}
 

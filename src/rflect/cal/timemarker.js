@@ -91,7 +91,7 @@ rflect.cal.TimeMarker.prototype.onTick_ = function(opt_event) {
       if (lineEl)
         lineEl.style.top = this.getPosition_(false, today) + 'px';
 
-      goog.dom.getElement('wk-dec-layer-in-col' + index).appendChild(lineEl);
+      goog.dom.getElement('wk-events-layer-col' + index).appendChild(lineEl);
     }
 
   }
