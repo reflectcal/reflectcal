@@ -45,8 +45,7 @@ rflect.cal.MiniCalBuilder = function(aMiniCal, aTimeManager) {
  */
 rflect.cal.MiniCalBuilder.HTML_PARTS_ = [
   '<div id="month-selector">',
-  '<div class="' + goog.getCssName('goog-date-picker') + ' ' +
-      goog.getCssName('minical'),
+  '<div class="' + goog.getCssName('goog-date-picker'),
   /*
   * Date picker classname ().
   */
