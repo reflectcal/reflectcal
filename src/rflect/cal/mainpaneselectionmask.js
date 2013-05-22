@@ -453,24 +453,14 @@ rflect.cal.MainPaneSelectionMask.prototype.updateDrag_ = function (
         this.pixelDiffWithEventEnd_;
     if (startPixelPosition >= endPixelPosition)
       return;
-    if (goog.DEBUG)
-      _log('currentPixelPosition', currentPixelPosition);
-    if (goog.DEBUG)
-      _log('startPixelPosition', startPixelPosition);
-    if (goog.DEBUG)
-      _log('endPixelPosition', endPixelPosition);
 
     var startCoordinate = this.pixelPositionToCoordinate_(
         startPixelPosition);
     var endCoordinate = this.pixelPositionToCoordinate_(
         endPixelPosition);
-    if (goog.DEBUG)
-      _log('startCoordinate', startCoordinate);
-    if (goog.DEBUG)
-      _log('endCoordinate', endCoordinate);
     // To prevent cases when non all-day events are displayed with their genuine
     // start and end positions, and fit them to cells instead.
-    if (!this.isHorizontal()) {
+    if (this.isAllDay() || this.isMonth()) {
       var startDate = this.calendarEvent_.startDate;
       var endDate = this.calendarEvent_.endDate;
       if (startDate.getHours() != 0 || startDate.getMinutes() != 0)
@@ -494,7 +484,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getPixelToTimeK_ = function() {
         rflect.cal.predefined.WEEK_GRID_HEIGHT *
         rflect.cal.predefined.MILLIS_IN_MINUTE;
   if (this.isAllDay())
-    return (rflect.cal.predefined.MINS_IN_DAY) /
+    return rflect.cal.predefined.MINS_IN_DAY /
         this.blockPoolAllDay_.gridSize.height *
         rflect.cal.predefined.MILLIS_IN_MINUTE;
   return (7 * rflect.cal.predefined.MINS_IN_DAY) /
@@ -680,7 +670,7 @@ rflect.cal.MainPaneSelectionMask.prototype.getCellCoordinate_ =
 
     maxX = this.blockPoolWeek_.getBlocksNumber() - 1;
     // Allday mask always have zero y index.
-    maxY = 0;
+    maxY = this.blockPoolAllDay_.gridSize.height;
 
     if (aChangePrimaryComponent)
       coord.x = this.getBlockIndexByCoordinate_(coord.x, this.blockPoolWeek_);
@@ -1004,12 +994,6 @@ rflect.cal.MainPaneSelectionMask.prototype.update_ = function(aStartCoordinate,
     startCoordForDraw = startCoordForDate = aStartCoordinate;
     endCoordForDraw = endCoordForDate = aEndCoordinate;
 
-    if (goog.DEBUG)
-        _log('aStartCoordinate', aStartCoordinate);
-    if (goog.DEBUG)
-        _log('aEndCoordinate', aEndCoordinate);
-
-
   } else {
 
     startCoordForDraw = this.getMinCoordSnapped_(aStartCoordinate,
@@ -1093,7 +1077,7 @@ rflect.cal.MainPaneSelectionMask.prototype.update_ = function(aStartCoordinate,
   }
 
   this.maskEl_.innerHTML = this.build_();
-  this.calculateDates(startCoordForDate, endCoordForDate);
+  this.calculateDates(startCoordForDate, endCoordForDate, this.isWeek());
 
 };
 

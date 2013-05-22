@@ -205,16 +205,17 @@ rflect.cal.SelectionMask.prototype.getMinCoordinate = function(aCellA, aCellB){
  * Calculates dates from cell selection.
  * @param {goog.math.Coordinate} aMinCell Lesser of cells.
  * @param {goog.math.Coordinate=} opt_maxCell Greater of cells.
+ * @param {boolean=} opt_hours Whether to treat cells as hours.
  * @protected
  */
 rflect.cal.SelectionMask.prototype.calculateDates = function(aMinCell,
-    opt_maxCell) {
+    opt_maxCell, opt_hours) {
   var startDate = null;
   var endDate = null;
   var minutes = 0;
   var tempDate = null;
 
-  if (this.isHorizontal()) {
+  if (opt_hours) {
     tempDate = this.timeManager_.daySeries[aMinCell.x];
     minutes = 30 * aMinCell.y;
     startDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
