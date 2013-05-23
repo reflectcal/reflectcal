@@ -32,12 +32,12 @@
   position:relative;
   top: 36px;
   width: 100%;
-  height: 110px; /* +2px to hide margin. */
+  height: 114px; /* +2px to hide margin. */
 }
 
 .minical-table {
   position: relative;
-  top: -110px;
+  top: -114px;
 }
 
 .goog-date-picker table {

@@ -136,6 +136,8 @@ rflect.cal.MiniCal.prototype.initMask_ = function() {
 
   }
 
+  this.startSelectionIndex = startSelectionIndex;
+  this.endSelectionIndex = endSelectionIndex;
   this.selectionMask.init(
       rflect.cal.MiniCalSelectionMask.Configuration.MINI_MONTH_EXTERNAL,
       startSelectionIndex, endSelectionIndex);
@@ -166,10 +168,11 @@ rflect.cal.MiniCal.prototype.onMouseDown_ = function(aEvent) {
   var className = aEvent.target.className;
   var index = rflect.string.get2DigitIndex(aEvent.target.id);
 
-  if (this.isField_(className))
+  if (this.isField_(className)) {
     this.selectionMask.init(
         rflect.cal.MiniCalSelectionMask.Configuration.MINI_MONTH_INTERNAL,
         index, 0);
+  }
 
   if (this.isInteractiveArea_(className))
     aEvent.preventDefault();
@@ -187,7 +190,8 @@ rflect.cal.MiniCal.prototype.onMouseMove_ = function(aEvent) {
   var index = rflect.string.get2DigitIndex(target.id);
   var className = target.className;
 
-  if (this.selectionMask.isDragStarted() && this.isField_(className)){
+  if (this.selectionMask.isDragStarted() && this.isField_(className) &&
+      !isNaN(index)){
     this.selectionMask.update(index);
     aEvent.preventDefault();
   }

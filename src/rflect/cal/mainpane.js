@@ -1327,21 +1327,9 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
   var className = aEvent.target.className;
   var preventDefaultIsNeeded = false;
   var maskConfiguration;
-  if (goog.DEBUG)
-    _log('className', className);
   // Whether we clicked on hollow space.
   if (this.isWeekGrid_(className)) {
 
-    /*this.gridSize = goog.style.getSize(this.getDomHelper().getElement('grid-rows-container'));
-    this.gridContainerSize = goog.style.getSize(this.getDomHelper().getElement('grid-table-wrapper-wk'));
-    this.gridContainerSize.width -= 1;
-    this.updateBlockManager();
-
-    if (goog.DEBUG)
-      _log('this.gridContainerSize', this.gridContainerSize);
-    if (goog.DEBUG)
-      _log('this.gridSize', this.gridSize);
-    */
     this.selectionMask_.init(
         maskConfiguration = /**@type {number}*/
         (rflect.cal.MainPaneSelectionMask.Configuration.WEEK),

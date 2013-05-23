@@ -321,23 +321,20 @@ rflect.cal.ViewManager.prototype.onMenuCommandOptions_ = function() {
  */
 rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
 
-  if (!aEvent.isInMask){
+  this.timeManager.shiftToPoint(aEvent.date);
 
-    this.timeManager.shiftToPoint(aEvent.date);
+  this.mainBody_.miniCal.updateBeforeRedraw();
+  this.mainBody_.miniCal.updateByRedraw();
 
-    this.mainBody_.miniCal.updateBeforeRedraw();
-    this.mainBody_.miniCal.updateByRedraw();
+  this.mainBody_.updateBeforeRedraw(
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR),
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.MINI_CAL));
+  this.mainBody_.updateByRedraw(
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR),
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.MINI_CAL));
 
-    this.mainBody_.updateBeforeRedraw(
-        /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
-        /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR),
-        /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.MINI_CAL));
-    this.mainBody_.updateByRedraw(
-        /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
-        /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR),
-        /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.MINI_CAL));
-
-  }
 }
 
 

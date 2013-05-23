@@ -1077,7 +1077,7 @@ rflect.cal.MainPaneSelectionMask.prototype.update_ = function(aStartCoordinate,
   }
 
   this.maskEl_.innerHTML = this.build_();
-  this.calculateDates(startCoordForDate, endCoordForDate, this.isWeek());
+  this.calculateDates(startCoordForDate, endCoordForDate);
 
 };
 
@@ -1113,7 +1113,7 @@ rflect.cal.MainPaneSelectionMask.prototype.calculateDates = function(aMinCell,
         /**@type {goog.math.Coordinate}*/(opt_maxCell), false, true);
 
     rflect.cal.MainPaneSelectionMask.superClass_.calculateDates
-        .call(this, minCell, maxCell);
+        .call(this, minCell, maxCell, this.isWeek());
   }
 
 }

@@ -258,7 +258,7 @@ body {
   width: 16px; /*considering that visible edge of element is the border of contained element*/
   height: 16px;
   cursor: pointer;
-  
+
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
@@ -770,7 +770,7 @@ overflow:hidden
 }
 
 .hl-even {
-  color: #aaaaaa;
+  /*color: #aaaaaa;*/
   /*color: #6b6b6b;*/
   /*color: #aaaaaa;*/
 }
@@ -1509,5 +1509,7 @@ overflow:hidden
 
 #month-selector .goog-date-picker {
   border-left: none;
+  height: 150px;
+  padding: 0;
 }
 

@@ -122,6 +122,20 @@ rflect.cal.ui.DatePicker.prototype.basisIndex = -1;
 
 
 /**
+ * Start selection index.
+ * @type {number}
+ */
+rflect.cal.ui.DatePicker.prototype.startSelectionIndex = -1;
+
+
+/**
+ * End selection index.
+ * @type {number}
+ */
+rflect.cal.ui.DatePicker.prototype.endSelectionIndex = -1;
+
+
+/**
  * Updates mini cal with new data before redraw.
  * If called parameterless, takes basis from external time manager, otherwise
  * we should use internal one.

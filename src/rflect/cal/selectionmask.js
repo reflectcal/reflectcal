@@ -203,8 +203,9 @@ rflect.cal.SelectionMask.prototype.getMinCoordinate = function(aCellA, aCellB){
 
 /**
  * Calculates dates from cell selection.
- * @param {goog.math.Coordinate} aMinCell Lesser of cells.
- * @param {goog.math.Coordinate=} opt_maxCell Greater of cells.
+ * @param {goog.math.Coordinate|number} aMinCell Lesser of cells or indexes.
+ * @param {goog.math.Coordinate|number=} opt_maxCell Greater of cells or
+ * indexes.
  * @param {boolean=} opt_hours Whether to treat cells as hours.
  * @protected
  */
@@ -239,13 +240,16 @@ rflect.cal.SelectionMask.prototype.calculateDates = function(aMinCell,
     }
 
   } else {
-    tempDate = this.timeManager_.daySeries[aMinCell.x + aMinCell.y * 7];
+    var minIndex = goog.isNumber(aMinCell.x) ? aMinCell.x + aMinCell.y * 7 :
+        aMinCell;
+    tempDate = this.timeManager_.daySeries[minIndex];
     startDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
         tempDate.getDate());
 
     if (opt_maxCell) {
-      tempDate = rflect.date.getTomorrow(this.timeManager_.daySeries[
-          opt_maxCell.x + opt_maxCell.y * 7]);
+      var maxIndex = goog.isNumber(opt_maxCell.x) ? opt_maxCell.x +
+          opt_maxCell.y * 7 : opt_maxCell;
+      tempDate = rflect.date.getTomorrow(this.timeManager_.daySeries[maxIndex]);
       endDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
           tempDate.getDate());
     }

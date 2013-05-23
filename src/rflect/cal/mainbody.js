@@ -277,8 +277,6 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
  * Rebuilds main pane after sizes of all static panes are known.
  */
 rflect.cal.MainBody.prototype.rebuildMPWithSizes = function() {
-  if (goog.DEBUG)
-    _log('rebuildMPWithSizes called');
   this.measureStaticSizes();
   if (this.viewManager_.isInWeekMode())
     this.firstBuildWk = false;
@@ -295,8 +293,6 @@ rflect.cal.MainBody.prototype.rebuildMPWithSizes = function() {
  * Rebuilds main pane after sizes of all static panes are known.
  */
 rflect.cal.MainBody.prototype.measureStaticSizes = function() {
-  if (goog.DEBUG)
-    _log('measureStaticSizes called');
   var dom = this.getDomHelper();
   var totalSize = goog.style.getSize(dom.getElement('main-container'));
 

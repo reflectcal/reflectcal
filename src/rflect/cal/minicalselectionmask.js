@@ -60,10 +60,19 @@ rflect.cal.MiniCalSelectionMask.prototype.draggedAtLeastOnce_ = false;
 
 
 /**
- * Whether selection index is in mask.
- * @type {boolean}
+ * Index where we're started drag.
+ * @type {number}
+ * @private
  */
-rflect.cal.MiniCalSelectionMask.prototype.indexIsInMask_ = false;
+rflect.cal.MiniCalSelectionMask.prototype.startIndex_ = -1;
+
+
+/**
+ * Index where we're currently dragging.
+ * @type {number}
+ * @private
+ */
+rflect.cal.MiniCalSelectionMask.prototype.currentIndex_ = -1;
 
 
 /**
@@ -100,9 +109,6 @@ rflect.cal.SelectionMask.prototype.isDragStarted = function() {
  */
 rflect.cal.MiniCalSelectionMask.prototype.close = function() {
   if (this.draggedAtLeastOnce_) {
-    this.currentCoordinate_ = this.visibleCurrentCell_;
-    this.startCoordinate_ = this.visibleStartCell_;
-
     this.draggedAtLeastOnce_ = this.dragStarted_ = false;
 
     goog.events.dispatchEvent(this.component_, {
@@ -115,8 +121,7 @@ rflect.cal.MiniCalSelectionMask.prototype.close = function() {
 
     goog.events.dispatchEvent(this.component_, {
       type: rflect.cal.EventType.DATE_SELECT,
-      date: this.startDate,
-      isInMask: this.indexIsInMask_
+      date: this.startDate
     });
   }
 };
@@ -127,17 +132,14 @@ rflect.cal.MiniCalSelectionMask.prototype.close = function() {
  * @param {number} aIndex Cell index.
  */
 rflect.cal.MiniCalSelectionMask.prototype.update = function(aIndex) {
-  var currentCell = this.getCellBySelectionIndex_(aIndex);
-
   if (!this.dragStarted_)
     return;
 
-  if (!goog.math.Coordinate.equals(this.currentCoordinate_, currentCell)) {
-
+  if (this.currentIndex_ != aIndex) {
     this.draggedAtLeastOnce_ = true;
     this.initialized_ = true;
 
-    this.currentCoordinate_ = currentCell;
+    this.currentIndex_ = aIndex;
 
     this.update_();
   }
@@ -155,18 +157,16 @@ rflect.cal.MiniCalSelectionMask.prototype.init = function(aConfiguration,
     startSelectionIndex, endSelectionIndex) {
   rflect.cal.SelectionMask.prototype.init.call(this, aConfiguration);
 
-  this.maskEl_ = goog.dom.getElement('minical-mask-cnt');
   this.dragStarted_ = false;
   this.draggedAtLeastOnce_ = false;
-  this.indexIsInMask_ = false;
 
   if (this.isMiniMonthExt_()) {
     // When in external configuration, we don't need to know whether mask was
     // previously initialized.
     this.initialized_ = false;
 
-    this.startCoordinate_ = this.getCellBySelectionIndex_(startSelectionIndex);
-    this.currentCoordinate_ = this.getCellBySelectionIndex_(endSelectionIndex);
+    this.component_.startSelectionIndex = startSelectionIndex;
+    this.component_.endSelectionIndex = endSelectionIndex;
 
     // Update mask for external mode.
     this.update_();
@@ -176,52 +176,11 @@ rflect.cal.MiniCalSelectionMask.prototype.init = function(aConfiguration,
     // If we're here in minical internal, we started drag.
     this.dragStarted_ = true;
 
-    // Whether mask was previously initialized.
-    this.indexIsInMask_ = this.getIndexIsInMask(startSelectionIndex);
-    this.calculateDates(this.startCoordinate_ = this.getCellBySelectionIndex_(
-        startSelectionIndex));
-    this.currentCoordinate_ = this.startCoordinate_.clone();
+    this.calculateDates(this.startIndex_ = this.currentIndex_ =
+        startSelectionIndex);
 
   }
 
-};
-
-
-/**
- * @param {number} aIndex Index to test.
- * @return {boolean} Whether given index is in mask.
- */
-rflect.cal.MiniCalSelectionMask.prototype.getIndexIsInMask = function(aIndex) {
-  if (!this.initialized_)
-    return false;
-  var cell = this.getCellBySelectionIndex_(aIndex);
-  var minCell = this.getMinCoordinate(this.visibleStartCell_, this.visibleCurrentCell_);
-  var maxCell = this.getMaxCoordinate(this.visibleStartCell_, this.visibleCurrentCell_);
-
-  return this.compareCells_(cell, minCell) >= 0 &&
-      this.compareCells_(cell, maxCell) <= 0;
-}
-
-
-
-/**
- * @param {number} aSelectionIndex Index of whether selection start or end.
- * @return {goog.math.Coordinate} Cell position for mini-month.
- */
-rflect.cal.MiniCalSelectionMask.prototype.getCellBySelectionIndex_ =
-    function(aSelectionIndex) {
-  return new goog.math.Coordinate(aSelectionIndex % 7,
-      Math.floor(aSelectionIndex / 7));
-};
-
-
-/**
- * @param {goog.math.Coordinate} Cell.
- * @return {number} Index of cell.
- */
-rflect.cal.MiniCalSelectionMask.prototype.getSelectionIndexByCell_ =
-    function(aCell) {
-  return aCell.x + aCell.y * 7;
 };
 
 
@@ -230,66 +189,25 @@ rflect.cal.MiniCalSelectionMask.prototype.getSelectionIndexByCell_ =
  * @private
  */
 rflect.cal.MiniCalSelectionMask.prototype.update_ = function() {
-  var maxCell;
-  var minCell;
-  
-  // Rectangles to pass to builder.
-  this.rects_.length = 0;
-
-  if (this.startCoordinate_.x < 0 || this.startCoordinate_.y < 0 ||
-      this.currentCoordinate_.x < 0 || this.currentCoordinate_.y < 0)
-    return;
-
   // If cells are valid, we're initialized.
   this.initialized_ = true;
 
-  // In mini-month, there's only one rect.
-  var defaultStepX = rflect.cal.predefined.MINICAL_MASK_WIDTH / 7;
-  var defaultStepY = rflect.cal.predefined.MINICAL_MASK_HEIGHT / 6;
-    
-  // We need clone cells before modifying originals.
-  this.visibleStartCell_ = this.startCoordinate_.clone();
-  this.visibleCurrentCell_ = this.currentCoordinate_.clone();
-    
-  minCell = this.getMinCoordinate(this.visibleStartCell_, this.visibleCurrentCell_);
-  maxCell = this.getMaxCoordinate(this.visibleStartCell_, this.visibleCurrentCell_);
+  if (!this.isMiniMonthExt_()) {
+    var maxIndex = Math.max(this.startIndex_, this.currentIndex_);
+    var minIndex = Math.min(this.startIndex_, this.currentIndex_);
 
-  var range = this.getSelectionIndexByCell_(maxCell) -
-      this.getSelectionIndexByCell_(minCell) + 1;
-
-  if (range <= 7 && range >= 2 && (maxCell.y - minCell.y) == 1) {
-    // Situation where two rects are possible.
-    this.rects_.push(this.getRect_(
-        minCell.x * defaultStepX,
-        minCell.y * defaultStepY,
-        (7 - minCell.x) * defaultStepX,
-        defaultStepY
-    ));
-    this.rects_.push(this.getRect_(
-        0,
-        maxCell.y * defaultStepY,
-        (maxCell.x + 1) * defaultStepX,
-        defaultStepY
-    ));
-  } else {
-
-    if (minCell.y != maxCell.y) {
-      minCell.x = 0;
-      maxCell.x = 6;
+    var range = maxIndex - minIndex + 1;
+    if (range > 7) {
+      minIndex -= minIndex % 7;
+      if ((maxIndex + 1) % 7 != 0)
+        maxIndex = Math.floor(maxIndex / 7) * 7 + 6 ;
     }
 
-    this.rects_.push(this.getRect_(
-        minCell.x * defaultStepX,
-        minCell.y * defaultStepY,
-        (maxCell.x - minCell.x + 1) * defaultStepX,
-        (maxCell.y - minCell.y + 1) * defaultStepY
-    ));
+    this.calculateDateAndSelectionType_(minIndex, maxIndex);
 
-  }
-
-  if (!this.isMiniMonthExt_()) {
-    this.calculateDateAndSelectionType_(minCell, maxCell);
-    this.maskEl_.innerHTML = this.build_();
+    this.component_.startSelectionIndex = minIndex;
+    this.component_.endSelectionIndex = maxIndex;
+    this.component_.updateByRedraw();
     
     goog.events.dispatchEvent(this.component_, {
       type: rflect.cal.EventType.DATE_DRAG,
@@ -298,7 +216,6 @@ rflect.cal.MiniCalSelectionMask.prototype.update_ = function() {
       duration: this.duration_,
       selectionConfiguration: this.selectionConfiguration_
     });
-
     this.draggedAtLeastOnce_ = true;
   }
 };
@@ -308,15 +225,13 @@ rflect.cal.MiniCalSelectionMask.prototype.update_ = function() {
  * Calculates date and type of selection interval.
  */
 rflect.cal.MiniCalSelectionMask.prototype.calculateDateAndSelectionType_ =
-    function(aMinCell, aMaxCell) {
+    function(aMinIndex, aMaxIndex) {
 
-  var tempDate = this.timeManager_.daySeries[
-      this.getSelectionIndexByCell_(aMinCell)];
+  var tempDate = this.timeManager_.daySeries[aMinIndex];
   this.startDate_ = new goog.date.DateTime(tempDate.getYear(),
       tempDate.getMonth(), tempDate.getDate());
 
-  var duration = this.duration_ = this.getSelectionIndexByCell_(aMaxCell) -
-      this.getSelectionIndexByCell_(aMinCell) + 1;
+  var duration = this.duration_ = aMaxIndex - aMinIndex + 1;
 
   var dayInMonth = this.timeManager_.daySeries[6];
   var year = dayInMonth.getYear();
@@ -329,9 +244,9 @@ rflect.cal.MiniCalSelectionMask.prototype.calculateDateAndSelectionType_ =
       indexOfFirstDayOfMonth + goog.date.getNumberOfDaysInMonth(year, month));
 
   // Configuration detection.
-  if (duration % 7 == 0 && aMinCell.x == 0) {
+  if (duration % 7 == 0) {
     // Month mode is tested first.
-    if (aMinCell.y == 0 && duration == numberOfDaysInMonth) {
+    if (duration == numberOfDaysInMonth) {
       this.selectionConfiguration_ = rflect.cal.TimeManager.Configuration.MONTH;
       tempDate = this.timeManager_.daySeries[indexOfFirstDayOfMonth];
       this.firstDayInMonth_ = new goog.date.DateTime(tempDate.getYear(),
@@ -355,13 +270,3 @@ rflect.cal.MiniCalSelectionMask.prototype.calculateDateAndSelectionType_ =
   }
 
 }
-
-
-/**
- * Builds mask, for external usage.
- * @param {goog.string.StringBuffer=} aSb String buffer to append mask to.
- * @return {string} HTML of mask.
- */
-rflect.cal.SelectionMask.prototype.build = function(aSb) {
-  return this.build_(aSb) || '';
-};

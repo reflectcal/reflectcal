@@ -114,9 +114,6 @@ rflect.cal.MiniCalBuilder.prototype.buildInternal = function(aSb) {
       case 1: {
         this.buildMainClassName_(aSb);
       };break;
-      case 2: {
-        this.miniCal_.selectionMask && this.miniCal_.selectionMask.build(aSb);
-      };break;
       case 3: {
         this.buildHeader_(aSb);
       };break;
@@ -283,6 +280,9 @@ rflect.cal.MiniCalBuilder.prototype.buildDayCells_ = function(aSb, aOffset,
     if (this.timeManager_.basis.getMonth() != (day = daySeries[id]).getMonth())
       aSb.append(goog.getCssName('dl-other-month'));
     if (id == this.miniCal_.basisIndex)
+      aSb.append(' ' + goog.getCssName('goog-date-picker-selected-pre'));
+    if (id >= this.miniCal_.startSelectionIndex &&
+        id <= this.miniCal_.endSelectionIndex)
       aSb.append(' ' + goog.getCssName('goog-date-picker-selected-pre'));
     aSb.append(rflect.cal.MiniCalBuilder.HTML_PARTS_[aOffset + 2]);
     // Build daycell day number.
