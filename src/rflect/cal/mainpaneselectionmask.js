@@ -938,8 +938,12 @@ rflect.cal.MainPaneSelectionMask.prototype.getRect_ =
   var rect;
   if (this.isMonth())
     rect = new goog.math.Rect(aY, aX, aDy, aDx);
-  else
-    rect = new goog.math.Rect(aX, aY, aDx, aDy);
+  else {
+    var dy = this.isWeek() && aDy < rflect.cal.predefined.MINIMAL_MASK_HEIGHT ?
+        rflect.cal.predefined.MINIMAL_MASK_HEIGHT : aDy;
+
+    rect = new goog.math.Rect(aX, aY, aDx, dy);
+  }
   return rect;
 };
 

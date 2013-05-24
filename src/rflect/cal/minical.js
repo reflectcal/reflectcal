@@ -174,8 +174,7 @@ rflect.cal.MiniCal.prototype.onMouseDown_ = function(aEvent) {
         index, 0);
   }
 
-  if (this.isInteractiveArea_(className))
-    aEvent.preventDefault();
+  aEvent.preventDefault();
 
 };
 

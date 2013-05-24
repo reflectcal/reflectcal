@@ -598,7 +598,7 @@ rflect.cal.predefined.chips.OVERLAPPING_DEGREE = 0.75;
  * @type {number}
  * @const
  */
-rflect.cal.predefined.chips.MINIMAL_MINS = 20;
+rflect.cal.predefined.chips.MINIMAL_MINS = 30;
 
 
 /**
@@ -670,3 +670,11 @@ rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE =
 rflect.cal.predefined.MONTH_SCROLLABLE_DEFAULT_SIZE =
     new goog.math.Size(rflect.cal.predefined.MONTH_SCROLLABLE_MINIMAL_WIDTH,
     rflect.cal.predefined.MONTH_SCROLLABLE_MINIMAL_HEIGHT);
+
+
+/**
+ * Minimal mask height, in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.MINIMAL_MASK_HEIGHT = 15;

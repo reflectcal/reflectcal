@@ -1437,7 +1437,8 @@ overflow:hidden
   left: 1px;
   position: absolute;
   width: 100%;
-  width: calc(100% - 1px);
+  margin-left: -1px;
+  /*width: calc(100% - 1px);*/
   border-color: inherit;
 }
 
@@ -1472,8 +1473,7 @@ overflow:hidden
   width: 5px;
   top: 1px;
   position: absolute;
-  height: 100%;
-  height: calc(100% - 1px);
+  height: 16px;
   border-color: inherit;
 }
 
@@ -1511,5 +1511,11 @@ overflow:hidden
   border-left: none;
   height: 150px;
   padding: 0;
+}
+
+.faraway-cont {
+  position:absolute;
+  left: 0;
+  top: -10000px;
 }
 

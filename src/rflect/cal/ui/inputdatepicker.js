@@ -204,7 +204,8 @@ rflect.cal.ui.InputDatePicker.prototype.onInputBlur_ = function (aEvent) {
  * @private
  */
 rflect.cal.ui.InputDatePicker.prototype.onInputKeyDown_ = function(aEvent) {
-  if (this.visible_ && aEvent.keyCode == goog.events.KeyCodes.ESC) {
+  if (this.visible_ && (aEvent.keyCode == goog.events.KeyCodes.ESC ||
+      aEvent.keyCode == goog.events.KeyCodes.ENTER)) {
     this.setVisible(false);
     aEvent.stopPropagation();
   }

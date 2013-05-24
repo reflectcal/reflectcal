@@ -14,6 +14,7 @@ goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
+goog.require('goog.userAgent');
 goog.require('rflect.ui.Component');
 goog.require('rflect.cal.MainPaneBuilder');
 goog.require('rflect.cal.MainPaneSelectionMask');
@@ -232,6 +233,14 @@ rflect.cal.MainPane.prototype.chipWasDragged_;
 
 
 /**
+ * Container placed out of sight, used to store grips temporary.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.MainPane.prototype.farAwayCont_;
+
+
+/**
  * Grip container, week, upper.
  * @type {Element}
  * @private
@@ -379,8 +388,11 @@ rflect.cal.MainPane.prototype.setDefaultSizes_ = function() {
 
 /**
  * Updates main pane with new data before redraw. Includes size adjustment.
+ * @param {boolean=} opt_doNotRemoveScrollListeners Whether not to remove scroll
+ * listeners.
  */
-rflect.cal.MainPane.prototype.updateBeforeRedraw = function() {
+rflect.cal.MainPane.prototype.updateBeforeRedraw = function(
+    opt_doNotRemoveScrollListeners) {
   if (this.getParent().firstBuildWk && this.viewManager_.isInWeekMode() ||
       this.getParent().firstBuildMn && this.viewManager_.isInMonthMode())
     return this.setDefaultSizes_();
@@ -471,7 +483,8 @@ rflect.cal.MainPane.prototype.updateBeforeRedraw = function() {
 
   }
 
-  this.removeScrollListeners_();
+  if (!opt_doNotRemoveScrollListeners)
+    this.removeScrollListeners_();
 };
 
 
@@ -482,18 +495,15 @@ rflect.cal.MainPane.prototype.updateBeforeRedraw = function() {
 rflect.cal.MainPane.prototype.addScrollListeners_ = function() {
   if (this.viewManager_.isInWeekMode()) {
 
-    if (this.blockManager_.blockPoolWeek.expanded)
+    this.scrollListenersKeys_.push(goog.events.listen(
+        this.getDomHelper().getElement('main-pane-body-scrollable-wk'),
+        goog.events.EventType.SCROLL, this.onMainPaneScrollableScroll_, false,
+        this));
+    if (this.blockManager_.blockPoolAllDay.expanded)
       this.scrollListenersKeys_.push(goog.events.listen(
-          this.getDomHelper().getElement('main-pane-body-scrollable-wk'),
+          this.getDomHelper().getElement('main-pane-header-scrollable'),
           goog.events.EventType.SCROLL, this.onMainPaneScrollableScroll_, false,
           this));
-    //TODO(alexk): implement focus before introducing both scrollable controls.
-    /*if (this.blockManager_.blockPoolAllDay.expanded)
-      this.scrollListenersKeys_.push(goog.events.listen(
-          this.dom_.getElement('main-pane-header-scrollable'),
-          goog.events.EventType.SCROLL, this.onMainPaneScrollableScroll_, false,
-          this));*/
-
   } else if (this.viewManager_.isInMonthMode()) {
 
     if (this.blockManager_.blockPoolMonth.expanded)
@@ -548,13 +558,24 @@ rflect.cal.MainPane.prototype.updateByRedraw = function() {
   this.addScrollListeners_();
   // Return to previous scrollTop, scrollLeft values, if any.
   if (this.viewManager_.isInWeekMode()) {
+    var headerScrollable =
+        this.getDomHelper().getElement('main-pane-header-scrollable');
+    var mainScrollable =
+        this.getDomHelper().getElement('main-pane-body-scrollable-wk');
+
     if (this.blockManager_.blockPoolWeek.expanded)
-      this.dom_.getElement('main-pane-body-scrollable-wk').scrollLeft =
-          this.dom_.getElement('main-pane-header-scrollable').scrollLeft =
+      mainScrollable.scrollLeft =
+          headerScrollable.scrollLeft =
           this.blockManager_.blockPoolWeek.scrollLeft;
+    if (this.blockManager_.blockPoolAllDay.expanded)
+      headerScrollable.scrollTop =
+          this.blockManager_.blockPoolAllDay.scrollTop;
+    mainScrollable.scrollTop =
+        this.blockManager_.blockPoolWeek.scrollTop;
+
   } else if (this.viewManager_.isInMonthMode()) {
     if (this.blockManager_.blockPoolMonth.expanded)
-      this.dom_.getElement('main-pane-body-scrollable-mn').scrollTop =
+      this.getDomHelper().getElement('main-pane-body-scrollable-mn').scrollTop =
           this.blockManager_.blockPoolMonth.scrollTop;
   }
 };
@@ -626,13 +647,19 @@ rflect.cal.MainPane.prototype.updateByRedrawMonthGrid_ = function() {
 rflect.cal.MainPane.prototype.updateConditionally_ = function(
     aConditionToUpdateAllDay, aConditionToUpdateWeek, aConditionToUpdateMonth) {
 
+  // We need to detect IE8 because it doesn't allow changing of table's
+  // innerHTML.
+  var isIE8OrLower = goog.userAgent.IE &&
+      goog.userAgent.compare(goog.userAgent.VERSION, '8') <= 0;
+
   this.eventManager_.run();
 
   this.updateBeforeRedraw();
 
   if (this.viewManager_.isInWeekMode() &&
       !this.blockManager_.blockPoolWeek.expanded &&
-      !this.blockManager_.blockPoolAllDay.expanded) {
+      !this.blockManager_.blockPoolAllDay.expanded &&
+      !isIE8OrLower) {
 
     if (aConditionToUpdateAllDay)
       this.updateByRedrawAllDayGrid_();
@@ -641,7 +668,7 @@ rflect.cal.MainPane.prototype.updateConditionally_ = function(
       this.updateByRedrawWeekGrid_();
 
   } else if (this.viewManager_.isInMonthMode() &&
-      !this.blockManager_.blockPoolMonth.expanded) {
+      !this.blockManager_.blockPoolMonth.expanded && !isIE8OrLower) {
 
     if (aConditionToUpdateMonth)
       this.updateByRedrawMonthGrid_();
@@ -932,6 +959,12 @@ rflect.cal.MainPane.prototype.addChipGrip_ = function(aElement, aWeekChip,
   var endIsCutMnRe = rflect.string.buildClassNameRe(
       goog.getCssName('event-rect-mn-inner-collapse-right'));
 
+
+  if (!this.farAwayCont_) {
+    this.farAwayCont_ = goog.dom.createDom('div',
+      goog.getCssName('faraway-cont'));
+    this.getDomHelper().getDocument().body.appendChild(this.farAwayCont_);
+  }
   if (!this.upperContWk_) {
     this.upperContWk_ = goog.dom.createDom('div', [
       goog.getCssName('wk-event-grip-cont'),
@@ -975,18 +1008,22 @@ rflect.cal.MainPane.prototype.addChipGrip_ = function(aElement, aWeekChip,
     var re = new RegExp(rflect.cal.predefined.chips.CHIP_EVENT_CLASS + '\\d+');
     var chipIdClass = re.exec(chipClassName);
 
+    this.farAwayCont_.appendChild(this.leftContAd_);
+    this.farAwayCont_.appendChild(this.rightContAd_);
+
     var chips = this.getDomHelper().getElement('alldayevents-grid')
         .querySelectorAll('.' + chipIdClass);
     goog.array.forEach(chips, goog.partial(this.addChipGripInner_, aWeekChip,
         /**@type {boolean}*/(opt_allDayChip), startIsCutWkRe, endIsCutWkRe,
         startIsCutMnRe, endIsCutMnRe, this.upperContWk_, this.lowerContWk_,
         this.leftContMn_, this.rightContMn_, this.leftContAd_,
-        this.rightContAd_));
+        this.rightContAd_, this.farAwayCont_));
   } else
     this.addChipGripInner_(aWeekChip, /**@type {boolean}*/(opt_allDayChip),
         startIsCutWkRe, endIsCutWkRe, startIsCutMnRe, endIsCutMnRe,
         this.upperContWk_, this.lowerContWk_, this.leftContMn_,
-        this.rightContMn_, this.leftContAd_, this.rightContAd_, chip);
+        this.rightContMn_, this.leftContAd_, this.rightContAd_, 
+        this.farAwayCont_, chip);
 
 }
 
@@ -1006,24 +1043,38 @@ rflect.cal.MainPane.prototype.addChipGrip_ = function(aElement, aWeekChip,
  * @param {Element} aRightContMn Month second grip cont.
  * @param {Element} aLeftContAd All-day first grip cont.
  * @param {Element} aRightContAd All-day second grip cont.
+ * @param {Element} aFarAwayCont Temporary cont.
  * @param {Element} aChip Chip element.
  * @private
  */
 rflect.cal.MainPane.prototype.addChipGripInner_ =
     function(aWeekChip, aAllDayChip, aStartIsCutWkRe, aEndIsCutWkRe,
              aStartIsCutMnRe, aEndIsCutMnRe, aUpperContWk, aLowerContWk,
-             aLeftContMn, aRightContMn, aLeftContAd, aRightContAd, aChip) {
+             aLeftContMn, aRightContMn, aLeftContAd, aRightContAd, aFarAwayCont, 
+             aChip) {
   var chipClassName = aChip.className;
 
-  if (aWeekChip) {
-    if (!aStartIsCutWkRe.test(chipClassName)) aChip.appendChild(aUpperContWk);
-    if (!aEndIsCutWkRe.test(chipClassName)) aChip.appendChild(aLowerContWk);
-  } else if (aAllDayChip) {
+  if (aAllDayChip) {
+
     if (!aStartIsCutMnRe.test(chipClassName)) aChip.appendChild(aLeftContAd);
     if (!aEndIsCutMnRe.test(chipClassName)) aChip.appendChild(aRightContAd);
+
+  } else if (aWeekChip) {
+
+    aFarAwayCont.appendChild(aUpperContWk);
+    aFarAwayCont.appendChild(aLowerContWk);
+
+    if (!aStartIsCutWkRe.test(chipClassName)) aChip.appendChild(aUpperContWk);
+    if (!aEndIsCutWkRe.test(chipClassName)) aChip.appendChild(aLowerContWk);
+
   } else {
+
+    aFarAwayCont.appendChild(aLeftContMn);
+    aFarAwayCont.appendChild(aRightContMn);
+
     if (!aStartIsCutMnRe.test(chipClassName)) aChip.appendChild(aLeftContMn);
     if (!aEndIsCutMnRe.test(chipClassName)) aChip.appendChild(aRightContMn);
+
   }
 }
 
@@ -1322,7 +1373,7 @@ rflect.cal.MainPane.prototype.isGrip_ =
 rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
   this.containerSizeMonitor_.checkForContainerSizeChange();
-  this.updateBeforeRedraw();
+  this.updateBeforeRedraw(true);
 
   var className = aEvent.target.className;
   var preventDefaultIsNeeded = false;
@@ -1334,19 +1385,25 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
         maskConfiguration = /**@type {number}*/
         (rflect.cal.MainPaneSelectionMask.Configuration.WEEK),
         aEvent);
+
     preventDefaultIsNeeded = true;
+
   } else if (this.isAlldayGrid_(className)) {
+
     this.selectionMask_.init(
         maskConfiguration = /**@type {number}*/
         (rflect.cal.MainPaneSelectionMask.Configuration.ALLDAY),
         aEvent);
+
     preventDefaultIsNeeded = true;
+
   } else if (this.isMonthGrid_(className)) {
 
     if (!this.isDaynumLabel_(className))
       this.selectionMask_.init(
           maskConfiguration = /**@type {number}*/
           (rflect.cal.MainPaneSelectionMask.Configuration.MONTH), aEvent);
+
     preventDefaultIsNeeded = true;
 
   } else if (this.isChip_(className)) {
@@ -1534,25 +1591,42 @@ rflect.cal.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
  */
 rflect.cal.MainPane.prototype.onMainPaneScrollableScroll_ = function(aEvent) {
   var scrollable = aEvent.target;
-  var scrollPos = 0;
+  var scrollLeft = 0;
+  var scrollTop = 0;
 
   if (this.viewManager_.isInWeekMode()) {
-    scrollPos = scrollable.scrollLeft;
-    this.blockManager_.blockPoolWeek.scrollLeft = scrollPos;
 
-    this.dom_.getElement('weekmode-zippies-table').style.left = '-' +
-        scrollPos + 'px';
-    this.dom_.getElement('weekmode-daynames-table').style.left = '-' +
-        scrollPos + 'px';
-    this.dom_.getElement('main-pane-header-scrollable').scrollLeft = scrollPos;
+    scrollLeft = scrollable.scrollLeft;
+    scrollTop = scrollable.scrollTop;
 
+    if (scrollable ==
+        this.getDomHelper().getElement('main-pane-header-scrollable')) {
+
+      this.blockManager_.blockPoolAllDay.scrollTop = scrollTop;
+
+    } else {
+
+      this.blockManager_.blockPoolWeek.scrollLeft = scrollLeft;
+      this.blockManager_.blockPoolWeek.scrollTop = scrollTop;
+
+      this.blockManager_.blockPoolAllDay.scrollLeft = scrollLeft;
+
+      this.getDomHelper().getElement('weekmode-zippies-table').style.left =
+          '-' + scrollLeft + 'px';
+      this.getDomHelper().getElement('weekmode-daynames-table').style.left =
+          '-' + scrollLeft + 'px';
+      this.getDomHelper().getElement('main-pane-header-scrollable').scrollLeft =
+          scrollLeft;
+    }
 
   } else if (this.viewManager_.isInMonthMode()) {
-    scrollPos = scrollable.scrollTop;
-    this.blockManager_.blockPoolMonth.scrollTop = scrollPos;
 
-    this.dom_.getElement('monthmode-zippies-table').style.top = '-' +
-        scrollPos + 'px';
+    scrollTop = scrollable.scrollTop;
+    this.blockManager_.blockPoolMonth.scrollTop = scrollTop;
+
+    this.getDomHelper().getElement('monthmode-zippies-table').style.top = '-' +
+        scrollTop + 'px';
+
   }
 };
 

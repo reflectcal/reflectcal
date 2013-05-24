@@ -365,12 +365,21 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
  * @private
  */
 rflect.cal.ui.EventPane.prototype.onKeyDown_ = function(aEvent) {
-  if (this.visible_ &&
-      !this.startTimeAC_.getRenderer().isVisible() &&
-      !this.endTimeAC_.getRenderer().isVisible() &&
-      aEvent.keyCode == goog.events.KeyCodes.ESC) {
-    aEvent.stopPropagation();
-    this.onCancel_();
+  if (this.visible_ && !this.startTimeAC_.getRenderer().isVisible() &&
+      !this.endTimeAC_.getRenderer().isVisible()) {
+    // ESC key.
+    if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
+
+      aEvent.stopPropagation();
+      this.onCancel_();
+
+    // Ctrl + Enter saves form
+    } else if (aEvent.keyCode == goog.events.KeyCodes.ENTER &&
+        aEvent.platformModifierKey) {
+
+      this.onSave_();
+
+    }
   }
 }
 
@@ -437,9 +446,8 @@ rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
 
 /**
  * Save action listener.
- * @param {goog.events.Event} aEvent Event object.
  */
-rflect.cal.ui.EventPane.prototype.onSave_ = function(aEvent) {
+rflect.cal.ui.EventPane.prototype.onSave_ = function() {
   if (this.scanValues()) {
     this.eventManager_.eventHolder.endWithEdit();
     if (this.dispatchEvent(new goog.events.Event(

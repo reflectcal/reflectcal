@@ -10,6 +10,8 @@
 goog.provide('rflect.cal.ui.EditDialog');
 goog.provide('rflect.cal.ui.EditDialog.ButtonCaptions');
 
+goog.require('goog.events.KeyCodes');
+goog.require('goog.ui.Component.EventType');
 goog.require('rflect.ui.DialogMouseMissBehavior');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.SaveDialog');
@@ -124,7 +126,9 @@ rflect.cal.ui.EditDialog.prototype.enterDocument = function () {
   rflect.cal.ui.EditDialog.superClass_.enterDocument.call(this);
 
   this.getHandler().listen(this.eventNameLink_, goog.events.EventType.CLICK,
-      this.onEditClick_, false, this);
+      this.onEditClick_, false, this)
+      .listen(document, goog.events.EventType.KEYDOWN,
+      this.onDeleteKey_, false, this);
 }
 
 
@@ -156,6 +160,20 @@ rflect.cal.ui.EditDialog.prototype.onEditClick_ = function (aEvent) {
       rflect.cal.ui.SaveDialog.EVENT_EDIT});
   if (close)
     this.setVisible(false);
+}
+
+
+/**
+ * Keydown listener.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.EditDialog.prototype.onDeleteKey_ = function (aEvent) {
+  if (this.isVisible() && aEvent.keyCode == goog.events.KeyCodes.DELETE) {
+    // Dispatch click on delete button.
+    this.getButtonSet().getButton(1)
+        .dispatchEvent({type: goog.ui.Component.EventType.ACTION});
+  }
 }
 
 
