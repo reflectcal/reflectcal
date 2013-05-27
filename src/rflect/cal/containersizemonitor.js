@@ -10,6 +10,7 @@
 
 goog.provide('rflect.cal.ContainerSizeMonitor');
 
+goog.require('goog.dom');
 goog.require('goog.dom.ViewportSizeMonitor');
 goog.require('goog.style');
 goog.require('rflect.cal.predefined');
@@ -20,7 +21,8 @@ goog.require('rflect.cal.predefined');
  * This class can be used to monitor changes of outer container where component
  * is placed, window or arbitrary element.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
- * @param {Element} aContainer Container which size is to monitor.
+ * @param {Element|string} aContainer Container which size is to monitor or its
+ * id.
  * @param {Window=} opt_window The window to monitor; defaults to the window in
  *    which this code is executing.
  * @constructor
@@ -36,7 +38,10 @@ rflect.cal.ContainerSizeMonitor = function(aViewManager, aContainer,
    * @type {Element}
    * @private
    */
-  this.container_ = aContainer;
+  this.container_ = goog.dom.getElement(aContainer);
+
+  if (goog.isString(this.container_))
+    this.containerId_ = /**@type {string}*/ (aContainer);
 
   /**
    * Size of container.
@@ -59,12 +64,27 @@ rflect.cal.ContainerSizeMonitor.prototype.scrollbarWidth = 0;
 
 
 /**
+ * Container id, used when container element is not yet ready to be passed in
+ * constructor and will be retrieved later by this id.
+ * @type {string}
+ */
+rflect.cal.ContainerSizeMonitor.prototype.containerId_;
+
+
+/**
  * Timeout for delayed check of window size.
  * @type {number}
  * @private
  */
 rflect.cal.ContainerSizeMonitor.prototype.windowSizePollTimeout_ = 0;
 
+
+/**
+ * @return {Element} Container element.
+ */
+rflect.cal.ContainerSizeMonitor.prototype.getContainer = function() {
+  return this.container_ || goog.dom.getElement(this.containerId_);
+}
 
 /**
  * Returns the most recently recorded size of the container, in pixels. May
@@ -81,8 +101,8 @@ rflect.cal.ContainerSizeMonitor.prototype.getSize = function() {
  * @private
  */
 rflect.cal.ContainerSizeMonitor.prototype.getContainerSize_ = function() {
-  return new goog.math.Size(this.container_.clientWidth,
-      this.container_.clientHeight);
+  return new goog.math.Size(this.getContainer().clientWidth,
+      this.getContainer().clientHeight);
 };
 
 
@@ -158,5 +178,7 @@ rflect.cal.ContainerSizeMonitor.prototype.disposeInternal = function() {
   this.container_ = null;
   this.containerSize_ = null;
 };
+
+
 
 

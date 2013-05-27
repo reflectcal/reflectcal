@@ -352,19 +352,6 @@ rflect.cal.MainPane.prototype.isScrollableExpandedVer = function() {
 
 
 /**
- * Normalizes size of app, do not letting it be less than minimum.
- * @param {goog.math.Size} aSize Size to normalize.
- * @param {goog.math.Size} aDefaultSize Minimal size.
- */
-rflect.cal.MainPane.prototype.normalizeSize = function(aSize, aDefaultSize) {
-  if (aSize.x < aDefaultSize.x)
-    aSize.x = aDefaultSize.x;
-  if (aSize.y < aDefaultSize.y)
-    aSize.y = aDefaultSize.y;
-}
-
-
-/**
  * Sets initial sizes for scrollables.
  * @private
  */
@@ -400,8 +387,6 @@ rflect.cal.MainPane.prototype.updateBeforeRedraw = function(
   // Take current viewport size.
   var containerSize = this.containerSizeMonitor_.getSize();
   var staticSizes;
-  var appMinimalSize = this.getParent().getMinimalSize();
-  this.normalizeSize(containerSize, appMinimalSize);
 
   // Begin size adjustment phase.
   if (this.viewManager_.isInWeekMode()) {

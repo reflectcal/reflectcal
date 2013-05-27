@@ -85,3 +85,9 @@
 .goog-buttonset-default {
   font-weight: bold;
 }
+
+.dialog-button {
+  padding-left: 25px;
+  padding-right: 25px;
+  margin-right: 10px;
+}

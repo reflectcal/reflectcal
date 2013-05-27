@@ -11,15 +11,13 @@ body {
   height: 100%;
   margin: 0;
   font: 13px arial, sans-serif;
-}
-
-.main-container {
-  padding: 8px 0 0 0;
+  /*Note(alexk): It's responsibility of container to provide width/height restrictions.*/
+  min-width: 500px;
+  min-height: 262px; /* -8px of .cal-container margin-top.*/
 }
 
 .cal-container {
-  min-width: 500px;
-  min-height: 262px; /* -8px of .main-container margin-top.*/
+  padding: 8px 0 0 0;
 }
 
 #top-pane {

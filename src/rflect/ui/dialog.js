@@ -1252,9 +1252,10 @@ rflect.ui.Dialog.ButtonSet.prototype.createDom = function() {
   var container = this.getDomHelper().createDom('div');
   this.forEachChild(function(child) {
     child.createDom();
+    goog.dom.classes.add(child.getElement(), goog.getCssName('dialog-button'));
     if (child == this.emphasisButton_)
       goog.dom.classes.add(child.getElement(),
-          goog.getCssName('emphasis-button'))
+          goog.getCssName('emphasis-button'));
     this.getDomHelper().appendChild(container, child.getElement());
   }, this);
   rflect.ui.Dialog.ButtonSet.superClass_.setElementInternal.call(this,

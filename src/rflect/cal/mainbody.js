@@ -105,8 +105,6 @@ goog.inherits(rflect.cal.MainBody, rflect.ui.Component);
  * @private
  */
 rflect.cal.MainBody.HTML_PARTS_ = [
-  '<div id="main-container">',
-
   '<div id="cal-container" class="cal-container">',
   '<div id="top-pane">',
   '</div>',
@@ -126,8 +124,6 @@ rflect.cal.MainBody.HTML_PARTS_ = [
   '<div id="main-pane" class="' + goog.getCssName('main-pane') + '">',
   '</div>',
   '</div>',
-  '</div>',
-
   '</div>'
 ];
 
@@ -204,8 +200,8 @@ rflect.cal.MainBody.prototype.decorateInternal = function(aElement,
       opt_doNotBuildBody);
 
   if (!opt_doNotBuildBody) {
-    this.getElement().id = 'main-container';
-    this.getElement().className = 'main-container';
+    this.getElement().id = 'cal-container';
+    this.getElement().className = goog.getCssName('cal-container');
   }
 };
 
@@ -226,20 +222,20 @@ rflect.cal.MainBody.prototype.buildInternal = function(aSb) {
     aSb.append(parts[counter]);
     switch (counter) {
       // Include top pane in common buffer.
-      case 2: {
+      case 1: {
         this.topPane_.build(aSb);
       };break;
-      case 7: {
+      case 6: {
         this.miniCal.build(aSb);
       };break;
-      case 9: {
+      case 8: {
         this.calSelector_.build(aSb);
       };break;
-      case 11: {
+      case 10: {
         this.taskSelector_.build(aSb);
       };break;
       // Include main pane in common buffer.
-      case 17: {
+      case 16: {
         this.mainPane_.build(aSb);
       };break;
 
@@ -294,7 +290,7 @@ rflect.cal.MainBody.prototype.rebuildMPWithSizes = function() {
  */
 rflect.cal.MainBody.prototype.measureStaticSizes = function() {
   var dom = this.getDomHelper();
-  var totalSize = goog.style.getSize(dom.getElement('main-container'));
+  var totalSize = goog.style.getSize(dom.getElement('cal-container'));
 
   if (this.viewManager_.isInWeekMode()) {
     var allDayPaneSize = goog.style.getSize(
@@ -318,7 +314,8 @@ rflect.cal.MainBody.prototype.measureStaticSizes = function() {
         rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2
         , totalSize.height -
         monthPaneSize.height +
-        rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2);
+        //TODO(alexk): why do I need 4px here and not 2?
+        rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 4);
   }
 }
 
@@ -328,8 +325,7 @@ rflect.cal.MainBody.prototype.measureStaticSizes = function() {
  */
 rflect.cal.MainBody.prototype.getMinimalSize = function() {
   return new goog.math.Size(this.staticSizesWk.width + Math.max(
-      rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE.width +
-      rflect.cal.predefined.WEEK_SCROLLABLE_DEFAULT_SIZE.width,
+      rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE.width,
       rflect.cal.predefined.MONTH_SCROLLABLE_DEFAULT_SIZE.width),
       this.staticSizesWk.height + Math.max(
       rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE.height +
