@@ -41,10 +41,13 @@
 }
 
 input[type="email"], input[type="number"], input[type="password"], input[type="tel"], input[type="text"], input[type="url"] {
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  height: 29px;
-  line-height: 29px;
+  /*-moz-box-sizing: border-box;
+  box-sizing: border-box;*/
+  line-height: 14px/*to enclose 13px font, override this if needed*/;
+  height: 14px/*to enclose 13px font, override this if needed*/;
+  /*Padding is needed to avoid giant cursor in webkit, which we get if
+  height = line-height = 22px.*/
+  padding: 6px 8px;
 
   background: none;
   border-color: #C0C0C0 #D9D9D9 #D9D9D9;
@@ -55,7 +58,6 @@ input[type="email"], input[type="number"], input[type="password"], input[type="t
   border-width: 1px;
   display: inline-block;
   margin: 0;
-  padding: 0 8px;
 
   transition: box-shadow .1s;
 }
@@ -75,6 +77,7 @@ input[type="text"]:hover {
 }
 
 textarea {
+  font-family: arial, sans-serif;
   background: none;
   border-color: #C0C0C0 #D9D9D9 #D9D9D9;
   border-right: 1px solid #D9D9D9;
@@ -84,7 +87,6 @@ textarea {
   border-width: 1px;
   display: inline-block;
   height: 29px;
-  line-height: 29px;
   margin: 0;
   padding: 4px;
 

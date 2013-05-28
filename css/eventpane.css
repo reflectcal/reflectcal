@@ -38,11 +38,14 @@
 }
 
 .ep-event-name-input {
-  width: 500px;
-  height: 35px !important;
-  line-height: 35px !important;
-  font-family: arial, sans-serif;
+  width: 482px;
+  height: 19px !important;
+  line-height: 19px !important;
+  padding-top: 8px;
+  padding-bottom: 8px;
+
   font-size: 16px;
+  font-family: arial, sans-serif;
   font-weight: bold;
 }
 
@@ -59,12 +62,12 @@
 }
 
 .event-date-input {
-  width: 150px;
+  width: 112px;
 }
 
 .event-time-input {
   width: 90px;
-  margin-left: 5px !important;
+  margin-left: 6px !important;
 }
 
 .all-day-input-cont {
@@ -80,7 +83,7 @@
 }
 
 .event-description {
-  width: 500px;
+  width: 490px;
   height: 100px;
 }
 
