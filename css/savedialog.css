@@ -20,7 +20,8 @@
 
 .event-name-input {
   direction: ltr;
-  font: 15px arial, sans-serif bold;
+  font: 15px arial, sans-serif;
+  font-weight: bold;
   height: 32px;
   width: 330px;
 }
