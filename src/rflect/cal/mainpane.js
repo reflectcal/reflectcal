@@ -887,11 +887,20 @@ rflect.cal.MainPane.prototype.showEventEditComponent_ = function(aTarget,
  */
 rflect.cal.MainPane.prototype.onMouseOut_ = function(aEvent) {
   var target = aEvent.target;
+  var relatedTarget = aEvent.relatedTarget;
   var id = target.id;
   var className = target.className;
   if (this.isDaynumLabel_(className) || this.isWeeknumLabel_(className) ||
       this.isZippy_(className))
     this.moRegistry_.deregisterTarget();
+
+  if (this.isWeekChip_(className)) {
+    this.removeChipGrip_();
+  } else if (this.isAllDayChip_(className)) {
+    this.addChipGrip_(target, false, true);
+  } else if (this.isMonthChip_(className)) {
+    this.addChipGrip_(target, false);
+  }
 }
 
 
@@ -902,6 +911,8 @@ rflect.cal.MainPane.prototype.onMouseOver_ = function(aEvent) {
   var target = aEvent.target;
   var id = target.id;
   var className = target.className;
+  if (goog.DEBUG)
+    _log('className', className);
   if (this.isDaynumLabel_(className) || this.isWeeknumLabel_(className))
     this.moRegistry_.registerTarget(target,
         goog.getCssName('label-underlined'));
@@ -917,8 +928,8 @@ rflect.cal.MainPane.prototype.onMouseOver_ = function(aEvent) {
     this.addChipGrip_(target, false, true);
   } else if (this.isMonthChip_(className)) {
     this.addChipGrip_(target, false);
-  } else
-    this.removeChipGrip_();
+  } /*else
+    this.removeChipGrip_();*/
 
 
 }
@@ -1254,9 +1265,7 @@ rflect.cal.MainPane.prototype.isWeeknumLabel_ = function(aClassName) {
 rflect.cal.MainPane.prototype.isWeekChip_ = function(aClassName) {
   var chipWeekRe_ = this.chipWeekRe_ || (this.chipWeekRe_ =
       rflect.string.buildClassNameRe(goog.getCssName('event-rect-wk-inner'),
-          goog.getCssName('event-wk-timelabel'),
-          goog.getCssName('wk-event-grip-cont'),
-          goog.getCssName('wk-event-grip')
+          goog.getCssName('event-wk-timelabel')
       ));
 
   return chipWeekRe_.test(aClassName);
@@ -1314,7 +1323,7 @@ rflect.cal.MainPane.prototype.isStartGripCont_ =
       goog.getCssName('mn-event-grip-cont-left'));
   if (re.test(aTargetClassName))
     return true;
-  if (this.isGrip_(aTargetClassName))
+  if (opt_target && this.isGrip_(aTargetClassName))
     return this.isStartGripCont_(opt_target.parentNode.className);
   return false;
 };
@@ -1332,7 +1341,7 @@ rflect.cal.MainPane.prototype.isEndGripCont_ =
       goog.getCssName('mn-event-grip-cont-right'));
   if (re.test(aTargetClassName))
     return true;
-  if (this.isGrip_(aTargetClassName))
+  if (opt_target && this.isGrip_(aTargetClassName))
     return this.isEndGripCont_(opt_target.parentNode.className);
   return false;
 };
@@ -1348,6 +1357,12 @@ rflect.cal.MainPane.prototype.isGrip_ =
       goog.getCssName('mn-event-grip'));
   return re.test(aTargetClassName);
 };
+
+
+rflect.cal.MainPane.prototype.isGripOrGripCont_ = function(aClassName) {
+  return this.isGrip_(aClassName) || this.isStartGripCont_(aClassName) ||
+      this.isEndGripCont_(aClassName);
+}
 
 
 /**
