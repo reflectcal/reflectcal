@@ -523,8 +523,9 @@ rflect.cal.ui.EventPane.prototype.setVisible = function(visible,
 
   try {
     this.inputName_.focus();
+    this.inputName_.select();
   } catch(e) {
-    // IE8- shows error that it couldn't set focus but nevertheless, it sets it.
+    // IE8- shows error that it couldn't set focus but nevertheless, sets it.
   }
 
   this.visible_ = visible;

@@ -122,6 +122,19 @@ rflect.cal.ui.SaveDialog.EVENT_EDIT = 'editevent';
 
 
 /**
+ * @override
+ */
+rflect.cal.ui.SaveDialog.prototype.setVisible = function (aVisible) {
+  rflect.cal.ui.SaveDialog.superClass_.setVisible.call(this, aVisible);
+  // If dialog disappears, input still remains focused in Webkit and Opera,
+  // which could produce weird behavior. More specifically, holding Enter
+  // produces many events with the same id.
+  if (!aVisible)
+    this.input_.blur();
+}
+
+
+/**
  * Dispose method.
  * @override
  */

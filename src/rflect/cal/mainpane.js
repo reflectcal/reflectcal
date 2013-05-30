@@ -1688,6 +1688,13 @@ rflect.cal.MainPane.prototype.disposeInternal = function() {
   this.timeManager_ = null;
   this.containerSizeMonitor_ = null;
 
+  this.farAwayCont_ = null;
+  this.upperContWk_ = null;
+  this.lowerContWk_ = null;
+  this.leftContMn_ = null;
+  this.rightContMn_ = null;
+  this.leftContAd_ = null;
+  this.rightContAd_ = null;
 
   rflect.cal.MainPane.superClass_.disposeInternal.call(this);
 };
