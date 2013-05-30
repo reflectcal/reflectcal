@@ -19,10 +19,15 @@
 }
 
 .event-name-input {
+  /*overrides of default input*/
+  height: 16px !important;
+  line-height: 16px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+
   direction: ltr;
   font: 15px arial, sans-serif;
   font-weight: bold;
-  height: 32px;
   width: 330px;
 }
 

@@ -890,16 +890,18 @@ rflect.cal.MainPane.prototype.onMouseOut_ = function(aEvent) {
   var relatedTarget = aEvent.relatedTarget;
   var id = target.id;
   var className = target.className;
+  var relClassName = relatedTarget && relatedTarget.className;
   if (this.isDaynumLabel_(className) || this.isWeeknumLabel_(className) ||
       this.isZippy_(className))
     this.moRegistry_.deregisterTarget();
 
-  if (this.isWeekChip_(className)) {
+  if (
+      // If we moving from chip to anything except grip
+      this.isChip_(className) && !this.isGrip_(relClassName) ||
+      // If we moving from grip to anything except grip or chip
+      this.isGrip_(className) && !this.isChip_(relClassName) &&
+      !this.isGrip_(relClassName)) {
     this.removeChipGrip_();
-  } else if (this.isAllDayChip_(className)) {
-    this.addChipGrip_(target, false, true);
-  } else if (this.isMonthChip_(className)) {
-    this.addChipGrip_(target, false);
   }
 }
 
@@ -911,8 +913,6 @@ rflect.cal.MainPane.prototype.onMouseOver_ = function(aEvent) {
   var target = aEvent.target;
   var id = target.id;
   var className = target.className;
-  if (goog.DEBUG)
-    _log('className', className);
   if (this.isDaynumLabel_(className) || this.isWeeknumLabel_(className))
     this.moRegistry_.registerTarget(target,
         goog.getCssName('label-underlined'));
@@ -1323,7 +1323,7 @@ rflect.cal.MainPane.prototype.isStartGripCont_ =
       goog.getCssName('mn-event-grip-cont-left'));
   if (re.test(aTargetClassName))
     return true;
-  if (opt_target && this.isGrip_(aTargetClassName))
+  if (opt_target && this.isGripContChild_(aTargetClassName))
     return this.isStartGripCont_(opt_target.parentNode.className);
   return false;
 };
@@ -1341,7 +1341,7 @@ rflect.cal.MainPane.prototype.isEndGripCont_ =
       goog.getCssName('mn-event-grip-cont-right'));
   if (re.test(aTargetClassName))
     return true;
-  if (opt_target && this.isGrip_(aTargetClassName))
+  if (opt_target && this.isGripContChild_(aTargetClassName))
     return this.isEndGripCont_(opt_target.parentNode.className);
   return false;
 };
@@ -1351,7 +1351,7 @@ rflect.cal.MainPane.prototype.isEndGripCont_ =
  * @param {string} aTargetClassName Class name of element.
  * @private
  */
-rflect.cal.MainPane.prototype.isGrip_ =
+rflect.cal.MainPane.prototype.isGripContChild_ =
     function(aTargetClassName) {
   var re = rflect.string.buildClassNameRe(goog.getCssName('wk-event-grip'),
       goog.getCssName('mn-event-grip'));
@@ -1359,9 +1359,53 @@ rflect.cal.MainPane.prototype.isGrip_ =
 };
 
 
-rflect.cal.MainPane.prototype.isGripOrGripCont_ = function(aClassName) {
-  return this.isGrip_(aClassName) || this.isStartGripCont_(aClassName) ||
-      this.isEndGripCont_(aClassName);
+/**
+ * @param {string} aClassName Class name of element.
+ * @return {boolean} Whether this is an all-day grip.
+ * @private
+ */
+rflect.cal.MainPane.prototype.isAllDayGrip_ = function(aClassName) {
+  var re = rflect.string.buildClassNameRe(
+      goog.getCssName('ad-event-grip-cont'),
+      goog.getCssName('ad-event-grip'));
+  return re.test(aClassName);
+}
+
+
+/**
+ * @param {string} aClassName Class name of element.
+ * @return {boolean} Whether this is an week grip.
+ * @private
+ */
+rflect.cal.MainPane.prototype.isWeekGrip_ = function(aClassName) {
+  var re = rflect.string.buildClassNameRe(
+      goog.getCssName('wk-event-grip-cont'),
+      goog.getCssName('wk-event-grip'));
+  return re.test(aClassName);
+};
+
+
+/**
+ * @param {string} aClassName Class name of element.
+ * @return {boolean} Whether this is an week grip.
+ * @private
+ */
+rflect.cal.MainPane.prototype.isMonthGrip_ = function(aClassName) {
+  var re = rflect.string.buildClassNameRe(
+      goog.getCssName('mn-event-grip-cont'),
+      goog.getCssName('mn-event-grip'));
+  return re.test(aClassName);
+};
+
+
+/**
+ * @param {string} aClassName Class name of element.
+ * @return {boolean} Whether this is an any grip.
+ * @private
+ */
+rflect.cal.MainPane.prototype.isGrip_ = function(aClassName) {
+  return this.isAllDayGrip_(aClassName) || this.isWeekGrip_(aClassName) ||
+      this.isMonthGrip_(aClassName);
 }
 
 
@@ -1406,7 +1450,7 @@ rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
     preventDefaultIsNeeded = true;
 
-  } else if (this.isChip_(className)) {
+  } else if (this.isChip_(className) || this.isGrip_(className)) {
 
     this.startChipDrag_(aEvent, className);
     preventDefaultIsNeeded = true;
@@ -1475,13 +1519,13 @@ rflect.cal.MainPane.prototype.startChipDrag_ = function(aEvent, aClassName) {
   var isEndGrip = this.isEndGripCont_(aClassName,
       /**@type {Element}*/ (aEvent.target));
 
-  if (this.isWeekChip_(aClassName))
+  if (this.isWeekChip_(aClassName) || this.isWeekGrip_(aClassName))
     maskConfiguration = rflect.cal.MainPaneSelectionMask.Configuration.WEEK;
   // Test for all-day chip first, because it's a month chip, too.
-  else if (this.isAllDayChip_(aClassName))
+  else if (this.isAllDayChip_(aClassName) || this.isAllDayGrip_(aClassName))
     maskConfiguration =
         rflect.cal.MainPaneSelectionMask.Configuration.ALLDAY;
-  else if (this.isMonthChip_(aClassName))
+  else if (this.isMonthChip_(aClassName) || this.isMonthGrip_(aClassName))
     maskConfiguration =
         rflect.cal.MainPaneSelectionMask.Configuration.MONTH;
 
