@@ -118,6 +118,13 @@ rflect.cal.blocks.Block.prototype.position = 0;
 
 
 /**
+ * Time position of earliest chip in block.
+ * @type {number}
+ */
+rflect.cal.blocks.Block.prototype.earliestChipStart = 0;
+
+
+/**
  * @typedef {{chip: rflect.cal.events.Chip, startCol: number, colSpan: number}}
  */
 rflect.cal.blocks.BlobEntry;
@@ -190,6 +197,8 @@ rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips) {
 
   // The end time of the last ending event in the entire blob
   var latestItemEnd;
+  // The start time of the first starting event in the entire blob
+  var earliestItemStart;
 
   // This array keeps track of the last (latest ending) chip in each of
   // the columns of the current blob. We could reconstruct this data at
@@ -217,6 +226,9 @@ rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips) {
 
     if (!latestItemEnd) {
       latestItemEnd = itemEnd;
+    }
+    if (!earliestItemStart || itemStart < earliestItemStart) {
+      earliestItemStart = itemStart;
     }
     if (currentBlob.length && latestItemEnd &&
       //itemStart.compare(latestItemEnd) != -1) {
@@ -428,6 +440,8 @@ rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips) {
 
   if (this.capacity < maxCol + 1)
     this.capacity = maxCol + 1;
+
+  this.earliestChipStart = /**@type {number}*/(earliestItemStart);
 
 }
 

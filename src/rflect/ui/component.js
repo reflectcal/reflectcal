@@ -32,13 +32,14 @@ goog.inherits(rflect.ui.Component, goog.ui.Component);
 
 
 /**
- * @param {Array.<number>|Arguments} aContainer Array to test index presence in.
+ * @param {Array.<number>|undefined} aContainer Array to test index presence in.
  * @param {number} aIndex Index to test.
  * @return {boolean} Whether index is within array of indexes to be excluded
  * from update.
  */
 rflect.ui.Component.indexIsInExclusions_ = function(aContainer, aIndex) {
-  return /**@type {boolean}*/ (aContainer.length) &&
+  return /**@type {boolean}*/ (aContainer) &&
+      /**@type {boolean}*/ (aContainer.length) &&
       goog.array.contains(aContainer, aIndex)
 }
 
@@ -100,15 +101,14 @@ rflect.ui.Component.prototype.buildInternal = function(aSb) {
  * component's update logic need to be separated from redraw. Propagates to
  * component's children by default. For custom behavior, should be overridden by
  * subclasses.
- * @param {...number} var_args Index(es) of
- * component's children which should be excluded from update.
+ * @param {Array.<number>=} opt_exclusions Index(es) of component's children which
+ * should be excluded from update.
  */
 rflect.ui.Component.prototype.updateBeforeRedraw =
-    function(var_args) {
-  var args = arguments;
+    function(opt_exclusions) {
   this.forEachChild(function(aChild, aIndex) {
     if (aChild.updateBeforeRedraw &&
-        !rflect.ui.Component.indexIsInExclusions_(args, aIndex))
+        !rflect.ui.Component.indexIsInExclusions_(opt_exclusions, aIndex))
       aChild.updateBeforeRedraw();
   });
 };
@@ -117,17 +117,16 @@ rflect.ui.Component.prototype.updateBeforeRedraw =
 /**
  * Updates body of component by redraw. This is a second and final part of
  * component update sequence.
- * @param {...number} var_args Index(es) of
- * component's children which should be excluded from update.
+ * @param {Array.<number>=} opt_exclusions Index(es) of component's children which
+ * should be excluded from update.
  * @see {rflect.cal.MainBody#updateBeforeRedraw}.
  */
 rflect.ui.Component.prototype.updateByRedraw =
-    function(var_args) {
-  var args = arguments;
+    function(opt_exclusions) {
   // Propagate call to child components that have a DOM, if any.
   this.forEachChild(function(aChild, aIndex) {
     if (aChild.updateByRedraw && aChild.isInDocument() && aChild.getElement() &&
-        !rflect.ui.Component.indexIsInExclusions_(args, aIndex)) {
+        !rflect.ui.Component.indexIsInExclusions_(opt_exclusions, aIndex)) {
       aChild.updateByRedraw();
     }
   });
@@ -136,15 +135,14 @@ rflect.ui.Component.prototype.updateByRedraw =
 
 /**
  * Updates component in whole update sequence.
- * @param {...number} var_args Index(es) of
- * component's children which should be excluded from update.
+ * @param {Array.<number>=} opt_exclusions Index(es) of component's children which
+ * should be excluded from update.
  * @see {rflect.cal.MainBody#updateBeforeRedraw}.
  */
 rflect.ui.Component.prototype.update =
-    function(var_args) {
-  var args = goog.array.slice(arguments, 0);
-  rflect.ui.Component.prototype.updateBeforeRedraw.apply(this, args);
-  rflect.ui.Component.prototype.updateByRedraw.apply(this, args);
+    function(opt_exclusions) {
+  this.updateBeforeRedraw(opt_exclusions);
+  this.updateByRedraw(opt_exclusions);
 };
 
 

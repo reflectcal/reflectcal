@@ -428,17 +428,17 @@ rflect.cal.MainBody.prototype.onEventPaneDelete_ = function(aEvent) {
  */
 rflect.cal.MainBody.prototype.updateMainPane_ = function() {
   this.eventManager_.run();
-  this.updateBeforeRedraw(
+  this.updateBeforeRedraw([
       /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
       /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR),
       /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.MINI_CAL),
-      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TOP_PANE)
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TOP_PANE)]
   );
-  this.updateByRedraw(
+  this.updateByRedraw([
       /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
       /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR),
       /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.MINI_CAL),
-      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TOP_PANE)
+      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TOP_PANE)]
   );
 }
 

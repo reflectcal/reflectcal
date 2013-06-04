@@ -348,3 +348,19 @@ rflect.cal.blocks.BlockPool.prototype.getSizeFromCapacity =
       rflect.cal.predefined.MN_EVENT_LAYER_MARGIN_TOP +
       rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2;
 };
+
+
+/**
+ * @return {number} Time position of earliest chip in this block pool.
+ */
+rflect.cal.blocks.BlockPool.prototype.getEarliestChipStart =
+    function () {
+  var earliestChipStart = this.blocks[0].earliestChipStart;
+  for (var counter = 1; counter < this.blocksNumber_; counter++) {
+    var currentBlockEarliestChipStart = this.blocks[counter].earliestChipStart;
+    if (currentBlockEarliestChipStart < earliestChipStart)
+      earliestChipStart = currentBlockEarliestChipStart;
+  }
+
+  return earliestChipStart;
+}

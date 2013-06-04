@@ -377,9 +377,11 @@ rflect.cal.MainPane.prototype.setDefaultSizes_ = function() {
  * Updates main pane with new data before redraw. Includes size adjustment.
  * @param {boolean=} opt_doNotRemoveScrollListeners Whether not to remove scroll
  * listeners.
+ * @param {boolean=} opt_updateByNavigation Whether this update initiated by
+ * buttons of top pane or minical.
  */
 rflect.cal.MainPane.prototype.updateBeforeRedraw = function(
-    opt_doNotRemoveScrollListeners) {
+    opt_doNotRemoveScrollListeners, opt_updateByNavigation) {
   if (this.getParent().firstBuildWk && this.viewManager_.isInWeekMode() ||
       this.getParent().firstBuildMn && this.viewManager_.isInMonthMode())
     return this.setDefaultSizes_();
@@ -470,6 +472,10 @@ rflect.cal.MainPane.prototype.updateBeforeRedraw = function(
 
   if (!opt_doNotRemoveScrollListeners)
     this.removeScrollListeners_();
+
+  if (opt_updateByNavigation)
+    this.blockManager_.blockPoolWeek.scrollTop =
+        this.blockManager_.blockPoolWeek.getEarliestChipStart();
 };
 
 
@@ -555,6 +561,7 @@ rflect.cal.MainPane.prototype.updateByRedraw = function() {
     if (this.blockManager_.blockPoolAllDay.expanded)
       headerScrollable.scrollTop =
           this.blockManager_.blockPoolAllDay.scrollTop;
+
     mainScrollable.scrollTop =
         this.blockManager_.blockPoolWeek.scrollTop;
 
