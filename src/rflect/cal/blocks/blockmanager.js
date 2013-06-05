@@ -24,7 +24,8 @@ goog.require('rflect.cal.predefined');
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @constructor
  */
-rflect.cal.blocks.BlockManager = function(aViewManager, aTimeManager, aEventManager) {
+rflect.cal.blocks.BlockManager = function(aViewManager, aTimeManager,
+                                          aEventManager) {
 
   /**
    * Link to view manager.
@@ -51,21 +52,24 @@ rflect.cal.blocks.BlockManager = function(aViewManager, aTimeManager, aEventMana
    * Block pool for week mode.
    * @type {rflect.cal.blocks.BlockPool}
    */
-  this.blockPoolWeek = new rflect.cal.blocks.BlockPool(true);
+  this.blockPoolWeek = new rflect.cal.blocks.BlockPool(true,
+      this.eventManager_);
   this.blockPoolWeek.fill();
 
   /**
    * Block pool for month mode.
    * @type {rflect.cal.blocks.BlockPool}
    */
-  this.blockPoolMonth = new rflect.cal.blocks.BlockPool(false);
+  this.blockPoolMonth = new rflect.cal.blocks.BlockPool(false,
+      this.eventManager_);
   this.blockPoolMonth.fill(6);
 
   /**
    * Block pool for allday.
    * @type {rflect.cal.blocks.BlockPool}
    */
-  this.blockPoolAllDay = new rflect.cal.blocks.BlockPool(false);
+  this.blockPoolAllDay = new rflect.cal.blocks.BlockPool(false,
+      this.eventManager_);
   this.blockPoolAllDay.fill(1);
   this.blockPoolAllDay.setBlocksNumber(1);
 

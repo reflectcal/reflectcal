@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012. Rflect, Alex K.
+ * Copyright (c) 2013. Rflect, Alex K.
  */
 
 /**
@@ -8,6 +8,8 @@
  */
 
 goog.provide('rflect.cal.events.Calendar');
+
+goog.require('goog.array');
 
 
 
@@ -18,6 +20,7 @@ goog.provide('rflect.cal.events.Calendar');
 rflect.cal.events.Calendar = function(aUid, aName) {
   this.id = aUid;
   this.name = aName;
+  this.eventIds = [];
 };
 
 
@@ -47,7 +50,6 @@ rflect.cal.events.Calendar.prototype.id;
 /**
  * Name of calendar.
  * @type {string}
- * @private
  */
 rflect.cal.events.Calendar.prototype.name;
 
@@ -55,9 +57,22 @@ rflect.cal.events.Calendar.prototype.name;
 /**
  * Color of calendar.
  * @type {string}
- * @private
  */
 rflect.cal.events.Calendar.prototype.color;
+
+
+/**
+ * Whether this calendar is visible.
+ * @type {boolean}
+ */
+rflect.cal.events.Calendar.prototype.visible;
+
+
+/**
+ * Collection of event ids of this calendar.
+ * @type {Array.<number>}
+ */
+rflect.cal.events.Calendar.prototype.eventIds;
 
 
 /**
@@ -68,3 +83,21 @@ rflect.cal.events.Calendar.prototype.clone = function() {
 
   return clone;
 };
+
+
+/**
+ * @param {rflect.cal.events.Event} aEvent Event to add to this calendar.
+ */
+rflect.cal.events.Calendar.prototype.addEvent = function(aEvent) {
+  this.eventIds.push(aEvent.id);
+};
+
+
+/**
+ * @param {rflect.cal.events.Event} aEvent Event to remove from this calendar.
+ */
+rflect.cal.events.Calendar.prototype.deleteEvent = function(aEvent) {
+  var id = aEvent.id;
+  goog.array.remove(this.eventIds, id);
+};
+

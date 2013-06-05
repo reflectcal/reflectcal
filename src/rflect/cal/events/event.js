@@ -25,10 +25,11 @@ goog.provide('rflect.cal.events.Event');
  * @param {boolean} aAllDay Whether event is all day.
  * @param {string=} opt_summary Name of event.
  * @param {string=} opt_description Longer description of event.
+ * @param {number=} opt_calendarId Id of calendar this event belongs to.
  * @constructor
  */
 rflect.cal.events.Event = function(aUid, aLongId, aStartDate, aEndDate, aAllDay,
-    opt_summary, opt_description) {
+    opt_summary, opt_description, opt_calendarId) {
   this.id = aUid;
   this.longId = aLongId;
   this.startDate = aStartDate;
@@ -36,6 +37,7 @@ rflect.cal.events.Event = function(aUid, aLongId, aStartDate, aEndDate, aAllDay,
   this.allDay = aAllDay;
   this.summary = opt_summary || '';
   this.description = opt_description || '';
+  this.calendarId = opt_calendarId;
 };
 
 
@@ -88,6 +90,14 @@ rflect.cal.events.Event.FIELD_ALL_DAY = 5;
 
 
 /**
+ * Index of calendar id in JSON array.
+ * @type {number}
+ * @const
+ */
+rflect.cal.events.Event.FIELD_CALENDAR_ID = 6;
+
+
+/**
  * Id of event.
  * @type {number}
  */
@@ -133,6 +143,13 @@ rflect.cal.events.Event.prototype.endDate;
  * @type {boolean}
  */
 rflect.cal.events.Event.prototype.allDay;
+
+
+/**
+ * Calendar id.
+ * @type {number|undefined}
+ */
+rflect.cal.events.Event.prototype.calendarId;
 
 
 /**
@@ -214,7 +231,9 @@ rflect.cal.events.Event.prototype.toString = function() {
       ', summary: ' +
       this.summary +
       ', description: ' +
-      this.description;
+      this.description +
+      ', calendarId: ' +
+      this.calendarId;
 };
 
 /**
@@ -222,7 +241,8 @@ rflect.cal.events.Event.prototype.toString = function() {
  */
 rflect.cal.events.Event.prototype.clone = function() {
   var clone = new rflect.cal.events.Event(this.id, this.longId, this.startDate,
-      this.endDate, this.allDay, this.summary, this.description);
+      this.endDate, this.allDay, this.summary, this.description,
+      this.calendarId);
 
   return clone;
 };

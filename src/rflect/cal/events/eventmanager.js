@@ -187,7 +187,6 @@ rflect.cal.events.EventManager.createCalendarId = function() {
  * @return {rflect.cal.events.Event} Event representation.
  */
 rflect.cal.events.EventManager.createEventFromArray = function(aArray) {
-  var uid = rflect.cal.events.EventManager.createEventId();
   var longId = aArray[rflect.cal.events.Event.FIELD_ID];
   // We parse start day with day and week fields, they are needed for forming
   // chips.
@@ -198,9 +197,10 @@ rflect.cal.events.EventManager.createEventFromArray = function(aArray) {
   var summary = aArray[rflect.cal.events.Event.FIELD_SUMMARY];
   var description = aArray[rflect.cal.events.Event.FIELD_DESCRIPTION];
   var allDay = aArray[rflect.cal.events.Event.FIELD_ALL_DAY];
+  var calendarId = aArray[rflect.cal.events.Event.FIELD_CALENDAR_ID];
 
-  return new rflect.cal.events.Event(uid, longId, startDate, endDate, allDay,
-      summary, description);
+  return rflect.cal.events.EventManager.createEvent(longId, startDate, endDate,
+      allDay, summary, description, calendarId);
 }
 
 
@@ -212,13 +212,15 @@ rflect.cal.events.EventManager.createEventFromArray = function(aArray) {
  * @param {boolean} aAllDay Whether event is all day.
  * @param {string=} opt_summary Name of event.
  * @param {string=} opt_description Longer description of event.
+ * @param {number=} opt_calendarId Calendar id.
  * @return {rflect.cal.events.Event} Event representation.
  */
 rflect.cal.events.EventManager.createEvent = function(aLongId,
-    aStartDate, aEndDate, aAllDay, opt_summary, opt_description) {
+    aStartDate, aEndDate, aAllDay, opt_summary, opt_description,
+    opt_calendarId) {
   var uid = rflect.cal.events.EventManager.createEventId();
   return new rflect.cal.events.Event(uid, aLongId, aStartDate, aEndDate,
-      aAllDay, opt_summary, opt_description);
+      aAllDay, opt_summary, opt_description, opt_calendarId);
 }
 
 
@@ -292,6 +294,20 @@ rflect.cal.events.EventManager.pushNestedAllDayChips_ = function(
 
 
 /**
+ * @param {rflect.cal.events.Chip} aChip Chip to test.
+ * @return {boolean} Whether this chip is in visible calendar.
+ */
+rflect.cal.events.EventManager.prototype.chipIsInVisibleCalendar =
+    function(aChip) {
+  var eventId = aChip.eventId;
+  var event = this.events_[eventId];
+  var calendar = this.calendars_[event.calendarId];
+  //So that even chips from non-existent calendar are treated as from invisible.
+  return /**@type {boolean}*/(calendar) && calendar.visible;
+}
+
+
+/**
  * Transforms parsed json to chips.
  * @param {Array.<Array.<string|number|boolean>>} aEventsArray List of JSON
  * representation of events.
@@ -333,6 +349,8 @@ rflect.cal.events.EventManager.prototype.addEvent =
   var weekChipEndMins = 0;
   var total = 0;
   var isAllDay = aEvent.allDay;
+  var calendarId = aEvent.calendarId;
+  var calendar = this.calendars_[calendarId];
 
   var tomorrow;
   var chip;
@@ -341,6 +359,8 @@ rflect.cal.events.EventManager.prototype.addEvent =
     var allDayIndexes = [];
 
   this.events_[aEvent.id] = aEvent;
+
+  calendar && calendar.addEvent(aEvent);
 
   // Generating chips.
   while (hasNext) {
@@ -444,7 +464,44 @@ rflect.cal.events.EventManager.prototype.removeEventById =
  */
 rflect.cal.events.EventManager.prototype.deleteEvent =
     function(aEvent) {
+  var calendar = this.calendars_[aEvent.calendarId];
+
+  calendar && calendar.deleteEvent(aEvent);
   this.removeEventById(aEvent.id);
+}
+
+
+
+/**
+ * Adds calendar to collection.
+ * @param {rflect.cal.events.Calendar} aCalendar Calendar.
+ */
+rflect.cal.events.EventManager.prototype.addCalendar =
+    function(aCalendar) {
+  this.calendars_[aCalendar.id] = aCalendar;
+}
+
+
+/**
+ * Deletes calendar with all events.
+ * @param {rflect.cal.events.Calendar} aCalendar Calendar.
+ * TODO(alexk): maybe it's better not to delete all events from calendar
+ * outright (may take long time), but filter out chips from non-existent
+ * calendar.
+ * @see {rflect.cal.events.EventManager#chipIsInVisibleCalendar}
+ */
+rflect.cal.events.EventManager.prototype.deleteCalendar =
+    function(aCalendar) {
+  var calendar = this.calendars_[aCalendar.id];
+
+  if (calendar) {
+    var eventIds = calendar.eventIds;
+    for (var counter = 0, length = eventIds.length; counter < length;
+         counter++)
+      this.removeEventById(eventIds[counter]);
+
+    delete this.calendars_[aCalendar.id];
+  }
 }
 
 

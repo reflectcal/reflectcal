@@ -162,8 +162,10 @@ rflect.cal.blocks.Block.prototype.clone = function() {
  * Taken from Mozilla Lightning.
  * @param {!Array.<rflect.cal.events.Chip>} aChips Collection of chips for this
  * block.
+ * @param {rflect.cal.events.EventManager} aEventManager Event manager.
  */
-rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips) {
+rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips,
+                                                             aEventManager) {
   /* We're going to create a series of 'blobs'.  A blob is a series of
   * events that create a continuous block of busy time.  In other
   * words, a blob ends when there is some time such that no events
@@ -221,6 +223,10 @@ rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips) {
     //var itemEnd = chip.endDate || chip.dueDate;
 
     var chip = aChips[i];
+
+    if (!aEventManager.chipIsInVisibleCalendar(chip))
+      continue;
+
     var itemStart = chip.start;
     var itemEnd = chip.end;
 

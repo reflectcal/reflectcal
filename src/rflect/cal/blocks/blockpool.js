@@ -18,11 +18,19 @@ goog.require('rflect.cal.predefined');
  * Block pool contains collection of blocks, could add them if necessary,
  * deleting is unnecessary, but could clear all collection.
  * @param {boolean} aIsHorizontal Whether block pool is horizontal.
+ * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @constructor
  */
-rflect.cal.blocks.BlockPool = function(aIsHorizontal) {
+rflect.cal.blocks.BlockPool = function(aIsHorizontal, aEventManager) {
 
   this.isHorizontal_ = aIsHorizontal;
+
+  /**
+   * Link to event manager.
+   * @type {rflect.cal.events.EventManager}
+   * @private
+   */
+  this.eventManager_ = aEventManager;
 
   /**
    * Collection of individual blocks.
@@ -254,7 +262,7 @@ rflect.cal.blocks.BlockPool.prototype.updateEventMap = function(aChips,
     // but still are able to expand block because chips have width less that
     // optimal. But maybe there's no need to show this case via expand sign.
 
-    this.blocks[counter].computeEventMap(aChips[counter]);
+    this.blocks[counter].computeEventMap(aChips[counter], this.eventManager_);
     if (opt_createArrays)
       this.blocks[counter].createSparseArraysFromBlobs(opt_arraysLength || 0);
 
