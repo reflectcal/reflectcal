@@ -78,7 +78,7 @@ rflect.cal.ViewManager = function(aMainInstance) {
 
   /**
    * Main body component.
-   * @type {rflect.ui.Component}
+   * @type {rflect.cal.MainBody}
    * @private
    */
   this.mainBody_ = new rflect.cal.MainBody(this, this.timeManager,
@@ -169,14 +169,14 @@ rflect.cal.ViewManager.prototype.isInMonthMode = function() {
  * @private
  */
 rflect.cal.ViewManager.prototype.onViewportResize_ = function() {
-  this.mainBody_.updateBeforeRedraw(
+  this.mainBody_.updateBeforeRedraw([
       rflect.cal.MainBody.ComponentsIndexes.TOP_PANE,
       rflect.cal.MainBody.ComponentsIndexes.MINI_CAL
-  );
-  this.mainBody_.updateByRedraw(
+  ]);
+  this.mainBody_.updateByRedraw([
       rflect.cal.MainBody.ComponentsIndexes.TOP_PANE,
       rflect.cal.MainBody.ComponentsIndexes.MINI_CAL
-  );
+  ]);
 };
 
 
@@ -377,7 +377,7 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
   this.eventManager_.run();
 
   if (this.isOnStartup_) {
-    this.mainBody_.updateBeforeRedraw();
+    this.mainBody_.updateBeforeRedraw(null, true);
     // Render main body and places it in document.body.
     this.mainBody_.render();
     this.assignEvents_();
@@ -402,7 +402,7 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
         /**@type {number}*/
         (rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
         /**@type {number}*/
-        (rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR)]);
+        (rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR)], true);
     this.mainBody_.updateByRedraw([
         /**@type {number}*/
         (rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
@@ -438,7 +438,7 @@ rflect.cal.ViewManager.prototype.showNext_ = function(aDirection) {
   //  if (goog.DEBUG) _perf('next interval');
   this.timeManager.shift(aDirection);
   this.eventManager_.run();
-  this.mainBody_.updateBeforeRedraw();
+  this.mainBody_.updateBeforeRedraw(null, true);
   this.mainBody_.updateByRedraw();
   //  if (goog.DEBUG) _perf('next interval');
 };
@@ -450,7 +450,7 @@ rflect.cal.ViewManager.prototype.showNext_ = function(aDirection) {
 rflect.cal.ViewManager.prototype.showNow = function() {
   this.timeManager.shiftToNow();
   this.eventManager_.run();
-  this.mainBody_.updateBeforeRedraw();
+  this.mainBody_.updateBeforeRedraw(null, true);
   this.mainBody_.updateByRedraw();
 };
 

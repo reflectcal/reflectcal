@@ -119,9 +119,9 @@ rflect.cal.blocks.Block.prototype.position = 0;
 
 /**
  * Time position of earliest chip in block.
- * @type {number}
+ * @type {number|undefined}
  */
-rflect.cal.blocks.Block.prototype.earliestChipStart = 0;
+rflect.cal.blocks.Block.prototype.earliestChipStart;
 
 
 /**

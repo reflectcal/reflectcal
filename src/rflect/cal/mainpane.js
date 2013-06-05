@@ -375,12 +375,14 @@ rflect.cal.MainPane.prototype.setDefaultSizes_ = function() {
 
 /**
  * Updates main pane with new data before redraw. Includes size adjustment.
+ * @param {Array.<number>=} opt_exclusions Index(es) of component's children
+ * which should be excluded from update.
  * @param {boolean=} opt_doNotRemoveScrollListeners Whether not to remove scroll
  * listeners.
  * @param {boolean=} opt_updateByNavigation Whether this update initiated by
  * buttons of top pane or minical.
  */
-rflect.cal.MainPane.prototype.updateBeforeRedraw = function(
+rflect.cal.MainPane.prototype.updateBeforeRedraw = function(opt_exclusions,
     opt_doNotRemoveScrollListeners, opt_updateByNavigation) {
   if (this.getParent().firstBuildWk && this.viewManager_.isInWeekMode() ||
       this.getParent().firstBuildMn && this.viewManager_.isInMonthMode())
@@ -474,9 +476,28 @@ rflect.cal.MainPane.prototype.updateBeforeRedraw = function(
     this.removeScrollListeners_();
 
   if (opt_updateByNavigation)
-    this.blockManager_.blockPoolWeek.scrollTop =
-        this.blockManager_.blockPoolWeek.getEarliestChipStart();
+    this.setHandyScrollPosition_();
+
 };
+
+
+/**
+ * Sets scroll position that focuses on either event or today's time.
+ * @private
+ */
+rflect.cal.MainPane.prototype.setHandyScrollPosition_ = function() {
+  var scrollTop = 0;
+  var earliestChipStart =
+      this.blockManager_.blockPoolWeek.getEarliestChipStart();
+
+  if (earliestChipStart != 0)
+    scrollTop = earliestChipStart * 1152 / 1440;
+  else if (this.timeManager_.isInNowPoint)
+    scrollTop = this.timeMarker_.getPosition(true);
+
+  this.blockManager_.blockPoolWeek.scrollTop =
+      scrollTop;
+}
 
 
 /**
@@ -1424,7 +1445,7 @@ rflect.cal.MainPane.prototype.isGrip_ = function(aClassName) {
 rflect.cal.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
   this.containerSizeMonitor_.checkForContainerSizeChange();
-  this.updateBeforeRedraw(true);
+  this.updateBeforeRedraw(null, true);
 
   var className = aEvent.target.className;
   var preventDefaultIsNeeded = false;

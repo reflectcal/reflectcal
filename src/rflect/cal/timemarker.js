@@ -84,12 +84,12 @@ rflect.cal.TimeMarker.prototype.onTick_ = function(opt_event) {
     var today = new Date();
     var headEl = goog.dom.getElement('time-marker-head');
     if (headEl)
-      headEl.style.top = this.getPosition_(true, today) + 'px';
+      headEl.style.top = this.getPosition(true, today) + 'px';
     if (this.timeManager_.isInNowPoint) {
       var index = this.getIndexOfTodayBlock_(today);
       var lineEl = this.getMarkerEl_();
       if (lineEl)
-        lineEl.style.top = this.getPosition_(false, today) + 'px';
+        lineEl.style.top = this.getPosition(false, today) + 'px';
 
       goog.dom.getElement('wk-events-layer-col' + index).appendChild(lineEl);
     }
@@ -106,7 +106,7 @@ rflect.cal.TimeMarker.prototype.onTick_ = function(opt_event) {
  * @param {Date=} opt_today Today's date.
  * @return {number} Position of marker.
  */
-rflect.cal.TimeMarker.prototype.getPosition_ = function(aHead, opt_today) {
+rflect.cal.TimeMarker.prototype.getPosition = function(aHead, opt_today) {
   var today = opt_today || new Date();
   var timePos = today.getHours() * 60 + today.getMinutes();
   var pixelPos = timePos * rflect.cal.predefined.HOUR_ROW_HEIGHT / 30;
@@ -171,7 +171,7 @@ rflect.cal.TimeMarker.prototype.stop = function() {
  */
 rflect.cal.TimeMarker.prototype.buildHead = function(aSb) {
   aSb.append(rflect.cal.TimeMarker.HEAD_PARTS_[0]);
-  aSb.append(this.getPosition_(true));
+  aSb.append(this.getPosition(true));
   aSb.append(rflect.cal.TimeMarker.HEAD_PARTS_[1]);
 }
 
@@ -186,7 +186,7 @@ rflect.cal.TimeMarker.prototype.buildHead = function(aSb) {
  */
 rflect.cal.TimeMarker.prototype.buildLine = function(aSb) {
   aSb.append(rflect.cal.TimeMarker.HEAD_PARTS_[2]);
-  aSb.append(this.getPosition_(false));
+  aSb.append(this.getPosition(false));
   aSb.append(rflect.cal.TimeMarker.HEAD_PARTS_[3]);
 }
 

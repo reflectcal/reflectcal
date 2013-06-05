@@ -139,13 +139,15 @@ rflect.cal.ui.DatePicker.prototype.endSelectionIndex = -1;
  * Updates mini cal with new data before redraw.
  * If called parameterless, takes basis from external time manager, otherwise
  * we should use internal one.
+ * @param {Array.<number>=} opt_exclusions Index(es) of component's children
+ * which should be excluded from update.
  * @param {boolean=} opt_internal Whether method was called internally.
  * @param {rflect.cal.TimeManager.Direction=} opt_direction Direction where to
  * shift basis when called
  * internally.
  */
-rflect.cal.ui.DatePicker.prototype.updateBeforeRedraw = function(opt_internal,
-    opt_direction) {
+rflect.cal.ui.DatePicker.prototype.updateBeforeRedraw = function(opt_exclusions,
+    opt_internal, opt_direction) {
   if (opt_internal && opt_direction){
     this.timeManager_.shift(opt_direction);
   } else {
@@ -239,7 +241,7 @@ rflect.cal.ui.DatePicker.prototype.onClick_ = function(aEvent) {
   }
 
   if (direction) {
-    this.updateBeforeRedraw(true, direction);
+    this.updateBeforeRedraw(null, true, direction);
     this.updateByRedraw();
   }
 };

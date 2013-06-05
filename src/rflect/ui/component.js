@@ -37,7 +37,7 @@ goog.inherits(rflect.ui.Component, goog.ui.Component);
  * @return {boolean} Whether index is within array of indexes to be excluded
  * from update.
  */
-rflect.ui.Component.indexIsInExclusions_ = function(aContainer, aIndex) {
+rflect.ui.Component.indexIsInExclusions = function(aContainer, aIndex) {
   return /**@type {boolean}*/ (aContainer) &&
       /**@type {boolean}*/ (aContainer.length) &&
       goog.array.contains(aContainer, aIndex)
@@ -108,7 +108,7 @@ rflect.ui.Component.prototype.updateBeforeRedraw =
     function(opt_exclusions) {
   this.forEachChild(function(aChild, aIndex) {
     if (aChild.updateBeforeRedraw &&
-        !rflect.ui.Component.indexIsInExclusions_(opt_exclusions, aIndex))
+        !rflect.ui.Component.indexIsInExclusions(opt_exclusions, aIndex))
       aChild.updateBeforeRedraw();
   });
 };
@@ -126,7 +126,7 @@ rflect.ui.Component.prototype.updateByRedraw =
   // Propagate call to child components that have a DOM, if any.
   this.forEachChild(function(aChild, aIndex) {
     if (aChild.updateByRedraw && aChild.isInDocument() && aChild.getElement() &&
-        !rflect.ui.Component.indexIsInExclusions_(opt_exclusions, aIndex)) {
+        !rflect.ui.Component.indexIsInExclusions(opt_exclusions, aIndex)) {
       aChild.updateByRedraw();
     }
   });

@@ -355,12 +355,16 @@ rflect.cal.blocks.BlockPool.prototype.getSizeFromCapacity =
  */
 rflect.cal.blocks.BlockPool.prototype.getEarliestChipStart =
     function () {
-  var earliestChipStart = this.blocks[0].earliestChipStart;
-  for (var counter = 1; counter < this.blocksNumber_; counter++) {
+  var earliestChipStart;
+  for (var counter = 0; counter < this.blocksNumber_; counter++) {
     var currentBlockEarliestChipStart = this.blocks[counter].earliestChipStart;
+
+    if (!earliestChipStart && currentBlockEarliestChipStart)
+      earliestChipStart = currentBlockEarliestChipStart;
+
     if (currentBlockEarliestChipStart < earliestChipStart)
       earliestChipStart = currentBlockEarliestChipStart;
   }
 
-  return earliestChipStart;
+  return earliestChipStart || 0;
 }

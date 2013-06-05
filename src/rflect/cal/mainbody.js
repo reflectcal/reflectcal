@@ -246,6 +246,32 @@ rflect.cal.MainBody.prototype.buildInternal = function(aSb) {
 
 
 /**
+ * Updates main body before redraw.
+ * @param {Array.<number>=} opt_exclusions Index(es) of component's children
+ * which should be excluded from update.
+ * @param {boolean=} opt_updateByNavigation Whether this update initiated by
+ * buttons of top pane or minical.
+ * @override
+ */
+rflect.cal.MainBody.prototype.updateBeforeRedraw = function(opt_exclusions,
+    opt_updateByNavigation) {
+  // We will update main pane separately.
+  var exclusions = opt_exclusions ||
+      [rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE];
+
+  if (!goog.array.contains(exclusions,
+      rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE))
+    exclusions.push(rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE);
+
+  rflect.cal.MainBody.superClass_.updateBeforeRedraw.call(this, exclusions);
+
+  if (!rflect.ui.Component.indexIsInExclusions(opt_exclusions,
+      rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE))
+    this.mainPane_.updateBeforeRedraw(null, undefined, opt_updateByNavigation);
+};
+
+
+/**
  * Decorates child components.
  */
 rflect.cal.MainBody.prototype.enterDocument = function() {
