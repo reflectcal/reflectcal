@@ -246,7 +246,7 @@ rflect.cal.MainBody.prototype.buildInternal = function(aSb) {
 
 
 /**
- * Updates main body before redraw.
+ * Redirects parameter to main pane, other children are updated normally.
  * @param {Array.<number>=} opt_exclusions Index(es) of component's children
  * which should be excluded from update.
  * @param {boolean=} opt_updateByNavigation Whether this update initiated by
@@ -256,18 +256,19 @@ rflect.cal.MainBody.prototype.buildInternal = function(aSb) {
 rflect.cal.MainBody.prototype.updateBeforeRedraw = function(opt_exclusions,
     opt_updateByNavigation) {
   // We will update main pane separately.
-  var exclusions = opt_exclusions ||
+  var exclusions = opt_exclusions ?
+      opt_exclusions.slice() :
       [rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE];
 
-  if (!goog.array.contains(exclusions,
-      rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE))
-    exclusions.push(rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE);
+  // Nothing wrong to have duplicates.
+  exclusions.push(rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE);
 
   rflect.cal.MainBody.superClass_.updateBeforeRedraw.call(this, exclusions);
 
   if (!rflect.ui.Component.indexIsInExclusions(opt_exclusions,
-      rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE))
+      rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE)) {
     this.mainPane_.updateBeforeRedraw(null, undefined, opt_updateByNavigation);
+  }
 };
 
 
@@ -291,14 +292,14 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
   this.getHandler().listen(this.topPane_, goog.ui.Component.EventType.ACTION,
       this.onTopPaneAction_, false, this);
       
-  this.rebuildMPWithSizes();
+  this.rebuildMainPaneWithSizes();
 };
 
 
 /**
  * Rebuilds main pane after sizes of all static panes are known.
  */
-rflect.cal.MainBody.prototype.rebuildMPWithSizes = function() {
+rflect.cal.MainBody.prototype.rebuildMainPaneWithSizes = function() {
   this.measureStaticSizes();
   if (this.viewManager_.isInWeekMode())
     this.firstBuildWk = false;

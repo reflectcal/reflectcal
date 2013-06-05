@@ -558,11 +558,11 @@ rflect.cal.MainPane.prototype.updateByRedraw = function() {
   this.getElement().innerHTML = this.build();
 
   if (this.getParent().firstBuildWk && this.viewManager_.isInWeekMode()) {
-    this.getParent().rebuildMPWithSizes();
+    this.getParent().rebuildMainPaneWithSizes();
     return;
   }
   if (this.getParent().firstBuildMn && this.viewManager_.isInMonthMode()) {
-    this.getParent().rebuildMPWithSizes();
+    this.getParent().rebuildMainPaneWithSizes();
     return;
   }
 
