@@ -559,6 +559,7 @@ rflect.cal.ui.EventPane.prototype.displayValues = function() {
   this.checkboxAllDay_.setChecked(eh.getAllDay());
 
   this.showTimeInputs_(!eh.getAllDay());
+
 };
 
 
@@ -662,8 +663,11 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
           endDateShim.getMinutes() == 0)) {
         endDateShim.setHours(0);
         endDateShim.setMinutes(0);
-        endDateShim = endDateShim.getTomorrow();
       }
+
+      // ui date is lesser than real by 1 day for all-day events
+      endDateShim = endDateShim.getTomorrow();
+
     }
 
     eh.setStartDate(startDateShim);
