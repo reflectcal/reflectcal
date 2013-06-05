@@ -45,12 +45,11 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
    * Event transaction helper.
    * @type {rflect.cal.events.EventHolder}
    */
-  this.eventHolder =
-      new rflect.cal.events.EventHolder(this);
+  this.eventHolder = new rflect.cal.events.EventHolder(this);
 
   /**
    * Map of event id to event.
-   * @type {Object.<number, rflect.cal.events.Event|rflect.cal.events.RecurringEvent>}
+   * @type {Object.<number, rflect.cal.events.Event|rflect.cal.events.Plan>}
    * @private
    */
   this.events_ = {};
@@ -137,9 +136,16 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
 
   /**
    * List of recurring events with infinite intervals.
-   * @type {Array.<rflect.cal.events.RecurringEvent>}
+   * @type {Array.<rflect.cal.events.Plan>}
    */
   this.infinitePlans_ = [];
+
+
+  /**
+   * Map of calendar id -> calendar.
+   * @type {Object.<number, rflect.cal.events.Calendar>}
+   */
+  this.calendars_ = {};
 };
 
 
@@ -152,10 +158,26 @@ rflect.cal.events.EventManager.eventUid_ = 0;
 
 
 /**
+ * Calendar id.
+ * @type {number}
+ * @private
+ */
+rflect.cal.events.EventManager.calendarUid_ = 0;
+
+
+/**
  * @returns {number} Event id.
  */
 rflect.cal.events.EventManager.createEventId = function() {
   return rflect.cal.events.EventManager.eventUid_++;
+};
+
+
+/**
+ * @returns {number} Calendar id.
+ */
+rflect.cal.events.EventManager.createCalendarId = function() {
+  return rflect.cal.events.EventManager.calendarUid_++;
 };
 
 
@@ -197,6 +219,17 @@ rflect.cal.events.EventManager.createEvent = function(aLongId,
   var uid = rflect.cal.events.EventManager.createEventId();
   return new rflect.cal.events.Event(uid, aLongId, aStartDate, aEndDate,
       aAllDay, opt_summary, opt_description);
+}
+
+
+/**
+ * Factory method that creates calendar from args.
+ * @param {string} aName Calendar name.
+ * @return {rflect.cal.events.Calendar} Calendar.
+ */
+rflect.cal.events.EventManager.createCalendar = function(aName) {
+  var uid = rflect.cal.events.EventManager.createCalendarId();
+  return new rflect.cal.events.Calendar(uid, aName);
 }
 
 
