@@ -15,11 +15,15 @@ goog.require('goog.array');
 
 /**
  * Class that stores info about calendar.
+ * @param {number} aUid Client-side id for calendar.
+ * @param {string} aName Name of calendar.
+ * @param {rflect.cal.events.ColorCode} aColorCode Color code object.
  * @constructor
  */
-rflect.cal.events.Calendar = function(aUid, aName) {
+rflect.cal.events.Calendar = function(aUid, aName, aColorCode) {
   this.id = aUid;
   this.name = aName;
+  this.colorCode = aColorCode;
   this.eventIds = [];
 };
 
@@ -33,11 +37,19 @@ rflect.cal.events.Calendar.FIELD_ID = 0;
 
 
 /**
- * Index of start date in JSON array.
+ * Index of name in JSON array.
  * @type {number}
  * @const
  */
 rflect.cal.events.Calendar.FIELD_NAME = 1;
+
+
+/**
+ * Index of name in JSON array.
+ * @type {number}
+ * @const
+ */
+rflect.cal.events.Calendar.FIELD_COLOR_CODE = 2;
 
 
 /**
@@ -56,9 +68,9 @@ rflect.cal.events.Calendar.prototype.name;
 
 /**
  * Color of calendar.
- * @type {string}
+ * @type {rflect.cal.events.ColorCode}
  */
-rflect.cal.events.Calendar.prototype.color;
+rflect.cal.events.Calendar.prototype.colorCode;
 
 
 /**

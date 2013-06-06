@@ -14,6 +14,7 @@ goog.require('rflect.structs.IntervalTree');
 goog.require('rflect.cal.events.Chip');
 goog.require('rflect.cal.events.Event');
 goog.require('rflect.cal.events.EventHolder');
+goog.require('rflect.cal.i18n.PREDEFINED_COLOR_CODES');
 goog.require('rflect.cal.predefined.chips');
 goog.require('rflect.object');
 
@@ -140,12 +141,20 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
    */
   this.infinitePlans_ = [];
 
+  /**
+   * Array of color codes.
+   * @type {Array.<rflect.cal.events.ColorCode>}
+   */
+  this.colorCodes_ = rflect.cal.i18n.PREDEFINED_COLOR_CODES.slice();
 
   /**
    * Map of calendar id -> calendar.
    * @type {Object.<number, rflect.cal.events.Calendar>}
    */
-  this.calendars_ = {};
+  this.calendars = {};
+  //TODO(alexk): this is temporary - calendars are loaded from server.
+  // if no one loaded then default should be created.
+  this.addCalendar(rflect.cal.events.EventManager.createCalendar(0));
 };
 
 
@@ -229,9 +238,17 @@ rflect.cal.events.EventManager.createEvent = function(aLongId,
  * @param {string} aName Calendar name.
  * @return {rflect.cal.events.Calendar} Calendar.
  */
-rflect.cal.events.EventManager.createCalendar = function(aName) {
+rflect.cal.events.EventManager.createCalendar = function(opt_colorCodeIndex,
+    opt_name) {
   var uid = rflect.cal.events.EventManager.createCalendarId();
-  return new rflect.cal.events.Calendar(uid, aName);
+
+  // Choose a random array index in [0, i] (inclusive with i).
+  var pickIndex = goog.isDef(opt_colorCodeIndex) ? opt_colorCodeIndex :
+      Math.floor(Math.random() * (this.colorCodes_.length));
+  var colorCode = this.colorCodes_[pickIndex];
+  var name = opt_name || colorCode.getFullName();
+
+  return new rflect.cal.events.Calendar(uid, aName, colorCode);
 }
 
 
@@ -301,7 +318,7 @@ rflect.cal.events.EventManager.prototype.chipIsInVisibleCalendar =
     function(aChip) {
   var eventId = aChip.eventId;
   var event = this.events_[eventId];
-  var calendar = this.calendars_[event.calendarId];
+  var calendar = this.calendars[event.calendarId];
   //So that even chips from non-existent calendar are treated as from invisible.
   return /**@type {boolean}*/(calendar) && calendar.visible;
 }
@@ -350,7 +367,7 @@ rflect.cal.events.EventManager.prototype.addEvent =
   var total = 0;
   var isAllDay = aEvent.allDay;
   var calendarId = aEvent.calendarId;
-  var calendar = this.calendars_[calendarId];
+  var calendar = this.calendars[calendarId];
 
   var tomorrow;
   var chip;
@@ -464,7 +481,7 @@ rflect.cal.events.EventManager.prototype.removeEventById =
  */
 rflect.cal.events.EventManager.prototype.deleteEvent =
     function(aEvent) {
-  var calendar = this.calendars_[aEvent.calendarId];
+  var calendar = this.calendars[aEvent.calendarId];
 
   calendar && calendar.deleteEvent(aEvent);
   this.removeEventById(aEvent.id);
@@ -478,7 +495,7 @@ rflect.cal.events.EventManager.prototype.deleteEvent =
  */
 rflect.cal.events.EventManager.prototype.addCalendar =
     function(aCalendar) {
-  this.calendars_[aCalendar.id] = aCalendar;
+  this.calendars[aCalendar.id] = aCalendar;
 }
 
 
@@ -492,7 +509,7 @@ rflect.cal.events.EventManager.prototype.addCalendar =
  */
 rflect.cal.events.EventManager.prototype.deleteCalendar =
     function(aCalendar) {
-  var calendar = this.calendars_[aCalendar.id];
+  var calendar = this.calendars[aCalendar.id];
 
   if (calendar) {
     var eventIds = calendar.eventIds;
@@ -500,7 +517,7 @@ rflect.cal.events.EventManager.prototype.deleteCalendar =
          counter++)
       this.removeEventById(eventIds[counter]);
 
-    delete this.calendars_[aCalendar.id];
+    delete this.calendars[aCalendar.id];
   }
 }
 

@@ -1,0 +1,47 @@
+/*
+ * Copyright (c) 2013. Rflect, Alex K.
+ */
+
+/*
+ * Save dialog styles.
+ *
+ * @author alexeykofficial@gmail.com (Alex K)
+ */
+.event-name-cont {
+
+}
+
+
+.event-name-label {
+  font-weight: bold;
+  padding-bottom: 10px;
+  display: block;
+}
+
+.event-name-input {
+  /*overrides of default input*/
+  height: 16px !important;
+  line-height: 16px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+
+  direction: ltr;
+  font: 15px arial, sans-serif;
+  font-weight: bold;
+  width: 330px;
+}
+
+.event-edit-link {
+  padding-top: 10px;
+  font-weight: bold;
+}
+
+.edit-dialog-link {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+.edit-dialog-link:hover {
+  background-color: #dae5ed;
+}

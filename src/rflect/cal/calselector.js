@@ -19,11 +19,20 @@ goog.require('rflect.cal.i18n.Symbols');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
+ * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @constructor
  * @extends {rflect.cal.ListSelector}
  */
-rflect.cal.CalSelector = function(aViewManager, aContainerSizeMonitor) {
+rflect.cal.CalSelector = function(aViewManager, aContainerSizeMonitor,
+    aEventManager) {
   rflect.cal.ListSelector.call(this, aViewManager, aContainerSizeMonitor);
+
+  /**
+   * Link to event manager.
+   * @type {rflect.cal.events.EventManager}
+   * @private
+   */
+  this.eventManager_ = aEventManager;
 
   this.label_ = rflect.cal.i18n.Symbols.CALENDARS_LABEL;
 };
@@ -36,7 +45,19 @@ goog.inherits(rflect.cal.CalSelector, rflect.cal.ListSelector);
  * @private
  * @const
  */
-rflect.cal.CalSelector.HTML_PARTS_ = [];
+rflect.cal.CalSelector.HTML_PARTS_ = [
+<div class="listitem-cont" id="calitem-cont-item
+">
+<div class="goog-checkbox goog-inline-block" id="calitem-color-item
+"></div>
+<div class="listitem-label calitem-label-active" id="calitem-label-item
+">
+/*Name here*/
+</div>
+<div class="listitem-opt-cont" id="calitem-opt-item
+"></div>
+</div>
+];
 
 
 /**
@@ -114,7 +135,42 @@ rflect.cal.CalSelector.prototype.buildOptions = function(aSb) {
  *
  */
 rflect.cal.CalSelector.prototype.buildContent = function(aSb) {
-  aSb.append('');
+  for (var calendarId in this.eventManager_.calendars) {
+    if (goog.isNumber(calendarId)) {
+
+      var calendar = this.eventManager_.calendars[calendarId];
+
+<div class="listitem-cont" id="calitem-cont-item
+">
+<div class="goog-checkbox goog-inline-block" id="calitem-color-item
+"></div>
+<div class="listitem-label calitem-label-active" id="calitem-label-item
+">
+/*Name here*/
+</div>
+<div class="listitem-opt-cont" id="calitem-opt-item
+"></div>
+</div>
+
+      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[0]);
+      aSb.append(calendarId);
+      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[1]);
+      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[2]);
+      aSb.append(calendarId);
+      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[3]);
+      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[4]);
+      aSb.append(calendarId);
+      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[5]);
+      aSb.append(calendar.name);
+      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[6]);
+      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[7]);
+      aSb.append(calendarId);
+      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[8]);
+      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[9]);
+
+
+    }
+  }
 };
 
 
