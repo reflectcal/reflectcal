@@ -94,7 +94,7 @@ rflect.cal.events.ColorCode.prototype.checkboxClass;
 /**
  * @return {string} Name with "calendar" postfix.
  */
-rflect.cal.events.ColorCode.prototype.getFullName = function(aEvent) {
+rflect.cal.events.ColorCode.prototype.getFullName = function() {
   return this.name + rflect.cal.i18n.Symbols.CALENDAR_POSTFIX;
 };
 

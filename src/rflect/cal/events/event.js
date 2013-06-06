@@ -37,7 +37,7 @@ rflect.cal.events.Event = function(aUid, aLongId, aStartDate, aEndDate, aAllDay,
   this.allDay = aAllDay;
   this.summary = opt_summary || '';
   this.description = opt_description || '';
-  this.calendarId = opt_calendarId;
+  goog.isDef(opt_calendarId) && (this.calendarId = opt_calendarId);
 };
 
 
@@ -147,9 +147,9 @@ rflect.cal.events.Event.prototype.allDay;
 
 /**
  * Calendar id.
- * @type {number|undefined}
+ * @type {number}
  */
-rflect.cal.events.Event.prototype.calendarId;
+rflect.cal.events.Event.prototype.calendarId = -1;
 
 
 /**

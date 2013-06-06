@@ -161,9 +161,9 @@ rflect.cal.ListSelector.prototype.buildInternal = function(aSb) {
       case 2: {
         this.buildOptions(aSb);
       };break;
-      case 4: {
+      /*case 4: {
         this.buildListBodyClass_(aSb);
-      };break;
+      };break;*/
       case 5: {
         this.buildScrollableHeight_(aSb);
       };break;

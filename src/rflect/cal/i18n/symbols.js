@@ -60,7 +60,7 @@ rflect.cal.i18n.Symbols_by = {
   CALENDARS_LABEL: 'Календары',
   TASKS_LABEL: 'Задачы',
   NO_NAME_EVENT: '(Без імя)',
-  CALENDAR_POSTFIX: ' каляндар',
+  CALENDAR_POSTFIX: ' каляндар'
 };
 
 

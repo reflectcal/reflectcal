@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012. Rflect, Alex K.
+ * Copyright (c) 2013. Rflect, Alex K.
  */
 
 /**
@@ -20,7 +20,7 @@ goog.require('rflect.cal.events.ColorCode');
 
 /**
  * Array of color codes.
- * @type {Array.<ColorCode>}
+ * @type {Array.<rflect.cal.events.ColorCode>}
  * @const
  */
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_EN = [
@@ -31,7 +31,7 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_EN = [
 
 /**
  * Array of color codes.
- * @type {Array.<ColorCode>}
+ * @type {Array.<rflect.cal.events.ColorCode>}
  * @const
  */
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_RU = [
@@ -42,7 +42,7 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_RU = [
 
 /**
  * Array of color codes.
- * @type {Array.<ColorCode>}
+ * @type {Array.<rflect.cal.events.ColorCode>}
  * @const
  */
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_BY = [
@@ -53,7 +53,7 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_BY = [
 
 /**
  * Array of color codes.
- * @type {Array.<ColorCode>}
+ * @type {Array.<rflect.cal.events.ColorCode>}
  * @const
  */
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_FR = [

@@ -11,6 +11,7 @@ goog.provide('rflect.cal.events.EventManager');
 
 goog.require('goog.date.DateTime');
 goog.require('rflect.structs.IntervalTree');
+goog.require('rflect.cal.events.Calendar');
 goog.require('rflect.cal.events.Chip');
 goog.require('rflect.cal.events.Event');
 goog.require('rflect.cal.events.EventHolder');
@@ -154,7 +155,7 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
   this.calendars = {};
   //TODO(alexk): this is temporary - calendars are loaded from server.
   // if no one loaded then default should be created.
-  this.addCalendar(rflect.cal.events.EventManager.createCalendar(0));
+  this.addCalendar(this.createCalendar(0));
 };
 
 
@@ -234,25 +235,6 @@ rflect.cal.events.EventManager.createEvent = function(aLongId,
 
 
 /**
- * Factory method that creates calendar from args.
- * @param {string} aName Calendar name.
- * @return {rflect.cal.events.Calendar} Calendar.
- */
-rflect.cal.events.EventManager.createCalendar = function(opt_colorCodeIndex,
-    opt_name) {
-  var uid = rflect.cal.events.EventManager.createCalendarId();
-
-  // Choose a random array index in [0, i] (inclusive with i).
-  var pickIndex = goog.isDef(opt_colorCodeIndex) ? opt_colorCodeIndex :
-      Math.floor(Math.random() * (this.colorCodes_.length));
-  var colorCode = this.colorCodes_[pickIndex];
-  var name = opt_name || colorCode.getFullName();
-
-  return new rflect.cal.events.Calendar(uid, aName, colorCode);
-}
-
-
-/**
  * @return {Array.<rflect.cal.events.Chip>} Chips from data structure.
  * @param {Object.<number, Object.<number, Array.<rflect.cal.events.Chip>>>} aDataStructure Data structure from where to retrieve chips.
  * @param {number} aIndex1 First index.
@@ -307,6 +289,26 @@ rflect.cal.events.EventManager.pushNestedAllDayChips_ = function(
     }
   }
   return allDayChipsCounter;
+}
+
+
+/**
+ * Factory method that creates calendar from args.
+ * @param {number=} opt_colorCodeIndex Index of color code.
+ * @param {string=} opt_name Calendar name.
+ * @return {rflect.cal.events.Calendar} Calendar.
+ */
+rflect.cal.events.EventManager.prototype.createCalendar = function(opt_colorCodeIndex,
+                                                                   opt_name) {
+  var uid = rflect.cal.events.EventManager.createCalendarId();
+
+  // Choose a random array index in [0, i] (inclusive with i).
+  var pickIndex = goog.isDef(opt_colorCodeIndex) ? opt_colorCodeIndex :
+      Math.floor(Math.random() * (this.colorCodes_.length));
+  var colorCode = this.colorCodes_[pickIndex];
+  var name = opt_name || colorCode.getFullName();
+
+  return new rflect.cal.events.Calendar(uid, name, colorCode);
 }
 
 

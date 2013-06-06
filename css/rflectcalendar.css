@@ -216,6 +216,7 @@ body {
 
 .list-body{
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .list-body-overflown{
@@ -223,7 +224,7 @@ body {
 }
 
 .listitem-cont {
-  margin: 3px 2px;
+  padding: 5px 2px;
   height: 16px;
 }
 
@@ -343,7 +344,6 @@ body {
 .listitem-label {
   position: relative;
   float: none;
-  padding: 0 0 0 5px;
   width: auto;
   overflow: hidden;
   font-size: 12px;
@@ -374,7 +374,8 @@ body {
 .listitem-opt-cont {
   position: absolute;
   right: 0;
-  width: 10px;
+  top: 0;
+  width: 20px;
   height: 100%;
   background: #ffffff;
   background: -moz-linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);

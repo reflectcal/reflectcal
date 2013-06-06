@@ -91,7 +91,8 @@ rflect.cal.events.Calendar.prototype.eventIds;
  * @return {rflect.cal.events.Calendar} Clone of this calendar.
  */
 rflect.cal.events.Calendar.prototype.clone = function() {
-  var clone = new rflect.cal.events.Calendar(this.id, this.name);
+  var clone = new rflect.cal.events.Calendar(this.id, this.name,
+      this.colorCode);
 
   return clone;
 };

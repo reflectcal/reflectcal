@@ -83,7 +83,7 @@ rflect.cal.MainBody = function(aViewManager, aTimeManager, aEventManager,
   this.addChild(this.miniCal = new rflect.cal.MiniCal(this.viewManager_,
       this.timeManager_));
   this.addChild(this.calSelector_ = new rflect.cal.CalSelector(this.viewManager_,
-      this.containerSizeMonitor_));
+      this.containerSizeMonitor_, this.eventManager_));
   this.addChild(this.taskSelector_ = new rflect.cal.TaskSelector(
       this.viewManager_, this.containerSizeMonitor_));
 
