@@ -1619,6 +1619,7 @@ rflect.cal.MainPane.prototype.onSaveDialogButtonSelect_ = function(aEvent) {
   if (aEvent.key == this.saveDialog_.getButtonSet().getDefault()) {
     this.eventManager_.eventHolder.setSummary(
         this.saveDialog_.getEventName());
+    this.eventManager_.eventHolder.setCalendarId(0);
     this.eventManager_.eventHolder.endWithAdd();
 
     this.updateAfterSave_();

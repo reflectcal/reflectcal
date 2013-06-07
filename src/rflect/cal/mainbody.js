@@ -19,6 +19,7 @@ goog.require('rflect.cal.MainPane');
 goog.require('rflect.cal.MiniCal');
 goog.require('rflect.cal.TopPane');
 goog.require('rflect.cal.CalSelector');
+goog.require('rflect.cal.CalSelector.EventType');
 goog.require('rflect.cal.TaskSelector');
 
 
@@ -290,7 +291,9 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
   rflect.cal.MainBody.superClass_.enterDocument.call(this);
 
   this.getHandler().listen(this.topPane_, goog.ui.Component.EventType.ACTION,
-      this.onTopPaneAction_, false, this);
+      this.onTopPaneAction_, false, this)
+      .listen(this.calSelector_, rflect.cal.CalSelector.EventType.CALENDAR_SWITCH,
+      this.onCalendarSwitch_, false, this);
       
   this.rebuildMainPaneWithSizes();
 };
@@ -376,6 +379,22 @@ rflect.cal.MainBody.prototype.onTopPaneAction_ = function(aEvent) {
 
     this.showEventPane(true, true);
   }
+}
+
+
+/**
+ * Cal selector action handler.
+ * @param {{type: string, visible: boolean, calendarId: number}} aEvent
+ * Event object.
+ * @private
+ */
+rflect.cal.MainBody.prototype.onCalendarSwitch_ = function(aEvent) {
+  var calendarId = aEvent.calendarId;
+  var visible = aEvent.visible;
+
+  this.eventManager_.setVisibleCalendar(calendarId, visible);
+  this.eventManager_.run();
+  this.mainPane_.update();
 }
 
 

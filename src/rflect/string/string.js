@@ -58,8 +58,8 @@ rflect.string.buildClassNameRe = function(var_args) {
  * @return {number} Index found in id.
  */
 rflect.string.getNumericIndex = function(aId, opt_base) {
-  var base = goog.isDef(opt_base) ? opt_base : 1;
-  var re = new RegExp('\\d{1,' + base + '}');
+  var reStr = goog.isDef(opt_base) ? '{1,' + opt_base + '}' : '+';
+  var re = new RegExp('\\d' + reStr);
   var matches = re.exec(aId);
   return matches ? +matches[0] : NaN;
 }

@@ -8,9 +8,13 @@
  */
 
 goog.provide('rflect.cal.CalSelector');
+goog.provide('rflect.cal.CalSelector.EventType');
 
+goog.require('goog.ui.Checkbox');
+goog.require('goog.ui.Component.EventType');
 goog.require('rflect.cal.ListSelector');
 goog.require('rflect.cal.i18n.Symbols');
+goog.require('rflect.string');
 
 
 /**
@@ -44,15 +48,22 @@ goog.inherits(rflect.cal.CalSelector, rflect.cal.ListSelector);
  * @const
  */
 rflect.cal.CalSelector.HTML_PARTS_ = [
-  '<div class="listitem-cont listitem-label calitem-label-active" id="calitem-label-item',
+  '<div class="listitem-cont-outer"><div class="listitem-cont listitem-label calitem-label-active" id="calitem-label-item',
   '"><div class="goog-checkbox calitem-color-cont" id="calitem-color-item',
   '"></div>',
   /*Name here*/
-  '<div class="listitem-opt-cont" id="calitem-opt-item',
+  '</div><div class="listitem-opt-cont" id="calitem-opt-item',
   '"></div></div>'
 ];
 
 
+/**
+ * Calendar selector event names.
+ * @enum {string}
+ */
+rflect.cal.CalSelector.EventType = {
+  CALENDAR_SWITCH: 'calswitch'
+}
 
 
 /**
@@ -61,7 +72,35 @@ rflect.cal.CalSelector.HTML_PARTS_ = [
 rflect.cal.CalSelector.prototype.enterDocument = function () {
   rflect.cal.CalSelector.superClass_.enterDocument.call(this);
   //TODO(alexk): mousedown, click, mousemove, mouseup listeners will go here.
+
+  var nodes = this.getElement().querySelectorAll('.' +
+      goog.getCssName('goog-checkbox'));
+  goog.array.forEach(nodes, function(node, index) {
+    var cb = new goog.ui.Checkbox();
+    this.addChild(cb);
+    cb.decorate(node);
+    cb.setLabel(node.parentNode);
+  }, this);
+
+  this.getHandler().listen(this, goog.ui.Component.EventType.CHANGE,
+    this.onCheck_, false, this);
 };
+
+
+/**
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.CalSelector.prototype.onCheck_ = function(aEvent) {
+
+  var cb = /**@type {goog.ui.Checkbox}*/ (aEvent.target);
+  var id = rflect.string.getNumericIndex(cb.getElement().id);
+
+  this.dispatchEvent({
+    type: rflect.cal.CalSelector.EventType.CALENDAR_SWITCH,
+    visible: cb.isChecked(),
+    calendarId: id
+  })
+}
 
 
 /**
@@ -72,10 +111,12 @@ rflect.cal.CalSelector.prototype.enterDocument = function () {
  * @override
  */
 rflect.cal.CalSelector.prototype.isItem = function (aClassName) {
-  /*var itemRe_ = this.itemRe_ || (this.itemRe_ =
-   rflect.string.buildClassNameRe(goog.getCssName('')));
-   return itemRe_.test(aClassName);*/
-  return false;
+  var re = rflect.string.buildClassNameRe(
+    goog.getCssName('listitem-cont'),
+    goog.getCssName('listitem-label'),
+    goog.getCssName('goog-checkbox'),
+    goog.getCssName('listitem-opt-cont'));
+  return re.test(aClassName);
 };
 
 
@@ -86,8 +127,11 @@ rflect.cal.CalSelector.prototype.isItem = function (aClassName) {
  * @protected
  * @override
  */
-rflect.cal.CalSelector.prototype.isHeader = function (aClassName) {
-  return false;
+rflect.cal.CalSelector.prototype.isHeader = function(aClassName) {
+  var re = rflect.string.buildClassNameRe(
+    goog.getCssName('list-label-cont'),
+    goog.getCssName('list-label'));
+  return re.test(aClassName);
 };
 
 
@@ -148,11 +192,3 @@ rflect.cal.CalSelector.prototype.buildContent = function (aSb) {
     }
   }
 };
-
-
-/**
- * @override
- * TODO(alexk): This function will contain logic for appearance of options
- * buttons.
- */
-rflect.cal.CalSelector.prototype.highlightHeader = goog.nullFunction;

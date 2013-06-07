@@ -10,6 +10,7 @@
 
 goog.provide('rflect.cal.ListSelector');
 
+goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('rflect.ui.Component');
@@ -313,7 +314,7 @@ rflect.cal.ListSelector.prototype.enterDocument = function() {
 /**
  * List selector mouseout handler.
  * @param {goog.events.Event} aEvent Event object.
- * @private 
+ * @private
  */
 rflect.cal.ListSelector.prototype.onMouseOut_ = function(aEvent) {
   var target = aEvent.target;
@@ -321,7 +322,7 @@ rflect.cal.ListSelector.prototype.onMouseOut_ = function(aEvent) {
   var className = target.className;
   if (!aEvent.relatedTarget ||
       !this.dom_.contains(this.getElement(), aEvent.relatedTarget))
-    this.moRegistryForWhole_.deregisterTarget();
+    this.showOptions(false);
   if (!this.isItem(className) || !this.isHeader(className) ||
       !this.isButton(className))
     this.moRegistryForParts_.deregisterTarget();
@@ -330,34 +331,51 @@ rflect.cal.ListSelector.prototype.onMouseOut_ = function(aEvent) {
 
 /**
  * List selector mouseover handler.
- * @param {goog.events.Event} aEvent Event object. 
- * @private 
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
  */
 rflect.cal.ListSelector.prototype.onMouseOver_ = function(aEvent) {
   var target = /**@type {Element}*/ (aEvent.target);
   var id = target.id;
   var className = target.className;
+
   // Highlight of whole element.
-  this.moRegistryForWhole_.registerTarget(this.getHeader(),
-      goog.getCssName('list-label-cont-highlighted'));
+  this.showOptions(true);
   // Highlight of element's parts.
   if (this.isHeader(className))
-    this.highlightHeader();
+    this.moRegistryForParts_.registerTarget(this.getHeader(),
+      goog.getCssName('list-label-cont-highlighted'));
   else if (this.isButton(className))
     this.moRegistryForParts_.registerTarget(target,
         goog.getCssName('list-selector-options-button-highlighted'));
   else if (this.isItem(className))
-    this.moRegistryForParts_.registerTarget(target,
+    this.moRegistryForParts_.registerTarget(
+        rflect.cal.ListSelector.getItem(target),
         goog.getCssName('list-selector-item-highlighted'));
+}
+
+
+/**
+ * Searches for closest target ancestor that is item.
+ * @param {Element} aTarget Target to start search for item.
+ * @return {Element} Item element or null.
+ * @protected
+ */
+rflect.cal.ListSelector.getItem = function(aTarget) {
+  return /**@type {Element}*/ (goog.dom.getAncestor(aTarget, function(aNode) {
+    return aNode.className == goog.getCssName('listitem-cont-outer');
+  }, true, 2));
 }
 
 
 /**
  * Highlights list selector header, where label is situated, shows additional
  * option elements. Should be overridden.
+ * @param {boolean} aShow Whether options are shown.
  * @protected
  */
-rflect.cal.ListSelector.prototype.highlightHeader = goog.abstractMethod;
+rflect.cal.ListSelector.prototype.showOptions = function(aShow) {
+};
 
 
 /**

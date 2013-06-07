@@ -123,4 +123,4 @@ rflect.cal.TaskSelector.prototype.buildContent = function(aSb) {
  * TODO(alexk): This function will contain logic for appearance of options
  * buttons.
  */
-rflect.cal.TaskSelector.prototype.highlightHeader = goog.nullFunction;
+rflect.cal.TaskSelector.prototype.showOptions = goog.nullFunction;

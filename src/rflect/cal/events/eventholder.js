@@ -157,6 +157,15 @@ rflect.cal.events.EventHolder.prototype.setAllDay =
 
 
 /**
+ * @param {number} aCalendarId Calendar id.
+ */
+rflect.cal.events.EventHolder.prototype.setCalendarId =
+    function(aCalendarId) {
+  return this.newTemporaryEvent_.calendarId = aCalendarId;
+}
+
+
+/**
  * @return {goog.date.DateTime|rflect.date.DateShim} aStartDate Start date.
  */
 rflect.cal.events.EventHolder.prototype.getStartDate = function() {
@@ -204,6 +213,15 @@ rflect.cal.events.EventHolder.prototype.getAllDay = function() {
 }
     
     
+/**
+ * @return {number} Calendar id.
+ */
+rflect.cal.events.EventHolder.prototype.getCalendarId =
+    function() {
+  return this.newTemporaryEvent_.calendarId;
+}
+
+
 /**
  * @return {rflect.cal.events.Event|undefined} Backup event.
  */

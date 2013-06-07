@@ -156,6 +156,7 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
   //TODO(alexk): this is temporary - calendars are loaded from server.
   // if no one loaded then default should be created.
   this.addCalendar(this.createCalendar(0));
+  this.addCalendar(this.createCalendar(0, 'Some calendar with long name...'));
 };
 
 
@@ -737,4 +738,12 @@ rflect.cal.events.EventManager.prototype.startEventCreationSession =
 }
 
 
-
+/**
+ * @param {number} aCalendarId Calendar id.
+ * @param {boolean} aVisible Whether calendar should be visible.
+ */
+rflect.cal.events.EventManager.prototype.setVisibleCalendar = function(
+    aCalendarId, aVisible) {
+  var calendar = this.calendars[aCalendarId];
+  calendar.visible = aVisible;
+}
