@@ -383,7 +383,9 @@ body {
   background: #ffffff;
   background: -moz-linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
   background: -webkit-gradient(linear, center right, center left, from(#ffffff), to(rgba(255,255,255,0)));
+  background: -webkit-linear-gradient(to right, #ffffff 0, rgba(255,255,255,0) 100%);
   background: -webkit-linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
+
   background: -ms-linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
   background: -o-linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
   background: linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
@@ -1519,5 +1521,9 @@ overflow:hidden
   position:absolute;
   left: 0;
   top: -10000px;
+}
+
+.checked-sign-calselector {
+  top: -3px;
 }
 

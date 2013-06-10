@@ -25,7 +25,9 @@ goog.require('rflect.cal.events.ColorCode');
  */
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_EN = [
   new rflect.cal.events.ColorCode(0, 'Blue',
-    goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'))
+    goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue')),
+  new rflect.cal.events.ColorCode(0, 'Red',
+    goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'))
 ];
 
 
@@ -36,7 +38,9 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_EN = [
  */
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_RU = [
   new rflect.cal.events.ColorCode(0, 'Синий',
-    goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'))
+    goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue')),
+  new rflect.cal.events.ColorCode(0, 'Красный',
+      goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'))
 ];
 
 
@@ -47,7 +51,9 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_RU = [
  */
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_BY = [
   new rflect.cal.events.ColorCode(0, 'Сiнi',
-    goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'))
+    goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue')),
+  new rflect.cal.events.ColorCode(0, 'Чырвоны',
+      goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'))
 ];
 
 
@@ -58,7 +64,9 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_BY = [
  */
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_FR = [
   new rflect.cal.events.ColorCode(0, 'Bleu',
-    goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'))
+    goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue')),
+  new rflect.cal.events.ColorCode(0, 'Rouge',
+      goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'))
 ];
 
 

@@ -20,7 +20,7 @@ goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.style');
 goog.require('goog.ui.ac');
 goog.require('goog.ui.Button');
-goog.require('goog.ui.Checkbox');
+goog.require('rflect.ui.Checkbox');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('rflect.cal.i18n.Symbols');
@@ -77,7 +77,7 @@ rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
   this.addChild(this.buttonDelete_ = new goog.ui.Button(
       rflect.cal.ui.EditDialog.ButtonCaptions.DELETE,
       goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.checkboxAllDay_ = new goog.ui.Checkbox());
+  this.addChild(this.checkboxAllDay_ = new rflect.ui.Checkbox());
   this.addChild(this.buttonCancel2_ = new goog.ui.Button(
       rflect.ui.Dialog.DefaultButtonCaptions.CANCEL,
       goog.ui.FlatButtonRenderer.getInstance()));

@@ -3,45 +3,35 @@
  */
 
 /*
- * Save dialog styles.
+ * Color styles.
  *
  * @author alexeykofficial@gmail.com (Alex K)
  */
-.event-name-cont {
+.cal-checkbox-blue {
+  border-color: #28518E;
+}
+
+.goog-checkbox-checked.cal-checkbox-blue {
+  box-shadow: 0 0 3px 2px #6699EE;
+  background: linear-gradient(to bottom, rgba(102, 153, 238, 0.5) 0px, #6699EE 50%, rgba(102, 153, 238, 0.5) 100%);
+  background: -webkit-linear-gradient(to bottom, rgba(102, 153, 238, 0.5) 0px, #6699EE 50%, rgba(102, 153, 238, 0.5) 100%);
+}
+
+.event-rect-blue {
 
 }
 
-
-.event-name-label {
-  font-weight: bold;
-  padding-bottom: 10px;
-  display: block;
+.cal-checkbox-red {
+  border-color: #b82828;
 }
 
-.event-name-input {
-  /*overrides of default input*/
-  height: 16px !important;
-  line-height: 16px !important;
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
-
-  direction: ltr;
-  font: 15px arial, sans-serif;
-  font-weight: bold;
-  width: 330px;
+.goog-checkbox-checked.cal-checkbox-red {
+  box-shadow: 0 0 3px 2px #f43535;
+  background: linear-gradient(to bottom, rgba(244, 53, 53, .8) 0px, rgba(184, 40, 40, .9) 50%, rgba(244, 53, 53, .8) 100%);
+  background: -webkit-linear-gradient(to bottom, rgba(244, 53, 53, .8) 0px, rgba(184, 40, 40, .9) 50%, rgba(244, 53, 53, .8) 100%);
 }
 
-.event-edit-link {
-  padding-top: 10px;
-  font-weight: bold;
+.event-rect-red {
+
 }
 
-.edit-dialog-link {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  padding: 5px;
-}
-
-.edit-dialog-link:hover {
-  background-color: #dae5ed;
-}

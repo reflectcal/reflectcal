@@ -10,7 +10,7 @@
 goog.provide('rflect.cal.CalSelector');
 goog.provide('rflect.cal.CalSelector.EventType');
 
-goog.require('goog.ui.Checkbox');
+goog.require('rflect.ui.Checkbox');
 goog.require('goog.ui.Component.EventType');
 goog.require('rflect.cal.ListSelector');
 goog.require('rflect.cal.i18n.Symbols');
@@ -26,7 +26,8 @@ goog.require('rflect.string');
  * @constructor
  * @extends {rflect.cal.ListSelector}
  */
-rflect.cal.CalSelector = function (aViewManager, aContainerSizeMonitor, aEventManager) {
+rflect.cal.CalSelector = function (aViewManager, aContainerSizeMonitor,
+    aEventManager) {
   rflect.cal.ListSelector.call(this, aViewManager, aContainerSizeMonitor);
 
   /**
@@ -48,9 +49,11 @@ goog.inherits(rflect.cal.CalSelector, rflect.cal.ListSelector);
  * @const
  */
 rflect.cal.CalSelector.HTML_PARTS_ = [
-  '<div class="listitem-cont-outer"><div class="listitem-cont listitem-label calitem-label-active" id="calitem-label-item',
-  '"><div class="goog-checkbox calitem-color-cont" id="calitem-color-item',
-  '"></div>',
+  '<div class="listitem-cont-outer"><div title="',
+  '" class="listitem-cont listitem-label calitem-label-active" id="calitem-label-item',
+  '"><div class="goog-checkbox calitem-color-cont ',
+  '" id="calitem-color-item',
+  '"><div class="checked-sign checked-sign-calselector" style="display:none"></div></div>',
   /*Name here*/
   '</div><div class="listitem-opt-cont" id="calitem-opt-item',
   '"></div></div>'
@@ -76,7 +79,7 @@ rflect.cal.CalSelector.prototype.enterDocument = function () {
   var nodes = this.getElement().querySelectorAll('.' +
       goog.getCssName('goog-checkbox'));
   goog.array.forEach(nodes, function(node, index) {
-    var cb = new goog.ui.Checkbox();
+    var cb = new rflect.ui.Checkbox();
     this.addChild(cb);
     cb.decorate(node);
     cb.setLabel(node.parentNode);
@@ -92,7 +95,7 @@ rflect.cal.CalSelector.prototype.enterDocument = function () {
  */
 rflect.cal.CalSelector.prototype.onCheck_ = function(aEvent) {
 
-  var cb = /**@type {goog.ui.Checkbox}*/ (aEvent.target);
+  var cb = /**@type {rflect.ui.Checkbox}*/ (aEvent.target);
   var id = rflect.string.getNumericIndex(cb.getElement().id);
 
   this.dispatchEvent({
@@ -180,14 +183,18 @@ rflect.cal.CalSelector.prototype.buildContent = function (aSb) {
       var calendar = this.eventManager_.calendars[+calendarId];
 
       aSb.append(rflect.cal.CalSelector.HTML_PARTS_[0]);
-      aSb.append(calendarId);
+      aSb.append(calendar.name);
       aSb.append(rflect.cal.CalSelector.HTML_PARTS_[1]);
       aSb.append(calendarId);
       aSb.append(rflect.cal.CalSelector.HTML_PARTS_[2]);
-      aSb.append(calendar.name);
+      aSb.append(calendar.colorCode && calendar.colorCode.checkboxClass);
       aSb.append(rflect.cal.CalSelector.HTML_PARTS_[3]);
       aSb.append(calendarId);
       aSb.append(rflect.cal.CalSelector.HTML_PARTS_[4]);
+      aSb.append(calendar.name);
+      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[5]);
+      aSb.append(calendarId);
+      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[6]);
 
     }
   }
