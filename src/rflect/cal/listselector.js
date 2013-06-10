@@ -254,23 +254,34 @@ rflect.cal.ListSelector.prototype.buildContent = goog.abstractMethod;
 
 /**
  * Updates list selector with new data before redraw. Includes size adjustment.
+ * @param {Array.<number>=} opt_exclusions Exclusion indexes.
+ * @param {boolean=} opt_firstTime Whether it's a first time update.
+ * @param {boolean=} opt_zeroHeight Whether to update this component with zero
+ * height.
  */
-rflect.cal.ListSelector.prototype.updateBeforeRedraw = function() {
+rflect.cal.ListSelector.prototype.updateBeforeRedraw = function(opt_exclusions,
+    opt_firstTime, opt_zeroHeight) {
   // Take current viewport size.
   this.scrollableSize_ = this.containerSizeMonitor_.getSize();
 
-  // Check if app is in size bounds.
-  if (this.scrollableSize_.height < rflect.cal.predefined.APP_MINIMAL_HEIGHT)
-    this.scrollableSize_.height = rflect.cal.predefined.APP_MINIMAL_HEIGHT;
+  if (goog.DEBUG)
+    _log('this.scrollableSize_', this.scrollableSize_);
 
-  this.scrollableSize_.height -=
-      rflect.cal.predefined.CONTAINER_AND_LIST_SELECTORS_HEIGHT_DIFFERENCE;
+  if (opt_firstTime && opt_zeroHeight)
+    this.scrollableSize_.height = 0;
+  else if (opt_firstTime)
+    this.scrollableSize_.height =
+        rflect.cal.predefined.CAL_SELECTOR_TEST_HEIGHT;
+  else {
+    var staticSizes = this.getParent().staticSizesLeftPane;
+    if (goog.DEBUG)
+      _log('staticSizes', staticSizes);
+    this.scrollableSize_.height -= staticSizes.height;
+  }
 
   // Default behaviour is to have two selectors in a column, so divide height
   // by 2.
   this.scrollableSize_.height /= 2;
-  this.scrollableSize_.height -=
-      rflect.cal.predefined.LIST_SELECTOR_AND_SCROLLABLE_HEIGHT_DIFEERENCE;
 };
 
 

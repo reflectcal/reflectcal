@@ -161,6 +161,13 @@ rflect.cal.MainBody.prototype.staticSizesMn;
 
 
 /**
+ * Static sizes for cal selector.
+ * @type {goog.math.Size}
+ */
+rflect.cal.MainBody.prototype.staticSizesLeftPane;
+
+
+/**
  * Whether it's a first build in week mode.
  * @type {boolean}
  */
@@ -172,6 +179,13 @@ rflect.cal.MainBody.prototype.firstBuildWk = true;
  * @type {boolean}
  */
 rflect.cal.MainBody.prototype.firstBuildMn = true;
+
+
+/**
+ * Whether it's a first build for cal selectors.
+ * @type {boolean}
+ */
+rflect.cal.MainBody.prototype.firstBuildLeftPane = true;
 
 
 /**
@@ -259,16 +273,29 @@ rflect.cal.MainBody.prototype.updateBeforeRedraw = function(opt_exclusions,
   // We will update main pane separately.
   var exclusions = opt_exclusions ?
       opt_exclusions.slice() :
-      [rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE];
+      [rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE,
+          rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR,
+          rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR];
 
-  // Nothing wrong to have duplicates.
+  // Nothing wrong to have duplicates in exclusion indexes.
   exclusions.push(rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE);
+  exclusions.push(rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR);
+  exclusions.push(rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR);
 
   rflect.cal.MainBody.superClass_.updateBeforeRedraw.call(this, exclusions);
 
   if (!rflect.ui.Component.indexIsInExclusions(opt_exclusions,
       rflect.cal.MainBody.ComponentsIndexes.MAIN_PANE)) {
     this.mainPane_.updateBeforeRedraw(null, undefined, opt_updateByNavigation);
+  }
+  if (!rflect.ui.Component.indexIsInExclusions(opt_exclusions,
+      rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR)) {
+    this.calSelector_.updateBeforeRedraw(null, this.firstBuildLeftPane);
+  }
+  if (!rflect.ui.Component.indexIsInExclusions(opt_exclusions,
+      rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR)) {
+    this.taskSelector_.updateBeforeRedraw(null, this.firstBuildLeftPane,
+        true);
   }
 };
 
@@ -296,6 +323,7 @@ rflect.cal.MainBody.prototype.enterDocument = function() {
       this.onCalendarSwitch_, false, this);
       
   this.rebuildMainPaneWithSizes();
+  this.rebuildLeftPaneWithSizes();
 };
 
 
@@ -317,6 +345,20 @@ rflect.cal.MainBody.prototype.rebuildMainPaneWithSizes = function() {
 
 /**
  * Rebuilds main pane after sizes of all static panes are known.
+ */
+rflect.cal.MainBody.prototype.rebuildLeftPaneWithSizes = function() {
+  this.measureLeftPaneStaticSizes();
+
+  this.firstBuildLeftPane = false;
+
+  this.calSelector_.updateBeforeRedraw();
+  this.calSelector_.updateByRedraw();
+
+}
+
+
+/**
+ * Measures main pane static sizes.
  */
 rflect.cal.MainBody.prototype.measureStaticSizes = function() {
   var dom = this.getDomHelper();
@@ -347,6 +389,21 @@ rflect.cal.MainBody.prototype.measureStaticSizes = function() {
         //TODO(alexk): why do I need 4px here and not 2?
         rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 4);
   }
+}
+
+
+/**
+ * Measures left pane static sizes.
+ */
+rflect.cal.MainBody.prototype.measureLeftPaneStaticSizes = function() {
+  var dom = this.getDomHelper();
+  var totalSize = goog.style.getSize(dom.getElement('cal-container'));
+
+  var calSelectorBodySize = goog.style.getSize(
+      dom.getElement('calendars-body'));
+
+  this.staticSizesLeftPane = new goog.math.Size(0, totalSize.height -
+      calSelectorBodySize.height);
 }
 
 

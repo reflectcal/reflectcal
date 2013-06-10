@@ -678,3 +678,11 @@ rflect.cal.predefined.MONTH_SCROLLABLE_DEFAULT_SIZE =
  * @const
  */
 rflect.cal.predefined.MINIMAL_MASK_HEIGHT = 15;
+
+
+/**
+ * Test height for cal selector measurement.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.CAL_SELECTOR_TEST_HEIGHT = 500;
