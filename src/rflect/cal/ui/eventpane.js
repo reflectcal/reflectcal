@@ -272,11 +272,14 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     'for': 'event-all-day',
     className: labelClassName
   }, 'All-day event');
+  var allDaySubCont = dom.createDom('span', null, labelAllDay,
+      this.checkboxAllDay_.getElement());
+  this.checkboxAllDay_.setLabel(allDaySubCont);
   var allDayCont = dom.createDom('div', {
     id: 'all-day-label',
     className: goog.getCssName('description-cont') + ' ' +
       goog.getCssName('event-edit-pane-cont')
-    }, labelAllDay, this.checkboxAllDay_.getElement());
+    }, allDaySubCont);
 
   var labelDesc = dom.createDom('label', {
     'for': 'event-description',

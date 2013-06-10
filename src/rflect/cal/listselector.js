@@ -256,32 +256,23 @@ rflect.cal.ListSelector.prototype.buildContent = goog.abstractMethod;
  * Updates list selector with new data before redraw. Includes size adjustment.
  * @param {Array.<number>=} opt_exclusions Exclusion indexes.
  * @param {boolean=} opt_firstTime Whether it's a first time update.
- * @param {boolean=} opt_zeroHeight Whether to update this component with zero
- * height.
  */
 rflect.cal.ListSelector.prototype.updateBeforeRedraw = function(opt_exclusions,
-    opt_firstTime, opt_zeroHeight) {
+    opt_firstTime) {
   // Take current viewport size.
   this.scrollableSize_ = this.containerSizeMonitor_.getSize();
 
-  if (goog.DEBUG)
-    _log('this.scrollableSize_', this.scrollableSize_);
-
-  if (opt_firstTime && opt_zeroHeight)
+  if (opt_firstTime)
     this.scrollableSize_.height = 0;
-  else if (opt_firstTime)
-    this.scrollableSize_.height =
-        rflect.cal.predefined.CAL_SELECTOR_TEST_HEIGHT;
   else {
     var staticSizes = this.getParent().staticSizesLeftPane;
-    if (goog.DEBUG)
-      _log('staticSizes', staticSizes);
     this.scrollableSize_.height -= staticSizes.height;
   }
 
   // Default behaviour is to have two selectors in a column, so divide height
   // by 2.
-  this.scrollableSize_.height /= 2;
+  if (!opt_firstTime)
+    this.scrollableSize_.height /= 2;
 };
 
 

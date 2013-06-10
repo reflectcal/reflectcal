@@ -13,7 +13,7 @@ body {
   font: 13px arial, sans-serif;
   /*Note(alexk): It's responsibility of container to provide width/height restrictions.*/
   min-width: 500px;
-  min-height: 262px; /* -8px of .cal-container margin-top.*/
+  min-height: 376px; /* -8px of .cal-container margin-top.*/
 }
 
 .cal-container {
@@ -190,13 +190,13 @@ body {
 }
 
 #month-selector {
-  margin-top: 20px;
+  padding-top: 20px;
   height: 152px;
 }
 
 .list-selector, #calendars-selector, #tasks-selector {
-  margin-top: 10px;
   padding: 2px 1px 5px 0;
+  padding-top: 12px;
   color: #2c2c2c;
 }
 

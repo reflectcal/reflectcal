@@ -294,8 +294,7 @@ rflect.cal.MainBody.prototype.updateBeforeRedraw = function(opt_exclusions,
   }
   if (!rflect.ui.Component.indexIsInExclusions(opt_exclusions,
       rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR)) {
-    this.taskSelector_.updateBeforeRedraw(null, this.firstBuildLeftPane,
-        true);
+    this.taskSelector_.updateBeforeRedraw(null, this.firstBuildLeftPane);
   }
 };
 
@@ -397,13 +396,27 @@ rflect.cal.MainBody.prototype.measureStaticSizes = function() {
  */
 rflect.cal.MainBody.prototype.measureLeftPaneStaticSizes = function() {
   var dom = this.getDomHelper();
-  var totalSize = goog.style.getSize(dom.getElement('cal-container'));
 
-  var calSelectorBodySize = goog.style.getSize(
-      dom.getElement('calendars-body'));
+  var calContainerMB =
+      goog.style.getMarginBox(dom.getElement('cal-container'));
+  var calContainerBB =
+      goog.style.getBorderBox(dom.getElement('cal-container'));
+  var calContainerPB =
+      goog.style.getPaddingBox(dom.getElement('cal-container'));
 
-  this.staticSizesLeftPane = new goog.math.Size(0, totalSize.height -
-      calSelectorBodySize.height);
+  var topPaneSize = goog.style.getSize(dom.getElement('top-pane'));
+  var minicalSize = goog.style.getSize(dom.getElement('month-selector'));
+  var calSelectorSize =
+      goog.style.getSize(dom.getElement('calendars-selector'));
+  var taskSelectorSize = goog.style.getSize(dom.getElement('tasks-selector'));
+
+  var totalHeight = calContainerMB.top + calContainerMB.bottom +
+      calContainerBB.top + calContainerBB.bottom +
+      calContainerPB.top + calContainerPB.bottom +
+      topPaneSize.height + minicalSize.height + calSelectorSize.height +
+      taskSelectorSize.height;
+
+  this.staticSizesLeftPane = new goog.math.Size(0, totalHeight);
 }
 
 
