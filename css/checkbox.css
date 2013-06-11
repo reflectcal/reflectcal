@@ -29,7 +29,6 @@
 
 .goog-checkbox-active {
   border-color: #bbb !important;
-  box-shadow: inset 0 1px 5px 1px #d0d0d0;
 }
 
 .goog-checkbox-focused {

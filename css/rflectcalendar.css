@@ -266,72 +266,6 @@ body {
   border-radius: 3px;
 }
 
-.calitem-color-up {
-  height: 7px;
-  border: 1px solid #28518e;
-  border-bottom: none;
-  background-color: #6699ee;
-  background: -moz-linear-gradient(center bottom, rgba(102, 153, 238, 1) 0, rgba(102, 153, 238, 0.5) 100%);
-  background: -webkit-gradient(linear, center bottom, center top, from(rgba(102, 153, 238, 1)), to(rgba(102, 153, 238, 0.5)));
-  background: -webkit-linear-gradient(center bottom, rgba(102, 153, 238, 1) 0, rgba(102, 153, 238, 0.5) 100%));
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = "#adc8f6", endColorStr="#6699ee");
-  background: -ms-linear-gradient(center bottom, rgba(102, 153, 238, 1) 0, rgba(102, 153, 238, 0.5) 100%);
-  background: -o-linear-gradient(center bottom, rgba(102, 153, 238, 1) 0, rgba(102, 153, 238, 0.5) 100%);
-  background: linear-gradient(center bottom, rgba(102, 153, 238, 1) 0, rgba(102, 153, 238, 0.5) 100%);
-
-  -moz-border-radius: 3px 3px 0 0;
-  -webkit-border-radius: 3px 3px 0 0;
-  border-radius: 3px 3px 0 0;
-
-  -moz-animation-name: slide-color-up;
-  -moz-animation-timing-function: linear;
-  -moz-animation-duration: 4s;
-  -moz-animation-iteration-count: infinite;
-}
-
-.calitem-color-down {
-  height: 7px;
-  border: 1px solid #28518e;
-  border-top: none;
-  background-color: #6699ee;
-  background: -moz-linear-gradient(center top, rgba(102, 153, 238, 1) 0, rgba(102, 153, 238, 0.5) 100%);
-  background: -webkit-gradient(linear, center top, center bottom, from(rgba(102, 153, 238, 1)), to(rgba(102, 153, 238, 0.5)));
-  background: -webkit-linear-gradient(center top, rgba(102, 153, 238, 1) 0, rgba(102, 153, 238, 0.5) 100%));
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = "#6699ee", endColorStr="#adc8f6");
-  background: -ms-linear-gradient(center top, rgba(102, 153, 238, 1) 0, rgba(102, 153, 238, 0.5) 100%);
-  background: -o-linear-gradient(center top, rgba(102, 153, 238, 1) 0, rgba(102, 153, 238, 0.5) 100%);
-  background: linear-gradient(center top, rgba(102, 153, 238, 1) 0, rgba(102, 153, 238, 0.5) 100%);
-
-  -moz-border-radius: 0 0 3px 3px;
-  -webkit-border-radius: 0 0 3px 3px;
-  border-radius: 0 0 3px 3px;
-
-  -moz-animation-name: slide-color-down;
-  -moz-animation-timing-function: linear;
-  -moz-animation-duration: 4s;
-  -moz-animation-iteration-count: infinite;
-}
-
-@-moz-keyframes slide-color-up {
-  from {
-    height: 11px;
-  }
-
-  to {
-    height: 3px
-  }
-}
-
-@-moz-keyframes slide-color-up {
-  from {
-    height: 3px;
-  }
-
-  to {
-    height: 11px
-  }
-}
-
 .calitem-color-active {
   -moz-box-shadow: 0 0 3px 2px #6699ee;
   -webkit-box-shadow: 0 0 3px 2px #6699ee;
@@ -342,6 +276,10 @@ body {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+
+.checked-sign-calselector {
+  top: -3px;
 }
 
 .listitem-label {
@@ -383,12 +321,11 @@ body {
   background: #ffffff;
   background: -moz-linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
   background: -webkit-gradient(linear, center right, center left, from(#ffffff), to(rgba(255,255,255,0)));
-  background: -webkit-linear-gradient(to right, #ffffff 0, rgba(255,255,255,0) 100%);
-  background: -webkit-linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
-
   background: -ms-linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
-  background: -o-linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
-  background: linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
+
+  background: -webkit-linear-gradient(right, #ffffff 0, rgba(255,255,255,0) 100%);
+  background: -o-linear-gradient(to left, #ffffff 0, rgba(255,255,255,0) 100%);
+  background: linear-gradient(to left, #ffffff 0, rgba(255,255,255,0) 100%);
 }
 
 .listitem-opt {
@@ -1522,8 +1459,3 @@ overflow:hidden
   left: 0;
   top: -10000px;
 }
-
-.checked-sign-calselector {
-  top: -3px;
-}
-

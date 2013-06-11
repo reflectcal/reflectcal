@@ -156,7 +156,8 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
   //TODO(alexk): this is temporary - calendars are loaded from server.
   // if no one loaded then default should be created.
   this.addCalendar(this.createCalendar(0));
-//  this.addCalendar(this.createCalendar(1));
+  this.addCalendar(this.createCalendar(1));
+  this.addCalendar(this.createCalendar(2));
 };
 
 
@@ -319,11 +320,34 @@ rflect.cal.events.EventManager.prototype.createCalendar = function(opt_colorCode
  */
 rflect.cal.events.EventManager.prototype.chipIsInVisibleCalendar =
     function(aChip) {
-  var eventId = aChip.eventId;
-  var event = this.events_[eventId];
-  var calendar = this.calendars[event.calendarId];
+  var calendar = this.getCalendarByChip_(aChip);
   //So that even chips from non-existent calendar are treated as from invisible.
   return /**@type {boolean}*/(calendar) && calendar.visible;
+}
+
+
+/**
+ * @param {rflect.cal.events.Chip} aChip Chip.
+ * @return {string} Chip color class.
+ */
+rflect.cal.events.EventManager.prototype.getChipColorClass =
+    function(aChip) {
+  var calendar = this.getCalendarByChip_(aChip);
+  // Here class 'undefined' will be returned in case of no color class. Not very
+  // professional, but safe.
+  return /**@type {string}*/(calendar) && calendar.colorCode.eventClass;
+}
+
+
+/**
+ * @param {rflect.cal.events.Chip} aChip Chip.
+ * @return {rflect.cal.events.Calendar} Calendar of this chip.
+ * @private
+ */
+rflect.cal.events.EventManager.prototype.getCalendarByChip_ = function(aChip) {
+  var eventId = aChip.eventId;
+  var event = this.events_[eventId];
+  return this.calendars[event.calendarId];
 }
 
 

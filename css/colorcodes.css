@@ -7,31 +7,69 @@
  *
  * @author alexeykofficial@gmail.com (Alex K)
  */
+/* Blue */
 .cal-checkbox-blue {
-  border-color: #28518E;
+  border-color: #6699EE;
 }
 
 .goog-checkbox-checked.cal-checkbox-blue {
   box-shadow: 0 0 3px 2px #6699EE;
+  background: -webkit-linear-gradient(top, rgba(102, 153, 238, 0.5) 0px, #6699EE 50%, rgba(102, 153, 238, 0.5) 100%);
+  background: -o-linear-gradient(to bottom, rgba(102, 153, 238, 0.5) 0px, #6699EE 50%, rgba(102, 153, 238, 0.5) 100%);
   background: linear-gradient(to bottom, rgba(102, 153, 238, 0.5) 0px, #6699EE 50%, rgba(102, 153, 238, 0.5) 100%);
-  background: -webkit-linear-gradient(to bottom, rgba(102, 153, 238, 0.5) 0px, #6699EE 50%, rgba(102, 153, 238, 0.5) 100%);
+}
+
+.goog-checkbox-active.cal-checkbox-blue {
+  border-color: #6699EE !important;
 }
 
 .event-rect-blue {
-
+  background-color: #6699ee;
+  border-color: #28518e;
+  color: #fff;
 }
 
+/* Red */
 .cal-checkbox-red {
-  border-color: #b82828;
+  border-color: #f44050;
 }
 
 .goog-checkbox-checked.cal-checkbox-red {
-  box-shadow: 0 0 3px 2px #f43535;
-  background: linear-gradient(to bottom, rgba(244, 53, 53, .8) 0px, rgba(184, 40, 40, .9) 50%, rgba(244, 53, 53, .8) 100%);
-  background: -webkit-linear-gradient(to bottom, rgba(244, 53, 53, .8) 0px, rgba(184, 40, 40, .9) 50%, rgba(244, 53, 53, .8) 100%);
+  box-shadow: 0 0 3px 2px #f44050;
+  background: -webkit-linear-gradient(top, #fecdce 0px, #f44050 50%, #fecdce 100%);
+  background: -o-linear-gradient(to bottom, #fecdce 0px, #f44050 50%, #fecdce 100%);
+  background: linear-gradient(to bottom, #fecdce 0px, #f44050 50%, #fecdce 100%);
+}
+
+.goog-checkbox-active.cal-checkbox-red {
+  border-color: #f44050 !important;
 }
 
 .event-rect-red {
+  background-color: #f44050;
+  border-color: #9f2a35;
+  color: #fff;
+}
 
+/* Green */
+.cal-checkbox-green {
+  border-color: #51be32;
+}
+
+.goog-checkbox-checked.cal-checkbox-green {
+  box-shadow: 0 0 3px 2px #51be32;
+  background: -webkit-linear-gradient(top, #96f481 0px, #51be32 50%, #96f481 100%);
+  background: -o-linear-gradient(to bottom, #96f481 0px, #51be32 50%, #96f481 100%);
+  background: linear-gradient(to bottom, #96f481 0px, #51be32 50%, #96f481 100%);
+}
+
+.goog-checkbox-active.cal-checkbox-green {
+  border-color: #51be32 !important;
+}
+
+.event-rect-green {
+  background-color: #51be32;
+  border-color: #3e9327;
+  color: #fff;
 }
 

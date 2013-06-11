@@ -27,7 +27,9 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_EN = [
   new rflect.cal.events.ColorCode(0, 'Blue',
     goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue')),
   new rflect.cal.events.ColorCode(0, 'Red',
-    goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'))
+    goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red')),
+  new rflect.cal.events.ColorCode(0, 'Green',
+    goog.getCssName('event-rect-green'), goog.getCssName('cal-checkbox-green'))
 ];
 
 
@@ -40,7 +42,9 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_RU = [
   new rflect.cal.events.ColorCode(0, 'Синий',
     goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue')),
   new rflect.cal.events.ColorCode(0, 'Красный',
-      goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'))
+      goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red')),
+  new rflect.cal.events.ColorCode(0, 'Зеленый',
+      goog.getCssName('event-rect-green'), goog.getCssName('cal-checkbox-green'))
 ];
 
 
@@ -53,7 +57,9 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_BY = [
   new rflect.cal.events.ColorCode(0, 'Сiнi',
     goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue')),
   new rflect.cal.events.ColorCode(0, 'Чырвоны',
-      goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'))
+      goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red')),
+  new rflect.cal.events.ColorCode(0, 'Зялены',
+      goog.getCssName('event-rect-green'), goog.getCssName('cal-checkbox-green'))
 ];
 
 
@@ -66,7 +72,9 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_FR = [
   new rflect.cal.events.ColorCode(0, 'Bleu',
     goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue')),
   new rflect.cal.events.ColorCode(0, 'Rouge',
-      goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'))
+      goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red')),
+  new rflect.cal.events.ColorCode(0, 'Vert',
+      goog.getCssName('event-rect-green'), goog.getCssName('cal-checkbox-green'))
 ];
 
 

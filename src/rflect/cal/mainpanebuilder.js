@@ -1546,9 +1546,11 @@ rflect.cal.MainPaneBuilder.buildWeekBlockChip_ =
   aSb.append(aChip.eventId);
   // Additional classes.
   if (aChip.startIsCut)
-    aSb.append(' ' + goog.getCssName('event-rect-wk-collapse-top') + ' ');
+    aSb.append(' ' + goog.getCssName('event-rect-wk-collapse-top'));
   if (aChip.endIsCut)
     aSb.append(' ' + goog.getCssName('event-rect-wk-collapse-bottom'));
+  // Color class
+  aSb.append(' ' + aChip.colorClass);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
   // Start time.
   rflect.cal.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, true);
@@ -1620,11 +1622,13 @@ rflect.cal.MainPaneBuilder.buildMonthBlockChip_ =
   if (opt_allDay)
     // Class to differ all-day events from ordinary month ones.
     aSb.append(' ' + goog.getCssName('event-rect-all-day') + ' ');
-  // TODO: Additional class.
+  //Additional class.
   if (aChip.startIsCut)
     aSb.append(' ' + goog.getCssName('event-rect-mn-inner-collapse-left'));
   if (aChip.endIsCut)
     aSb.append(' ' + goog.getCssName('event-rect-mn-inner-collapse-right'));
+  // Color class
+  aSb.append(' ' + aChip.colorClass);
   aSb.append(rflect.cal.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 5]);
   // Time.
   //rflect.cal.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, true);

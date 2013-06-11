@@ -18,15 +18,17 @@ goog.provide('rflect.cal.events.Chip');
  * @param {number} aEnd Chip end.
  * @param {boolean} aStartIsCut Whether chip starts before block's start.
  * @param {boolean} aEndIsCut Whether chip ends after block's end.
+ * @param {string=} opt_colorClass Chip color class.
  * @constructor
  */
 rflect.cal.events.Chip = function(aEventId, aStart, aEnd, aStartIsCut,
-    aEndIsCut) {
+    aEndIsCut, opt_colorClass) {
   this.eventId = aEventId;
   this.start = aStart;
   this.end = aEnd;
   this.startIsCut = aStartIsCut;
   this.endIsCut = aEndIsCut;
+  opt_colorClass && (this.colorClass = opt_colorClass);
 };
 
 
@@ -87,6 +89,13 @@ rflect.cal.events.Chip.prototype.endIsCut;
 
 
 /**
+ * Chip's color class.
+ * @type {string}
+ */
+rflect.cal.events.Chip.prototype.colorClass;
+
+
+/**
  * @param {rflect.cal.events.Chip} aChip Another chip to compare.
  * @returns {boolean} Whether this chip equals another.
  */
@@ -103,5 +112,5 @@ rflect.cal.events.Chip.prototype.equals = function(aChip) {
  */
 rflect.cal.events.Chip.prototype.clone = function() {
   return new rflect.cal.events.Chip(this.eventId , this.start, this.end,
-      this.startIsCut, this.endIsCut);
+      this.startIsCut, this.endIsCut, this.colorClass);
 }

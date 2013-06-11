@@ -226,6 +226,7 @@ rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips,
 
     if (!aEventManager.chipIsInVisibleCalendar(chip))
       continue;
+    chip.colorClass = aEventManager.getChipColorClass(chip);
 
     var itemStart = chip.start;
     var itemEnd = chip.end;
