@@ -771,3 +771,24 @@ rflect.cal.events.EventManager.prototype.setVisibleCalendar = function(
   var calendar = this.calendars[aCalendarId];
   calendar.visible = aVisible;
 }
+
+
+/**
+ * Iterates over all calendars.
+ * @param {function(this:T,rflect.cal.events.Calendar,number,Object.<number,
+ * rflect.cal.events.Calendar>):?} aFunction The function to call
+ *     for every calendar. This function takes 3 arguments (the calendar, the
+ *     calendar id and the calendars object) and the return value is ignored.
+ * @param {T} aObj This is used as the 'this' object within f.
+ * @template T
+ */
+rflect.cal.events.EventManager.prototype.forEachCalendar = function(aFunction,
+    aObj) {
+  var calendars = this.calendars;
+  for (var calendarId in calendars) {
+    if (!isNaN(+calendarId)) {
+      //This is indeed calendar.
+      aFunction.call(aObj, calendars[+calendarId], +calendarId, calendars);
+    }
+  }
+}

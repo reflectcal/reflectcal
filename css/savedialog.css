@@ -14,7 +14,8 @@
 
 .event-name-label {
   font-weight: bold;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
+  padding-top: 10px;
   display: block;
 }
 
@@ -44,4 +45,8 @@
 
 .edit-dialog-link:hover {
   background-color: #dae5ed;
+}
+
+.event-cal-select {
+  display: block;
 }

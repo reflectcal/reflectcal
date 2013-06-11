@@ -163,7 +163,8 @@ rflect.cal.MainPane = function(aViewManager, aTimeManager, aEventManager,
    * @type {rflect.cal.ui.SaveDialog}
    * @private
    */
-  this.saveDialog_ = new rflect.cal.ui.SaveDialog();
+  this.saveDialog_ = new rflect.cal.ui.SaveDialog(undefined, undefined,
+      undefined, aEventManager);
   if (goog.DEBUG)
     _inspect('saveDialog_', this.saveDialog_);
 
@@ -1620,7 +1621,7 @@ rflect.cal.MainPane.prototype.onSaveDialogButtonSelect_ = function(aEvent) {
     this.eventManager_.eventHolder.setSummary(
         this.saveDialog_.getEventName());
     this.eventManager_.eventHolder.setCalendarId(
-        Math.floor(Math.random() * 3));
+        this.saveDialog_.getCalendarId());
     this.eventManager_.eventHolder.endWithAdd();
 
     this.updateAfterSave_();

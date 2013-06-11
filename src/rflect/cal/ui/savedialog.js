@@ -10,6 +10,7 @@
 
 goog.provide('rflect.cal.ui.SaveDialog');
 
+goog.require('goog.dom');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.ui.DialogMouseMissBehavior');
 
@@ -17,23 +18,34 @@ goog.require('rflect.ui.DialogMouseMissBehavior');
 
 /**
  * Class for save event dialog.
- * @constructor
  * @param {string=} opt_class CSS class name for the dialog element, also used
  *     as a class name prefix for related elements; defaults to modal-dialog.
  * @param {boolean=} opt_useIframeMask Work around windowed controls z-index
  *     issue by using an iframe instead of a div for bg element.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
  *     goog.ui.Component} for semantics.
+ * @param {rflect.cal.events.EventManager=} opt_eventManager Link to event manager.
+ * @constructor
  * @extends {rflect.ui.DialogMouseMissBehavior}
  */
-rflect.cal.ui.SaveDialog = function (opt_class, opt_useIframeMask, opt_domHelper) {
+rflect.cal.ui.SaveDialog = function (opt_class,
+    opt_useIframeMask, opt_domHelper, opt_eventManager) {
   rflect.ui.DialogMouseMissBehavior.call(this, undefined, undefined, undefined);
+
+  /**
+   * Link to event manager.
+   * @type {rflect.cal.events.EventManager}
+   * @private
+   */
+  this.eventManager_ = /**@type {rflect.cal.events.EventManager}*/
+      (opt_eventManager);
 
   this.setTitle('New event');
   this.setModal(false);
   this.setBackgroundElementOpacity(0);
   this.setButtonSet(rflect.ui.Dialog.ButtonSet.createSaveCancel());
   this.setContent(rflect.cal.ui.SaveDialog.HTML_PARTS_);
+  this.setUpdate();
 };
 goog.inherits(rflect.cal.ui.SaveDialog, rflect.ui.DialogMouseMissBehavior);
 
@@ -44,6 +56,22 @@ goog.inherits(rflect.cal.ui.SaveDialog, rflect.ui.DialogMouseMissBehavior);
  * @private
  */
 rflect.cal.ui.SaveDialog.prototype.input_;
+
+
+/**
+ * Calendars select.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.SaveDialog.prototype.select_;
+
+
+/**
+ * Whether this dialog should be updated by external request.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.ui.SaveDialog.prototype.shouldUpdate_;
 
 
 /**
@@ -60,6 +88,10 @@ rflect.cal.ui.SaveDialog.HTML_PARTS_ =
         rflect.cal.i18n.Symbols.NO_NAME_EVENT +
         '"/>' +
         '</div>' +
+
+        '<label for="event-cal" class="event-name-label">Calendar</label>' +
+        '<select id="event-cal" class="event-cal-select"></select>' +
+
         '<a id="event-edit" class="event-edit-link goog-inline-block" ' +
         'href="javascript:void(0)">' +
         'Edit options</a>';
@@ -83,8 +115,10 @@ rflect.cal.ui.SaveDialog.prototype.focus = function () {
  * @override
  */
 rflect.cal.ui.SaveDialog.prototype.enterDocument = function () {
-  var link = this.getDomHelper().getElement('event-edit');
-  this.input_ = this.getDomHelper().getElement('event-name');
+  var dom = this.getDomHelper();
+  var link = dom.getElement('event-edit');
+  this.input_ = dom.getElement('event-name');
+  this.select_ = dom.getElement('event-cal');
 
   rflect.cal.ui.SaveDialog.superClass_.enterDocument.call(this);
 
@@ -98,6 +132,22 @@ rflect.cal.ui.SaveDialog.prototype.enterDocument = function () {
  */
 rflect.cal.ui.SaveDialog.prototype.getEventName = function () {
   return this.input_.value;
+}
+
+
+/**
+ * @return {number} Selected calendar id.
+ */
+rflect.cal.ui.SaveDialog.prototype.getCalendarId = function () {
+  return +this.select_.options[this.select_.selectedIndex].value;
+}
+
+
+/**
+ * Sets "should update" state. Should be used after changes in calendars.
+ */
+rflect.cal.ui.SaveDialog.prototype.setUpdate = function () {
+  this.shouldUpdate_ = true;
 }
 
 
@@ -131,6 +181,28 @@ rflect.cal.ui.SaveDialog.prototype.setVisible = function (aVisible) {
   // produces many events with the same id.
   if (!aVisible)
     this.input_.blur();
+  else
+    this.populateCalendars();
+}
+
+
+/**
+ * Populates calendar select.
+ */
+rflect.cal.ui.SaveDialog.prototype.populateCalendars = function() {
+  var dom = this.getDomHelper();
+
+  if (this.shouldUpdate_) {
+
+    dom.removeChildren(this.select_);
+
+    this.eventManager_.forEachCalendar(function(calendar, calendarId){
+      this.select_.appendChild(dom.createDom('option', {value: calendarId},
+          calendar.name));
+    }, this);
+
+    this.shouldUpdate_ = false;
+  }
 }
 
 

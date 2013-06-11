@@ -18,7 +18,7 @@ goog.require('goog.array');
  * @param {number} aUid Client-side id for calendar.
  * @param {string} aName Name of calendar.
  * @param {rflect.cal.events.ColorCode} aColorCode Color code object.
- * @param {boolean} opt_readOnly Whether calendar is read-only.
+ * @param {boolean=} opt_readOnly Whether calendar is read-only.
  * @constructor
  */
 rflect.cal.events.Calendar = function(aUid, aName, aColorCode, opt_readOnly) {

@@ -177,25 +177,21 @@ rflect.cal.CalSelector.prototype.buildOptions = function (aSb) {
  *
  */
 rflect.cal.CalSelector.prototype.buildContent = function (aSb) {
-  for (var calendarId in this.eventManager_.calendars) {
-    if (!isNaN(+calendarId)) {
+  this.eventManager_.forEachCalendar(function(calendar, calendarId) {
 
-      var calendar = this.eventManager_.calendars[+calendarId];
+    aSb.append(rflect.cal.CalSelector.HTML_PARTS_[0]);
+    aSb.append(calendar.name);
+    aSb.append(rflect.cal.CalSelector.HTML_PARTS_[1]);
+    aSb.append(calendarId);
+    aSb.append(rflect.cal.CalSelector.HTML_PARTS_[2]);
+    aSb.append(calendar.colorCode && calendar.colorCode.checkboxClass);
+    aSb.append(rflect.cal.CalSelector.HTML_PARTS_[3]);
+    aSb.append(calendarId);
+    aSb.append(rflect.cal.CalSelector.HTML_PARTS_[4]);
+    aSb.append(calendar.name);
+    aSb.append(rflect.cal.CalSelector.HTML_PARTS_[5]);
+    aSb.append(calendarId);
+    aSb.append(rflect.cal.CalSelector.HTML_PARTS_[6]);
 
-      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[0]);
-      aSb.append(calendar.name);
-      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[1]);
-      aSb.append(calendarId);
-      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[2]);
-      aSb.append(calendar.colorCode && calendar.colorCode.checkboxClass);
-      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[3]);
-      aSb.append(calendarId);
-      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[4]);
-      aSb.append(calendar.name);
-      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[5]);
-      aSb.append(calendarId);
-      aSb.append(rflect.cal.CalSelector.HTML_PARTS_[6]);
-
-    }
-  }
+  }, this);
 };
