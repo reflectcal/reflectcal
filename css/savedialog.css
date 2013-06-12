@@ -49,4 +49,6 @@
 
 .event-cal-select {
   display: block;
+  padding: 5px 4px 5px 8px;
+  width: 348px;
 }

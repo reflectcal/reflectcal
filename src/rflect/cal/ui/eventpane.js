@@ -25,6 +25,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.ac');
+goog.require('rflect.cal.ui.CalendarsSelect');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.InputDatePicker');
 goog.require('rflect.date.util');
@@ -169,6 +170,14 @@ rflect.cal.ui.EventPane.prototype.endTimeAC_;
 
 
 /**
+ * Calendars select.
+ * @type {rflect.cal.ui.CalendarsSelect}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.selectCalendars_;
+
+
+/**
  * @return {boolean} Whether the component is visible.
  */
 rflect.cal.ui.EventPane.prototype.isVisible = function() {
@@ -281,6 +290,23 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
       goog.getCssName('event-edit-pane-cont')
     }, allDaySubCont);
 
+  // Calendars select.
+  var labelCalendars = dom.createDom('label', {
+    'for': 'event-calendars',
+    className: labelClassName
+  }, 'Calendar');
+  var selectCalendarsEl = dom.createDom('select', {
+      id: 'event-calendars',
+      className: goog.getCssName('event-cal-select') + ' ' +
+          goog.getCssName('event-edit-pane-cal-select')
+    });
+  this.selectCalendars_ = new rflect.cal.ui.CalendarsSelect(selectCalendarsEl,
+      this.eventManager_);
+  var calendarsCont = dom.createDom('div', {
+    id: 'all-day-label',
+    className: goog.getCssName('event-edit-pane-cont')
+    }, labelCalendars, selectCalendarsEl);
+
   var labelDesc = dom.createDom('label', {
     'for': 'event-description',
     className: labelClassName + ' ' +
@@ -298,7 +324,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   var root = dom.createDom('div', {
     className: goog.getCssName('event-edit-pane'),
     id: 'event-edit-pane'
-    }, buttonsCont1, nameCont, dateCont, allDayCont, descCont,
+    }, buttonsCont1, nameCont, dateCont, allDayCont, calendarsCont, descCont,
       buttonsCont2);
 
   this.setElementInternal(root);
@@ -561,6 +587,9 @@ rflect.cal.ui.EventPane.prototype.displayValues = function() {
 
   this.checkboxAllDay_.setChecked(eh.getAllDay());
 
+  this.selectCalendars_.update();
+  this.selectCalendars_.setCalendarId(eh.getCalendarId());
+
   this.showTimeInputs_(!eh.getAllDay());
 
 };
@@ -617,6 +646,8 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
   eh.setSummary(this.inputName_.value);
 
   eh.setDescription(this.textAreaDesc_.innerHTML);
+
+  eh.setCalendarId(this.selectCalendars_.getCalendarId());
 
   var startDate = new goog.date.DateTime();
   var startTime = new goog.date.DateTime();
@@ -690,6 +721,7 @@ rflect.cal.ui.EventPane.prototype.disposeInternal = function() {
   this.inputDatePicker_.dispose();
   this.startTimeAC_.dispose();
   this.endTimeAC_.dispose();
+  this.selectCalendars_.dispose();
 
   rflect.cal.ui.EventPane.superClass_.disposeInternal.call(this);
 };

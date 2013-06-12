@@ -101,3 +101,7 @@
 .event-edit-pane-button-delete {
   margin-left: 100px;
 }
+
+.event-edit-pane-cal-select {
+  display: inline;
+}

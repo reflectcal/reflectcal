@@ -157,7 +157,7 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
   // if no one loaded then default should be created.
   this.addCalendar(this.createCalendar(0));
   this.addCalendar(this.createCalendar(1));
-  this.addCalendar(this.createCalendar(2));
+  this.addCalendar(this.createCalendar(2, "Some calendar with long name, well, it's really long..."));
 };
 
 

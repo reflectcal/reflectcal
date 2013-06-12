@@ -13,6 +13,7 @@ goog.provide('rflect.cal.ui.SaveDialog');
 goog.require('goog.dom');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.ui.DialogMouseMissBehavior');
+goog.require('rflect.cal.ui.CalendarsSelect');
 
 
 
@@ -45,7 +46,6 @@ rflect.cal.ui.SaveDialog = function (opt_class,
   this.setBackgroundElementOpacity(0);
   this.setButtonSet(rflect.ui.Dialog.ButtonSet.createSaveCancel());
   this.setContent(rflect.cal.ui.SaveDialog.HTML_PARTS_);
-  this.setUpdate();
 };
 goog.inherits(rflect.cal.ui.SaveDialog, rflect.ui.DialogMouseMissBehavior);
 
@@ -60,18 +60,10 @@ rflect.cal.ui.SaveDialog.prototype.input_;
 
 /**
  * Calendars select.
- * @type {Element}
+ * @type {rflect.cal.ui.CalendarsSelect}
  * @private
  */
 rflect.cal.ui.SaveDialog.prototype.select_;
-
-
-/**
- * Whether this dialog should be updated by external request.
- * @type {boolean}
- * @private
- */
-rflect.cal.ui.SaveDialog.prototype.shouldUpdate_;
 
 
 /**
@@ -118,7 +110,11 @@ rflect.cal.ui.SaveDialog.prototype.enterDocument = function () {
   var dom = this.getDomHelper();
   var link = dom.getElement('event-edit');
   this.input_ = dom.getElement('event-name');
-  this.select_ = dom.getElement('event-cal');
+
+  var selectEl = dom.getElement('event-cal');
+
+  this.select_ = new rflect.cal.ui.CalendarsSelect(selectEl,
+      this.eventManager_);
 
   rflect.cal.ui.SaveDialog.superClass_.enterDocument.call(this);
 
@@ -139,15 +135,7 @@ rflect.cal.ui.SaveDialog.prototype.getEventName = function () {
  * @return {number} Selected calendar id.
  */
 rflect.cal.ui.SaveDialog.prototype.getCalendarId = function () {
-  return +this.select_.options[this.select_.selectedIndex].value;
-}
-
-
-/**
- * Sets "should update" state. Should be used after changes in calendars.
- */
-rflect.cal.ui.SaveDialog.prototype.setUpdate = function () {
-  this.shouldUpdate_ = true;
+  return this.select_.getCalendarId();
 }
 
 
@@ -182,27 +170,7 @@ rflect.cal.ui.SaveDialog.prototype.setVisible = function (aVisible) {
   if (!aVisible)
     this.input_.blur();
   else
-    this.populateCalendars();
-}
-
-
-/**
- * Populates calendar select.
- */
-rflect.cal.ui.SaveDialog.prototype.populateCalendars = function() {
-  var dom = this.getDomHelper();
-
-  if (this.shouldUpdate_) {
-
-    dom.removeChildren(this.select_);
-
-    this.eventManager_.forEachCalendar(function(calendar, calendarId){
-      this.select_.appendChild(dom.createDom('option', {value: calendarId},
-          calendar.name));
-    }, this);
-
-    this.shouldUpdate_ = false;
-  }
+    this.select_.update();
 }
 
 
@@ -212,6 +180,7 @@ rflect.cal.ui.SaveDialog.prototype.populateCalendars = function() {
  */
 rflect.cal.ui.SaveDialog.prototype.disposeInternal = function () {
   this.input_ = null;
+  this.select_ && this.select_.dispose();
   rflect.cal.ui.SaveDialog.superClass_.disposeInternal.call(this);
 
 }
