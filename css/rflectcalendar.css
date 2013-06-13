@@ -229,6 +229,7 @@ body {
 
 .listitem-cont-outer {
   position: relative;
+  cursor: pointer;
 }
 
 .listitem-color {
@@ -284,6 +285,7 @@ body {
 
 .listitem-label {
   position: relative;
+  margin-left: 16px;
   float: none;
   width: auto;
   overflow: hidden;
@@ -291,7 +293,6 @@ body {
   white-space: nowrap;
   color: #2c2c2c;
   line-height: 18px;
-  cursor: pointer;
 }
 
 .calitem-label-active {

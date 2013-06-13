@@ -50,12 +50,12 @@ goog.inherits(rflect.cal.CalSelector, rflect.cal.ListSelector);
  */
 rflect.cal.CalSelector.HTML_PARTS_ = [
   '<div class="listitem-cont-outer"><div title="',
-  '" class="listitem-cont listitem-label calitem-label-active" id="calitem-label-item',
+  '" class="listitem-cont calitem-label-active" id="calitem-label-item',
   '"><div class="goog-checkbox calitem-color-cont ',
   '" id="calitem-color-item',
-  '"><div class="checked-sign checked-sign-calselector" style="display:none"></div></div>',
+  '"><div class="checked-sign checked-sign-calselector" style="display:none"></div></div><div class="listitem-label">',
   /*Name here*/
-  '</div><div class="listitem-opt-cont" id="calitem-opt-item',
+  '</div></div><div class="listitem-opt-cont" id="calitem-opt-item',
   '"></div></div>'
 ];
 
