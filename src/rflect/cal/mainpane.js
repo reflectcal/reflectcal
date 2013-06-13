@@ -895,6 +895,8 @@ rflect.cal.MainPane.prototype.showEventEditComponent_ = function(aTarget,
 
   var event = this.getEventByTarget_(aTarget);
 
+  this.eventManager_.eventHolder.openSession(event);
+
   if (event) {
 
     if (aShowPane) {
@@ -906,7 +908,6 @@ rflect.cal.MainPane.prototype.showEventEditComponent_ = function(aTarget,
       this.editDialog_.setEventTimeString(event.toHumanString());
     }
 
-    this.eventManager_.eventHolder.openSession(event);
   }
 }
 

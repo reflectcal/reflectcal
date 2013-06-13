@@ -90,7 +90,7 @@ rflect.cal.ui.CalendarsSelect.prototype.setCalendarId = function (aCalendarId) {
   var index = goog.array.findIndex(this.select_.options, function(option){
     return option.value == aCalendarId;
   });
-  if (index > 0)
+  if (!(index < 0))
     this.select_.selectedIndex = index;
 }
 
