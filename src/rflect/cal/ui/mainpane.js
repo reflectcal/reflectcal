@@ -18,7 +18,7 @@ goog.require('goog.userAgent');
 goog.require('rflect.ui.Component');
 goog.require('rflect.cal.ui.MainPaneBuilder');
 goog.require('rflect.cal.ui.MainPaneSelectionMask');
-goog.require('rflect.cal.ui.MouseOverRegistry');
+goog.require('rflect.ui.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.predefined.chips');
 goog.require('rflect.cal.ui.TimeMarker');
@@ -153,10 +153,10 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
   
   /**
    * Mouse over registry.
-   * @type {rflect.cal.ui.MouseOverRegistry}
+   * @type {rflect.ui.MouseOverRegistry}
    * @private
    */
-  this.moRegistry_ = new rflect.cal.ui.MouseOverRegistry();
+  this.moRegistry_ = new rflect.ui.MouseOverRegistry();
 
   /**
    * Popup save dialog.

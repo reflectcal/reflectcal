@@ -14,7 +14,7 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('rflect.ui.Component');
-goog.require('rflect.cal.ui.MouseOverRegistry');
+goog.require('rflect.ui.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.string');
 
@@ -54,17 +54,17 @@ rflect.cal.ui.ListSelector = function(aViewManager, aContainerSizeMonitor) {
 
   /**
    * Mouse over registry for whole component.
-   * @type {rflect.cal.ui.MouseOverRegistry}
+   * @type {rflect.ui.MouseOverRegistry}
    * @private
    */
-   this.moRegistryForWhole_ = new rflect.cal.ui.MouseOverRegistry();
+   this.moRegistryForWhole_ = new rflect.ui.MouseOverRegistry();
 
    /**
    * Mouse over registry for parts of component.
-   * @type {rflect.cal.ui.MouseOverRegistry}
+   * @type {rflect.ui.MouseOverRegistry}
    * @private
    */
-   this.moRegistryForParts_ = new rflect.cal.ui.MouseOverRegistry();
+   this.moRegistryForParts_ = new rflect.ui.MouseOverRegistry();
 
 };
 goog.inherits(rflect.cal.ui.ListSelector, rflect.ui.Component);
