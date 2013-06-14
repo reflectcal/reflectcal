@@ -550,6 +550,7 @@ rflect.cal.ui.EventPane.prototype.setVisible = function(visible,
 
   this.showElement_(visible);
 
+  /** @preserveTry */
   try {
     this.inputName_.focus();
     this.inputName_.select();

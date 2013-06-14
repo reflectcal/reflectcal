@@ -675,3 +675,11 @@ rflect.date.DateShim.prototype.clone = function() {
 
   return date;
 };
+
+
+/**
+ * @return {number} JSON representation.
+ */
+rflect.date.DateShim.prototype.toJSON = function() {
+  return this.getTime();
+};

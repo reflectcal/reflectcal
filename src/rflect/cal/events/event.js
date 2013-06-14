@@ -246,3 +246,13 @@ rflect.cal.events.Event.prototype.clone = function() {
 
   return clone;
 };
+
+
+/**
+ * @return {Array} JSON representation of event.
+ */
+rflect.cal.events.Event.prototype.toJSON = function() {
+  return [this.id, this.longId, this.startDate,
+      this.endDate, this.allDay, this.summary, this.description,
+      this.calendarId];
+};
