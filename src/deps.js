@@ -5,7 +5,7 @@ goog.addDependency('../../../rflect/cal/blocks/block.js', ['rflect.cal.blocks', 
 goog.addDependency('../../../rflect/cal/blocks/blockmanager.js', ['rflect.cal.blocks.BlockManager'], ['rflect.cal.blocks.Block', 'rflect.cal.blocks.BlockPool', 'rflect.cal.predefined']);
 goog.addDependency('../../../rflect/cal/blocks/blockpool.js', ['rflect.cal.blocks.BlockPool'], ['rflect.cal.blocks.Block', 'rflect.cal.predefined']);
 goog.addDependency('../../../rflect/cal/button.js', ['rflect.cal.Button'], ['goog.ui.Button']);
-goog.addDependency('../../../rflect/cal/calselector.js', ['rflect.cal.CalSelector', 'rflect.cal.CalSelector.EventType'], ['goog.ui.Component.EventType', 'rflect.cal.ListSelector', 'rflect.cal.i18n.Symbols', 'rflect.string', 'rflect.ui.Checkbox']);
+goog.addDependency('../../../rflect/cal/calselector.js', ['rflect.cal.CalSelector', 'rflect.cal.CalSelector.EventType'], ['goog.dom.classes', 'goog.ui.Component.EventType', 'rflect.cal.ListSelector', 'rflect.cal.i18n.Symbols', 'rflect.string', 'rflect.ui.Checkbox']);
 goog.addDependency('../../../rflect/cal/containersizemonitor.js', ['rflect.cal.ContainerSizeMonitor'], ['goog.dom', 'goog.dom.ViewportSizeMonitor', 'goog.style', 'rflect.cal.predefined']);
 goog.addDependency('../../../rflect/cal/events/calendar.js', ['rflect.cal.events.Calendar'], ['goog.array']);
 goog.addDependency('../../../rflect/cal/events/chip.js', ['rflect.cal.events.Chip'], []);

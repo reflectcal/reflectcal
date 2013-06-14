@@ -10,11 +10,12 @@
 goog.provide('rflect.cal.CalSelector');
 goog.provide('rflect.cal.CalSelector.EventType');
 
-goog.require('rflect.ui.Checkbox');
+goog.require('goog.dom.classes');
 goog.require('goog.ui.Component.EventType');
-goog.require('rflect.cal.ListSelector');
 goog.require('rflect.cal.i18n.Symbols');
+goog.require('rflect.cal.ListSelector');
 goog.require('rflect.string');
+goog.require('rflect.ui.Checkbox');
 
 
 /**
@@ -79,14 +80,23 @@ rflect.cal.CalSelector.prototype.enterDocument = function () {
   var nodes = this.getElement().querySelectorAll('.' +
       goog.getCssName('goog-checkbox'));
   goog.array.forEach(nodes, function(node, index) {
+
     var cb = new rflect.ui.Checkbox();
     this.addChild(cb);
     cb.decorate(node);
     cb.setLabel(node.parentNode);
+
+    this.getHandler().listen(cb.getKeyEventTarget(),
+        goog.events.EventType.FOCUS, this.onFocus_, false, this)
+        .listen(cb.getKeyEventTarget(), goog.events.EventType.BLUR,
+        this.onBlur_, false, this);
+
   }, this);
 
   this.getHandler().listen(this, goog.ui.Component.EventType.CHANGE,
-    this.onCheck_, false, this);
+      this.onCheck_, false, this)
+
+
 };
 
 
@@ -103,6 +113,30 @@ rflect.cal.CalSelector.prototype.onCheck_ = function(aEvent) {
     visible: cb.isChecked(),
     calendarId: id
   })
+
+}
+
+
+/**
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.CalSelector.prototype.onFocus_ = function(aEvent) {
+  var cbEl = /**@type {Element}*/ (aEvent.target);
+  goog.dom.classes.add(cbEl.parentNode,
+      goog.getCssName('listitem-cont-focused'));
+
+}
+
+
+/**
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.CalSelector.prototype.onBlur_ = function(aEvent) {
+
+  var cbEl = /**@type {Element}*/ (aEvent.target);
+     goog.dom.classes.remove(cbEl.parentNode,
+     goog.getCssName('listitem-cont-focused'));
+
 }
 
 

@@ -223,8 +223,13 @@ body {
 }
 
 .listitem-cont {
-  padding: 5px 2px 5px 8px;
+  border-left: 2px solid transparent;
+  padding: 5px 2px 5px 6px;
   height: 16px;
+}
+
+.listitem-cont-focused {
+  border-left-color: #6699ee;
 }
 
 .listitem-cont-outer {
