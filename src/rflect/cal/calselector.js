@@ -134,8 +134,8 @@ rflect.cal.CalSelector.prototype.onFocus_ = function(aEvent) {
 rflect.cal.CalSelector.prototype.onBlur_ = function(aEvent) {
 
   var cbEl = /**@type {Element}*/ (aEvent.target);
-     goog.dom.classes.remove(cbEl.parentNode,
-     goog.getCssName('listitem-cont-focused'));
+  goog.dom.classes.remove(cbEl.parentNode,
+      goog.getCssName('listitem-cont-focused'));
 
 }
 
