@@ -16,7 +16,7 @@ goog.require('rflect.cal.blocks.BlockManager');
 goog.require('rflect.cal.ContainerSizeMonitor');
 goog.require('rflect.cal.events.EventManager');
 goog.require('rflect.cal.EventType');
-goog.require('rflect.cal.MainBody');
+goog.require('rflect.cal.ui.MainBody');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
 goog.require('rflect.cal.ViewType');
@@ -78,10 +78,10 @@ rflect.cal.ViewManager = function(aMainInstance) {
 
   /**
    * Main body component.
-   * @type {rflect.cal.MainBody}
+   * @type {rflect.cal.ui.MainBody}
    * @private
    */
-  this.mainBody_ = new rflect.cal.MainBody(this, this.timeManager,
+  this.mainBody_ = new rflect.cal.ui.MainBody(this, this.timeManager,
       this.eventManager_, this.containerSizeMonitor_, this.blockManager_);
 
   if (goog.DEBUG)
@@ -170,12 +170,12 @@ rflect.cal.ViewManager.prototype.isInMonthMode = function() {
  */
 rflect.cal.ViewManager.prototype.onViewportResize_ = function() {
   this.mainBody_.updateBeforeRedraw([
-      rflect.cal.MainBody.ComponentsIndexes.TOP_PANE,
-      rflect.cal.MainBody.ComponentsIndexes.MINI_CAL
+      rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE,
+      rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL
   ]);
   this.mainBody_.updateByRedraw([
-      rflect.cal.MainBody.ComponentsIndexes.TOP_PANE,
-      rflect.cal.MainBody.ComponentsIndexes.MINI_CAL
+      rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE,
+      rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL
   ]);
 };
 
@@ -327,13 +327,13 @@ rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
   this.mainBody_.miniCal.updateByRedraw();
 
   this.mainBody_.updateBeforeRedraw([
-      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
-      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR),
-      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.MINI_CAL)]);
+      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR),
+      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR),
+      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL)]);
   this.mainBody_.updateByRedraw([
-      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
-      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR),
-      /**@type {number}*/(rflect.cal.MainBody.ComponentsIndexes.MINI_CAL)]);
+      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR),
+      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR),
+      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL)]);
 
 }
 
@@ -385,29 +385,29 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
   } else if (calledByMiniCal) {
     this.mainBody_.updateBeforeRedraw([
         /**@type {number}*/
-        (rflect.cal.MainBody.ComponentsIndexes.MINI_CAL),
+        (rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL),
         /**@type {number}*/
-        (rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
+        (rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR),
         /**@type {number}*/
-        (rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR)]);
+        (rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR)]);
     this.mainBody_.updateByRedraw([
         /**@type {number}*/
-        (rflect.cal.MainBody.ComponentsIndexes.MINI_CAL),
+        (rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL),
         /**@type {number}*/
-        (rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
+        (rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR),
         /**@type {number}*/
-        (rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR)]);
+        (rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR)]);
   } else {
     this.mainBody_.updateBeforeRedraw([
         /**@type {number}*/
-        (rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
+        (rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR),
         /**@type {number}*/
-        (rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR)], true);
+        (rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR)], true);
     this.mainBody_.updateByRedraw([
         /**@type {number}*/
-        (rflect.cal.MainBody.ComponentsIndexes.CAL_SELECTOR),
+        (rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR),
         /**@type {number}*/
-        (rflect.cal.MainBody.ComponentsIndexes.TASK_SELECTOR)]);
+        (rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR)]);
   }
 };
 

@@ -13,8 +13,8 @@ goog.require('goog.array');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('rflect.ui.Component');
-goog.require('rflect.cal.MiniCalBuilder');
-goog.require('rflect.cal.MouseOverRegistry');
+goog.require('rflect.cal.ui.MiniCalBuilder');
+goog.require('rflect.cal.ui.MouseOverRegistry');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
 goog.require('rflect.date');
@@ -49,18 +49,18 @@ rflect.cal.ui.DatePicker = function(aViewManager) {
 
   /**
    * Date picker builder.
-   * @type {rflect.cal.MiniCalBuilder}
+   * @type {rflect.cal.ui.MiniCalBuilder}
    * @private
    */
-  this.miniCalBuilder_ = new rflect.cal.MiniCalBuilder(this,
+  this.miniCalBuilder_ = new rflect.cal.ui.MiniCalBuilder(this,
       this.timeManager_);
 
   /**
    * Mouse over registry.
-   * @type {rflect.cal.MouseOverRegistry}
+   * @type {rflect.cal.ui.MouseOverRegistry}
    * @private
    */
-  this.moRegistry_ = new rflect.cal.MouseOverRegistry();
+  this.moRegistry_ = new rflect.cal.ui.MouseOverRegistry();
 
 };
 goog.inherits(rflect.cal.ui.DatePicker, rflect.ui.Component);

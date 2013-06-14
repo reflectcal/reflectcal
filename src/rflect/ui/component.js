@@ -119,7 +119,7 @@ rflect.ui.Component.prototype.updateBeforeRedraw =
  * component update sequence.
  * @param {Array.<number>=} opt_exclusions Index(es) of component's children which
  * should be excluded from update.
- * @see {rflect.cal.MainBody#updateBeforeRedraw}.
+ * @see {rflect.cal.ui.MainBody#updateBeforeRedraw}.
  */
 rflect.ui.Component.prototype.updateByRedraw =
     function(opt_exclusions) {
@@ -137,7 +137,7 @@ rflect.ui.Component.prototype.updateByRedraw =
  * Updates component in whole update sequence.
  * @param {Array.<number>=} opt_exclusions Index(es) of component's children which
  * should be excluded from update.
- * @see {rflect.cal.MainBody#updateBeforeRedraw}.
+ * @see {rflect.cal.ui.MainBody#updateBeforeRedraw}.
  */
 rflect.ui.Component.prototype.update =
     function(opt_exclusions) {
