@@ -9,15 +9,7 @@
 
 goog.provide('rflect.cal.TransportManager');
 
-goog.require('goog.date.DateTime');
-goog.require('rflect.structs.IntervalTree');
-goog.require('rflect.cal.events.Calendar');
-goog.require('rflect.cal.events.Chip');
-goog.require('rflect.cal.events.Event');
-goog.require('rflect.cal.events.EventHolder');
-goog.require('rflect.cal.i18n.PREDEFINED_COLOR_CODES');
-goog.require('rflect.cal.predefined.chips');
-goog.require('rflect.object');
+goog.require('goog.net.XhrIo');
 
 
 
@@ -54,7 +46,8 @@ goog.inherits(rflect.cal.TransportManager, goog.events.EventTarget);
  */
 rflect.cal.TransportManager.EventTypes = {
   ASYNC_OPERATION_SUCCESS: 'asyncsuccess',
-  ASYNC_OPERATION_FAILURE: 'asyncfailure'
+  ASYNC_OPERATION_FAILURE: 'asyncfailure',
+  SAVE_EVENT: 'saveevent'
 }
 
 
@@ -62,22 +55,60 @@ rflect.cal.TransportManager.EventTypes = {
  * @enum {string}
  */
 rflect.cal.TransportManager.OperationUrls = {
-  SAVE_EVENT: 'events/save',
-  LOAD_EVENT: 'events/load',
-  DELETE_EVENT: 'events/delete'
+  SAVE_EVENT: '//events/save',
+  LOAD_EVENT: '//events/load',
+  DELETE_EVENT: '//events/delete'
+}
+
+
+rflect.cal.TransportManager.SaveEvent = function(aEventId, aLongId) {
+  this.type = rflect.cal.TransportManager.EventTypes.SAVE_EVENT;
+  this.eventId = aEventId;
+  this.longId = aLongId;
+}
+
+
+rflect.cal.TransportManager.serialize = function(aOperation) {
+
+}
+
+
+rflect.cal.TransportManager.parse = function(aOperation) {
+
 }
 
 
 /**
  * Saves event.
- * @returns {number} Event id.
+ * @param {rflect.cal.events.Event} Event.
  */
-rflect.cal.TransportManager.saveEventAsync = function(aEvent) {
-
+rflect.cal.TransportManager.prototype.saveEventAsync = function(aEvent) {
+  goog.net.XhrIo.send(rflect.cal.TransportManager.OperationUrls.SAVE_EVENT,
+      goog.bind(this.onSaveEvent_, this),
+      'POST',
+      rflect.cal.TransportManager.serialize(aEvent));
 };
 
 
-rflect.cal.TransportManager.onSaveEvent_ = function(aEvent) {
+/**
+ * Save event callback.
+ * @param {goog.net.XhrIo} x Xhr instance.
+ */
+rflect.cal.TransportManager.prototype.onSaveEvent_ = function(x) {
+
+  var response = x.getResponseJson();
+  var eventId = response.eventId;
+  var longId = response.longId;
+
+  if (goog.DEBUG) {
+    _inspect('_response', aResponse);
+  }
+
+  var event = this.eventManager_.getEventById(eventId);
+  event.longId = longId
+
+  this.dispatchEvent(
+      new rflect.cal.TransportManager.SaveEvent(eventId, longId));
 
 };
 
@@ -86,7 +117,7 @@ rflect.cal.TransportManager.onSaveEvent_ = function(aEvent) {
  * @override
  */
 rflect.cal.TransportManager.prototype.disposeInternal = function() {
-
+  goog.net.XhrIo.cleanup();
 
   rflect.cal.TransportManager.superClass_.disposeInternal.call(this);
 }
