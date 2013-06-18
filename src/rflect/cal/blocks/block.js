@@ -226,7 +226,11 @@ rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips,
 
     if (!aEventManager.chipIsInVisibleCalendar(chip))
       continue;
+    // We are setting color class here to avoid many lookups later for cloned
+    // all-day chips.
     chip.colorClass = aEventManager.getChipColorClass(chip);
+    if (aEventManager.eventIsInProgress(chip.eventId))
+      chip.colorClass += aEventManager.getChipIsInProgressClass(chip);
 
     var itemStart = chip.start;
     var itemEnd = chip.end;

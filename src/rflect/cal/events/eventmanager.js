@@ -120,6 +120,13 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
 
 
   /**
+   * Event ids that are in some process.
+   * @type {Object.<number, boolean>}
+   */
+  this.eventsInProgress_ = {};
+
+
+  /**
    * Similar as <code>tracksChipsByDay_</code>, for all-day chips.
    * chips.
    * @type {Object.<number, Array.<Array.<number>>>}
@@ -333,9 +340,21 @@ rflect.cal.events.EventManager.prototype.chipIsInVisibleCalendar =
 rflect.cal.events.EventManager.prototype.getChipColorClass =
     function(aChip) {
   var calendar = this.getCalendarByChip_(aChip);
-  // Here class 'undefined' will be returned in case of no color class. Not very
-  // professional, but safe.
-  return /**@type {string}*/(calendar) && calendar.colorCode.eventClass;
+
+  return (calendar) && calendar.colorCode.eventClass || '';
+}
+
+
+/**
+ * @param {rflect.cal.events.Chip} aChip Chip.
+ * @return {string} Chip "in progress" state class.
+ */
+rflect.cal.events.EventManager.prototype.getChipIsInProgressClass =
+    function(aChip) {
+  var calendar = this.getCalendarByChip_(aChip);
+
+  return (calendar) && calendar.colorCode
+      .eventIsInProgressClass || '';
 }
 
 
@@ -787,8 +806,31 @@ rflect.cal.events.EventManager.prototype.forEachCalendar = function(aFunction,
   var calendars = this.calendars;
   for (var calendarId in calendars) {
     if (!isNaN(+calendarId)) {
-      //This is indeed calendar.
+      //This is indeed a calendar.
       aFunction.call(aObj, calendars[+calendarId], +calendarId, calendars);
     }
   }
+}
+
+
+/**
+ * @param {number} aEventId Event id of event to indicate whether it's in
+ * progress.
+ * @param {boolean} aInProgress Whether event is in progress.
+ */
+rflect.cal.events.EventManager.prototype.setEventIsInProgress =
+    function(aEventId, aInProgress) {
+  if (aInProgress) this.eventsInProgress_[aEventId] = true;
+  else delete this.eventsInProgress_[aEventId];
+}
+
+
+/**
+ * @param {number} aEventId Event id.
+ * @return {boolean} Whether event is in progress.
+ */
+rflect.cal.events.EventManager.prototype.eventIsInProgress =
+    function(aEventId) {
+  return true;
+//  return this.eventsInProgress_[aEventId];
 }

@@ -1551,6 +1551,8 @@ rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip_ =
     aSb.append(' ' + goog.getCssName('event-rect-wk-collapse-bottom'));
   // Color class
   aSb.append(' ' + aChip.colorClass);
+  if (aEventManager.eventIsInProgress(aChip.eventId))
+    aSb.append(' ' + goog.getCssName('event-in-progress'));
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
   // Start time.
   rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, true);
@@ -1629,6 +1631,8 @@ rflect.cal.ui.MainPaneBuilder.buildMonthBlockChip_ =
     aSb.append(' ' + goog.getCssName('event-rect-mn-inner-collapse-right'));
   // Color class
   aSb.append(' ' + aChip.colorClass);
+  if (aEventManager.eventIsInProgress(aChip.eventId))
+    aSb.append(' ' + goog.getCssName('event-in-progress'));
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 5]);
   // Time.
   //rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, true);

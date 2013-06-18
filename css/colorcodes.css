@@ -29,6 +29,26 @@
   color: #fff;
 }
 
+.event-in-progress-blue {
+  background-color: #A3C2F5;
+  background-image: -webkit-linear-gradient(45deg,
+      transparent 25%,
+      #6699EE  25%,
+      #6699EE  50%,
+      transparent 50%,
+      transparent 75%,
+      #6699EE  75%,
+      #6699EE  100%);
+  background-image: linear-gradient(45deg,
+      transparent 25%,
+      #6699EE 25%,
+      #6699EE 50%,
+      transparent 50%,
+      transparent 75%,
+      #6699EE 75%,
+      #6699EE 100%);
+}
+
 /* Red */
 .cal-checkbox-red {
   border-color: #f44050;
@@ -51,6 +71,26 @@
   color: #fff;
 }
 
+.event-in-progress-red {
+  background-color: #fecdce;
+  background-image: -webkit-linear-gradient(45deg,
+      transparent 25%,
+      #f44050 25%,
+      #f44050 50%,
+      transparent 50%,
+      transparent 75%,
+      #f44050 75%,
+      #f44050 100%);
+  background-image: linear-gradient(45deg,
+      transparent 25%,
+      #f44050 25%,
+      #f44050 50%,
+      transparent 50%,
+      transparent 75%,
+      #f44050 75%,
+      #f44050 100%);
+}
+
 /* Green */
 .cal-checkbox-green {
   border-color: #51be32;
@@ -71,5 +111,25 @@
   background-color: #51be32;
   border-color: #3e9327;
   color: #fff;
+}
+
+.event-in-progress-green {
+  background-color: #96f481;
+  background-image: -webkit-linear-gradient(45deg,
+      transparent 25%,
+      #51be32 25%,
+      #51be32 50%,
+      transparent 50%,
+      transparent 75%,
+      #51be32 75%,
+      #51be32 100%);
+  background-image: linear-gradient(45deg,
+      transparent 25%,
+      #51be32 25%,
+      #51be32 50%,
+      transparent 50%,
+      transparent 75%,
+      #51be32 75%,
+      #51be32 100%);
 }
 

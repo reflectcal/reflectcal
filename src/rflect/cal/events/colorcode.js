@@ -20,14 +20,17 @@ goog.require('rflect.cal.i18n.Symbols');
  * @param {string} aName Localized name.
  * @param {string} aEventClass Css name defining event color.
  * @param {string} aCheckboxClass Css name defining checkbox color.
+ * @param {string} aEventIsInProgressClass Css name defining event color when it
+ * is in progress.
  * @constructor
  */
 rflect.cal.events.ColorCode = function(aUid, aName, aEventClass,
-    aCheckboxClass) {
+    aCheckboxClass, aEventIsInProgressClass) {
   this.id = aUid;
   this.name = aName;
   this.eventClass = aEventClass;
   this.checkboxClass = aCheckboxClass;
+  this.eventIsInProgressClass = aEventIsInProgressClass;
 };
 
 
@@ -82,6 +85,13 @@ rflect.cal.events.ColorCode.prototype.name;
  * @type {string}
  */
 rflect.cal.events.ColorCode.prototype.eventClass;
+
+
+/**
+ * Event class for in progress state.
+ * @type {string}
+ */
+rflect.cal.events.ColorCode.prototype.eventIsInProgressClass;
 
 
 /**

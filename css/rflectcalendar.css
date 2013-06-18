@@ -1002,6 +1002,49 @@ overflow:hidden
   border-right: 0;
 }
 
+.event-in-progress {
+  -webkit-animation-duration: 6s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-name: background-move;
+
+  animation-duration: 6s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-name: background-move;
+
+  /* Default stripes. */
+  background-image: linear-gradient(45deg,
+        transparent 25%,
+        rgba(255, 255, 255, .5) 25%,
+        rgba(255, 255, 255, .5) 50%,
+        transparent 50%,
+        transparent 75%,
+        rgba(255, 255, 255, .5) 75%,
+        rgba(255, 255, 255, .5) 100%);
+  background-size: 30px 30px;
+  background-repeat: repeat;
+}
+
+@-webkit-keyframes background-move {
+  from {
+    background-position: 0;
+  }
+
+  to {
+    background-position: 300px;
+  }
+}
+@keyframes background-move {
+  from {
+    background-position: 0;
+  }
+
+  to {
+    background-position: 300px;
+  }
+}
+
 .expand-sign-wk-cont {
   position: relative;
   width: 100%;

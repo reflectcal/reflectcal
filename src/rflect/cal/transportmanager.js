@@ -8,6 +8,7 @@
  */
 
 goog.provide('rflect.cal.TransportManager');
+goog.provide('rflect.cal.TransportManager.EventTypes');
 
 goog.require('goog.net.XhrIo');
 
@@ -17,10 +18,12 @@ goog.require('goog.net.XhrIo');
  * Transport manager main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
+ * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-rflect.cal.TransportManager = function(aViewManager, aTimeManager) {
+rflect.cal.TransportManager = function(aViewManager, aTimeManager,
+    aEventManager) {
   goog.events.EventTarget.call(this);
 
   /**
@@ -36,6 +39,13 @@ rflect.cal.TransportManager = function(aViewManager, aTimeManager) {
    * @private
    */
   this.timeManager_ = aTimeManager;
+
+  /**
+   * Link to event manager.
+   * @type {rflect.cal.events.EventManager}
+   * @private
+   */
+  this.eventManager_ = aEventManager;
 
 };
 goog.inherits(rflect.cal.TransportManager, goog.events.EventTarget);
@@ -61,6 +71,12 @@ rflect.cal.TransportManager.OperationUrls = {
 }
 
 
+/**
+ * Event that is fired after save.
+ * @param {number} aEventId Event id.
+ * @param {string} aLongId Event long id.
+ * @constructor.
+ */
 rflect.cal.TransportManager.SaveEvent = function(aEventId, aLongId) {
   this.type = rflect.cal.TransportManager.EventTypes.SAVE_EVENT;
   this.eventId = aEventId;
@@ -68,13 +84,28 @@ rflect.cal.TransportManager.SaveEvent = function(aEventId, aLongId) {
 }
 
 
+/**
+ * @param {Object} aOperation Object to turn into JSON.
+ * @return {string} JSON string.
+ */
 rflect.cal.TransportManager.serialize = function(aOperation) {
-
+  return JSON.stringify(aOperation);
 }
 
 
+/**
+ * @param {string} aOperation String to turn into in-memory object.
+ * @return {*} Object from JSON.
+ */
 rflect.cal.TransportManager.parse = function(aOperation) {
+  return JSON.parse(aOperation);
+}
 
+/**
+ * @param {goog.net.XhrIo} x Response to extract JSON from.
+ */
+rflect.cal.TransportManager.getResponseJSON = function(x) {
+  return rflect.cal.TransportManager.parse(x.getResponseText());
 }
 
 
@@ -83,6 +114,8 @@ rflect.cal.TransportManager.parse = function(aOperation) {
  * @param {rflect.cal.events.Event} Event.
  */
 rflect.cal.TransportManager.prototype.saveEventAsync = function(aEvent) {
+  this.eventManager_.setEventIsInProgress(aEvent.id, true);
+
   goog.net.XhrIo.send(rflect.cal.TransportManager.OperationUrls.SAVE_EVENT,
       goog.bind(this.onSaveEvent_, this),
       'POST',
@@ -96,16 +129,13 @@ rflect.cal.TransportManager.prototype.saveEventAsync = function(aEvent) {
  */
 rflect.cal.TransportManager.prototype.onSaveEvent_ = function(x) {
 
-  var response = x.getResponseJson();
+  var response = rflect.cal.TransportManager.getResponseJSON(x);
   var eventId = response.eventId;
   var longId = response.longId;
 
-  if (goog.DEBUG) {
-    _inspect('_response', aResponse);
-  }
-
   var event = this.eventManager_.getEventById(eventId);
   event.longId = longId
+  this.eventManager_.setEventIsInProgress(eventId, false);
 
   this.dispatchEvent(
       new rflect.cal.TransportManager.SaveEvent(eventId, longId));
