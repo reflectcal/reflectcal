@@ -26,15 +26,13 @@ goog.require('rflect.cal.events.ColorCode');
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_EN = [
   new rflect.cal.events.ColorCode(0, 'Blue',
     goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'),
-    // Space here for cheaper concatenation at compile time, to avoid it in
-    // block.js.
-    ' ' + goog.getCssName('event-in-progress-blue')),
+    goog.getCssName('event-in-progress-blue')),
   new rflect.cal.events.ColorCode(1, 'Red',
     goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'),
-    ' ' + goog.getCssName('event-in-progress-red')),
+    goog.getCssName('event-in-progress-red')),
   new rflect.cal.events.ColorCode(2, 'Green',
     goog.getCssName('event-rect-green'), goog.getCssName('cal-checkbox-green'),
-    ' ' + goog.getCssName('event-in-progress-green'))
+    goog.getCssName('event-in-progress-green'))
 ];
 
 
@@ -46,14 +44,14 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_EN = [
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_RU = [
   new rflect.cal.events.ColorCode(0, 'Синий',
     goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'),
-    ' ' + goog.getCssName('event-in-progress-blue')),
+    goog.getCssName('event-in-progress-blue')),
   new rflect.cal.events.ColorCode(1, 'Красный',
       goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'),
-      ' ' + goog.getCssName('event-in-progress-red')),
+      goog.getCssName('event-in-progress-red')),
   new rflect.cal.events.ColorCode(2, 'Зеленый',
       goog.getCssName('event-rect-green'),
       goog.getCssName('cal-checkbox-green'),
-      ' ' + goog.getCssName('event-in-progress-green'))
+      goog.getCssName('event-in-progress-green'))
 ];
 
 
@@ -65,14 +63,14 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_RU = [
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_BY = [
   new rflect.cal.events.ColorCode(0, 'Сiнi',
     goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'),
-    ' ' + goog.getCssName('event-in-progress-blue')),
+    goog.getCssName('event-in-progress-blue')),
   new rflect.cal.events.ColorCode(1, 'Чырвоны',
       goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'),
-      ' ' + goog.getCssName('event-in-progress-red')),
+      goog.getCssName('event-in-progress-red')),
   new rflect.cal.events.ColorCode(2, 'Зялены',
       goog.getCssName('event-rect-green'),
       goog.getCssName('cal-checkbox-green'),
-      ' ' + goog.getCssName('event-in-progress-green'))
+      goog.getCssName('event-in-progress-green'))
 ];
 
 
@@ -84,14 +82,14 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_BY = [
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_FR = [
   new rflect.cal.events.ColorCode(0, 'Bleu',
     goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'),
-    ' ' + goog.getCssName('event-in-progress-blue')),
+    goog.getCssName('event-in-progress-blue')),
   new rflect.cal.events.ColorCode(1, 'Rouge',
       goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'),
-      ' ' + goog.getCssName('event-in-progress-red')),
+      goog.getCssName('event-in-progress-red')),
   new rflect.cal.events.ColorCode(2, 'Vert',
       goog.getCssName('event-rect-green'),
       goog.getCssName('cal-checkbox-green'),
-      ' ' + goog.getCssName('event-in-progress-green'))
+      goog.getCssName('event-in-progress-green'))
 ];
 
 

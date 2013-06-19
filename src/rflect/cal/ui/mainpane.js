@@ -21,6 +21,7 @@ goog.require('rflect.cal.ui.MainPaneSelectionMask');
 goog.require('rflect.ui.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.predefined.chips');
+goog.require('rflect.cal.Transport.EventTypes');
 goog.require('rflect.cal.ui.TimeMarker');
 goog.require('rflect.string');
 goog.require('rflect.cal.ui.EditDialog');
@@ -36,11 +37,12 @@ goog.require('rflect.cal.ui.SaveDialog');
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
  * @param {rflect.cal.blocks.BlockManager} aBlockManager Link to block manager.
+ * @param {rflect.cal.Transport} aTransport Link to transport.
  * @constructor
  * @extends {rflect.ui.Component}
  */
 rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
-    aContainerSizeMonitor, aBlockManager) {
+    aContainerSizeMonitor, aBlockManager, aTransport) {
   rflect.ui.Component.call(this);
 
   /**
@@ -77,6 +79,13 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
    * @private
    */
   this.blockManager_ = aBlockManager;
+
+  /**
+   * Link to transport.
+   * @type {rflect.cal.Transport}
+   * @private
+   */
+  this.transport_ = aTransport;
 
   /**
    * Time marker.
@@ -756,7 +765,9 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
       .listen(this.editDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
       this.onEventEdit_, false, this)
       .listen(this.editDialog_, rflect.ui.Dialog.EventType.SELECT,
-      this.onEditDialogButtonSelect_, false, this);
+      this.onEditDialogButtonSelect_, false, this)
+      .listen(this.transport_, rflect.cal.Transport.EventTypes.SAVE_EVENT,
+      this.onSaveEvent_, false, this);
 
   this.timeMarker_.start();
 };
@@ -1624,7 +1635,8 @@ rflect.cal.ui.MainPane.prototype.onSaveDialogButtonSelect_ = function(aEvent) {
     this.eventManager_.eventHolder.setCalendarId(
         this.saveDialog_.getCalendarId());
     this.eventManager_.eventHolder.endWithAdd();
-
+    this.transport_.saveEventAsync(
+        this.eventManager_.eventHolder.getCurrentEvent());
     this.updateAfterSave_();
   }
 }
@@ -1657,6 +1669,25 @@ rflect.cal.ui.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
 
     this.updateAfterDelete_();
   }
+}
+
+
+/**
+ * @param {rflect.cal.Transport.SaveEvent} aEvent Event object.
+ */
+rflect.cal.ui.MainPane.prototype.onSaveEvent_ = function(aEvent) {
+  var eventId = aEvent.eventId;
+
+  if (goog.DEBUG)
+    _log('onSaveEvent_');
+
+  var mp = this.getDomHelper().getElement('main-pane');
+  mp && goog.array.forEach(mp.querySelectorAll('.' +
+      rflect.cal.predefined.chips.CHIP_EVENT_CLASS + eventId), function(el) {
+    goog.dom.classes.remove(el, goog.getCssName('event-in-progress'));
+    goog.dom.classes.remove(el,
+        this.eventManager_.getEventIsInProgressClass(eventId));
+  }, this);
 }
 
 

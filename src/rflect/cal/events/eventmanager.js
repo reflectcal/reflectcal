@@ -322,36 +322,36 @@ rflect.cal.events.EventManager.prototype.createCalendar = function(opt_colorCode
 
 
 /**
- * @param {rflect.cal.events.Chip} aChip Chip to test.
+ * @param {number} aEventId Event id.
  * @return {boolean} Whether this chip is in visible calendar.
  */
-rflect.cal.events.EventManager.prototype.chipIsInVisibleCalendar =
-    function(aChip) {
-  var calendar = this.getCalendarByChip_(aChip);
+rflect.cal.events.EventManager.prototype.eventIsInVisibleCalendar =
+    function(aEventId) {
+  var calendar = this.getCalendarByEventId_(aEventId);
   //So that even chips from non-existent calendar are treated as from invisible.
   return /**@type {boolean}*/(calendar) && calendar.visible;
 }
 
 
 /**
- * @param {rflect.cal.events.Chip} aChip Chip.
+ * @param {number} aEventId Event id.
  * @return {string} Chip color class.
  */
-rflect.cal.events.EventManager.prototype.getChipColorClass =
-    function(aChip) {
-  var calendar = this.getCalendarByChip_(aChip);
+rflect.cal.events.EventManager.prototype.getEventColorClass =
+    function(aEventId) {
+  var calendar = this.getCalendarByEventId_(aEventId);
 
   return (calendar) && calendar.colorCode.eventClass || '';
 }
 
 
 /**
- * @param {rflect.cal.events.Chip} aChip Chip.
+ * @param {number} aEventId Event id.
  * @return {string} Chip "in progress" state class.
  */
-rflect.cal.events.EventManager.prototype.getChipIsInProgressClass =
-    function(aChip) {
-  var calendar = this.getCalendarByChip_(aChip);
+rflect.cal.events.EventManager.prototype.getEventIsInProgressClass =
+    function(aEventId) {
+  var calendar = this.getCalendarByEventId_(aEventId);
 
   return (calendar) && calendar.colorCode
       .eventIsInProgressClass || '';
@@ -359,13 +359,13 @@ rflect.cal.events.EventManager.prototype.getChipIsInProgressClass =
 
 
 /**
- * @param {rflect.cal.events.Chip} aChip Chip.
+ * @param {number} aEventId Event id.
  * @return {rflect.cal.events.Calendar} Calendar of this chip.
  * @private
  */
-rflect.cal.events.EventManager.prototype.getCalendarByChip_ = function(aChip) {
-  var eventId = aChip.eventId;
-  var event = this.events_[eventId];
+rflect.cal.events.EventManager.prototype.getCalendarByEventId_ =
+    function(aEventId) {
+  var event = this.events_[aEventId];
   return this.calendars[event.calendarId];
 }
 
@@ -551,7 +551,7 @@ rflect.cal.events.EventManager.prototype.addCalendar =
  * TODO(alexk): maybe it's better not to delete all events from calendar
  * outright (may take long time), but filter out chips from non-existent
  * calendar.
- * @see {rflect.cal.events.EventManager#chipIsInVisibleCalendar}
+ * @see {rflect.cal.events.EventManager#eventIsInVisibleCalendar}
  */
 rflect.cal.events.EventManager.prototype.deleteCalendar =
     function(aCalendar) {
@@ -831,6 +831,5 @@ rflect.cal.events.EventManager.prototype.setEventIsInProgress =
  */
 rflect.cal.events.EventManager.prototype.eventIsInProgress =
     function(aEventId) {
-  return true;
-//  return this.eventsInProgress_[aEventId];
+  return this.eventsInProgress_[aEventId];
 }

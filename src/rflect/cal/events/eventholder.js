@@ -232,6 +232,15 @@ rflect.cal.events.EventHolder.prototype.getBackUpEvent =
 
 
 /**
+ * @return {rflect.cal.events.Event|undefined} Current event.
+ */
+rflect.cal.events.EventHolder.prototype.getCurrentEvent =
+    function() {
+  return this.newTemporaryEvent_;
+}
+
+
+/**
  * Ends event creation with adding new event.
  */
 rflect.cal.events.EventHolder.prototype.endWithAdd = function() {

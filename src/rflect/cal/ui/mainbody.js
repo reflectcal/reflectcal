@@ -32,11 +32,12 @@ goog.require('rflect.cal.ui.TaskSelector');
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
  * @param {rflect.cal.blocks.BlockManager} aBlockManager Link to block manager.
+ * @param {rflect.cal.Transport} aTransport Link to transport.
  * @constructor
  * @extends {rflect.ui.Component}
  */
 rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
-    aContainerSizeMonitor, aBlockManager) {
+    aContainerSizeMonitor, aBlockManager, aTransport) {
   rflect.ui.Component.call(this);
 
   /**
@@ -74,13 +75,20 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
    */
   this.blockManager_ = aBlockManager;
 
+  /**
+   * Link to transport.
+   * @type {rflect.cal.Transport}
+   * @private
+   */
+  this.transport_ = aTransport;
+
   // Add child components in order for them to be included in propagation of
   // string building and updating.
   this.addChild(this.topPane_ = new rflect.cal.ui.TopPane(this.viewManager_,
       this.timeManager_));
   this.addChild(this.mainPane_ = new rflect.cal.ui.MainPane(this.viewManager_,
         this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
-        this.blockManager_));
+        this.blockManager_, this.transport_));
   this.addChild(this.miniCal = new rflect.cal.ui.MiniCal(this.viewManager_,
       this.timeManager_));
   this.addChild(this.calSelector_ = new rflect.cal.ui.CalSelector(this.viewManager_,

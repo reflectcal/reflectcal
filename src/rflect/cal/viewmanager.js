@@ -19,7 +19,7 @@ goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
-goog.require('rflect.cal.TransportManager');
+goog.require('rflect.cal.Transport');
 goog.require('rflect.cal.ui.MainBody');
 goog.require('rflect.cal.ViewType');
 
@@ -70,11 +70,11 @@ rflect.cal.ViewManager = function(aMainInstance) {
       this.timeManager);
 
   /**
-   * Transport manager.
-   * @type {rflect.cal.TransportManager}
+   * Transport.
+   * @type {rflect.cal.Transport}
    * @private
    */
-  this.transportManager_ = new rflect.cal.TransportManager(this,
+  this.transport_ = new rflect.cal.Transport(this,
       this.timeManager, this.eventManager_);
 
   /**
@@ -91,7 +91,8 @@ rflect.cal.ViewManager = function(aMainInstance) {
    * @private
    */
   this.mainBody_ = new rflect.cal.ui.MainBody(this, this.timeManager,
-      this.eventManager_, this.containerSizeMonitor_, this.blockManager_);
+      this.eventManager_, this.containerSizeMonitor_, this.blockManager_,
+      this.transport_);
 
   if (goog.DEBUG)
     _inspect('mainBody_', this.mainBody_);
