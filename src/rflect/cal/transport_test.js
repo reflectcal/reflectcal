@@ -10,7 +10,8 @@ goog.require('rflect.cal.events.EventManager');
 goog.require('rflect.cal.Transport');
 
 
-var transports;
+var eventManager;
+var transport;
 
 function createMockStaticSend(timeInterval, desiredResponse) {
 

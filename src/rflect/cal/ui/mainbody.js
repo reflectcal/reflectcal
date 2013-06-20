@@ -486,7 +486,7 @@ rflect.cal.ui.MainBody.prototype.showEventPane = function(aShow,
   if (!this.eventPane_) {
     this.eventPane_ = new rflect.cal.ui.EventPane(this.viewManager_,
         this.timeManager_, this.eventManager_,
-        this.getDomHelper().getElement('main-container'));
+        this.getDomHelper().getElement('main-container'), this.transport_);
     this.addChild(this.eventPane_);
 
     this.getHandler().listen(this.eventPane_,

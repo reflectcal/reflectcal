@@ -39,11 +39,12 @@ goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @param {Element} aParentElement Element in which pane will be rendered.
+ * @param {rflect.cal.Transport} aTransport Link to transport.
  * @constructor
  * @extends {goog.ui.Component}
  */
 rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
-    aParentElement) {
+    aParentElement, aTransport) {
   goog.ui.Component.call(this);
 
   /**
@@ -66,6 +67,13 @@ rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
    * @private
    */
   this.eventManager_ = aEventManager;
+
+  /**
+   * Link to transport.
+   * @type {rflect.cal.Transport}
+   * @private
+   */
+  this.transport_ = aTransport;
 
   this.parentEl_ = aParentElement;
 
@@ -479,6 +487,8 @@ rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
 rflect.cal.ui.EventPane.prototype.onSave_ = function() {
   if (this.scanValues()) {
     this.eventManager_.eventHolder.endWithEdit();
+    this.transport_.saveEventAsync(
+        this.eventManager_.eventHolder.getCurrentEvent());
     if (this.dispatchEvent(new goog.events.Event(
         rflect.cal.ui.EventPane.EventTypes.SAVE))) {
       this.setVisible(false);
@@ -493,6 +503,10 @@ rflect.cal.ui.EventPane.prototype.onSave_ = function() {
  */
 rflect.cal.ui.EventPane.prototype.onDelete_ = function(aEvent) {
   this.eventManager_.eventHolder.endWithDelete();
+
+  this.transport_.deleteEventAsync(
+      this.eventManager_.eventHolder.getBackUpEvent());
+
   if (this.dispatchEvent(new goog.events.Event(
       rflect.cal.ui.EventPane.EventTypes.DELETE))) {
     this.setVisible(false);

@@ -827,7 +827,8 @@ rflect.cal.ui.MainPane.prototype.onClick_ = function(aEvent) {
     this.updateBeforeRedraw();
     this.updateByRedraw();
 
-  } else if (this.isChip_(className) && !this.selectionMask_.wasDragged()) {
+  } else if ((this.isChipOrChild_(className) || this.isGrip_(className)) &&
+      !this.selectionMask_.wasDragged()) {
 
     this.showEventEditComponent_(target, className);
 
@@ -845,7 +846,7 @@ rflect.cal.ui.MainPane.prototype.onDoubleClick_ = function(aEvent) {
   var id = target.id;
   var className = target.className;
 
-  if (this.isChip_(className)) {
+  if (this.isChipOrChild_(className) || this.isGrip_(className)) {
     this.showEventEditComponent_(target, className, true);
   }
 
@@ -875,23 +876,10 @@ rflect.cal.ui.MainPane.prototype.getEventByTarget_ =
  * @return {Element} Found chip or null.
  */
 rflect.cal.ui.MainPane.prototype.getChipElement_ = function(aTarget) {
-  var gripRe = rflect.string.buildClassNameRe(
-      goog.getCssName('wk-event-grip'),
-      goog.getCssName('mn-event-grip')
-  );
-  var gripContRe = rflect.string.buildClassNameRe(
-      goog.getCssName('wk-event-grip-cont'),
-      goog.getCssName('mn-event-grip-cont')
-  );
-
-  if (aTarget.className == goog.getCssName('event-wk-timelabel'))
-    return /**@type {Element}*/ (aTarget.parentNode);
-  if (gripContRe.test(aTarget.className))
-    return /**@type {Element}*/ (aTarget.parentNode);
-  if (gripRe.test(aTarget.className))
-    return /**@type {Element}*/ (aTarget.parentNode.parentNode);
-
-  return aTarget;
+  return /**@type {Element}*/ (goog.dom.getAncestor(aTarget,
+      goog.bind(function(aNode) {
+    return this.isChip_(aNode.className);
+  }, this), true, 2));
 }
 
 
@@ -938,9 +926,9 @@ rflect.cal.ui.MainPane.prototype.onMouseOut_ = function(aEvent) {
 
   if (
       // If we moving from chip to anything except grip
-      this.isChip_(className) && !this.isGrip_(relClassName) ||
+      this.isChipOrChild_(className) && !this.isGrip_(relClassName) ||
       // If we moving from grip to anything except grip or chip
-      this.isGrip_(className) && !this.isChip_(relClassName) &&
+      this.isGrip_(className) && !this.isChipOrChild_(relClassName) &&
       !this.isGrip_(relClassName)) {
     this.removeChipGrip_();
   }
@@ -963,29 +951,24 @@ rflect.cal.ui.MainPane.prototype.onMouseOver_ = function(aEvent) {
   else
     this.moRegistry_.deregisterTarget();
 
-  if (this.isWeekChip_(className)) {
-    this.addChipGrip_(target, true);
-  } else if (this.isAllDayChip_(className)) {
-    this.addChipGrip_(target, false, true);
-  } else if (this.isMonthChip_(className)) {
-    this.addChipGrip_(target, false);
-  } /*else
-    this.removeChipGrip_();*/
-
-
+  if (goog.DEBUG)
+    _log('this.isChipOrChild_(className)', this.isChipOrChild_(className));
+  if (this.isChipOrChild_(className)) {
+    this.addChipGrip_(target);
+  }
 }
 
 
 /**
  * Adds grip to one or more chips.
  * @param {Element} aElement Chip element or its label.
- * @param {boolean} aWeekChip Whether is of week type, if false - month type.
- * @param {boolean=} opt_allDayChip Whether is of all-day type.
  * @private
  */
-rflect.cal.ui.MainPane.prototype.addChipGrip_ = function(aElement, aWeekChip,
-                                                      opt_allDayChip) {
+rflect.cal.ui.MainPane.prototype.addChipGrip_ = function(aElement) {
   var chip = this.getChipElement_(aElement);
+  var className = chip.className;
+  var weekChip = this.isWeekChip_(className);
+  var allDayChip = this.isAllDayChip_(className);
 
   var startIsCutWkRe = rflect.string.buildClassNameRe(
       goog.getCssName('event-rect-wk-collapse-top'));
@@ -995,7 +978,6 @@ rflect.cal.ui.MainPane.prototype.addChipGrip_ = function(aElement, aWeekChip,
       goog.getCssName('event-rect-mn-inner-collapse-left'));
   var endIsCutMnRe = rflect.string.buildClassNameRe(
       goog.getCssName('event-rect-mn-inner-collapse-right'));
-
 
   if (!this.farAwayCont_) {
     this.farAwayCont_ = goog.dom.createDom('div',
@@ -1039,7 +1021,7 @@ rflect.cal.ui.MainPane.prototype.addChipGrip_ = function(aElement, aWeekChip,
     this.attachGripChildren_(this.rightContAd_, false, true);
   }
 
-  if (opt_allDayChip) {
+  if (allDayChip) {
     var chipClassName = chip.className;
 
     var re = new RegExp(rflect.cal.predefined.chips.CHIP_EVENT_CLASS + '\\d+');
@@ -1050,13 +1032,13 @@ rflect.cal.ui.MainPane.prototype.addChipGrip_ = function(aElement, aWeekChip,
 
     var chips = this.getDomHelper().getElement('alldayevents-grid')
         .querySelectorAll('.' + chipIdClass);
-    goog.array.forEach(chips, goog.partial(this.addChipGripInner_, aWeekChip,
-        /**@type {boolean}*/(opt_allDayChip), startIsCutWkRe, endIsCutWkRe,
+    goog.array.forEach(chips, goog.partial(this.addChipGripInner_, weekChip,
+        allDayChip, startIsCutWkRe, endIsCutWkRe,
         startIsCutMnRe, endIsCutMnRe, this.upperContWk_, this.lowerContWk_,
         this.leftContMn_, this.rightContMn_, this.leftContAd_,
         this.rightContAd_, this.farAwayCont_));
   } else
-    this.addChipGripInner_(aWeekChip, /**@type {boolean}*/(opt_allDayChip),
+    this.addChipGripInner_(weekChip, allDayChip,
         startIsCutWkRe, endIsCutWkRe, startIsCutMnRe, endIsCutMnRe,
         this.upperContWk_, this.lowerContWk_, this.leftContMn_,
         this.rightContMn_, this.leftContAd_, this.rightContAd_, 
@@ -1305,11 +1287,23 @@ rflect.cal.ui.MainPane.prototype.isWeeknumLabel_ = function(aClassName) {
  */
 rflect.cal.ui.MainPane.prototype.isWeekChip_ = function(aClassName) {
   var chipWeekRe_ = this.chipWeekRe_ || (this.chipWeekRe_ =
-      rflect.string.buildClassNameRe(goog.getCssName('event-rect-wk-inner'),
-          goog.getCssName('event-wk-timelabel')
-      ));
+      rflect.string.buildClassNameRe(goog.getCssName('event-rect-wk-inner')));
 
   return chipWeekRe_.test(aClassName);
+};
+
+
+/**
+ * @param {string} aClassName Class name of element.
+ * @return {boolean} Whether this is an child element of chip element
+ * (but not grip!).
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.isChipChild_ = function(aClassName) {
+  var re = rflect.string.buildClassNameRe(
+      goog.getCssName('event-wk-timelabel'));
+
+  return re.test(aClassName);
 };
 
 
@@ -1320,10 +1314,7 @@ rflect.cal.ui.MainPane.prototype.isWeekChip_ = function(aClassName) {
  */
 rflect.cal.ui.MainPane.prototype.isMonthChip_ = function(aClassName) {
   var chipMonthRe_ = this.chipMonthRe_ || (this.chipMonthRe_ =
-      rflect.string.buildClassNameRe(goog.getCssName('event-rect-mn-inner'),
-      goog.getCssName('mn-event-grip-cont'),
-      goog.getCssName('mn-event-grip')
-      ));
+      rflect.string.buildClassNameRe(goog.getCssName('event-rect-mn-inner')));
   return chipMonthRe_.test(aClassName);
 };
 
@@ -1340,14 +1331,22 @@ rflect.cal.ui.MainPane.prototype.isChip_ = function(aClassName) {
 
 /**
  * @param {string} aClassName Class name of element.
+ * @return {boolean} Whether this is chip or one of its children.
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.isChipOrChild_ = function(aClassName) {
+  return this.isChip_(aClassName) || this.isChipChild_(aClassName);
+};
+
+
+/**
+ * @param {string} aClassName Class name of element.
  * @return {boolean} Whether this is an all-day chip.
  * @private
  */
 rflect.cal.ui.MainPane.prototype.isAllDayChip_ = function(aClassName) {
   var chipAllDayRe_ = this.chipAllDayRe_ || (this.chipAllDayRe_ =
-      rflect.string.buildClassNameRe(goog.getCssName('event-rect-all-day'),
-          goog.getCssName('ad-event-grip-cont'),
-          goog.getCssName('ad-event-grip')));
+      rflect.string.buildClassNameRe(goog.getCssName('event-rect-all-day')));
   return chipAllDayRe_.test(aClassName);
 };
 
@@ -1491,7 +1490,7 @@ rflect.cal.ui.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
     preventDefaultIsNeeded = true;
 
-  } else if (this.isChip_(className) || this.isGrip_(className)) {
+  } else if (this.isChipOrChild_(className) || this.isGrip_(className)) {
 
     this.startChipDrag_(aEvent, className);
     preventDefaultIsNeeded = true;
@@ -1589,6 +1588,8 @@ rflect.cal.ui.MainPane.prototype.endChipDrag_ = function() {
   this.eventManager_.eventHolder.setEndDate(
       this.selectionMask_.endDate);
   this.eventManager_.eventHolder.endWithEdit();
+  this.transport_.saveEventAsync(
+      this.eventManager_.eventHolder.getCurrentEvent());
   this.updateAfterSave_();
 }
 
@@ -1665,7 +1666,11 @@ rflect.cal.ui.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
 
   } else if (aEvent.key != this.editDialog_.getButtonSet().getCancel()) {
     // The only spare button - delete.
+
     this.eventManager_.eventHolder.endWithDelete();
+
+    this.transport_.deleteEventAsync(
+        this.eventManager_.eventHolder.getBackUpEvent());
 
     this.updateAfterDelete_();
   }

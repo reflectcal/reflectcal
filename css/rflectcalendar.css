@@ -272,13 +272,7 @@ body {
   border-radius: 3px;
 }
 
-.calitem-color-active {
-  -moz-box-shadow: 0 0 3px 2px #6699ee;
-  -webkit-box-shadow: 0 0 3px 2px #6699ee;
-  box-shadow: 0 0 3px 2px #6699ee;
-}
-
-.calitem-color-inactive {
+.goog-checkbox-hover.calitem-color-cont {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;

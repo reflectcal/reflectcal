@@ -64,7 +64,8 @@ goog.inherits(rflect.cal.Transport, goog.events.EventTarget);
 rflect.cal.Transport.EventTypes = {
   ASYNC_OPERATION_SUCCESS: 'asyncsuccess',
   ASYNC_OPERATION_FAILURE: 'asyncfailure',
-  SAVE_EVENT: 'saveevent'
+  SAVE_EVENT: 'saveevent',
+  DELETE_EVENT: 'deleteevent'
 }
 
 
@@ -88,6 +89,17 @@ rflect.cal.Transport.SaveEvent = function(aEventId, aLongId) {
   this.type = rflect.cal.Transport.EventTypes.SAVE_EVENT;
   this.eventId = aEventId;
   this.longId = aLongId;
+}
+
+
+/**
+ * Event that is fired after delete.
+ * @param {number} aEventId Event id.
+ * @constructor.
+ */
+rflect.cal.Transport.DeleteEvent = function(aEventId) {
+  this.type = rflect.cal.Transport.EventTypes.DELETE_EVENT;
+  this.eventId = aEventId;
 }
 
 
@@ -125,7 +137,7 @@ rflect.cal.Transport.prototype.saveEventAsync = function(aEvent) {
   this.eventManager_.setEventIsInProgress(aEvent.id, true);
 
   goog.testing.net.XhrIo.send(rflect.cal.Transport.OperationUrls.SAVE_EVENT,
-      goog.bind(this.onSaveEvent_, this),
+      goog.bind(this.onSaveEvent_, this, aEvent.id),
       'POST',
       rflect.cal.Transport.serialize(aEvent), null);
 
@@ -133,7 +145,7 @@ rflect.cal.Transport.prototype.saveEventAsync = function(aEvent) {
 
     var sendInstances = goog.testing.net.XhrIo.getSendInstances();
     var xhr = sendInstances[sendInstances.length - 1];
-    xhr.simulateResponse(200, '{"eventId":' + aEvent.id + ',"longId":""}');
+    xhr.simulateResponse(200, '{"longId":""}');
 
   }, 5000);
 };
@@ -141,24 +153,61 @@ rflect.cal.Transport.prototype.saveEventAsync = function(aEvent) {
 
 /**
  * Save event callback.
+ * @param {number} aCalEventId Event id.
  * @param {goog.events.Event} aEvent Event object.
  */
-rflect.cal.Transport.prototype.onSaveEvent_ = function(aEvent) {
+rflect.cal.Transport.prototype.onSaveEvent_ = function(aCalEventId, aEvent) {
   var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
-  if (goog.DEBUG) {
-    _log('onSaveEvent_ in transport');
-    _inspect('x', x);
-  }
 
   var response = rflect.cal.Transport.getResponseJSON(x);
-  var eventId = response.eventId;
   var longId = response.longId;
 
-  var event = this.eventManager_.getEventById(eventId);
+  var event = this.eventManager_.getEventById(aCalEventId);
   event.longId = longId
-  this.eventManager_.setEventIsInProgress(eventId, false);
+  this.eventManager_.setEventIsInProgress(aCalEventId, false);
 
-  this.dispatchEvent(new rflect.cal.Transport.SaveEvent(eventId, longId));
+  this.dispatchEvent(new rflect.cal.Transport.SaveEvent(aCalEventId, longId));
+
+};
+
+
+/**
+ * Deletes event.
+ * @param {rflect.cal.events.Event} Event.
+ */
+rflect.cal.Transport.prototype.deleteEventAsync = function(aEvent) {
+  this.eventManager_.setEventIsInProgress(aEvent.id, true);
+
+  goog.testing.net.XhrIo.send(rflect.cal.Transport.OperationUrls.DELETE_EVENT +
+      '?longId=' + aEvent.longId,
+      goog.bind(this.onDeleteEvent_, this, aEvent.id),
+      'GET');
+
+  setTimeout(function(){
+
+    var sendInstances = goog.testing.net.XhrIo.getSendInstances();
+    var xhr = sendInstances[sendInstances.length - 1];
+    xhr.simulateResponse(200, '0');
+
+  }, 5000);
+};
+
+
+/**
+ * Delete event callback.
+ * @param {number} aCalEventId Event id.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.Transport.prototype.onDeleteEvent_ = function(aCalEventId, aEvent) {
+  var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
+
+  var response = rflect.cal.Transport.getResponseJSON(x);
+  var operationCode = response;
+
+  if (operationCode == 0)
+    this.eventManager_.setEventIsInProgress(aCalEventId, false);
+
+  this.dispatchEvent(new rflect.cal.Transport.DeleteEvent(aCalEventId));
 
 };
 

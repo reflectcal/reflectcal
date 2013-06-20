@@ -75,7 +75,6 @@ rflect.cal.ui.CalSelector.EventType = {
  */
 rflect.cal.ui.CalSelector.prototype.enterDocument = function () {
   rflect.cal.ui.CalSelector.superClass_.enterDocument.call(this);
-  //TODO(alexk): mousedown, click, mousemove, mouseup listeners will go here.
 
   var nodes = this.getElement().querySelectorAll('.' +
       goog.getCssName('goog-checkbox'));
