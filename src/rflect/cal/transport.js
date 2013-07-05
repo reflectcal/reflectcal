@@ -54,6 +54,13 @@ rflect.cal.Transport = function(aViewManager, aTimeManager,
    * @private
    */
   this.send_ = goog.net.XhrIo.send;
+
+  /**
+   * Set of intervals that were already updated.
+   * @type {Object.<string, boolean>}
+   * @private
+   */
+  this.updatedIntervals_ = {};
 };
 goog.inherits(rflect.cal.Transport, goog.events.EventTarget);
 
@@ -209,6 +216,17 @@ rflect.cal.Transport.prototype.onDeleteEvent_ = function(aCalEventId, aEvent) {
 
   this.dispatchEvent(new rflect.cal.Transport.DeleteEvent(aCalEventId));
 
+};
+
+
+/**
+ * Checks whether new events should be loaded.
+ */
+rflect.cal.Transport.prototype.update = function() {
+  var monthsToCheck = [];
+
+  var startDate = new goog.date.Date(this.timeManager_.interval.start);
+  var endDate = new goog.date.Date(this.timeManager_.interval.end);
 };
 
 
