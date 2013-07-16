@@ -57,10 +57,17 @@ rflect.cal.Transport = function(aViewManager, aTimeManager,
 
   /**
    * Set of intervals that were already updated.
+   * @type {Array.<rflect.date.Interval>}
+   * @private
+   */
+  this.updatedIntervals_ = [];
+
+  /**
+   * Set of event ids that already present.
    * @type {Object.<string, boolean>}
    * @private
    */
-  this.updatedIntervals_ = {};
+  this.loadedEventsIds_ = {};
 };
 goog.inherits(rflect.cal.Transport, goog.events.EventTarget);
 
@@ -220,13 +227,71 @@ rflect.cal.Transport.prototype.onDeleteEvent_ = function(aCalEventId, aEvent) {
 
 
 /**
- * Checks whether new events should be loaded.
+ * Checks whether interval is not covered by loading and loading attempt is
+ * needed.
+ * @param {rflect.date.Interval} Interval to check.
+ * @return {boolean} Loading attempt is needed.
  */
-rflect.cal.Transport.prototype.update = function() {
-  var monthsToCheck = [];
+rflect.cal.Transport.prototype.intervalIsNotCovered = function(aInterval) {
 
-  var startDate = new goog.date.Date(this.timeManager_.interval.start);
-  var endDate = new goog.date.Date(this.timeManager_.interval.end);
+  for (var counter = 0, length = this.updatedIntervals_.length;
+      counter < length; counter++) {
+
+    var interval = this.updatedIntervals_[counter];
+    // If interval is already covered, there's nothing to do here.
+    if (interval.contains(aInterval))
+      return false;
+  }
+
+ return true;
+
+};
+
+
+/**
+ * Updates intervals covered by loading.
+ * @param {rflect.date.Interval} Interval which was covered by loading.
+ */
+rflect.cal.Transport.prototype.updateIntervals = function(aLoadedInterval) {
+
+  var intersectionIndexes = [];
+  var min = aLoadedInterval.start;
+  var max = aLoadedInterval.end;
+
+  var notPresent = false;
+  for (var counter = 0, length = this.updatedIntervals_.length;
+      counter < length; counter++) {
+
+    var interval = this.updatedIntervals_[counter];
+    // If interval is already covered, there's nothing to do here.
+    if (interval.contains(aLoadedInterval))
+      break;
+
+    if (interval.abuts(aLoadedInterval) ||
+        interval.overlaps(aLoadedInterval)) {
+
+      if (interval.start < min) min = interval.start;
+      if (interval.end > max) max = interval.end;
+
+      intersectionIndexes.push(counter);
+
+    } else
+      notPresent = true;
+  }
+
+  // If there are no overlaps, just add new interval.
+  if (notPresent)
+    this.updatedIntervals_.push(interval);
+  else if (intersectionIndexes.length) {
+    // Of all intersections, we form new interval.
+    intersectionIndexes.sort();
+    for (var counter = intersectionIndexes.length - 1; counter >= 0;
+        counter--) {
+      this.updatedIntervals_.splice(intersectionIndexes[counter], 1);
+    }
+    this.updatedIntervals_.push(new rflect.date.Interval(min, max));
+  }
+
 };
 
 
