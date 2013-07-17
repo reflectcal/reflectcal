@@ -12,6 +12,8 @@ goog.provide('rflect.cal.Transport.EventTypes');
 
 goog.require('goog.net.XhrIo');
 goog.require('goog.testing.net.XhrIo');
+goog.require('rflect.cal.events.EventManager');
+goog.require('rflect.date.Interval');
 
 
 
@@ -67,7 +69,7 @@ rflect.cal.Transport = function(aViewManager, aTimeManager,
    * @type {Object.<string, boolean>}
    * @private
    */
-  this.loadedEventsIds_ = {};
+  this.loadedEventIds_ = {};
 };
 goog.inherits(rflect.cal.Transport, goog.events.EventTarget);
 
@@ -79,7 +81,8 @@ rflect.cal.Transport.EventTypes = {
   ASYNC_OPERATION_SUCCESS: 'asyncsuccess',
   ASYNC_OPERATION_FAILURE: 'asyncfailure',
   SAVE_EVENT: 'saveevent',
-  DELETE_EVENT: 'deleteevent'
+  DELETE_EVENT: 'deleteevent',
+  LOAD_EVENT: 'loadevent'
 }
 
 
@@ -103,6 +106,17 @@ rflect.cal.Transport.SaveEvent = function(aEventId, aLongId) {
   this.type = rflect.cal.Transport.EventTypes.SAVE_EVENT;
   this.eventId = aEventId;
   this.longId = aLongId;
+}
+
+
+/**
+ * Event that is fired after delete.
+ * @param {rflect.date.Interval} aInterval Interval.
+ * @constructor.
+ */
+rflect.cal.Transport.LoadEvent = function(aInterval) {
+  this.type = rflect.cal.Transport.EventTypes.DELETE_EVENT;
+  this.interval = aInterval;
 }
 
 
@@ -177,7 +191,9 @@ rflect.cal.Transport.prototype.onSaveEvent_ = function(aCalEventId, aEvent) {
   var longId = response.longId;
 
   var event = this.eventManager_.getEventById(aCalEventId);
-  event.longId = longId
+  event.longId = longId;
+  this.loadedEventIds_[longId] = true;
+
   this.eventManager_.setEventIsInProgress(aCalEventId, false);
 
   this.dispatchEvent(new rflect.cal.Transport.SaveEvent(aCalEventId, longId));
@@ -194,7 +210,7 @@ rflect.cal.Transport.prototype.deleteEventAsync = function(aEvent) {
 
   goog.testing.net.XhrIo.send(rflect.cal.Transport.OperationUrls.DELETE_EVENT +
       '?longId=' + aEvent.longId,
-      goog.bind(this.onDeleteEvent_, this, aEvent.id),
+      goog.bind(this.onDeleteEvent_, this, aEvent.id, aEvent.longId),
       'GET');
 
   setTimeout(function(){
@@ -210,16 +226,21 @@ rflect.cal.Transport.prototype.deleteEventAsync = function(aEvent) {
 /**
  * Delete event callback.
  * @param {number} aCalEventId Event id.
+ * @param {string} aLongId Event long id.
  * @param {goog.events.Event} aEvent Event object.
  */
-rflect.cal.Transport.prototype.onDeleteEvent_ = function(aCalEventId, aEvent) {
+rflect.cal.Transport.prototype.onDeleteEvent_ = function(aCalEventId, aLongId,
+    aEvent) {
   var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
 
   var response = rflect.cal.Transport.getResponseJSON(x);
   var operationCode = response;
 
-  if (operationCode == 0)
+  if (operationCode == 0) {
+    delete this.loadedEventIds_[aLongId];
+
     this.eventManager_.setEventIsInProgress(aCalEventId, false);
+  }
 
   this.dispatchEvent(new rflect.cal.Transport.DeleteEvent(aCalEventId));
 
@@ -227,12 +248,66 @@ rflect.cal.Transport.prototype.onDeleteEvent_ = function(aCalEventId, aEvent) {
 
 
 /**
- * Checks whether interval is not covered by loading and loading attempt is
- * needed.
- * @param {rflect.date.Interval} Interval to check.
- * @return {boolean} Loading attempt is needed.
+ * Loads events.
  */
-rflect.cal.Transport.prototype.intervalIsNotCovered = function(aInterval) {
+rflect.cal.Transport.prototype.loadEventsAsync = function() {
+  var interval = this.timeManager_.interval;
+
+  if (this.intervalIsCovered_(interval))
+    return;
+
+  goog.testing.net.XhrIo.send(rflect.cal.Transport.OperationUrls.LOAD_EVENT +
+      '?int=' + rflect.cal.Transport.serialize(interval),
+      goog.bind(this.onLoadEvents_, this, interval),
+      'GET');
+
+  setTimeout(function(){
+
+    var sendInstances = goog.testing.net.XhrIo.getSendInstances();
+    var xhr = sendInstances[sendInstances.length - 1];
+    xhr.simulateResponse(200, '[]');
+
+  }, 1000);
+};
+
+
+/**
+ * Load events callback.
+ * @param {rflect.date.Interval} aInterval Interval, events for which were
+ * loaded.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.Transport.prototype.onLoadEvents_ = function(aInterval, aEvent) {
+  var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
+
+  var response = rflect.cal.Transport.getResponseJSON(x);
+  var events = response;
+
+  this.updateIntervals_(aInterval);
+
+  for (var counter = 0, length = events.length; counter < length; counter++) {
+    if (events.longId in this.loadedEventIds_)
+      continue;
+
+    var eventObj = events[counter];
+    var event = rflect.cal.events.EventManager.createEventFromArray(eventObj);
+
+    this.eventManager_.addEvent(event);
+  }
+
+  this.dispatchEvent(new rflect.cal.Transport.LoadEvent(aInterval));
+
+};
+
+
+/**
+ * Checks whether interval is covered by loading and loading attempt is not
+ * needed.
+ * @param {rflect.date.Interval} aInterval Interval to check.
+ * @return {boolean} Loading attempt is needed.
+ * @private
+ */
+rflect.cal.Transport.prototype.intervalIsCovered_ = function(aInterval) {
 
   for (var counter = 0, length = this.updatedIntervals_.length;
       counter < length; counter++) {
@@ -240,48 +315,51 @@ rflect.cal.Transport.prototype.intervalIsNotCovered = function(aInterval) {
     var interval = this.updatedIntervals_[counter];
     // If interval is already covered, there's nothing to do here.
     if (interval.contains(aInterval))
-      return false;
+      return true;
   }
 
- return true;
+  return false;
 
 };
 
 
 /**
  * Updates intervals covered by loading.
- * @param {rflect.date.Interval} Interval which was covered by loading.
+ * @param {rflect.date.Interval} aLoadedInterval Interval which was covered by
+ * loading.
+ * @private
  */
-rflect.cal.Transport.prototype.updateIntervals = function(aLoadedInterval) {
+rflect.cal.Transport.prototype.updateIntervals_ = function(aLoadedInterval) {
 
   var intersectionIndexes = [];
   var min = aLoadedInterval.start;
   var max = aLoadedInterval.end;
 
-  var notPresent = false;
+  var notPresent = true;
   for (var counter = 0, length = this.updatedIntervals_.length;
       counter < length; counter++) {
 
     var interval = this.updatedIntervals_[counter];
     // If interval is already covered, there's nothing to do here.
-    if (interval.contains(aLoadedInterval))
+    if (interval.contains(aLoadedInterval)) {
+      notPresent = false;
       break;
+    }
 
     if (interval.abuts(aLoadedInterval) ||
         interval.overlaps(aLoadedInterval)) {
+      notPresent = false;
 
       if (interval.start < min) min = interval.start;
       if (interval.end > max) max = interval.end;
 
       intersectionIndexes.push(counter);
-
-    } else
-      notPresent = true;
+    }
   }
 
   // If there are no overlaps, just add new interval.
   if (notPresent)
-    this.updatedIntervals_.push(interval);
+    this.updatedIntervals_.push(aLoadedInterval);
   else if (intersectionIndexes.length) {
     // Of all intersections, we form new interval.
     intersectionIndexes.sort();

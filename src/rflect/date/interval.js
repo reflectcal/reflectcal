@@ -152,7 +152,7 @@ rflect.date.Interval.prototype.eventId;
  * this interval abuts it.
  * @return {boolean} Whether intervals abut.
  */
-rflect.date.Interval.prototype.abuts(aInterval) {
+rflect.date.Interval.prototype.abuts = function(aInterval) {
   return aInterval.end == this.start || this.end == aInterval.start;
 }
 
@@ -161,12 +161,22 @@ rflect.date.Interval.prototype.abuts(aInterval) {
  * Does this time interval contain the specified millisecond instant.
  * Non-zero duration intervals are inclusive of the start instant and
  * exclusive of the end. A zero duration interval cannot contain anything.
- * @param {number} aMillisInstant The instant to compare to, millisecond instant
- * from 1970-01-01T00:00:00Z
- * @return {boolean} Whether this interval contains instant.
+ * @param {number|rflect.date.Interval} aInterval The instant or interval to
+ * check.
+ * @return {boolean} Whether this interval contains instant or interval.
  */
-rflect.date.Interval.prototype.contains = function(aMillisInstant) {
-  return (aMillisInstant >= this.start && aMillisInstant < this.end);
+rflect.date.Interval.prototype.contains = function(aInterval) {
+  var thisStart = this.start;
+  var thisEnd = this.end;
+  
+  if (aInterval.start) {
+    var otherStart = aInterval.start;
+    var otherEnd = aInterval.end;
+    return thisStart <= otherStart && otherStart < thisEnd && otherEnd <=
+        thisEnd;
+  }
+
+  return (aInterval >= thisStart && aInterval < thisEnd);
 }
 
 
@@ -272,13 +282,21 @@ rflect.date.Interval.prototype.length = function() {
 
 
 /**
+ * @return {Array.<number>} JSON representation.
+ */
+rflect.date.Interval.prototype.toJSON = function() {
+  return [this.start, this.end];
+};
+
+
+/**
  * @return {string} String representation.
  */
 rflect.date.Interval.prototype.toString = function() {
-  /*if (goog.DEBUG){
-    return '[' + new goog.date.Date(new Date(this.start)).toString() + ';' +
-        new goog.date.Date(new Date(this.end)).toString() + ')';
-  }*/
+  if (goog.DEBUG){
+    return '[' + new Date(this.start) + ';' +
+        new Date(this.end) + ')';
+  }
   return '[' + this.start + ';' + this.end + ')';
 };
 

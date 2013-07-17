@@ -20,7 +20,7 @@ goog.addDependency('../../../rflect/cal/loader.js', ['rflect.cal.Loader'], ['goo
 goog.addDependency('../../../rflect/cal/main.js', ['rflect.cal.Main'], ['goog.Disposable', 'rflect.cal.ViewManager']);
 goog.addDependency('../../../rflect/cal/predefined.js', ['rflect.cal.predefined', 'rflect.cal.predefined.chips'], ['goog.math.Size', 'rflect.cal.i18n.predefined']);
 goog.addDependency('../../../rflect/cal/timemanager.js', ['rflect.cal.TimeManager', 'rflect.cal.TimeManager.Direction'], ['goog.array', 'goog.date', 'goog.date.Date', 'goog.date.Interval', 'goog.i18n.DateTimeFormat', 'goog.i18n.DateTimeSymbols', 'rflect.cal.ViewType', 'rflect.date', 'rflect.date.DateShim', 'rflect.date.Interval', 'rflect.math']);
-goog.addDependency('../../../rflect/cal/transport.js', ['rflect.cal.Transport', 'rflect.cal.Transport.EventTypes'], ['goog.net.XhrIo', 'goog.testing.net.XhrIo']);
+goog.addDependency('../../../rflect/cal/transport.js', ['rflect.cal.Transport', 'rflect.cal.Transport.EventTypes'], ['goog.net.XhrIo', 'goog.testing.net.XhrIo', 'rflect.cal.events.EventManager', 'rflect.date.Interval']);
 goog.addDependency('../../../rflect/cal/ui/ac/ac.js', ['rflect.cal.ui.ac'], ['goog.ui.ac.InputHandler', 'rflect.cal.ui.ac.NoFilterMatcher', 'rflect.cal.ui.ac.RendererScrollSupport', 'rflect.cal.ui.ac.TimeAutoComplete']);
 goog.addDependency('../../../rflect/cal/ui/ac/autocomplete.js', ['rflect.cal.ui.ac.TimeAutoComplete'], ['goog.ui.ac.AutoComplete']);
 goog.addDependency('../../../rflect/cal/ui/ac/nofiltermatcher.js', ['rflect.cal.ui.ac.NoFilterMatcher'], ['goog.array', 'goog.ui.ac.ArrayMatcher']);

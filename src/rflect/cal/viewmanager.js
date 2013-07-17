@@ -104,6 +104,8 @@ rflect.cal.ViewManager = function(aMainInstance) {
     _inspect('containerSizeMonitor_', this.containerSizeMonitor_);
   if (goog.DEBUG)
     _inspect('eventManager_', this.eventManager_);
+  if (goog.DEBUG)
+    _inspect('transport_', this.transport_);
 
   this.showView(this.currentView);
 };
@@ -419,6 +421,8 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
         /**@type {number}*/
         (rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR)]);
   }
+
+  this.transport_.loadEventsAsync();
 };
 
 
@@ -450,6 +454,7 @@ rflect.cal.ViewManager.prototype.showNext_ = function(aDirection) {
   this.eventManager_.run();
   this.mainBody_.updateBeforeRedraw(null, true);
   this.mainBody_.updateByRedraw();
+  this.transport_.loadEventsAsync();
   //  if (goog.DEBUG) _perf('next interval');
 };
 
@@ -462,6 +467,7 @@ rflect.cal.ViewManager.prototype.showNow = function() {
   this.eventManager_.run();
   this.mainBody_.updateBeforeRedraw(null, true);
   this.mainBody_.updateByRedraw();
+  this.transport_.loadEventsAsync();
 };
 
 
@@ -471,14 +477,16 @@ rflect.cal.ViewManager.prototype.showNow = function() {
  * @protected
  */
 rflect.cal.ViewManager.prototype.disposeInternal = function() {
-  rflect.cal.ViewManager.superClass_.disposeInternal.call(this);
 
   this.containerSizeMonitor_.dispose();
   this.mainBody_.dispose();
+  this.transport_.dispose();
 
   this.containerSizeMonitor_ = null;
   this.mainBody_ = null;
   this.mainInstance_ = null;
   this.blockManager_ = null;
+
+  rflect.cal.ViewManager.superClass_.disposeInternal.call(this);
 };
 
