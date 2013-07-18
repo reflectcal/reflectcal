@@ -347,6 +347,7 @@ rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
       /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR),
       /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL)]);
 
+  this.transport_.loadEventsAsync();
 }
 
 

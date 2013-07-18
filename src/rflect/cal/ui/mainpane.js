@@ -951,8 +951,6 @@ rflect.cal.ui.MainPane.prototype.onMouseOver_ = function(aEvent) {
   else
     this.moRegistry_.deregisterTarget();
 
-  if (goog.DEBUG)
-    _log('this.isChipOrChild_(className)', this.isChipOrChild_(className));
   if (this.isChipOrChild_(className)) {
     this.addChipGrip_(target);
   }

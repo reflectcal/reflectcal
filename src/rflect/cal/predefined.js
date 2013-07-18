@@ -17,6 +17,14 @@ goog.provide('rflect.cal.predefined.chips');
 
 //TODO(alexk): much of this file will go to cfg
 /**
+ * Whether debug should be silent.
+ * @type {boolean}
+ * @const
+ */
+rflect.SILENT = false;
+
+
+/**
  * Body margin top in pixels.
  * @type {number}
  * @const

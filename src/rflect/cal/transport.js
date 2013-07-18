@@ -251,9 +251,13 @@ rflect.cal.Transport.prototype.onDeleteEvent_ = function(aCalEventId, aLongId,
  * Loads events.
  */
 rflect.cal.Transport.prototype.loadEventsAsync = function() {
-  var interval = this.timeManager_.interval;
+  var interval = this.timeManager_.interval.clone();
+  var intervalIsCovered = this.intervalIsCovered_(interval);
 
-  if (this.intervalIsCovered_(interval))
+  if (goog.DEBUG)
+    _log(interval.toString() + ' is covered', intervalIsCovered);
+
+  if (intervalIsCovered)
     return;
 
   goog.testing.net.XhrIo.send(rflect.cal.Transport.OperationUrls.LOAD_EVENT +
@@ -330,7 +334,6 @@ rflect.cal.Transport.prototype.intervalIsCovered_ = function(aInterval) {
  * @private
  */
 rflect.cal.Transport.prototype.updateIntervals_ = function(aLoadedInterval) {
-
   var intersectionIndexes = [];
   var min = aLoadedInterval.start;
   var max = aLoadedInterval.end;
@@ -340,6 +343,16 @@ rflect.cal.Transport.prototype.updateIntervals_ = function(aLoadedInterval) {
       counter < length; counter++) {
 
     var interval = this.updatedIntervals_[counter];
+
+    if (goog.DEBUG) {
+      _log(interval.toString() + ' abuts ' + aLoadedInterval.toString(),
+          interval.abuts(aLoadedInterval));
+      _log(interval.toString() + ' overlaps ' + aLoadedInterval.toString(),
+          interval.overlaps(aLoadedInterval));
+      _log(interval.toString() + ' contains ' + aLoadedInterval.toString(),
+          interval.contains(aLoadedInterval));
+    }
+
     // If interval is already covered, there's nothing to do here.
     if (interval.contains(aLoadedInterval)) {
       notPresent = false;
@@ -348,6 +361,8 @@ rflect.cal.Transport.prototype.updateIntervals_ = function(aLoadedInterval) {
 
     if (interval.abuts(aLoadedInterval) ||
         interval.overlaps(aLoadedInterval)) {
+
+
       notPresent = false;
 
       if (interval.start < min) min = interval.start;
@@ -357,17 +372,37 @@ rflect.cal.Transport.prototype.updateIntervals_ = function(aLoadedInterval) {
     }
   }
 
+  if (goog.DEBUG)
+    _log('notPresent', notPresent);
+
   // If there are no overlaps, just add new interval.
-  if (notPresent)
+  if (notPresent) {
+
     this.updatedIntervals_.push(aLoadedInterval);
-  else if (intersectionIndexes.length) {
+    if (goog.DEBUG)
+      _log('new interval added', aLoadedInterval.toString());
+
+  } else if (intersectionIndexes.length) {
+
+    if (goog.DEBUG) {
+      goog.array.forEach(intersectionIndexes, function(index) {
+        _log('this interval will be removed',
+            this.updatedIntervals_[index].toString());
+      }, this);
+    }
+
     // Of all intersections, we form new interval.
     intersectionIndexes.sort();
     for (var counter = intersectionIndexes.length - 1; counter >= 0;
         counter--) {
       this.updatedIntervals_.splice(intersectionIndexes[counter], 1);
     }
-    this.updatedIntervals_.push(new rflect.date.Interval(min, max));
+    var replacementInterval = new rflect.date.Interval(min, max);
+
+    if (goog.DEBUG)
+      _log('and this will be added instead', replacementInterval.toString());
+
+    this.updatedIntervals_.push(replacementInterval);
   }
 
 };

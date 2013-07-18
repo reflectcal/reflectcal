@@ -274,6 +274,14 @@ rflect.date.Interval.prototype.equals = function(aInterval) {
 
 
 /**
+ * @return {rflect.date.Interval} Clone of this interval.
+ */
+rflect.date.Interval.prototype.clone = function() {
+  return new rflect.date.Interval(this.start, this.end);
+}
+
+
+/**
  * @return {number} Length of this interval in milliseconds
  */
 rflect.date.Interval.prototype.length = function() {
@@ -294,10 +302,10 @@ rflect.date.Interval.prototype.toJSON = function() {
  */
 rflect.date.Interval.prototype.toString = function() {
   if (goog.DEBUG){
-    return '[' + new Date(this.start) + ';' +
+    return '[' + new Date(this.start) + '/' +
         new Date(this.end) + ')';
   }
-  return '[' + this.start + ';' + this.end + ')';
+  return '[' + this.start + '/' + this.end + ')';
 };
 
 
