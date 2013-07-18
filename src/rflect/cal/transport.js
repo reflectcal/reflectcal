@@ -261,7 +261,7 @@ rflect.cal.Transport.prototype.loadEventsAsync = function() {
     return;
 
   goog.testing.net.XhrIo.send(rflect.cal.Transport.OperationUrls.LOAD_EVENT +
-      '?int=' + rflect.cal.Transport.serialize(interval),
+      '?from=' + interval.start + '&to=' + interval.end,
       goog.bind(this.onLoadEvents_, this, interval),
       'GET');
 
