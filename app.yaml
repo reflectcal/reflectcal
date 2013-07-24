@@ -1,8 +1,10 @@
-application: ctst
-version: 1
+application: rflectevents
+version: 1a
 runtime: python27
 api_version: 1
 threadsafe: yes
+
+default_expiration: "0d"
 
 builtins:
 - remote_api: on
@@ -15,6 +17,36 @@ libraries:
   version: latest
 
 handlers:
+
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: (.*)/rflectcalendar-images.png
+  static_files: img/rflectcalendar-images.png
+  upload: (.*)/rflectcalendar-images.png
+  mime_type: "image/png"
+
+- url: .*/css/(.*).css
+  static_files: css/\1.css
+  upload: .*/css/(.*).css
+  mime_type: "text/css"
+
+- url: .*/src/(.*).js
+  static_files: src/\1.js
+  upload: .*/src/(.*).js
+  mime_type: "application/javascript"
+
+- url: .*/templates/(.*).html
+  static_files: templates/\1.html
+  upload: .*/templates/(.*).html
+  mime_type: "text/html"
+
+- url: /manifest/(.*\.appcache)
+  static_files: manifest/\1
+  mime_type: text/cache-manifest
+  upload: manifest/(.*\.appcache)
+
 - url: /_ah/queue/deferred
   script: djangoappengine.deferred.handler.application
   login: admin

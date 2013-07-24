@@ -1,0 +1,7 @@
+1. New UI.
+2. Move to Closure Library.
+3. Performance testing in IE6 and Firefox 2.
+4. New functionality (print, quick add, search).
+5. Server (import and export of .ics).
+6. API.
+7. Docs.

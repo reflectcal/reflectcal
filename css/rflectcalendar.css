@@ -1,0 +1,1506 @@
+/*
+ * Copyright Rflect.net and Alex K (c) 2011.
+ */
+
+html {
+  height: 100%;
+  overflow-y: auto; /*To prevent appearance of scrollbar in IE7.*/
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  font: 13px arial, sans-serif;
+  /*Note(alexk): It's responsibility of container to provide width/height restrictions.*/
+  min-width: 500px;
+  min-height: 376px; /* -8px of .cal-container margin-top.*/
+}
+
+.cal-container {
+  padding: 8px 0 0 0;
+}
+
+#top-pane {
+  padding: 10px 0;
+  height: 28px;
+  overflow: hidden;
+}
+
+#main-pane-controls-left {
+  width: auto;
+  float: none;
+  overflow: hidden;
+  /*This is for possible highlight shadow of nested button.*/
+  padding-left: 5px;
+}
+
+#main-pane-controls-left-left {
+  float: left;
+}
+
+#main-pane-controls-left-right {
+  width: auto;
+  float: none;
+}
+
+#top-center-navig {
+  float: right;
+}
+
+#main-pane-controls-right {
+  float: right;
+  padding-right: 10px;
+}
+
+/**
+ * Buttons
+ */
+
+.cal-menu-button {
+  width: 50px; /*default button width*/
+  text-align: center;
+}
+
+.cal-menu-button-now {
+  width: 50px;
+}
+
+.cal-menu-button-back {
+  width: 25px;  /* (140 - (.cal-menu-button-now width + 12 + 2) ) / 2 - (12 + 1) */
+}
+
+.cal-menu-button-forward {
+  width: 25px;
+}
+
+.cal-menu-button-new-event {
+  width: auto;
+}
+
+.cal-menu-button-month-view {
+  margin-right: 10px;
+  width: 50px;
+}
+
+.cal-menu-button-options {
+  width: 25px;
+}
+
+.button-sign {
+  width: 16px;
+  height: 18px;
+  background-image: url(../img/rflectcalendar-images.png);
+  vertical-align: top;
+}
+
+.button-sign-forward {
+  background-position: -89px 0;
+}
+
+.button-sign-back {
+  background-position: -105px 0;
+}
+
+.button-sign-options {
+  background-position: -141px 0;
+}
+
+#left-navtable {
+  white-space: nowrap;
+}
+
+#main-body {
+}
+
+#loading-indicator {
+  -moz-animation-duration: 2s;
+  -moz-animation-timing-function: linear;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-name: spin;
+}
+
+@-moz-keyframes spin {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+.cal-menu-leftmost-button {
+  margin-left: 8px;
+}
+
+.cal-menu-rightmost-button {
+  margin-right: 0;
+}
+
+#time-period-label {
+  margin: auto;
+  /*white-space: nowrap;*/
+  overflow: hidden;
+  color: #2c2c2c;
+  font-weight: bold;
+  line-height: 28px; /*height of .goog-flat-button*/
+  text-align: center;
+}
+
+#sidebar-controls {
+  float: left;
+  width: 148px;
+  margin: 0;
+}
+
+#left-pane {
+  float: left;
+  width: 150px;
+  margin: 0;
+}
+
+#left-main-pane {
+  float: left;
+  width: 148px;
+  margin: 0;
+}
+
+#left-aux-pane {
+  float: none;
+  /*width: 140px;
+  margin-left: 145px;*/
+}
+
+#main-pane-controls {
+  float: none;
+  margin-left: 150px;
+  width: auto;
+  white-space: nowrap;
+}
+
+#main-pane {
+  float: none;
+  margin-left: 160px;
+  width: auto;
+  cursor: default; /*IE7 shows text cursor.*/
+}
+
+#main-pane-header {
+  /*width: 100%;*/
+}
+
+#month-selector {
+  padding-top: 20px;
+  height: 152px;
+}
+
+.list-selector, #calendars-selector, #tasks-selector {
+  padding: 2px 1px 5px 0;
+  padding-top: 12px;
+  color: #2c2c2c;
+}
+
+.list-label-cont-highlighted, .list-selector-item-highlighted {
+  background-color: #e5e5e5;
+}
+
+.list-label-cont, #calendars-label-cont, #tasks-label-cont {
+  position: relative;
+  line-height: 17px;
+}
+
+.list-label, #calendars-label, #tasks-label {
+  padding: 3px 1px 3px 8px;
+}
+
+.list-body{
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.list-body-overflown{
+  overflow-y: scroll;
+}
+
+.listitem-cont {
+  border-left: 2px solid transparent;
+  padding: 5px 2px 5px 6px;
+  height: 16px;
+}
+
+.listitem-cont-focused {
+  border-left-color: #6699ee;
+}
+
+.listitem-cont-outer {
+  position: relative;
+  cursor: pointer;
+}
+
+.listitem-color {
+  position: relative;
+  float: left;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  background-color: #d5d5d5;
+  /*border: 1px solid #28518e;*/
+
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.listitem-checked-sign {
+  position: absolute;
+  top: -2px;
+  left: 1px;
+  width: 20px;
+  height: 20px;
+  background: url(../img/rflectcalendar-images.png) -121px 0;
+}
+
+.calitem-color-cont {
+  position: relative;
+  float: left;
+  width: 16px; /*considering that visible edge of element is the border of contained element*/
+  height: 16px;
+  cursor: pointer;
+
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.goog-checkbox-hover.calitem-color-cont {
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.checked-sign-calselector {
+  top: -3px;
+}
+
+.listitem-label {
+  position: relative;
+  margin-left: 16px;
+  float: none;
+  width: auto;
+  overflow: hidden;
+  font-size: 12px;
+  white-space: nowrap;
+  color: #2c2c2c;
+  line-height: 18px;
+}
+
+.calitem-label-active {
+  color: #2c2c2c;
+}
+
+.calitem-label-inactive {
+  color: #aaaaaa;
+}
+
+.taskitem-label-completed {
+  text-decoration: line-through;
+  font-style: italic;
+}
+
+.taskitem-label-not-completed {
+  text-decoration: none;
+  font-style: normal;
+}
+
+.listitem-opt-cont {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  background: #ffffff;
+  background: -moz-linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
+  background: -webkit-gradient(linear, center right, center left, from(#ffffff), to(rgba(255,255,255,0)));
+  background: -ms-linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
+
+  background: -webkit-linear-gradient(right, #ffffff 0, rgba(255,255,255,0) 100%);
+  background: -o-linear-gradient(to left, #ffffff 0, rgba(255,255,255,0) 100%);
+  background: linear-gradient(to left, #ffffff 0, rgba(255,255,255,0) 100%);
+}
+
+.listitem-opt {
+  height: 9px;
+  width: 6px;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  cursor: pointer;
+  background-image: url(../img/rflectcalendar-images.png);
+}
+
+.calitem-opt-right {
+  background-position: -60px 0;
+}
+
+.calitem-opt-left {
+  background-position: -60px -9px;
+}
+
+.tasks-opt {
+  height: 11px;
+  width: 12px;
+  position: absolute;
+  right: 4px;
+  top: 3px;
+  cursor: pointer;
+  background-image: url(../img/rflectcalendar-images.png);
+}
+
+.tasks-opt-right {
+  background-position: -66px 0;
+}
+
+.tasks-opt-left {
+  background-position: -66px -11px;
+}
+
+/*.taskitem-checkbox-cont {
+  float: left;
+  width: 17px;
+  background-color: #d5d5d5;
+  -moz-border-radius: 7.5px 0 0 7.5px;
+  -webkit-border-radius: 7.5px 0 0 7.5px;
+  border-radius: 7.5px 0 0 7.5px;
+}
+
+.taskitem-checkbox {
+  cursor: pointer;
+  margin: 2px;
+  padding: 0;
+  height: 13px;
+  width: 13px;
+}
+
+.taskitem-label {
+  float: none;
+  *//*margin-right: 20px;*//*
+ *//* border-top: 1px solid #d5d5d5;
+  border-bottom: 1px solid #d5d5d5;*//*
+  padding: 0 0 0 5px;
+  width: auto;
+  overflow: hidden;
+  font-size: 12px;
+  white-space: nowrap;
+  color: #2c2c2c;
+  line-height: 18px;
+  cursor: pointer;
+
+  -moz-border-radius: 0 7.5px 7.5px 0;
+  -webkit-border-radius: 0 7.5px 7.5px 0;
+  border-radius: 0 7.5px 7.5px 0;
+}
+
+.taskitem-label-completed {
+  font-style: italic;
+  text-decoration: line-through;
+}*/
+
+.taskitem-new {
+  border-top: 1px solid #d7d7d7;
+  color: #aaaaaa;
+  cursor: pointer;
+}
+
+#daynames-prefix-wk {
+  width: 41px;
+  position: relative;
+  height: 100%;
+}
+
+#daynames-zippy {
+  position: absolute;
+  right: 0;
+  top: 20px;
+}
+
+.main-pane-header-container-wk {
+  margin-left: 41px; /*+1 pixel to match #grid-table border*/
+}
+
+#main-pane-header-wk-daynames {
+  position: relative;
+  overflow: hidden;
+  height: 20px;
+  line-height: 20px;
+  margin-right: 19px; /*to compensate 17px scrollbar + 2px from borders of upper table*/
+}
+
+#weekmode-daynames-table {
+  table-layout: fixed;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: #2c2c2c;
+  overflow: hidden;
+  position: relative;
+}
+
+.dayname-wk {
+  position: relative;
+  height: 100%;
+}
+
+.dayname-wk-inner {
+  cursor: pointer;
+}
+
+.label-underlined {
+  text-decoration: underline;
+}
+
+#main-pane-header-scrollable {
+  border: 1px solid #d5d5d5;
+  /*we need this for ie7 as nested relative positioned elements
+  don't get affected by overflow without it*/
+  position: relative;
+
+  /*-moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;*/
+}
+
+/**
+ * Helper classes for scroll manipulation.
+ * Note: scrollbar size may be different, on Mac, for example.
+ */
+.mphs-scroll-horz-on {
+  overflow-x: scroll;
+  margin-bottom: 5px;
+}
+
+.mphs-scroll-horz-off {
+  overflow-x: visible;
+  margin-bottom: 22px;
+}
+
+.mphs-scroll-vert-on {
+  overflow-y: scroll;
+  margin-right: 0;
+  border-right: none !important;
+}
+
+.mphs-scroll-vert-off {
+  overflow-y: visible;
+  margin-right: 17px;
+}
+
+/**
+ * In ie7, underlying table, being set to 100% gets its width
+ * using whole scrollable container width, including scrollbar.
+ * We want to set table width excluding scrollbars, so it's wrapped
+ * in div with "auto" width.
+ * For this element pixel height is set.
+ */
+#alldayevents-grid-wrapper {
+  width: auto;
+  zoom: 1;
+  position: relative;
+}
+
+#alldayevents-grid {
+  position: relative;
+  /*border-right: 1px solid #d5d5d5;*/
+  /*border-bottom: 1px solid #e1e1e1;*/
+  table-layout: fixed;
+  width: 100%;
+  height: 100%; /*opera needs explicitly set height*/
+  /* default size: 30px event inner container + 2px borders
+   + 1px upper margin + 12px expand sign*/
+  vertical-align: top; /*for layers*/
+  /*columns elements still take place after being shifted,
+    so cover their previous positions*/
+  overflow:  hidden;
+}
+
+.wk-ad-layers-cont-outer {
+  height: inherit;
+}
+
+*:first-child+html .wk-ad-layers-cont-outer{
+  height: 100%;
+}
+
+.wk-ad-layers-cont {
+  /*overflow-x: visible;*/
+  /*overflow-y: hidden;*/
+  height: 100%;
+  position: relative;
+  z-index: 3;
+}
+
+.wk-ad-decoration-layer {
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.wk-ad-decoration-layer-outer, .wk-ad-mask-layer {
+  height: 100%;
+  top: -200%;
+  position: relative;
+  /*margin-bottom: -100%;*/
+  z-index: 1;
+}
+
+.wk-ad-events-layer {
+  height: 100%;
+  top: -100%;
+  position: relative;
+  /*margin-bottom: -100%;*/
+  /*padding: 0 5px 0 5px;*/
+  z-index: 1;
+}
+
+.wk-ad-mask {
+  position: absolute;
+  height: 100%;
+  background: #cecece;
+  opacity: 0.5;
+  filter: alpha(opacity = 50);
+}
+
+#main-pane-header-wk-zippies {
+  position: relative;
+  overflow: hidden;
+  height: 11px;
+  margin-right: 19px;
+}
+
+#weekmode-zippies-table {
+  position: relative;
+  table-layout: fixed;
+  width: 100%;
+  height: 100%;
+  /*text-align: right;*/
+}
+
+.wk-col-zippy-cont {
+  position: relative;
+  height: 100%;
+}
+
+.wk-col-zippy {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+#daynames-scroll-placeholder {
+  width: 19px;
+}
+
+.weekgrid-prefix {
+  width: 40px;
+}
+
+.border-collapse-left {
+  margin-left: 0;
+  border-left: none;
+}
+
+.alldayevent-cell {
+  border: 1px solid #d5d5d5;
+}
+
+.no-tborder-right {
+  border-right: 0;
+}
+
+#main-pane-body-scrollable-wk {
+  overflow-y: scroll;
+  /*overflow-x: visible;*/
+  border: 1px solid #d5d5d5;
+  border-right: none;
+  height: 400px;
+  position: relative;
+
+  /*-moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;*/
+}
+
+#grid-table-outer-wrapper {
+  width: auto;
+  zoom: 1;
+}
+
+.mpbs-wk-scroll-horz-on {
+  overflow-x: scroll;
+  margin-bottom: 0;
+}
+
+.mpbs-wk-scroll-horz-off {
+  overflow-x: visible;
+}
+
+#hours-container {
+  float: left;
+  position: absolute;
+  width: 40px;
+  margin: 0;
+  left: 0; /*This will be set to scrollable scrollLeft in expanded mode*/
+}
+
+#grid-table-wrapper-wk {
+  position: relative;
+  height: 1152px;
+  margin-left: 40px;
+  width: auto;
+  /*overflow: hidden;*/
+  border-left: 1px solid #d5d5d5;
+}
+
+.wk-grid-rows-cont {
+  height: 100%;
+}
+
+.grid-table-wk-outer {
+position:relative;top:-1152px;margin-bottom:-1176px;height:1176px;
+overflow:hidden
+}
+
+
+.grid-table-wk {
+  /*position: relative;*/
+  table-layout: fixed;
+  width: 100%;
+  vertical-align: top; /*for layers*/
+  /*We cannot use height: 100%; top: -100%; because #grid-table-wrapper-wk has no
+  overflow in order to let .grid-table-wk be flexible in width. As a consequence, we need
+  margin-bottom: -{fixed_pixels}px to negate place left from shift,
+  margin-bottom: -100% will not work, as it takes percents from width, not height.*/
+  height: 1152px;
+  top: -1152px;
+  margin-bottom: -1152px;
+  /*overflow: hidden;*/
+}
+
+.grid-table-row {
+  height: 23px;
+}
+
+.grid-table-row-odd {
+  border-bottom: 1px solid #d5d5d5;
+  /*border-bottom: 1px dotted rgba(213,213,213,0.9);*/
+}
+
+.grid-table-row-even {
+  border-bottom: 1px dotted #d5d5d5;
+}
+
+.hour-label {
+  text-align: right;
+  padding-right: 2px;
+  color: #2c2c2c;
+  line-height: 23px;
+}
+
+.hl-odd {
+  /*color: #2c2c2c;*/
+  color: #b4b4b4;
+}
+
+.hl-even {
+  /*color: #aaaaaa;*/
+  /*color: #6b6b6b;*/
+  /*color: #aaaaaa;*/
+}
+
+.time-marker-head {
+  position: absolute;
+  right: 0;
+  height: 5px;
+  width: 5px;
+  background-color: #cf221a;
+
+  -moz-border-radius: 2.5px;
+  -webkit-border-radius: 2.5px;
+  border-radius: 2.5px;
+  -moz-box-shadow: 0 0 3px #cf221a;
+  -webkit-box-shadow: 0 0 3px #cf221a;
+  box-shadow: 0 0 3px #cf221a;
+}
+
+#time-marker {
+  position: absolute;
+  width: 100%;
+  /*Event layer margin.*/
+  padding-right: 12px;
+  height: 1px;
+  background-color: #cf221a;
+  /*High enough number to cover chips with z-indexes 1, 2, etc.*/
+  z-index: 1000;
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+
+  -moz-border-radius: 0.5px;
+  -webkit-border-radius: 0.5px;
+  border-radius: 0.5px;
+  -moz-box-shadow: 0 0 1px #cf221a;
+  -webkit-box-shadow: 0 0 1px #cf221a;
+  box-shadow: 0 0 1px #cf221a;
+}
+
+.weekgrid-col {
+  border-right: 1px solid #d5d5d5;
+  position: relative;
+  height: 100%;
+}
+
+.weekgrid-col-last {
+  border: none;
+}
+
+.monthgrid-col {
+  border-right: 1px solid #d5d5d5;
+}
+
+.weekgrid-col-today, monthgrid-cell-today {
+  background-color: #f0f0f0;
+}
+
+.wk-decoration-layer {
+  width: 100%;
+  height: 1152px;
+  position: relative;
+  z-index: 1;
+}
+
+.wk-decoration-layer-outer, .wk-mask-layer {
+  width: 100%;
+  height: 1152px;
+  top: -1152px;
+  position: relative;
+  margin-bottom: -1152px;
+  z-index: 1;
+}
+
+.wk-events-layer {
+  width: auto;
+  height: 1152px;
+  top: -1152px;
+  position: relative;
+  margin-bottom: -1152px;
+  z-index: 1;
+  margin-right: 12px; /*12px is a width of expand sign + 2px of event-rect-wk borders*/
+}
+
+.today-mask-wk {
+  position:relative;
+  top: -100%;
+  height: 100%;
+  width: 100%;
+  background-color: #cecece;
+  opacity: 0.25;
+  filter: alpha(opacity = 25);
+}
+
+.today-mask-mn {
+  background-color: #f2f2f2;
+  height: 100%;
+}
+
+.mask {
+  background-color: #cecece;
+  position: absolute;
+  filter: alpha(opacity = 50);
+  opacity: 0.5;
+}
+
+.mainpane-mask {
+  z-index: 10;
+}
+
+.wk-mask {
+  background-color: #cecece;
+  position: absolute;
+  filter: alpha(opacity = 50);
+  opacity: 0.5;
+}
+
+.zippy {
+  width: 11px;
+  height: 11px;
+  background-image: url('../img/rflectcalendar-images.png');
+  cursor: pointer;
+}
+
+.zippy-highlighted {
+  background-color: #eee;
+}
+
+.goog-zippy-expanded, .wk-col-zippy-collapsed, .mn-row-zippy-expanded{
+  background-position: 0 -11px;
+}
+
+.goog-zippy-collapsed, .wk-col-zippy-expanded, .mn-row-zippy-collapsed{
+  background-position: 0 0;
+}
+
+.event-rect-wk {
+  position: relative;
+}
+
+.event-rect-wk-inner {
+  border: 1px solid #28518e;
+  margin: 0 0 1px 0;
+  padding: 2px 2px 0 2px;
+  width: auto;
+  height: 100%;
+  background-color: #6699ee;
+  overflow: hidden;
+  font-size: 12px;
+  white-space: normal;
+  word-wrap: break-word;
+  color: #ffffff;
+  line-height: 14px;
+  cursor: pointer;
+
+
+  /*-moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  -moz-box-shadow: 1px 1px 1px #777777;
+  -webkit-box-shadow: 1px 1px 1px #777777;
+  box-shadow: 1px 1px 1px #777777;*/
+}
+
+.event-wk-timelabel {
+  white-space: nowrap;
+}
+
+.event-rect-wk-collapse-top {
+  border-top-width: 0;
+}
+
+.event-rect-wk-collapse-bottom {
+  border-bottom-width: 0;
+}
+
+.event-rect-wk-collapse-both {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  border-top: 0;
+  border-bottom: 0;
+}
+
+/**
+ * Event rect dimensions could either be set through margins or left/width.
+ * Helper table of 100/7 percentages:
+ * 14.2857%
+ * 28.5714%
+ * 42.8571%
+ * 57.1428%
+ * 71.4286%
+ * 85.7143%
+ * Note: Opera doesn't understand non-integer percent widths, so in case
+ * of her we could set width like: left: 42.8571%; width: 14%; margin-right: -0.2857%.
+ * Or, and that's a preferred solution, we could regulate width with left and right
+ * margins, but this doesn't work with absolute position.
+ */
+.event-rect-mn-outer {
+  position: relative;
+  width: auto;
+  height: 16px;
+  /*margin: 0 40% 0 20%;*/
+  /*these margins are used to set event rect dimensions*/
+  margin-bottom: -17px;
+  padding-top: 1px;
+}
+
+.event-rect-wk-ad-outer {
+  position: absolute;
+  width: auto;
+  /*margin: 0 40% 0 20%;*/
+  /*these margins are used to set event rect dimensions*/
+  margin: 1px 0 0 0;
+}
+
+.event-rect-mn {
+  width: auto;
+  /*overflow: hidden;*/
+  margin: 0 1px 0 1px;
+}
+
+.event-rect-mn-inner {
+  border: 1px solid #28518e;
+  padding: 0 5px 0 5px;
+  width: auto;
+  height: 14px; /*line-height * number_of_lines + 2px padding*/
+  background-color: #6699ee;
+  overflow: hidden;
+  font-size: 12px;
+  white-space: nowrap;
+  color: #ffffff;
+  line-height: 14px;
+  vertical-align: top;
+  cursor: pointer;
+
+  /*-moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  -moz-box-shadow: 1px 1px 1px #777777;
+  -webkit-box-shadow: 1px 1px 1px #777777;
+  box-shadow: 1px 1px 1px #777777;*/
+}
+
+.event-rect-mn-inner-twoline {
+  height: 30px; /*line-height * number_of_lines + 2px padding*/
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.event-rect-focused {
+  border-color: #2c2c2c;
+  /*border-style: dotted;*/
+}
+
+.event-rect-mn-collapse-left {
+  margin-left: 0;
+}
+
+.event-rect-mn-collapse-right {
+  margin-right: -1px;
+}
+
+.event-rect-mn-inner-collapse-left {
+  /*-moz-border-radius: 0 8px 8px 0;
+  -webkit-border-radius: 0 8px 8px 0;
+  border-radius: 0 8px 8px 0;*/
+  border-left-width: 0;
+}
+
+.event-rect-mn-inner-collapse-right {
+  /*-moz-border-radius: 8px 0 0 8px;
+  -webkit-border-radius: 8px 0 0 8px;
+  border-radius: 8px 0 0 8px;*/
+  border-right-width: 0;
+}
+
+.event-rect-mn-inner-collapse-both {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+}
+
+.event-in-progress {
+  -webkit-animation-duration: 6s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-name: background-move;
+
+  animation-duration: 6s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-name: background-move;
+
+  /* Default stripes. */
+  background-image: linear-gradient(45deg,
+        transparent 25%,
+        rgba(255, 255, 255, .5) 25%,
+        rgba(255, 255, 255, .5) 50%,
+        transparent 50%,
+        transparent 75%,
+        rgba(255, 255, 255, .5) 75%,
+        rgba(255, 255, 255, .5) 100%);
+  background-size: 30px 30px;
+  background-repeat: repeat;
+
+  cursor: default;
+}
+
+@-webkit-keyframes background-move {
+  from {
+    background-position: 0;
+  }
+
+  to {
+    background-position: 300px;
+  }
+}
+@keyframes background-move {
+  from {
+    background-position: 0;
+  }
+
+  to {
+    background-position: 300px;
+  }
+}
+
+.expand-sign-wk-cont {
+  position: relative;
+  width: 100%;
+  height: 192px; /*divisor of 48 * current row height*/
+}
+
+.expand-sign-wk {
+  position: absolute;
+  right: 0;
+  top: 5px;
+  width: 12px;
+  height: 13px;
+  background-image: url('../img/rflectcalendar-images.png');
+  background-position: 13px 14px; /* Do not show any background by default. */
+}
+
+.expand-sign-wk-collapsed {
+  background-position: -23px 0 !important;
+}
+
+.expand-sign-wk-expanded {
+  background-position: -35px 0 !important;
+}
+
+.expand-sign-wk-ad-cont {
+  position: relative;
+  height: 100%;
+}
+
+.expand-sign-wk-ad {
+  position: absolute;
+  right: 2px; /* to align with 3px space of expand-sign-wk pic */
+  bottom: 0;
+  width: 13px;
+  height: 12px;
+  background-image: url('../img/rflectcalendar-images.png');
+  background-position: 14px 13px; /* Do not show any background by default. */
+  overflow: hidden; /* element contents are bigger than it's box in ie7 */
+}
+
+.expand-sign-wk-ad-collapsed, .expand-sign-mn-collapsed {
+  background-position: -22px -14px !important;
+}
+
+.expand-sign-wk-ad-expanded, .expand-sign-mn-expanded {
+  background-position: -35px -14px !important;
+}
+
+#daynames-prefix-mn {
+  width: 28px;
+  position: relative;
+  height: 100%;
+  float: left;
+}
+
+.main-pane-header-container-mn {
+  margin-left: 28px; /*11+ 1 pixels from zippies, 15 + 1 pixels from weeknums*/
+  float: none;
+}
+
+#main-pane-body-scrollable-mn {
+  /*overflow-y: visible;*/
+  overflow-x: hidden;
+  border: 1px solid #d5d5d5;
+  /*margin-right: 17px;*/ /*scroll placeholder*/
+  position: relative;
+  height: 100%;
+
+  /*-moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;*/
+}
+
+.mpbs-mn-scroll-vert-on {
+  overflow-y: scroll;
+  margin-right: 0;
+  border-right: none !important;
+}
+
+.mpbs-mn-scroll-vert-off {
+  overflow-y: hidden;
+  /*margin-right: 17px;*/
+}
+
+#grid-table-wrapper-outer {
+
+}
+
+#weeknum-cont {
+  float: left;
+  width: 15px;
+  height: 100%;
+  border-right: 1px solid #d5d5d5;
+}
+
+#weeknums {
+  table-layout: fixed;
+  height: 100%;
+  margin-right: 1px;
+  width: 14px;
+  color: #aaaaaa;
+}
+
+.weeknum-label {
+  vertical-align: middle;
+  text-align: right;
+}
+
+.weeknum-label-inner {
+  cursor: pointer;
+}
+
+#grid-table-wrapper-mn {
+  position: relative;
+  height: 426px; /*subject to change, remove?*/
+  /*margin-left: 16px;*/
+  width: auto;
+  height: 100%;
+  overflow: hidden;
+}
+
+.grid-table-mn {
+  table-layout: fixed;
+  width: 100%;
+  vertical-align: top; /*for layers*/
+  position: relative;
+  height: 100%;
+  top: -100%;
+}
+
+.mn-grid-cols-cont {
+  height: 100%;
+}
+
+/*table in ie7 needs &nbsp; in cells in order to be visible*/
+#grid-cols-cont-inner {
+  table-layout: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+.monthgrid-row {
+  border-bottom: 1px solid #d5d5d5;
+  /*height: 70px;*/
+}
+
+.monthgrid-row-last {
+  border: none;
+}
+
+.weeknum-row {
+  border-bottom: 1px solid #d5d5d5;
+}
+
+/**
+ * We need height: inherit because all browsers treat height differently. If we have
+ * td with border then IE count border as part of td's height, gecko adds them. Im order
+ * to work out that, we create div with 100% height that takes height from td and adds
+ * border height. But doing this works differently in webkit - it puts border inside of
+ * 100% height. So we explicitly inherit height from td to div whenever it's possible,
+ * i.e. everywhere except ie7, which is fine with div being set to 100% of td's height.
+ */
+.mn-layers-cont {
+  overflow: hidden;
+  height: 100%;
+  position: relative;
+}
+
+/*IE7 doesn't support height: inherit*/
+*:first-child+html .mn-layers-cont {
+  overflow: hidden;
+  height: 100%;
+  position: relative;
+}
+
+.mn-decoration-layer {
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.mn-events-layer {
+  height: 100%;
+  top: -100%;
+  position: relative;
+  margin-bottom: -14px;
+  z-index: 1;
+  margin-top: 14px; /*12px is a width of expand sign + 2px of event-rect-mn borders*/
+}
+
+.mn-decoration-layer-outer, .mn-mask-layer {
+  height: 100%;
+  top: -200%;
+  position: relative;
+  z-index: 1;
+}
+
+.mn-mask {
+  background-color: #cecece;
+  position: absolute;
+  filter: alpha(opacity = 50);
+  opacity: 0.5;
+}
+/**
+ * regulates height of main body, but take into account additional 2px from borders of
+ * #main-pane-header-mn-zippies and #main-pane-body-scrollable-mn
+ */
+#main-pane-body-scrollable-wrapper {
+  /*height: 426px;*/
+  /*width: auto;*/
+}
+
+#main-pane-header-mn-zippies {
+  overflow: hidden;
+  margin: 1px 0 1px 0;
+  float: left;
+  position: relative;
+  width: 12px;
+  height: 100%;
+}
+
+#monthmode-zippies-table {
+  table-layout: fixed;
+  vertical-align: top;
+  position: relative;
+}
+
+.mn-row-zippy-cont {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.mn-row-zippy {
+  position: absolute;
+  top: 0;
+}
+
+.daynums {
+  table-layout: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.daycell {
+  height: 100%;
+  vertical-align: top; /* This is needed for webkit. */
+}
+
+.daycell-decoration-cont {
+  height: 100%;
+  padding-right: 1px;
+}
+
+.daycell-daynum-outer-cont {
+  position: relative;
+  height: 100%;
+  top: -100%;
+}
+
+/*IE7 gets table.daynums doubled in height.*/
+*:first-child+html .daycell-daynum-outer-cont {
+  height:100%;
+  position:relative;
+  top:-50%;
+}
+
+.expand-sign-mn-cont {
+
+  float: left;
+  width: 13px;
+  height: 100%;
+}
+
+.expand-sign-mn {
+  position: absolute;
+  left: 2px; /* to align with 3px space of expand-sign-wk pic */
+  top: 0;
+  width: 13px;
+  height: 12px;
+  background-image: url('../img/rflectcalendar-images.png');
+  background-position: 14px 13px; /* Do not show any background by default. */
+  overflow: hidden; /* Element contents are bigger than it's box in ie7. */
+}
+
+.daynum-cont {
+  margin-left: 13px;
+  width: auto;
+  height: 100%;
+
+}
+
+.daynum-label {
+  position: absolute;
+  right: 2px;
+  font-size: 12px;
+  color: #2c2c2c;
+  cursor: pointer;
+}
+
+.dl-other-month {
+  color: #aaaaaa;
+}
+
+/* Colors.
+*/
+
+/*{aliceblue:"#f0f8ff",antiquewhite:"#faebd7",aqua:"#00ffff",aquamarine:"#7fffd4",azure:"#f0ffff"
+
+  ,beige:"#f5f5dc",bisque:"#ffe4c4",black:"#000000",blanchedalmond:"#ffebcd",blue:"#0000ff",blueviolet
+
+  :"#8a2be2",brown:"#a52a2a",burlywood:"#deb887",cadetblue:"#5f9ea0",chartreuse:"#7fff00",chocolate:"#d2691e"
+
+  ,coral:"#ff7f50",cornflowerblue:"#6495ed",cornsilk:"#fff8dc",crimson:"#dc143c",cyan:"#00ffff",darkblue
+
+  :"#00008b",darkcyan:"#008b8b",darkgoldenrod:"#b8860b",darkgray:"#a9a9a9",darkgreen:"#006400",
+
+  darkgrey:"#a9a9a9",darkkhaki:"#bdb76b",darkmagenta:"#8b008b",darkolivegreen:"#556b2f",darkorange:"#ff8c00"
+
+  ,darkorchid:"#9932cc",darkred:"#8b0000",darksalmon:"#e9967a",darkseagreen:"#8fbc8f",darkslateblue:"#483d8b"
+
+  ,darkslategray:"#2f4f4f",darkslategrey:"#2f4f4f",darkturquoise:"#00ced1",darkviolet:"#9400d3",deeppink
+
+  :"#ff1493",deepskyblue:"#00bfff",dimgray:"#696969",dimgrey:"#696969",dodgerblue:"#1e90ff",firebrick:"
+
+  #b22222",floralwhite:"#fffaf0",forestgreen:"#228b22",fuchsia:"#ff00ff",gainsboro:"#dcdcdc",
+
+  ghostwhite:"#f8f8ff",gold:"#ffd700",goldenrod:"#daa520",gray:"#808080",green:"#008000",greenyellow:"
+
+  #adff2f",grey:"#808080",honeydew:"#f0fff0",hotpink:"#ff69b4",indianred:"#cd5c5c",indigo:"#4b0082",ivory
+
+  :"#fffff0",khaki:"#f0e68c",lavender:"#e6e6fa",lavenderblush:"#fff0f5",lawngreen:"#7cfc00",lemonchiffon
+
+  :"#fffacd",lightblue:"#add8e6",lightcoral:"#f08080",lightcyan:"#e0ffff",lightgoldenrodyellow:"#fafad2"
+
+  ,lightgray:"#d3d3d3",lightgreen:"#90ee90",lightgrey:"#d3d3d3",lightpink:"#ffb6c1",lightsalmon:"#ffa07a"
+
+  ,
+
+  lightseagreen:"#20b2aa",lightskyblue:"#87cefa",lightslategray:"#778899",lightslategrey:"#778899",lightsteelblue
+
+  :"#b0c4de",lightyellow:"#ffffe0",lime:"#00ff00",limegreen:"#32cd32",linen:"#faf0e6",magenta:"#ff00ff"
+
+  ,maroon:"#800000",mediumaquamarine:"#66cdaa",mediumblue:"#0000cd",mediumorchid:"#ba55d3",mediumpurple
+
+  :"#9370d8",mediumseagreen:"#3cb371",mediumslateblue:"#7b68ee",mediumspringgreen:"#00fa9a",mediumturquoise
+
+  :"#48d1cc",mediumvioletred:"#c71585",midnightblue:"#191970",mintcream:"#f5fffa",mistyrose:"#ffe4e1",
+
+  moccasin:"#ffe4b5",navajowhite:"#ffdead",navy:"#000080",oldlace:"#fdf5e6",olive:"#808000",olivedrab:"
+
+  #6b8e23",orange:"#ffa500",orangered:"#ff4500",orchid:"#da70d6",palegoldenrod:"#eee8aa",palegreen:"#98fb98"
+
+  ,paleturquoise:"#afeeee",palevioletred:"#d87093",papayawhip:"#ffefd5",peachpuff:"#ffdab9",peru:"#cd853f"
+
+  ,pink:"#ffc0cb",plum:"#dda0dd",powderblue:"#b0e0e6",purple:"#800080",red:"#ff0000",rosybrown:"#bc8f8f"
+
+  ,royalblue:"#4169e1",saddlebrown:"#8b4513",salmon:"#fa8072",sandybrown:"#f4a460",seagreen:"#2e8b57",
+
+  seashell:"#fff5ee",sienna:"#a0522d",silver:"#c0c0c0",skyblue:"#87ceeb",slateblue:"#6a5acd",slategray
+
+  :"#708090",slategrey:"#708090",snow:"#fffafa",springgreen:"#00ff7f",steelblue:"#4682b4",tan:"#d2b48c"
+
+  ,teal:"#008080",thistle:"#d8bfd8",tomato:"#ff6347",turquoise:"#40e0d0",violet:"#ee82ee",wheat:"#f5deb3"
+
+  ,white:ba,whitesmoke:"#f5f5f5",yellow:"#ffff00",yellowgreen:"#9acd32"}*/
+
+.edit-dialog-link {
+  display: block;
+  font-weight: bold;
+  max-height: 50px;
+  overflow: hidden;
+  width: 330px;
+}
+
+.wk-event-grip-cont {
+  cursor: n-resize;
+  height: 5px;
+  left: 1px;
+  position: absolute;
+  width: 100%;
+  margin-left: -1px;
+  /*width: calc(100% - 1px);*/
+  border-color: inherit;
+}
+
+.wk-event-grip-cont-upper {
+  top: 1px;
+}
+
+.wk-event-grip-cont-lower {
+  bottom: -2px;
+}
+
+.wk-event-grip {
+  border-top-width: 1px;
+  border-top-style: dotted;
+  border-color: inherit;
+  height: 1px;
+  position: absolute;
+  width: 100%;
+  width: calc(100% - 1px);
+}
+
+.wk-event-grip-upper {
+  bottom: 2px;
+}
+
+.wk-event-grip-lower {
+  bottom: 0;
+}
+
+.mn-event-grip-cont {
+  cursor: w-resize;
+  width: 5px;
+  top: 1px;
+  position: absolute;
+  height: 16px;
+  border-color: inherit;
+}
+
+.mn-event-grip-cont-left {
+  left: 1px;
+}
+
+.mn-event-grip-cont-right {
+  right: 1px;
+}
+
+.mn-event-grip {
+  border-right-width: 1px;
+  border-right-style: dotted;
+  border-color: inherit;
+  width: 1px;
+  position: absolute;
+  height: 100%;
+  height: calc(100% - 1px);
+}
+
+.mn-event-grip-left {
+  left: 0;
+}
+
+.mn-event-grip-right {
+  left: 2px;
+}
+
+#main-pane-placeholder {
+  border: 1px solid #d5d5d5;
+}
+
+#month-selector .goog-date-picker {
+  border-left: none;
+  height: 150px;
+  padding: 0;
+}
+
+.faraway-cont {
+  position:absolute;
+  left: 0;
+  top: -10000px;
+}
