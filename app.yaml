@@ -33,10 +33,18 @@ handlers:
   upload: .*/templates/(.*).html
   mime_type: "text/html"
 
-- url: /.*
-  script: main.py
-
 - url: /manifest/(.*\.appcache)
   static_files: manifest/\1
   mime_type: text/cache-manifest
   upload: manifest/(.*\.appcache)
+
+- url: /_ah/queue/deferred
+  script: djangoappengine/deferred/handler.py
+  login: admin
+
+- url: /media/admin
+  static_dir: django/contrib/admin/media
+  expiration: '0'
+
+- url: /.*
+  script: djangoappengine/main/main.py
