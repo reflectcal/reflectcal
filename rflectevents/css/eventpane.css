@@ -1,0 +1,107 @@
+/*
+ * Copyright (c) 2013. Rflect, Alex K.
+ */
+
+/* Author:alexeykofficial@gmail.com (Alex K.) */
+
+/* Styles for event edit pane. */
+
+.event-edit-pane {
+  padding: 18px 10px 10px 10px;
+}
+
+.event-edit-pane-header-cont {
+  width: 600px;
+  margin-left: 25px;
+}
+
+.event-edit-pane-header {
+  margin-top: 0;
+}
+
+.event-edit-pane-buttons {
+  margin: 0 10px 10px 10px;
+  margin-left: 20px;
+}
+
+.event-edit-pane-cont {
+  margin: 15px;
+}
+
+.event-edit-pane-cont-inner {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.event-name-input-cont {
+
+}
+
+.ep-event-name-input {
+  width: 482px;
+  height: 19px !important;
+  line-height: 19px !important;
+  padding-top: 8px;
+  padding-bottom: 8px;
+
+  font-size: 16px;
+  font-family: arial, sans-serif;
+  font-weight: bold;
+}
+
+.date-input-cont {
+
+}
+
+.start-input-cont {
+
+}
+
+.end-input-cont {
+
+}
+
+.event-date-input {
+  width: 112px;
+}
+
+.event-time-input {
+  width: 90px;
+  margin-left: 6px !important;
+}
+
+.all-day-input-cont {
+
+}
+
+.description-cont {
+
+}
+
+.event-description-label {
+  vertical-align: top;
+}
+
+.event-description {
+  width: 490px;
+  height: 100px;
+}
+
+.event-edit-pane-label {
+  width: 100px;
+}
+
+.event-edit-pane-button {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.event-edit-pane-button-delete {
+  margin-left: 100px;
+}
+
+.event-edit-pane-cal-select {
+  display: inline;
+}
