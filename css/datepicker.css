@@ -126,7 +126,7 @@
   position: absolute;
   width: 10px;
   height: 10px;
-  background-image: url('../img/rflectcalendar-images.png');
+  background-image: url('../static/rflectcalendar-images.png');
   cursor: pointer;
 }
 

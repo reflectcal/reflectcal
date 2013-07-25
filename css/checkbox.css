@@ -53,7 +53,7 @@
 }
 
 .checked-sign {
-  background: url("../img/rflectcalendar-images.png") repeat scroll -121px 0 transparent;
+  background: url("../static/rflectcalendar-images.png") repeat scroll -121px 0 transparent;
 
   height: 20px;
   left: 0;

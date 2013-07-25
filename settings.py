@@ -154,6 +154,13 @@ LOGGING = {
     }
 }
 
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+
 #Note(alexk): django-nonrel specific settings.
 
 # Initialize App Engine and import the default settings (DB backend, etc.).
@@ -173,6 +180,7 @@ SECRET_KEY = '=r-$b*8hglm+858&9t043hlm6-&6-3d3vfc4((7yd0dbrakhvi'
 INSTALLED_APPS = (
 #    'django.contrib.admin',
     'django.contrib.contenttypes',
+    'django.contrib.staticfiles',
     'django.contrib.auth',
     'django.contrib.sessions',
     'djangotoolbox',
@@ -196,6 +204,35 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.request',
     'django.core.context_processors.media',
+    'django.core.context_processors.static',
+)
+
+# Absolute path to the directory static files should be collected to.
+# Don't put anything in this directory yourself; store your static files
+# in apps' "static/" subdirectories and in STATICFILES_DIRS.
+# Example: "/home/media/media.lawrence.com/static/"
+STATIC_ROOT = ''
+
+# URL prefix for static files.
+# Example: "http://media.lawrence.com/static/"
+STATIC_URL = '/static/'
+
+# Additional locations of static files
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(os.path.dirname(__file__), 'src'),
+    os.path.join(os.path.dirname(__file__), 'css'),
+    os.path.join(os.path.dirname(__file__), 'img'),
+)
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # This test runner captures stdout and associates tracebacks with their
@@ -206,3 +243,7 @@ ADMIN_MEDIA_PREFIX = '/media/admin/'
 TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), 'templates'),)
 
 ROOT_URLCONF = 'rflectevents.urls'
+
+# Application administrator should provide root url of where application will be
+# deployed.
+SITE_URL = 'http://localhost:8000/'

@@ -3,31 +3,34 @@
 <head>
   <meta http-equiv="content-type" content="text/html;charset=utf-8">
   <title>Rflect events</title>
-  <link href="../css/common.css" rel="stylesheet" type="text/css">
-  <link href="../css/autocomplete.css" rel="stylesheet" type="text/css">
-  <link href="../css/flatbutton.css" rel="stylesheet" type="text/css">
-  <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
-  <link href="../css/dialog.css" rel="stylesheet" type="text/css">
-  <link href="../css/savedialog.css" rel="stylesheet" type="text/css">
-  <link href="../css/checkbox.css" rel="stylesheet" type="text/css">
-  <link href="../css/eventpane.css" rel="stylesheet" type="text/css">
-  <link href="../css/rflectcalendar.css" rel="stylesheet" type="text/css">
-  <link href="../css/colorcodes.css" rel="stylesheet" type="text/css">
+  <link href="{{STATIC_URL}}common.css" rel="stylesheet" type="text/css">
+  <link href="{{STATIC_URL}}autocomplete.css" rel="stylesheet" type="text/css">
+  <link href="{{STATIC_URL}}flatbutton.css" rel="stylesheet" type="text/css">
+  <link href="{{STATIC_URL}}datepicker.css" rel="stylesheet" type="text/css">
+  <link href="{{STATIC_URL}}dialog.css" rel="stylesheet" type="text/css">
+  <link href="{{STATIC_URL}}savedialog.css" rel="stylesheet" type="text/css">
+  <link href="{{STATIC_URL}}checkbox.css" rel="stylesheet" type="text/css">
+  <link href="{{STATIC_URL}}eventpane.css" rel="stylesheet" type="text/css">
+  <link href="{{STATIC_URL}}rflectcalendar.css" rel="stylesheet" type="text/css">
+  <link href="{{STATIC_URL}}colorcodes.css" rel="stylesheet" type="text/css">
 
-  <script src="../src/closure-library/closure/goog/base.js"
+  <script src="{{STATIC_URL}}closure-library/closure/goog/base.js"
           type="text/javascript">
   </script>
-  <script src="../src/deps.js" type="text/javascript">
+  <script src="{{STATIC_URL}}deps.js" type="text/javascript">
   </script>
-  <script src="../src/rflect/cal/loader.js" type="text/javascript">
+  <script src="{{STATIC_URL}}rflect/cal/loader.js" type="text/javascript">
   </script>
   <!--<script src="../src/outputcompiled.js" type="text/javascript"></script>-->
 
 </head>
 <body>
 <script type="text/javascript">
-  // Call main method.
-  rflect.cal.Loader.main();
+var ROOT_URL = '{{SITE_URL}}';
+</script>
+<script type="text/javascript">
+// Call main method.
+rflect.cal.Loader.main();
 </script>
 </body>
 </html>

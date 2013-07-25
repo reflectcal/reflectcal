@@ -90,9 +90,9 @@ rflect.cal.Transport.EventTypes = {
  * @enum {string}
  */
 rflect.cal.Transport.OperationUrls = {
-  SAVE_EVENT: '//events/save',
-  LOAD_EVENT: '//events/load',
-  DELETE_EVENT: '//events/delete'
+  SAVE_EVENT: '../events/save/',
+  LOAD_EVENT: '../events/load/',
+  DELETE_EVENT: '../events/delete/'
 }
 
 
@@ -164,18 +164,11 @@ rflect.cal.Transport.getResponseJSON = function(x) {
 rflect.cal.Transport.prototype.saveEventAsync = function(aEvent) {
   this.eventManager_.setEventIsInProgress(aEvent.id, true);
 
-  goog.testing.net.XhrIo.send(rflect.cal.Transport.OperationUrls.SAVE_EVENT,
+  goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.SAVE_EVENT,
       goog.bind(this.onSaveEvent_, this, aEvent.id),
       'POST',
       rflect.cal.Transport.serialize(aEvent), null);
 
-  setTimeout(function(){
-
-    var sendInstances = goog.testing.net.XhrIo.getSendInstances();
-    var xhr = sendInstances[sendInstances.length - 1];
-    xhr.simulateResponse(200, '{"longId":""}');
-
-  }, 5000);
 };
 
 
@@ -208,18 +201,11 @@ rflect.cal.Transport.prototype.onSaveEvent_ = function(aCalEventId, aEvent) {
 rflect.cal.Transport.prototype.deleteEventAsync = function(aEvent) {
   this.eventManager_.setEventIsInProgress(aEvent.id, true);
 
-  goog.testing.net.XhrIo.send(rflect.cal.Transport.OperationUrls.DELETE_EVENT +
-      '?longId=' + aEvent.longId,
+  goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.DELETE_EVENT +
+      aEvent.longId + '/',
       goog.bind(this.onDeleteEvent_, this, aEvent.id, aEvent.longId),
       'GET');
 
-  setTimeout(function(){
-
-    var sendInstances = goog.testing.net.XhrIo.getSendInstances();
-    var xhr = sendInstances[sendInstances.length - 1];
-    xhr.simulateResponse(200, '0');
-
-  }, 5000);
 };
 
 
@@ -260,18 +246,10 @@ rflect.cal.Transport.prototype.loadEventsAsync = function() {
   if (intervalIsCovered)
     return;
 
-  goog.testing.net.XhrIo.send(rflect.cal.Transport.OperationUrls.LOAD_EVENT +
-      '?from=' + interval.start + '&to=' + interval.end,
+  goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.LOAD_EVENT +
+      interval.start + '-' + interval.end + '/',
       goog.bind(this.onLoadEvents_, this, interval),
       'GET');
-
-  setTimeout(function(){
-
-    var sendInstances = goog.testing.net.XhrIo.getSendInstances();
-    var xhr = sendInstances[sendInstances.length - 1];
-    xhr.simulateResponse(200, '[]');
-
-  }, 1000);
 };
 
 
