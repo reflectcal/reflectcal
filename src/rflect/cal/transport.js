@@ -164,10 +164,14 @@ rflect.cal.Transport.getResponseJSON = function(x) {
 rflect.cal.Transport.prototype.saveEventAsync = function(aEvent) {
   this.eventManager_.setEventIsInProgress(aEvent.id, true);
 
+  var headers = {
+    'Content-Type': 'application/json;charset=utf-8'
+  };
+
   goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.SAVE_EVENT,
       goog.bind(this.onSaveEvent_, this, aEvent.id),
       'POST',
-      rflect.cal.Transport.serialize(aEvent), null);
+      rflect.cal.Transport.serialize(aEvent), headers);
 
 };
 
@@ -181,11 +185,16 @@ rflect.cal.Transport.prototype.onSaveEvent_ = function(aCalEventId, aEvent) {
   var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
 
   var response = rflect.cal.Transport.getResponseJSON(x);
-  var longId = response.longId;
 
   var event = this.eventManager_.getEventById(aCalEventId);
-  event.longId = longId;
-  this.loadedEventIds_[longId] = true;
+
+  // 200 code response could either be 0 or new event id
+  if (response != 0) {
+    var longId = response;
+
+    event.longId = longId;
+    this.loadedEventIds_[longId] = true;
+  }
 
   this.eventManager_.setEventIsInProgress(aCalEventId, false);
 
