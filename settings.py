@@ -161,7 +161,7 @@ LOGGING = {
 ################################################################################
 ################################################################################
 
-#Note(alexk): django-nonrel specific settings.
+#Overridden project-specific settings.
 
 # Initialize App Engine and import the default settings (DB backend, etc.).
 # If you want to use a different backend you have to remove all occurences
@@ -170,12 +170,18 @@ from djangoappengine.settings_base import *
 
 import os
 
-# Activate django-dbindexer for the default database
-DATABASES['native'] = DATABASES['default']
-DATABASES['default'] = {'ENGINE': 'dbindexer', 'TARGET': 'native'}
-AUTOLOAD_SITECONF = 'indexes'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.oracle', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'rflectevents',                      # Or path to database file if using sqlite3.
+        'USER': 'rflectuser',                      # Not used with sqlite3.
+        'PASSWORD': 'rflectpass',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
 
-SECRET_KEY = '=r-$b*8hglm+858&9t043hlm6-&6-3d3vfc4((7yd0dbrakhvi'
+SECRET_KEY = 'jkawhg890234hadiy2--s-u984397hiaosd892kigkisosoer8'
 
 INSTALLED_APPS = (
 #    'django.contrib.admin',

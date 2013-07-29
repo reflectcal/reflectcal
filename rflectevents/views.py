@@ -28,9 +28,11 @@ def loadEvents(aRequest, aStart, aEnd):
 def saveEvent(aRequest):
   event = json.loads(aRequest.body)
 
+  # If editing already present event.
   if event[0]:
     id = event[0]
     response = 0
+  # If creating new event.
   else:
     id = util.generateEventId()
     response = id
