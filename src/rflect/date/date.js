@@ -191,6 +191,36 @@ rflect.date.createDateShim = function(aYear, aMonth, aDate, aHours, aMinutes,
   return dateShim;
 }
 
+
+/**
+ * @param {rflect.date.DateShim} aDate Date.
+ * @param {boolean=} opt_full Whether to use real date object in creating.
+ * @return {rflect.date.DateShim} Date in DateShim form.
+ */
+rflect.date.createDateShimFromDate = function(aDate, opt_full){
+  return rflect.date.createDateShim(
+    aDate.getFullYear(),
+    aDate.getMonth(),
+    aDate.getDay(),
+    aDate.getHours(),
+    aDate.getMinutes(),
+    aDate.getSeconds(),
+    opt_full
+  );
+}
+
+
+/**
+ * @param {number} aTs Timestamp.
+ * @param {boolean=} opt_full Whether to use real date object in creating.
+ * @return {rflect.date.DateShim} Date in DateShim form.
+ */
+rflect.date.createDateShimFromTimestamp = function(aTs, opt_full){
+  var date = new Date(aTs);
+  return rflect.date.createDateShimFromDate(date, opt_full);
+}
+
+
 /**
  * @param {string} aDateStr JSON string representation of date.
  * @param {boolean=} opt_full Whether to use real date object in parsing.

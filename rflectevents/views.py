@@ -20,10 +20,22 @@ def loadEvents(aRequest, aStart, aEnd):
   events = Event.objects.filter(end__gt=start).filter(start__lt=end)
   jsonSerializer = serializers.get_serializer("json")()
 
-  response = None
-  jsonSerializer.serialize(events, ensure_ascii=False, stream=response)
+  response = []
+  for event in events:
+    eventList = []
+    eventList.append(event.id)
+    eventList.append(event.start)
+    eventList.append(event.end)
+    eventList.append(event.name)
+    eventList.append(event.description)
+    eventList.append(event.allDay)
+    eventList.append(event.calendar.id)
 
-  return HttpResponse(response, mimetype="application/json")
+    response.append(eventList)
+    
+  responseJSON = json.dumps(response)
+    
+  return HttpResponse(responseJSON, mimetype="application/json")
 
 def saveEvent(aRequest):
   event = json.loads(aRequest.body)
@@ -46,6 +58,8 @@ def saveEvent(aRequest):
 
 def deleteEvent(aRequest, aEventId):
   response = 0
+
+  Event.objects.get(id = aEventId).delete()
 
   return HttpResponse(json.dumps(response), mimetype="application/json")
 

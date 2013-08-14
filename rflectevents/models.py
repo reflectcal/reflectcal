@@ -1,7 +1,7 @@
 from django.db import models
 
 class Calendar(models.Model):
-    id = models.CharField(max_length=30, primary_key=True)
+    id = models.CharField(max_length=40, primary_key=True)
     name = models.CharField(max_length=100)
     visible = models.BooleanField()
 
@@ -10,12 +10,12 @@ class Calendar(models.Model):
           self.visible)
 
 class Event(models.Model):
-    id = models.CharField(max_length=30, primary_key=True)
+    id = models.CharField(max_length=40, primary_key=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=500)
     calendar = models.ForeignKey(Calendar)
-    start = models.IntegerField()
-    end = models.IntegerField()
+    start = models.BigIntegerField()
+    end = models.BigIntegerField()
     allDay = models.BooleanField()
 
     def __unicode__(self):

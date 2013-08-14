@@ -209,10 +209,10 @@ rflect.cal.events.EventManager.createEventFromArray = function(aArray) {
   var longId = aArray[rflect.cal.events.Event.FIELD_ID];
   // We parse start day with day and week fields, they are needed for forming
   // chips.
-  var startDate = rflect.date.parse(
-      aArray[rflect.cal.events.Event.FIELD_START_DATE], true);
-  var endDate = rflect.date.parse(
-      aArray[rflect.cal.events.Event.FIELD_END_DATE], true);
+  var startDate = rflect.date.createDateShimFromTimestamp(
+      +aArray[rflect.cal.events.Event.FIELD_START_DATE], true);
+  var endDate = rflect.date.createDateShimFromTimestamp(
+      +aArray[rflect.cal.events.Event.FIELD_END_DATE], true);
   var summary = aArray[rflect.cal.events.Event.FIELD_SUMMARY];
   var description = aArray[rflect.cal.events.Event.FIELD_DESCRIPTION];
   var allDay = aArray[rflect.cal.events.Event.FIELD_ALL_DAY];

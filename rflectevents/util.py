@@ -19,4 +19,5 @@ def generateCalendarId():
   return id
 
 def __generateUniqueIdImpl():
+  #TODO(alexk): change this to 30
   return urlsafe_b64encode(os.urandom(30))
