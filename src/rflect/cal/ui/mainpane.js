@@ -1681,9 +1681,6 @@ rflect.cal.ui.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
 rflect.cal.ui.MainPane.prototype.onSaveEvent_ = function(aEvent) {
   var eventId = aEvent.eventId;
 
-  if (goog.DEBUG)
-    _log('onSaveEvent_');
-
   var mp = this.getDomHelper().getElement('main-pane');
   mp && goog.array.forEach(mp.querySelectorAll('.' +
       rflect.cal.predefined.chips.CHIP_EVENT_CLASS + eventId), function(el) {
