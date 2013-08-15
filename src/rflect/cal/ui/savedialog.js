@@ -168,7 +168,7 @@ rflect.cal.ui.SaveDialog.prototype.setVisible = function (aVisible) {
   // which could produce weird behavior. More specifically, holding Enter
   // produces many events with the same id.
   if (!aVisible)
-    this.input_.blur();
+    this.input_ && this.input_.blur();
   else
     this.select_.update();
 }
