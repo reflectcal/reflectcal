@@ -12,6 +12,7 @@ goog.provide('rflect.cal.Transport.EventTypes');
 
 goog.require('goog.net.XhrIo');
 goog.require('goog.testing.net.XhrIo');
+goog.require('rflect.cal.events.Event');
 goog.require('rflect.cal.events.EventManager');
 goog.require('rflect.date.Interval');
 
@@ -115,7 +116,7 @@ rflect.cal.Transport.SaveEvent = function(aEventId, aLongId) {
  * @constructor.
  */
 rflect.cal.Transport.LoadEvent = function(aInterval) {
-  this.type = rflect.cal.Transport.EventTypes.DELETE_EVENT;
+  this.type = rflect.cal.Transport.EventTypes.LOAD_EVENT;
   this.interval = aInterval;
 }
 
@@ -277,16 +278,22 @@ rflect.cal.Transport.prototype.onLoadEvents_ = function(aInterval, aEvent) {
   this.updateIntervals_(aInterval);
 
   for (var counter = 0, length = events.length; counter < length; counter++) {
-    if (events.longId in this.loadedEventIds_)
+    var eventObj = events[counter];
+    var longId = eventObj[rflect.cal.events.Event.FIELD_ID];
+
+    if (longId in this.loadedEventIds_)
       continue;
 
-    var eventObj = events[counter];
+    this.loadedEventIds_[longId] = true;
+
     var event = rflect.cal.events.EventManager.createEventFromArray(eventObj);
 
     this.eventManager_.addEvent(event);
   }
 
-  this.dispatchEvent(new rflect.cal.Transport.LoadEvent(aInterval));
+  // We only dispatch event when interval is relevant.
+  if (this.timeManager_.interval.overlaps(aInterval))
+    this.dispatchEvent(new rflect.cal.Transport.LoadEvent(aInterval));
 
 };
 
@@ -393,6 +400,22 @@ rflect.cal.Transport.prototype.updateIntervals_ = function(aLoadedInterval) {
   }
 
 };
+
+
+/**
+ * Initializes calendars from their list.
+ */
+rflect.cal.Transport.prototype.loadCalendars = function() {
+
+  if (goog.global.CALENDARS && goog.global.CALENDARS.length)
+    goog.array.forEach(goog.global.CALENDARS, function(aCalArray){
+      this.eventManager_.addCalendar(
+          this.eventManager_.createCalendarFromArray(aCalArray));
+    }, this);
+
+  else
+    this.eventManager_.addCalendar(this.eventManager_.createCalendar(0));
+}
 
 
 /**

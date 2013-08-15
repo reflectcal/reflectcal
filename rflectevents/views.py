@@ -18,22 +18,8 @@ def loadEvents(aRequest, aStart, aEnd):
     raise Http404()
 
   events = Event.objects.filter(end__gt=start).filter(start__lt=end)
-  jsonSerializer = serializers.get_serializer("json")()
 
-  response = []
-  for event in events:
-    eventList = []
-    eventList.append(event.id)
-    eventList.append(event.start)
-    eventList.append(event.end)
-    eventList.append(event.name)
-    eventList.append(event.description)
-    eventList.append(event.allDay)
-    eventList.append(event.calendar.id)
-
-    response.append(eventList)
-    
-  responseJSON = json.dumps(response)
+  responseJSON = util.serializeEvents(events)
     
   return HttpResponse(responseJSON, mimetype="application/json")
 
@@ -67,16 +53,14 @@ def mainRender(aRequest):
   #Note(alexk): it's important to use request context, because we're referring
   #to STATIC_URL in template.
 
-  context = RequestContext(aRequest, {
-              'SITE_URL': settings.SITE_URL
-            })
+  calendars = Calendar.objects.all()
 
-  cal0 = Calendar(id = 0, name = '', visible = True)
-  cal0.save()
-  cal1 = Calendar(id = 1, name = '', visible = True)
-  cal1.save()
-  cal2 = Calendar(id = 2, name = '', visible = True)
-  cal2.save()
+  calendarsJSON = util.serializeCalendars(calendars)
+
+  context = RequestContext(aRequest, {
+              'SITE_URL': settings.SITE_URL,
+              'CALENDARS_LIST': calendarsJSON
+            })
 
   template = get_template('rflectcalendar.html')
   html = template.render(context)

@@ -18,14 +18,17 @@ goog.require('goog.array');
  * @param {number} aUid Client-side id for calendar.
  * @param {string} aName Name of calendar.
  * @param {rflect.cal.events.ColorCode} aColorCode Color code object.
+ * @param {boolean=} opt_visible Whether calendar is visible.
  * @param {boolean=} opt_readOnly Whether calendar is read-only.
  * @constructor
  */
-rflect.cal.events.Calendar = function(aUid, aName, aColorCode, opt_readOnly) {
+rflect.cal.events.Calendar = function(aUid, aName, aColorCode, opt_visible,
+    opt_readOnly) {
   this.id = aUid;
   this.name = aName;
   this.colorCode = aColorCode;
   this.eventIds = [];
+  this.visible = opt_visible || false;
   this.readOnly = opt_readOnly || false;
 };
 
@@ -47,11 +50,19 @@ rflect.cal.events.Calendar.FIELD_NAME = 1;
 
 
 /**
+ * Index of visibility state in JSON array.
+ * @type {number}
+ * @const
+ */
+rflect.cal.events.Calendar.FIELD_VISIBLE = 2;
+
+
+/**
  * Index of color code in JSON array.
  * @type {number}
  * @const
  */
-rflect.cal.events.Calendar.FIELD_COLOR_CODE = 2;
+rflect.cal.events.Calendar.FIELD_COLOR_CODE_INDEX = 3;
 
 
 /**
@@ -59,7 +70,7 @@ rflect.cal.events.Calendar.FIELD_COLOR_CODE = 2;
  * @type {number}
  * @const
  */
-rflect.cal.events.Calendar.FIELD_READ_ONLY = 3;
+rflect.cal.events.Calendar.FIELD_READ_ONLY = 4;
 
 
 /**
@@ -131,3 +142,18 @@ rflect.cal.events.Calendar.prototype.deleteEvent = function(aEvent) {
   goog.array.remove(this.eventIds, id);
 };
 
+
+/**
+ * @return {Array} JSON representation of event.
+ */
+rflect.cal.events.Calendar.prototype.toJSON = function() {
+  var cal = [];
+  
+  cal[rflect.cal.events.Calendar.FIELD_ID] = this.id;
+  cal[rflect.cal.events.Calendar.FIELD_NAME] = this.name;
+  cal[rflect.cal.events.Calendar.FIELD_VISIBLE] = this.visible;
+  cal[rflect.cal.events.Calendar.FIELD_COLOR_CODE_INDEX] = this.colorCode.id;
+  cal[rflect.cal.events.Calendar.FIELD_READ_ONLY] = this.readOnly;
+
+  return cal;
+};

@@ -4,6 +4,8 @@ class Calendar(models.Model):
     id = models.CharField(max_length=40, primary_key=True)
     name = models.CharField(max_length=100)
     visible = models.BooleanField()
+    colorCodeIndex = models.IntegerField()
+    readOnly = models.BooleanField()
 
     def __unicode__(self):
       return u'id:%s, name:%s, on:%s' % (self.id, self.name,

@@ -390,11 +390,15 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
   this.eventManager_.run();
 
   if (this.isOnStartup_) {
+
+    this.transport_.loadCalendars();
+
     this.mainBody_.updateBeforeRedraw(null, true);
     // Render main body and places it in document.body.
     this.mainBody_.render();
     this.assignEvents_();
     this.isOnStartup_ = false;
+
   } else if (calledByMiniCal) {
     this.mainBody_.updateBeforeRedraw([
         /**@type {number}*/

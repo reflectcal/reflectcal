@@ -193,7 +193,7 @@ rflect.date.createDateShim = function(aYear, aMonth, aDate, aHours, aMinutes,
 
 
 /**
- * @param {rflect.date.DateShim} aDate Date.
+ * @param {goog.date.DateLike} aDate Date.
  * @param {boolean=} opt_full Whether to use real date object in creating.
  * @return {rflect.date.DateShim} Date in DateShim form.
  */
@@ -201,7 +201,7 @@ rflect.date.createDateShimFromDate = function(aDate, opt_full){
   return rflect.date.createDateShim(
     aDate.getFullYear(),
     aDate.getMonth(),
-    aDate.getDay(),
+    aDate.getDate(),
     aDate.getHours(),
     aDate.getMinutes(),
     aDate.getSeconds(),

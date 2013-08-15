@@ -160,11 +160,6 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
    * @type {Object.<number, rflect.cal.events.Calendar>}
    */
   this.calendars = {};
-  //TODO(alexk): this is temporary - calendars are loaded from server.
-  // if no one loaded then default should be created.
-  this.addCalendar(this.createCalendar(0));
-  this.addCalendar(this.createCalendar(1));
-  this.addCalendar(this.createCalendar(2, "Some calendar with long name, well, it's really long..."));
 };
 
 
@@ -211,8 +206,12 @@ rflect.cal.events.EventManager.createEventFromArray = function(aArray) {
   // chips.
   var startDate = rflect.date.createDateShimFromTimestamp(
       +aArray[rflect.cal.events.Event.FIELD_START_DATE], true);
+  if (goog.DEBUG)
+    _log('startDate', startDate);
   var endDate = rflect.date.createDateShimFromTimestamp(
       +aArray[rflect.cal.events.Event.FIELD_END_DATE], true);
+  if (goog.DEBUG)
+    _log('endDate', endDate);
   var summary = aArray[rflect.cal.events.Event.FIELD_SUMMARY];
   var description = aArray[rflect.cal.events.Event.FIELD_DESCRIPTION];
   var allDay = aArray[rflect.cal.events.Event.FIELD_ALL_DAY];
@@ -305,10 +304,12 @@ rflect.cal.events.EventManager.pushNestedAllDayChips_ = function(
  * Factory method that creates calendar from args.
  * @param {number=} opt_colorCodeIndex Index of color code.
  * @param {string=} opt_name Calendar name.
+ * @param {boolean=} opt_visible Whether calendar is visible.
  * @return {rflect.cal.events.Calendar} Calendar.
  */
 rflect.cal.events.EventManager.prototype.createCalendar = function(opt_colorCodeIndex,
-                                                                   opt_name) {
+                                                                   opt_name,
+                                                                   opt_visible) {
   var uid = rflect.cal.events.EventManager.createCalendarId();
 
   // Choose a random array index in [0, i] (inclusive with i).
@@ -317,7 +318,22 @@ rflect.cal.events.EventManager.prototype.createCalendar = function(opt_colorCode
   var colorCode = this.colorCodes_[pickIndex];
   var name = opt_name || colorCode.getFullName();
 
-  return new rflect.cal.events.Calendar(uid, name, colorCode);
+  return new rflect.cal.events.Calendar(uid, name, colorCode, opt_visible);
+}
+
+
+/**
+ * Factory method that creates calendar from array.
+ * @param {Array} aArray Array of calendar properties.
+ * @return {rflect.cal.events.Calendar} Calendar.
+ */
+rflect.cal.events.EventManager.prototype.createCalendarFromArray =
+    function(aArray) {
+  return this.createCalendar(
+      aArray[rflect.cal.events.Calendar.FIELD_COLOR_CODE_INDEX],
+      aArray[rflect.cal.events.Calendar.FIELD_NAME],
+      aArray[rflect.cal.events.Calendar.FIELD_VISIBLE]
+  );
 }
 
 

@@ -13,6 +13,7 @@ goog.require('goog.math.Size');
 goog.require('goog.style');
 goog.require('rflect.ui.Component');
 goog.require('rflect.cal.predefined');
+goog.require('rflect.cal.Transport');
 goog.require('rflect.cal.ui.EventPane');
 goog.require('rflect.cal.ui.EventPane.EventTypes');
 goog.require('rflect.cal.ui.MainPane');
@@ -327,8 +328,10 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
   this.getHandler().listen(this.topPane_, goog.ui.Component.EventType.ACTION,
       this.onTopPaneAction_, false, this)
       .listen(this.calSelector_, rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
-      this.onCalendarSwitch_, false, this);
-      
+      this.onCalendarSwitch_, false, this)
+      .listen(this.transport_, rflect.cal.Transport.EventTypes.LOAD_EVENT,
+      this.onLoadEvents_, false, this);
+
   this.rebuildMainPaneWithSizes();
   this.rebuildLeftPaneWithSizes();
 };
@@ -471,6 +474,17 @@ rflect.cal.ui.MainBody.prototype.onCalendarSwitch_ = function(aEvent) {
   var visible = aEvent.visible;
 
   this.eventManager_.setVisibleCalendar(calendarId, visible);
+  this.eventManager_.run();
+  this.mainPane_.update();
+}
+
+
+/**
+ * Events load handler.
+ * @param {rflect.cal.Transport.LoadEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.MainBody.prototype.onLoadEvents_ = function(aEvent) {
   this.eventManager_.run();
   this.mainPane_.update();
 }

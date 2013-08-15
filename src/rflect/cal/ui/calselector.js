@@ -85,6 +85,10 @@ rflect.cal.ui.CalSelector.prototype.enterDocument = function () {
     cb.decorate(node);
     cb.setLabel(node.parentNode);
 
+    var id = rflect.string.getNumericIndex(cb.getElement().id);
+    if (this.eventManager_.calendars[id].visible)
+      cb.setChecked(true);
+
     this.getHandler().listen(cb.getKeyEventTarget(),
         goog.events.EventType.FOCUS, this.onFocus_, false, this)
         .listen(cb.getKeyEventTarget(), goog.events.EventType.BLUR,
