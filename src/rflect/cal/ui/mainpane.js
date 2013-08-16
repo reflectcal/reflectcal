@@ -1039,7 +1039,7 @@ rflect.cal.ui.MainPane.prototype.addChipGrip_ = function(aElement) {
     this.addChipGripInner_(weekChip, allDayChip,
         startIsCutWkRe, endIsCutWkRe, startIsCutMnRe, endIsCutMnRe,
         this.upperContWk_, this.lowerContWk_, this.leftContMn_,
-        this.rightContMn_, this.leftContAd_, this.rightContAd_, 
+        this.rightContMn_, this.leftContAd_, this.rightContAd_,
         this.farAwayCont_, chip);
 
 }
@@ -1067,7 +1067,7 @@ rflect.cal.ui.MainPane.prototype.addChipGrip_ = function(aElement) {
 rflect.cal.ui.MainPane.prototype.addChipGripInner_ =
     function(aWeekChip, aAllDayChip, aStartIsCutWkRe, aEndIsCutWkRe,
              aStartIsCutMnRe, aEndIsCutMnRe, aUpperContWk, aLowerContWk,
-             aLeftContMn, aRightContMn, aLeftContAd, aRightContAd, aFarAwayCont, 
+             aLeftContMn, aRightContMn, aLeftContAd, aRightContAd, aFarAwayCont,
              aChip) {
   var chipClassName = aChip.className;
 
@@ -1543,27 +1543,34 @@ rflect.cal.ui.MainPane.prototype.onMouseUp_ = function (aEvent) {
 
 /**
  * @param {goog.events.Event} aEvent Event object.
- * @param {string} aClassName Chip class name.
+ * @param {string} aTargetClassName Chip class name.
  * @private
  */
-rflect.cal.ui.MainPane.prototype.startChipDrag_ = function(aEvent, aClassName) {
-
+rflect.cal.ui.MainPane.prototype.startChipDrag_ = function(aEvent,
+    aTargetClassName) {
   var maskConfiguration;
+  var target = aEvent.target;
+
   var calendarEvent = this.getEventByTarget_(
-      /**@type {Element}*/(aEvent.target));
+      /**@type {Element}*/(target));
 
-  var isStartGrip = this.isStartGripCont_(aClassName,
-      /**@type {Element}*/ (aEvent.target));
-  var isEndGrip = this.isEndGripCont_(aClassName,
-      /**@type {Element}*/ (aEvent.target));
+  var chipElement = this.getChipElement_(/**@type {Element}*/(target));
+  var eventClassName = chipElement.className;
 
-  if (this.isWeekChip_(aClassName) || this.isWeekGrip_(aClassName))
+  var isStartGrip = this.isStartGripCont_(aTargetClassName,
+      /**@type {Element}*/ (target));
+  var isEndGrip = this.isEndGripCont_(aTargetClassName,
+      /**@type {Element}*/ (target));
+
+  if (this.isWeekChip_(eventClassName) || this.isWeekGrip_(eventClassName))
     maskConfiguration = rflect.cal.ui.MainPaneSelectionMask.Configuration.WEEK;
   // Test for all-day chip first, because it's a month chip, too.
-  else if (this.isAllDayChip_(aClassName) || this.isAllDayGrip_(aClassName))
+  else if (this.isAllDayChip_(eventClassName) ||
+      this.isAllDayGrip_(eventClassName))
     maskConfiguration =
         rflect.cal.ui.MainPaneSelectionMask.Configuration.ALLDAY;
-  else if (this.isMonthChip_(aClassName) || this.isMonthGrip_(aClassName))
+  else if (this.isMonthChip_(eventClassName) ||
+      this.isMonthGrip_(eventClassName))
     maskConfiguration =
         rflect.cal.ui.MainPaneSelectionMask.Configuration.MONTH;
 
