@@ -15,10 +15,9 @@
 .goog-tab {
   position: relative;
   padding: 4px 8px;
-  color: #00c;
-  text-decoration: underline;
-  cursor: default;
-  border-left: 2px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  border-left: 4px solid transparent;
 }
 
 .goog-tab-bar-top .goog-tab {
@@ -69,6 +68,7 @@
   text-decoration: none;
   font-weight: bold;
   border-left-color: #6699ee;
+  cursor: default;
 }
 
 .goog-tab-bar-top {
@@ -94,7 +94,6 @@
 }
 
 .goog-tab-bar-start .goog-tab-selected {
-  left: 1px;
   margin-left: 0;
   padding-right: 9px;
 }

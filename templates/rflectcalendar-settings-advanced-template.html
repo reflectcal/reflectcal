@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<!--
+  ~ Copyright (c) 2013. Rflect, Alex K.
+  -->
+
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>Rflect calendar</title>
+  <link href="../css/common.css" rel="stylesheet" type="text/css">
+  <link href="../css/flatbutton.css" rel="stylesheet" type="text/css">
+  <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
+  <link href="../css/rflectcalendar.css" rel="stylesheet" type="text/css">
+  <link href="../css/checkbox.css" rel="stylesheet" type="text/css">
+  <link href="../css/savedialog.css" rel="stylesheet" type="text/css">
+  <link href="../css/tab.css" rel="stylesheet" type="text/css">
+  <link href="../css/tabbar.css" rel="stylesheet" type="text/css">
+  <link href="../css/eventpane.css" rel="stylesheet" type="text/css">
+  <link href="../css/settingspane.css" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+<div class="main-container">
+  <div id="settings-pane" class="settings-pane">
+
+      <div class="settings-pane-header-cont goog-inline-block">
+        <h3 class="event-edit-pane-header">Settings</h3>
+      </div>
+
+    <div class="settings-pane-buttons settings-pane-buttons-upper goog-inline-block">
+
+      <div class="goog-flat-button event-edit-pane-button goog-inline-block"
+           id="epb1"
+           role="button" style="-moz-user-select: none;" tabindex="0">
+        Cancel
+      </div>
+      <div
+          class="goog-flat-button event-edit-pane-button goog-inline-block emphasis-button"
+          id="epb2"
+          role="button" style="-moz-user-select: none;" tabindex="0">
+        Save
+      </div>
+      <div
+          class="goog-flat-button event-edit-pane-button goog-inline-block event-edit-pane-button-delete"
+          id="epb3"
+          role="button" style="-moz-user-select: none;" tabindex="0">
+        Delete
+      </div>
+    </div>
+
+    <div class="settings-body">
+
+    <div class="goog-tab-bar goog-tab-bar-start" id="settings-tabs"
+         style="-moz-user-select: none;" role="tablist" tabindex="0"
+         aria-activedescendant="">
+      <div class="goog-tab goog-tab-selected" aria-selected="true" role="tab"
+           style="-moz-user-select: none;" id=":8">Main
+      </div>
+      <div class="goog-tab" aria-selected="false" role="tab"
+           style="-moz-user-select: none;" id=":9">Calendars
+      </div>
+      <div class="goog-tab" aria-selected="false" role="tab"
+           style="-moz-user-select: none;" id=":a">Advanced
+      </div>
+    </div>
+
+    <div class="tabs-content" style="margin-left: 125px">
+
+
+    <div class="event-name-input-cont event-edit-pane-cont">
+      <label for="ep-event-name-input"
+             class="goog-inline-block event-edit-pane-label">
+        Name
+      </label>
+      <input id="ep-event-name-input" class="ep-event-name-input"
+             type="text"/>
+    </div>
+
+    <div class="date-input-cont event-edit-pane-cont">
+      <div class="start-input-cont event-edit-pane-cont-inner">
+        <label for="event-start-date"
+               class="goog-inline-block event-edit-pane-label">Start
+          date</label>
+        <input id="event-start-date" class="event-date-input"
+               type="text"/>
+        <input id="event-start-time" class="event-time-input"
+               type="text"/>
+      </div>
+      <div class="end-input-cont event-edit-pane-cont-inner">
+        <label for="event-end-date"
+               class="goog-inline-block event-edit-pane-label">End
+          date</label>
+        <input id="event-end-date" class="event-date-input"
+               type="text"/>
+        <input id="event-end-time" class="event-time-input"
+               type="text"/>
+      </div>
+      <div class="all-day-input-cont event-edit-pane-cont-inner">
+        <div id="all-day-label"
+             class="goog-inline-block event-edit-pane-label">All-day
+          event
+        </div>
+        <span class="goog-checkbox goog-checkbox-unchecked" aria-checked="false"
+              role="checkbox" style="-moz-user-select: none;"
+              tabindex="0" aria-labelledby="all-day-label"></span>
+      </div>
+    </div>
+
+    <div class="description-cont event-edit-pane-cont">
+      <label for="event-description"
+             class="goog-inline-block event-edit-pane-label event-description-label ">
+        Description
+      </label>
+      <textarea id="event-description"
+                class="event-description"></textarea>
+    </div>
+
+    </div>
+    </div>
+
+    <div class="settings-pane-buttons">
+      <div class="goog-flat-button event-edit-pane-button goog-inline-block"
+           id="epb4"
+           role="button" style="-moz-user-select: none;" tabindex="0">
+        Cancel
+      </div>
+      <div
+          class="goog-flat-button event-edit-pane-button goog-inline-block emphasis-button"
+          id="epb5"
+          role="button" style="-moz-user-select: none;" tabindex="0">
+        Save
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

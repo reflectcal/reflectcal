@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<!--
+  ~ Copyright (c) 2013. Rflect, Alex K.
+  -->
+
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>Rflect calendar</title>
+  <link href="../css/common.css" rel="stylesheet" type="text/css">
+  <link href="../css/flatbutton.css" rel="stylesheet" type="text/css">
+  <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
+  <link href="../css/rflectcalendar.css" rel="stylesheet" type="text/css">
+  <link href="../css/checkbox.css" rel="stylesheet" type="text/css">
+  <link href="../css/savedialog.css" rel="stylesheet" type="text/css">
+  <link href="../css/tab.css" rel="stylesheet" type="text/css">
+  <link href="../css/tabbar.css" rel="stylesheet" type="text/css">
+  <link href="../css/eventpane.css" rel="stylesheet" type="text/css">
+  <link href="../css/settingspane.css" rel="stylesheet" type="text/css">
+  <link href="../css/colorcodes.css" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+<div class="main-container">
+  <div id="settings-pane" class="settings-pane">
+
+    <div class="settings-pane-header-cont goog-inline-block">
+      <h3 class="event-edit-pane-header">Settings</h3>
+    </div><div
+      class="settings-pane-buttons settings-pane-buttons-upper goog-inline-block">
+
+    <div class="goog-flat-button event-edit-pane-button goog-inline-block"
+         id="epb1"
+         role="button" style="-moz-user-select: none;" tabindex="0">
+      Cancel
+    </div>
+    <div
+        class="goog-flat-button event-edit-pane-button goog-inline-block emphasis-button"
+        id="epb2"
+        role="button" style="-moz-user-select: none;" tabindex="0">
+      Save
+    </div>
+  </div>
+
+    <div class="settings-body">
+
+      <div class="goog-tab-bar goog-tab-bar-start" id="settings-tabs"
+           style="-moz-user-select: none;" role="tablist" tabindex="0"
+           aria-activedescendant="">
+        <div class="goog-tab goog-tab-selected" aria-selected="true" role="tab"
+             style="-moz-user-select: none;" id=":8">Main
+        </div>
+        <div class="goog-tab" aria-selected="false" role="tab"
+             style="-moz-user-select: none;" id=":9">Calendars
+        </div>
+        <div class="goog-tab" aria-selected="false" role="tab"
+             style="-moz-user-select: none;" id=":a">Advanced
+        </div>
+      </div>
+
+      <div class="tabs-content settings-tab-content">
+
+        <div
+            class="settings-pane-buttons settings-pane-buttons-upper goog-inline-block">
+
+          <div class="goog-flat-button event-edit-pane-button goog-inline-block"
+               id="epb8"
+               role="button" style="-moz-user-select: none;" tabindex="0">
+            New calendar
+          </div>
+          <div class="goog-flat-button event-edit-pane-button goog-inline-block"
+               id="epb6"
+               role="button" style="-moz-user-select: none;" tabindex="0">
+            Import
+          </div>
+          <div
+              class="goog-flat-button event-edit-pane-button goog-inline-block"
+              id="epb7"
+              role="button" style="-moz-user-select: none;" tabindex="0">
+            Export all
+          </div>
+        </div>
+
+        <div id="calendars-my" class="event-edit-pane-cont">My calendars:
+          <table class="calendars-cont" style="padding: 20px">
+            <tbody>
+              <tr>
+                <td class="listitem-cont" style="width: 200px">
+                  <a>Red calendar</a>
+                </td>
+                <td>
+                  <div class="calitem-color-cont event-rect-red"></div>
+                </td>
+              </tr><tr>
+              <td class="listitem-cont"  style="width: 200px">
+                  <a>Blue calendar</a>
+                </td>
+                <td>
+                  <div class="calitem-color-cont event-rect-blue"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="calendars-other" class="event-edit-pane-cont">Other calendars:
+          <table class="calendars-cont" style="padding: 20px">
+            <tbody>
+              <tr>
+                <td class="listitem-cont" style="width: 200px">
+                  <a>Red calendar</a>
+                </td>
+                <td>
+                  <div class="calitem-color-cont event-rect-red"></div>
+                </td>
+              </tr><tr>
+              <td class="listitem-cont"  style="width: 200px">
+                  <a>Blue calendar</a>
+                </td>
+                <td>
+                  <div class="calitem-color-cont event-rect-blue"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="settings-pane-buttons settings-pane-buttons-lower">
+      <div class="goog-flat-button event-edit-pane-button goog-inline-block"
+           id="epb4"
+           role="button" style="-moz-user-select: none;" tabindex="0">
+        Cancel
+      </div>
+      <div
+          class="goog-flat-button event-edit-pane-button goog-inline-block emphasis-button"
+          id="epb5"
+          role="button" style="-moz-user-select: none;" tabindex="0">
+        Save
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
