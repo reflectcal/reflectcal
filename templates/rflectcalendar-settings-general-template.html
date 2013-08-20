@@ -13,7 +13,10 @@
   <link href="../css/rflectcalendar.css" rel="stylesheet" type="text/css">
   <link href="../css/checkbox.css" rel="stylesheet" type="text/css">
   <link href="../css/savedialog.css" rel="stylesheet" type="text/css">
+  <link href="../css/tab.css" rel="stylesheet" type="text/css">
+  <link href="../css/tabbar.css" rel="stylesheet" type="text/css">
   <link href="../css/eventpane.css" rel="stylesheet" type="text/css">
+  <link href="../css/settingspane.css" rel="stylesheet" type="text/css">
 
 </head>
 <body>
@@ -42,6 +45,22 @@
           id="epb3"
           role="button" style="-moz-user-select: none;" tabindex="0">
         Delete
+      </div>
+    </div>
+
+    <div class="settings-body">
+
+    <div class="goog-tab-bar goog-tab-bar-start" id="settings-tabs"
+         style="-moz-user-select: none;" role="tablist" tabindex="0"
+         aria-activedescendant="">
+      <div class="goog-tab goog-tab-selected" aria-selected="true" role="tab"
+           style="-moz-user-select: none;" id=":8">Main
+      </div>
+      <div class="goog-tab" aria-selected="false" role="tab"
+           style="-moz-user-select: none;" id=":9">Calendars
+      </div>
+      <div class="goog-tab" aria-selected="false" role="tab"
+           style="-moz-user-select: none;" id=":a">Advanced
       </div>
     </div>
 
@@ -96,6 +115,7 @@
                 class="event-description"></textarea>
     </div>
 
+    </div>
     </div>
 
     <div class="event-edit-pane-buttons">
