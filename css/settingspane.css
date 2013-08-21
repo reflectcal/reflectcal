@@ -34,13 +34,80 @@
   padding-left: 170px;
 }
 
+.settings-pane-buttons-inner {
+  padding: 0;
+}
+
 .settings-body {
   border-top: 1px solid #d5d5d5;
   padding-top: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #d5d5d5;
+  min-height: 100px;
 }
 
 .settings-tab-content {
-  margin-left: 120px;
+  margin-left: 170px;
+}
+
+.calendars-cont {
+  padding: 15px;
+}
+
+.calendars-table {
+  table-layout: fixed;
+  border-collapse:collapse;
+}
+
+.calendar-row {
+  cursor: pointer;
+}
+
+.calendar-row:hover {
+  background: #e5e5e5;
+}
+
+.name-cell {
+  width: 200px;
+}
+
+.color-cell {
+  width: 20px;
+}
+
+.calendar-colors-label {
+  vertical-align: top;
+}
+
+.calendar-colors-table {
+  table-layout: fixed;
+  border-collapse:collapse;
+}
+
+.calendar-colors-table td {
+  padding: 2px;
+}
+
+.calendar-color {
+  border-radius: 0;
+  transition: opacity .2s;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.calendar-color:hover {
+  opacity: .7;
+}
+
+.calendar-color-selected {
+  border: black 1px solid !important;
+}
+
+.settings-link {
+  cursor: pointer;
+  padding: 8px 6px;
+}
+
+.settings-link:hover {
+  text-decoration: underline;
 }
