@@ -29,6 +29,7 @@ goog.require('rflect.cal.ui.CalendarsSelect');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.InputDatePicker');
 goog.require('rflect.date.util');
+goog.require('rflect.ui.Checkbox');
 goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
 
 
