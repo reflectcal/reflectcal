@@ -75,6 +75,20 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
 
   this.parentEl_ = aParentElement;
 
+  /**
+   * List of user's own calendars, for UI.
+   * @type {Array.<rflect.cal.events.Calendar>}
+   * @private
+   */
+  this.calendarsListMy_ = [];
+
+  /**
+   * List of calendars user is subscribed to, for UI.
+   * @type {Array.<rflect.cal.events.Calendar>}
+   * @private
+   */
+  this.calendarsListOther_ = [];
+
   // Building hierarchy of elements.
   this.addChild(this.tabBar_ = goog.ui.TabBar(goog.ui.TabBar.Location.START));
 
@@ -437,6 +451,10 @@ rflect.cal.ui.SettingsPane.prototype.createSettingsBody_ =
   body.appendChild(this.tabBar_.getElement());
   body.appendChild(this.createTabContents1_());
 
+  this.createTabContents2_();
+  this.createCalendarEditForm_();
+
+
   return body;
 }
 
@@ -471,31 +489,6 @@ rflect.cal.ui.SettingsPane.prototype.createTabContents1_ =
  * @param {Element} aSettingsBody Settings body.
  * @return {Element} "Calendars" tab contents.
  */
-<div class="event-edit-pane-cont" id="calendars-my">My calendars:
-          <div class="calendars-cont">
-
-          <table class="calendars-table">
-            <tbody>
-              <tr class="calendar-row">
-                <td class="listitem-cont name-cell">
-                  <a class="settings-link">Red calendar</a>
-                </td>
-                <td class="color-cell">
-                  <div class="calitem-color-cont calendar-color event-rect-red"></div>
-                </td>
-              </tr><tr class="calendar-row">
-              <td class="listitem-cont name-cell">
-                  <a class="settings-link">Blue calendar</a>
-                </td>
-                <td class="color-cell">
-                  <div class="calitem-color-cont calendar-color event-rect-blue"></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-
-        </div>
 rflect.cal.ui.SettingsPane.prototype.createTabContents2_ =
     function(aDom) {
   var buttonsCont = aDom.createDom('div', ['settings-pane-buttons',
@@ -505,14 +498,14 @@ rflect.cal.ui.SettingsPane.prototype.createTabContents2_ =
   goog.dom.classes.add(this.buttonNewCalendar_.getElement(),
       rflect.cal.ui.SettingsPane.BUTTON_CLASS_NAME);
 
-  var myCalendarsTable = this.createTable;
+  var myCalendarsTable = this.createCalendarsTable_(aDom, true);
   var myCalendarsSubCont = aDom.createDom('div',
       goog.getCssName('calendars-cont'), 'My calendars', myCalendarsTable);
   var myCalendarsCont = aDom.createDom('div',
       goog.getCssName('event-edit-pane-cont'),
       myCalendarsSubCont);
       
-  var otherCalendarsTable = this.createTable;
+  var otherCalendarsTable = this.createCalendarsTable_(aDom, false);
   var otherCalendarsSubCont = aDom.createDom('div',
       goog.getCssName('calendars-cont'), 'My calendars', otherCalendarsTable);
   var otherCalendarsCont = aDom.createDom('div',
@@ -525,23 +518,98 @@ rflect.cal.ui.SettingsPane.prototype.createTabContents2_ =
 
 
 /**
- *
+ * @param {goog.dom.DomHelper} aDom Dom helper.
+ * @param {boolean} aMy Whether "my" calendar list is built.
+ * @return {Element} Calendars list table
+ * @private
  */
-rflect.cal.ui.SettingsPane.prototype.createMyCalendarsTable = function() {
-  var calendars = [];
+rflect.cal.ui.SettingsPane.prototype.createCalendarsTable_ = 
+    function(aDom, aMy) {
+  var calendars = aMy ? this.calendarsListMy_ : this.calendarsListOther_;
+
+  calendars.length = 0;
+
   for (var calendarId in this.eventManager_.calendars) {
     calendars.push(this.eventManager_.calendars[calendarId]);
   }
 
-  return this.createTable(aDom, null, goog.getCssName('calendars-table'),
+  return this.createTable_(aDom, null, goog.getCssName('calendars-table'),
       calendars.length, 2, goog.getCssName('calendar-row'),
-      function(aTd, aRowIndex, aColIndex) {
-        switch (aColIndex) {
-          case 0:
-          case 1:
-          default: return aTd;
-        }
-      });
+      goog.bind(rflect.cal.ui.SettingsPane.createCalendarsTd_, aDom, aMy,
+      calendars));
+}
+
+
+/**
+ * @param {goog.dom.DomHelper} aDom Dom helper.
+ * @param {boolean} aMy Whether "my" calendar list is built.
+ * @param {Array.<rflect.cal.events.Calendar>} aCalendars Corresponding
+ * calendars list.
+ * @param {Element} aTd Td to decorate.
+ * @param {number} aRowIndex Td row index.
+ * @param {number} aColIndex Td col index.
+ * @return {Element} Decorated calendars table td.
+ * @private
+ */
+rflect.cal.ui.SettingsPane.createCalendarsTd_ =
+    function(aDom, aMy, aCalendars, aTd, aRowIndex, aColIndex) {
+  var calendar = aCalendars[aRowIndex];
+
+  switch (aColIndex) {
+    case 0: {
+      aTd.className = goog.getCssName('listitem-cont') + ' ' +
+          goog.getCssName('name-cell');
+      var link = aDom.createDom('a', {
+        className: goog.getCssName('settings-link'),
+        id: (aMy ? 'calendar-my-' : 'calendar-other-') + aRowIndex
+      }, calendar.name);
+      aTd.appendChild(link);
+    };break;
+    case 1: {
+      aTd.className = goog.getCssName('color-cell');
+      var colorItem = aDom.createDom('div', [
+        goog.getCssName('calitem-color-cont'),
+        goog.getCssName('calendar-color'),
+        calendar.colorCode.eventClass
+      ]);
+      aTd.appendChild(colorItem);
+    };break;
+    default: break;
+  }
+
+  return aTd;
+}
+
+
+/**
+ * @param {goog.dom.DomHelper} aDom Dom helper.
+ * @return {Element} Calendar edit form
+ * @private
+ */
+rflect.cal.ui.SettingsPane.prototype.createCalendarEditForm_ = function(aDom) {
+  var buttonsCont = aDom.createDom('div', ['settings-pane-buttons',
+        'settings-pane-buttons-inner', 'goog-inline-block']);
+
+  buttonsCont.appendChild(this.buttonNewCalendar_.getElement());
+  goog.dom.classes.add(this.buttonNewCalendar_.getElement(),
+      rflect.cal.ui.SettingsPane.BUTTON_CLASS_NAME);
+
+  var myCalendarsTable = this.createCalendarsTable_(aDom, true);
+  var myCalendarsSubCont = aDom.createDom('div',
+      goog.getCssName('calendars-cont'), 'My calendars', myCalendarsTable);
+  var myCalendarsCont = aDom.createDom('div',
+      goog.getCssName('event-edit-pane-cont'),
+      myCalendarsSubCont);
+
+  var otherCalendarsTable = this.createCalendarsTable_(aDom, false);
+  var otherCalendarsSubCont = aDom.createDom('div',
+      goog.getCssName('calendars-cont'), 'My calendars', otherCalendarsTable);
+  var otherCalendarsCont = aDom.createDom('div',
+      goog.getCssName('event-edit-pane-cont'),
+      otherCalendarsSubCont);
+
+  return aDom.createDom('div', ['tabs-content', 'settings-tab-content'],
+      buttonsCont, myCalendarsCont, otherCalendarsCont);
 }
 
 
@@ -946,8 +1014,9 @@ rflect.cal.ui.SettingsPane.prototype.disposeInternal = function() {
  * @param {function(Element, number, number):Element} aTdMakerFn Function that
  * takes td and decorates it.
  * @return {Element} Table.
+ * @private
  */
-rflect.cal.ui.SettingsPane.prototype.createTable = function(aDom, aTableId,
+rflect.cal.ui.SettingsPane.prototype.createTable_ = function(aDom, aTableId,
     aTableClassName, aRowsN, aColsN, aRowClassName, aTdMakerFn) {
 
   var tbody = aDom.createDom('tbody');
