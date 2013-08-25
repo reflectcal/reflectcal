@@ -229,7 +229,7 @@ rflect.cal.ViewManager.prototype.onMainBodyAction_ = function(aEvent){
       if (goog.events.dispatchEvent(this.mainBody_,
           rflect.cal.EventType.MENU_COMMAND_MONTH))
         this.onMenuCommandMonth_();break;
-    case rflect.cal.predefined.BUTTON_OPTIONS_ID:
+    case rflect.cal.predefined.BUTTON_SETTINGS_ID:
       if (goog.events.dispatchEvent(this.mainBody_,
           rflect.cal.EventType.MENU_COMMAND_OPTIONS))
         this.onMenuCommandOptions_();break;

@@ -22,6 +22,8 @@ goog.require('rflect.cal.ui.TopPane');
 goog.require('rflect.cal.ui.CalSelector');
 goog.require('rflect.cal.ui.CalSelector.EventType');
 goog.require('rflect.cal.ui.TaskSelector');
+goog.require('rflect.cal.ui.SettingsPane');
+goog.require('rflect.cal.ui.SettingsPane.EventTypes');
 
 
 
@@ -203,6 +205,14 @@ rflect.cal.ui.MainBody.prototype.firstBuildLeftPane = true;
  * @private
  */
 rflect.cal.ui.MainBody.prototype.eventPane_;
+
+
+/**
+ * Settings pane.
+ * @type {rflect.cal.ui.SettingsPane}
+ * @private
+ */
+rflect.cal.ui.MainBody.prototype.settingsPane_;
 
 
 /**
@@ -459,6 +469,10 @@ rflect.cal.ui.MainBody.prototype.onTopPaneAction_ = function(aEvent) {
     this.eventManager_.startEventCreationSession();
 
     this.showEventPane(true, true);
+  } else if (id == rflect.cal.predefined.BUTTON_SETTINGS_ID) {
+
+    this.showSettingsPane(true);
+
   }
 }
 
@@ -519,6 +533,31 @@ rflect.cal.ui.MainBody.prototype.showEventPane = function(aShow,
 
 
 /**
+ * Shows settings pane when possible and lazily instantiates it at the first
+ * time.
+ * @param {boolean} aShow Whether to show settings pane.
+ */
+rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
+  if (!this.settingsPane_) {
+    this.settingsPane_ = new rflect.cal.ui.SettingsPane(this.viewManager_,
+        this.timeManager_, this.eventManager_,
+        this.getDomHelper().getElement('main-container'), this.transport_);
+    this.addChild(this.settingsPane_);
+
+    this.getHandler().listen(this.settingsPane_,
+        rflect.cal.ui.SettingsPane.EventTypes.CANCEL, this.onSettingsPaneCancel_,
+        false, this).listen(this.settingsPane_,
+        rflect.cal.ui.SettingsPane.EventTypes.SAVE, this.onSettingsPaneSave_,
+        false, this)
+  }
+
+  this.settingsPane_.setVisible(aShow);
+  //NOTE(alexk): do we need smarter logic here than just hide calendar?
+  this.showCalendar_(!aShow);
+}
+
+
+/**
  * @param {boolean} aShow Whether to show calendar element.
  * @private
  */
@@ -560,6 +599,28 @@ rflect.cal.ui.MainBody.prototype.onEventPaneDelete_ = function(aEvent) {
 
   this.showEventPane(false);
 }
+
+
+/**
+ * Settings pane cancel listener.
+ */
+rflect.cal.ui.MainBody.prototype.onSettingsPaneCancel_ = function() {
+  this.showSettingsPane(false);
+}
+
+
+/**
+ * Settings pane save listener.
+ * @param {Event} aEvent Event object.
+ */
+rflect.cal.ui.MainBody.prototype.onSettingsPaneSave_ = function(aEvent) {
+  aEvent.preventDefault();
+
+  this.updateMainPane_();
+
+  this.showSettingsPane(false);
+}
+
 
 /**
  * Updates just main pane.

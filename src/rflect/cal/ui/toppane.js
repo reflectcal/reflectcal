@@ -151,7 +151,7 @@ rflect.cal.ui.TopPane.prototype.buildInternal = function(aSb) {
     rflect.cal.i18n.Symbols.MONTH,
     '</div></div>',
     // Options button.
-    '<div id="' + rflect.cal.predefined.BUTTON_OPTIONS_ID + '" class="goog-flat-button cal-menu-rightmost-button cal-menu-button ',
+    '<div id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '" class="goog-flat-button cal-menu-rightmost-button cal-menu-button ',
     'cal-menu-button-options">',
     '<div class="button-sign button-sign-options goog-inline-block"></div>',
     '</div></div>',
@@ -200,7 +200,7 @@ rflect.cal.ui.TopPane.prototype.enterDocument = function() {
   this.buttonMonth_.decorate(this.dom_.getElement(
       rflect.cal.predefined.BUTTON_MONTH_ID));
   this.buttonOptions_.decorate(this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_OPTIONS_ID));
+      rflect.cal.predefined.BUTTON_SETTINGS_ID));
 
   rflect.cal.ui.TopPane.superClass_.enterDocument.call(this);
 

@@ -498,7 +498,7 @@ rflect.cal.predefined.BUTTON_MONTH_ID = 'nb6';
  * @type {string}
  * @const
  */
-rflect.cal.predefined.BUTTON_OPTIONS_ID = 'nb8';
+rflect.cal.predefined.BUTTON_SETTINGS_ID = 'nb8';
 
 
 /**

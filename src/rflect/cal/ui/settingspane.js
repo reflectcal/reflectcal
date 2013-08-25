@@ -24,6 +24,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('goog.ui.Tab');
 goog.require('goog.ui.TabBar');
+goog.require('rflect.cal.i18n.PREDEFINED_COLOR_CODES');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.ui.Checkbox');
@@ -90,7 +91,8 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
   this.calendarsListOther_ = [];
 
   // Building hierarchy of elements.
-  this.addChild(this.tabBar_ = goog.ui.TabBar(goog.ui.TabBar.Location.START));
+  this.addChild(this.tabBar_ = new
+      goog.ui.TabBar(goog.ui.TabBar.Location.START));
 
   this.tab1_ = new goog.ui.Tab('Main');
   this.tab2_ = new goog.ui.Tab('Calendars');
@@ -99,6 +101,13 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
   this.tabBar_.addChild(this.tab1_);
   this.tabBar_.addChild(this.tab2_);
   this.tabBar_.addChild(this.tab3_);
+
+  /**
+   * Views elements, pages.
+   * @type {Array.<Element>}
+   * @private
+   */
+  this.viewsElements_ = [];
 
   this.addChild(this.buttonCancel1_ = new goog.ui.Button(
       rflect.ui.Dialog.DefaultButtonCaptions.CANCEL,
@@ -119,7 +128,7 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
   this.addChild(this.buttonDeleteCalendar_ = new goog.ui.Button(
       'Delete calendar',
       goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.checkboxDebug_ = rflect.ui.Checkbox());
+  this.addChild(this.checkboxDebug_ = new rflect.ui.Checkbox());
 };
 goog.inherits(rflect.cal.ui.SettingsPane, goog.ui.Component);
 
@@ -149,6 +158,20 @@ rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME =
  */
 rflect.cal.ui.SettingsPane.BUTTON_CLASS_NAME =
     goog.getCssName('event-edit-pane-button');
+
+
+/**
+ * @type {number}
+ * @const
+ */
+rflect.cal.ui.SettingsPane.PALETTE_ROWS_NUMBER = 3;
+
+
+/**
+ * @type {number}
+ * @const
+ */
+rflect.cal.ui.SettingsPane.PALETTE_COLS_NUMBER = 6;
 
 
 /**
@@ -198,27 +221,11 @@ rflect.cal.ui.SettingsPane.prototype.parentEl_;
 
 
 /**
- * Start time ac.
- * @type {rflect.cal.ui.ac.TimeAutoComplete}
+ * Current page element.
+ * @type {Element}
  * @private
  */
-rflect.cal.ui.SettingsPane.prototype.startTimeAC_;
-
-
-/**
- * End time ac.
- * @type {rflect.cal.ui.ac.TimeAutoComplete}
- * @private
- */
-rflect.cal.ui.SettingsPane.prototype.endTimeAC_;
-
-
-/**
- * Calendars select.
- * @type {rflect.cal.ui.CalendarsSelect}
- * @private
- */
-rflect.cal.ui.SettingsPane.prototype.selectCalendars_;
+rflect.cal.ui.SettingsPane.prototype.currentViewElement_;
 
 
 /**
@@ -255,14 +262,14 @@ rflect.cal.ui.SettingsPane.prototype.createDom = function() {
       goog.getCssName('emphasis-button'));
   goog.dom.classes.add(this.buttonSave2_.getElement(),
       goog.getCssName('emphasis-button'));
-  goog.dom.classes.add(this.buttonDelete_.getElement(),
+  goog.dom.classes.add(this.buttonDeleteCalendar_.getElement(),
       goog.getCssName('event-edit-pane-button-delete'));
 
   var buttonsCont1 = dom.createDom('div',
       goog.getCssName('event-edit-pane-buttons'),
       this.buttonCancel1_.getElement(),
       this.buttonSave1_.getElement(),
-      this.buttonDelete_.getElement());
+      this.buttonDeleteCalendar_.getElement());
   var buttonsCont2 = dom.createDom('div',
       goog.getCssName('event-edit-pane-buttons'),
       this.buttonCancel2_.getElement(),
@@ -326,8 +333,8 @@ rflect.cal.ui.SettingsPane.prototype.createDom = function() {
     className: labelClassName
   }, 'All-day event');
   var allDaySubCont = dom.createDom('span', null, labelAllDay,
-      this.checkboxAllDay_.getElement());
-  this.checkboxAllDay_.setLabel(allDaySubCont);
+      this.checkboxDebug_.getElement());
+  this.checkboxDebug_.setLabel(allDaySubCont);
   var allDayCont = dom.createDom('div', {
     id: 'all-day-label',
     className: goog.getCssName('description-cont') + ' ' +
@@ -368,7 +375,7 @@ rflect.cal.ui.SettingsPane.prototype.createDom = function() {
   var settingsHeader = this.createSettingsHeader_(dom);
   var settingsPaneButtonsUpper = this.createSettingsPaneButtonsUpper_(dom);
   var settingsBody = this.createSettingsBody_(dom);
-  var settingsPaneButtonsLower = this.createSettingsPaneButtonsLower(dom);
+  var settingsPaneButtonsLower = this.createSettingsPaneButtonsLower_(dom);
 
   var root = dom.createDom('div', {
     className: goog.getCssName('settings-pane'),
@@ -448,12 +455,16 @@ rflect.cal.ui.SettingsPane.prototype.createSettingsBody_ =
 
   var body = aDom.createDom('div', goog.getCssName('settings-body'));
 
+  var defaultTabContent = this.createTabContents1_(aDom);
+
   body.appendChild(this.tabBar_.getElement());
-  body.appendChild(this.createTabContents1_());
+  body.appendChild(defaultTabContent);
 
-  this.createTabContents2_();
-  this.createCalendarEditForm_();
+  this.viewsElements_.push(defaultTabContent);
+  this.viewsElements_.push(this.createTabContents2_(aDom));
+  this.viewsElements_.push(this.createTabContents3_(aDom));
 
+  this.viewsElements_.push(this.createCalendarEditForm_(aDom));
 
   return body;
 }
@@ -466,16 +477,16 @@ rflect.cal.ui.SettingsPane.prototype.createSettingsBody_ =
 rflect.cal.ui.SettingsPane.prototype.createTabContents1_ =
     function(aDom) {
   // Calendars select.
-  var labelLanguages = dom.createDom('label', {
+  var labelLanguages = aDom.createDom('label', {
     'for': 'settings-languages',
     className: rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME
   }, 'Languages');
-  var selectLanguages = dom.createDom('select', {
+  var selectLanguages = aDom.createDom('select', {
     id: 'settings-languages',
     className: goog.getCssName('event-cal-select') + ' ' +
       goog.getCssName('event-edit-pane-cal-select')
     });
-  var languagesCont = dom.createDom('div', {
+  var languagesCont = aDom.createDom('div', {
     className: goog.getCssName('event-edit-pane-cont')
     }, labelLanguages, selectLanguages);
 
@@ -485,8 +496,48 @@ rflect.cal.ui.SettingsPane.prototype.createTabContents1_ =
 
 
 /**
+ * Generates table.
+ * @param {goog.dom.DomHelper} aDom Dom helper.
+ * @param {string|null} aTableId Table id.
+ * @param {string} aTableClassName Table class.
+ * @param {number} aRowsN Rows number.
+ * @param {number} aColsN Cols number.
+ * @param {string|null} aRowClassName Class for each row.
+ * @param {function(goog.dom.DomHelper, Element, number, number):Element} aTdMakerFn Function that
+ * takes td and decorates it.
+ * @return {Element} Table.
+ * @private
+ */
+rflect.cal.ui.SettingsPane.prototype.createTable_ = function(aDom, aTableId,
+                                                             aTableClassName,
+                                                             aRowsN, aColsN,
+                                                             aRowClassName,
+                                                             aTdMakerFn) {
+
+  var tbody = aDom.createDom('tbody');
+  var table = aDom.createDom('table', {
+    id: aTableId,
+    className: aTableClassName
+  }, tbody);
+
+  for (var rowCounter = 0; rowCounter < aRowsN; rowCounter++) {
+    var tr = aDom.createDom('tr');
+    if (aRowClassName) tr.className = aRowClassName;
+    tbody.appendChild(tr);
+
+    for (var colCounter = 0; colCounter < aColsN; colCounter++) {
+      var td = aDom.createDom('td');
+      tr.appendChild(goog.bind(aTdMakerFn, this, aDom, td, rowCounter,
+          colCounter)());
+    }
+  }
+
+  return table;
+}
+
+
+/**
  * @param {!goog.dom.DomHelper} aDom Dom helper.
- * @param {Element} aSettingsBody Settings body.
  * @return {Element} "Calendars" tab contents.
  */
 rflect.cal.ui.SettingsPane.prototype.createTabContents2_ =
@@ -530,21 +581,21 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarsTable_ =
   calendars.length = 0;
 
   for (var calendarId in this.eventManager_.calendars) {
-    calendars.push(this.eventManager_.calendars[calendarId]);
+    calendars.push(this.eventManager_.calendars[+calendarId]);
   }
 
   return this.createTable_(aDom, null, goog.getCssName('calendars-table'),
       calendars.length, 2, goog.getCssName('calendar-row'),
-      goog.bind(rflect.cal.ui.SettingsPane.createCalendarsTd_, aDom, aMy,
+      goog.partial(rflect.cal.ui.SettingsPane.createCalendarsTd_, aMy,
       calendars));
 }
 
 
 /**
- * @param {goog.dom.DomHelper} aDom Dom helper.
  * @param {boolean} aMy Whether "my" calendar list is built.
  * @param {Array.<rflect.cal.events.Calendar>} aCalendars Corresponding
  * calendars list.
+ * @param {goog.dom.DomHelper} aDom Dom helper.
  * @param {Element} aTd Td to decorate.
  * @param {number} aRowIndex Td row index.
  * @param {number} aColIndex Td col index.
@@ -552,7 +603,7 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarsTable_ =
  * @private
  */
 rflect.cal.ui.SettingsPane.createCalendarsTd_ =
-    function(aDom, aMy, aCalendars, aTd, aRowIndex, aColIndex) {
+    function(aMy, aCalendars, aDom, aTd, aRowIndex, aColIndex) {
   var calendar = aCalendars[aRowIndex];
 
   switch (aColIndex) {
@@ -590,26 +641,98 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarEditForm_ = function(aDom) {
   var buttonsCont = aDom.createDom('div', ['settings-pane-buttons',
         'settings-pane-buttons-inner', 'goog-inline-block']);
 
-  buttonsCont.appendChild(this.buttonNewCalendar_.getElement());
-  goog.dom.classes.add(this.buttonNewCalendar_.getElement(),
-      rflect.cal.ui.SettingsPane.BUTTON_CLASS_NAME);
+  goog.dom.classes.add(this.buttonDeleteCalendar_.getElement(),
+      rflect.cal.ui.SettingsPane.BUTTON_CLASS_NAME,
+      goog.getCssName('event-edit-pane-button-delete'));
+  var backLink = aDom.createDom('a', [goog.getCssName('goog-inline-block'),
+      goog.getCssName('settings-link')], 'Calendars list');
 
-  var myCalendarsTable = this.createCalendarsTable_(aDom, true);
-  var myCalendarsSubCont = aDom.createDom('div',
-      goog.getCssName('calendars-cont'), 'My calendars', myCalendarsTable);
-  var myCalendarsCont = aDom.createDom('div',
-      goog.getCssName('event-edit-pane-cont'),
-      myCalendarsSubCont);
+  buttonsCont.appendChild(backLink);
+  buttonsCont.appendChild(this.buttonDeleteCalendar_.getElement());
 
-  var otherCalendarsTable = this.createCalendarsTable_(aDom, false);
-  var otherCalendarsSubCont = aDom.createDom('div',
-      goog.getCssName('calendars-cont'), 'My calendars', otherCalendarsTable);
-  var otherCalendarsCont = aDom.createDom('div',
-      goog.getCssName('event-edit-pane-cont'),
-      otherCalendarsSubCont);
+  var labelName = aDom.createDom('label', {
+    'for': 'ep-event-name-input',
+    className: rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME
+  }, 'Name');
+  this.inputName_ = aDom.createDom('input', {
+    'type': 'text',
+    id: 'sp-calendar-name-input',
+    className: 'ep-event-name-input',
+    autofocus: 'autofocus',
+    placeholder: rflect.cal.i18n.Symbols.NO_NAME_EVENT
+  });
+  var nameCont = aDom.createDom('div',
+      [goog.getCssName('event-name-input-cont'),
+        goog.getCssName('event-edit-pane-cont')],
+      labelName, this.inputName_);
+
+  var colorPaletteTable = this.createColorsTable_(aDom);
 
   return aDom.createDom('div', ['tabs-content', 'settings-tab-content'],
-      buttonsCont, myCalendarsCont, otherCalendarsCont);
+      buttonsCont, nameCont, colorPaletteTable);
+}
+
+
+/**
+ * @param {goog.dom.DomHelper} aDom Dom helper.
+ * @return {Element} Calendars list table
+ * @private
+ */
+rflect.cal.ui.SettingsPane.prototype.createColorsTable_ =
+    function(aDom) {
+  return this.createTable_(aDom, 'calendar-colors',
+      goog.getCssName('calendar-colors-table') + ' ' +
+          goog.getCssName('goog-inline-block'),
+      rflect.cal.ui.SettingsPane.PALETTE_ROWS_NUMBER,
+      rflect.cal.ui.SettingsPane.PALETTE_COLS_NUMBER,
+      null, rflect.cal.ui.SettingsPane.createColorsTd_);
+ }
+
+
+/**
+ * @param {goog.dom.DomHelper} aDom Dom helper.
+ * @param {Element} aTd Td to decorate.
+ * @param {number} aRowIndex Td row index.
+ * @param {number} aColIndex Td col index.
+ * @return {Element} Decorated calendars table td.
+ * @private
+ */
+rflect.cal.ui.SettingsPane.createColorsTd_ = function(aDom, aTd, aRowIndex,
+                                                      aColIndex) {
+  var colorCodeIndex = aRowIndex *
+      rflect.cal.ui.SettingsPane.PALETTE_COLS_NUMBER + aColIndex;
+
+  var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[colorCodeIndex];
+
+  var colorLink = aDom.createDom('a', [goog.getCssName('calitem-color-cont'),
+    goog.getCssName('calendar-color'), colorCode.eventClass]);
+  aTd.appendChild(colorLink);
+
+  return aTd;
+}
+
+
+/**
+ * @param {goog.dom.DomHelper} aDom Dom helper.
+ * @return {Element} "Advanced" tab contents.
+ * @private
+ */
+rflect.cal.ui.SettingsPane.prototype.createTabContents3_ = function(aDom) {
+  var labelDebug = aDom.createDom('label', {
+    'for': 'settings-debug-mode',
+    className: rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME
+  }, 'Debug mode');
+  var debugSubCont = aDom.createDom('span', null, labelDebug,
+      this.checkboxDebug_.getElement());
+  this.checkboxDebug_.setLabel(debugSubCont);
+  var allDayCont = aDom.createDom('div', {
+    id: 'all-day-label',
+    className: goog.getCssName('description-cont') + ' ' +
+        goog.getCssName('event-edit-pane-cont')
+  }, debugSubCont);
+
+  return aDom.createDom('div', ['tabs-content', 'settings-tab-content'],
+      allDayCont);
 }
 
 
@@ -628,32 +751,14 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
       goog.ui.Component.EventType.ACTION, this.onSave_, false, this)
       .listen(this.buttonSave2_, goog.ui.Component.EventType.ACTION,
       this.onSave_, false, this)
-      .listen(this.buttonDelete_,
+      .listen(this.buttonDeleteCalendar_,
       goog.ui.Component.EventType.ACTION, this.onDelete_, false, this)
-      .listen(this.checkboxAllDay_,
-      goog.ui.Component.EventType.CHANGE, this.onCheck_, false, this)
 
-      .listen(this.inputStartDate_,
-      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
-      .listen(this.inputStartTime_,
-      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
-      .listen(this.inputEndDate_,
-      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
-      .listen(this.inputEndTime_,
-      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
-
-      .listen(this.inputStartTime_, goog.events.EventType.MOUSEDOWN,
-          this.onTimeInputMouseDown_, false, this)
-      .listen(this.inputEndTime_, goog.events.EventType.MOUSEDOWN,
-          this.onTimeInputMouseDown_, false, this)
+      .listen(this.tabBar_,
+          goog.ui.Component.EventType.SELECT, this.onTabSelect_, false, this)
 
       .listen(document,
       goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this);
-
-  this.inputDatePicker_.addInput(this.inputStartDate_);
-  this.inputDatePicker_.addInput(this.inputEndDate_);
-
-
 };
 
 
@@ -663,8 +768,7 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
  * @private
  */
 rflect.cal.ui.SettingsPane.prototype.onKeyDown_ = function(aEvent) {
-  if (this.visible_ && !this.startTimeAC_.getRenderer().isVisible() &&
-      !this.endTimeAC_.getRenderer().isVisible()) {
+  if (this.visible_) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 
@@ -683,51 +787,19 @@ rflect.cal.ui.SettingsPane.prototype.onKeyDown_ = function(aEvent) {
 
 
 /**
- * Input focus listener.
+ * Tab select listener.
  * @param {goog.events.Event} aEvent Event object.
- * @private
  */
-rflect.cal.ui.SettingsPane.prototype.onInputFocus_ = function(aEvent) {
-  goog.dom.classes.remove(/**@type {Element}*/(aEvent.target),
-      goog.getCssName('input-invalid'));
+rflect.cal.ui.SettingsPane.prototype.onTabSelect_ = function(aEvent) {
+  var selectedTabIndex = aEvent.target.getSelectedTabIndex();
 
-  var target = /**@type{Element}*/(aEvent.target);
-  if (target == this.inputStartTime_) {
-    this.updateAC_(this.startTimeAC_);
-  } else if (target == this.inputEndTime_) {
-    this.updateAC_(this.endTimeAC_);
-  }  else {
-    this.startTimeAC_.dismiss();
-    this.endTimeAC_.dismiss();
-  }
-}
+  var tabContent =
+      this.getDomHelper().getNextElementSibling(this.tabBar_.getElement());
 
+  this.getDomHelper().removeNode(tabContent);
 
-/**
- * Time input mousedown listener.
- * @param {goog.events.Event} aEvent Event object.
- * @private
- */
-rflect.cal.ui.SettingsPane.prototype.onTimeInputMouseDown_ = function(aEvent) {
-  var target = /**@type{Element}*/(aEvent.target);
-  if (target == this.inputStartTime_) {
-    this.updateAC_(this.startTimeAC_);
-  } else if (target == this.inputEndTime_) {
-    this.updateAC_(this.endTimeAC_);
-  }
-}
-
-
-/**
- * Updates ac for given input.
- * @param {rflect.cal.ui.ac.TimeAutoComplete} aAC Autocomplete.
- */
-rflect.cal.ui.SettingsPane.prototype.updateAC_ = function(aAC) {
-  if (goog.userAgent.IE) {
-    if (goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0)
-      setTimeout(goog.bind(function(){aAC.update(true)}, this), 0);
-  } else
-    aAC.update(true);
+  this.getDomHelper().insertSiblingAfter(this.tabBar_.getElement(),
+      this.viewsElements_[selectedTabIndex]);
 }
 
 
@@ -776,62 +848,23 @@ rflect.cal.ui.SettingsPane.prototype.onDelete_ = function(aEvent) {
 
 
 /**
- * Checkbox action listener.
- * @param {goog.events.Event} aEvent Event object.
- */
-rflect.cal.ui.SettingsPane.prototype.onCheck_ = function(aEvent) {
-  var eh = this.eventManager_.eventHolder;
-  var checked;
-  if (aEvent.target == this.checkboxAllDay_) {
-    checked = this.checkboxAllDay_.isChecked();
-    this.showTimeInputs_(!checked);
-    eh.setAllDay(checked);
-
-    this.displayDates_();
-  }
-}
-
-
-/**
- * @param {boolean} aShow Whether to show time inputs.
- * @private
- */
-rflect.cal.ui.SettingsPane.prototype.showTimeInputs_ = function(aShow) {
-  goog.style.showElement(this.inputStartTime_, aShow);
-  goog.style.showElement(this.inputEndTime_, aShow);
-}
-
-
-/**
  * Sets the visibility of the event pane and moves focus to the
  * event name input. Lazily renders the component if needed.
  * @param {boolean} visible Whether the pane should be visible.
- * @param {boolean=} opt_creatingNewEvent Whether we're creating new event.
  */
-rflect.cal.ui.SettingsPane.prototype.setVisible = function(visible,
-    opt_creatingNewEvent) {
+rflect.cal.ui.SettingsPane.prototype.setVisible = function(visible) {
   if (visible == this.visible_) {
     return;
   }
-
-  this.newEventMode_ = opt_creatingNewEvent || false;
 
   // If the pane hasn't been rendered yet, render it now.
   if (!this.isInDocument()) {
     this.render(this.parentEl_);
   }
 
-  this.displayValues();
+  //this.displayValues();
 
   this.showElement_(visible);
-
-  /** @preserveTry */
-  try {
-    this.inputName_.focus();
-    this.inputName_.select();
-  } catch(e) {
-    // IE8- shows error that it couldn't set focus but nevertheless, sets it.
-  }
 
   this.visible_ = visible;
 };
@@ -853,7 +886,7 @@ rflect.cal.ui.SettingsPane.prototype.showElement_ = function(visible) {
 rflect.cal.ui.SettingsPane.prototype.displayValues = function() {
   var eh = this.eventManager_.eventHolder;
 
-  this.buttonDelete_.setVisible(!this.newEventMode_);
+  this.buttonDeleteCalendar_.setVisible(!this.newEventMode_);
 
   this.displayDates_();
 
@@ -861,13 +894,10 @@ rflect.cal.ui.SettingsPane.prototype.displayValues = function() {
 
   this.textAreaDesc_.innerHTML = eh.getDescription();
 
-  this.checkboxAllDay_.setChecked(eh.getAllDay());
+  this.checkboxDebug_.setChecked(eh.getAllDay());
 
   this.selectCalendars_.update();
   this.selectCalendars_.setCalendarId(eh.getCalendarId());
-
-  this.showTimeInputs_(!eh.getAllDay());
-
 };
 
 
@@ -994,47 +1024,8 @@ rflect.cal.ui.SettingsPane.prototype.scanValues = function() {
  * @protected
  */
 rflect.cal.ui.SettingsPane.prototype.disposeInternal = function() {
-  this.inputDatePicker_.dispose();
-  this.startTimeAC_.dispose();
-  this.endTimeAC_.dispose();
-  this.selectCalendars_.dispose();
 
   rflect.cal.ui.SettingsPane.superClass_.disposeInternal.call(this);
 };
 
 
-/**
- * Generates table.
- * @param {goog.dom.DomHelper} aDom Dom helper.
- * @param {string} aTableId Table id.
- * @param {string} aTableClassName Table class.
- * @param {number} aRowsN Rows number.
- * @param {number} aColsN Cols number.
- * @param {string} aRowClassName Class for each row.
- * @param {function(Element, number, number):Element} aTdMakerFn Function that
- * takes td and decorates it.
- * @return {Element} Table.
- * @private
- */
-rflect.cal.ui.SettingsPane.prototype.createTable_ = function(aDom, aTableId,
-    aTableClassName, aRowsN, aColsN, aRowClassName, aTdMakerFn) {
-
-  var tbody = aDom.createDom('tbody');
-  var table = aDom.createDom('table', {
-    id: aTableId,
-    className: aTableClassName
-  }, tbody);
-
-  for (var rowCounter = 0; rowCounter < aRowsN; rowCounter++) {
-    var tr = aDom.createDom('tr');
-    if (aRowClassName) tr.className = aRowClassName;
-    tbody.appendChild(tr);
-
-    for (var colCounter = 0; colCounter < aColN; colCounter++) {
-      var td = aDom.createDom('td');
-      tr.appendChild(goog.bind(aTdMakerFn, this, td, rowCounter, colCounter)());
-    }
-  }
-
-  return table;
-}
