@@ -161,17 +161,24 @@ rflect.cal.ui.SettingsPane.BUTTON_CLASS_NAME =
 
 
 /**
- * @type {number}
+ * @type {string}
  * @const
  */
-rflect.cal.ui.SettingsPane.PALETTE_ROWS_NUMBER = 3;
+rflect.cal.ui.SettingsPane.HOLLOW_LINK_HREF = 'javascript:void 0';
 
 
 /**
  * @type {number}
  * @const
  */
-rflect.cal.ui.SettingsPane.PALETTE_COLS_NUMBER = 6;
+rflect.cal.ui.SettingsPane.PALETTE_ROWS_NUMBER = 1;
+
+
+/**
+ * @type {number}
+ * @const
+ */
+rflect.cal.ui.SettingsPane.PALETTE_COLS_NUMBER = 3;
 
 
 /**
@@ -265,121 +272,14 @@ rflect.cal.ui.SettingsPane.prototype.createDom = function() {
   goog.dom.classes.add(this.buttonDeleteCalendar_.getElement(),
       goog.getCssName('event-edit-pane-button-delete'));
 
-  var buttonsCont1 = dom.createDom('div',
-      goog.getCssName('event-edit-pane-buttons'),
-      this.buttonCancel1_.getElement(),
-      this.buttonSave1_.getElement(),
-      this.buttonDeleteCalendar_.getElement());
-  var buttonsCont2 = dom.createDom('div',
-      goog.getCssName('event-edit-pane-buttons'),
-      this.buttonCancel2_.getElement(),
-      this.buttonSave2_.getElement());
-
-  var labelName = dom.createDom('label', {
-    'for': 'ep-event-name-input',
-    className: labelClassName
-  }, 'Name');
-  this.inputName_ = dom.createDom('input', {
-    'type': 'text',
-    id: 'ep-event-name-input',
-    className: 'ep-event-name-input',
-    autofocus: 'autofocus',
-    placeholder: rflect.cal.i18n.Symbols.NO_NAME_EVENT
-  });
-  var nameCont = dom.createDom('div',
-    [goog.getCssName('event-name-input-cont'),
-      goog.getCssName('event-edit-pane-cont')],
-    labelName, this.inputName_);
-
-  var labelStartDate = dom.createDom('label', {
-    'for': 'event-start-date',
-    className: labelClassName
-  }, 'Date');
-  this.inputStartDate_ = dom.createDom('input', {
-    'type': 'text',
-    id: 'event-start-date',
-    className: goog.getCssName('event-date-input')
-  });
-  this.inputStartTime_ = dom.createDom('input', {
-    'type': 'text',
-    id: 'event-start-time',
-    className: goog.getCssName('event-time-input')
-  });
-
-  this.inputEndDate_ = dom.createDom('input', {
-    'type': 'text',
-    id: 'event-end-date',
-    className: goog.getCssName('event-date-input')
-  });
-  this.inputEndTime_ = dom.createDom('input', {
-    'type': 'text',
-    id: 'event-end-time',
-    className: goog.getCssName('event-time-input')
-  });
-
-  var startInputCont = dom.createDom('div',
-      [goog.getCssName('start-input-cont'),
-        goog.getCssName('event-edit-pane-cont-inner')],
-      labelStartDate, this.inputStartDate_, this.inputStartTime_,
-      ' - ', this.inputEndDate_, this.inputEndTime_);
-
-  var dateCont = dom.createDom('div',
-    [goog.getCssName('date-input-cont'),
-      goog.getCssName('event-edit-pane-cont')],
-    startInputCont);
-
-  var labelAllDay = dom.createDom('label', {
-    'for': 'event-all-day',
-    className: labelClassName
-  }, 'All-day event');
-  var allDaySubCont = dom.createDom('span', null, labelAllDay,
-      this.checkboxDebug_.getElement());
-  this.checkboxDebug_.setLabel(allDaySubCont);
-  var allDayCont = dom.createDom('div', {
-    id: 'all-day-label',
-    className: goog.getCssName('description-cont') + ' ' +
-      goog.getCssName('event-edit-pane-cont')
-    }, allDaySubCont);
-
-  // Calendars select.
-  var labelCalendars = dom.createDom('label', {
-    'for': 'event-calendars',
-    className: labelClassName
-  }, 'Calendar');
-  var selectCalendarsEl = dom.createDom('select', {
-      id: 'event-calendars',
-      className: goog.getCssName('event-cal-select') + ' ' +
-          goog.getCssName('event-edit-pane-cal-select')
-    });
-  this.selectCalendars_ = new rflect.cal.ui.CalendarsSelect(selectCalendarsEl,
-      this.eventManager_);
-  var calendarsCont = dom.createDom('div', {
-    id: 'all-day-label',
-    className: goog.getCssName('event-edit-pane-cont')
-    }, labelCalendars, selectCalendarsEl);
-
-  var labelDesc = dom.createDom('label', {
-    'for': 'event-description',
-    className: labelClassName + ' ' +
-      goog.getCssName('event-description-label')
-  }, 'Description');
-  this.textAreaDesc_ = dom.createDom('textarea', {
-    id: 'event-description',
-      className: goog.getCssName('event-description')
-  });
-  var descCont = dom.createDom('div', [
-    goog.getCssName('description-cont'),
-      goog.getCssName('event-edit-pane-cont')],
-    labelDesc, this.textAreaDesc_);
-
   var settingsHeader = this.createSettingsHeader_(dom);
   var settingsPaneButtonsUpper = this.createSettingsPaneButtonsUpper_(dom);
   var settingsBody = this.createSettingsBody_(dom);
   var settingsPaneButtonsLower = this.createSettingsPaneButtonsLower_(dom);
 
   var root = dom.createDom('div', {
-    className: goog.getCssName('settings-pane'),
-    id: 'settings-pane'
+      className: goog.getCssName('settings-pane'),
+      id: 'settings-pane'
     }, settingsHeader, settingsPaneButtonsUpper, settingsBody,
     settingsPaneButtonsLower);
 
@@ -407,13 +307,6 @@ rflect.cal.ui.SettingsPane.prototype.createSettingsHeader_ = function(aDom) {
 rflect.cal.ui.SettingsPane.prototype.createSettingsPaneButtonsUpper_ =
     function(aDom) {
 
-  this.addChild(this.buttonCancel1_ = new goog.ui.Button(
-      rflect.ui.Dialog.DefaultButtonCaptions.CANCEL,
-      goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.buttonSave1_ = new goog.ui.Button(
-      rflect.ui.Dialog.DefaultButtonCaptions.SAVE,
-      goog.ui.FlatButtonRenderer.getInstance()));
-
   return aDom.createDom('div',
       [goog.getCssName('settings-pane-buttons'),
       goog.getCssName('settings-pane-buttons-upper'),
@@ -429,13 +322,6 @@ rflect.cal.ui.SettingsPane.prototype.createSettingsPaneButtonsUpper_ =
  */
 rflect.cal.ui.SettingsPane.prototype.createSettingsPaneButtonsLower_ =
     function(aDom) {
-
-  this.addChild(this.buttonCancel2_ = new goog.ui.Button(
-      rflect.ui.Dialog.DefaultButtonCaptions.CANCEL,
-      goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.buttonSave2_ = new goog.ui.Button(
-      rflect.ui.Dialog.DefaultButtonCaptions.SAVE,
-      goog.ui.FlatButtonRenderer.getInstance()));
 
   return aDom.createDom('div',
       [goog.getCssName('settings-pane-buttons'),
@@ -457,7 +343,14 @@ rflect.cal.ui.SettingsPane.prototype.createSettingsBody_ =
 
   var defaultTabContent = this.createTabContents1_(aDom);
 
-  body.appendChild(this.tabBar_.getElement());
+  var tabBarEl = this.tabBar_.getElement();
+  this.tab1_.render(tabBarEl);
+  this.tab2_.render(tabBarEl);
+  this.tab3_.render(tabBarEl);
+
+  this.tabBar_.setSelectedTabIndex(0);
+
+  body.appendChild(tabBarEl);
   body.appendChild(defaultTabContent);
 
   this.viewsElements_.push(defaultTabContent);
@@ -551,17 +444,17 @@ rflect.cal.ui.SettingsPane.prototype.createTabContents2_ =
 
   var myCalendarsTable = this.createCalendarsTable_(aDom, true);
   var myCalendarsSubCont = aDom.createDom('div',
-      goog.getCssName('calendars-cont'), 'My calendars', myCalendarsTable);
+      goog.getCssName('calendars-cont'),  myCalendarsTable);
   var myCalendarsCont = aDom.createDom('div',
       goog.getCssName('event-edit-pane-cont'),
-      myCalendarsSubCont);
+      'My calendars', myCalendarsSubCont);
       
   var otherCalendarsTable = this.createCalendarsTable_(aDom, false);
   var otherCalendarsSubCont = aDom.createDom('div',
-      goog.getCssName('calendars-cont'), 'My calendars', otherCalendarsTable);
+      goog.getCssName('calendars-cont'), otherCalendarsTable);
   var otherCalendarsCont = aDom.createDom('div',
       goog.getCssName('event-edit-pane-cont'),
-      otherCalendarsSubCont);
+      'Other calendars', otherCalendarsSubCont);
 
   return aDom.createDom('div', ['tabs-content', 'settings-tab-content'],
       buttonsCont, myCalendarsCont, otherCalendarsCont);
@@ -581,7 +474,10 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarsTable_ =
   calendars.length = 0;
 
   for (var calendarId in this.eventManager_.calendars) {
-    calendars.push(this.eventManager_.calendars[+calendarId]);
+    var calendar = this.eventManager_.calendars[+calendarId];
+
+    if (calendar.own && aMy || !calendar.own && !aMy)
+      calendars.push(calendar);
   }
 
   return this.createTable_(aDom, null, goog.getCssName('calendars-table'),
@@ -612,7 +508,8 @@ rflect.cal.ui.SettingsPane.createCalendarsTd_ =
           goog.getCssName('name-cell');
       var link = aDom.createDom('a', {
         className: goog.getCssName('settings-link'),
-        id: (aMy ? 'calendar-my-' : 'calendar-other-') + aRowIndex
+        id: (aMy ? 'calendar-my-' : 'calendar-other-') + aRowIndex,
+        href: rflect.cal.ui.SettingsPane.HOLLOW_LINK_HREF
       }, calendar.name);
       aTd.appendChild(link);
     };break;
@@ -644,8 +541,11 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarEditForm_ = function(aDom) {
   goog.dom.classes.add(this.buttonDeleteCalendar_.getElement(),
       rflect.cal.ui.SettingsPane.BUTTON_CLASS_NAME,
       goog.getCssName('event-edit-pane-button-delete'));
-  var backLink = aDom.createDom('a', [goog.getCssName('goog-inline-block'),
-      goog.getCssName('settings-link')], 'Calendars list');
+  var backLink = aDom.createDom('a', {
+    className: goog.getCssName('goog-inline-block') +
+        ' ' + goog.getCssName('settings-link'),
+    href: rflect.cal.ui.SettingsPane.HOLLOW_LINK_HREF
+  }, 'Calendars list');
 
   buttonsCont.appendChild(backLink);
   buttonsCont.appendChild(this.buttonDeleteCalendar_.getElement());
@@ -704,8 +604,11 @@ rflect.cal.ui.SettingsPane.createColorsTd_ = function(aDom, aTd, aRowIndex,
 
   var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[colorCodeIndex];
 
-  var colorLink = aDom.createDom('a', [goog.getCssName('calitem-color-cont'),
-    goog.getCssName('calendar-color'), colorCode.eventClass]);
+  var colorLink = aDom.createDom('a', {
+    className: goog.getCssName('calitem-color-cont') +
+        goog.getCssName('calendar-color') + colorCode.eventClass,
+    href: rflect.cal.ui.SettingsPane.HOLLOW_LINK_HREF
+  });
   aTd.appendChild(colorLink);
 
   return aTd;
@@ -791,15 +694,18 @@ rflect.cal.ui.SettingsPane.prototype.onKeyDown_ = function(aEvent) {
  * @param {goog.events.Event} aEvent Event object.
  */
 rflect.cal.ui.SettingsPane.prototype.onTabSelect_ = function(aEvent) {
-  var selectedTabIndex = aEvent.target.getSelectedTabIndex();
+  var selectedTabIndex = aEvent.currentTarget.getSelectedTabIndex();
+
+  if (goog.DEBUG)
+    _log('selectedTabIndex', selectedTabIndex);
 
   var tabContent =
       this.getDomHelper().getNextElementSibling(this.tabBar_.getElement());
 
   this.getDomHelper().removeNode(tabContent);
 
-  this.getDomHelper().insertSiblingAfter(this.tabBar_.getElement(),
-      this.viewsElements_[selectedTabIndex]);
+  this.getDomHelper().insertSiblingAfter(this.viewsElements_[selectedTabIndex],
+      this.tabBar_.getElement());
 }
 
 
@@ -819,9 +725,8 @@ rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
  */
 rflect.cal.ui.SettingsPane.prototype.onSave_ = function() {
   if (this.scanValues()) {
-    this.eventManager_.eventHolder.endWithEdit();
-    this.transport_.saveEventAsync(
-        this.eventManager_.eventHolder.getCurrentEvent());
+    /*this.transport_.saveEventAsync(
+        this.eventManager_.eventHolder.getCurrentEvent());*/
     if (this.dispatchEvent(new goog.events.Event(
         rflect.cal.ui.SettingsPane.EventTypes.SAVE))) {
       this.setVisible(false);
@@ -884,60 +789,10 @@ rflect.cal.ui.SettingsPane.prototype.showElement_ = function(visible) {
  * Displays event properties in form.
  */
 rflect.cal.ui.SettingsPane.prototype.displayValues = function() {
-  var eh = this.eventManager_.eventHolder;
+  //this.buttonDeleteCalendar_.setVisible(!this.newEventMode_);
 
-  this.buttonDeleteCalendar_.setVisible(!this.newEventMode_);
-
-  this.displayDates_();
-
-  this.inputName_.value = eh.getSummary();
-
-  this.textAreaDesc_.innerHTML = eh.getDescription();
-
-  this.checkboxDebug_.setChecked(eh.getAllDay());
-
-  this.selectCalendars_.update();
-  this.selectCalendars_.setCalendarId(eh.getCalendarId());
+  //this.inputName_.value = settings.getSummary();
 };
-
-
-/**
- * Displays dates in form.
- * @private
- */
-rflect.cal.ui.SettingsPane.prototype.displayDates_ = function() {
-  var eh = this.eventManager_.eventHolder;
-
-  var startDate = eh.getStartDate();
-  var endDate = eh.getEndDate();
-  // We need human-adjusted end date for all-day events.
-  // Our interval end dates are exclusive, and it's more natural for all-day
-  // events to have inclusive end.
-  var uiEndDate = endDate.clone();
-
-  if (eh.getAllDay() && uiEndDate.getHours() == 0 &&
-      uiEndDate.getMinutes() == 0)
-    uiEndDate.add(new goog.date.Interval(goog.date.Interval.DAYS, -1));
-
-  var formatStringDate = rflect.cal.ui.SettingsPane.getDateFormatString();
-  var formatStringTime = goog.i18n.DateTimeSymbols.TIMEFORMATS[3];
-  var formatDate = new goog.i18n.DateTimeFormat(formatStringDate);
-  var formatTime = new goog.i18n.DateTimeFormat(formatStringTime);
-  var startDateFormatted = formatDate.format(startDate);
-  var startTimeFormatted = formatTime.format(startDate);
-  var endDateFormatted = formatDate.format(uiEndDate);
-  var endTimeFormatted = formatTime.format(uiEndDate);
-
-  this.inputStartDate_.value = startDateFormatted;
-  this.inputStartTime_.value = startTimeFormatted;
-  this.inputEndDate_.value = endDateFormatted;
-  this.inputEndTime_.value = endTimeFormatted;
-
-  rflect.cal.ui.SettingsPane.markInput(true, this.inputStartDate_);
-  rflect.cal.ui.SettingsPane.markInput(true, this.inputEndDate_);
-  rflect.cal.ui.SettingsPane.markInput(true, this.inputStartTime_);
-  rflect.cal.ui.SettingsPane.markInput(true, this.inputEndTime_);
-}
 
 
 /**
@@ -946,73 +801,9 @@ rflect.cal.ui.SettingsPane.prototype.displayDates_ = function() {
  */
 rflect.cal.ui.SettingsPane.prototype.scanValues = function() {
   var valid = false;
-
-  var eh = this.eventManager_.eventHolder;
-
-  eh.setSummary(this.inputName_.value);
-
-  eh.setDescription(this.textAreaDesc_.innerHTML);
-
-  eh.setCalendarId(this.selectCalendars_.getCalendarId());
-
-  var startDate = new goog.date.DateTime();
-  var startTime = new goog.date.DateTime();
-  var endDate = new goog.date.DateTime();
-  var endTime = new goog.date.DateTime();
-
-  var parserDate = new goog.i18n.DateTimeParse(
-      rflect.cal.ui.SettingsPane.getDateFormatString());
-  var parserTime = new goog.i18n.DateTimeParse(
-      goog.i18n.DateTimeSymbols.TIMEFORMATS[3]);
-
-  var validStartDate = parserDate.parse(this.inputStartDate_.value, startDate)
-      != 0;
-  var validEndDate = parserDate.parse(this.inputEndDate_.value, endDate) != 0;
-  var validStartTime = parserTime.parse(this.inputStartTime_.value, startTime)
-      != 0;
-  var validEndTime = parserTime.parse(this.inputEndTime_.value, endTime) != 0;
-
-  if (valid = (validStartDate && validEndDate && validStartTime &&
-      validEndTime)) {
-    startDate.setHours(startTime.getHours());
-    startDate.setMinutes(startTime.getMinutes());
-    endDate.setHours(endTime.getHours());
-    endDate.setMinutes(endTime.getMinutes());
-  }
-  
-  if (valid && startDate.getTime() > endDate.getTime())
-    valid = validEndDate = validEndTime = false;
-
-  rflect.cal.ui.SettingsPane.markInput(validStartDate, this.inputStartDate_);
-  rflect.cal.ui.SettingsPane.markInput(validEndDate, this.inputEndDate_);
-  rflect.cal.ui.SettingsPane.markInput(validStartTime, this.inputStartTime_);
-  rflect.cal.ui.SettingsPane.markInput(validEndTime, this.inputEndTime_);
-
-  if (valid) {
-    var startDateShim = rflect.date.createDateShim(startDate.getYear(),
-        startDate.getMonth(), startDate.getDate(), startDate.getHours(),
-        startDate.getMinutes(), 0, true);
-    var endDateShim = rflect.date.createDateShim(endDate.getYear(),
-        endDate.getMonth(), endDate.getDate(), endDate.getHours(),
-        endDate.getMinutes(), 0);
-
-    if (eh.getAllDay()) {
-      startDateShim.setHours(0);
-      startDateShim.setMinutes(0);
-      if (!(endDateShim.getHours() == 0 &&
-          endDateShim.getMinutes() == 0)) {
-        endDateShim.setHours(0);
-        endDateShim.setMinutes(0);
-      }
-
-      // ui date is lesser than real by 1 day for all-day events
-      endDateShim = endDateShim.getTomorrow();
-
-    }
-
-    eh.setStartDate(startDateShim);
-    eh.setEndDate(endDateShim);
-  }
+  /*if (valid) {
+    settings.setEndDate(endDateShim);
+  }*/
 
   return valid;
 };

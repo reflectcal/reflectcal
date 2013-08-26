@@ -549,6 +549,10 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
         false, this).listen(this.settingsPane_,
         rflect.cal.ui.SettingsPane.EventTypes.SAVE, this.onSettingsPaneSave_,
         false, this)
+
+    if (goog.DEBUG) {
+      _inspect('settingsPane_', this.settingsPane_);
+    }
   }
 
   this.settingsPane_.setVisible(aShow);

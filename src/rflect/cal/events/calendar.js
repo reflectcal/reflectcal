@@ -20,16 +20,18 @@ goog.require('goog.array');
  * @param {rflect.cal.events.ColorCode} aColorCode Color code object.
  * @param {boolean=} opt_visible Whether calendar is visible.
  * @param {boolean=} opt_readOnly Whether calendar is read-only.
+ * @param {boolean=} opt_own Whether calendar is owned by user himself.
  * @constructor
  */
 rflect.cal.events.Calendar = function(aUid, aName, aColorCode, opt_visible,
-    opt_readOnly) {
+    opt_readOnly, opt_own) {
   this.id = aUid;
   this.name = aName;
   this.colorCode = aColorCode;
   this.eventIds = [];
   this.visible = opt_visible || false;
   this.readOnly = opt_readOnly || false;
+  this.own = opt_own || true;
 };
 
 
@@ -71,6 +73,14 @@ rflect.cal.events.Calendar.FIELD_COLOR_CODE_INDEX = 3;
  * @const
  */
 rflect.cal.events.Calendar.FIELD_READ_ONLY = 4;
+
+
+/**
+ * Index of "own" property in JSON array.
+ * @type {number}
+ * @const
+ */
+rflect.cal.events.Calendar.FIELD_OWN = 4;
 
 
 /**
@@ -116,11 +126,18 @@ rflect.cal.events.Calendar.prototype.readOnly;
 
 
 /**
+ * Whether this calendar is owned by user himself.
+ * @type {boolean}
+ */
+rflect.cal.events.Calendar.prototype.own;
+
+
+/**
  * @return {rflect.cal.events.Calendar} Clone of this calendar.
  */
 rflect.cal.events.Calendar.prototype.clone = function() {
   var clone = new rflect.cal.events.Calendar(this.id, this.name,
-      this.colorCode, this.readOnly);
+      this.colorCode, this.readOnly, this.own);
 
   return clone;
 };
@@ -154,6 +171,7 @@ rflect.cal.events.Calendar.prototype.toJSON = function() {
   cal[rflect.cal.events.Calendar.FIELD_VISIBLE] = this.visible;
   cal[rflect.cal.events.Calendar.FIELD_COLOR_CODE_INDEX] = this.colorCode.id;
   cal[rflect.cal.events.Calendar.FIELD_READ_ONLY] = this.readOnly;
+  cal[rflect.cal.events.Calendar.FIELD_OWN] = this.own;
 
   return cal;
 };
