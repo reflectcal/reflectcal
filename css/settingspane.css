@@ -106,8 +106,14 @@
 .settings-link {
   cursor: pointer;
   padding: 8px 6px;
+  color: #333;
+  text-decoration: none;
 }
 
 .settings-link:hover {
   text-decoration: underline;
+}
+
+.calendar-color:focus {
+  outline: 1px dotted black;
 }

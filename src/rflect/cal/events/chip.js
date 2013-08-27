@@ -3,7 +3,8 @@
  */
 
 /**
- * @fileoverview Event collection and manager class.
+ * @fileoverview Chip is rectangle that represents event or part of it,
+ * visually.
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 

@@ -53,7 +53,7 @@
 
 /* State: Hover */
 .goog-tab-hover {
-  background: #eee;
+  background: #eee !important;
 }
 
 /* State: Disabled */

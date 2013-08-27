@@ -3,7 +3,7 @@
  */
 
 /**
- * @fileoverview Calendar that groups events.
+ * @fileoverview Class that stores info about calendar.
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
