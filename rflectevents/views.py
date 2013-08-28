@@ -40,14 +40,14 @@ def saveEvent(aRequest):
   Event(id = id, start = event[1], end = event[2], allDay = event[3],
         name = event[4], description = event[5], calendar = cal).save()
 
-  return HttpResponse(json.dumps(response), mimetype="application/json")
+  return HttpResponse(util.protectJSON(json.dumps(response)), mimetype="application/json")
 
 def deleteEvent(aRequest, aEventId):
   response = 0
 
   Event.objects.get(id = aEventId).delete()
 
-  return HttpResponse(json.dumps(response), mimetype="application/json")
+  return HttpResponse(util.protectJSON(json.dumps(response)), mimetype="application/json")
 
 def mainRender(aRequest):
   #Note(alexk): it's important to use request context, because we're referring
@@ -56,10 +56,12 @@ def mainRender(aRequest):
   calendars = Calendar.objects.all()
 
   calendarsJSON = util.serializeCalendars(calendars)
+  settingsJSON = util.serializeSettings()
 
   context = RequestContext(aRequest, {
               'SITE_URL': settings.SITE_URL,
-              'CALENDARS_LIST': calendarsJSON
+              'CALENDARS_LIST': calendarsJSON,
+              'SETTINGS': settingsJSON
             })
 
   template = get_template('rflectcalendar.html')

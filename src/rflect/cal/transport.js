@@ -76,6 +76,14 @@ goog.inherits(rflect.cal.Transport, goog.events.EventTarget);
 
 
 /**
+ * String prepended to JSON to avoid xss.
+ * @type {string}
+ * @const
+ */
+rflect.cal.Transport.JSON_XSS_PREPENDER = '}>';
+
+
+/**
  * @enum {string}
  */
 rflect.cal.Transport.EventTypes = {
@@ -152,9 +160,17 @@ rflect.cal.Transport.parse = function(aOperation) {
 
 /**
  * @param {goog.net.XhrIo} x Response to extract JSON from.
+ * @param {boolean=} opt_dontUseXssiPrefix Whether not to use anti-xssi prefix.
+ * @see {http://jeremiahgrossman.blogspot.com/2006/01/advanced-web-attack-techniques-using.html}
  */
-rflect.cal.Transport.getResponseJSON = function(x) {
-  return rflect.cal.Transport.parse(x.getResponseText());
+rflect.cal.Transport.getResponseJSON = function(x, opt_dontUseXssiPrefix) {
+  var responseText = x.getResponseText();
+  var xssiPrefix = rflect.cal.Transport.JSON_XSS_PREPENDER;
+
+  if (!opt_dontUseXssiPrefix && responseText.indexOf(xssiPrefix) == 0) {
+    responseText = responseText.substring(xssiPrefix.length);
+  }
+  return rflect.cal.Transport.parse(responseText);
 }
 
 

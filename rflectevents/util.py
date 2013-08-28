@@ -3,6 +3,11 @@ from base64 import urlsafe_b64encode
 import os
 import json
 
+JSON_XSS_PREPENDER = '}>'
+
+def protectJSON(json):
+  return JSON_XSS_PREPENDER + json
+
 def generateEventId():
   id = __generateUniqueIdImpl()
 
@@ -39,7 +44,7 @@ def serializeEvents(events):
 
     response.append(eventList)
 
-  responseJSON = json.dumps(response)
+  responseJSON = protectJSON(json.dumps(response))
   return responseJSON
 
 
@@ -60,3 +65,11 @@ def serializeCalendars(calendars):
 
   responseJSON = json.dumps(response)
   return responseJSON
+
+def serializeSettings():
+
+  response = []
+
+  responseJSON = json.dumps(response)
+  return responseJSON
+
