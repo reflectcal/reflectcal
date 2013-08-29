@@ -84,6 +84,16 @@ rflect.cal.Transport.JSON_XSS_PREPENDER = '}>';
 
 
 /**
+ * Headers for POST request.
+ * @type {Object.<string, string>}
+ * @const
+ */
+rflect.cal.Transport.DEFAULT_POST_HEADERS = {
+  'Content-Type': 'application/json;charset=utf-8'
+};
+
+
+/**
  * @enum {string}
  */
 rflect.cal.Transport.EventTypes = {
@@ -102,6 +112,8 @@ rflect.cal.Transport.OperationUrls = {
   SAVE_EVENT: '../events/save/',
   LOAD_EVENT: '../events/load/',
   DELETE_EVENT: '../events/delete/'
+  SAVE_CALENDAR: '../calendars/save/',
+  DELETE_CALENDAR: '../calendars/delete/'
 }
 
 
@@ -181,14 +193,11 @@ rflect.cal.Transport.getResponseJSON = function(x, opt_dontUseXssiPrefix) {
 rflect.cal.Transport.prototype.saveEventAsync = function(aEvent) {
   this.eventManager_.setEventIsInProgress(aEvent.id, true);
 
-  var headers = {
-    'Content-Type': 'application/json;charset=utf-8'
-  };
-
   goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.SAVE_EVENT,
       goog.bind(this.onSaveEvent_, this, aEvent.id),
       'POST',
-      rflect.cal.Transport.serialize(aEvent), headers);
+      rflect.cal.Transport.serialize(aEvent),
+      rflect.cal.Transport.DEFAULT_POST_HEADERS);
 
 };
 
@@ -432,6 +441,91 @@ rflect.cal.Transport.prototype.loadCalendars = function() {
   else
     this.eventManager_.addCalendar(this.eventManager_.createCalendar(0));
 }
+
+
+/**
+ * Saves event.
+ * @param {rflect.cal.events.Calendar} Calendar.
+ */
+rflect.cal.Transport.prototype.saveCalendarAsync = function(aCalendar) {
+  this.eventManager_.setEventIsInProgress(aCalendar.id, true);
+
+  goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.SAVE_CALENDAR,
+      goog.bind(this.onSaveCalendar_, this, aCalendar.id),
+      'POST',
+      rflect.cal.Transport.serialize(aCalendar),
+      rflect.cal.Transport.DEFAULT_POST_HEADERS);
+
+};
+
+
+/**
+ * Save event callback.
+ * Only on save callback calendar-related ui appears: calendars list in left
+ * pane and calendars select in creation dialog.
+ *
+ * @param {number} aCalendarId Calendar id.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.Transport.prototype.onSaveCalendar_ = function(aCalendarId, aEvent) {
+  var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
+
+  var response = rflect.cal.Transport.getResponseJSON(x);
+
+  var event = this.eventManager_.getEventById(aCalendarId);
+
+  // 200 code response could either be 0 or new event id
+  if (response != 0) {
+    var longId = response;
+
+    event.longId = longId;
+    this.loadedEventIds_[longId] = true;
+  }
+
+  this.eventManager_.setEventIsInProgress(aCalendarId, false);
+
+  this.dispatchEvent(new rflect.cal.Transport.SaveEvent(aCalendarId, longId));
+
+};
+
+
+/**
+ * Deletes event.
+ * @param {rflect.cal.events.Calendar} Calendar.
+ */
+rflect.cal.Transport.prototype.deleteCalendarAsync = function(aCalendar) {
+  this.eventManager_.setEventIsInProgress(aCalendar.id, true);
+
+  goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.DELETE_CALENDAR +
+      aCalendar.longId + '/',
+      goog.bind(this.onDeleteCalendar_, this, aCalendar.id, aCalendar.longId),
+      'GET');
+
+};
+
+
+/**
+ * Delete event callback.
+ * @param {number} aCalendarId Calendar id.
+ * @param {string} aLongId Calendar long id.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.Transport.prototype.onDeleteCalendar_ = function(aCalendarId, aLongId,
+    aEvent) {
+  var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
+
+  var response = rflect.cal.Transport.getResponseJSON(x);
+  var operationCode = response;
+
+  if (operationCode == 0) {
+    delete this.loadedEventIds_[aLongId];
+
+    this.eventManager_.setEventIsInProgress(aCalendarId, false);
+  }
+
+  this.dispatchEvent(new rflect.cal.Transport.DeleteEvent(aCalendarId));
+
+};
 
 
 /**

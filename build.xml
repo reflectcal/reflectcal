@@ -18,7 +18,7 @@
     <target name="gjslinter" description="linter">
         <exec executable="python" dir="${basedir}">
             <arg
-                    value="c:\work\research\closure linter\closure_linter-2.3\closure_linter\gjslint.py"/>
+                    value="d:\work\research\closure linter\closure_linter-2.3\closure_linter\gjslint.py"/>
             <!--Optional, but recommended-->
             <arg value="--strict"/>
             <arg value="-r"/>
@@ -30,7 +30,7 @@
     <target name="fixjsstyle" description="fixer">
         <exec executable="python" dir="${basedir}">
             <arg
-                    value="c:\work\research\closure linter\closure_linter-2.3\closure_linter\fixjsstyle.py"/>
+                    value="d:\work\research\closure linter\closure_linter-2.3\closure_linter\fixjsstyle.py"/>
             <!--Optional, but recommended-->
             <arg value="--strict"/>
             <arg value="--r"/>
@@ -43,7 +43,7 @@
             depends="clearbuild">
         <exec executable="python" dir="${basedir}">
             <arg
-                    value="c:\Work\rflectevents\src\closure-library\closure\bin\build\closurebuilder.py"/>
+                    value="d:\work\rflectevents\src\closure-library\closure\bin\build\closurebuilder.py"/>
             <arg value="--root=${basedir}\src\closure-library"/>
             <arg value="--root=${basedir}\src\rflect"/>
             <arg value="--output_mode=compiled"/>
@@ -70,7 +70,7 @@
     depends="clearbuild">
         <exec executable="python" dir="${basedir}">
             <arg
-            value="c:\Work\rflectevents\src\closure-library\closure\bin\build\closurebuilder.py"/>
+            value="d:\work\rflectevents\src\closure-library\closure\bin\build\closurebuilder.py"/>
             <arg value="--root=${basedir}\src\closure-library"/>
             <arg value="--root=${basedir}\src\rflect"/>
             <arg value="--output_mode=compiled"/>
@@ -94,7 +94,7 @@
             depends="clearbuild">
         <exec executable="python" dir="${basedir}">
             <arg
-            value="c:\Work\rflectevents\src\closure-library\closure\bin\build\closurebuilder.py"/>
+            value="d:\work\rflectevents\src\closure-library\closure\bin\build\closurebuilder.py"/>
             <arg value="--root=${basedir}\src\closure-library"/>
             <arg value="--root=${basedir}\src\rflect"/>
             <arg value="--output_mode=compiled"/>
@@ -123,13 +123,13 @@
 
     <!-- JS doc. -->
     <target name="jsdoc" description="JS Doc">
-        <java jar="c:\Work\Research\jsdoc_toolkit-2.4.0\jsdoc-toolkit\jsrun.jar"
+        <java jar="d:\work\Research\jsdoc_toolkit-2.4.0\jsdoc-toolkit\jsrun.jar"
               fork="true" dir="${basedir}">
             <arg
-                    value="c:\Work\Research\jsdoc_toolkit-2.4.0\jsdoc-toolkit\app\run.js"/>
+                    value="d:\work\Research\jsdoc_toolkit-2.4.0\jsdoc-toolkit\app\run.js"/>
             <arg value="-a"/>
             <arg
-                    value="-t=c:\Work\Research\jsdoc_toolkit-2.4.0\jsdoc-toolkit\templates\jsdoc"/>
+                    value="-t=d:\work\Research\jsdoc_toolkit-2.4.0\jsdoc-toolkit\templates\jsdoc"/>
             <arg value="${basedir}\src\rflect"/>
             <arg value="-d=${basedir}\doc"/>
         </java>
