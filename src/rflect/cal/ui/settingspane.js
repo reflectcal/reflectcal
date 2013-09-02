@@ -140,7 +140,9 @@ goog.inherits(rflect.cal.ui.SettingsPane, goog.ui.Component);
 rflect.cal.ui.SettingsPane.EventTypes = {
   CANCEL: 'cancel',
   SAVE: 'save',
-  DELETE: 'delete'
+  DELETE: 'delete',
+  SAVE_CALENDAR: 'savecalendar',
+  DELETE_CALENDAR: 'deletecalendar'
 };
 
 
@@ -215,7 +217,7 @@ rflect.cal.ui.SettingsPane.prototype.visible_ = false;
 
 
 /**
- * Whether event pane is in state when we're creating new event.
+ * Whether we're creating new calendar.
  * @type {boolean}
  * @private
  */
@@ -223,8 +225,15 @@ rflect.cal.ui.SettingsPane.prototype.newCalendarMode_ = false;
 
 
 /**
+ * Whether we're editing some calendar.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.ui.SettingsPane.prototype.calendarEditMode_ = false;
+
+
+/**
  * Calendar that is being edited at the moment.
- * TODO(alexk): in future this will be changed to CalendarHolder, similar to event's one.
  * @type {rflect.cal.events.Calendar}
  * @private
  */
@@ -764,6 +773,7 @@ rflect.cal.ui.SettingsPane.prototype.onNewCalendarAction_ =
   this.currentCalendar_ = this.eventManager_.createCalendar(
       randomColorCodeIndex);
 
+  this.newCalendarMode_ = true;
   this.switchContent_(rflect.cal.ui.SettingsPane.PageIndexes.CALENDAR_EDIT);
   this.displayCalendarValues_();
 }
@@ -828,10 +838,14 @@ rflect.cal.ui.SettingsPane.prototype.switchContent_ = function(aIndex) {
   if (this.viewIndex_ == rflect.cal.ui.SettingsPane.PageIndexes.CALENDAR_EDIT){
     this.buttonSave1_.setCaption('Save');
     this.buttonSave2_.setCaption('Save');
+
+    this.calendarEditMode_ =  this.newCalendarMode_ = false;
   }
   if (aIndex == rflect.cal.ui.SettingsPane.PageIndexes.CALENDAR_EDIT){
     this.buttonSave1_.setCaption('Save calendar');
     this.buttonSave2_.setCaption('Save calendar');
+
+    this.calendarEditMode_ = true;
   }
 
   this.getDomHelper().insertSiblingAfter(this.viewsElements_[aIndex],
@@ -856,11 +870,23 @@ rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
  */
 rflect.cal.ui.SettingsPane.prototype.onSave_ = function() {
   if (this.scanValues()) {
-    /*this.transport_.saveEventAsync(
-        this.eventManager_.eventHolder.getCurrentEvent());*/
-    if (this.dispatchEvent(new goog.events.Event(
-        rflect.cal.ui.SettingsPane.EventTypes.SAVE))) {
-      this.setVisible(false);
+    if (this.calendarEditMode_){
+
+      this.transport_.saveCalendarAsync(
+          this.currentCalendar_);
+      if (this.dispatchEvent(new goog.events.Event(
+          rflect.cal.ui.SettingsPane.EventTypes.SAVE_CALENDAR))) {
+        this.switchContent(rflect.cal.ui.SettingsPane.PageIndexes.CALENDARS);
+      }
+
+    } else {
+
+      this.transport_.saveSettingsAsync();
+      if (this.dispatchEvent(new goog.events.Event(
+          rflect.cal.ui.SettingsPane.EventTypes.SAVE))) {
+        this.setVisible(false);
+      }
+
     }
   }
 }
@@ -931,7 +957,7 @@ rflect.cal.ui.SettingsPane.prototype.displayValues = function() {
  * @return {boolean} Whether input is valid.
  */
 rflect.cal.ui.SettingsPane.prototype.scanValues = function() {
-  var valid = false;
+  var valid = true;
   /*if (valid) {
     settings.setEndDate(endDateShim);
   }*/
@@ -947,7 +973,30 @@ rflect.cal.ui.SettingsPane.prototype.displayCalendarValues_ = function() {
   //this.buttonDeleteCalendar_.setVisible(!this.newCalendarMode_);
 
   this.inputCalendarName_.value = this.currentCalendar_.name;
+
+  /** @preserveTry */
+  try {
+    this.inputCalendarName_.focus();
+    this.inputCalendarName_.select();
+  } catch(e) {
+    // IE8- shows error that it couldn't set focus but nevertheless, sets it.
+  }
+
   this.displayCalendarColor_(this.currentCalendar_.colorCode.id);
+};
+
+
+/**
+ * Scans calendar values from form.
+ * @return {boolean} Whether input is valid.
+ */
+rflect.cal.ui.SettingsPane.prototype.scanCalendarValues_ = function() {
+  var valid = true;
+  /*if (valid) {
+    settings.setEndDate(endDateShim);
+  }*/
+
+  return valid;
 };
 
 

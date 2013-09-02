@@ -127,6 +127,13 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
 
 
   /**
+   * Calendar ids that are in some process.
+   * @type {Object.<string, boolean>}
+   */
+  this.calendarsInProgress_ = {};
+
+
+  /**
    * Similar as <code>tracksChipsByDay_</code>, for all-day chips.
    * chips.
    * @type {Object.<number, Array.<Array.<number>>>}
@@ -157,7 +164,7 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
 
   /**
    * Map of calendar id -> calendar.
-   * @type {Object.<number, rflect.cal.events.Calendar>}
+   * @type {Object.<string, rflect.cal.events.Calendar>}
    */
   this.calendars = {};
 };
@@ -848,4 +855,26 @@ rflect.cal.events.EventManager.prototype.setEventIsInProgress =
 rflect.cal.events.EventManager.prototype.eventIsInProgress =
     function(aEventId) {
   return this.eventsInProgress_[aEventId];
+}
+
+
+/**
+ * @param {number} aCalendarId Calendar id of calendar to indicate whether it's
+ * in progress.
+ * @param {boolean} aInProgress Whether calendar is in progress.
+ */
+rflect.cal.events.EventManager.prototype.setCalendarIsInProgress =
+    function(aCalendarId, aInProgress) {
+  if (aInProgress) this.calendarsInProgress_[aCalendarId] = true;
+  else delete this.calendarsInProgress_[aCalendarId];
+}
+
+
+/**
+ * @param {number} aCalendarId Calendar id.
+ * @return {boolean} Whether calendar is in progress.
+ */
+rflect.cal.events.EventManager.prototype.calendarIsInProgress =
+    function(aCalendarId) {
+  return this.calendarsInProgress_[aCalendarId];
 }
