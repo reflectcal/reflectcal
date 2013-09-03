@@ -151,6 +151,7 @@ rflect.cal.Transport.LoadEvent = function(aInterval) {
 rflect.cal.Transport.DeleteEvent = function(aEventId) {
   this.type = rflect.cal.Transport.EventTypes.DELETE_EVENT;
   this.eventId = aEventId;
+}
 
 
 /**
@@ -507,9 +508,9 @@ rflect.cal.Transport.prototype.onSaveCalendar_ = function(aCalendar, aEvent) {
     this.eventManager_.calendars[calendar.id] = calendar;
   }
 
-  this.eventManager_.setCalendarIsInProgress(aCalendarId, false);
+  this.eventManager_.setCalendarIsInProgress(calendar.id, false);
 
-  this.dispatchEvent(new rflect.cal.Transport.SaveCalendar(aCalendarId));
+  this.dispatchEvent(new rflect.cal.Transport.SaveCalendar(calendar.id));
 
 };
 
