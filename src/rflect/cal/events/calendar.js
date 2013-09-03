@@ -15,7 +15,7 @@ goog.require('goog.array');
 
 /**
  * Class that stores info about calendar.
- * @param {number} aUid Client-side id for calendar.
+ * @param {string} aUid Id for calendar.
  * @param {string} aName Name of calendar.
  * @param {rflect.cal.events.ColorCode} aColorCode Color code object.
  * @param {boolean=} opt_visible Whether calendar is visible.
@@ -85,7 +85,7 @@ rflect.cal.events.Calendar.FIELD_OWN = 4;
 
 /**
  * Id of calendar.
- * @type {number}
+ * @type {string}
  */
 rflect.cal.events.Calendar.prototype.id;
 

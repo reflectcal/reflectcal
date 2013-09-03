@@ -864,7 +864,7 @@ rflect.cal.ui.MainPane.prototype.getEventByTarget_ =
   var chip = this.getChipElement_(aTarget);
   var className = chip.className;
 
-  var eventId = rflect.string.getNumericIndexWithPrefix(className,
+  var eventId = rflect.string.getNumericIndexWithoutPrefix(className,
       rflect.cal.predefined.chips.CHIP_EVENT_CLASS);
   var event = this.eventManager_.getEventById(eventId);
   return event;

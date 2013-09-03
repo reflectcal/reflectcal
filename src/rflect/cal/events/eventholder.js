@@ -157,7 +157,7 @@ rflect.cal.events.EventHolder.prototype.setAllDay =
 
 
 /**
- * @param {number} aCalendarId Calendar id.
+ * @param {string} aCalendarId Calendar id.
  */
 rflect.cal.events.EventHolder.prototype.setCalendarId =
     function(aCalendarId) {
@@ -214,7 +214,7 @@ rflect.cal.events.EventHolder.prototype.getAllDay = function() {
     
     
 /**
- * @return {number} Calendar id.
+ * @return {string} Calendar id.
  */
 rflect.cal.events.EventHolder.prototype.getCalendarId =
     function() {

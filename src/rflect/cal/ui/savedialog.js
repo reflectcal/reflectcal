@@ -132,7 +132,7 @@ rflect.cal.ui.SaveDialog.prototype.getEventName = function () {
 
 
 /**
- * @return {number} Selected calendar id.
+ * @return {string} Selected calendar id.
  */
 rflect.cal.ui.SaveDialog.prototype.getCalendarId = function () {
   return this.select_.getCalendarId();

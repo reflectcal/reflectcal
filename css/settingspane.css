@@ -117,3 +117,7 @@
 .calendar-color:focus {
   outline: 1px dotted black;
 }
+
+.cal-list-link {
+  font-weight: bold;
+}

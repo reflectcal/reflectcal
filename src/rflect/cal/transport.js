@@ -167,7 +167,7 @@ rflect.cal.Transport.SaveCalendar = function(aCalendarId) {
 
 /**
  * Event that is fired after delete of calendar.
- * @param {number} aCalendarId Calendar id.
+ * @param {string} aCalendarId Calendar id.
  * @constructor.
  */
 rflect.cal.Transport.DeleteCalendar = function(aCalendarId) {
@@ -532,7 +532,7 @@ rflect.cal.Transport.prototype.deleteCalendarAsync = function(aCalendar) {
 
 /**
  * Delete calendar callback.
- * @param {number} aCalendarId Calendar id.
+ * @param {string} aCalendarId Calendar id.
  * @param {goog.events.Event} aEvent Event object.
  */
 rflect.cal.Transport.prototype.onDeleteCalendar_ = function(aCalendarId,
@@ -547,6 +547,55 @@ rflect.cal.Transport.prototype.onDeleteCalendar_ = function(aCalendarId,
   }
 
   this.dispatchEvent(new rflect.cal.Transport.DeleteCalendar(aCalendarId));
+
+};
+
+
+/**
+ * Initializes settings from their list.
+ */
+rflect.cal.Transport.prototype.loadSetting = function() {
+
+  /*if (goog.global.SETTINGS && goog.global.SETTINGS.length)
+    goog.array.forEach(goog.global.SETTINGS, function(aCalArray){
+
+    }, this);
+
+  else
+    this.eventManager_.addSettings(this.eventManager_.createSettings(0));*/
+}
+
+
+/**
+ * Saves settings.
+ */
+rflect.cal.Transport.prototype.saveSettingsAsync = function() {
+
+  /*goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.SAVE_SETTINGS,
+      goog.bind(this.onSaveSettings_, this, aSettings),
+      'POST',
+      rflect.cal.Transport.serialize(aSettings),
+      rflect.cal.Transport.DEFAULT_POST_HEADERS);*/
+
+};
+
+
+/**
+ * Save settings callback.
+ *
+ * @param {Object} aSettings Settings.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.Transport.prototype.onSaveSettings_ = function(aSettings, aEvent) {
+  /*var x = *//**@type {goog.net.XhrIo}*//* (aEvent.target);
+
+  var response = rflect.cal.Transport.getResponseJSON(x);
+
+  if (response != 0) {
+  } else if (response == 0) {
+  }
+
+  this.dispatchEvent(new rflect.cal.Transport.SaveSettings(settings.id));*/
 
 };
 

@@ -25,7 +25,7 @@ goog.provide('rflect.cal.events.Event');
  * @param {boolean} aAllDay Whether event is all day.
  * @param {string=} opt_summary Name of event.
  * @param {string=} opt_description Longer description of event.
- * @param {number=} opt_calendarId Id of calendar this event belongs to.
+ * @param {string=} opt_calendarId Id of calendar this event belongs to.
  * @constructor
  */
 rflect.cal.events.Event = function(aUid, aLongId, aStartDate, aEndDate, aAllDay,
@@ -147,9 +147,9 @@ rflect.cal.events.Event.prototype.allDay;
 
 /**
  * Calendar id.
- * @type {number}
+ * @type {string}
  */
-rflect.cal.events.Event.prototype.calendarId = -1;
+rflect.cal.events.Event.prototype.calendarId = '';
 
 
 /**

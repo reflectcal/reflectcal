@@ -76,15 +76,15 @@ rflect.cal.ui.CalendarsSelect.prototype.updateFlag;
 
 
 /**
- * @return {number} Selected calendar id.
+ * @return {string} Selected calendar id.
  */
 rflect.cal.ui.CalendarsSelect.prototype.getCalendarId = function () {
-  return +this.select_.options[this.select_.selectedIndex].value;
+  return this.select_.options[this.select_.selectedIndex].value;
 }
 
 
 /**
- * @param {number} aCalendarId Calendar id.
+ * @param {string} aCalendarId Calendar id.
  */
 rflect.cal.ui.CalendarsSelect.prototype.setCalendarId = function (aCalendarId) {
   var index = goog.array.findIndex(this.select_.options, function(option){

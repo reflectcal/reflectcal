@@ -13,6 +13,7 @@ goog.provide('rflect.cal.ui.CalSelector.EventType');
 goog.require('goog.dom.classes');
 goog.require('goog.ui.Component.EventType');
 goog.require('rflect.cal.i18n.Symbols');
+goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.ui.ListSelector');
 goog.require('rflect.string');
 goog.require('rflect.ui.Checkbox');
@@ -85,7 +86,8 @@ rflect.cal.ui.CalSelector.prototype.enterDocument = function () {
     cb.decorate(node);
     cb.setLabel(node.parentNode);
 
-    var id = rflect.string.getNumericIndex(cb.getElement().id);
+    var id = rflect.string.getIdWithoutPrefix(cb.getElement().id,
+        rflect.cal.predefined.CALENDAR_COLOR_CHECKBOX_PREFIX);
     if (this.eventManager_.calendars[id].visible)
       cb.setChecked(true);
 
@@ -109,7 +111,8 @@ rflect.cal.ui.CalSelector.prototype.enterDocument = function () {
 rflect.cal.ui.CalSelector.prototype.onCheck_ = function(aEvent) {
 
   var cb = /**@type {rflect.ui.Checkbox}*/ (aEvent.target);
-  var id = rflect.string.getNumericIndex(cb.getElement().id);
+  var id = rflect.string.getIdWithoutPrefix(cb.getElement().id,
+      rflect.cal.predefined.CALENDAR_COLOR_CHECKBOX_PREFIX);
 
   this.dispatchEvent({
     type: rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,

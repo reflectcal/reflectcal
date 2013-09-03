@@ -81,7 +81,7 @@ rflect.string.get2DigitIndex = function(aId) {
  * @param {string} aPrefix Prefix string which used to identify numeric index.
  * @return {number} Numeric index.
  */
-rflect.string.getNumericIndexWithPrefix = function(aStr, aPrefix) {
+rflect.string.getNumericIndexWithoutPrefix = function(aStr, aPrefix) {
   var re = new RegExp(aPrefix + '\\d+');
   var matches = re.exec(aStr);
   if (matches) {
@@ -89,4 +89,16 @@ rflect.string.getNumericIndexWithPrefix = function(aStr, aPrefix) {
     return +matches[0].substring(aPrefix.length, len);
   }
   return NaN;
+}
+
+
+/**
+ * Gets substring from string of type "{prefix}str" where {prefix} is
+ * arbitrary string.
+ * @param {string} aStr String to extract id.
+ * @param {string} aPrefix Prefix string.
+ * @return {string} Id string.
+ */
+rflect.string.getIdWithoutPrefix = function(aStr, aPrefix) {
+  return aStr.substring(aPrefix.length);
 }

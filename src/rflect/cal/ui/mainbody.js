@@ -479,7 +479,7 @@ rflect.cal.ui.MainBody.prototype.onTopPaneAction_ = function(aEvent) {
 
 /**
  * Cal selector action handler.
- * @param {{type: string, visible: boolean, calendarId: number}} aEvent
+ * @param {{type: string, visible: boolean, calendarId: string}} aEvent
  * Event object.
  * @private
  */

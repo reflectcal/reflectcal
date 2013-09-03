@@ -494,12 +494,10 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarsTable_ =
 
   calendars.length = 0;
 
-  for (var calendarId in this.eventManager_.calendars) {
-    var calendar = this.eventManager_.calendars[+calendarId];
-
+  this.eventManager_.forEachCalendar(function(calendar){
     if (calendar.own && aMy || !calendar.own && !aMy)
       calendars.push(calendar);
-  }
+  });
 
   return this.createTable_(aDom, null, goog.getCssName('calendars-table'),
       calendars.length, 2, goog.getCssName('calendar-row'),
@@ -568,7 +566,7 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarEditForm_ = function(aDom) {
         ' ' + goog.getCssName('settings-link') + ' ' +
         goog.getCssName('cal-list-link'),
     href: rflect.cal.ui.SettingsPane.HOLLOW_LINK_HREF
-  }, '< Calendars list');
+  }, '< Back to calendars');
 
   buttonsCont.appendChild(backLink);
   buttonsCont.appendChild(this.buttonDeleteCalendar_.getElement());
@@ -869,19 +867,21 @@ rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
  * Save action listener.
  */
 rflect.cal.ui.SettingsPane.prototype.onSave_ = function() {
-  if (this.scanValues()) {
-    if (this.calendarEditMode_){
+  if (this.calendarEditMode_) {
+    if (this.scanCalendarValues_()) {
 
       this.transport_.saveCalendarAsync(
           this.currentCalendar_);
-      if (this.dispatchEvent(new goog.events.Event(
-          rflect.cal.ui.SettingsPane.EventTypes.SAVE_CALENDAR))) {
-        this.switchContent(rflect.cal.ui.SettingsPane.PageIndexes.CALENDARS);
-      }
+      //TODO(alexk): calendars list is updated here
+      this.switchContent_(rflect.cal.ui.SettingsPane.PageIndexes.CALENDARS);
 
-    } else {
+    }
+  } else {
+    if (this.scanSettingsValues_()) {
 
       this.transport_.saveSettingsAsync();
+      // Settings could change pretty anything - so to dispatch event here is
+      // useful.
       if (this.dispatchEvent(new goog.events.Event(
           rflect.cal.ui.SettingsPane.EventTypes.SAVE))) {
         this.setVisible(false);
@@ -924,7 +924,7 @@ rflect.cal.ui.SettingsPane.prototype.setVisible = function(visible) {
     this.render(this.parentEl_);
   }
 
-  //this.displayValues();
+  //this.displaySettingsValues_();
 
   this.showElement_(visible);
 
@@ -945,7 +945,7 @@ rflect.cal.ui.SettingsPane.prototype.showElement_ = function(visible) {
 /**
  * Displays settings in form.
  */
-rflect.cal.ui.SettingsPane.prototype.displayValues = function() {
+rflect.cal.ui.SettingsPane.prototype.displaySettingsValues_ = function() {
   //this.buttonDeleteCalendar_.setVisible(!this.newCalendarMode_);
 
   //this.inputCalendarName_.value = settings.getSummary();
@@ -956,7 +956,7 @@ rflect.cal.ui.SettingsPane.prototype.displayValues = function() {
  * Scans settings from form.
  * @return {boolean} Whether input is valid.
  */
-rflect.cal.ui.SettingsPane.prototype.scanValues = function() {
+rflect.cal.ui.SettingsPane.prototype.scanSettingsValues_ = function() {
   var valid = true;
   /*if (valid) {
     settings.setEndDate(endDateShim);
@@ -989,12 +989,15 @@ rflect.cal.ui.SettingsPane.prototype.displayCalendarValues_ = function() {
 /**
  * Scans calendar values from form.
  * @return {boolean} Whether input is valid.
+ *
+ * Color code is set in
+ * @see {rflect.cal.ui.SettingsPane#onCalendarsColorLinkClick_}
  */
 rflect.cal.ui.SettingsPane.prototype.scanCalendarValues_ = function() {
   var valid = true;
-  /*if (valid) {
-    settings.setEndDate(endDateShim);
-  }*/
+  if (valid) {
+    this.currentCalendar_.name = this.inputCalendarName_.value;
+  }
 
   return valid;
 };
@@ -1018,19 +1021,6 @@ rflect.cal.ui.SettingsPane.prototype.displayCalendarColor_ = function(aIndex) {
   this.inputCalendarName_.placeholder =
       rflect.cal.i18n.PREDEFINED_COLOR_CODES[aIndex].getFullName();
 }
-
-/**
- * Scans calendar values from form.
- * @return {boolean} Whether input is valid.
- */
-rflect.cal.ui.SettingsPane.prototype.scanCalendarValues_ = function() {
-  var valid = false;
-  /*if (valid) {
-    settings.setEndDate(endDateShim);
-  }*/
-
-  return valid;
-};
 
 
 /**

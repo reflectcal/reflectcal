@@ -195,10 +195,10 @@ rflect.cal.events.EventManager.createEventId = function() {
 
 
 /**
- * @returns {number} Calendar id.
+ * @returns {string} Calendar id.
  */
 rflect.cal.events.EventManager.createCalendarId = function() {
-  return rflect.cal.events.EventManager.calendarUid_++;
+  return /**@type {string}*/(rflect.cal.events.EventManager.calendarUid_++);
 };
 
 
@@ -237,7 +237,7 @@ rflect.cal.events.EventManager.createEventFromArray = function(aArray) {
  * @param {boolean} aAllDay Whether event is all day.
  * @param {string=} opt_summary Name of event.
  * @param {string=} opt_description Longer description of event.
- * @param {number=} opt_calendarId Calendar id.
+ * @param {string=} opt_calendarId Calendar id.
  * @return {rflect.cal.events.Event} Event representation.
  */
 rflect.cal.events.EventManager.createEvent = function(aLongId,
@@ -805,7 +805,7 @@ rflect.cal.events.EventManager.prototype.startEventCreationSession =
 
 
 /**
- * @param {number} aCalendarId Calendar id.
+ * @param {string} aCalendarId Calendar id.
  * @param {boolean} aVisible Whether calendar should be visible.
  */
 rflect.cal.events.EventManager.prototype.setVisibleCalendar = function(
@@ -817,20 +817,20 @@ rflect.cal.events.EventManager.prototype.setVisibleCalendar = function(
 
 /**
  * Iterates over all calendars.
- * @param {function(this:T,rflect.cal.events.Calendar,number,Object.<number,
+ * @param {function(this:T,rflect.cal.events.Calendar,string,Object.<string,
  * rflect.cal.events.Calendar>):?} aFunction The function to call
  *     for every calendar. This function takes 3 arguments (the calendar, the
  *     calendar id and the calendars object) and the return value is ignored.
- * @param {T} aObj This is used as the 'this' object within f.
+ * @param {T=} opt_thisObj This is used as the 'this' object within f.
  * @template T
  */
 rflect.cal.events.EventManager.prototype.forEachCalendar = function(aFunction,
-    aObj) {
+    opt_thisObj) {
   var calendars = this.calendars;
   for (var calendarId in calendars) {
-    if (!isNaN(+calendarId)) {
+    if (calendars[calendarId] instanceof rflect.cal.events.Calendar) {
       //This is indeed a calendar.
-      aFunction.call(aObj, calendars[+calendarId], +calendarId, calendars);
+      aFunction.call(opt_thisObj, calendars[calendarId], calendarId, calendars);
     }
   }
 }
@@ -859,7 +859,7 @@ rflect.cal.events.EventManager.prototype.eventIsInProgress =
 
 
 /**
- * @param {number} aCalendarId Calendar id of calendar to indicate whether it's
+ * @param {string} aCalendarId Calendar id of calendar to indicate whether it's
  * in progress.
  * @param {boolean} aInProgress Whether calendar is in progress.
  */
@@ -871,7 +871,7 @@ rflect.cal.events.EventManager.prototype.setCalendarIsInProgress =
 
 
 /**
- * @param {number} aCalendarId Calendar id.
+ * @param {string} aCalendarId Calendar id.
  * @return {boolean} Whether calendar is in progress.
  */
 rflect.cal.events.EventManager.prototype.calendarIsInProgress =
