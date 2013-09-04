@@ -25,7 +25,6 @@ def generateCalendarId():
   return id
 
 def __generateUniqueIdImpl():
-  #TODO(alexk): change this to 30
   return urlsafe_b64encode(os.urandom(30))
 
 
@@ -60,6 +59,8 @@ def serializeCalendars(calendars):
     calendarList.append(cal.visible)
     calendarList.append(cal.colorCodeIndex)
     calendarList.append(cal.readOnly)
+    #TODO(alexk): change this to actual 'own'
+    calendarList.append(True)
 
     response.append(calendarList)
 

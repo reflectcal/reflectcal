@@ -6,6 +6,8 @@ class Calendar(models.Model):
     visible = models.BooleanField()
     colorCodeIndex = models.IntegerField()
     readOnly = models.BooleanField()
+    #TODO(alexk): this will be User model
+    owner = models.CharField(max_length=40)
 
     def __unicode__(self):
       return u'id:%s, name:%s, on:%s' % (self.id, self.name,

@@ -10,6 +10,7 @@
 goog.provide('rflect.cal.events.Calendar');
 
 goog.require('goog.array');
+goog.require('rflect.cal.i18n.PREDEFINED_COLOR_CODES');
 
 
 
@@ -175,3 +176,30 @@ rflect.cal.events.Calendar.prototype.toJSON = function() {
 
   return cal;
 };
+
+
+/**
+ * Factory method that creates calendar from args.
+ * @param {Array} aCalArray Array of calendar properties.
+ * @return {rflect.cal.events.Calendar} Calendar.
+ */
+rflect.cal.events.Calendar.fromJSON = function(aCalArray) {
+
+  var id = aCalArray[rflect.cal.events.Calendar.FIELD_ID];
+  var name = aCalArray[rflect.cal.events.Calendar.FIELD_NAME];
+  var visible = aCalArray[rflect.cal.events.Calendar.FIELD_VISIBLE];
+  var colorCodeIndex = aCalArray[
+      rflect.cal.events.Calendar.FIELD_COLOR_CODE_INDEX];
+  var readOnly = aCalArray[rflect.cal.events.Calendar.FIELD_READ_ONLY];
+  var own = aCalArray[rflect.cal.events.Calendar.FIELD_OWN];
+
+  // Choose a random array index in [0, i] (inclusive with i).
+  var pickIndex = goog.isDef(colorCodeIndex) ? colorCodeIndex :
+      Math.floor(Math.random() * (this.colorCodes_.length));
+
+  var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[pickIndex];
+  var name = opt_name || colorCode.getFullName();
+
+  return new rflect.cal.events.Calendar(id, name, colorCode, visible, readOnly,
+      own);
+}

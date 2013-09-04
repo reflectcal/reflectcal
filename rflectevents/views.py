@@ -53,10 +53,9 @@ def mainRender(aRequest):
   #Note(alexk): it's important to use request context, because we're referring
   #to STATIC_URL in template.
 
-  calendars = Calendar.objects.all()
-
-  calendarsJSON = util.serializeCalendars(calendars)
   settingsJSON = util.serializeSettings()
+
+  calendarsJSON = loadCalendars()
 
   context = RequestContext(aRequest, {
               'SITE_URL': settings.SITE_URL,
@@ -68,4 +67,40 @@ def mainRender(aRequest):
   html = template.render(context)
   return HttpResponse(html)
 
+def loadCalendars():
+  #Create at least one default calendar.
+  if Calendar.objects.all().count() == 0:
+    Calendar(id = generateCalendarId(), name = '', visible = True,
+          colorCodeIndex = 0, readOnly = fallse, owner = 'alexk').save()
+
+  calendars = Calendar.objects.all()
+
+  calendarsJSON = util.serializeCalendars(calendars)
+  return calendarsJSON
+
+def saveCalendar(aRequest):
+  calendar = json.loads(aRequest.body)
+
+  # If editing already present calendar.
+  if calendar[0]:
+    id = calendar[0]
+    response = 0
+  # If creating new calendar.
+  else:
+    id = util.generateCalendarId()
+    response = id
+
+  Calendar(id = id, name = calendar[1], visible = calendar[2],
+      colorCodeIndex = calendar[3], readOnly = calendar[4],
+      owner = 'alexk').save()
+
+  return HttpResponse(util.protectJSON(json.dumps(response)),
+      mimetype="application/json")
+
+def deleteCalendar(aRequest, aCalendarId):
+  response = 0
+
+  Calendar.objects.get(id = aCalendarId).delete()
+
+  return HttpResponse(util.protectJSON(json.dumps(response)), mimetype="application/json")
 

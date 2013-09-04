@@ -12,6 +12,7 @@ goog.provide('rflect.cal.Transport.EventTypes');
 
 goog.require('goog.net.XhrIo');
 goog.require('goog.testing.net.XhrIo');
+goog.require('rflect.cal.events.Calendar');
 goog.require('rflect.cal.events.Event');
 goog.require('rflect.cal.events.EventManager');
 goog.require('rflect.date.Interval');
@@ -459,11 +460,13 @@ rflect.cal.Transport.prototype.loadCalendars = function() {
   if (goog.global.CALENDARS && goog.global.CALENDARS.length)
     goog.array.forEach(goog.global.CALENDARS, function(aCalArray){
       this.eventManager_.addCalendar(
-          this.eventManager_.createCalendarFromArray(aCalArray));
+          rflect.cal.events.Calendar.fromJSON(aCalArray));
     }, this);
 
   else
-    this.eventManager_.addCalendar(this.eventManager_.createCalendar(0));
+    //TODO(alexk): change this when default calendar will be created on server.
+    this.eventManager_.addCalendar(
+        new rflect.cal.events.Calendar(goog.getUid({}).toString(), '', 0));
 }
 
 
@@ -554,7 +557,7 @@ rflect.cal.Transport.prototype.onDeleteCalendar_ = function(aCalendarId,
 /**
  * Initializes settings from their list.
  */
-rflect.cal.Transport.prototype.loadSetting = function() {
+rflect.cal.Transport.prototype.loadSettings = function() {
 
   /*if (goog.global.SETTINGS && goog.global.SETTINGS.length)
     goog.array.forEach(goog.global.SETTINGS, function(aCalArray){
