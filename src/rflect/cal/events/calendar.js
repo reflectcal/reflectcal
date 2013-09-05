@@ -134,6 +134,15 @@ rflect.cal.events.Calendar.prototype.own;
 
 
 /**
+ * @return {string} Name to show on UI, if original name is empty, ui name will
+ * be derived from color code.
+ */
+rflect.cal.events.Calendar.prototype.getUIName = function() {
+  return this.name || this.colorCode.getFullName();
+};
+
+
+/**
  * @return {rflect.cal.events.Calendar} Clone of this calendar.
  */
 rflect.cal.events.Calendar.prototype.clone = function() {
@@ -193,12 +202,12 @@ rflect.cal.events.Calendar.fromJSON = function(aCalArray) {
   var readOnly = aCalArray[rflect.cal.events.Calendar.FIELD_READ_ONLY];
   var own = aCalArray[rflect.cal.events.Calendar.FIELD_OWN];
 
-  // Choose a random array index in [0, i] (inclusive with i).
+  // Choose a random array index in [0, i] (inclusive with i, where i =
+  // codes.length - 1).
   var pickIndex = goog.isDef(colorCodeIndex) ? colorCodeIndex :
-      Math.floor(Math.random() * (this.colorCodes_.length));
+      Math.floor(Math.random() * rflect.cal.i18n.PREDEFINED_COLOR_CODES.length);
 
   var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[pickIndex];
-  var name = opt_name || colorCode.getFullName();
 
   return new rflect.cal.events.Calendar(id, name, colorCode, visible, readOnly,
       own);

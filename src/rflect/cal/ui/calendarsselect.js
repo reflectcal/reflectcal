@@ -106,7 +106,7 @@ rflect.cal.ui.CalendarsSelect.prototype.update = function() {
 
     this.eventManager_.forEachCalendar(function(calendar, calendarId){
       this.select_.appendChild(goog.dom.createDom('option', {value: calendarId},
-          calendar.name));
+          calendar.getUIName()));
     }, this);
 
     this.updateFlag = false;

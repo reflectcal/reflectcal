@@ -530,7 +530,7 @@ rflect.cal.ui.SettingsPane.createCalendarsTd_ =
             goog.getCssName('cal-link'),
         id: (aMy ? 'calendar-my-' : 'calendar-other-') + aRowIndex,
         href: rflect.cal.ui.SettingsPane.HOLLOW_LINK_HREF
-      }, calendar.name);
+      }, calendar.getUIName());
       aTd.appendChild(link);
     };break;
     case 1: {
@@ -973,6 +973,7 @@ rflect.cal.ui.SettingsPane.prototype.displayCalendarValues_ = function() {
   //this.buttonDeleteCalendar_.setVisible(!this.newCalendarMode_);
 
   this.inputCalendarName_.value = this.currentCalendar_.name;
+  this.inputCalendarName_.placeholder = this.currentCalendar_.getUIName();
 
   /** @preserveTry */
   try {

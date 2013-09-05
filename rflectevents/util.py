@@ -1,4 +1,4 @@
-from rflectevents.models import Event
+from rflectevents.models import Event, Calendar
 from base64 import urlsafe_b64encode
 import os
 import json

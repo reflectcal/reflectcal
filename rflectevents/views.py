@@ -70,8 +70,8 @@ def mainRender(aRequest):
 def loadCalendars():
   #Create at least one default calendar.
   if Calendar.objects.all().count() == 0:
-    Calendar(id = generateCalendarId(), name = '', visible = True,
-          colorCodeIndex = 0, readOnly = fallse, owner = 'alexk').save()
+    Calendar(id = util.generateCalendarId(), name = '', visible = True,
+          colorCodeIndex = 0, readOnly = False, owner = 'alexk').save()
 
   calendars = Calendar.objects.all()
 

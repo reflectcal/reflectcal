@@ -220,7 +220,7 @@ rflect.cal.ui.CalSelector.prototype.buildContent = function (aSb) {
   this.eventManager_.forEachCalendar(function(calendar, calendarId) {
 
     aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[0]);
-    aSb.append(calendar.name);
+    aSb.append(calendar.getUIName());
     aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[1]);
     aSb.append(calendarId);
     aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[2]);
@@ -228,7 +228,7 @@ rflect.cal.ui.CalSelector.prototype.buildContent = function (aSb) {
     aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[3]);
     aSb.append(calendarId);
     aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[4]);
-    aSb.append(calendar.name);
+    aSb.append(calendar.getUIName());
     aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[5]);
     aSb.append(calendarId);
     aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[6]);
