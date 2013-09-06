@@ -8,6 +8,10 @@ urlpatterns = patterns('',
     (r'^events/load/(\d+)-(\d+)/$', loadEvents),
     (r'^events/save/$', saveEvent),
     (r'^events/delete/(.+)/$', deleteEvent),
+
+    (r'^calendars/save/$', saveCalendar),
+    (r'^calendars/delete/(.+)/$', deleteCalendar),
+
     (r'^view/$', mainRender),
 
 )

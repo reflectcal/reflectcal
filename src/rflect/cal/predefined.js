@@ -702,3 +702,11 @@ rflect.cal.predefined.CAL_SELECTOR_TEST_HEIGHT = 500;
  * @const
  */
 rflect.cal.predefined.CALENDAR_COLOR_CHECKBOX_PREFIX = 'calitem-color-item';
+
+
+/**
+ * Id prefix of calendar color checkbox.
+ * @type {string}
+ * @const
+ */
+rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX = 'cal-list';

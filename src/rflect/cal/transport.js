@@ -15,6 +15,7 @@ goog.require('goog.testing.net.XhrIo');
 goog.require('rflect.cal.events.Calendar');
 goog.require('rflect.cal.events.Event');
 goog.require('rflect.cal.events.EventManager');
+goog.require('rflect.cal.i18n.PREDEFINED_COLOR_CODES');
 goog.require('rflect.date.Interval');
 
 
@@ -158,11 +159,14 @@ rflect.cal.Transport.DeleteEvent = function(aEventId) {
 /**
  * Event that is fired after save of calendar.
  * @param {number} aCalendarId Calendar id.
+ * @param {rflect.cal.events.Calendar} aCalendar Calendar itself, to be removed
+ * from pending list in settings pane.
  * @constructor.
  */
-rflect.cal.Transport.SaveCalendar = function(aCalendarId) {
+rflect.cal.Transport.SaveCalendar = function(aCalendarId, aCalendar) {
   this.type = rflect.cal.Transport.EventTypes.SAVE_CALENDAR;
   this.calendarId = aCalendarId;
+  this.calendar = aCalendar;
 }
 
 
@@ -463,10 +467,10 @@ rflect.cal.Transport.prototype.loadCalendars = function() {
           rflect.cal.events.Calendar.fromJSON(aCalArray));
     }, this);
 
-  else
-    //TODO(alexk): change this when default calendar will be created on server.
+  /*else
     this.eventManager_.addCalendar(
-        new rflect.cal.events.Calendar(goog.getUid({}).toString(), '', 0));
+        new rflect.cal.events.Calendar(goog.getUid({}).toString(), '',
+        rflect.cal.i18n.PREDEFINED_COLOR_CODES[0]));*/
 }
 
 
@@ -475,7 +479,10 @@ rflect.cal.Transport.prototype.loadCalendars = function() {
  * @param {rflect.cal.events.Calendar} Calendar.
  */
 rflect.cal.Transport.prototype.saveCalendarAsync = function(aCalendar) {
-  this.eventManager_.setCalendarIsInProgress(aCalendar.id, true);
+  // New calendars won't have an id, and won't be shown on UI, so there's no
+  // sense to mark them as in progress.
+  aCalendar.id &&
+      this.eventManager_.setCalendarIsInProgress(aCalendar.id, true);
 
   goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.SAVE_CALENDAR,
       goog.bind(this.onSaveCalendar_, this, aCalendar),
@@ -513,7 +520,8 @@ rflect.cal.Transport.prototype.onSaveCalendar_ = function(aCalendar, aEvent) {
 
   this.eventManager_.setCalendarIsInProgress(calendar.id, false);
 
-  this.dispatchEvent(new rflect.cal.Transport.SaveCalendar(calendar.id));
+  this.dispatchEvent(new rflect.cal.Transport.SaveCalendar(calendar.id,
+      calendar));
 
 };
 
