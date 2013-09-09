@@ -6,8 +6,12 @@ import json
 from rflectevents.models import Event, Calendar
 import util
 from django.core import serializers
+import time
 
 def hello(aRequest):
+
+  if settings.DEBUG:
+      time.sleep(settings.DEBUG_RESPONSE_TIME)
   return HttpResponse("Hello world")
 
 def loadEvents(aRequest, aStart, aEnd):
@@ -20,7 +24,9 @@ def loadEvents(aRequest, aStart, aEnd):
   events = Event.objects.filter(end__gt=start).filter(start__lt=end)
 
   responseJSON = util.serializeEvents(events)
-    
+
+  if settings.DEBUG:
+      time.sleep(settings.DEBUG_RESPONSE_TIME)
   return HttpResponse(responseJSON, mimetype="application/json")
 
 def saveEvent(aRequest):
@@ -40,6 +46,8 @@ def saveEvent(aRequest):
   Event(id = id, start = event[1], end = event[2], allDay = event[3],
         name = event[4], description = event[5], calendar = cal).save()
 
+  if settings.DEBUG:
+      time.sleep(settings.DEBUG_RESPONSE_TIME)
   return HttpResponse(util.protectJSON(json.dumps(response)), mimetype="application/json")
 
 def deleteEvent(aRequest, aEventId):
@@ -47,6 +55,8 @@ def deleteEvent(aRequest, aEventId):
 
   Event.objects.get(id = aEventId).delete()
 
+  if settings.DEBUG:
+      time.sleep(settings.DEBUG_RESPONSE_TIME)
   return HttpResponse(util.protectJSON(json.dumps(response)), mimetype="application/json")
 
 def mainRender(aRequest):
@@ -65,6 +75,9 @@ def mainRender(aRequest):
 
   template = get_template('rflectcalendar.html')
   html = template.render(context)
+
+  if settings.DEBUG:
+      time.sleep(settings.DEBUG_RESPONSE_TIME)
   return HttpResponse(html)
 
 def loadCalendars():
@@ -94,6 +107,9 @@ def saveCalendar(aRequest):
       colorCodeIndex = calendar[3], readOnly = calendar[4],
       owner = 'alexk').save()
 
+  if settings.DEBUG:
+    time.sleep(settings.DEBUG_RESPONSE_TIME)
+
   return HttpResponse(util.protectJSON(json.dumps(response)),
       mimetype="application/json")
 
@@ -102,5 +118,7 @@ def deleteCalendar(aRequest, aCalendarId):
 
   Calendar.objects.get(id = aCalendarId).delete()
 
+  if settings.DEBUG:
+      time.sleep(settings.DEBUG_RESPONSE_TIME)
   return HttpResponse(util.protectJSON(json.dumps(response)), mimetype="application/json")
 

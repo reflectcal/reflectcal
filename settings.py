@@ -242,3 +242,6 @@ ROOT_URLCONF = 'rflectevents.urls'
 # Application administrator should provide root url of where application will be
 # deployed.
 SITE_URL = 'http://localhost:8000/'
+
+# Request longevity, in seconds, for debugging
+DEBUG_RESPONSE_TIME = 10

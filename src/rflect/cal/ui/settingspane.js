@@ -575,7 +575,8 @@ rflect.cal.ui.SettingsPane.createCalendarsTd_ =
       if (inProgress)
         linkParameters.className +=
             ' ' + goog.getCssName('cal-link-in-progress');
-      if (calendar.id) linkParameters.id = calendar.id;
+      if (calendar.id) linkParameters.id =
+          rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX + calendar.id;
 
       var link = aDom.createDom('a', linkParameters, calendar.getUIName());
       aTd.appendChild(link);
