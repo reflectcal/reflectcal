@@ -2,6 +2,9 @@ from rflectevents.models import Event, Calendar
 from base64 import urlsafe_b64encode
 import os
 import json
+from django.conf import settings
+import time
+import random
 
 JSON_XSS_PREPENDER = '}>'
 
@@ -73,4 +76,8 @@ def serializeSettings():
 
   responseJSON = json.dumps(response)
   return responseJSON
+
+def delayResponse():
+  time.sleep(random.randint(settings.DEBUG_RESPONSE_TIME_MIN,
+      settings.DEBUG_RESPONSE_TIME_MAX))
 

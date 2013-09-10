@@ -11,7 +11,7 @@ import time
 def hello(aRequest):
 
   if settings.DEBUG:
-      time.sleep(settings.DEBUG_RESPONSE_TIME)
+     util.delayResponse()
   return HttpResponse("Hello world")
 
 def loadEvents(aRequest, aStart, aEnd):
@@ -26,7 +26,7 @@ def loadEvents(aRequest, aStart, aEnd):
   responseJSON = util.serializeEvents(events)
 
   if settings.DEBUG:
-      time.sleep(settings.DEBUG_RESPONSE_TIME)
+    util.delayResponse()
   return HttpResponse(responseJSON, mimetype="application/json")
 
 def saveEvent(aRequest):
@@ -47,7 +47,7 @@ def saveEvent(aRequest):
         name = event[4], description = event[5], calendar = cal).save()
 
   if settings.DEBUG:
-      time.sleep(settings.DEBUG_RESPONSE_TIME)
+    util.delayResponse()
   return HttpResponse(util.protectJSON(json.dumps(response)), mimetype="application/json")
 
 def deleteEvent(aRequest, aEventId):
@@ -56,7 +56,7 @@ def deleteEvent(aRequest, aEventId):
   Event.objects.get(id = aEventId).delete()
 
   if settings.DEBUG:
-      time.sleep(settings.DEBUG_RESPONSE_TIME)
+    util.delayResponse()
   return HttpResponse(util.protectJSON(json.dumps(response)), mimetype="application/json")
 
 def mainRender(aRequest):
@@ -77,7 +77,7 @@ def mainRender(aRequest):
   html = template.render(context)
 
   if settings.DEBUG:
-      time.sleep(settings.DEBUG_RESPONSE_TIME)
+    util.delayResponse()
   return HttpResponse(html)
 
 def loadCalendars():
@@ -108,7 +108,7 @@ def saveCalendar(aRequest):
       owner = 'alexk').save()
 
   if settings.DEBUG:
-    time.sleep(settings.DEBUG_RESPONSE_TIME)
+    util.delayResponse()
 
   return HttpResponse(util.protectJSON(json.dumps(response)),
       mimetype="application/json")
@@ -116,9 +116,10 @@ def saveCalendar(aRequest):
 def deleteCalendar(aRequest, aCalendarId):
   response = 0
 
-  Calendar.objects.get(id = aCalendarId).delete()
+  if Calendar.objects.filter(id = aCalendarId).exists():
+    Calendar.objects.get(id = aCalendarId).delete()
 
   if settings.DEBUG:
-      time.sleep(settings.DEBUG_RESPONSE_TIME)
+    util.delayResponse()
   return HttpResponse(util.protectJSON(json.dumps(response)), mimetype="application/json")
 

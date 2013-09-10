@@ -735,7 +735,8 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
       .listen(this.buttonSave2_, goog.ui.Component.EventType.ACTION,
       this.onSave_, false, this)
       .listen(this.buttonDeleteCalendar_,
-      goog.ui.Component.EventType.ACTION, this.onDelete_, false, this)
+      goog.ui.Component.EventType.ACTION, this.onDeleteCalendarAction_, false,
+      this)
       .listen(this.buttonNewCalendar_,
       goog.ui.Component.EventType.ACTION, this.onNewCalendarAction_, false,
       this)
@@ -857,6 +858,14 @@ rflect.cal.ui.SettingsPane.prototype.onCalendarsColorLinkClick_ =
 rflect.cal.ui.SettingsPane.prototype.onSaveCalendar_ = function(aEvent) {
   var calendar = aEvent.calendar;
 
+  if (goog.DEBUG)
+    _inspect('_calendar', calendar);
+
+
+  if (goog.DEBUG)
+    _log('goog.array.indexOf(this.newCalendars_, calendar);',
+        goog.array.indexOf(this.newCalendars_, calendar));
+
   // New calendars that we store in list do not have an id, so we only could
   // identify them by direct equality.
   goog.array.remove(this.newCalendars_, calendar);
@@ -866,11 +875,33 @@ rflect.cal.ui.SettingsPane.prototype.onSaveCalendar_ = function(aEvent) {
 
 
 /**
- * Delete calendar event listener.
+ * Delete calendar button event listener.
  * @param {rflect.cal.Transport.DeleteCalendar} aEvent Event object.
  * @private
  */
-rflect.cal.ui.SettingsPane.prototype.onDeleteCalendar_ = function(aEvent) {
+rflect.cal.ui.SettingsPane.prototype.onDeleteCalendarAction_ =
+    function(aEvent) {
+  this.eventManager_.deleteCalendar(this.currentCalendar_);
+
+  this.transport_.deleteCalendarAsync(
+        this.currentCalendar_);
+
+  this.createCalendarsTables_(this.getDomHelper(), this.tabContents2_);
+
+  if (this.dispatchEvent(new goog.events.Event(
+      rflect.cal.ui.SettingsPane.EventTypes.DELETE_CALENDAR))) {
+    this.switchContent_(rflect.cal.ui.SettingsPane.PageIndexes.CALENDARS);
+  }
+}
+
+
+/**
+ * Delete calendar remote operation listener.
+ * @param {rflect.cal.Transport.DeleteCalendar} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.SettingsPane.prototype.onDeleteCalendar_ =
+    function(aEvent) {
 }
 
 
@@ -918,15 +949,20 @@ rflect.cal.ui.SettingsPane.prototype.switchContent_ = function(aIndex) {
 
   this.getDomHelper().removeNode(tabContent);
 
+  // We are leaving calendar edit mode.
   if (this.viewIndex_ == rflect.cal.ui.SettingsPane.PageIndexes.CALENDAR_EDIT){
     this.buttonSave1_.setCaption('Save');
     this.buttonSave2_.setCaption('Save');
 
     this.calendarEditMode_ =  this.newCalendarMode_ = false;
   }
+
+  // We are entering calendar edit mode.
   if (aIndex == rflect.cal.ui.SettingsPane.PageIndexes.CALENDAR_EDIT){
     this.buttonSave1_.setCaption('Save calendar');
     this.buttonSave2_.setCaption('Save calendar');
+
+    this.buttonDeleteCalendar_.setVisible(!this.newCalendarMode_);
 
     this.calendarEditMode_ = true;
   }
@@ -957,7 +993,8 @@ rflect.cal.ui.SettingsPane.prototype.onSave_ = function() {
 
       this.transport_.saveCalendarAsync(
           this.currentCalendar_);
-      //TODO(alexk): calendars list is updated here
+      this.createCalendarsTables_(this.getDomHelper(), this.tabContents2_);
+
       this.switchContent_(rflect.cal.ui.SettingsPane.PageIndexes.CALENDARS);
 
     }
@@ -973,23 +1010,6 @@ rflect.cal.ui.SettingsPane.prototype.onSave_ = function() {
       }
 
     }
-  }
-}
-
-
-/**
- * Delete action listener.
- * @param {goog.events.Event} aEvent Event object.
- */
-rflect.cal.ui.SettingsPane.prototype.onDelete_ = function(aEvent) {
-  this.eventManager_.eventHolder.endWithDelete();
-
-  this.transport_.deleteEventAsync(
-      this.eventManager_.eventHolder.getBackUpEvent());
-
-  if (this.dispatchEvent(new goog.events.Event(
-      rflect.cal.ui.SettingsPane.EventTypes.DELETE))) {
-    this.setVisible(false);
   }
 }
 

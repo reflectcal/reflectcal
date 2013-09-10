@@ -535,7 +535,7 @@ rflect.cal.Transport.prototype.deleteCalendarAsync = function(aCalendar) {
 
   goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.DELETE_CALENDAR +
       aCalendar.id + '/',
-      goog.bind(this.onDeleteCalendar_, this, aCalendar.id, aCalendar.longId),
+      goog.bind(this.onDeleteCalendar_, this, aCalendar.id),
       'GET');
 
 };

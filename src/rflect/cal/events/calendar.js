@@ -30,7 +30,7 @@ rflect.cal.events.Calendar = function(aUid, aName, aColorCode, opt_visible,
   this.name = aName;
   this.colorCode = aColorCode;
   this.eventIds = [];
-  this.visible = opt_visible || false;
+  this.visible = opt_visible || true;
   this.readOnly = opt_readOnly || false;
   this.own = opt_own || true;
 };
@@ -147,7 +147,7 @@ rflect.cal.events.Calendar.prototype.getUIName = function() {
  */
 rflect.cal.events.Calendar.prototype.clone = function() {
   var clone = new rflect.cal.events.Calendar(this.id, this.name,
-      this.colorCode, this.readOnly, this.own);
+      this.colorCode, this.visible, this.readOnly, this.own);
 
   return clone;
 };
