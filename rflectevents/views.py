@@ -117,7 +117,10 @@ def deleteCalendar(aRequest, aCalendarId):
   response = 0
 
   if Calendar.objects.filter(id = aCalendarId).exists():
-    Calendar.objects.get(id = aCalendarId).delete()
+    calendar = Calendar.objects.get(id = aCalendarId)
+    Event.objects.filter(calendar = calendar).delete()
+    calendar.delete()
+
 
   if settings.DEBUG:
     util.delayResponse()
