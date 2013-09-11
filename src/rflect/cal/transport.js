@@ -268,7 +268,7 @@ rflect.cal.Transport.prototype.deleteEventAsync = function(aEvent) {
   goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.DELETE_EVENT +
       aEvent.longId + '/',
       goog.bind(this.onDeleteEvent_, this, aEvent.id, aEvent.longId),
-      'GET');
+      'POST');
 
 };
 
@@ -536,7 +536,7 @@ rflect.cal.Transport.prototype.deleteCalendarAsync = function(aCalendar) {
   goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.DELETE_CALENDAR +
       aCalendar.id + '/',
       goog.bind(this.onDeleteCalendar_, this, aCalendar.id),
-      'GET');
+      'POST');
 
 };
 
