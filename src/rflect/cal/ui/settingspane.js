@@ -993,7 +993,10 @@ rflect.cal.ui.SettingsPane.prototype.switchContent_ = function(aIndex) {
 rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
   if (this.dispatchEvent(new goog.events.Event(
       rflect.cal.ui.SettingsPane.EventTypes.CANCEL))) {
-    this.setVisible(false);
+    if (this.calendarEditMode_)
+      this.switchContent_(rflect.cal.ui.SettingsPane.PageIndexes.CALENDARS);
+    else
+      this.setVisible(false);
   }
 }
 
