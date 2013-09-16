@@ -144,6 +144,15 @@ rflect.cal.ui.ListSelector.prototype.buttonRe_;
 
 
 /**
+ * Whether full redraw is needed when calling updateByRedraw.
+ * @see {rflect.cal.ui.ListSelector#updateByRedraw}
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.ui.ListSelector.prototype.redrawIsNeeded = false;
+
+
+/**
  * Builds body of component.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
@@ -278,7 +287,6 @@ rflect.cal.ui.ListSelector.prototype.updateBeforeRedraw = function(opt_exclusion
 
 /**
  * Redraws list selector. This default version changes scrollable size.
- * TODO(alexk): add/remove item case.
  */
 rflect.cal.ui.ListSelector.prototype.updateByRedraw = function() {
   this.scrollableEl_.style.height = this.scrollableSize_.height + 'px';

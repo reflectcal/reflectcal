@@ -548,7 +548,9 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
         rflect.cal.ui.SettingsPane.EventTypes.CANCEL, this.onSettingsPaneCancel_,
         false, this).listen(this.settingsPane_,
         rflect.cal.ui.SettingsPane.EventTypes.SAVE, this.onSettingsPaneSave_,
-        false, this)
+        false, this).listen(this.settingsPane_,
+        rflect.cal.ui.SettingsPane.EventTypes.CALENDAR_UPDATE,
+        this.onSettingsPaneCalendarUpdate_, false, this);
 
     if (goog.DEBUG) {
       _inspect('settingsPane_', this.settingsPane_);
@@ -623,6 +625,23 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneSave_ = function(aEvent) {
   this.updateMainPane_();
 
   this.showSettingsPane(false);
+}
+
+
+/**
+ * Settings pane calendar update listener.
+ * @param {Event} aEvent Event object.
+ */
+rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
+    function(aEvent) {
+  aEvent.preventDefault();
+
+  this.eventManager_.run();
+  this.calSelector_.redrawIsNeeded = true;
+  this.taskSelector_.redrawIsNeeded = true;
+  this.update([
+    /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL),
+    /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE)]);
 }
 
 

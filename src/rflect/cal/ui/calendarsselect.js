@@ -33,31 +33,8 @@ rflect.cal.ui.CalendarsSelect = function(aSelect, aEventManager) {
   this.eventManager_ = aEventManager;
 
   this.select_ = aSelect;
-
-  this.updateFlag = true;
-
-  rflect.cal.ui.CalendarsSelect.instances_.push(this);
 };
 goog.inherits(rflect.cal.ui.CalendarsSelect, goog.Disposable);
-
-
-/**
- * Collection of select instances used for easy updates.
- * @type {Array.<rflect.cal.ui.CalendarsSelect>}
- */
-rflect.cal.ui.CalendarsSelect.instances_ = [];
-
-
-/**
- * Informs instances that they should be updated on next
- * rflect.cal.ui.CalendarsSelect#update call.
- */
-rflect.cal.ui.CalendarsSelect.setInstancesToUpdate = function() {
-  goog.array.forEach(rflect.cal.ui.CalendarsSelect.instances_,
-      function(aInstance){
-    aInstance.updateFlag = true;
-  });
-}
 
 
 /**
@@ -100,17 +77,13 @@ rflect.cal.ui.CalendarsSelect.prototype.setCalendarId = function (aCalendarId) {
  */
 rflect.cal.ui.CalendarsSelect.prototype.update = function() {
 
-  if (this.updateFlag) {
+  goog.dom.removeChildren(this.select_);
 
-    goog.dom.removeChildren(this.select_);
+  this.eventManager_.forEachCalendar(function(calendar, calendarId){
+    this.select_.appendChild(goog.dom.createDom('option', {value: calendarId},
+        calendar.getUIName()));
+  }, this);
 
-    this.eventManager_.forEachCalendar(function(calendar, calendarId){
-      this.select_.appendChild(goog.dom.createDom('option', {value: calendarId},
-          calendar.getUIName()));
-    }, this);
-
-    this.updateFlag = false;
-  }
 }
 
 
@@ -119,8 +92,6 @@ rflect.cal.ui.CalendarsSelect.prototype.update = function() {
  * @override
  */
 rflect.cal.ui.CalendarsSelect.prototype.disposeInternal = function () {
-  goog.array.remove(rflect.cal.ui.CalendarsSelect.instances_, this);
   this.select_ = null;
   rflect.cal.ui.CalendarsSelect.superClass_.disposeInternal.call(this);
-
 }

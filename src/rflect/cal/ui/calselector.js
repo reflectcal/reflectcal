@@ -77,6 +77,17 @@ rflect.cal.ui.CalSelector.EventType = {
 rflect.cal.ui.CalSelector.prototype.enterDocument = function () {
   rflect.cal.ui.CalSelector.superClass_.enterDocument.call(this);
 
+  this.enterDocumentForCheckboxes();
+
+  this.getHandler().listen(this, goog.ui.Component.EventType.CHANGE,
+      this.onCheck_, false, this)
+};
+
+
+/**
+ * Makes checkboxes active.
+ */
+rflect.cal.ui.CalSelector.prototype.enterDocumentForCheckboxes = function () {
   var nodes = this.getElement().querySelectorAll('.' +
       goog.getCssName('goog-checkbox'));
   goog.array.forEach(nodes, function(node, index) {
@@ -97,11 +108,35 @@ rflect.cal.ui.CalSelector.prototype.enterDocument = function () {
         this.onBlur_, false, this);
 
   }, this);
-
-  this.getHandler().listen(this, goog.ui.Component.EventType.CHANGE,
-      this.onCheck_, false, this)
+}
 
 
+/**
+ * Disposes of checkboxes.
+ */
+rflect.cal.ui.CalSelector.prototype.disposeCheckboxes = function () {
+  this.forEachChild(function(checkbox) {
+    checkbox.dispose();
+  });
+
+  this.removeChildren();
+}
+
+
+/**
+ * Redraws list selector. This default version changes scrollable size.
+ * @override
+ */
+rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
+  if (this.redrawIsNeeded) {
+    this.redrawIsNeeded = false;
+
+    this.disposeCheckboxes();
+    this.getElement().innerHTML = this.build();
+    this.enterDocumentForCheckboxes();
+
+  } else
+    this.scrollableEl_.style.height = this.scrollableSize_.height + 'px';
 };
 
 

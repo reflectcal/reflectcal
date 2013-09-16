@@ -473,6 +473,7 @@ rflect.cal.ui.EventPane.prototype.updateAC_ = function(aAC) {
 
 /**
  * Cancel action listener.
+ * Default action is to hide pane.
  */
 rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
   if (this.dispatchEvent(new goog.events.Event(

@@ -139,11 +139,9 @@ goog.inherits(rflect.cal.ui.SettingsPane, goog.ui.Component);
  * @enum {string}
  */
 rflect.cal.ui.SettingsPane.EventTypes = {
-  CANCEL: 'cancel',
+  CANCEL: 'settingsCancel',
   SAVE: 'save',
-  DELETE: 'delete',
-  SAVE_CALENDAR: 'savecalendar',
-  DELETE_CALENDAR: 'deletecalendar'
+  CALENDAR_UPDATE: 'calendarUpdate'
 };
 
 
@@ -869,7 +867,8 @@ rflect.cal.ui.SettingsPane.prototype.onCalendarsColorLinkClick_ =
  * @param {rflect.cal.Transport.SaveCalendar} aEvent Event object.
  * @private
  */
-rflect.cal.ui.SettingsPane.prototype.onSaveCalendarResponse_ = function(aEvent) {
+rflect.cal.ui.SettingsPane.prototype.onSaveCalendarResponse_ =
+    function(aEvent) {
   var calendar = aEvent.calendar;
 
   // New calendars that we store in list do not have an id, so we only could
@@ -877,6 +876,9 @@ rflect.cal.ui.SettingsPane.prototype.onSaveCalendarResponse_ = function(aEvent) 
   goog.array.remove(this.newCalendars_, calendar);
 
   this.updateCalendarTables_(this.getDomHelper(), this.tabContents2_);
+
+  this.dispatchEvent(new goog.events.Event(
+            rflect.cal.ui.SettingsPane.EventTypes.CALENDAR_UPDATE));
 }
 
 
@@ -895,7 +897,7 @@ rflect.cal.ui.SettingsPane.prototype.onDeleteCalendarAction_ =
   this.updateCalendarTables_(this.getDomHelper(), this.tabContents2_);
 
   if (this.dispatchEvent(new goog.events.Event(
-      rflect.cal.ui.SettingsPane.EventTypes.DELETE_CALENDAR))) {
+      rflect.cal.ui.SettingsPane.EventTypes.CALENDAR_UPDATE))) {
     this.switchContent_(rflect.cal.ui.SettingsPane.PageIndexes.CALENDARS);
   }
 }
@@ -908,6 +910,8 @@ rflect.cal.ui.SettingsPane.prototype.onDeleteCalendarAction_ =
  */
 rflect.cal.ui.SettingsPane.prototype.onDeleteCalendarResponse_ =
     function(aEvent) {
+  this.dispatchEvent(new goog.events.Event(
+      rflect.cal.ui.SettingsPane.EventTypes.CALENDAR_UPDATE));
 }
 
 
@@ -989,15 +993,16 @@ rflect.cal.ui.SettingsPane.prototype.switchContent_ = function(aIndex) {
 
 /**
  * Cancel action listener.
+ * Default action is to hide pane.
  */
 rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
-  if (this.dispatchEvent(new goog.events.Event(
-      rflect.cal.ui.SettingsPane.EventTypes.CANCEL))) {
-    if (this.calendarEditMode_)
+  if (this.calendarEditMode_)
       this.switchContent_(rflect.cal.ui.SettingsPane.PageIndexes.CALENDARS);
     else
-      this.setVisible(false);
-  }
+      if (this.dispatchEvent(new goog.events.Event(
+          rflect.cal.ui.SettingsPane.EventTypes.CANCEL)))
+        this.setVisible(false);
+
 }
 
 
