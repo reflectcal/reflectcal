@@ -112,25 +112,31 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
       rflect.ui.Dialog.DefaultButtonCaptions.CANCEL,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonSaveSettings1_ = new goog.ui.Button(
-      rflect.cal.i18n.SettingsSymbols.SAVE_SETTINGS_BUTTON,
+      rflect.ui.Dialog.DefaultButtonCaptions.SAVE,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonCancel2_ = new goog.ui.Button(
       rflect.ui.Dialog.DefaultButtonCaptions.CANCEL,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonSaveSettings2_ = new goog.ui.Button(
-      rflect.cal.i18n.SettingsSymbols.SAVE_SETTINGS_BUTTON,
+      rflect.ui.Dialog.DefaultButtonCaptions.SAVE,
       goog.ui.FlatButtonRenderer.getInstance()));
 
   this.addChild(this.buttonNewCalendar_ = new goog.ui.Button(
       'New calendar',
       goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.buttonSaveCalendar_ = new goog.ui.Button(
-      rflect.cal.i18n.SettingsSymbols.SAVE_CALENDAR_BUTTON,
+  this.addChild(this.buttonSaveCalendar1_ = new goog.ui.Button(
+      rflect.ui.Dialog.DefaultButtonCaptions.SAVE,
+      goog.ui.FlatButtonRenderer.getInstance()));
+  this.addChild(this.buttonSaveCalendar2_ = new goog.ui.Button(
+      rflect.ui.Dialog.DefaultButtonCaptions.SAVE,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonDeleteCalendar_ = new goog.ui.Button(
       'Delete calendar',
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.checkboxDebug_ = new rflect.ui.Checkbox());
+
+  this.buttonSaveCalendar1_.setVisible(false);
+  this.buttonSaveCalendar2_.setVisible(false);
 };
 goog.inherits(rflect.cal.ui.SettingsPane, goog.ui.Component);
 
@@ -295,14 +301,12 @@ rflect.cal.ui.SettingsPane.prototype.createDom = function() {
   });
 
   goog.array.forEach([this.buttonSaveSettings1_, this.buttonSaveSettings2_,
-      this.buttonSaveCalendar_],
+      this.buttonSaveCalendar1_, this.buttonSaveCalendar2_],
       function(button){
     goog.dom.classes.add(button.getElement(),
         goog.getCssName('emphasis-button'));
   });
 
-  goog.dom.classes.add(this.buttonSaveCalendar_.getElement(),
-      goog.getCssName('save-calendar-button'));
   goog.dom.classes.add(this.buttonDeleteCalendar_.getElement(),
       goog.getCssName('event-edit-pane-button-delete'));
 
@@ -345,8 +349,9 @@ rflect.cal.ui.SettingsPane.prototype.createSettingsPaneButtonsUpper_ =
       [goog.getCssName('settings-pane-buttons'),
       goog.getCssName('settings-pane-buttons-upper'),
       goog.getCssName('goog-inline-block')],
-      this.buttonCancel1_.getElement(),
-      this.buttonSaveSettings1_.getElement()
+      this.buttonSaveSettings1_.getElement(),
+      this.buttonSaveCalendar1_.getElement(),
+      this.buttonCancel1_.getElement()
       );
 }
 
@@ -362,8 +367,10 @@ rflect.cal.ui.SettingsPane.prototype.createSettingsPaneButtonsLower_ =
       [goog.getCssName('settings-pane-buttons'),
       goog.getCssName('settings-pane-buttons-lower'),
       goog.getCssName('goog-inline-block')],
-      this.buttonCancel2_.getElement(),
-      this.buttonSaveSettings2_.getElement());
+      this.buttonSaveSettings2_.getElement(),
+      this.buttonSaveCalendar2_.getElement(),
+      this.buttonCancel2_.getElement()
+      );
 }
 
 
@@ -629,7 +636,6 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarEditForm_ = function(aDom) {
   }, '< Back to calendars');
 
   buttonsCont.appendChild(backLink);
-  buttonsCont.appendChild(this.buttonSaveCalendar_.getElement());
   buttonsCont.appendChild(this.buttonDeleteCalendar_.getElement());
 
   var labelName = aDom.createDom('label', {
@@ -747,7 +753,9 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
       this.onSaveSettings_, false, this)
       .listen(this.buttonSaveSettings2_, goog.ui.Component.EventType.ACTION,
       this.onSaveSettings_, false, this)
-      .listen(this.buttonSaveCalendar_, goog.ui.Component.EventType.ACTION,
+      .listen(this.buttonSaveCalendar1_, goog.ui.Component.EventType.ACTION,
+      this.onSaveCalendar_, false, this)
+      .listen(this.buttonSaveCalendar2_, goog.ui.Component.EventType.ACTION,
       this.onSaveCalendar_, false, this)
       .listen(this.buttonDeleteCalendar_,
       goog.ui.Component.EventType.ACTION, this.onDeleteCalendarAction_, false,
@@ -984,6 +992,9 @@ rflect.cal.ui.SettingsPane.prototype.switchContent_ = function(aIndex) {
   //Hide generic save settings buttons when entering cal-edit view.
   this.buttonSaveSettings1_.setVisible(!enteringCalEditMode);
   this.buttonSaveSettings2_.setVisible(!enteringCalEditMode);
+  //And opposite to calendar save buttons.
+  this.buttonSaveCalendar1_.setVisible(enteringCalEditMode);
+  this.buttonSaveCalendar2_.setVisible(enteringCalEditMode);
 
   this.getDomHelper().insertSiblingAfter(this.viewsElements_[aIndex],
       this.tabBar_.getElement());
