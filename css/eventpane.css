@@ -10,9 +10,8 @@
   padding: 18px 10px 10px 10px;
 }
 
-.event-edit-pane-header-cont {
-  width: 600px;
-  margin-left: 25px;
+.event-pane-header-cont {
+  width: 90px;
 }
 
 .event-edit-pane-header {
@@ -25,7 +24,11 @@
 }
 
 .event-edit-pane-cont {
-  margin: 15px;
+  margin: 15px 15px 0 15px;
+}
+
+.event-edit-pane-cont-first {
+  margin-top: 0;
 }
 
 .event-edit-pane-cont-inner {
@@ -89,6 +92,7 @@
 
 .event-edit-pane-label {
   width: 100px;
+  padding-left: 20px;
 }
 
 .event-edit-pane-button {
@@ -104,4 +108,14 @@
 
 .event-edit-pane-cal-select {
   display: inline;
+}
+
+.event-pane-buttons-upper {
+  padding-left: 20px;
+  padding-bottom: 18px;
+}
+
+.event-pane-buttons-lower {
+  padding-left: 130px;
+  padding-top: 18px;
 }

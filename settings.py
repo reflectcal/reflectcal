@@ -244,5 +244,5 @@ ROOT_URLCONF = 'rflectevents.urls'
 SITE_URL = 'http://localhost:8000/'
 
 # Request longevity, in seconds, for debugging
-DEBUG_RESPONSE_TIME_MIN = 5
-DEBUG_RESPONSE_TIME_MAX = 10
+DEBUG_RESPONSE_TIME_MIN = 0
+DEBUG_RESPONSE_TIME_MAX = 0

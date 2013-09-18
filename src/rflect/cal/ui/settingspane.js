@@ -288,11 +288,6 @@ rflect.cal.ui.SettingsPane.prototype.createDom = function() {
   var labelClassName = goog.getCssName('goog-inline-block') + ' ' +
       goog.getCssName('event-edit-pane-label');
 
-  /*var headerCont = dom.createDom('div',
-      goog.getCssName('event-edit-pane-header-cont'),
-      dom.createDom('h3', goog.getCssName('event-edit-pane-header'),
-      'Event edit'));*/
-
   this.forEachChild(function(child){
     child.createDom();
     if (child instanceof goog.ui.Button)
@@ -365,8 +360,7 @@ rflect.cal.ui.SettingsPane.prototype.createSettingsPaneButtonsLower_ =
 
   return aDom.createDom('div',
       [goog.getCssName('settings-pane-buttons'),
-      goog.getCssName('settings-pane-buttons-lower'),
-      goog.getCssName('goog-inline-block')],
+      goog.getCssName('settings-pane-buttons-lower')],
       this.buttonSaveSettings2_.getElement(),
       this.buttonSaveCalendar2_.getElement(),
       this.buttonCancel2_.getElement()
@@ -513,23 +507,27 @@ rflect.cal.ui.SettingsPane.prototype.updateCalendarTables_ = function(aDom,
   });
 
   var myCalendarsTable = this.createCalendarsTable_(aDom, true);
-  var myCalendarsSubCont = aDom.createDom('div',
-      goog.getCssName('calendars-cont'),  myCalendarsTable);
-  var myCalendarsCont = aDom.createDom('div',
-      [goog.getCssName('event-edit-pane-cont'),
-      goog.getCssName('calendars-outer-cont')],
-      'My calendars', myCalendarsSubCont);
+  if (myCalendarsTable) {
+    var myCalendarsSubCont = aDom.createDom('div',
+        goog.getCssName('calendars-cont'),  myCalendarsTable);
+    var myCalendarsCont = aDom.createDom('div',
+        [goog.getCssName('event-edit-pane-cont'),
+        goog.getCssName('calendars-outer-cont')],
+        'My calendars', myCalendarsSubCont);
+    aParent.appendChild(myCalendarsCont);
+  }
 
   var otherCalendarsTable = this.createCalendarsTable_(aDom, false);
-  var otherCalendarsSubCont = aDom.createDom('div',
-      goog.getCssName('calendars-cont'), otherCalendarsTable);
-  var otherCalendarsCont = aDom.createDom('div',
-      [goog.getCssName('event-edit-pane-cont'),
-      goog.getCssName('calendars-outer-cont')],
-      'Other calendars', otherCalendarsSubCont);
+  if (otherCalendarsTable) {
+    var otherCalendarsSubCont = aDom.createDom('div',
+        goog.getCssName('calendars-cont'), otherCalendarsTable);
+    var otherCalendarsCont = aDom.createDom('div',
+        [goog.getCssName('event-edit-pane-cont'),
+        goog.getCssName('calendars-outer-cont')],
+        'Other calendars', otherCalendarsSubCont);
+    aParent.appendChild(otherCalendarsCont);
+  }
 
-  aParent.appendChild(myCalendarsCont);
-  aParent.appendChild(otherCalendarsCont);
 }
 
 
@@ -556,10 +554,12 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarsTable_ =
   if (aMy)
     Array.prototype.push.apply(calendars, this.newCalendars_);
 
-  return this.createTable_(aDom, null, goog.getCssName('calendars-table'),
+  return calendars.length ?
+      this.createTable_(aDom, null, goog.getCssName('calendars-table'),
       calendars.length, 2, goog.getCssName('calendar-row'),
       goog.partial(rflect.cal.ui.SettingsPane.createCalendarsTd_,
-      this.eventManager_, calendars));
+      this.eventManager_, calendars)) :
+      null;
 }
 
 

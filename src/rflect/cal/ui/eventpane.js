@@ -204,11 +204,6 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   var labelClassName = goog.getCssName('goog-inline-block') + ' ' +
       goog.getCssName('event-edit-pane-label');
 
-  /*var headerCont = dom.createDom('div',
-      goog.getCssName('event-edit-pane-header-cont'),
-      dom.createDom('h3', goog.getCssName('event-edit-pane-header'),
-      'Event edit'));*/
-
   this.forEachChild(function(child){
     child.createDom();
     if (child instanceof goog.ui.Button)
@@ -223,15 +218,24 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   goog.dom.classes.add(this.buttonDelete_.getElement(),
       goog.getCssName('event-edit-pane-button-delete'));
 
+  var headerCont = dom.createDom('div', [
+       goog.getCssName('settings-pane-header-cont'),
+       goog.getCssName('event-pane-header-cont'),
+       goog.getCssName('goog-inline-block')],
+       dom.createDom('h3', goog.getCssName('event-edit-pane-header'),
+       'Event'));
   var buttonsCont1 = dom.createDom('div',
-      goog.getCssName('event-edit-pane-buttons'),
-      this.buttonCancel1_.getElement(),
+      [goog.getCssName('settings-pane-buttons'),
+      goog.getCssName('event-pane-buttons-upper'),
+      goog.getCssName('goog-inline-block')],
       this.buttonSave1_.getElement(),
+      this.buttonCancel1_.getElement(),
       this.buttonDelete_.getElement());
   var buttonsCont2 = dom.createDom('div',
-      goog.getCssName('event-edit-pane-buttons'),
-      this.buttonCancel2_.getElement(),
-      this.buttonSave2_.getElement());
+      [goog.getCssName('settings-pane-buttons'),
+       goog.getCssName('event-pane-buttons-lower')],
+      this.buttonSave2_.getElement(),
+      this.buttonCancel2_.getElement());
 
   var labelName = dom.createDom('label', {
     'for': 'ep-event-name-input',
@@ -246,6 +250,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   });
   var nameCont = dom.createDom('div',
     [goog.getCssName('event-name-input-cont'),
+      goog.getCssName('event-edit-pane-cont-first'),
       goog.getCssName('event-edit-pane-cont')],
     labelName, this.inputName_);
 
@@ -330,11 +335,13 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
       goog.getCssName('event-edit-pane-cont')],
     labelDesc, this.textAreaDesc_);
 
+  var body = dom.createDom('div', goog.getCssName('settings-body'),
+      nameCont, dateCont, allDayCont, calendarsCont, descCont);
+
   var root = dom.createDom('div', {
-    className: goog.getCssName('event-edit-pane'),
+    className: goog.getCssName('settings-pane'),
     id: 'event-edit-pane'
-    }, buttonsCont1, nameCont, dateCont, allDayCont, calendarsCont, descCont,
-      buttonsCont2);
+    }, headerCont, buttonsCont1, body, buttonsCont2);
 
   this.setElementInternal(root);
 

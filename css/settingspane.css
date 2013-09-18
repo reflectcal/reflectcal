@@ -4,7 +4,7 @@
 
 /* Author:alexeykofficial@gmail.com (Alex K.) */
 
-/* Styles for event edit pane. */
+/* Styles for settings edit pane. */
 
 
 .settings-pane {
@@ -51,7 +51,11 @@
 }
 
 .calendars-cont {
-  padding: 15px;
+  padding: 15px 15px 0 15px;
+}
+
+.calendars-outer-cont {
+  margin-bottom: 0;
 }
 
 .calendars-table {
