@@ -310,10 +310,17 @@ rflect.cal.Transport.prototype.loadEventsAsync = function() {
   if (intervalIsCovered)
     return;
 
+  var calendarsList = [];
+  this.eventManager_.forEachCalendar(function(cal){
+    calendarsList.push(cal.id);
+  });
+
   goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.LOAD_EVENT +
       interval.start + '-' + interval.end + '/',
       goog.bind(this.onLoadEvents_, this, interval),
-      'GET');
+      'POST',
+      rflect.cal.Transport.serialize(calendarsList),
+      rflect.cal.Transport.DEFAULT_POST_HEADERS);
 };
 
 
