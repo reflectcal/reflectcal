@@ -131,12 +131,18 @@ rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
   if (this.redrawIsNeeded) {
     this.redrawIsNeeded = false;
 
+    // Dereference scrollable element.
+    this.scrollableEl_ = null;
+
     this.disposeCheckboxes();
     this.getElement().innerHTML = this.build();
     this.enterDocumentForCheckboxes();
 
-  } else
-    this.scrollableEl_.style.height = this.scrollableSize_.height + 'px';
+    // Save reference to scrollable element.
+    this.scrollableEl_ = goog.dom.getChildren(this.getElement())[1];
+
+  }
+  this.scrollableEl_.style.height = this.scrollableSize_.height + 'px';
 };
 
 

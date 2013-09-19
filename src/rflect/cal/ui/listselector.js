@@ -417,6 +417,8 @@ rflect.cal.ui.ListSelector.prototype.isButton = goog.abstractMethod;
 rflect.cal.ui.ListSelector.prototype.disposeInternal = function() {
   rflect.cal.ui.ListSelector.superClass_.disposeInternal.call(this);
 
+  // Dereference scrollable element.
+  this.scrollableEl_ = null;
   this.viewManager_ = null;
   this.containerSizeMonitor_ = null;
 };
