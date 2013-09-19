@@ -914,6 +914,8 @@ rflect.cal.ui.SettingsPane.prototype.onDeleteCalendarAction_ =
 /**
  * Delete calendar remote operation listener.
  * @param {rflect.cal.Transport.DeleteCalendar} aEvent Event object.
+ * TODO(alexk): there undo action will be possible, so differentiate this event
+ * from one that comes right after button click.
  * @private
  */
 rflect.cal.ui.SettingsPane.prototype.onDeleteCalendarResponse_ =

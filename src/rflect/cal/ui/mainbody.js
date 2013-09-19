@@ -634,7 +634,6 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneSave_ = function(aEvent) {
  */
 rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
     function(aEvent) {
-  aEvent.preventDefault();
 
   this.eventManager_.run();
   this.calSelector_.redrawIsNeeded = true;
