@@ -53,6 +53,14 @@ rflect.cal.ui.CalendarsSelect.prototype.updateFlag;
 
 
 /**
+ * Select element selected index.
+ * @type {number}
+ * @private
+ */
+rflect.cal.ui.CalendarsSelect.prototype.selectedIndex_ = 0;
+
+
+/**
  * @return {string} Selected calendar id.
  */
 rflect.cal.ui.CalendarsSelect.prototype.getCalendarId = function () {
@@ -76,6 +84,7 @@ rflect.cal.ui.CalendarsSelect.prototype.setCalendarId = function (aCalendarId) {
  * Populates calendars select. Generic function.
  */
 rflect.cal.ui.CalendarsSelect.prototype.update = function() {
+  this.saveSelectedOption_();
 
   goog.dom.removeChildren(this.select_);
 
@@ -84,6 +93,27 @@ rflect.cal.ui.CalendarsSelect.prototype.update = function() {
         calendar.getUIName()));
   }, this);
 
+  this.recallSelectedOption_();
+}
+
+
+/**
+ * Saves currently selected option.
+ * @private
+ */
+rflect.cal.ui.CalendarsSelect.prototype.saveSelectedOption_ = function() {
+  this.selectedIndex_ = this.select_.selectedIndex;
+}
+
+
+/**
+ * Recalls previously selected option, if possible.
+ * @private
+ */
+rflect.cal.ui.CalendarsSelect.prototype.recallSelectedOption_ = function() {
+  if (this.selectedIndex_ >= 0 && this.selectedIndex_ <
+      this.select_.options.length)
+    this.select_.selectedIndex = this.selectedIndex_;
 }
 
 
