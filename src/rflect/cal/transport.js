@@ -82,7 +82,7 @@ goog.inherits(rflect.cal.Transport, goog.events.EventTarget);
  * @type {string}
  * @const
  */
-rflect.cal.Transport.JSON_XSS_PREPENDER = '}>';
+rflect.cal.Transport.JSON_XSS_PREPENDER = '])}>"';
 
 
 /**
@@ -310,16 +310,19 @@ rflect.cal.Transport.prototype.loadEventsAsync = function() {
   if (intervalIsCovered)
     return;
 
-  var calendarsList = [];
+  var paramsVector = [];
+
+  paramsVector[0] = interval.start;
+  paramsVector[1] = interval.end;
+
   this.eventManager_.forEachCalendar(function(cal){
-    calendarsList.push(cal.id);
+    paramsVector.push(cal.id);
   });
 
-  goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.LOAD_EVENT +
-      interval.start + '-' + interval.end + '/',
+  goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.LOAD_EVENT,
       goog.bind(this.onLoadEvents_, this, interval),
       'POST',
-      rflect.cal.Transport.serialize(calendarsList),
+      rflect.cal.Transport.serialize(paramsVector),
       rflect.cal.Transport.DEFAULT_POST_HEADERS);
 };
 

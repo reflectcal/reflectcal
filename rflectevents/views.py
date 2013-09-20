@@ -15,11 +15,13 @@ def hello(aRequest):
   return HttpResponse("Hello world")
 
 def loadEvents(aRequest, aStart, aEnd):
+  paramsVector = json.loads(aRequest.body)
+
   try:
-    start = int(aStart)
-    end = int(aEnd)
+    start = int(paramsVector[0])
+    end = int(paramsVector[1])
   except ValueError:
-    raise Http404()
+    raise Http500()
 
   events = Event.objects.filter(end__gt=start).filter(start__lt=end)
 

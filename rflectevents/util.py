@@ -6,7 +6,7 @@ from django.conf import settings
 import time
 import random
 
-JSON_XSS_PREPENDER = '}>'
+JSON_XSS_PREPENDER = '])}>"'
 
 def protectJSON(json):
   return JSON_XSS_PREPENDER + json
