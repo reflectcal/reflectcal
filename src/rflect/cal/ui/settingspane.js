@@ -853,6 +853,8 @@ rflect.cal.ui.SettingsPane.prototype.onNewCalendarAction_ =
   this.currentCalendar_ = new rflect.cal.events.Calendar('', '',
       rflect.cal.i18n.PREDEFINED_COLOR_CODES[randomColorCodeIndex]);
 
+  aEvent.target.setFocused(false);
+
   this.switchContent_(rflect.cal.ui.SettingsPane.PageIndexes.CALENDAR_EDIT);
   this.displayCalendarValues_();
 }
