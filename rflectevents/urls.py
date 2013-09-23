@@ -5,7 +5,7 @@ urlpatterns = patterns('',
     ('^$', 'django.views.generic.simple.direct_to_template',
         {'template': 'home.html'}),
 
-    (r'^events/load/(\d+)-(\d+)/$', loadEvents),
+    (r'^events/load/$', loadEvents),
     (r'^events/save/$', saveEvent),
     (r'^events/delete/(.+)/$', deleteEvent),
 

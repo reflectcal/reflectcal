@@ -14,7 +14,7 @@ def hello(aRequest):
      util.delayResponse()
   return HttpResponse("Hello world")
 
-def loadEvents(aRequest, aStart, aEnd):
+def loadEvents(aRequest):
   paramsVector = json.loads(aRequest.body)
 
   try:
@@ -23,7 +23,9 @@ def loadEvents(aRequest, aStart, aEnd):
   except ValueError:
     raise Http500()
 
-  events = Event.objects.filter(end__gt=start).filter(start__lt=end)
+  calendarsQs = Calendar.objects.filter(id__in=paramsVector[2:])
+  events = Event.objects.filter(calendar__in=calendarsQs).filter(
+      end__gt=start).filter(start__lt=end)
 
   responseJSON = util.serializeEvents(events)
 
