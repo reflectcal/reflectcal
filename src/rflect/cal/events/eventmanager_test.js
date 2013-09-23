@@ -370,7 +370,7 @@ function testCreateEvent() {
   prepareDataStructures(-1);
 
   goog.array.forEach(eventsJSON, function(event, index) {
-    var event = rflect.cal.events.EventManager.createEventFromArray(event);
+    var event = rflect.cal.events.Event.fromJSON(event);
 
     assertNotNull('event is not null', event);
     assertTrue('id equals control', event.longId == fields[index][0]);

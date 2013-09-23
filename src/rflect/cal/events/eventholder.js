@@ -9,6 +9,7 @@
 
 goog.provide('rflect.cal.events.EventHolder');
 
+goog.require('rflect.cal.events.Event');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.date.DateShim');
 
@@ -85,10 +86,10 @@ rflect.cal.events.EventHolder.prototype.openSession =
     function(opt_event) {
   if (opt_event) {
     this.newTemporaryEvent_ = opt_event.clone();
-    this.newTemporaryEvent_.id = rflect.cal.events.EventManager.createEventId();
+    this.newTemporaryEvent_.id = rflect.cal.events.Event.createEventId();
   }
   else
-    this.newTemporaryEvent_ = rflect.cal.events.EventManager.createEvent('',
+    this.newTemporaryEvent_ = rflect.cal.events.Event.createEvent('',
         null, null, false);
 
   this.backUpEvent_ = opt_event && opt_event.clone();

@@ -8,8 +8,8 @@ goog.addDependency('../../../rflect/cal/containersizemonitor.js', ['rflect.cal.C
 goog.addDependency('../../../rflect/cal/events/calendar.js', ['rflect.cal.events.Calendar'], ['goog.array', 'rflect.cal.i18n.PREDEFINED_COLOR_CODES']);
 goog.addDependency('../../../rflect/cal/events/chip.js', ['rflect.cal.events.Chip'], []);
 goog.addDependency('../../../rflect/cal/events/colorcode.js', ['rflect.cal.events.ColorCode'], ['goog.array', 'rflect.cal.i18n.Symbols']);
-goog.addDependency('../../../rflect/cal/events/event.js', ['rflect.cal.events.Event'], ['goog.date.Interval', 'goog.i18n.DateTimeFormat', 'goog.i18n.DateTimePatterns', 'goog.i18n.DateTimeSymbols']);
-goog.addDependency('../../../rflect/cal/events/eventholder.js', ['rflect.cal.events.EventHolder'], ['rflect.cal.i18n.Symbols', 'rflect.date.DateShim']);
+goog.addDependency('../../../rflect/cal/events/event.js', ['rflect.cal.events.Event'], ['goog.date.Interval', 'goog.i18n.DateTimeFormat', 'goog.i18n.DateTimePatterns', 'goog.i18n.DateTimeSymbols', 'rflect.date']);
+goog.addDependency('../../../rflect/cal/events/eventholder.js', ['rflect.cal.events.EventHolder'], ['rflect.cal.events.Event', 'rflect.cal.i18n.Symbols', 'rflect.date.DateShim']);
 goog.addDependency('../../../rflect/cal/events/eventmanager.js', ['rflect.cal.events.EventManager'], ['goog.date.DateTime', 'rflect.cal.events.Calendar', 'rflect.cal.events.Chip', 'rflect.cal.events.Event', 'rflect.cal.events.EventHolder', 'rflect.cal.i18n.PREDEFINED_COLOR_CODES', 'rflect.cal.predefined.chips', 'rflect.object', 'rflect.structs.IntervalTree']);
 goog.addDependency('../../../rflect/cal/events/plan.js', ['rflect.cal.events.Plan'], []);
 goog.addDependency('../../../rflect/cal/eventtype.js', ['rflect.cal.EventType'], []);

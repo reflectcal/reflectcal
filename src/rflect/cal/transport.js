@@ -350,7 +350,7 @@ rflect.cal.Transport.prototype.onLoadEvents_ = function(aInterval, aEvent) {
 
     this.loadedEventIds_[longId] = true;
 
-    var event = rflect.cal.events.EventManager.createEventFromArray(eventObj);
+    var event = rflect.cal.events.Event.fromJSON(eventObj);
 
     this.eventManager_.addEvent(event);
   }

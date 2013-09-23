@@ -166,69 +166,6 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
 
 
 /**
- * Event short id.
- * @type {number}
- * @private
- */
-rflect.cal.events.EventManager.eventUid_ = 0;
-
-
-/**
- * @returns {number} Event id.
- */
-rflect.cal.events.EventManager.createEventId = function() {
-  return rflect.cal.events.EventManager.eventUid_++;
-};
-
-
-/**
- * Factory method that creates event from JSON array.
- * @param {Array} aArray Array representation.
- * @return {rflect.cal.events.Event} Event representation.
- */
-rflect.cal.events.EventManager.createEventFromArray = function(aArray) {
-  var longId = aArray[rflect.cal.events.Event.FIELD_ID];
-  // We parse start day with day and week fields, they are needed for forming
-  // chips.
-  var startDate = rflect.date.createDateShimFromTimestamp(
-      +aArray[rflect.cal.events.Event.FIELD_START_DATE], true);
-  if (goog.DEBUG)
-    _log('startDate', startDate);
-  var endDate = rflect.date.createDateShimFromTimestamp(
-      +aArray[rflect.cal.events.Event.FIELD_END_DATE], true);
-  if (goog.DEBUG)
-    _log('endDate', endDate);
-  var summary = aArray[rflect.cal.events.Event.FIELD_SUMMARY];
-  var description = aArray[rflect.cal.events.Event.FIELD_DESCRIPTION];
-  var allDay = aArray[rflect.cal.events.Event.FIELD_ALL_DAY];
-  var calendarId = aArray[rflect.cal.events.Event.FIELD_CALENDAR_ID];
-
-  return rflect.cal.events.EventManager.createEvent(longId, startDate, endDate,
-      allDay, summary, description, calendarId);
-}
-
-
-/**
- * Factory method that creates event from args.
- * @param {string} aLongId Server-side id for event.
- * @param {rflect.date.DateShim} aStartDate Start date.
- * @param {rflect.date.DateShim} aEndDate End date.
- * @param {boolean} aAllDay Whether event is all day.
- * @param {string=} opt_summary Name of event.
- * @param {string=} opt_description Longer description of event.
- * @param {string=} opt_calendarId Calendar id.
- * @return {rflect.cal.events.Event} Event representation.
- */
-rflect.cal.events.EventManager.createEvent = function(aLongId,
-    aStartDate, aEndDate, aAllDay, opt_summary, opt_description,
-    opt_calendarId) {
-  var uid = rflect.cal.events.EventManager.createEventId();
-  return new rflect.cal.events.Event(uid, aLongId, aStartDate, aEndDate,
-      aAllDay, opt_summary, opt_description, opt_calendarId);
-}
-
-
-/**
  * @return {Array.<rflect.cal.events.Chip>} Chips from data structure.
  * @param {Object.<number, Object.<number, Array.<rflect.cal.events.Chip>>>} aDataStructure Data structure from where to retrieve chips.
  * @param {number} aIndex1 First index.
@@ -345,7 +282,7 @@ rflect.cal.events.EventManager.prototype.jsonToChips =
   for (var counter = 0, length = aEventsArray.length; counter < length;
         counter++) {
 
-    var event = rflect.cal.events.EventManager.createEventFromArray(
+    var event = rflect.cal.events.Event.fromJSON(
         aEventsArray[counter]);
     this.addEvent(event);
   }
@@ -739,7 +676,7 @@ rflect.cal.events.EventManager.prototype.startEventCreationSession =
       end.getDate(), end.getHours(), 0, 0);
 
   var event =
-      rflect.cal.events.EventManager.createEvent('', start, end, allDay);
+      rflect.cal.events.Event.createEvent('', start, end, allDay);
 
   this.eventHolder.openSession(event);
 
