@@ -14,11 +14,11 @@
 .goog-date-picker,
 .goog-date-picker th,
 .goog-date-picker td {
-  font: 13px arial, sans-serif;
+  font: 13px 'Roboto', arial, sans-serif;
 }
 
 .goog-date-picker {
-  height: 146px; /*default size*/
+  height: 160px; /*default size 146px, other - depends on font*/
   position: relative;
   border: 1px solid #d5d5d5;
   /*float: left;*/

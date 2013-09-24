@@ -1514,7 +1514,7 @@ overflow:hidden
 
 #month-selector .goog-date-picker {
   border-left: none;
-  height: 150px;
+  height: 160px;/*For Roboto, 150px for arial*/
   padding: 0;
 }
 
