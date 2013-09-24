@@ -7,10 +7,29 @@ html {
   overflow-y: auto; /*To prevent appearance of scrollbar in IE7.*/
 }
 
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: url(//ssl.gstatic.com/fonts/roboto/v9/grlryt2bdKIyfMSOhzd1eA.woff) format('woff');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: url(//ssl.gstatic.com/fonts/roboto/v9/vxNK-E6B13CyehuDCmvQvw.woff) format('woff');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: url(//ssl.gstatic.com/fonts/roboto/v9/d-QWLnp4didxos_6urzFtg.woff) format('woff');
+}
+
 body {
   height: 100%;
   margin: 0;
-  font: 13px arial, sans-serif;
+  font: 13px 'Roboto', arial, sans-serif;
   /*Note(alexk): It's responsibility of container to provide width/height restrictions.*/
   min-width: 500px;
   min-height: 376px; /* -8px of .cal-container margin-top.*/
