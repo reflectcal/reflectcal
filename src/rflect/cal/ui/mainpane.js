@@ -894,6 +894,9 @@ rflect.cal.ui.MainPane.prototype.showEventEditComponent_ = function(aTarget,
 
   var event = this.getEventByTarget_(aTarget);
 
+  if (this.eventManager_.eventIsInProgress(event.id))
+    return;
+
   this.eventManager_.eventHolder.openSession(event);
 
   if (event) {
@@ -1553,6 +1556,9 @@ rflect.cal.ui.MainPane.prototype.startChipDrag_ = function(aEvent,
 
   var calendarEvent = this.getEventByTarget_(
       /**@type {Element}*/(target));
+
+  if (this.eventManager_.eventIsInProgress(calendarEvent.id))
+    return;
 
   var chipElement = this.getChipElement_(/**@type {Element}*/(target));
   var eventClassName = chipElement.className;
