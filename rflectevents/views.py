@@ -45,7 +45,10 @@ def saveEvent(aRequest):
     id = util.generateEventId()
     response = id
 
-  cal = Calendar(id = event[6])
+  if Calendar.objects.filter(id = event[6]).exists():
+    cal = Calendar(id = event[6])
+  else:
+    raise Http500()
 
   Event(id = id, start = event[1], end = event[2], allDay = event[3],
         name = event[4], description = event[5], calendar = cal).save()
