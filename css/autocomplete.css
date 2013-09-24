@@ -17,7 +17,7 @@
  * goog-autocomplete-renderer
  */
 .ac-renderer {
-  font: normal 13px Arial, sans-serif;
+  font: normal 13px 'Roboto', Arial, sans-serif;
   position: absolute;
   background: #fff;
   border: 1px solid #d5d5d5;

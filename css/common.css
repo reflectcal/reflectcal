@@ -77,7 +77,7 @@ input[type="text"]:hover {
 }
 
 textarea {
-  font-family: arial, sans-serif;
+  font-family: 'Roboto', arial, sans-serif;
   background: none;
   border-color: #C0C0C0 #D9D9D9 #D9D9D9;
   border-right: 1px solid #D9D9D9;
