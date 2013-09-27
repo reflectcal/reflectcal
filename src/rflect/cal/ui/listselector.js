@@ -84,7 +84,7 @@ rflect.cal.ui.ListSelector.HTML_PARTS_ = [
   '</div>',
   /* List selector menu signs (<div class="listitem-opt"></div>)*/
   '</div>',
-  '<div id="calendars-body" class="list-body ',
+  '<div id="calendars-body" class="' + goog.getCssName('list-body') + ' ',
   /* Class indicating whether list body is overflown (list-body-overflown). */
   '" style="height:',
   /* Height of list selector's body in pixels (150). */

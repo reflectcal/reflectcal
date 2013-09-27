@@ -117,7 +117,7 @@ goog.inherits(rflect.cal.ui.MainBody, rflect.ui.Component);
  * @private
  */
 rflect.cal.ui.MainBody.HTML_PARTS_ = [
-  '<div id="cal-container" class="cal-container">',
+  '<div id="cal-container" class="' + goog.getCssName('cal-container') + '">',
   '<div id="top-pane">',
   '</div>',
   '<div id="main-body">',
@@ -125,9 +125,9 @@ rflect.cal.ui.MainBody.HTML_PARTS_ = [
   '<div id="left-main-pane">',
   '<div id="month-selector">',
   '</div>',
-  '<div id="calendars-selector" class="list-selector">',
+  '<div id="calendars-selector" class="' + goog.getCssName('list-selector') + '">',
   '</div>',
-  '<div id="tasks-selector" class="list-selector">',
+  '<div id="tasks-selector" class="' + goog.getCssName('list-selector') + '">',
   '</div>',
   '</div>',
   '<div id="left-aux-pane">',

@@ -114,22 +114,22 @@ rflect.cal.ui.TopPane.prototype.buildInternal = function(aSb) {
     // First button container.
     // 'Now' button.
     '<div id="' + rflect.cal.predefined.BUTTON_NOW_ID +
-        '" class="goog-flat-button-collapse-right ',
-    'cal-menu-leftmost-button goog-flat-button-bord-rad-collapse-right',
-    ' cal-menu-button cal-menu-button-now">',
+        '" class="' + goog.getCssName('goog-flat-button-collapse-right') + ' ',
+    goog.getCssName('cal-menu-leftmost-button') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-right'),
+    ' ' + goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-now') + '">',
     rflect.cal.i18n.Symbols.NOW,
     '</div>',
 
     // Back button.
     '<div id="' + rflect.cal.predefined.BUTTON_PREV_ID +
-        '" class="goog-flat-button-collapse-left ',
-    'goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both ',
-    'cal-menu-button cal-menu-button-back"><div class="button-sign button-sign-back goog-inline-block"></div></div>',
+        '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
+    goog.getCssName('goog-flat-button-collapse-right') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-both') + ' ',
+    goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-back') + '"><div class="' + goog.getCssName('button-sign button-sign-back') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div>',
 
     // Forward button.
-    '<div id="' + rflect.cal.predefined.BUTTON_NEXT_ID + '" class="goog-flat-button-collapse-left ',
-    'cal-menu-rightmost-button goog-flat-button-bord-rad-collapse-left ',
-    'cal-menu-button cal-menu-button-forward"><div class="button-sign button-sign-forward goog-inline-block"></div></div></div>',
+    '<div id="' + rflect.cal.predefined.BUTTON_NEXT_ID + '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
+    goog.getCssName('cal-menu-rightmost-button') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-left') + ' ',
+    goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-forward') + '"><div class="' + goog.getCssName('button-sign') + ' ' + goog.getCssName('button-sign-forward') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div></div>',
 
     '<div id="main-pane-controls"><div id="main-pane-controls-right">',
     '<div style="margin-right: 0px;" class="goog-inline-block">',

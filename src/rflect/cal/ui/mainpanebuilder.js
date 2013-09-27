@@ -151,7 +151,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   '"></div>',
   '</div>',
   // Header container.
-  '<div id="main-pane-header-container" class="main-pane-header-container-wk" style="' +
+  '<div id="main-pane-header-container" class="' + goog.getCssName('main-pane-header-container-wk') + '" style="' +
       /*Main pane header container margin (left or right) in pixels (40px).*/
       rflect.cal.i18n.predefined.MAIN_PANE_HEADER_CONTAINER_WK_MARGIN,
   // Daynames container.
@@ -196,7 +196,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   // Individual weekgrid col.
   '<div id="weekgrid-ad-col',
   /*Weekgrid ad col id is here (weekgrid-ad-col0).*/
-  '" class="weekgrid-col',
+  '" class="' + goog.getCssName('weekgrid-col') + '',
   /*Weekgrid col class (weekgrid-col).*/
   ' wk-ad-layers-cont-outer" style="margin-left:',
   /*Weekgrid ad col left margin in percents (0).*/
@@ -205,14 +205,14 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   '%;top:',
   /*Weekgrid ad col top position in percents (0).*/
   '%">',
-  '<div class="wk-ad-layers-cont">',
+  '<div class="' + goog.getCssName('wk-ad-layers-cont') + '">',
   // Individual decoration layer.
   '<div id="wk-ad-dec-layer-col',
   /*Decoration layer id (wk-ad-dec-layer-col0).*/
-  '" class="wk-ad-decoration-layer">',
+  '" class="' + goog.getCssName('wk-ad-decoration-layer') + '">',
   // Expand sign
-  '<div class="expand-sign-wk-ad-cont">',
-  '<div class="expand-sign-wk-ad ',
+  '<div class="' + goog.getCssName('expand-sign-wk-ad-cont') + '">',
+  '<div class="' + goog.getCssName('expand-sign-wk-ad') + ' ',
   /*Expand sign state is here
   (expand-sign-wk-ad-collapsed, expand-sign-wk-ad-expanded).*/
   '"></div></div>',
@@ -221,7 +221,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
 
   // Individual event layer.
   '<div id="wk-ad-events-layer-col',/*Individual ad event layer id (wk-ad-events-layer-col0).*/
-  '" class="wk-ad-events-layer">',/*Events are here.*/
+  '" class="' + goog.getCssName('wk-ad-events-layer') + '">',/*Events are here.*/
   // End of individual events layer.
   '</div>',
   '</div>',
@@ -240,13 +240,13 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   /* Width of zippies table in percent (100). */
   '%">',
   // Individual zippy.
-  '<div class="wk-col-zippy-cont" style="margin-left:',/*Individual zippy left
+  '<div class="' + goog.getCssName('wk-col-zippy-cont') + '" style="margin-left:',/*Individual zippy left
   margin in percent (14.2857).*/
   '%;margin-right:',/*Individual zippy right margin in percent (71.4286).*/
   '%;top:',/*Individual zippy top in percent (0).*/
   '%">',
   '<div id="wk-zippy-col',/*Id of zippy (wk-zippy-col2).*/
-  '" class="zippy wk-col-zippy ',/*State of zippy
+  '" class="' + goog.getCssName('zippy') + ' ' + goog.getCssName('wk-col-zippy') + ' ',/*State of zippy
   (goog-zippy-expanded, goog-zippy-collapsed).*/
   '"></div>',
   '</div>',
@@ -272,7 +272,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   // Individual hour.
   '<div class="',/*Grid table row state (grid-table-row grid-table-row-odd,
   grid-table-row grid-table-row-even).*/
-  '"><div class="hour-label ',/*Hour state (hl-odd, hl-even).*/
+  '"><div class="' + goog.getCssName('hour-label') + ' ',/*Hour state (hl-odd, hl-even).*/
   '">',/*Hour here (00:00).*/
   '</div></div>',
   // End of hours container.
@@ -282,7 +282,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
       /* Margin of grid table wrapper (left or right) in pixels (40px).*/
       rflect.cal.i18n.predefined.GRID_TABLE_WRAPPER_WK_MARGIN + '">',
   // Grid rows container.
-  '<div id="grid-rows-container" class="wk-grid-rows-cont" style="width:',
+  '<div id="grid-rows-container" class="' + goog.getCssName('wk-grid-rows-cont') + '" style="width:',
   /* Width of grid rows in percents (100%). */
   '%">',
   // Individual row.
@@ -292,7 +292,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   // End of grid rows container.
   '</div>',
   // Grid table.
-  '<div class="grid-table-wk-outer" style="width:',
+  '<div class="' + goog.getCssName('grid-table-wk-outer') + '" style="width:',
   /* Width of grid table in percents (100%). */
   '%"><div id="grid-table-wk" class="' + goog.getCssName('grid-table-wk') + '">',
   // Masks.
@@ -300,7 +300,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   // Individual weekgrid col.
   '<div id="weekgrid-col',
   /*Id of weekgrid col (0).*/
-  '" class="weekgrid-col',
+  '" class="' + goog.getCssName('weekgrid-col') + '',
   /*Class of weekgrid col (weekgrid-col).*/
   '" style="margin-left:',
   /*Weekgrid col left margin
@@ -313,9 +313,9 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   '%">',
   // Individual decoration layer.
   '<div id="wk-dec-layer-in-col',/*Id of individual decoration layer (wk-dec-layer-in-col0).*/
-  '" class="wk-decoration-layer">',
+  '" class="' + goog.getCssName('wk-decoration-layer') + '">',
   // Expand sign.
-  '<div class="expand-sign-wk-cont"><div class="expand-sign-wk ',
+  '<div class="' + goog.getCssName('expand-sign-wk-cont') + '"><div class="' + goog.getCssName('expand-sign-wk') + ' ',
   /* Expand sign state (expand-sign-wk-collapsed, expand-sign-wk-expanded).*/
   '"></div></div>',
   // Today mask.
@@ -324,10 +324,10 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   '</div>',
   // Individual events layer.
   '<div id="wk-events-layer-col',/*Id of individual events layer (wk-events-layer-col0).*/
-  '" class="wk-events-layer">',
+  '" class="' + goog.getCssName('wk-events-layer') + '">',
   /*Events are here.*/
   // Individual event chip
-  '<div class="event-rect-wk" style="top:',
+  '<div class="' + goog.getCssName('event-rect-wk') + '" style="top:',
   /*Chip top in pixels (30)*/
   'px; margin-left:',
   /*Chip margin-left in percents (33.3)*/
@@ -339,9 +339,9 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   /*Chip margin-bottom in pixels (-30)*/
   'px;z-index:',
   /*Chip z-index (1)*/
-  '"><div class="event-rect-wk-inner ',
+  '"><div class="' + goog.getCssName('event-rect-wk-inner') + ' ',
   /*Chip inner class (event-rect-focused)*/
-  '"><span class="event-wk-timelabel">',
+  '"><span class="' + goog.getCssName('event-wk-timelabel') + '">',
   /*Chip start time (14:00)*/
   ' - ',
   /*Chip end time (00:00)*/
@@ -378,7 +378,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '<div id="main-pane-header">',
   '<div id="daynames-prefix-mn">',
   '</div>',
-  '<div id="main-pane-header-container" class="main-pane-header-container-mn">',
+  '<div id="main-pane-header-container" class="' + goog.getCssName('main-pane-header-container-mn') + '">',
   '<div id="main-pane-header-wk-daynames" style="margin-right:',
   /* Main pane header container margin left (19).*/
   'px"><table id="weekmode-daynames-table" cellspacing="0" cellpadding="0">',
@@ -407,10 +407,10 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '" style="height:',
   /*Height of individual month zippy container in pixels (70).*/
   'px;">',
-  '<div class="mn-row-zippy-cont">',
+  '<div class="' + goog.getCssName('mn-row-zippy-cont') + '">',
   '<div id="mn-zippy-row',
   /*Id of individual zippy (0)*/
-  '" class="zippy mn-row-zippy ',
+  '" class="' + goog.getCssName('zippy') + ' ' + goog.getCssName('mn-row-zippy') + ' ',
   /*State of individual zippy (mn-row-zippy-collapsed).*/
   '"></div>',
   '</div>',
@@ -432,9 +432,9 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   // Individual weeknum.
   '<tr><td id="weeknum',
   /* Id of individual weeknum (0).*/
-  '" class="weeknum-label" style="height:',
+  '" class="' + goog.getCssName('weeknum-label') + '" style="height:',
   /* Height of individual weeknum in pixels (70).*/
-  'px;"><span class="weeknum-label-inner">',
+  'px;"><span class="' + goog.getCssName('weeknum-label-inner') + '">',
   /* Name of individual weeknum (10).*/
   // End of individual weeknum.
   '</span></td></tr>',
@@ -444,7 +444,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '<div id="grid-table-wrapper-mn">' +
       // Masks.
       '<div id="mn-mask-cnt"></div>',
-  '<div id="grid-cols-container" class="mn-grid-cols-cont">' +
+  '<div id="grid-cols-container" class="' + goog.getCssName('mn-grid-cols-cont') + ''">' +
       '<table id="grid-cols-cont-inner" cellspacing="0" cellpadding="0">' +
       '<tbody><tr>',
   // Individual monthgrid col.
@@ -460,30 +460,30 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   // Individual monthgrid row.
   '<tr><td id="monthgrid-row',
   /*Individual monthgrid row id (0).*/
-  '" class="monthgrid-row ',
+  '" class="' + goog.getCssName('monthgrid-row') + ' ',
   /*Class of monthgrid row (monthgrid-row-last).*/
   '" style="height:',
   /*Individual monthgrid row height in pixels (69).*/
   'px;">',
-  '<div class="mn-layers-cont">',
+  '<div class="' + goog.getCssName('mn-layers-cont') + '">',
   // Individual decoration layer.
   '<div id="mn-dec-layer-row',
   /*Individual decoration layer id (0)*/
-  '" class="mn-decoration-layer">',
+  '" class="' + goog.getCssName('mn-decoration-layer') + '">',
   '<table cellspacing="0" cellpadding="0" class="daynums"><tbody><tr>',
   // Individual daycell.
-  '<td class="daycell"><div class="daycell-decoration-cont">',
-  '<div class="today-mask-mn"></div>',
+  '<td class="' + goog.getCssName('daycell') + '"><div class="' + goog.getCssName('daycell-decoration-cont') + '">',
+  '<div class="' + goog.getCssName('today-mask-mn') + '"></div>',
   /*Decoration container content (<div class="today-mask-mn"></div>).*/
-  '</div><div class="daycell-daynum-outer-cont"><div class="expand-sign-mn-cont"><div class="expand-sign-mn ',
+  '</div><div class="' + goog.getCssName('') + '"><div class="' + goog.getCssName('expand-sign-mn-cont') + '"><div class="' + goog.getCssName('expand-sign-mn') + ' ',
   /*Individual expand sign state
   (expand-sign-mn-collapsed, expand-sign-mn-expanded).*/
   '"></div>',
   '</div>',
-  '<div class="daynum-cont"><div id="daynum-',
+  '<div class="' + goog.getCssName('daynum-cont') + '"><div id="daynum-',
   /*Id of daynum row (0).*/
   /*Id of daynum col (0).*/
-  '" class="daynum-label ',
+  '" class="' + goog.getCssName('daynum-label') + ' ',
   /*Daynum state (dl-other-month).*/
   '">',
   /*Daynum name (26).*/
@@ -497,7 +497,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   // Individual events layer.
   '<div id="mn-events-layer-row',
   /*Individual events layer id (0).*/
-  '" class="mn-events-layer">',
+  '" class="' + goog.getCssName('mn-events-layer') + '">',
   /*Events are placed here.*/
   // Individual event chip.
   '<div style="margin-left:',
@@ -506,9 +506,9 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   /*margin-right in percent(0)*/
   '%;top:',
   /*top (17px)*/
-  'px" class="event-rect-mn-outer"><div class="event-rect-mn ',
+  'px" class="' + goog.getCssName('event-rect-mn-outer') + '"><div class="' + goog.getCssName('event-rect-mn') + ' ',
   /*additional classes (event-rect-mn-collapse-left)*/
-  '"><div class="event-rect-mn-inner ',
+  '"><div class="' + goog.getCssName('event-rect-mn-inner') + ' ',
   /*additional classes (event-rect-mn-inner-blue)*/
   '">',
   /*event description (week of javascript)*/
@@ -718,8 +718,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth_ = function(aSb,
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesZippy_ =
     function(aSb, aOffset) {
-  aSb.append(this.blockPoolAllDay_.expanded ? 'goog-zippy-expanded' :
-      'goog-zippy-collapsed');
+  aSb.append(this.blockPoolAllDay_.expanded ? goog.getCssName('goog-zippy-expanded') :
+      goog.getCssName('goog-zippy-collapsed'));
 };
 
 
@@ -1060,7 +1060,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekColZippies_ =
     aSb.append(colCounter);
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
     aSb.append(this.blockPoolWeek_.blocks[colCounter].expanded ?
-        'wk-col-zippy-expanded' : 'wk-col-zippy-collapsed');
+        goog.getCssName('wk-col-zippy-expanded') : goog.getCssName('wk-col-zippy-collapsed'));
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 9]);
   }
@@ -1101,7 +1101,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildMnRowZippies_ =
     aSb.append(rowCounter);
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 5]);
     aSb.append(this.blockPoolMonth_.blocks[rowCounter].expanded ?
-        'mn-row-zippy-expanded' : 'mn-row-zippy-collapsed');
+        goog.getCssName('mn-row-zippy-expanded') : goog.getCssName('mn-row-zippy-collapsed'));
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 6]);
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 7]);
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 8]);
@@ -1279,11 +1279,11 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildHoursAndGridRows_ =
   for (var counter = 0; counter < rflect.cal.predefined.HOUR_ROWS_NUMBER;
       counter++) {
     sb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
-    sb.append('grid-table-row ');
+    sb.append(goog.getCssName('grid-table-row') + ' ');
     if (counter % 2 == 0)
-      sb.append('grid-table-row-even');
+      sb.append(goog.getCssName('grid-table-row-even'));
     else
-      sb.append('grid-table-row-odd');
+      sb.append(goog.getCssName('grid-table-row-odd'));
     sb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 9]);
   }
   // Save to cache.
@@ -1305,11 +1305,11 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildGridRows_ =
     if (counter > 0)
       aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
     if (counter != 47)
-      aSb.append('grid-table-row ');
+      aSb.append(goog.getCssName('grid-table-row') + ' ');
     if (counter % 2 == 0) {
-      aSb.append('grid-table-row-even');
+      aSb.append(goog.getCssName('grid-table-row-even'));
     } else {
-      aSb.append('grid-table-row-odd');
+      aSb.append(goog.getCssName('grid-table-row-odd'));
     }
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
   }
@@ -1787,7 +1787,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGridRows_ = function(aSb, aOff
     aSb.append(rowCounter);
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 1]);
     if (rowCounter == rowsNumber - 1)
-      aSb.append('monthgrid-row-last');
+      aSb.append(goog.getCssName('monthgrid-row-last'));
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 2]);
     // Height of month grid row.
     aSb.append(this.blockPoolMonth_.blocks[rowCounter].size -
@@ -1891,7 +1891,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGridCols_ = function(aSb, aOff
     if (counter > 0)
       aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset]);
     if (counter == 6)
-      aSb.append(' weekgrid-col-last');
+      aSb.append(' ' + goog.getCssName('weekgrid-col-last'));
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 1]);
   }
 };

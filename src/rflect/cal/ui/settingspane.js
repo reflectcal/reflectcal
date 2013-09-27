@@ -419,7 +419,7 @@ rflect.cal.ui.SettingsPane.prototype.createTabContents1_ =
     className: goog.getCssName('event-edit-pane-cont')
     }, labelLanguages, selectLanguages);
 
-  return aDom.createDom('div', ['tabs-content', 'settings-tab-content'],
+  return aDom.createDom('div', [goog.getCssName('tabs-content'), goog.getCssName('settings-tab-content')],
       languagesCont);
 }
 
@@ -474,15 +474,15 @@ rflect.cal.ui.SettingsPane.prototype.createTable_ = function(aDom, aTableId,
  */
 rflect.cal.ui.SettingsPane.prototype.createTabContents2_ =
     function(aDom) {
-  var buttonsCont = aDom.createDom('div', ['settings-pane-buttons',
-      'settings-pane-buttons-inner', 'goog-inline-block']);
+  var buttonsCont = aDom.createDom('div', [goog.getCssName('settings-pane-buttons'),
+      goog.getCssName('settings-pane-buttons-inner'), goog.getCssName('goog-inline-block')]);
 
   buttonsCont.appendChild(this.buttonNewCalendar_.getElement());
   goog.dom.classes.add(this.buttonNewCalendar_.getElement(),
       rflect.cal.ui.SettingsPane.BUTTON_CLASS_NAME);
 
-  this.tabContents2_ = aDom.createDom('div', ['tabs-content',
-      'settings-tab-content'], buttonsCont);
+  this.tabContents2_ = aDom.createDom('div', [goog.getCssName('tabs-content'),
+      goog.getCssName('settings-tab-content')], buttonsCont);
 
   this.updateCalendarTables_(aDom, this.tabContents2_);
 
@@ -622,8 +622,8 @@ rflect.cal.ui.SettingsPane.createCalendarsTd_ =
  * @private
  */
 rflect.cal.ui.SettingsPane.prototype.createCalendarEditForm_ = function(aDom) {
-  var buttonsCont = aDom.createDom('div', ['settings-pane-buttons',
-        'settings-pane-buttons-inner', 'goog-inline-block']);
+  var buttonsCont = aDom.createDom('div', [goog.getCssName('settings-pane-buttons'),
+        goog.getCssName('settings-pane-buttons-inner'), goog.getCssName('goog-inline-block')]);
 
   goog.dom.classes.add(this.buttonDeleteCalendar_.getElement(),
       rflect.cal.ui.SettingsPane.BUTTON_CLASS_NAME,
@@ -645,7 +645,7 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarEditForm_ = function(aDom) {
   this.inputCalendarName_ = aDom.createDom('input', {
     'type': 'text',
     id: 'sp-calendar-name-input',
-    className: 'ep-event-name-input',
+    className: goog.getCssName('ep-event-name-input'),
     autofocus: 'autofocus',
     placeholder: rflect.cal.i18n.Symbols.NO_NAME_EVENT
   });
@@ -666,7 +666,7 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarEditForm_ = function(aDom) {
       labelColor, colorPaletteTable);
 
 
-  return aDom.createDom('div', ['tabs-content', 'settings-tab-content'],
+  return aDom.createDom('div', [goog.getCssName('tabs-content'), goog.getCssName('settings-tab-content')],
       buttonsCont, nameCont, colorsCont);
 }
 
@@ -733,7 +733,7 @@ rflect.cal.ui.SettingsPane.prototype.createTabContents3_ = function(aDom) {
         goog.getCssName('event-edit-pane-cont')
   }, debugSubCont);
 
-  return aDom.createDom('div', ['tabs-content', 'settings-tab-content'],
+  return aDom.createDom('div', [goog.getCssName('tabs-content'), goog.getCssName('settings-tab-content')],
       allDayCont);
 }
 

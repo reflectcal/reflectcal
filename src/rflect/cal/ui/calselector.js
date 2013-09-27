@@ -51,13 +51,13 @@ goog.inherits(rflect.cal.ui.CalSelector, rflect.cal.ui.ListSelector);
  * @const
  */
 rflect.cal.ui.CalSelector.HTML_PARTS_ = [
-  '<div class="listitem-cont-outer"><div title="',
-  '" class="listitem-cont calitem-label-active" id="calitem-label-item',
-  '"><div class="goog-checkbox calitem-color-cont ',
+  '<div class="' + goog.getCssName('listitem-cont-outer') + '"><div title="',
+  '" class="' + goog.getCssName('listitem-cont') + ' ' + goog.getCssName('calitem-label-active') + '" id="calitem-label-item',
+  '"><div class="' + goog.getCssName('goog-checkbox') + ' ' + goog.getCssName('calitem-color-cont') + ' ',
   '" id="calitem-color-item',
-  '"><div class="checked-sign checked-sign-calselector" style="display:none"></div></div><div class="listitem-label">',
+  '"><div class="' + goog.getCssName('checked-sign') + ' ' + goog.getCssName('checked-sign-calselector') + '" style="display:none"></div></div><div class="' + goog.getCssName('listitem-label') + '">',
   /*Name here*/
-  '</div></div><div class="listitem-opt-cont" id="calitem-opt-item',
+  '</div></div><div class="' + goog.getCssName('listitem-opt-cont') + '" id="calitem-opt-item',
   '"></div></div>'
 ];
 

@@ -51,7 +51,7 @@ rflect.cal.ui.MiniCalBuilder.HTML_PARTS_ = [
   */
   '"><div id="minical-mask-cnt">',
   /* Mask. */
-  '</div><table class="minical-table" cellspacing="0" cellpadding="0">' +
+  '</div><table class="' + goog.getCssName('minical-table') + '" cellspacing="0" cellpadding="0">' +
       '<thead><tr class="' + goog.getCssName('goog-date-picker-head'),
   /*
   * Date picker head classname ().
