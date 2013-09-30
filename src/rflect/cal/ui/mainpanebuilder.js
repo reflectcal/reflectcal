@@ -444,7 +444,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '<div id="grid-table-wrapper-mn">' +
       // Masks.
       '<div id="mn-mask-cnt"></div>',
-  '<div id="grid-cols-container" class="' + goog.getCssName('mn-grid-cols-cont') + ''">' +
+  '<div id="grid-cols-container" class="' + goog.getCssName('mn-grid-cols-cont') + '">' +
       '<table id="grid-cols-cont-inner" cellspacing="0" cellpadding="0">' +
       '<tbody><tr>',
   // Individual monthgrid col.
