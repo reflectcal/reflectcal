@@ -84,7 +84,7 @@
             <arg line="--compiler_flags=&quot;--js=${basedir}\src\deps.js&quot;"/>
             <arg value="--namespace=rflect.cal.Loader"/>
             <arg line="--compiler_flags=&quot;--define=&quot;goog.DEBUG=true&quot;&quot;"/>
-            <arg line="--compiler_flags=&quot;--source_map_format=V1&quot;"/>
+            <arg line="--compiler_flags=&quot;--source_map_format=V3&quot;"/>
             <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\build\outputcompiled.js.map&quot;"/>
             <arg line="--compiler_flags=&quot;--formatting=PRETTY_PRINT&quot;"/>
         </exec>
@@ -108,6 +108,8 @@
             <arg line="--compiler_flags=&quot;--js=${basedir}\src\deps.js&quot;"/>
             <arg value="--namespace=rflect.cal.Loader"/>
             <arg line="--compiler_flags=&quot;--define=&quot;goog.DEBUG=false&quot;&quot;"/>
+            <arg line="--compiler_flags=&quot;--source_map_format=V3&quot;"/>
+            <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\build\outputcompiled.js.map&quot;"/>
         </exec>
     </target>
     <!--Dependency writer, creates deps.js-->
@@ -151,8 +153,8 @@
     <!--Gzip test.-->
     <target name="gziptest" description="Gzip example size test"
             depends="compile_prod">
-        <copy file="${basedir}/src/outputcompiled.js" todir="${basedir}/build">
-        </copy>
+        <!--<copy file="${basedir}/src/outputcompiled.js" todir="${basedir}/build">
+        </copy>-->
         <gzip src="${basedir}/build/outputcompiled.js"
               destfile="${basedir}/build/outputcompiled.js.gz"/>
     </target>

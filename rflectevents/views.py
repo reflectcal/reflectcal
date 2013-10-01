@@ -80,7 +80,8 @@ def mainRender(aRequest):
               'SETTINGS': settingsJSON
             })
 
-  template = get_template('rflectcalendar.html')
+  #template = get_template('rflectcalendar.html')
+  template = get_template('rflectcalendar-compiled.html')
   html = template.render(context)
 
   if settings.DEBUG:
