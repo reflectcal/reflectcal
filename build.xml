@@ -63,6 +63,8 @@
             <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\build\outputcompiled.js.map&quot;"/>
             <arg line="--compiler_flags=&quot;--formatting=PRETTY_PRINT&quot;"/>
             <arg line="--compiler_flags=&quot;--closure_entry_point=rflect.cal.Loader&quot;"/>
+
+            <arg line="--compiler_flags=&quot;--externs=${basedir}\src\externs.js&quot;"/>
         </exec>
     </target>
     <target name="compile_preprod" description="Compilation for pre-production,
@@ -110,6 +112,8 @@
             <arg line="--compiler_flags=&quot;--define=&quot;goog.DEBUG=false&quot;&quot;"/>
             <arg line="--compiler_flags=&quot;--source_map_format=V3&quot;"/>
             <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\build\outputcompiled.js.map&quot;"/>
+
+            <arg line="--compiler_flags=&quot;--externs=${basedir}\src\externs.js&quot;"/>
         </exec>
     </target>
     <!--Dependency writer, creates deps.js-->

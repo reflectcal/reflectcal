@@ -471,8 +471,8 @@ rflect.cal.Transport.prototype.updateIntervals_ = function(aLoadedInterval) {
  */
 rflect.cal.Transport.prototype.loadCalendars = function() {
 
-  if (goog.global.CALENDARS && goog.global.CALENDARS.length)
-    goog.array.forEach(goog.global.CALENDARS, function(aCalArray){
+  if (CALENDARS.length)
+    goog.array.forEach(CALENDARS, function(aCalArray){
       this.eventManager_.addCalendar(
           rflect.cal.events.Calendar.fromJSON(aCalArray));
     }, this);
