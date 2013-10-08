@@ -173,7 +173,7 @@ rflect.cal.events.Calendar.prototype.deleteEvent = function(aEvent) {
 /**
  * @return {Array} JSON representation of event.
  */
-rflect.cal.events.Calendar.prototype.toJSON = function() {
+rflect.cal.events.Calendar.prototype['toJSON'] = function() {
   var cal = [];
   
   cal[rflect.cal.events.Calendar.FIELD_ID] = this.id;

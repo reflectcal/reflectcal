@@ -315,8 +315,8 @@ rflect.cal.events.Event.prototype.clone = function() {
 /**
  * @return {Array} JSON representation of event.
  */
-rflect.cal.events.Event.prototype.toJSON = function() {
-  return [this.longId, this.startDate,
-      this.endDate, this.allDay, this.summary, this.description,
+rflect.cal.events.Event.prototype['toJSON'] = function() {
+  return [this.longId, this.startDate.getTime(),
+      this.endDate.getTime(), this.allDay, this.summary, this.description,
       this.calendarId];
 };
