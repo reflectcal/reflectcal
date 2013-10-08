@@ -1276,7 +1276,7 @@ rflect.ui.Dialog.ButtonSet.prototype.decorateInternal = function(element) {
   if (!element || element.nodeType != goog.dom.NodeType.ELEMENT) {
     return;
   }
-  var buttons = this.dom_.getChildren(this.element_);
+  var buttons = this.dom_.getChildren(this.getElement());
   for (var i = 0, buttonEl, key, caption; buttonEl = buttons[i]; i++) {
     var button = new goog.ui.Button(null, this.buttonRenderer_);
     var isDefault = i == 0;
