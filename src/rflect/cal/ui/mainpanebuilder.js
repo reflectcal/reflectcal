@@ -540,9 +540,8 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
  * @param {boolean} aFirstBuild Whether we build for the fist time.
- * @protected
  */
-rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek_ = function(aSb,
+rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
                                                                        aFirstBuild) {
   // Form html. From index 1 (see offset increment before append), because 0
   // is the html of outer container, which we don't create in that method but
@@ -656,10 +655,9 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGrid = function(aSb) {
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
  * @param {boolean} aFirstBuild Whether we build for the fist time.
- * @see rflect.cal.ui.MainPaneBuilder#buildBodyInternalWeek_
- * @protected
+ * @see rflect.cal.ui.MainPaneBuilder#buildBodyInternalWeek
  */
-rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth_ = function(aSb,
+rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth = function(aSb,
     aFirstBuild) {
   var offset = 0;
   var length = rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_.length;

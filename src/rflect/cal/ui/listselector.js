@@ -147,7 +147,6 @@ rflect.cal.ui.ListSelector.prototype.buttonRe_;
  * Whether full redraw is needed when calling updateByRedraw.
  * @see {rflect.cal.ui.ListSelector#updateByRedraw}
  * @type {boolean}
- * @protected
  */
 rflect.cal.ui.ListSelector.prototype.redrawIsNeeded = false;
 
@@ -157,7 +156,7 @@ rflect.cal.ui.ListSelector.prototype.redrawIsNeeded = false;
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
  * @protected
- * @see {rflect.cal.ui.MainPaneBuilder#buildBodyInternalWeek_}
+ * @see {rflect.cal.ui.MainPaneBuilder#buildBodyInternalWeek}
  */
 rflect.cal.ui.ListSelector.prototype.buildInternal = function(aSb) {
   var offset = 0;

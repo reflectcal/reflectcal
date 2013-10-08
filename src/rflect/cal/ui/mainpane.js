@@ -14,6 +14,7 @@ goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
+goog.require('goog.string');
 goog.require('goog.userAgent');
 goog.require('rflect.ui.Component');
 goog.require('rflect.cal.ui.MainPaneBuilder');
@@ -616,10 +617,10 @@ rflect.cal.ui.MainPane.prototype.buildInternal = function(aSb) {
 
   if (this.viewManager_.isInMonthMode()) {
     firstBuild = this.getParent().firstBuildMn;
-    this.mainPaneBuilder_.buildBodyInternalMonth_(aSb, firstBuild);
+    this.mainPaneBuilder_.buildBodyInternalMonth(aSb, firstBuild);
   } else if (this.viewManager_.isInWeekMode()) {
     firstBuild = this.getParent().firstBuildWk;
-    this.mainPaneBuilder_.buildBodyInternalWeek_(aSb, firstBuild);
+    this.mainPaneBuilder_.buildBodyInternalWeek(aSb, firstBuild);
   }
 };
 
@@ -673,7 +674,7 @@ rflect.cal.ui.MainPane.prototype.updateConditionally_ = function(
   // We need to detect IE8 because it doesn't allow changing of table's
   // innerHTML.
   var isIE8OrLower = goog.userAgent.IE &&
-      goog.userAgent.compare(goog.userAgent.VERSION, '8') <= 0;
+      goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0;
 
   this.eventManager_.run();
 

@@ -34,17 +34,17 @@ rflect.cal.ui.DatePicker = function(aViewManager) {
   /**
    * Link to view manager.
    * @type {rflect.cal.ViewManager}
-   * @private
+   * @protected
    */
-  this.viewManager_ = aViewManager;
+  this.viewManager = aViewManager;
 
   /**
    * Internal time manager.
    * @type {rflect.cal.TimeManager}
-   * @private
+   * @protected
    */
-  this.timeManager_ = new rflect.cal.TimeManager();
-  this.timeManager_.configuration =
+  this.timeManager = new rflect.cal.TimeManager();
+  this.timeManager.configuration =
       rflect.cal.TimeManager.Configuration.MINI_MONTH;
 
   /**
@@ -53,7 +53,7 @@ rflect.cal.ui.DatePicker = function(aViewManager) {
    * @private
    */
   this.miniCalBuilder_ = new rflect.cal.ui.MiniCalBuilder(this,
-      this.timeManager_);
+      this.timeManager);
 
   /**
    * Mouse over registry.
@@ -149,12 +149,12 @@ rflect.cal.ui.DatePicker.prototype.endSelectionIndex = -1;
 rflect.cal.ui.DatePicker.prototype.updateBeforeRedraw = function(opt_exclusions,
     opt_internal, opt_direction) {
   if (opt_internal && opt_direction){
-    this.timeManager_.shift(opt_direction);
+    this.timeManager.shift(opt_direction);
   } else {
-    this.timeManager_.shiftToPoint(this.basis_);
+    this.timeManager.shiftToPoint(this.basis_);
   }
 
-  this.basisIndex = goog.array.findIndex(this.timeManager_.daySeries,
+  this.basisIndex = goog.array.findIndex(this.timeManager.daySeries,
       goog.partial(rflect.cal.ui.DatePicker.dateFinder_, this.basisShim_));
 };
 
@@ -217,9 +217,9 @@ rflect.cal.ui.DatePicker.prototype.enterDocument = function() {
       .listen(this.getElement(), goog.events.EventType.SELECTSTART,
       this.onSelectStart_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
-      this.onMouseDown_, false, this)
+      this.onMouseDown, false, this)
       .listen(document, goog.events.EventType.MOUSEUP,
-      this.onMouseUp_, false, this);
+      this.onMouseUp, false, this);
 };
 
 
@@ -256,7 +256,7 @@ rflect.cal.ui.DatePicker.prototype.onMouseOver_ = function(aEvent) {
   var target = /** @type {Element} */ (aEvent.target);
   var className = target.className;
 
-  if (this.isField_(className))
+  if (this.isField(className))
     this.moRegistry_.registerTarget(target,
         goog.getCssName('goog-date-picker-selected'));
 };
@@ -271,7 +271,7 @@ rflect.cal.ui.DatePicker.prototype.onMouseOut_ = function(aEvent) {
   var target = aEvent.target;
   var className = target.className;
 
-  if (this.isField_(className))
+  if (this.isField(className))
     this.moRegistry_.deregisterTarget();
 }
 
@@ -282,7 +282,7 @@ rflect.cal.ui.DatePicker.prototype.onMouseOut_ = function(aEvent) {
  * @return {boolean} Whether it's selectable area.
  */
 rflect.cal.ui.DatePicker.prototype.isInteractiveArea_ = function(aClassName) {
-  return this.isButton_(aClassName) || this.isField_(aClassName);
+  return this.isButton_(aClassName) || this.isField(aClassName);
 };
 
 
@@ -299,10 +299,10 @@ rflect.cal.ui.DatePicker.prototype.isButton_ = function(aClassName) {
 
 /**
  * @param {string} aClassName Class name of element to test.
- * @private
+ * @protected
  * @return {boolean} Whether it's main field.
  */
-rflect.cal.ui.DatePicker.prototype.isField_ = function(aClassName) {
+rflect.cal.ui.DatePicker.prototype.isField = function(aClassName) {
   return (this.fieldRe_ || (this.fieldRe_ = rflect.string.buildClassNameRe(
       goog.getCssName('goog-date-picker-date')))).test(aClassName);
 };
@@ -324,9 +324,9 @@ rflect.cal.ui.DatePicker.prototype.onSelectStart_ = function(aEvent) {
 /**
  * Date picker mousedown handler.
  * @param {goog.events.Event} aEvent Event object.
- * @private
+ * @protected
  */
-rflect.cal.ui.DatePicker.prototype.onMouseDown_ = function(aEvent) {
+rflect.cal.ui.DatePicker.prototype.onMouseDown = function(aEvent) {
   var className = aEvent.target.className;
   if (this.isInteractiveArea_(className))
     aEvent.preventDefault();
@@ -337,15 +337,15 @@ rflect.cal.ui.DatePicker.prototype.onMouseDown_ = function(aEvent) {
 /**
  * Date picker mouseup handler.
  * @param {goog.events.Event} aEvent Event object.
- * @private
+ * @protected
  */
-rflect.cal.ui.DatePicker.prototype.onMouseUp_ = function(aEvent) {
+rflect.cal.ui.DatePicker.prototype.onMouseUp = function(aEvent) {
   var className = aEvent.target.className;
   var index = rflect.string.get2DigitIndex(aEvent.target.id);
 
-  if (this.isField_(className) && !isNaN(index))
+  if (this.isField(className) && !isNaN(index))
     goog.events.dispatchEvent(this,
-      new rflect.cal.ui.DatePicker.Event(this.timeManager_.daySeries[index]));
+      new rflect.cal.ui.DatePicker.Event(this.timeManager.daySeries[index]));
 };
 
 

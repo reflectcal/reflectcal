@@ -223,7 +223,6 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.isHorizontal =
 
 /**
  * @return {boolean} Whether mask is month.
- * @private
  */
 rflect.cal.ui.MainPaneSelectionMask.prototype.isMonth = function() {
   return this.configuration ==

@@ -98,7 +98,6 @@ rflect.cal.TimeManager.prototype.currentDay_;
 /**
  * Whether interval we're in contains now point.
  * @type {boolean}
- * @private
  */
 rflect.cal.TimeManager.prototype.isInNowPoint = false;
 

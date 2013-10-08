@@ -34,9 +34,9 @@ rflect.cal.ui.MiniCal = function(aViewManager, aExternalTimeManager) {
   /**
    * Link to view manager.
    * @type {rflect.cal.ViewManager}
-   * @private
+   * @protected
    */
-  this.viewManager_ = aViewManager;
+  this.viewManager = aViewManager;
 
   /**
    * External time manager.
@@ -50,7 +50,7 @@ rflect.cal.ui.MiniCal = function(aViewManager, aExternalTimeManager) {
    * @type {rflect.cal.ui.MiniCalSelectionMask}
    */
   this.selectionMask = new rflect.cal.ui.MiniCalSelectionMask(aViewManager, this,
-      this.timeManager_);
+      this.timeManager);
   if (goog.DEBUG)
     _inspect('selectionMask', this.selectionMask);
 
@@ -88,9 +88,9 @@ rflect.cal.ui.MiniCal.prototype.fieldRe_;
 rflect.cal.ui.MiniCal.prototype.updateBeforeRedraw = function(opt_exclusions,
     opt_internal, opt_direction) {
   if (opt_internal && opt_direction){
-    this.timeManager_.shift(opt_direction);
+    this.timeManager.shift(opt_direction);
   } else {
-    this.timeManager_.shiftToPoint(this.extTimeManager_.basis);
+    this.timeManager.shiftToPoint(this.extTimeManager_.basis);
   }
   this.initMask_();
 };
@@ -105,9 +105,9 @@ rflect.cal.ui.MiniCal.prototype.initMask_ = function() {
   var startSelectionIndex = -1;
   var endSelectionIndex = -1;
 
-  if (this.timeManager_.interval.overlaps(this.extTimeManager_.interval)) {
+  if (this.timeManager.interval.overlaps(this.extTimeManager_.interval)) {
 
-    var overlap = this.timeManager_.interval.overlap(
+    var overlap = this.timeManager.interval.overlap(
         this.extTimeManager_.interval);
     var startDate = new goog.date.Date();
     var endDate = new goog.date.Date();
@@ -117,13 +117,13 @@ rflect.cal.ui.MiniCal.prototype.initMask_ = function() {
     var startDateMonth = startDate.getMonth();
     var endDateDay = endDate.getDate();
     var endDateMonth = endDate.getMonth();
-    startSelectionIndex = goog.array.findIndex(this.timeManager_.daySeries,
+    startSelectionIndex = goog.array.findIndex(this.timeManager.daySeries,
         function(aDate){
       return startDateMonth == aDate.getMonth() &&
           startDateDay == aDate.getDate();
     });
     endSelectionIndex = goog.array.findIndexRight(
-        this.timeManager_.daySeries, function(aDate){
+        this.timeManager.daySeries, function(aDate){
       return endDateMonth == aDate.getMonth() &&
           endDateDay == aDate.getDate();
     });
@@ -131,7 +131,7 @@ rflect.cal.ui.MiniCal.prototype.initMask_ = function() {
       if(endSelectionIndex < 0)
         // We haven't found end index, so use latest. Because time interval ends in
         // tomorrow relative to latest selected cell, use index - 1.
-        endSelectionIndex = this.timeManager_.daySeries.length - 1;
+        endSelectionIndex = this.timeManager.daySeries.length - 1;
       else
         endSelectionIndex--;
     }
@@ -153,24 +153,24 @@ rflect.cal.ui.MiniCal.prototype.enterDocument = function() {
   rflect.cal.ui.MiniCal.superClass_.enterDocument.call(this);
 
   this.getHandler().listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
-      this.onMouseDown_, false, this)
+      this.onMouseDown, false, this)
       .listen(document, goog.events.EventType.MOUSEMOVE,
       this.onMouseMove_, false, this)
       .listen(document, goog.events.EventType.MOUSEUP,
-      this.onMouseUp_, false, this);
+      this.onMouseUp, false, this);
 };
 
 
 /**
  * Mini cal mousedown handler.
  * @param {goog.events.Event} aEvent Event object.
- * @private
+ * @protected
  */
-rflect.cal.ui.MiniCal.prototype.onMouseDown_ = function(aEvent) {
+rflect.cal.ui.MiniCal.prototype.onMouseDown = function(aEvent) {
   var className = aEvent.target.className;
   var index = rflect.string.get2DigitIndex(aEvent.target.id);
 
-  if (this.isField_(className)) {
+  if (this.isField(className)) {
     this.selectionMask.init(
         rflect.cal.ui.MiniCalSelectionMask.Configuration.MINI_MONTH_INTERNAL,
         index, 0);
@@ -191,7 +191,7 @@ rflect.cal.ui.MiniCal.prototype.onMouseMove_ = function(aEvent) {
   var index = rflect.string.get2DigitIndex(target.id);
   var className = target.className;
 
-  if (this.selectionMask.isDragStarted() && this.isField_(className) &&
+  if (this.selectionMask.isDragStarted() && this.isField(className) &&
       !isNaN(index)){
     this.selectionMask.update(index);
     aEvent.preventDefault();
@@ -202,9 +202,9 @@ rflect.cal.ui.MiniCal.prototype.onMouseMove_ = function(aEvent) {
 /**
  * Mini cal mouseup handler.
  * @param {goog.events.Event} aEvent Event object.
- * @private
+ * @protected
  */
-rflect.cal.ui.MiniCal.prototype.onMouseUp_ = function(aEvent) {
+rflect.cal.ui.MiniCal.prototype.onMouseUp = function(aEvent) {
   if (this.selectionMask.isDragStarted()){
     this.selectionMask.close();
     aEvent.preventDefault();
