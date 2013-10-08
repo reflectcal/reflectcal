@@ -21,7 +21,7 @@
 <body>
 <script type="text/javascript">
 var ROOT_URL = '{{SITE_URL}}';
-var CALENDARS = [];
+var CALENDARS = {{CALENDARS_LIST|safe}};
 var SETTINGS = {{SETTINGS|safe}};
 </script>
 <script src="{{STATIC_URL}}outputcompiled.js" type="text/javascript"></script>
