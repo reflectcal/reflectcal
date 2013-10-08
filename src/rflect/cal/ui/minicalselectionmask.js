@@ -176,8 +176,8 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.init = function(aConfiguration,
     // If we're here in minical internal, we started drag.
     this.dragStarted_ = true;
 
-    this.calculateDates(/**@type {number}*/(this.startIndex_ =
-        this.currentIndex_ = opt_startSelectionIndex));
+    this.calculateDates(this.startIndex_ =
+        this.currentIndex_ = /**@type {number}*/(opt_startSelectionIndex));
 
   }
 
