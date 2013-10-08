@@ -106,17 +106,17 @@ rflect.cal.ui.ListSelector.prototype.header_;
 /**
  * Label shown in header.
  * @type {string}
- * @private
+ * @protected
  */
-rflect.cal.ui.ListSelector.prototype.label_;
+rflect.cal.ui.ListSelector.prototype.label;
 
 
 /**
  * Scrollable element.
  * @type {Element}
- * @private
+ * @protected
  */
-rflect.cal.ui.ListSelector.prototype.scrollableEl_;
+rflect.cal.ui.ListSelector.prototype.scrollableEl;
 
 
 /**
@@ -147,7 +147,7 @@ rflect.cal.ui.ListSelector.prototype.buttonRe_;
  * Whether full redraw is needed when calling updateByRedraw.
  * @see {rflect.cal.ui.ListSelector#updateByRedraw}
  * @type {boolean}
- * @private
+ * @protected
  */
 rflect.cal.ui.ListSelector.prototype.redrawIsNeeded = false;
 
@@ -198,7 +198,7 @@ rflect.cal.ui.ListSelector.prototype.buildInternal = function(aSb) {
  *
  */
 rflect.cal.ui.ListSelector.prototype.buildLabel_ = function(aSb) {
-  aSb.append(this.label_);
+  aSb.append(this.label);
 };
 
 
@@ -289,7 +289,7 @@ rflect.cal.ui.ListSelector.prototype.updateBeforeRedraw = function(opt_exclusion
  * Redraws list selector. This default version changes scrollable size.
  */
 rflect.cal.ui.ListSelector.prototype.updateByRedraw = function() {
-  this.scrollableEl_.style.height = this.scrollableSize_.height + 'px';
+  this.scrollableEl.style.height = this.scrollableSize_.height + 'px';
 };
 
 
@@ -317,7 +317,7 @@ rflect.cal.ui.ListSelector.prototype.enterDocument = function() {
       this.onMouseOut_, false, this);
 
   // Save reference to scrollable element.
-  this.scrollableEl_ = goog.dom.getChildren(this.getElement())[1];
+  this.scrollableEl = goog.dom.getChildren(this.getElement())[1];
 };
 
 
@@ -418,7 +418,7 @@ rflect.cal.ui.ListSelector.prototype.disposeInternal = function() {
   rflect.cal.ui.ListSelector.superClass_.disposeInternal.call(this);
 
   // Dereference scrollable element.
-  this.scrollableEl_ = null;
+  this.scrollableEl = null;
   this.viewManager_ = null;
   this.containerSizeMonitor_ = null;
 };

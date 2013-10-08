@@ -39,7 +39,7 @@ rflect.cal.ui.CalSelector = function (aViewManager, aContainerSizeMonitor,
    */
   this.eventManager_ = aEventManager;
 
-  this.label_ = rflect.cal.i18n.Symbols.CALENDARS_LABEL;
+  this.label = rflect.cal.i18n.Symbols.CALENDARS_LABEL;
 };
 goog.inherits(rflect.cal.ui.CalSelector, rflect.cal.ui.ListSelector);
 
@@ -132,17 +132,17 @@ rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
     this.redrawIsNeeded = false;
 
     // Dereference scrollable element.
-    this.scrollableEl_ = null;
+    this.scrollableEl = null;
 
     this.disposeCheckboxes();
     this.getElement().innerHTML = this.build();
     this.enterDocumentForCheckboxes();
 
     // Save reference to scrollable element.
-    this.scrollableEl_ = goog.dom.getChildren(this.getElement())[1];
+    this.scrollableEl = goog.dom.getChildren(this.getElement())[1];
 
   }
-  this.scrollableEl_.style.height = this.scrollableSize_.height + 'px';
+  this.scrollableEl.style.height = this.scrollableSize_.height + 'px';
 };
 
 
