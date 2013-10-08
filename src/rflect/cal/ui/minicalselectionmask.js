@@ -148,13 +148,13 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.update = function(aIndex) {
 
 /**
  * Sets up mask.
- * @param {rflect.cal.ui.MiniCalSelectionMask.Configuration} aConfiguration Configuration
+ * @param {number} aConfiguration Configuration
  * of mask.
- * @param {number} startSelectionIndex Index where to start a mask.
- * @param {number} endSelectionIndex Index where to end a mask.
+ * @param {number=} opt_startSelectionIndex Index where to start a mask.
+ * @param {number=} opt_endSelectionIndex Index where to end a mask.
  */
 rflect.cal.ui.MiniCalSelectionMask.prototype.init = function(aConfiguration,
-    startSelectionIndex, endSelectionIndex) {
+    opt_startSelectionIndex, opt_endSelectionIndex) {
   rflect.cal.ui.SelectionMask.prototype.init.call(this, aConfiguration);
 
   this.dragStarted_ = false;
@@ -165,8 +165,8 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.init = function(aConfiguration,
     // previously initialized.
     this.initialized = false;
 
-    this.component.startSelectionIndex = startSelectionIndex;
-    this.component.endSelectionIndex = endSelectionIndex;
+    this.component.startSelectionIndex = opt_startSelectionIndex;
+    this.component.endSelectionIndex = opt_endSelectionIndex;
 
     // Update mask for external mode.
     this.updateInternal();
@@ -176,8 +176,8 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.init = function(aConfiguration,
     // If we're here in minical internal, we started drag.
     this.dragStarted_ = true;
 
-    this.calculateDates(this.startIndex_ = this.currentIndex_ =
-        startSelectionIndex);
+    this.calculateDates(/**@type {number}*/(this.startIndex_ =
+        this.currentIndex_ = opt_startSelectionIndex));
 
   }
 

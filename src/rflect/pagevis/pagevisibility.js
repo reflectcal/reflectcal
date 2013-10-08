@@ -51,7 +51,7 @@ rflect.pagevis.pageIsVisible = function() {
  * after <code>detect</code>.
  */
 rflect.pagevis.isAvailable = function() {
-  return /**@type {boolean}*/(rflect.pagevis.nameOfHiddenProperty_ &&
+  return !!(rflect.pagevis.nameOfHiddenProperty_ &&
       rflect.pagevis.nameOfVisibilityChangeEvent);
 }
 

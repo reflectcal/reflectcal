@@ -38,8 +38,8 @@ goog.inherits(rflect.ui.Component, goog.ui.Component);
  * from update.
  */
 rflect.ui.Component.indexIsInExclusions = function(aContainer, aIndex) {
-  return /**@type {boolean}*/ (aContainer) &&
-      /**@type {boolean}*/ (aContainer.length) &&
+  return !!aContainer &&
+      !!aContainer.length &&
       goog.array.contains(aContainer, aIndex)
 }
 
