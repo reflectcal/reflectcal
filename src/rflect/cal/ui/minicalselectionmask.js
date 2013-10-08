@@ -80,7 +80,7 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.currentIndex_ = -1;
  * @private
  */
 rflect.cal.ui.MiniCalSelectionMask.prototype.isMiniMonthInt_ = function() {
-  return this.configuration_ == rflect.cal.ui.MiniCalSelectionMask.Configuration.
+  return this.configuration == rflect.cal.ui.MiniCalSelectionMask.Configuration.
       MINI_MONTH_INTERNAL;
 };
 
@@ -90,7 +90,7 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.isMiniMonthInt_ = function() {
  * @private
  */
 rflect.cal.ui.MiniCalSelectionMask.prototype.isMiniMonthExt_ = function() {
-  return this.configuration_ == rflect.cal.ui.MiniCalSelectionMask.Configuration.
+  return this.configuration == rflect.cal.ui.MiniCalSelectionMask.Configuration.
       MINI_MONTH_EXTERNAL;
 };
 
@@ -111,7 +111,7 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.close = function() {
   if (this.draggedAtLeastOnce_) {
     this.draggedAtLeastOnce_ = this.dragStarted_ = false;
 
-    goog.events.dispatchEvent(this.component_, {
+    goog.events.dispatchEvent(this.component, {
       type: rflect.cal.EventType.DATE_DRAG_END,
       startDate: this.startDate,
       endDate: this.endDate
@@ -119,7 +119,7 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.close = function() {
   } else if (this.dragStarted_) {
     this.dragStarted_ = false;
 
-    goog.events.dispatchEvent(this.component_, {
+    goog.events.dispatchEvent(this.component, {
       type: rflect.cal.EventType.DATE_SELECT,
       date: this.startDate
     });
@@ -137,11 +137,11 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.update = function(aIndex) {
 
   if (this.currentIndex_ != aIndex) {
     this.draggedAtLeastOnce_ = true;
-    this.initialized_ = true;
+    this.initialized = true;
 
     this.currentIndex_ = aIndex;
 
-    this.update_();
+    this.updateInternal();
   }
 };
 
@@ -163,13 +163,13 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.init = function(aConfiguration,
   if (this.isMiniMonthExt_()) {
     // When in external configuration, we don't need to know whether mask was
     // previously initialized.
-    this.initialized_ = false;
+    this.initialized = false;
 
-    this.component_.startSelectionIndex = startSelectionIndex;
-    this.component_.endSelectionIndex = endSelectionIndex;
+    this.component.startSelectionIndex = startSelectionIndex;
+    this.component.endSelectionIndex = endSelectionIndex;
 
     // Update mask for external mode.
-    this.update_();
+    this.updateInternal();
     this.close();
 
   } else {
@@ -186,11 +186,11 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.init = function(aConfiguration,
 
 /**
  * Updates mask.
- * @private
+ * @protected
  */
-rflect.cal.ui.MiniCalSelectionMask.prototype.update_ = function() {
+rflect.cal.ui.MiniCalSelectionMask.prototype.updateInternal = function() {
   // If cells are valid, we're initialized.
-  this.initialized_ = true;
+  this.initialized = true;
 
   if (!this.isMiniMonthExt_()) {
     var maxIndex = Math.max(this.startIndex_, this.currentIndex_);
@@ -205,11 +205,11 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.update_ = function() {
 
     this.calculateDateAndSelectionType_(minIndex, maxIndex);
 
-    this.component_.startSelectionIndex = minIndex;
-    this.component_.endSelectionIndex = maxIndex;
-    this.component_.updateByRedraw();
+    this.component.startSelectionIndex = minIndex;
+    this.component.endSelectionIndex = maxIndex;
+    this.component.updateByRedraw();
     
-    goog.events.dispatchEvent(this.component_, {
+    goog.events.dispatchEvent(this.component, {
       type: rflect.cal.EventType.DATE_DRAG,
       startDate: this.startDate_,
       firstDayInMonth: this.firstDayInMonth_,
@@ -227,16 +227,16 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.update_ = function() {
 rflect.cal.ui.MiniCalSelectionMask.prototype.calculateDateAndSelectionType_ =
     function(aMinIndex, aMaxIndex) {
 
-  var tempDate = this.timeManager_.daySeries[aMinIndex];
+  var tempDate = this.timeManager.daySeries[aMinIndex];
   this.startDate_ = new goog.date.DateTime(tempDate.getYear(),
       tempDate.getMonth(), tempDate.getDate());
 
   var duration = this.duration_ = aMaxIndex - aMinIndex + 1;
 
-  var dayInMonth = this.timeManager_.daySeries[6];
+  var dayInMonth = this.timeManager.daySeries[6];
   var year = dayInMonth.getYear();
   var month = dayInMonth.getMonth();
-  var indexOfFirstDayOfMonth = goog.array.findIndex(this.timeManager_.daySeries,
+  var indexOfFirstDayOfMonth = goog.array.findIndex(this.timeManager.daySeries,
       function(aDate){
     return aDate.getDate() == 1
   });
@@ -248,7 +248,7 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.calculateDateAndSelectionType_ =
     // Month mode is tested first.
     if (duration == numberOfDaysInMonth) {
       this.selectionConfiguration_ = rflect.cal.TimeManager.Configuration.MONTH;
-      tempDate = this.timeManager_.daySeries[indexOfFirstDayOfMonth];
+      tempDate = this.timeManager.daySeries[indexOfFirstDayOfMonth];
       this.firstDayInMonth_ = new goog.date.DateTime(tempDate.getYear(),
           tempDate.getMonth(), tempDate.getDate());
     } else if (duration == 7)

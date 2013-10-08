@@ -29,63 +29,63 @@ rflect.cal.ui.SelectionMask = function(aViewManager, aComponent, aTimeManager) {
   /**
    * Link to view manager.
    * @type {rflect.cal.ViewManager}
-   * @private
+   * @protected
    */
-  this.viewManager_ = aViewManager;
+  this.viewManager = aViewManager;
 
   /**
    * Link to component that owns selection mask.
    * @type {rflect.ui.Component}
-   * @private
+   * @protected
    */
-  this.component_ = aComponent;
+  this.component = aComponent;
 
   /**
    * Link to time manager.
    * @type {rflect.cal.TimeManager}
-   * @private
+   * @protected
    */
-  this.timeManager_ = aTimeManager;
+  this.timeManager = aTimeManager;
 
   /**
    * Mask rectangles.
    * @type {Array.<goog.math.Rect>}
-   * @private
+   * @protected
    */
-  this.rects_ = [];
+  this.rects = [];
 };
 
 
 /**
  * Mask configuration.
  * @type {number}
- * @private
+ * @protected
  */
-rflect.cal.ui.SelectionMask.prototype.configuration_ = 0;
+rflect.cal.ui.SelectionMask.prototype.configuration = 0;
 
 
 /**
  * Mask container.
  * @type {Element}
- * @private
+ * @protected
  */
-rflect.cal.ui.SelectionMask.prototype.maskEl_;
+rflect.cal.ui.SelectionMask.prototype.maskEl;
 
 
 /**
  * Coordinate where mask was started.
  * @type {goog.math.Coordinate}
- * @private
+ * @protected
  */
-rflect.cal.ui.SelectionMask.prototype.startCoordinate_;
+rflect.cal.ui.SelectionMask.prototype.startCoordinate;
 
 
 /**
  * Coordinate where mask is now.
  * @type {goog.math.Coordinate}
- * @private
+ * @protected
  */
-rflect.cal.ui.SelectionMask.prototype.currentCoordinate_;
+rflect.cal.ui.SelectionMask.prototype.currentCoordinate;
 
 
 /**
@@ -105,9 +105,9 @@ rflect.cal.ui.SelectionMask.prototype.endDate = null;
 /**
  * Whether mask was initialized.
  * @type {boolean}
- * @private
+ * @protected
  */
-rflect.cal.ui.SelectionMask.prototype.initialized_ = false;
+rflect.cal.ui.SelectionMask.prototype.initialized = false;
 
 
 /**
@@ -122,7 +122,7 @@ rflect.cal.ui.SelectionMask.prototype.additionalClassNames;
  * @return {boolean} Whether mask was initialized.
  */
 rflect.cal.ui.SelectionMask.prototype.isInitialized = function() {
-  return this.initialized_;
+  return this.initialized;
 }
 
 
@@ -144,7 +144,7 @@ rflect.cal.ui.SelectionMask.prototype.update = goog.abstractMethod;
  * @param {number} aConfiguration Configuration of mask.
  */
 rflect.cal.ui.SelectionMask.prototype.init = function(aConfiguration) {
-  this.configuration_ = aConfiguration;
+  this.configuration = aConfiguration;
 };
 
 
@@ -154,9 +154,9 @@ rflect.cal.ui.SelectionMask.prototype.init = function(aConfiguration) {
  * @param {number} aY Top.
  * @param {number} aDx Width.
  * @param {number} aDy Height.
- * @private
+ * @protected
  */
-rflect.cal.ui.SelectionMask.prototype.getRect_ =
+rflect.cal.ui.SelectionMask.prototype.getRect =
     function(aX, aY, aDx, aDy) {
   return new goog.math.Rect(aX, aY, aDx, aDy);
 };
@@ -217,7 +217,7 @@ rflect.cal.ui.SelectionMask.prototype.calculateDates = function(aMinCell,
   var tempDate = null;
 
   if (opt_hours) {
-    tempDate = this.timeManager_.daySeries[aMinCell.x];
+    tempDate = this.timeManager.daySeries[aMinCell.x];
     minutes = 30 * aMinCell.y;
     startDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
         tempDate.getDate(), minutes / 60, minutes % 60);
@@ -225,13 +225,13 @@ rflect.cal.ui.SelectionMask.prototype.calculateDates = function(aMinCell,
     if (opt_maxCell) {
       // Special case when we're on last line.
       if (opt_maxCell.y == rflect.cal.predefined.HOUR_ROWS_NUMBER - 1){
-        tempDate = rflect.date.getTomorrow(this.timeManager_.daySeries[
+        tempDate = rflect.date.getTomorrow(this.timeManager.daySeries[
             opt_maxCell.x]);
         endDate = new goog.date.DateTime(tempDate.getYear(),
             tempDate.getMonth(), tempDate.getDate());
       }
       else {
-        tempDate = this.timeManager_.daySeries[opt_maxCell.x];
+        tempDate = this.timeManager.daySeries[opt_maxCell.x];
         minutes = 30 * (opt_maxCell.y + 1);
         endDate = new goog.date.DateTime(tempDate.getYear(),
             tempDate.getMonth(), tempDate.getDate(), minutes / 60,
@@ -242,14 +242,14 @@ rflect.cal.ui.SelectionMask.prototype.calculateDates = function(aMinCell,
   } else {
     var minIndex = goog.isNumber(aMinCell.x) ? aMinCell.x + aMinCell.y * 7 :
         aMinCell;
-    tempDate = this.timeManager_.daySeries[minIndex];
+    tempDate = this.timeManager.daySeries[minIndex];
     startDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
         tempDate.getDate());
 
     if (opt_maxCell) {
       var maxIndex = goog.isNumber(opt_maxCell.x) ? opt_maxCell.x +
           opt_maxCell.y * 7 : opt_maxCell;
-      tempDate = rflect.date.getTomorrow(this.timeManager_.daySeries[maxIndex]);
+      tempDate = rflect.date.getTomorrow(this.timeManager.daySeries[maxIndex]);
       endDate = new goog.date.DateTime(tempDate.getYear(), tempDate.getMonth(),
           tempDate.getDate());
     }
@@ -263,22 +263,22 @@ rflect.cal.ui.SelectionMask.prototype.calculateDates = function(aMinCell,
 
 /**
  * Builds mask.
- * @private
+ * @protected
  */
-rflect.cal.ui.SelectionMask.prototype.update_ = goog.abstractMethod;
+rflect.cal.ui.SelectionMask.prototype.updateInternal = goog.abstractMethod;
 
 
 /**
  * Builds mask.
  * @param {goog.string.StringBuffer=} aSb String buffer to append mask to.
  * @return {string|undefined} HTML of mask.
- * @private
+ * @protected
  */
-rflect.cal.ui.SelectionMask.prototype.build_ = function(aSb) {
+rflect.cal.ui.SelectionMask.prototype.build = function(aSb) {
   var sb = aSb || new goog.string.StringBuffer();
-  for (var counter = 0, length = this.rects_.length; counter < length;
+  for (var counter = 0, length = this.rects.length; counter < length;
       counter++)
-    this.buildUnit_(sb, this.rects_[counter]);
+    this.buildUnit_(sb, this.rects[counter]);
   return aSb ? undefined : sb.toString();
 };
 
