@@ -1087,13 +1087,14 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.updateInternal = function(aStartCo
 
 /**
  * Calculates dates from cell selection.
- * @param {goog.math.Coordinate} aMinCell Lesser of cells.
- * @param {goog.math.Coordinate=} opt_maxCell Greater of cells.
+ * @param {goog.math.Coordinate|number} aMinCell Lesser of cells.
+ * @param {goog.math.Coordinate|number=} opt_maxCell Greater of cells.
+ * @param {boolean=} opt_hours Whether to treat cells as hours.
  * @protected
  * @override
  */
 rflect.cal.ui.MainPaneSelectionMask.prototype.calculateDates = function(aMinCell,
-    opt_maxCell) {
+    opt_maxCell, opt_hours) {
 
   if (this.calendarEvent_) {
 
@@ -1111,7 +1112,8 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.calculateDates = function(aMinCell
     this.endDate.setTime(endEventTs);
 
   } else {
-    var minCell = this.getCellCoordinate_(aMinCell, false, true);
+    var minCell = this.getCellCoordinate_(
+        /**@type {goog.math.Coordinate}*/(aMinCell), false, true);
     var maxCell = this.getCellCoordinate_(
         /**@type {goog.math.Coordinate}*/(opt_maxCell), false, true);
 
