@@ -51,7 +51,7 @@
             <arg line="--output_file=&quot;${basedir}\build\outputcompiled.js&quot;"/>
             <arg line="--compiler_flags=&quot;--compilation_level=ADVANCED_OPTIMIZATIONS&quot;"/>
             <arg line="--compiler_flags=&quot;--summary_detail_level=3&quot;"/>
-            <arg line="--compiler_flags=&quot;--jscomp_off=accessControls&quot;"/>
+
             <arg line="--compiler_flags=&quot;--warning_level=VERBOSE&quot;"/>
             <!--To prevent warnings from compiler.-->
             <arg line="--compiler_flags=&quot;--js=${basedir}\src\deps.js&quot;"/>
@@ -59,7 +59,7 @@
             <arg value="--namespace=rflect.cal.Loader"/>
             <arg line="--compiler_flags=&quot;--define=&quot;goog.DEBUG=true&quot;&quot;"/>
             <arg line="--compiler_flags=&quot;--debug&quot;"/>
-            <arg line="--compiler_flags=&quot;--source_map_format=V1&quot;"/>
+            <arg line="--compiler_flags=&quot;--source_map_format=V3&quot;"/>
             <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\build\outputcompiled.js.map&quot;"/>
             <arg line="--compiler_flags=&quot;--formatting=PRETTY_PRINT&quot;"/>
             <arg line="--compiler_flags=&quot;--closure_entry_point=rflect.cal.Loader&quot;"/>
@@ -89,6 +89,8 @@
             <arg line="--compiler_flags=&quot;--source_map_format=V3&quot;"/>
             <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\build\outputcompiled.js.map&quot;"/>
             <arg line="--compiler_flags=&quot;--formatting=PRETTY_PRINT&quot;"/>
+
+            <arg line="--compiler_flags=&quot;--externs=${basedir}\src\externs.js&quot;"/>
         </exec>
     </target>
     <target name="compile_prod"
@@ -155,7 +157,15 @@
     </target>
 
     <!--Gzip test.-->
-    <target name="gziptest" description="Gzip example size test"
+    <target name="gziptest" description="Gzip example size test">
+        <!--<copy file="${basedir}/src/outputcompiled.js" todir="${basedir}/build">
+        </copy>-->
+        <gzip src="${basedir}/build/outputcompiled.js"
+              destfile="${basedir}/build/outputcompiled.js.gz"/>
+    </target>
+
+    <!--Gzip test.-->
+    <target name="compile_prod_gzip" description="Compile and gzip"
             depends="compile_prod">
         <!--<copy file="${basedir}/src/outputcompiled.js" todir="${basedir}/build">
         </copy>-->
