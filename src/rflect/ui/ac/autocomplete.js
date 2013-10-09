@@ -585,9 +585,9 @@ rflect.ui.ac.AutoComplete.prototype.disposeInternal = function() {
  * @param {(boolean|rflect.ui.ac.RenderOptions)=} opt_options If true,
  *     keeps the currently hilited (by index) element hilited. If false not.
  *     Otherwise a RenderOptions object.
- * @private
+ * @protected
  */
-rflect.ui.ac.AutoComplete.prototype.matchListener_ =
+rflect.ui.ac.AutoComplete.prototype.matchListener =
     function(matchedToken, rows, opt_options) {
   if (this.token_ != matchedToken) {
     // Matcher's response token doesn't match current token.

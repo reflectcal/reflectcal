@@ -274,6 +274,14 @@ rflect.ui.ac.Renderer.prototype.getElement = function() {
 
 
 /**
+ * @return {Array} Array used to store the current set of rows being displayed.
+ */
+rflect.ui.ac.Renderer.prototype.getRows = function() {
+  return this.rows_;
+};
+
+
+/**
  * Sets the width provider element. The provider is only used on redraw and as
  * such will not automatically update on resize.
  * @param {Node} widthProvider The element whose width should be mirrored.
