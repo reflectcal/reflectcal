@@ -20,7 +20,7 @@
 goog.provide('rflect.cal.ui.ac.RendererScrollSupport');
 
 
-goog.require('goog.ui.ac.Renderer');
+goog.require('rflect.ui.ac.Renderer');
 
 
 
@@ -39,14 +39,14 @@ goog.require('goog.ui.ac.Renderer');
  *     highlighting should be applied to each row of data. Standard highlighting
  *     bolds every matching substring for a given token in each row. True by
  *     default.
- * @extends {goog.ui.ac.Renderer}
+ * @extends {rflect.ui.ac.Renderer}
  */
 rflect.cal.ui.ac.RendererScrollSupport = function(opt_parentNode, opt_customRenderer,
     opt_rightAlign, opt_useStandardHighlighting) {
-  goog.ui.ac.Renderer.call(this, opt_parentNode, opt_customRenderer,
+  rflect.ui.ac.Renderer.call(this, opt_parentNode, opt_customRenderer,
       opt_rightAlign, opt_useStandardHighlighting)
 };
-goog.inherits(rflect.cal.ui.ac.RendererScrollSupport, goog.ui.ac.Renderer);
+goog.inherits(rflect.cal.ui.ac.RendererScrollSupport, rflect.ui.ac.Renderer);
 
 
 /**

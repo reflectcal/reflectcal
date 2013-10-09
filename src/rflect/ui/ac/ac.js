@@ -18,32 +18,31 @@
  * @see ../../demos/autocomplete-basic.html
  */
 
-goog.provide('rflect.cal.ui.ac');
+goog.provide('rflect.ui.ac');
 
-goog.require('rflect.cal.ui.ac.NoFilterMatcher');
-goog.require('rflect.cal.ui.ac.TimeAutoComplete');
+goog.require('rflect.ui.ac.ArrayMatcher');
+goog.require('rflect.ui.ac.AutoComplete');
 goog.require('rflect.ui.ac.InputHandler');
-goog.require('rflect.cal.ui.ac.RendererScrollSupport');
+goog.require('rflect.ui.ac.Renderer');
 
 
 /**
  * Factory function for building a basic autocomplete widget that autocompletes
  * an inputbox or text area from a data array.
- * For time input.
  * @param {Array} data Data array.
  * @param {Element} input Input element or text area.
  * @param {boolean=} opt_multi Whether to allow multiple entries separated with
  *     semi-colons or commas.
  * @param {boolean=} opt_useSimilar use similar matches. e.g. "gost" => "ghost".
- * @return {!rflect.cal.ui.ac.TimeAutoComplete} A new autocomplete object.
+ * @return {!rflect.ui.ac.AutoComplete} A new autocomplete object.
  */
-rflect.cal.ui.ac.createTimeAutoComplete =
+rflect.ui.ac.createSimpleAutoComplete =
     function(data, input, opt_multi, opt_useSimilar) {
-  var matcher = new rflect.cal.ui.ac.NoFilterMatcher(data, !opt_useSimilar);
-  var renderer = new rflect.cal.ui.ac.RendererScrollSupport();
+  var matcher = new rflect.ui.ac.ArrayMatcher(data, !opt_useSimilar);
+  var renderer = new rflect.ui.ac.Renderer();
   var inputHandler = new rflect.ui.ac.InputHandler(null, null, !!opt_multi);
 
-  var autoComplete = new rflect.cal.ui.ac.TimeAutoComplete(
+  var autoComplete = new rflect.ui.ac.AutoComplete(
       matcher, renderer, inputHandler);
   inputHandler.attachAutoComplete(autoComplete);
   inputHandler.attachInputs(input);

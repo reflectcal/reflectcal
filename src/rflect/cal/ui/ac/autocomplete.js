@@ -20,7 +20,7 @@
 
 goog.provide('rflect.cal.ui.ac.TimeAutoComplete');
 
-goog.require('goog.ui.ac.AutoComplete');
+goog.require('rflect.ui.ac.AutoComplete');
 
 
 
@@ -44,12 +44,12 @@ goog.require('goog.ui.ac.AutoComplete');
  *        </code>.
  *
  * @constructor
- * @extends {goog.ui.ac.AutoComplete}
+ * @extends {rflect.ui.ac.AutoComplete}
  */
 rflect.cal.ui.ac.TimeAutoComplete = function(matcher, renderer, selectionHandler) {
-  goog.ui.ac.AutoComplete.call(this, matcher, renderer, selectionHandler);
+  rflect.ui.ac.AutoComplete.call(this, matcher, renderer, selectionHandler);
 };
-goog.inherits(rflect.cal.ui.ac.TimeAutoComplete, goog.ui.ac.AutoComplete);
+goog.inherits(rflect.cal.ui.ac.TimeAutoComplete, rflect.ui.ac.AutoComplete);
 
 
 /**
@@ -68,7 +68,7 @@ goog.inherits(rflect.cal.ui.ac.TimeAutoComplete, goog.ui.ac.AutoComplete);
  *
  * @param {string} matchedToken Token that corresponds with the rows.
  * @param {!Array} rows Set of data that match the given token.
- * @param {(boolean|goog.ui.ac.RenderOptions)=} opt_options If true,
+ * @param {(boolean|rflect.ui.ac.RenderOptions)=} opt_options If true,
  *     keeps the currently hilited (by index) element hilited. If false not.
  *     Otherwise a RenderOptions object.
  * @private

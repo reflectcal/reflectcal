@@ -21,7 +21,7 @@
 goog.provide('rflect.cal.ui.ac.NoFilterMatcher');
 
 goog.require('goog.array');
-goog.require('goog.ui.ac.ArrayMatcher');
+goog.require('rflect.ui.ac.ArrayMatcher');
 
 
 
@@ -32,12 +32,12 @@ goog.require('goog.ui.ac.ArrayMatcher');
  *     have a toString method that returns the value to match against.
  * @param {boolean=} opt_noSimilar if true, do not do similarity matches for the
  *     input token against the dictionary.
- * @extends {goog.ui.ac.ArrayMatcher}
+ * @extends {rflect.ui.ac.ArrayMatcher}
  */
 rflect.cal.ui.ac.NoFilterMatcher = function(rows, opt_noSimilar) {
-  goog.ui.ac.ArrayMatcher.call(this, rows, opt_noSimilar);
+  rflect.ui.ac.ArrayMatcher.call(this, rows, opt_noSimilar);
 };
-goog.inherits(rflect.cal.ui.ac.NoFilterMatcher, goog.ui.ac.ArrayMatcher);
+goog.inherits(rflect.cal.ui.ac.NoFilterMatcher, rflect.ui.ac.ArrayMatcher);
 
 
 /**
