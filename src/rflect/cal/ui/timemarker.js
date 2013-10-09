@@ -10,6 +10,8 @@
 goog.provide('rflect.cal.ui.TimeMarker');
 
 goog.require('goog.Disposable');
+goog.require('goog.date.Date');
+goog.require('goog.date.DateTime');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('rflect.pagevis');
@@ -81,7 +83,7 @@ rflect.cal.ui.TimeMarker.prototype.timer_;
  */
 rflect.cal.ui.TimeMarker.prototype.onTick_ = function(opt_event) {
   if (rflect.pagevis.pageIsVisible() && this.viewManager_.isInWeekMode()) {
-    var today = new Date();
+    var today = new goog.date.DateTime();
     var headEl = goog.dom.getElement('time-marker-head');
     if (headEl)
       headEl.style.top = this.getPosition(true, today) + 'px';
@@ -103,7 +105,7 @@ rflect.cal.ui.TimeMarker.prototype.onTick_ = function(opt_event) {
 
 /**
  * @param {boolean} aHead Whether to calculate head position or line one.
- * @param {Date=} opt_today Today's date.
+ * @param {goog.date.Date=} opt_today Today's date.
  * @return {number} Position of marker.
  */
 rflect.cal.ui.TimeMarker.prototype.getPosition = function(aHead, opt_today) {
@@ -121,7 +123,7 @@ rflect.cal.ui.TimeMarker.prototype.getPosition = function(aHead, opt_today) {
 
 
 /**
- * @param {Date} aToday Today's date.
+ * @param {goog.date.Date} aToday Today's date.
  * @return {number} Index of block corresponding to today.
  */
 rflect.cal.ui.TimeMarker.prototype.getIndexOfTodayBlock_ = function(aToday) {
