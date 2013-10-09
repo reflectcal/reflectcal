@@ -11,7 +11,7 @@
 goog.provide('rflect.cal.ContainerSizeMonitor');
 
 goog.require('goog.dom');
-goog.require('goog.dom.ViewportSizeMonitor');
+goog.require('rflect.dom.ViewportSizeMonitor');
 goog.require('goog.style');
 goog.require('rflect.cal.predefined');
 
@@ -26,12 +26,12 @@ goog.require('rflect.cal.predefined');
  * @param {Window=} opt_window The window to monitor; defaults to the window in
  *    which this code is executing.
  * @constructor
- * @extends {goog.dom.ViewportSizeMonitor}
- * @see {goog.dom.ViewportSizeMonitor}
+ * @extends {rflect.dom.ViewportSizeMonitor}
+ * @see {rflect.dom.ViewportSizeMonitor}
  */
 rflect.cal.ContainerSizeMonitor = function(aViewManager, aContainer,
     opt_window) {
-  goog.dom.ViewportSizeMonitor.call(this, opt_window);
+  rflect.dom.ViewportSizeMonitor.call(this, opt_window);
 
   /**
    * Container element.
@@ -53,7 +53,7 @@ rflect.cal.ContainerSizeMonitor = function(aViewManager, aContainer,
   this.scrollbarWidth = goog.style.getScrollbarWidth();
 
 };
-goog.inherits(rflect.cal.ContainerSizeMonitor, goog.dom.ViewportSizeMonitor);
+goog.inherits(rflect.cal.ContainerSizeMonitor, rflect.dom.ViewportSizeMonitor);
 
 
 /**
@@ -112,22 +112,22 @@ rflect.cal.ContainerSizeMonitor.prototype.getContainerSize_ = function() {
  * different from the previous ones.
  * @param {boolean=} aNotActualResize Whether this method was called not from
  * actual resize, true in case of manual call or by timer.
- * @private
+ * @protected
  */
-rflect.cal.ContainerSizeMonitor.prototype.checkForSizeChange_ = function(
+rflect.cal.ContainerSizeMonitor.prototype.checkForSizeChange = function(
     aNotActualResize) {
-  var viewportSize = goog.dom.getViewportSize(this.window_);
-  if (!goog.math.Size.equals(viewportSize, this.size_)) {
-    this.size_ = viewportSize;
+  var viewportSize = goog.dom.getViewportSize(this.window);
+  if (!goog.math.Size.equals(viewportSize, this.size)) {
+    this.size = viewportSize;
     this.checkForContainerSizeChange_();
     // When we change window size vertically from down to top, scroll briefly
     // appears. Then we adapt app for this size and scroll disappears, leave us
     // with incorrect size. So we need delayed check for actual size.
-    if (this.windowSizePollInterval_ == null && !aNotActualResize) {
+    if (this.windowSizePollInterval == null && !aNotActualResize) {
       clearTimeout(this.windowSizePollTimeout_);
       this.windowSizePollTimeout_ = setTimeout(
-          goog.bind(this.checkForSizeChange_, this, true),
-          goog.dom.ViewportSizeMonitor.WINDOW_SIZE_POLL_RATE);
+          goog.bind(this.checkForSizeChange, this, true),
+          rflect.dom.ViewportSizeMonitor.WINDOW_SIZE_POLL_RATE);
     }
   }
 };
@@ -164,7 +164,7 @@ rflect.cal.ContainerSizeMonitor.prototype.checkForContainerSizeChange =
  */
 rflect.cal.ContainerSizeMonitor.prototype.checkForViewportSizeChange =
     function() {
-  this.checkForSizeChange_(true);
+  this.checkForSizeChange(true);
 };
 
 

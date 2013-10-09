@@ -4,7 +4,7 @@ goog.addDependency('../../../rflect/array/array.js', ['rflect.array'], ['goog.ar
 goog.addDependency('../../../rflect/cal/blocks/block.js', ['rflect.cal.blocks', 'rflect.cal.blocks.Block'], ['rflect.cal.predefined']);
 goog.addDependency('../../../rflect/cal/blocks/blockmanager.js', ['rflect.cal.blocks.BlockManager'], ['rflect.cal.blocks.Block', 'rflect.cal.blocks.BlockPool', 'rflect.cal.predefined']);
 goog.addDependency('../../../rflect/cal/blocks/blockpool.js', ['rflect.cal.blocks.BlockPool'], ['rflect.cal.blocks.Block', 'rflect.cal.predefined']);
-goog.addDependency('../../../rflect/cal/containersizemonitor.js', ['rflect.cal.ContainerSizeMonitor'], ['goog.dom', 'goog.dom.ViewportSizeMonitor', 'goog.style', 'rflect.cal.predefined']);
+goog.addDependency('../../../rflect/cal/containersizemonitor.js', ['rflect.cal.ContainerSizeMonitor'], ['goog.dom', 'goog.style', 'rflect.cal.predefined', 'rflect.dom.ViewportSizeMonitor']);
 goog.addDependency('../../../rflect/cal/events/calendar.js', ['rflect.cal.events.Calendar'], ['goog.array', 'rflect.cal.i18n.PREDEFINED_COLOR_CODES']);
 goog.addDependency('../../../rflect/cal/events/chip.js', ['rflect.cal.events.Chip'], []);
 goog.addDependency('../../../rflect/cal/events/colorcode.js', ['rflect.cal.events.ColorCode'], ['goog.array', 'rflect.cal.i18n.Symbols']);
@@ -52,6 +52,7 @@ goog.addDependency('../../../rflect/date/date.js', ['rflect.date', 'rflect.date.
 goog.addDependency('../../../rflect/date/interval.js', ['rflect.date.Interval'], ['goog.date.Date']);
 goog.addDependency('../../../rflect/date/util.js', ['rflect.date.util'], ['goog.date.DateTime', 'goog.date.Interval', 'goog.i18n.DateTimeFormat', 'goog.i18n.DateTimeSymbols', 'rflect.cal.predefined']);
 goog.addDependency('../../../rflect/debug/debug.js', ['rflect.Debug'], ['goog.debug.FancyWindow', 'goog.debug.Logger', 'goog.userAgent']);
+goog.addDependency('../../../rflect/dom/viewportsizemonitor.js', ['rflect.dom.ViewportSizeMonitor'], ['goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.math.Size', 'goog.userAgent']);
 goog.addDependency('../../../rflect/math/math.js', ['rflect.math'], []);
 goog.addDependency('../../../rflect/object/object.js', ['rflect.object'], []);
 goog.addDependency('../../../rflect/pagevis/pagevisibility.js', ['rflect.pagevis'], []);
