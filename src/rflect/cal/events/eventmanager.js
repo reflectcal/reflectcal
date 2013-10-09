@@ -231,7 +231,7 @@ rflect.cal.events.EventManager.prototype.eventIsInVisibleCalendar =
     function(aEventId) {
   var calendar = this.getCalendarByEventId_(aEventId);
   //So that even chips from non-existent calendar are treated as from invisible.
-  return /**@type {boolean}*/(calendar) && calendar.visible;
+  return !!(calendar && calendar.visible);
 }
 
 

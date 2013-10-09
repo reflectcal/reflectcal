@@ -102,7 +102,6 @@ rflect.cal.ui.MiniCalBuilder.HTML_PARTS_ = [
  * Builds body of component.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
- * @protected
  * @see {rflect.cal.ui.MainPaneBuilder#buildBodyInternalWeek_}
  */
 rflect.cal.ui.MiniCalBuilder.prototype.buildInternal = function(aSb) {
