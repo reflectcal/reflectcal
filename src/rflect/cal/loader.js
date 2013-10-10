@@ -17,11 +17,18 @@ goog.require('rflect.Debug');
 goog.require('rflect.cal.Main');
 
 
+
+/**
+ * Calendar loader class.
+ * @constructor
+ */
+rflect.cal.Loader = function(){}
+
+
 /**
  * Binds creation of cal instance to load events.
- * @this {rflect.cal.Loader}
  */
-rflect.cal.Loader.main = function() {
+rflect.cal.Loader.prototype.enterDocument = function() {
   goog.events.listenOnce(window, 'load', function(aEvent) {
     // Load event will fire later than dom ready.
     if (!this.documentLoaded_)
@@ -45,7 +52,7 @@ rflect.cal.Loader.main = function() {
  * @type {boolean}
  * @private
  */
-rflect.cal.Loader.documentLoaded_ = false;
+rflect.cal.Loader.prototype.documentLoaded_ = false;
 
 
 /**
@@ -53,7 +60,7 @@ rflect.cal.Loader.documentLoaded_ = false;
  * @type {rflect.cal.Main}
  * @private
  */
-rflect.cal.Loader.calInstance_ = null;
+rflect.cal.Loader.prototype.calInstance_ = null;
 
 
 // Call main method.
@@ -62,6 +69,6 @@ try {
   // avoid exporting main as well as enclosing namespaces.
   // TODO(alexk): Make the same by setting --closure_entry_point compiler
   // option.
-  rflect.cal.Loader.main();
+  new rflect.cal.Loader().enterDocument();
 } catch (e) {
 }

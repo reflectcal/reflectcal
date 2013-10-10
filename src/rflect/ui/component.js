@@ -148,6 +148,8 @@ rflect.ui.Component.prototype.update =
 
 /**
  * Disposes of component.
+ * @override
+ * @protected
  */
 rflect.ui.Component.prototype.disposeInternal = function() {
   rflect.ui.Component.superClass_.disposeInternal.call(this);
