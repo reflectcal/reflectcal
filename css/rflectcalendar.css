@@ -338,12 +338,18 @@ body {
   width: 20px;
   height: 100%;
   background: #ffffff;
+  /* @alternate */
   background: -moz-linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
+  /* @alternate */
   background: -webkit-gradient(linear, center right, center left, from(#ffffff), to(rgba(255,255,255,0)));
+  /* @alternate */
   background: -ms-linear-gradient(center right, #ffffff 0, rgba(255,255,255,0) 100%);
 
+  /* @alternate */
   background: -webkit-linear-gradient(right, #ffffff 0, rgba(255,255,255,0) 100%);
+  /* @alternate */
   background: -o-linear-gradient(to left, #ffffff 0, rgba(255,255,255,0) 100%);
+  /* @alternate */
   background: linear-gradient(to left, #ffffff 0, rgba(255,255,255,0) 100%);
 }
 
@@ -1174,10 +1180,9 @@ overflow:hidden
 
 #grid-table-wrapper-mn {
   position: relative;
-  height: 426px; /*subject to change, remove?*/
+  height: 100%;
   /*margin-left: 16px;*/
   width: auto;
-  height: 100%;
   overflow: hidden;
 }
 
@@ -1455,16 +1460,6 @@ overflow:hidden
   bottom: -2px;
 }
 
-.wk-event-grip {
-  border-top-width: 1px;
-  border-top-style: dotted;
-  border-color: inherit;
-  height: 1px;
-  position: absolute;
-  width: 100%;
-  width: calc(100% - 1px);
-}
-
 .wk-event-grip-upper {
   bottom: 2px;
 }
@@ -1488,16 +1483,6 @@ overflow:hidden
 
 .mn-event-grip-cont-right {
   right: 1px;
-}
-
-.mn-event-grip {
-  border-right-width: 1px;
-  border-right-style: dotted;
-  border-color: inherit;
-  width: 1px;
-  position: absolute;
-  height: 100%;
-  height: calc(100% - 1px);
 }
 
 .mn-event-grip-left {

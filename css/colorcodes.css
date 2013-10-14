@@ -14,8 +14,11 @@
 
 .goog-checkbox-checked.cal-checkbox-blue {
   box-shadow: 0 0 3px 2px #6699EE;
+  /* @alternate */
   background: -webkit-linear-gradient(top, rgba(102, 153, 238, 0.5) 0px, #6699EE 50%, rgba(102, 153, 238, 0.5) 100%);
+  /* @alternate */
   background: -o-linear-gradient(to bottom, rgba(102, 153, 238, 0.5) 0px, #6699EE 50%, rgba(102, 153, 238, 0.5) 100%);
+  /* @alternate */
   background: linear-gradient(to bottom, rgba(102, 153, 238, 0.5) 0px, #6699EE 50%, rgba(102, 153, 238, 0.5) 100%);
 }
 
@@ -31,6 +34,7 @@
 
 .event-in-progress-blue {
   background-color: #A3C2F5;
+  /* @alternate */
   background-image: -webkit-linear-gradient(45deg,
       transparent 25%,
       #6699EE  25%,
@@ -39,6 +43,7 @@
       transparent 75%,
       #6699EE  75%,
       #6699EE  100%);
+  /* @alternate */
   background-image: linear-gradient(45deg,
       transparent 25%,
       #6699EE 25%,
@@ -56,8 +61,11 @@
 
 .goog-checkbox-checked.cal-checkbox-red {
   box-shadow: 0 0 3px 2px #f44050;
+  /* @alternate */
   background: -webkit-linear-gradient(top, #fecdce 0px, #f44050 50%, #fecdce 100%);
+  /* @alternate */
   background: -o-linear-gradient(to bottom, #fecdce 0px, #f44050 50%, #fecdce 100%);
+  /* @alternate */
   background: linear-gradient(to bottom, #fecdce 0px, #f44050 50%, #fecdce 100%);
 }
 
@@ -73,6 +81,7 @@
 
 .event-in-progress-red {
   background-color: #fecdce;
+  /* @alternate */
   background-image: -webkit-linear-gradient(45deg,
       transparent 25%,
       #f44050 25%,
@@ -81,6 +90,7 @@
       transparent 75%,
       #f44050 75%,
       #f44050 100%);
+  /* @alternate */
   background-image: linear-gradient(45deg,
       transparent 25%,
       #f44050 25%,
@@ -98,8 +108,11 @@
 
 .goog-checkbox-checked.cal-checkbox-green {
   box-shadow: 0 0 3px 2px #51be32;
+  /* @alternate */
   background: -webkit-linear-gradient(top, #96f481 0px, #51be32 50%, #96f481 100%);
+  /* @alternate */
   background: -o-linear-gradient(to bottom, #96f481 0px, #51be32 50%, #96f481 100%);
+  /* @alternate */
   background: linear-gradient(to bottom, #96f481 0px, #51be32 50%, #96f481 100%);
 }
 
@@ -115,6 +128,7 @@
 
 .event-in-progress-green {
   background-color: #96f481;
+  /* @alternate */
   background-image: -webkit-linear-gradient(45deg,
       transparent 25%,
       #51be32 25%,
@@ -123,6 +137,7 @@
       transparent 75%,
       #51be32 75%,
       #51be32 100%);
+  /* @alternate */
   background-image: linear-gradient(45deg,
       transparent 25%,
       #51be32 25%,

@@ -97,7 +97,7 @@
     </target>
     <target name="compile_prod"
             description="Compilation for production."
-            depends="clearbuild">
+            depends="clearbuild, gss">
         <exec executable="python" dir="${basedir}">
             <arg
             value="d:\work\rflectevents\src\closure-library\closure\bin\build\closurebuilder.py"/>
@@ -116,6 +116,7 @@
             <arg line="--compiler_flags=&quot;--define=&quot;goog.DEBUG=false&quot;&quot;"/>
             <arg line="--compiler_flags=&quot;--source_map_format=V3&quot;"/>
             <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\build\outputcompiled.js.map&quot;"/>
+            <arg line="--compiler_flags=&quot;--js=${basedir}\build\css-renaming-map.js&quot;"/>
 
             <arg line="--compiler_flags=&quot;--externs=${basedir}\src\externs.js&quot;"/>
         </exec>
@@ -155,7 +156,32 @@
 
     <!--Compresses css.-->
     <target name="gss" description="Closure stylesheets">
+        <java jar="${basedir}\bin\closure-stylesheets.jar"
+              fork="true" dir="${basedir}">
 
+            <arg line="--output-renaming-map ${basedir}/build/css-renaming-map.js"/>
+            <arg line="--output-renaming-map-format CLOSURE_COMPILED"/>
+            <arg line="--rename CLOSURE"/>
+            <arg line="--output-file ${basedir}/build/outputcompiled.css"/>
+            <arg line="--pretty-print"/>
+
+            <arg line="--allowed-non-standard-function progid:DXImageTransform.Microsoft.gradient"/>
+            <arg line="--allowed-unrecognized-property -moz-outline"/>
+
+            <arg line="${basedir}/css/common.css"/>
+            <arg line="${basedir}/css/autocomplete.css"/>
+            <arg line="${basedir}/css/flatbutton.css"/>
+            <arg line="${basedir}/css/datepicker.css"/>
+            <arg line="${basedir}/css/dialog.css"/>
+            <arg line="${basedir}/css/savedialog.css"/>
+            <arg line="${basedir}/css/checkbox.css"/>
+            <arg line="${basedir}/css/colorcodes.css"/>
+            <arg line="${basedir}/css/tab.css"/>
+            <arg line="${basedir}/css/tabbar.css"/>
+            <arg line="${basedir}/css/settingspane.css"/>
+            <arg line="${basedir}/css/eventpane.css"/>
+            <arg line="${basedir}/css/rflectcalendar.css"/>
+        </java>
     </target>
 
     <!--Gzip test.-->

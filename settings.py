@@ -220,6 +220,7 @@ STATICFILES_DIRS = (
     os.path.join(os.path.dirname(__file__), 'src'),
     os.path.join(os.path.dirname(__file__), 'css'),
     os.path.join(os.path.dirname(__file__), 'img'),
+    os.path.join(os.path.dirname(__file__), 'build'),
 )
 
 # List of finder classes that know how to find static files in
