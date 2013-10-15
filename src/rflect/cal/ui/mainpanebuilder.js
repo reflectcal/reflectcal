@@ -470,12 +470,12 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '<div id="mn-dec-layer-row',
   /*Individual decoration layer id (0)*/
   '" class="' + goog.getCssName('mn-decoration-layer') + '">',
-  '<table cellspacing="0" cellpadding="0" class="daynums"><tbody><tr>',
+  '<table cellspacing="0" cellpadding="0" class="' + goog.getCssName('daynums') + '"><tbody><tr>',
   // Individual daycell.
   '<td class="' + goog.getCssName('daycell') + '"><div class="' + goog.getCssName('daycell-decoration-cont') + '">',
   '<div class="' + goog.getCssName('today-mask-mn') + '"></div>',
   /*Decoration container content (<div class="today-mask-mn"></div>).*/
-  '</div><div class="' + goog.getCssName('') + '"><div class="' + goog.getCssName('expand-sign-mn-cont') + '"><div class="' + goog.getCssName('expand-sign-mn') + ' ',
+  '</div><div class="' + goog.getCssName('daycell-daynum-outer-cont') + '"><div class="' + goog.getCssName('expand-sign-mn-cont') + '"><div class="' + goog.getCssName('expand-sign-mn') + ' ',
   /*Individual expand sign state
   (expand-sign-mn-collapsed, expand-sign-mn-expanded).*/
   '"></div>',
