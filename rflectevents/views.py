@@ -80,8 +80,28 @@ def mainRender(aRequest):
               'SETTINGS': settingsJSON
             })
 
-  #template = get_template('rflectcalendar.html')
   template = get_template('rflectcalendar-compiled.html')
+  html = template.render(context)
+
+  if settings.DEBUG:
+    util.delayResponse()
+  return HttpResponse(html)
+
+def mainRenderUncompiled(aRequest):
+  #Note(alexk): it's important to use request context, because we're referring
+  #to STATIC_URL in template.
+
+  settingsJSON = util.serializeSettings()
+
+  calendarsJSON = loadCalendars()
+
+  context = RequestContext(aRequest, {
+              'SITE_URL': settings.SITE_URL,
+              'CALENDARS_LIST': calendarsJSON,
+              'SETTINGS': settingsJSON
+            })
+
+  template = get_template('rflectcalendar.html')
   html = template.render(context)
 
   if settings.DEBUG:

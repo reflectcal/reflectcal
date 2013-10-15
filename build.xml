@@ -205,13 +205,13 @@
             <arg line="${basedir}/css/datepicker.css"/>
             <arg line="${basedir}/css/dialog.css"/>
             <arg line="${basedir}/css/savedialog.css"/>
-            <arg line="${basedir}/css/checkbox.css"/>
-            <arg line="${basedir}/css/colorcodes.css"/>
             <arg line="${basedir}/css/tab.css"/>
             <arg line="${basedir}/css/tabbar.css"/>
             <arg line="${basedir}/css/settingspane.css"/>
             <arg line="${basedir}/css/eventpane.css"/>
+            <arg line="${basedir}/css/checkbox.css"/>
             <arg line="${basedir}/css/rflectcalendar.css"/>
+            <arg line="${basedir}/css/colorcodes.css"/>
         </java>
     </target>
 

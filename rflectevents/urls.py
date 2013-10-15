@@ -13,5 +13,6 @@ urlpatterns = patterns('',
     (r'^calendars/delete/(.+)/$', deleteCalendar),
 
     (r'^view/$', mainRender),
+    (r'^view-source/$', mainRenderUncompiled),
 
 )

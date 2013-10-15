@@ -1112,16 +1112,16 @@ rflect.cal.ui.MainPane.prototype.attachGripChildren_ = function(aContainer,
 
   if (aWeekType) {
 
-    var firstEl = goog.dom.createDom('div', [goog.getCssName('wk-event-grip'),
+    var firstEl = goog.dom.createDom('div', ['wk-event-grip',
       goog.getCssName('wk-event-grip-lower')]);
-    var secondEl = goog.dom.createDom('div', [goog.getCssName('wk-event-grip'),
+    var secondEl = goog.dom.createDom('div', ['wk-event-grip',
       goog.getCssName('wk-event-grip-upper')]);
 
   } else {
 
-    var firstEl = goog.dom.createDom('div', [goog.getCssName('mn-event-grip'),
+    var firstEl = goog.dom.createDom('div', ['mn-event-grip',
       goog.getCssName('mn-event-grip-left')]);
-    var secondEl = goog.dom.createDom('div', [goog.getCssName('mn-event-grip'),
+    var secondEl = goog.dom.createDom('div', ['mn-event-grip',
       goog.getCssName('mn-event-grip-right')]);
     if (opt_allDayType) {
       goog.dom.classes.add(firstEl, goog.getCssName('ad-event-grip'));
@@ -1395,8 +1395,7 @@ rflect.cal.ui.MainPane.prototype.isEndGripCont_ =
  */
 rflect.cal.ui.MainPane.prototype.isGripContChild_ =
     function(aTargetClassName) {
-  var re = rflect.string.buildClassNameRe(goog.getCssName('wk-event-grip'),
-      goog.getCssName('mn-event-grip'));
+  var re = rflect.string.buildClassNameRe('wk-event-grip', 'mn-event-grip');
   return re.test(aTargetClassName);
 };
 
@@ -1422,7 +1421,7 @@ rflect.cal.ui.MainPane.prototype.isAllDayGrip_ = function(aClassName) {
 rflect.cal.ui.MainPane.prototype.isWeekGrip_ = function(aClassName) {
   var re = rflect.string.buildClassNameRe(
       goog.getCssName('wk-event-grip-cont'),
-      goog.getCssName('wk-event-grip'));
+      'wk-event-grip');
   return re.test(aClassName);
 };
 
@@ -1434,8 +1433,7 @@ rflect.cal.ui.MainPane.prototype.isWeekGrip_ = function(aClassName) {
  */
 rflect.cal.ui.MainPane.prototype.isMonthGrip_ = function(aClassName) {
   var re = rflect.string.buildClassNameRe(
-      goog.getCssName('mn-event-grip-cont'),
-      goog.getCssName('mn-event-grip'));
+      goog.getCssName('mn-event-grip-cont'), 'mn-event-grip');
   return re.test(aClassName);
 };
 
