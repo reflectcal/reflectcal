@@ -244,7 +244,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   this.inputName_ = dom.createDom('input', {
     'type': 'text',
     id: 'ep-event-name-input',
-    className: 'ep-event-name-input',
+    className: goog.getCssName('ep-event-name-input'),
     autofocus: 'autofocus',
     placeholder: rflect.cal.i18n.Symbols.NO_NAME_EVENT
   });

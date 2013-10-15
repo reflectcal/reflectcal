@@ -145,7 +145,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   '<div id="daynames-prefix-wk" style="width:' +
       /*Daynames prefix width in pixels (40).*/
       rflect.cal.i18n.predefined.DAYNAMES_PREFIX_WEEK_WIDTH,
-  'px"><div id="daynames-zippy" class="zippy ',
+  'px"><div id="daynames-zippy" class="' + goog.getCssName('zippy') + ' ',
   /* Zippy state is here
   (goog-zippy-collapsed, goog-zippy-expanded).*/
   '"></div>',

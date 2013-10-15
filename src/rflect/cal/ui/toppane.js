@@ -124,7 +124,7 @@ rflect.cal.ui.TopPane.prototype.buildInternal = function(aSb) {
     '<div id="' + rflect.cal.predefined.BUTTON_PREV_ID +
         '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
     goog.getCssName('goog-flat-button-collapse-right') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-both') + ' ',
-    goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-back') + '"><div class="' + goog.getCssName('button-sign button-sign-back') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div>',
+    goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-back') + '"><div class="' + goog.getCssName('button-sign') + ' ' + goog.getCssName('button-sign-back') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div>',
 
     // Forward button.
     '<div id="' + rflect.cal.predefined.BUTTON_NEXT_ID + '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
