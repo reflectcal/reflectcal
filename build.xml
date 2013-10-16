@@ -228,8 +228,6 @@
     <!--Gzip test.-->
     <target name="compile_prod_gzip" description="Compile and gzip"
             depends="compile_prod, gziptest">
-        <!--<copy file="${basedir}/src/outputcompiled.js" todir="${basedir}/build">
-        </copy>-->
     </target>
 
     <!--Builds whole application.-->
