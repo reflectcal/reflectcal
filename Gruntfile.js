@@ -1,8 +1,6 @@
 module.exports = function(grunt) {
 
   var deepClone = require('clone');
-  var fs = require('fs');
-  var md5 = require('MD5');
 
   var LOCALES = ['en', 'ru', 'by'];
 
@@ -107,9 +105,10 @@ module.exports = function(grunt) {
   LOCALES.forEach(function(aLocaleName){
     var targetForLocale = deepClone(compilationTargetTemplate);
 
-    targetForLocale.dest = 'build/outputcompiled-' + aLocaleName + '.js';
-    targetForLocale.create_source_map = 'build/outputcompiled-' + aLocaleName + '.js.map';
+    targetForLocale.options.compilerOpts.create_source_map = 'build/outputcompiled-' + aLocaleName + '.js.map';
     targetForLocale.options.compilerOpts.define.push("goog.LOCALE='" + aLocaleName + "'");
+
+    targetForLocale.dest = 'build/outputcompiled-' + aLocaleName + '.js';
 
     closureBuilderTask['compileForLocale-' + aLocaleName] = targetForLocale;
 
@@ -119,13 +118,26 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    closureBuilder: closureBuilderTask
-    );
+    clean: ['build/*'],
+    closureBuilder: closureBuilderTask,
+    filerev: {
+      options: {
+        encoding: 'utf8',
+        algorithm: 'md5',
+        length: 32
+      },
+      statics: {
+        src: 'build/**/*.{css,js,woff}'
+      }
+    }
+  });
 
   // Load plugins.
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-closure-tools');
+  grunt.loadNpmTasks('grunt-filerev');
 
   // Default task(s).
-  grunt.registerTask('default', ['closureBuilder']);
+  grunt.registerTask('default', ['clean', 'closureBuilder', 'filerev']);
 
 };
