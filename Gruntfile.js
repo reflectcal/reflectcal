@@ -81,6 +81,7 @@ module.exports = function(grunt) {
 
     options: {
       compilerOpts: {
+        charset: 'utf-8',
         compilation_level: 'ADVANCED_OPTIMIZATIONS',
         summary_detail_level: 3,
         warning_level: 'VERBOSE',
