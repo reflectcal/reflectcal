@@ -2,7 +2,61 @@ module.exports = function(grunt) {
 
   var deepClone = require('clone');
 
-  var LOCALES = ['en', 'ru', 'by'];
+  // These are compilation target axises. So, total number of compilation
+  // targets is product of array lengths.
+  var LOCALES = ['en', 'ru', 'by', 'fr'];
+  var DEBUG = [true, false];
+  var UI_TYPE = ['DESKTOP'];
+  // False mean - do not specify user agent.
+  var USER_AGENT = [false, 'IE', 'GECKO', 'WEBKIT', 'OPERA'];
+
+  function makeListOfCompileTargets() {
+    var targets = [];
+
+    LOCALES.forEach(function(locale) {
+      DEBUG.forEach(function(debug) {
+        UI_TYPE.forEach(function(uiType) {
+          USER_AGENT.forEach(function(userAgent) {
+            targets.push({
+              locale: locale,
+              debug: debug,
+              uiType: uiType,
+              userAgent: userAgent
+            });
+          });
+        });
+      });
+    });
+
+    return targets;
+  }
+
+  function fillCompileTargetsWithDefines(aTargets) {
+    var targets = [];
+
+    aTargets.forEach(function(target) {
+      target.defines = [];
+
+      // Locale.
+      target.defines.push("goog.LOCALE='" + target.locale + "'");
+      // DEBUG.
+      target.defines.push("'goog.DEBUG=" + target.debug + "'");
+      // UI type.
+      //target.defines.push("rflect.UI_TYPE='" + target.uiType + "'");
+      // Assumptions on user agent.
+      if (target.userAgent)
+        target.defines.push("'goog.userAgent.ASSUME_" + target.userAgent + "=true'");
+    });
+
+    return aTargets;
+  }
+
+  var TARGETS = fillCompileTargetsWithDefines(makeListOfCompileTargets());
+
+  grunt.log.writeln(TARGETS);
+
+  // List of filenames so that options set could be mapped to files.
+  var resultFileNames = [];
 
   // Closure builder task without targets.
   var closureBuilderTask = {
@@ -86,7 +140,7 @@ module.exports = function(grunt) {
         summary_detail_level: 3,
         warning_level: 'VERBOSE',
         js: ['src/deps.js', 'src/closure-library/closure/goog/deps.js'],
-        define: ["'goog.DEBUG=false'"],
+        define: [],
         debug: false,
         source_map_format: 'V3',
         create_source_map: 'build/outputcompiled.js.map',
@@ -103,15 +157,27 @@ module.exports = function(grunt) {
     dest: 'build/outputcompiled.js'
   };
 
-  LOCALES.forEach(function(aLocaleName){
-    var targetForLocale = deepClone(compilationTargetTemplate);
+  TARGETS.forEach(function(aTarget, aIndex){
+    var targetOptions = deepClone(compilationTargetTemplate);
 
-    targetForLocale.options.compilerOpts.create_source_map = 'build/outputcompiled-' + aLocaleName + '.js.map';
-    targetForLocale.options.compilerOpts.define.push("goog.LOCALE='" + aLocaleName + "'");
+    var sourceMapName = 'build/outputcompiled-' + aTarget.locale + '.js.' +
+        aIndex + '.map'
+    targetOptions.options.compilerOpts.create_source_map =
+        sourceMapName;
 
-    targetForLocale.dest = 'build/outputcompiled-' + aLocaleName + '.js';
+    targetOptions.options.compilerOpts.define = aTarget.defines;
 
-    closureBuilderTask['compileForLocale-' + aLocaleName] = targetForLocale;
+    if (aTarget.debug)
+      targetOptions.options.compilerOpts.output_wrapper =
+          '%output%\n\\\\@ sourceMappingURL=' + sourceMapName;
+
+    targetOptions.dest = 'build/' + '_temp' + aIndex + '.outputcompiled-' +
+        aTarget.locale +
+        (aTarget.userAgent ? '-' + aTarget.userAgent : '')  +
+        (aTarget.debug ? '-debug' : '')  +
+        '.js';
+
+    closureBuilderTask['compileForTarget-' + aIndex] = targetOptions;
 
   });
 
@@ -119,7 +185,10 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    clean: ['build/*'],
+    clean: {
+      all: ['build/*'],
+      temp: ['build/_temp*']
+    },
     closureBuilder: closureBuilderTask,
     filerev: {
       options: {
@@ -130,15 +199,43 @@ module.exports = function(grunt) {
       statics: {
         src: 'build/**/*.{css,js,woff}'
       }
+    },
+    wrap: {
+      removeIndexes: {
+        src: ['build/*.js'],
+        dest: 'build/',
+        options: {
+          separator: '',
+          rename: function(dest, src) {
+             var fileName = src.substring(src.indexOf('/'));
+             var fileNameParts = fileName.split('.');
+             var fileIndexStr = fileNameParts.splice(0, 1)[0];
+             var fileIndex = /\d+/.exec(fileIndexStr);
+             var newFileName = fileNameParts.join('.');
+
+             resultFileNames[fileIndex] = newFileName;
+
+             grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
+                newFileName, '.');
+
+             return dest + newFileName;
+          }
+        }
+      }
     }
+
   });
 
   // Load plugins.
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-closure-tools');
   grunt.loadNpmTasks('grunt-filerev');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-wrap');
+  grunt.loadNpmTasks('grunt-renaming-wrap');
 
   // Default task(s).
-  grunt.registerTask('default', ['clean', 'closureBuilder', 'filerev']);
+  grunt.registerTask('default', ['clean:all', 'closureBuilder', 'filerev',
+      'wrap:removeIndexes', 'clean:temp']);
 
 };
