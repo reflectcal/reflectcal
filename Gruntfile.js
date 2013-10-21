@@ -7,7 +7,7 @@ module.exports = function(grunt) {
   var LOCALES = ['en', 'ru', 'by', 'fr'];
   var DEBUG = [true, false];
   var UI_TYPE = ['DESKTOP'];
-  // False mean - do not specify user agent.
+  // False means do not specify user agent.
   var USER_AGENT = [false, 'IE', 'GECKO', 'WEBKIT', 'OPERA'];
 
   function makeListOfCompileTargets() {
@@ -53,10 +53,34 @@ module.exports = function(grunt) {
 
   var TARGETS = fillCompileTargetsWithDefines(makeListOfCompileTargets());
 
-  grunt.log.writeln(TARGETS);
-
   // List of filenames so that options set could be mapped to files.
   var resultFileNames = [];
+
+  var gssCommand = [
+    'java',
+    '-showversion',
+    '-jar',
+    'bin/closure-stylesheets.jar',
+    '--output-renaming-map build/_temp-css-renaming-map.js',
+    '--output-renaming-map-format CLOSURE_COMPILED',
+    '--rename CLOSURE',
+    '--output-file build/_temp.outputcompiled.css',
+    '--allowed-non-standard-function progid:DXImageTransform.Microsoft.gradient',
+    '--allowed-unrecognized-property -moz-outline',
+    'css/common.css',
+    'css/autocomplete.css',
+    'css/flatbutton.css',
+    'css/datepicker.css',
+    'css/dialog.css',
+    'css/savedialog.css',
+    'css/tab.css',
+    'css/tabbar.css',
+    'css/eventpane.css',
+    'css/checkbox.css',
+    'css/rflectcalendar.css',
+    'css/colorcodes.css',
+    'css/settingspane.css'
+  ].join(' ');
 
   // Closure builder task without targets.
   var closureBuilderTask = {
@@ -139,7 +163,8 @@ module.exports = function(grunt) {
         compilation_level: 'ADVANCED_OPTIMIZATIONS',
         summary_detail_level: 3,
         warning_level: 'VERBOSE',
-        js: ['src/deps.js', 'src/closure-library/closure/goog/deps.js'],
+        js: ['src/deps.js', 'src/closure-library/closure/goog/deps.js',
+            'build/_temp-css-renaming-map.js'],
         define: [],
         debug: false,
         source_map_format: 'V3',
@@ -184,7 +209,26 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-
+    exec: {
+      gss: {
+        command: gssCommand
+      }
+    },
+    cssmin: {
+      combine: {
+        files: {
+          'build/_temp.outputcompiled.advanced.css':
+              ['css/rflectcalendar-advanced.css']
+        }
+      }
+    },
+    concat: {
+      css: {
+        src: ['build/_temp.outputcompiled.css',
+            'build/_temp.outputcompiled.advanced.css'],
+        dest: 'build/outputcompiled.css',
+      }
+    },
     clean: {
       all: ['build/*'],
       temp: ['build/_temp*']
@@ -202,7 +246,7 @@ module.exports = function(grunt) {
     },
     wrap: {
       removeIndexes: {
-        src: ['build/*.js'],
+        src: ['build/*outputcompiled*.js'],
         dest: 'build/',
         options: {
           separator: '',
@@ -228,14 +272,18 @@ module.exports = function(grunt) {
 
   // Load plugins.
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-exec');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-closure-tools');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-filerev');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-wrap');
   grunt.loadNpmTasks('grunt-renaming-wrap');
 
   // Default task(s).
-  grunt.registerTask('default', ['clean:all', 'closureBuilder', 'filerev',
-      'wrap:removeIndexes', 'clean:temp']);
+  grunt.registerTask('default', ['clean:all', 'exec:gss', 'cssmin:combine',
+      'concat:css', 'closureBuilder', 'filerev', 'wrap:removeIndexes',
+      'clean:temp']);
 
 };
