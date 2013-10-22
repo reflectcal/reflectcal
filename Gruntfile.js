@@ -2,6 +2,15 @@ module.exports = function(grunt) {
 
   var deepClone = require('clone');
 
+  /**
+   * Production flag.
+   * If it's true, it means that app is built for external world - sources,
+   * source maps, source maps links won't be present in compiled code.
+   * If it's false, app includes it all and could be tested on server in form in
+   * which it's exported.
+   */
+  var PRODUCTION = false;
+
   // These are compilation target axises. So, total number of compilation
   // targets is product of array lengths.
   var LOCALES = ['en', 'ru', 'by', 'fr'];
@@ -185,16 +194,14 @@ module.exports = function(grunt) {
   TARGETS.forEach(function(aTarget, aIndex){
     var targetOptions = deepClone(compilationTargetTemplate);
 
-    var sourceMapName = 'build/outputcompiled-' + aTarget.locale + '.js.' +
-        aIndex + '.map'
-    targetOptions.options.compilerOpts.create_source_map =
-        sourceMapName;
+    if (!PRODUCTION) {
+      var sourceMapName = 'build/outputcompiled-' + aTarget.locale + '.js.' +
+          aIndex + '.map'
+      targetOptions.options.compilerOpts.create_source_map =
+          sourceMapName;
+    }
 
     targetOptions.options.compilerOpts.define = aTarget.defines;
-
-    if (aTarget.debug)
-      targetOptions.options.compilerOpts.output_wrapper =
-          '%output%\n\\\\@ sourceMappingURL=' + sourceMapName;
 
     targetOptions.dest = 'build/' + '_temp' + aIndex + '.outputcompiled-' +
         aTarget.locale +
@@ -245,27 +252,43 @@ module.exports = function(grunt) {
       }
     },
     wrap: {
-      removeIndexes: {
+      renameJs: {
         src: ['build/*outputcompiled*.js'],
         dest: 'build/',
         options: {
           separator: '',
           rename: function(dest, src) {
-             var fileName = src.substring(src.indexOf('/'));
-             var fileNameParts = fileName.split('.');
-             var fileIndexStr = fileNameParts.splice(0, 1)[0];
-             var fileIndex = /\d+/.exec(fileIndexStr);
-             var newFileName = fileNameParts.join('.');
+            var fileName = src.substring(src.indexOf('/'));
+            var fileNameParts = fileName.split('.');
+            var fileIndexStr = fileNameParts.splice(0, 1)[0];
+            var fileIndex = /\d+/.exec(fileIndexStr);
+            var newFileName = fileNameParts.join('.');
 
-             resultFileNames[fileIndex] = newFileName;
+            resultFileNames[fileIndex] = newFileName;
 
-             grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
+            grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
                 newFileName, '.');
 
-             return dest + newFileName;
+            return dest + newFileName;
+          },
+          wrapper: function(src, options) {
+            var fileName = src.substring(src.indexOf('/'));
+
+            if (!PRODUCTION) {
+              var fileNameParts = fileName.split('.');
+              var fileIndex = /\d+/.exec(fileNameParts[0]);
+
+              var sourceMapName = 'outputcompiled-' + TARGETS[fileIndex].locale +
+                  '.js.' + fileIndex + '.map';
+
+              return ['', '//@ sourceMappingURL=' + sourceMapName];
+            }
+
+            return ['', ''];
           }
         }
       }
+
     }
 
   });
@@ -278,12 +301,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-filerev');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-wrap');
+  //grunt.loadNpmTasks('grunt-wrap');
   grunt.loadNpmTasks('grunt-renaming-wrap');
 
   // Default task(s).
   grunt.registerTask('default', ['clean:all', 'exec:gss', 'cssmin:combine',
-      'concat:css', 'closureBuilder', 'filerev', 'wrap:removeIndexes',
+      'concat:css', 'closureBuilder', 'wrap:renameJs', 'filerev',
       'clean:temp']);
 
 };
