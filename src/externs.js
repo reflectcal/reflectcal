@@ -10,3 +10,10 @@ var ROOT_URL;
  * @type {Array.<Array>}
  */
 var CALENDARS;
+
+
+/**
+ * List of js modules.
+ * @type {Array.<string>}
+ */
+var MODULES;

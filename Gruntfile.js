@@ -1,23 +1,24 @@
 module.exports = function(grunt) {
 
   var deepClone = require('clone');
+  var fs = require('fs');
 
   /**
    * Production flag.
    * If it's true, it means that app is built for external world - sources,
    * source maps, source maps links won't be present in compiled code.
-   * If it's false, app includes it all and could be tested on server in form in
-   * which it's exported.
+   * If it's false, app includes it all and could be tested on server in close
+   * to production form.
    */
-  var PRODUCTION = false;
+  var PRODUCTION = true;
 
   // These are compilation target axises. So, total number of compilation
   // targets is product of array lengths.
   var LOCALES = ['en', 'ru', 'by', 'fr'];
   var DEBUG = [true, false];
   var UI_TYPE = ['DESKTOP'];
-  // False means do not specify user agent.
-  var USER_AGENT = [false, 'IE', 'GECKO', 'WEBKIT', 'OPERA'];
+  // Empty string means that user agent is not specified.
+  var USER_AGENT = ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'];
 
   function makeListOfCompileTargets() {
     var targets = [];
@@ -60,10 +61,16 @@ module.exports = function(grunt) {
     return aTargets;
   }
 
-  var TARGETS = fillCompileTargetsWithDefines(makeListOfCompileTargets());
+  /**
+   * @typedef {{locale:String, debug:boolean, uiType:string, userAgent:string,
+   *    defines:Array.<string>, jsFilename:string, cssFilename:string}}
+   */
+  var Target;
 
-  // List of filenames so that options set could be mapped to files.
-  var resultFileNames = [];
+  /**
+   * @type {Array.<Target>}
+   */
+  var TARGETS = fillCompileTargetsWithDefines(makeListOfCompileTargets());
 
   var gssCommand = [
     'java',
@@ -73,7 +80,7 @@ module.exports = function(grunt) {
     '--output-renaming-map build/_temp-css-renaming-map.js',
     '--output-renaming-map-format CLOSURE_COMPILED',
     '--rename CLOSURE',
-    '--output-file build/_temp.outputcompiled.css',
+    '--output-file build/_temp.closure-stylesheets.css',
     '--allowed-non-standard-function progid:DXImageTransform.Microsoft.gradient',
     '--allowed-unrecognized-property -moz-outline',
     'css/common.css',
@@ -165,7 +172,6 @@ module.exports = function(grunt) {
 
   // Any closureBuilder task target must inherit this template.
   var compilationTargetTemplate = {
-
     options: {
       compilerOpts: {
         charset: 'utf-8',
@@ -177,7 +183,6 @@ module.exports = function(grunt) {
         define: [],
         debug: false,
         source_map_format: 'V3',
-        create_source_map: 'build/outputcompiled.js.map',
         closure_entry_point: 'rflect.cal.Loader',
 
         externs: ['src/externs.js']
@@ -224,23 +229,31 @@ module.exports = function(grunt) {
     cssmin: {
       combine: {
         files: {
-          'build/_temp.outputcompiled.advanced.css':
+          'build/_temp.no-closure-stylesheets.css':
               ['css/rflectcalendar-advanced.css']
         }
       }
     },
     concat: {
       css: {
-        src: ['build/_temp.outputcompiled.css',
-            'build/_temp.outputcompiled.advanced.css'],
-        dest: 'build/outputcompiled.css',
+        src: ['build/_temp.closure-stylesheets.css',
+            'build/_temp.no-closure-stylesheets.css'],
+        dest: 'build/_temp0.outputcompiled.css',
       }
     },
     clean: {
       all: ['build/*'],
-      temp: ['build/_temp*']
+      temp: ['build/_temp*', 'build/*.map']
     },
     closureBuilder: closureBuilderTask,
+    copy: {
+      sourceMaps: {
+        expand: true,
+        flatten: true,
+        src: 'build/*.map',
+        dest: 'build/js/'
+      }
+    },
     filerev: {
       options: {
         encoding: 'utf8',
@@ -252,9 +265,9 @@ module.exports = function(grunt) {
       }
     },
     wrap: {
-      renameJs: {
-        src: ['build/*outputcompiled*.js'],
-        dest: 'build/',
+      renameCss: {
+        src: ['build/*outputcompiled*.css'],
+        dest: 'build/css/',
         options: {
           separator: '',
           rename: function(dest, src) {
@@ -264,7 +277,32 @@ module.exports = function(grunt) {
             var fileIndex = /\d+/.exec(fileIndexStr);
             var newFileName = fileNameParts.join('.');
 
-            resultFileNames[fileIndex] = newFileName;
+            // TODO(alexk): here we're adding one css name, but in future css
+            // compilation should also be targeted, for different locales, ui
+            // types, user agents.
+            TARGETS.forEach(function(aTarget){aTarget.cssFileName = newFileName});
+            //TARGETS[fileIndex].cssFileName = newFileName;
+
+            grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
+                newFileName, '.');
+
+            return dest + newFileName;
+          }
+        }
+      },
+      renameJs: {
+        src: ['build/*outputcompiled*.js'],
+        dest: 'build/js/',
+        options: {
+          separator: '',
+          rename: function(dest, src) {
+            var fileName = src.substring(src.indexOf('/'));
+            var fileNameParts = fileName.split('.');
+            var fileIndexStr = fileNameParts.splice(0, 1)[0];
+            var fileIndex = /\d+/.exec(fileIndexStr);
+            var newFileName = fileNameParts.join('.');
+
+            TARGETS[fileIndex].jsFileName = newFileName;
 
             grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
                 newFileName, '.');
@@ -278,8 +316,8 @@ module.exports = function(grunt) {
               var fileNameParts = fileName.split('.');
               var fileIndex = /\d+/.exec(fileNameParts[0]);
 
-              var sourceMapName = 'outputcompiled-' + TARGETS[fileIndex].locale +
-                  '.js.' + fileIndex + '.map';
+              var sourceMapName = 'outputcompiled-' +
+                  TARGETS[fileIndex].locale + '.js.' + fileIndex + '.map';
 
               return ['', '//@ sourceMappingURL=' + sourceMapName];
             }
@@ -293,6 +331,20 @@ module.exports = function(grunt) {
 
   });
 
+  grunt.registerTask('exportTargets', function() {
+    var targetsFileName = 'build/targets.js';
+
+    TARGETS.forEach(function(aTarget){
+      // We do not need defines for export.
+      delete aTarget.defines;
+    });
+
+    grunt.log.writeln('TARGETS that will be written: ', TARGETS);
+
+    fs.writeFileSync(targetsFileName, JSON.stringify(TARGETS, null, '  '));
+
+  });
+
   // Load plugins.
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-exec');
@@ -301,12 +353,21 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-filerev');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  //grunt.loadNpmTasks('grunt-wrap');
   grunt.loadNpmTasks('grunt-renaming-wrap');
 
   // Default task(s).
-  grunt.registerTask('default', ['clean:all', 'exec:gss', 'cssmin:combine',
-      'concat:css', 'closureBuilder', 'wrap:renameJs', 'filerev',
-      'clean:temp']);
+  grunt.registerTask('default', [
+    'clean:all',
+    'exec:gss',
+    'cssmin:combine',
+    'concat:css',
+    'closureBuilder',
+    'filerev',
+    'wrap:renameCss',
+    'wrap:renameJs',
+    'copy:sourceMaps',
+    'exportTargets',
+    'clean:temp'
+  ]);
 
 };
