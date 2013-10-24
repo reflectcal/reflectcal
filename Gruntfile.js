@@ -14,8 +14,8 @@ module.exports = function(grunt) {
 
   // These are compilation target axises. So, total number of compilation
   // targets is product of array lengths.
-  var LOCALES = ['en', 'ru', 'by', 'fr'];
-  var DEBUG = [true, false];
+  var LOCALES = PRODUCTION ? ['en', 'ru', 'by', 'fr'] : ['en'];
+  var DEBUG = PRODUCTION ? [true, false] : [true];
   var UI_TYPE = ['DESKTOP'];
   // Empty string means that user agent is not specified.
   var USER_AGENT = ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'];

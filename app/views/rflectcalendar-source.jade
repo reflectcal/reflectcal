@@ -1,0 +1,31 @@
+extends base
+
+block cssLinks
+  link(rel='stylesheet', href='/css/common.css')
+  link(rel='stylesheet', href='/css/autocomplete.css')
+  link(rel='stylesheet', href='/css/flatbutton.css')
+  link(rel='stylesheet', href='/css/datepicker.css')
+  link(rel='stylesheet', href='/css/dialog.css')
+  link(rel='stylesheet', href='/css/savedialog.css')
+  link(rel='stylesheet', href='/css/checkbox.css')
+  link(rel='stylesheet', href='/css/rflectcalendar.css')
+  link(rel='stylesheet', href='/css/colorcodes.css')
+  link(rel='stylesheet', href='/css/tab.css')
+  link(rel='stylesheet', href='/css/tabbar.css')
+  link(rel='stylesheet', href='/css/settingspane.css')
+  link(rel='stylesheet', href='/css/eventpane.css')
+
+  link(rel='stylesheet', href='/css/rflectcalendar-advanced.css')
+
+block jsLinksHead
+  script(src='/src/closure-library/closure/goog/base.js')
+  script(src='/src/deps.js')
+  script(src='/src/rflect/cal/loader.js')
+
+block content
+  script.
+    var CALENDARS = #{calendars};
+    var SETTINGS = #{settings};
+  script.
+    // Call main method.
+    new rflect.cal.Loader().enterDocument();
