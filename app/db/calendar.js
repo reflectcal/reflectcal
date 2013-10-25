@@ -9,6 +9,7 @@
 
 
 var db = require('./connection').db;
+var dbUtil = require('./util');
 
 
 /**
@@ -43,15 +44,18 @@ exports.saveCalendarAsync = function(aCalendarJSON, aOnCalendarSaved){
   collection.count({ _id: calendar._id }, {}, function(aError, aCount){
     if (aCount > 0)
       collection.update(calendar, {}, function(aError, aResult){
-        // Executing callback for view.
-        aOnCalendarSaved('some id');
+        // Signalizing that update was ok.
+        aOnCalendarSaved(0);
       });
-    else
+    else if (aCount == 0) dbUtil.getUniqueIdAsync(collection,
+        function(aUniqueId){
+      calendar._id = aUniqueId;
       collection.insert(calendar, {}, function(aError, aResult){
         console.log(aResult);
-        // Executing callback for view.
-        aOnCalendarSaved('some id');
+        // Passing new id to callback.
+        aOnCalendarSaved(aUniqueId);
       });
+    });
   });
 };
 
