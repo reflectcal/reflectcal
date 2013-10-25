@@ -24,8 +24,8 @@ block jsLinksHead
 
 block content
   script.
-    var CALENDARS = #{calendars};
-    var SETTINGS = #{settings};
+    var CALENDARS = !{calendars};
+    var SETTINGS = !{settings};
   script.
     // Call main method.
     new rflect.cal.Loader().enterDocument();

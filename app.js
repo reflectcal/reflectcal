@@ -5,6 +5,7 @@
 var express = require('express');
 var connect = require('connect');
 var routesView = require('./app/routes/view');
+var routesCalendar = require('./app/routes/calendar');
 var http = require('http');
 var path = require('path');
 
@@ -27,6 +28,7 @@ app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/src', express.static(path.join(__dirname, 'src')));
 app.use('/templates', express.static(path.join(__dirname, 'templates')));
+app.use('/img', express.static(path.join(__dirname, 'img')));
 
 // development only
 if ('development' == app.get('env')) {
@@ -35,6 +37,9 @@ if ('development' == app.get('env')) {
 
 app.get('/view', routesView.view);
 app.get('/view-source', routesView.viewSource);
+
+app.post('/calendars/save', routesCalendar.calendarSave);
+//app.get('/view-source', routesCalendar.viewSource);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
