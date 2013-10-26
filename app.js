@@ -6,6 +6,7 @@ var express = require('express');
 var connect = require('connect');
 var routesView = require('./app/routes/view');
 var routesCalendar = require('./app/routes/calendar');
+var routesEvent = require('./app/routes/event');
 var http = require('http');
 var path = require('path');
 
@@ -39,7 +40,12 @@ app.get('/view', routesView.view);
 app.get('/view-source', routesView.viewSource);
 
 app.post('/calendars/save', routesCalendar.calendarSave);
-//app.get('/view-source', routesCalendar.viewSource);
+app.post('/calendars/delete/:id', routesCalendar.calendarDelete);
+
+app.post('/events/load', routesEvent.eventsLoad);
+app.post('/events/save', routesEvent.eventSave);
+app.post('/events/delete/:id', routesEvent.eventDelete);
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

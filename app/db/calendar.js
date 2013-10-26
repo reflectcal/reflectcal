@@ -14,48 +14,64 @@ var dbUtil = require('./util');
 
 /**
  * Loads calendars.
- * @param {function(Array)} aOnCalendarsLoaded Callback that will be executed
+ * @param {function(Array)} aOnCalendarsLoad Callback that will be executed
  * when db request is ready.
  */
-exports.getCalendarsAsync = function(aOnCalendarsLoaded){
+exports.getCalendarsAsync = function(aOnCalendarsLoad){
   var collection = db.get('calendars');
   var calendars = [];
 
   collection.find({}, {}, function(aError, aCalendars){
     aCalendars && aCalendars.forEach(function(aCalendar) {
-     calendars.push(calendarToTransportJSON(aCalendar));
+      calendars.push(calendarToTransportJSON(aCalendar));
     });
 
     // Executing callback for view.
-    aOnCalendarsLoaded(calendars);
+    aOnCalendarsLoad(calendars);
   });
 };
 
 
 /**
  * Saves calendar.
- * @param {function(Array)} aOnCalendarSaved Callback that will be when db
- * request is ready.
+ * @param {Object} aCalendarJSON JSON representing calendar.
+ * @param {function(string|number)} aOnCalendarSave Callback that will be
+ * called when db request is ready.
  */
-exports.saveCalendarAsync = function(aCalendarJSON, aOnCalendarSaved){
+exports.saveCalendarAsync = function(aCalendarJSON, aOnCalendarSave){
   var collection = db.get('calendars');
   var calendar = calendarFromTransportJSON(aCalendarJSON);
 
-  collection.count({ _id: calendar._id }, {}, function(aError, aCount){
+  collection.count({ _id: calendar._id }, function(aError, aCount){
     if (aCount > 0)
       collection.update(calendar, {}, function(aError, aResult){
         // Signalizing that update was ok.
-        aOnCalendarSaved(0);
+        aOnCalendarSave(0);
       });
     else if (aCount == 0) dbUtil.getUniqueIdAsync(collection,
         function(aUniqueId){
       calendar._id = aUniqueId;
       collection.insert(calendar, {}, function(aError, aResult){
-        console.log(aResult);
         // Passing new id to callback.
-        aOnCalendarSaved(aUniqueId);
+        aOnCalendarSave(aUniqueId);
       });
     });
+  });
+};
+
+
+/**
+ * Deletes calendar.
+ * @param {string} aCalendarId Calendar id.
+ * @param {function(number)} aOnCalendarDelete Callback that will be called
+ * when db request is ready.
+ */
+exports.deleteCalendarAsync = function(aCalendarId, aOnCalendarDelete){
+  var collection = db.get('calendars');
+
+  collection.remove({ _id: aCalendarId }, {}, function(aError, aResult){
+    // Passing result to callback.
+    aOnCalendarDelete(aResult);
   });
 };
 
@@ -86,10 +102,10 @@ function calendarToTransportJSON(aCalendar) {
  * @return {Object} DB representation of calendar.
  */
 function calendarFromTransportJSON(aCalendarJSON) {
-
+  console.log(aCalendarJSON);
   var cal = {};
 
-  cal.own = aCalendarJSON.pop();
+  //cal.own = aCalendarJSON.pop();
   cal.readOnly = aCalendarJSON.pop();
   cal.colorCodeId = aCalendarJSON.pop();
   cal.visible = aCalendarJSON.pop();

@@ -3,30 +3,45 @@
  */
 
 /**
- * @fileoverview Main view - calendar page.
+ * @fileoverview Event routes.
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
 
+var eventDAO = require('../db/event');
+
+
 /**
- * Renders main page for compiled view.
+ * Loads events.
  */
 exports.eventsLoad = function(req, res){
-  res.render('rflectcalendar-compiled', { calendars: '[]', settings: '[]' });
-};
+  var onEventsLoad = function(aEvents) {
+    res.send(JSON.stringify(aEvents));
+  }
+
+  eventDAO.getEventsAsync(req.body, onEventsLoad);
+}
 
 
 /**
- * Renders main page for uncompiled view.
+ * Saves event.
  */
 exports.eventSave = function(req, res){
-  res.render('rflectcalendar-source', { calendars: '[]', settings: '[]' });
+  var onEventSave = function(aEventId) {
+    res.send(JSON.stringify(aEventId));
+  }
+
+  eventDAO.saveEventAsync(req.body, onEventSave);
 };
 
 
 /**
- * Renders main page for uncompiled view.
+ * Deletes event.
  */
 exports.eventDelete = function(req, res){
-  res.render('rflectcalendar-source', { calendars: '[]', settings: '[]' });
+  var onEventDelete = function(aResult) {
+    res.send(JSON.stringify(aResult));
+  }
+
+  eventDAO.deleteEventAsync(req.params.id, onEventDelete);
 };

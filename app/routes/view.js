@@ -15,14 +15,14 @@ var calendarDAO = require('../db/calendar');
  * Renders main page for compiled view.
  */
 exports.view = function(req, res){
-  var onCalendarsLoaded = function(aCalendars) {
+  var onCalendarsLoad = function(aCalendars) {
     res.render('rflectcalendar-compiled', {
       calendars: JSON.stringify(aCalendars),
       settings: '[]'
     });
   }
 
-  calendarDAO.getCalendarsAsync(onCalendarsLoaded);
+  calendarDAO.getCalendarsAsync(onCalendarsLoad);
 };
 
 
@@ -30,12 +30,12 @@ exports.view = function(req, res){
  * Renders main page for uncompiled view.
  */
 exports.viewSource = function(req, res){
-  var onCalendarsLoaded = function(aCalendars) {
+  var onCalendarsLoad = function(aCalendars) {
     res.render('rflectcalendar-source', {
       calendars: JSON.stringify(aCalendars),
       settings: '[]'
     });
   }
 
-  calendarDAO.getCalendarsAsync(onCalendarsLoaded);
+  calendarDAO.getCalendarsAsync(onCalendarsLoad);
 };

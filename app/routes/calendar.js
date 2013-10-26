@@ -15,9 +15,21 @@ var calendarDAO = require('../db/calendar');
  * Saves calendar.
  */
 exports.calendarSave = function(req, res){
-  var onCalendarSaved = function(aCalendarId) {
-    res.body = JSON.stringify(aCalendarId);
+  var onCalendarSave = function(aCalendarId) {
+    res.send(JSON.stringify(aCalendarId));
   }
 
-  calendarDAO.saveCalendarAsync(JSON.parse(req.body), onCalendarSaved);
+  calendarDAO.saveCalendarAsync(req.body, onCalendarSave);
+};
+
+
+/**
+ * Deletes calendar.
+ */
+exports.calendarDelete = function(req, res){
+  var onCalendarDelete = function(aResult) {
+    res.send(JSON.stringify(aResult));
+  }
+
+  calendarDAO.deleteCalendarAsync(req.params.id, onCalendarDelete);
 };
