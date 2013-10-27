@@ -43,19 +43,21 @@ exports.saveCalendarAsync = function(aCalendarJSON, aOnCalendarSave){
   var calendar = calendarFromTransportJSON(aCalendarJSON);
 
   collection.count({ _id: calendar._id }, function(aError, aCount){
-    if (aCount > 0)
-      collection.update(calendar, {}, function(aError, aResult){
-        // Signalizing that update was ok.
-        aOnCalendarSave(0);
-      });
-    else if (aCount == 0) dbUtil.getUniqueIdAsync(collection,
+    if (aCount == 0) dbUtil.getUniqueIdAsync(collection,
         function(aUniqueId){
       calendar._id = aUniqueId;
       collection.insert(calendar, {}, function(aError, aResult){
         // Passing new id to callback.
         aOnCalendarSave(aUniqueId);
       });
-    });
+    })
+    else if (aCount > 0)
+      collection.update({ _id: calendar._id }, calendar, {},
+          function(aError, aResult){
+        // Signalizing that update was ok.
+        aOnCalendarSave(0);
+      });
+
   });
 };
 
@@ -67,11 +69,16 @@ exports.saveCalendarAsync = function(aCalendarJSON, aOnCalendarSave){
  * when db request is ready.
  */
 exports.deleteCalendarAsync = function(aCalendarId, aOnCalendarDelete){
-  var collection = db.get('calendars');
+  var calendars = db.get('calendars');
+  var events = db.get('calendars');
 
-  collection.remove({ _id: aCalendarId }, {}, function(aError, aResult){
-    // Passing result to callback.
-    aOnCalendarDelete(aResult);
+  calendars.remove({ _id: aCalendarId }, {}, function(aError, aCalResult){
+    // Removing all events of this calendar.
+    events.remove({ calendarId: aCalendarId }, {},
+        function(aError, aEventsResult){
+      // Passing result to callback.
+      aOnCalendarDelete(aCalResult);
+    });
   });
 };
 
@@ -105,7 +112,7 @@ function calendarFromTransportJSON(aCalendarJSON) {
   console.log(aCalendarJSON);
   var cal = {};
 
-  //cal.own = aCalendarJSON.pop();
+  cal.own = aCalendarJSON.pop();
   cal.readOnly = aCalendarJSON.pop();
   cal.colorCodeId = aCalendarJSON.pop();
   cal.visible = aCalendarJSON.pop();

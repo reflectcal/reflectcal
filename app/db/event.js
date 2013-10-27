@@ -52,19 +52,21 @@ exports.saveEventAsync = function(aEventJSON, aOnEventSave){
   var event = eventFromTransportJSON(aEventJSON);
 
   collection.count({ _id: event._id }, function(aError, aCount){
-    if (aCount > 0)
-      collection.update(event, {}, function(aError, aResult){
-        // Signalizing that update was ok.
-        aOnEventSave(0);
-      });
-    else if (aCount == 0) dbUtil.getUniqueIdAsync(collection,
+    console.log(aCount);
+    if (aCount == 0) dbUtil.getUniqueIdAsync(collection,
         function(aUniqueId){
       event._id = aUniqueId;
       collection.insert(event, {}, function(aError, aResult){
         // Passing new id to callback.
         aOnEventSave(aUniqueId);
       });
-    });
+    })
+    else if (aCount > 0)
+      collection.update({ _id: event._id }, event, {},
+          function(aError, aResult){
+        // Signalizing that update was ok.
+        aOnEventSave(0);
+      });
   });
 };
 
@@ -97,9 +99,9 @@ function eventToTransportJSON(aEvent) {
   event.push(aEvent._id);
   event.push(aEvent.start);
   event.push(aEvent.end);
-  event.push(aEvent.allDay);
   event.push(aEvent.name);
   event.push(aEvent.description);
+  event.push(aEvent.allDay);
   event.push(aEvent.calendarId);
 
   return event;
@@ -116,9 +118,9 @@ function eventFromTransportJSON(aEventJSON) {
   var event = {};
 
   event.calendarId = aEventJSON.pop();
+  event.allDay = aEventJSON.pop();
   event.description = aEventJSON.pop();
   event.name = aEventJSON.pop();
-  event.allDay = aEventJSON.pop();
   event.end = aEventJSON.pop();
   event.start = aEventJSON.pop();
   event._id = aEventJSON.pop();

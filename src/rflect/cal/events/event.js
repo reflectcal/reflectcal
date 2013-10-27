@@ -316,7 +316,15 @@ rflect.cal.events.Event.prototype.clone = function() {
  * @return {Array} JSON representation of event.
  */
 rflect.cal.events.Event.prototype['toJSON'] = function() {
-  return [this.longId, this.startDate.getTime(),
-      this.endDate.getTime(), this.allDay, this.summary, this.description,
-      this.calendarId];
+  var event = [];
+
+  event[rflect.cal.events.Event.FIELD_ID] = this.longId;
+  event[rflect.cal.events.Event.FIELD_START_DATE] = this.startDate.getTime();
+  event[rflect.cal.events.Event.FIELD_END_DATE] = this.endDate.getTime();
+  event[rflect.cal.events.Event.FIELD_SUMMARY] = this.summary;
+  event[rflect.cal.events.Event.FIELD_DESCRIPTION] = this.description;
+  event[rflect.cal.events.Event.FIELD_ALL_DAY] = this.allDay;
+  event[rflect.cal.events.Event.FIELD_CALENDAR_ID] = this.calendarId;
+
+  return event;
 };
