@@ -277,10 +277,14 @@ module.exports = function(grunt) {
             var fileIndex = /\d+/.exec(fileIndexStr);
             var newFileName = fileNameParts.join('.');
 
-            // TODO(alexk): here we're adding one css name, but in future css
-            // compilation should also be targeted, for different locales, ui
-            // types, user agents.
-            TARGETS.forEach(function(aTarget){aTarget.cssFileName = newFileName});
+            // TODO(alexk): here we're adding one css name for all targets, but
+            // in future css compilation will also be targeted, for different
+            // locales, ui types, user agents.
+            TARGETS.forEach(function(aTarget){
+              if (!aTarget.cssFileNames)
+                aTarget.cssFileNames = [];
+              aTarget.cssFileNames.push(newFileName);
+            });
             //TARGETS[fileIndex].cssFileName = newFileName;
 
             grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
@@ -302,7 +306,9 @@ module.exports = function(grunt) {
             var fileIndex = /\d+/.exec(fileIndexStr);
             var newFileName = fileNameParts.join('.');
 
-            TARGETS[fileIndex].jsFileName = newFileName;
+            if (!TARGETS[fileIndex].jsFileNames)
+              TARGETS[fileIndex].jsFileNames = [];
+            TARGETS[fileIndex].jsFileNames.push(newFileName);
 
             grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
                 newFileName, '.');
