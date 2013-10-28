@@ -81,7 +81,7 @@ rflect.cal.events.Calendar.FIELD_READ_ONLY = 4;
  * @type {number}
  * @const
  */
-rflect.cal.events.Calendar.FIELD_OWN = 4;
+rflect.cal.events.Calendar.FIELD_OWN = 5;
 
 
 /**
