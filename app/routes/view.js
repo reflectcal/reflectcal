@@ -9,6 +9,7 @@
 
 
 var calendarDAO = require('../db/calendar');
+var ua = require('../util/useragent');
 
 
 /**
