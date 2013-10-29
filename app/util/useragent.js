@@ -20,123 +20,128 @@
 
 
 /**
- * Name constant for Opera.
- * @type {string}
+ * Class that contains user agent properties.
+ * @constructor
  */
-exports.OPERA = 'OPERA';
+function UserAgent() {
+
+  /**
+   * Name constant for Opera.
+   * @type {boolean}
+   */
+  this.OPERA = false;
+  
+  
+  /**
+   * Name constant for Internet Explorer. This includes
+   * other browsers using Trident as its rendering engine. For example AOL
+   * and Netscape 8
+   * @type {boolean}
+   */
+  this.IE = false;
+  
+  
+  /**
+   * Name constant for WebKit. WebKit is the rendering
+   * engine that Safari, Android and others use.
+   * @type {boolean}
+   */
+  this.WEBKIT = false;
+  
+  
+  /**
+   * Name constant for Gecko. Gecko is the rendering
+   * engine used by Mozilla, Mozilla Firefox, Camino and many more.
+   * @type {boolean}
+   */
+  this.GECKO = false;
+  
+  
+  /**
+   * Name constant for a mobile device.
+   * @type {boolean}
+   */
+  this.MOBILE = false;
+  
+  
+  /**
+   * Name constant for iPad.
+   * @type {boolean}
+   */
+  this.IPAD = false;
+  
+  
+  /**
+   * Name constant for iPhone.
+   * @type {boolean}
+   */
+  this.IPHONE = false;
+  
+  
+  /**
+   * Name constant for Android.
+   * @type {boolean}
+   */
+  this.ANDROID = false;
+
+}
 
 
 /**
- * Name constant for Internet Explorer. This includes
- * other browsers using Trident as its rendering engine. For example AOL
- * and Netscape 8
- * @type {string}
+ * Initialize vars that define user agent properties, if detected.
+ * @param {string} aUserAgentStr User agent string.
+ * @return {UserAgent} User agent object.
  */
-exports.IE = 'IE';
+exports.detect = function(aUserAgentStr){
+  var ua = new UserAgent();
+
+  exports.detectUserAgent(aUserAgentStr, ua);
+  exports.detectMobile(aUserAgentStr, ua);
+  exports.detectPlatform(aUserAgentStr, ua);
+
+  return ua;
+}
 
 
 /**
- * Name constant for WebKit. WebKit is the rendering
- * engine that Safari, Android and others use.
- * @type {string}
+ * Initialize vars that define user agent name, if detected.
+ * @param {string} aUserAgentStr User agent string.
+ * @param {UserAgent} User agent object.
  */
-exports.WEBKIT = 'WEBKIT';
+exports.detectUserAgent = function(aUserAgentStr, aUserAgent){
 
-
-/**
- * Name constant for Gecko. Gecko is the rendering
- * engine used by Mozilla, Mozilla Firefox, Camino and many more.
- * @type {string}
- */
-exports.GECKO = 'GECKO';
-
-
-/**
- * Name constant for a mobile device.
- * @type {string}
- */
-exports.MOBILE = 'MOBILE';
-
-
-/**
- * Name constant for iPad.
- * @type {string}
- */
-exports.IPAD = 'IPAD';
-
-
-/**
- * Name constant for iPhone.
- * @type {string}
- */
-exports.IPHONE = 'IPHONE';
-
-
-/**
- * Name constant for Android.
- * @type {string}
- */
-exports.ANDROID = 'ANDROID';
-
-
-/**
- * Detects and returns user agent name, if detected.
- * @return {string} One of named constants for user agent, or null.
- */
-exports.detectUserAgent = function(aUserAgent){
-
-  if (aUserAgent) {
-    var detectedOpera = aUserAgent.indexOf('Opera') == 0;
-    var detectedIe = !detectedOpera &&
-        aUserAgent.indexOf('MSIE') != -1;
-    var detectedWebkit = !detectedOpera &&
-        aUserAgent.indexOf('WebKit') != -1;
-    var detectedGecko = !detectedOpera &&
-        !detectedWebkit && aUserAgent.indexOf('Gecko') != -1;
+  if (aUserAgentStr) {
+    userAgent.OPERA = aUserAgentStr.indexOf('Opera') == 0;
+    userAgent.IE = !userAgent.OPERA && aUserAgentStr.indexOf('MSIE') != -1;
+    userAgent.WEBKIT = !userAgent.OPERA &&
+        aUserAgentStr.indexOf('WebKit') != -1;
+    userAgent.GECKO = !userAgent.OPERA &&
+        !userAgent.WEBKIT && aUserAgentStr.indexOf('Gecko') != -1;
   }
-
-  if (detectedOpera)
-    return exports.OPERA;
-  if (detectedIe)
-    return exports.IE;
-  if (detectedWebkit)
-    return exports.WEBKIT;
-  if (detectedGecko)
-    return exports.GECKO;
-  return null;
 };
 
 
 /**
- * Initialize the vars that define whether platform is mobile.
- * @return {string} Named constants for mobile platform, or null.
+ * Initialize vars that define whether platform is mobile.
+ * @param {string} aUserAgentStr User agent string.
+ * @param {UserAgent} User agent object.
  */
-exports.detectMobile = function(aUserAgent){
-  var detectedMobile = aUserAgent.indexOf('Mobile') != -1;
-
-  if (detectedMobile)
-    return exports.MOBILE;
-  return null;
+exports.detectMobile = function(aUserAgentStr, aUserAgent){
+  userAgent.MOBILE = aUserAgentStr.indexOf('Mobile') != -1;
 };
 
 
 /**
- * Initialize the vars that define which platform the user agent is running on.
- * @return {string} Named constant for platform, or null.
+ * Initialize vars that define which platform the user agent is running on.
+ * @param {string} aUserAgentStr User agent string.
+ * @param {UserAgent} User agent object.
  */
-exports.detectPlatform = function(aUserAgent){
+exports.detectPlatform = function(aUserAgentStr, aUserAgent){
 
-  var detectedAndroid = !!aUserAgent && aUserAgent.indexOf('Android') >= 0;
+  userAgent.ANDROID = !!aUserAgentStr && aUserAgentStr.indexOf('Android') >= 0;
 
-  var detectedIPhone = !!aUserAgent && aUserAgent.indexOf('iPhone') >= 0;
+  userAgent.IPHONE = !!aUserAgentStr && aUserAgentStr.indexOf('iPhone') >= 0;
 
-  var detectedIPad = !!aUserAgent && aUserAgent.indexOf('iPad') >= 0;
+  userAgent.IPAD = !!aUserAgentStr && aUserAgentStr.indexOf('iPad') >= 0;
 
-  if (detectedAndroid)
-    return exports.ANDROID;
-  if (detectedIPhone)
-    return exports.IPHONE;
-  if (detectedIPad)
-    return exports.IPAD;
-  return null;
 };
