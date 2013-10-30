@@ -111,12 +111,12 @@ exports.detect = function(aUserAgentStr){
 exports.detectUserAgent = function(aUserAgentStr, aUserAgent){
 
   if (aUserAgentStr) {
-    userAgent.OPERA = aUserAgentStr.indexOf('Opera') == 0;
-    userAgent.IE = !userAgent.OPERA && aUserAgentStr.indexOf('MSIE') != -1;
-    userAgent.WEBKIT = !userAgent.OPERA &&
+    aUserAgent.OPERA = aUserAgentStr.indexOf('Opera') == 0;
+    aUserAgent.IE = !aUserAgent.OPERA && aUserAgentStr.indexOf('MSIE') != -1;
+    aUserAgent.WEBKIT = !aUserAgent.OPERA &&
         aUserAgentStr.indexOf('WebKit') != -1;
-    userAgent.GECKO = !userAgent.OPERA &&
-        !userAgent.WEBKIT && aUserAgentStr.indexOf('Gecko') != -1;
+    aUserAgent.GECKO = !aUserAgent.OPERA &&
+        !aUserAgent.WEBKIT && aUserAgentStr.indexOf('Gecko') != -1;
   }
 };
 
@@ -127,7 +127,7 @@ exports.detectUserAgent = function(aUserAgentStr, aUserAgent){
  * @param {UserAgent} User agent object.
  */
 exports.detectMobile = function(aUserAgentStr, aUserAgent){
-  userAgent.MOBILE = aUserAgentStr.indexOf('Mobile') != -1;
+  aUserAgent.MOBILE = aUserAgentStr.indexOf('Mobile') != -1;
 };
 
 
@@ -138,10 +138,10 @@ exports.detectMobile = function(aUserAgentStr, aUserAgent){
  */
 exports.detectPlatform = function(aUserAgentStr, aUserAgent){
 
-  userAgent.ANDROID = !!aUserAgentStr && aUserAgentStr.indexOf('Android') >= 0;
+  aUserAgent.ANDROID = !!aUserAgentStr && aUserAgentStr.indexOf('Android') >= 0;
 
-  userAgent.IPHONE = !!aUserAgentStr && aUserAgentStr.indexOf('iPhone') >= 0;
+  aUserAgent.IPHONE = !!aUserAgentStr && aUserAgentStr.indexOf('iPhone') >= 0;
 
-  userAgent.IPAD = !!aUserAgentStr && aUserAgentStr.indexOf('iPad') >= 0;
+  aUserAgent.IPAD = !!aUserAgentStr && aUserAgentStr.indexOf('iPad') >= 0;
 
 };

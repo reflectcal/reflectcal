@@ -17,7 +17,7 @@ var viewAdapter = require('../util/viewadapter');
  */
 exports.view = function(req, res){
   var onCalendarsLoad = function(aCalendars) {
-    viewAdapter.getCompiledTargetAsync(function(aTarget){
+    viewAdapter.getCompiledTargetAsync(req, function(aTarget){
 
       res.render('rflectcalendar-compiled', {
         calendars: JSON.stringify(aCalendars),
