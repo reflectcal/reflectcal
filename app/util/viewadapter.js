@@ -18,10 +18,10 @@
  */
 
 
-var ua = require('useragent');
+var ua = require('./useragent');
 var fs = require('fs');
 var TARGETS = require('../config/targets').TARGETS;
-var accLangParser = require("parse-acc-lang");
+var accLangParser = require('acc-lang-parser');
 
 
 /**

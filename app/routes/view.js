@@ -26,9 +26,8 @@ exports.view = function(req, res){
         cssFiles: aTarget.cssFiles
       });
 
-    }
+    });
   }
-}
 
   calendarDAO.getCalendarsAsync(onCalendarsLoad);
 };
