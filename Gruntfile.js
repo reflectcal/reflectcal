@@ -1,7 +1,11 @@
 module.exports = function(grunt) {
 
+  // Measure build time.
+  require('time-grunt')(grunt);
+
   var deepClone = require('clone');
   var fs = require('fs');
+
 
   /**
    * Production flag.
@@ -10,7 +14,7 @@ module.exports = function(grunt) {
    * If it's false, app includes it all and could be tested on server in close
    * to production form.
    */
-  var PRODUCTION = false;
+  var PRODUCTION = true;
 
   // These are compilation target axises. So, total number of compilation
   // targets is product of array lengths.

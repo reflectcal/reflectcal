@@ -1,13 +1,13 @@
 extends base
 
 block cssLinks
-  each cssFileName in !{cssFileNames}
-    link(rel='stylesheet', src='/css/' + cssFileName)
+  each cssFileName in cssFileNames
+    link(rel='stylesheet', href='/static/css/' + cssFileName)
 
 block content
-  script
-    var CALENDARS = calendars;
-    var SETTINGS = settings;
+  script.
+    var CALENDARS = !{calendars};
+    var SETTINGS = !{settings};
 block jsLinksBody
-  each jsFileName in !{jsFileNames}
-    script(src='/js/' + jsFileName)
+  each jsFileName in jsFileNames
+    script(src='/static/js/' + jsFileName)

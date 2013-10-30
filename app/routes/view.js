@@ -22,8 +22,8 @@ exports.view = function(req, res){
       res.render('rflectcalendar-compiled', {
         calendars: JSON.stringify(aCalendars),
         settings: '[]',
-        jsFiles: aTarget.jsFiles,
-        cssFiles: aTarget.cssFiles
+        jsFileNames: aTarget.jsFileNames,
+        cssFileNames: aTarget.cssFileNames
       });
 
     });
