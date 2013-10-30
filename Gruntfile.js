@@ -10,13 +10,13 @@ module.exports = function(grunt) {
    * If it's false, app includes it all and could be tested on server in close
    * to production form.
    */
-  var PRODUCTION = true;
+  var PRODUCTION = false;
 
   // These are compilation target axises. So, total number of compilation
   // targets is product of array lengths.
   var LOCALES = PRODUCTION ? ['en', 'ru', 'by', 'fr'] : ['en'];
   var DEBUG = PRODUCTION ? [true, false] : [true];
-  var UI_TYPE = ['DESKTOP'];
+  var UI_TYPE = [''];
   // Empty string means that user agent is not specified.
   var USER_AGENT = ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'];
 
@@ -247,11 +247,17 @@ module.exports = function(grunt) {
     },
     closureBuilder: closureBuilderTask,
     copy: {
+      app: {
+        expand: true,
+        flatten: false,
+        src: ['app/**', 'app.js', 'package.json'],
+        dest: 'build/'
+      },
       sourceMaps: {
         expand: true,
         flatten: true,
         src: 'build/*.map',
-        dest: 'build/js/'
+        dest: 'build/static/js/'
       }
     },
     filerev: {
@@ -267,7 +273,7 @@ module.exports = function(grunt) {
     wrap: {
       renameCss: {
         src: ['build/*outputcompiled*.css'],
-        dest: 'build/css/',
+        dest: 'build/static/css/',
         options: {
           separator: '',
           rename: function(dest, src) {
@@ -296,7 +302,7 @@ module.exports = function(grunt) {
       },
       renameJs: {
         src: ['build/*outputcompiled*.js'],
-        dest: 'build/js/',
+        dest: 'build/static/js/',
         options: {
           separator: '',
           rename: function(dest, src) {
@@ -338,7 +344,8 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('exportTargets', function() {
-    var targetsFileName = 'build/targets.js';
+    var targetsTemplateFileName = 'app/config/targets.js';
+    var targetsFileName = 'build/app/config/targets.js';
 
     TARGETS.forEach(function(aTarget){
       // We do not need defines for export.
@@ -347,7 +354,14 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('TARGETS that will be written: ', TARGETS);
 
-    fs.writeFileSync(targetsFileName, JSON.stringify(TARGETS, null, '  '));
+    var templateContents = fs.readFileSync(targetsTemplateFileName, {
+      encoding: 'utf-8'
+    });
+
+    var contents = templateContents.replace('/*{TARGETS_JSON}*/[]',
+        JSON.stringify(TARGETS, null, '  '));
+
+    fs.writeFileSync(targetsFileName, contents);
 
   });
 
@@ -372,6 +386,7 @@ module.exports = function(grunt) {
     'wrap:renameCss',
     'wrap:renameJs',
     'copy:sourceMaps',
+    'copy:app',
     'exportTargets',
     'clean:temp'
   ]);

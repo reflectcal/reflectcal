@@ -10,18 +10,25 @@
 
 var calendarDAO = require('../db/calendar');
 var ua = require('../util/useragent');
-
+var viewAdapter = require('../util/viewadapter');
 
 /**
  * Renders main page for compiled view.
  */
 exports.view = function(req, res){
   var onCalendarsLoad = function(aCalendars) {
-    res.render('rflectcalendar-compiled', {
-      calendars: JSON.stringify(aCalendars),
-      settings: '[]'
-    });
+    viewAdapter.getCompiledTargetAsync(function(aTarget){
+
+      res.render('rflectcalendar-compiled', {
+        calendars: JSON.stringify(aCalendars),
+        settings: '[]',
+        jsFiles: aTarget.jsFiles,
+        cssFiles: aTarget.cssFiles
+      });
+
+    }
   }
+}
 
   calendarDAO.getCalendarsAsync(onCalendarsLoad);
 };
