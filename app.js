@@ -18,8 +18,9 @@ app.set('views', path.join(__dirname, 'app', 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
 app.use(express.logger('dev'));
-app.use(connect.urlencoded())
-app.use(connect.json())
+app.use(connect.urlencoded());
+app.use(connect.json());
+app.use(connect.compress());
 app.use(express.methodOverride());
 app.use(express.cookieParser(
     'rflectevents_sdfjwioy2379ugd8syg38wyio-asdfh728t9284fdsfjs'));
@@ -34,7 +35,9 @@ app.use('/img', express.static(path.join(__dirname, 'img')));
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
+  app.locals.pretty = true;
 }
+
 
 app.get('/view', routesView.view);
 app.get('/view-source', routesView.viewSource);

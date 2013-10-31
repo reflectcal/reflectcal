@@ -12,43 +12,50 @@ var ua = require('./useragent');
 var fs = require('fs');
 var TARGETS = require('../config/targets').TARGETS;
 var accLangParser = require('acc-lang-parser');
+var settingsDAO = require('../db/settings');
 
 
 /**
  * Selects compiled target based on request and settings.
  * @return {string} One of named constants for user agent, or null.
  */
-exports.getCompiledTargetAsync = function(aRequest, aCallback){
+exports.getCompiledTargetAsync = function(aRequest, aOnGetCompiledTarget){
 
-  //Set default target.
-  var target;
+  settingsDAO.getSettingsAsync(function(aSettings){
 
-  var userAgentObject = ua.detect(aRequest.headers['user-agent']);
-  var userAgent = getUserAgentName(userAgentObject);
+    //Set default target.
+    var target;
+    var languages;
 
-  var languages = accLangParser.extractAllLangs(
-      aRequest.headers['accept-language']).map(function(aLangObj){
-    return aLangObj.language + (aLangObj.locale ? '-' + aLangObj.locale : '');
-  });
+    var userAgentObject = ua.detect(aRequest.headers['user-agent']);
+    var userAgent = getUserAgentName(userAgentObject);
 
-  // Add default 'en' locale.
-  // Parser is always return at least [], (https://github.com/adcloud/acc-lang-parser/blob/master/spec/unit/parse-acc-lang.spec.js#L132),
-  // so it's safe to push new item.
-  languages.push('en');
+    if (aSettings.language) {
+      languages = [aSettings.language];
+    } else {
+      languages = accLangParser.extractAllLangs(
+          aRequest.headers['accept-language']).map(function(aLangObj){
+        return aLangObj.language + (aLangObj.locale ? '-' + aLangObj.locale : '');
+      });
+    }
 
-  for (var counter = 0; counter < languages.length && !target;
-      counter++) {
-    target = targetFinder(TARGETS, languages[counter], true, '', userAgent);
-  }
+    // Add default 'en' locale.
+    // Parser is always return at least [], (https://github.com/adcloud/acc-lang-parser/blob/master/spec/unit/parse-acc-lang.spec.js#L132),
+    // so it's safe to push new item.
+    languages.push('en');
 
-  console.log('userAgent', userAgent);
-  console.log('target', target);
-  if (!target)
-    target = TARGETS[0];
+    for (var counter = 0; counter < languages.length && !target;
+        counter++) {
+      target = targetFinder(TARGETS, languages[counter], true, '', userAgent);
+    }
 
-  //TODO(alexk): here we'll do base lookup for settings, so make call async.
-  setImmediate(function() {
-    aCallback(target);
+    console.log('userAgent', userAgent);
+    console.log('target', target);
+    if (!target)
+      target = TARGETS[0];
+
+    aOnGetCompiledTarget(target);
+
   });
 
 };
