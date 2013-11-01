@@ -14,7 +14,12 @@ module.exports = function(grunt) {
    * If it's false, app includes it all and could be tested on server in close
    * to production form.
    */
-  var PRODUCTION = true;
+  var PRODUCTION = false;
+  /**
+   * This flag specifies that minimal number of compile targets will be
+   * produced.
+   */
+  var FAST_DEBUG = true;
 
   // These are compilation target axises. So, total number of compilation
   // targets is product of array lengths.
@@ -22,7 +27,8 @@ module.exports = function(grunt) {
   var DEBUG = PRODUCTION ? [true, false] : [true];
   var UI_TYPE = [''];
   // Empty string means that user agent is not specified.
-  var USER_AGENT = ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'];
+  var USER_AGENT = (!PRODUCTION && FAST_DEBUG) ?
+      [''] : ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'];
 
   function makeListOfCompileTargets() {
     var targets = [];

@@ -8,7 +8,7 @@
  */
 
 
-var db = require('./connection').db;
+var entityDAO = require('./entity');
 var dbUtil = require('./util');
 
 
@@ -19,25 +19,19 @@ var dbUtil = require('./util');
  * when db request is ready.
  */
 exports.getEventsAsync = function(aLookupJSON, aOnEventsLoad){
-  var collection = db.get('events');
-  var events = [];
 
   var intervalStart = aLookupJSON[0];
   var intervalEnd = aLookupJSON[1];
   var calendarIds = aLookupJSON.slice(2);
 
-  collection.find({
+  var lookupObject = {
     start: {$lt: intervalEnd},
     end: {$gt: intervalStart},
     calendarId: {$in: calendarIds}
-  }, {}, function(aError, aEvents){
-    aEvents && aEvents.forEach(function(aEvent) {
-      events.push(eventToTransportJSON(aEvent));
-    });
+  };
 
-    // Executing callback for view.
-    aOnEventsLoad(events);
-  });
+  entityDAO.getEntitiesAsync('events', lookupObject, aOnEventsLoad,
+      eventToTransportJSON);
 };
 
 
@@ -48,26 +42,8 @@ exports.getEventsAsync = function(aLookupJSON, aOnEventsLoad){
  * called when db request is ready.
  */
 exports.saveEventAsync = function(aEventJSON, aOnEventSave){
-  var collection = db.get('events');
-  var event = eventFromTransportJSON(aEventJSON);
-
-  collection.count({ _id: event._id }, function(aError, aCount){
-    console.log(aCount);
-    if (aCount == 0) dbUtil.getUniqueIdAsync(collection,
-        function(aUniqueId){
-      event._id = aUniqueId;
-      collection.insert(event, {}, function(aError, aResult){
-        // Passing new id to callback.
-        aOnEventSave(aUniqueId);
-      });
-    })
-    else if (aCount > 0)
-      collection.update({ _id: event._id }, event, {},
-          function(aError, aResult){
-        // Signalizing that update was ok.
-        aOnEventSave(0);
-      });
-  });
+  entityDAO.saveEntityAsync('events', aEventJSON, aOnEventSave,
+      eventFromTransportJSON);
 };
 
 
@@ -78,12 +54,7 @@ exports.saveEventAsync = function(aEventJSON, aOnEventSave){
  * when db request is ready.
  */
 exports.deleteEventAsync = function(aEventId, aOnEventDelete){
-  var collection = db.get('events');
-
-  collection.remove({ _id: aEventId }, {}, function(aError, aResult){
-    // Passing result to callback.
-    aOnEventDelete(aResult);
-  });
+  entityDAO.deleteEntityAsync('events', aEventId, aOnEventDelete);
 };
 
 

@@ -1,8 +1,11 @@
-/**
- * Root url of application. Could be changed before deployment.
- * @type {string}
+/*
+ * Copyright (c) 2013. Rflect, Alex K.
  */
-var ROOT_URL;
+
+/**
+ * @fileoverview Externs for client-side app code.
+ * @author alexeykofficial@gmail.com (Alex K.)
+ */
 
 
 /**
@@ -10,6 +13,13 @@ var ROOT_URL;
  * @type {Array.<Array>}
  */
 var CALENDARS;
+
+
+/**
+ * Settings object.
+ * @type {Object}
+ */
+var SETTINGS;
 
 
 /**

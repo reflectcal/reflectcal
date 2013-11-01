@@ -8,8 +8,10 @@
  */
 
 
-var db = require('./connection').db;
+var entityDAO = require('./entity');
 var dbUtil = require('./util');
+var DEFAULT_CALENDAR = require('../config/defaultcalendar').DEFAULT_CALENDAR;
+var db = require('./connection').db;
 
 
 /**
@@ -18,17 +20,9 @@ var dbUtil = require('./util');
  * when db request is ready.
  */
 exports.getCalendarsAsync = function(aOnCalendarsLoad){
-  var collection = db.get('calendars');
-  var calendars = [];
+  entityDAO.getEntitiesAsync('calendars', {}, aOnCalendarsLoad,
+      calendarToTransportJSON, DEFAULT_CALENDAR);
 
-  collection.find({}, {}, function(aError, aCalendars){
-    aCalendars && aCalendars.forEach(function(aCalendar) {
-      calendars.push(calendarToTransportJSON(aCalendar));
-    });
-
-    // Executing callback for view.
-    aOnCalendarsLoad(calendars);
-  });
 };
 
 
@@ -39,26 +33,8 @@ exports.getCalendarsAsync = function(aOnCalendarsLoad){
  * called when db request is ready.
  */
 exports.saveCalendarAsync = function(aCalendarJSON, aOnCalendarSave){
-  var collection = db.get('calendars');
-  var calendar = calendarFromTransportJSON(aCalendarJSON);
-
-  collection.count({ _id: calendar._id }, function(aError, aCount){
-    if (aCount == 0) dbUtil.getUniqueIdAsync(collection,
-        function(aUniqueId){
-      calendar._id = aUniqueId;
-      collection.insert(calendar, {}, function(aError, aResult){
-        // Passing new id to callback.
-        aOnCalendarSave(aUniqueId);
-      });
-    })
-    else if (aCount > 0)
-      collection.update({ _id: calendar._id }, calendar, {},
-          function(aError, aResult){
-        // Signalizing that update was ok.
-        aOnCalendarSave(0);
-      });
-
-  });
+  entityDAO.saveEntityAsync('calendars', aCalendarJSON, aOnCalendarSave,
+      calendarFromTransportJSON);
 };
 
 
@@ -69,10 +45,10 @@ exports.saveCalendarAsync = function(aCalendarJSON, aOnCalendarSave){
  * when db request is ready.
  */
 exports.deleteCalendarAsync = function(aCalendarId, aOnCalendarDelete){
-  var calendars = db.get('calendars');
-  var events = db.get('calendars');
+  var events = db.get('events');
 
-  calendars.remove({ _id: aCalendarId }, {}, function(aError, aCalResult){
+  entityDAO.deleteEntityAsync('calendars', aCalendarId,
+      function(aError, aCalResult){
     // Removing all events of this calendar.
     events.remove({ calendarId: aCalendarId }, {},
         function(aError, aEventsResult){

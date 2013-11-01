@@ -8,23 +8,21 @@
  */
 
 
-var db = require('./connection').db;
+var entityDAO = require('./entity');
 var dbUtil = require('./util');
+var DEFAULT_SETTINGS = require('../config/defaultsettings').DEFAULT_SETTINGS;
 
 
 /**
  * Loads settings.
- * @param {function(Array)} aOnSettingsLoad Callback that will be executed
+ * @param {function(Object)} aOnSettingsLoad Callback that will be executed
  * when db request is ready.
+ * TODO(alexk): think about multiple settings object per user, aka profiles.
  */
 exports.getSettingsAsync = function(aOnSettingsLoad){
-  var collection = db.get('settings');
-  var settings = [];
-
-  collection.find({}, {}, function(aError, aSettings){
-    // Executing callback for view.
-    aOnSettingsLoad(aSettings);
-  });
+  console.log('getSettingsAsync');
+  entityDAO.getEntitiesAsync('settings', {}, aOnSettingsLoad,
+      settingsToTransportJSON, DEFAULT_SETTINGS);
 };
 
 
@@ -35,27 +33,8 @@ exports.getSettingsAsync = function(aOnSettingsLoad){
  * called when db request is ready.
  */
 exports.saveSettingsAsync = function(aSettingsJSON, aOnSettingsSave){
-  var collection = db.get('settings');
-  var settings = settingsFromTransportJSON(aSettingsJSON);
-
-  collection.count({ _id: settings._id }, function(aError, aCount){
-    //TODO(alexk): make settings id map to user
-    //if (aCount == 0) dbUtil.getUniqueIdAsync(collection,
-    //    function(aUniqueId){
-      settings._id = /*aUniqueId*/1;
-      collection.insert(settings, {}, function(aError, aResult){
-        // Passing new id to callback.
-        aOnSettingsSave(/*aUniqueId*/1);
-      });
-    //})
-    else if (aCount > 0)
-      collection.update({ _id: settings._id }, settings, {},
-          function(aError, aResult){
-        // Signalizing that update was ok.
-        aOnSettingsSave(0);
-      });
-
-  });
+  entityDAO.saveEntityAsync('settings', aSettingsJSON,
+      aOnSettingsSave, settingsFromTransportJSON);
 };
 
 

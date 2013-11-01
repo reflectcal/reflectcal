@@ -3,8 +3,8 @@
  */
 
 /**
- * @fileoverview Middleware between settings and set of files needed for
- * displaying a view.
+ * @fileoverview Adapter that judges what target files should be used by app
+ * based on settings and request parameters.
  */
 
 
@@ -23,26 +23,13 @@ exports.getCompiledTargetAsync = function(aRequest, aOnGetCompiledTarget){
 
   settingsDAO.getSettingsAsync(function(aSettings){
 
+    console.log('settings', aSettings);
+
     //Set default target.
     var target;
-    var languages;
-
+    var languages = getLocales(aSettings, aRequest);
     var userAgentObject = ua.detect(aRequest.headers['user-agent']);
     var userAgent = getUserAgentName(userAgentObject);
-
-    if (aSettings.language) {
-      languages = [aSettings.language];
-    } else {
-      languages = accLangParser.extractAllLangs(
-          aRequest.headers['accept-language']).map(function(aLangObj){
-        return aLangObj.language + (aLangObj.locale ? '-' + aLangObj.locale : '');
-      });
-    }
-
-    // Add default 'en' locale.
-    // Parser is always return at least [], (https://github.com/adcloud/acc-lang-parser/blob/master/spec/unit/parse-acc-lang.spec.js#L132),
-    // so it's safe to push new item.
-    languages.push('en');
 
     for (var counter = 0; counter < languages.length && !target;
         counter++) {
@@ -54,11 +41,39 @@ exports.getCompiledTargetAsync = function(aRequest, aOnGetCompiledTarget){
     if (!target)
       target = TARGETS[0];
 
-    aOnGetCompiledTarget(target);
+    aOnGetCompiledTarget(target, aSettings);
 
   });
 
 };
+
+
+/**
+ * Gets list of locales based on settings and request.
+ * @return {Object} aSettings Settings object.
+ * @return {Object} aRequest Request object.
+ * @return {Array.<string>} List of locales.
+ */
+function getLocales(aSettings, aRequest) {
+  var languages;
+
+  if (aSettings.language) {
+    languages = [aSettings.language];
+  } else {
+    languages = accLangParser.extractAllLangs(
+        aRequest.headers['accept-language']).map(function(aLangObj){
+      return aLangObj.language + (aLangObj.locale ? '-' + aLangObj.locale :
+          '');
+    });
+  }
+
+  // Add default 'en' locale.
+  // Parser will always return at least [], (https://github.com/adcloud/acc-lang-parser/blob/master/spec/unit/parse-acc-lang.spec.js#L132),
+  // so it's safe to push new item.
+  languages.push('en');
+
+  return languages;
+}
 
 
 function getUserAgentName(aUAObject) {
