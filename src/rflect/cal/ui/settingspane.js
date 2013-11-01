@@ -78,6 +78,12 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
    */
   this.transport_ = aTransport;
 
+  /**
+   * Settings object.
+   * @type {Object}
+   */
+  this.settings = goog.object.clone(SETTINGS);
+
   this.parentEl_ = aParentElement;
 
   /**
@@ -405,7 +411,7 @@ rflect.cal.ui.SettingsPane.prototype.createSettingsBody_ =
  */
 rflect.cal.ui.SettingsPane.prototype.createTabContents1_ =
     function(aDom) {
-  // Calendars select.
+  // Languages select.
   var labelLanguages = aDom.createDom('label', {
     'for': 'settings-languages',
     className: rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME
@@ -415,6 +421,9 @@ rflect.cal.ui.SettingsPane.prototype.createTabContents1_ =
     className: goog.getCssName('event-cal-select') + ' ' +
       goog.getCssName('event-edit-pane-cal-select')
     });
+
+
+
   var languagesCont = aDom.createDom('div', {
     className: goog.getCssName('event-edit-pane-cont')
     }, labelLanguages, selectLanguages);

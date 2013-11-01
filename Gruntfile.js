@@ -30,6 +30,7 @@ module.exports = function(grunt) {
   var USER_AGENT = (!PRODUCTION && FAST_DEBUG) ?
       [''] : ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'];
 
+
   function makeListOfCompileTargets() {
     var targets = [];
 
