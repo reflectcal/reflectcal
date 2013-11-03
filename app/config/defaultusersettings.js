@@ -10,16 +10,11 @@
 
 
 /**
- *
+ * Standard user settings.
+ * @type {Object}
  */
-exports.DEFAULT_SETTINGS = {
+exports.DEFAULT_USER_SETTINGS = {
   // Currently used language.
   language: '',
-  // Locale names and their language names.
-  LOCALE_LANGUAGE_NAMES = [
-    ['en', 'English'],
-    ['ru', 'Русский'],
-    ['by', 'Беларускi'],
-    ['fr', 'Français']
-  ]
+  debug: false
 };

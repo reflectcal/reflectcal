@@ -27,3 +27,10 @@ var SETTINGS;
  * @type {Array.<string>}
  */
 var MODULES;
+
+
+/**
+ * List of (locale, lang name) pairs.
+ * @type {Array.<Array.<string>>}
+ */
+var LANGUAGE_NAMES;

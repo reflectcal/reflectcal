@@ -10,8 +10,8 @@
 
 var calendarDAO = require('../db/calendar');
 var settingsDAO = require('../db/settings');
-var ua = require('../util/useragent');
 var viewAdapter = require('../util/viewadapter');
+var appConfig = require('../config/appconfig');
 
 /**
  * Renders main page for compiled view.
@@ -26,7 +26,8 @@ exports.view = function(req, res){
         jsFileNames: aTarget.jsFileNames,
         cssFileNames: aTarget.cssFileNames,
         // Late modules are all js files except first one.
-        modules: JSON.stringify(aTarget.jsFileNames.slice(1))
+        modules: JSON.stringify(aTarget.jsFileNames.slice(1)),
+        languageNames: JSON.stringify(appConfig.LANGUAGE_NAMES)
       });
 
     });
@@ -44,7 +45,8 @@ exports.viewSource = function(req, res){
     settingsDAO.getSettingsAsync(function(aSettings) {
       res.render('rflectcalendar-source', {
         calendars: JSON.stringify(aCalendars, null, '  '),
-        settings: JSON.stringify(aSettings[0], null, '  ')
+        settings: JSON.stringify(aSettings[0], null, '  '),
+        languageNames: JSON.stringify(appConfig.LANGUAGE_NAMES, null, '  ')
       });
     });
   }

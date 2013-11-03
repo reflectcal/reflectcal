@@ -154,6 +154,14 @@ rflect.cal.ViewManager.prototype.assignEvents_ = function() {
   this.listen(this.mainBody_, rflect.cal.EventType.DATE_DRAG_END,
       goog.nullFunction, false, this);
 
+  //Listen immediate press on save settings button.
+  this.listen(this.mainBody_,
+      rflect.cal.ui.SettingsPane.EventTypes.SAVE, this.onSaveSettingsImmediate_,
+      false, this);
+  //Listen specific case when save settings need a reload.
+  this.listen(this.transport_, rflect.cal.Transport.EventTypes.SAVE_SETTINGS,
+      this.onSaveSettingsResponse_, false, this);
+
 };
 
 
@@ -348,6 +356,36 @@ rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
       /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL)]);
 
   this.transport_.loadEventsAsync();
+}
+
+
+/**
+ * Save settings immediate (when settings pane 'save' button is pressed)
+ * handler.
+ * @param {rflect.cal.ui.SettingsPane.SaveSettingsEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ViewManager.prototype.onSaveSettingsImmediate_ = function(aEvent) {
+  aEvent.preventDefault();
+
+  if (aEvent.settingsChanged) {
+    this.eventManager_.run();
+    this.mainBody_.update();
+  }
+
+  this.mainBody_.showSettingsPane(false);
+}
+
+
+/**
+ * Save settings transport response handler. We use it to reload page to apply
+ * settings, if needed.
+ * @param {rflect.cal.Transport.SaveSettingsEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ViewManager.prototype.onSaveSettingsResponse_ = function(aEvent) {
+  if (aEvent.reload)
+    window.location.reload();
 }
 
 

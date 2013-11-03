@@ -495,7 +495,7 @@ rflect.cal.ui.MainBody.prototype.onCalendarSwitch_ = function(aEvent) {
 
 /**
  * Events load handler.
- * @param {rflect.cal.Transport.LoadEvent} aEvent Event object.
+ * @param {rflect.cal.Transport.LoadEventEvent} aEvent Event object.
  * @private
  */
 rflect.cal.ui.MainBody.prototype.onLoadEvents_ = function(aEvent) {
@@ -544,10 +544,9 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
         this.getDomHelper().getElement('main-container'), this.transport_);
     this.addChild(this.settingsPane_);
 
+    // Save settings handler is in view manager.
     this.getHandler().listen(this.settingsPane_,
         rflect.cal.ui.SettingsPane.EventTypes.CANCEL, this.onSettingsPaneCancel_,
-        false, this).listen(this.settingsPane_,
-        rflect.cal.ui.SettingsPane.EventTypes.SAVE, this.onSettingsPaneSave_,
         false, this).listen(this.settingsPane_,
         rflect.cal.ui.SettingsPane.EventTypes.CALENDAR_UPDATE,
         this.onSettingsPaneCalendarUpdate_, false, this);
@@ -611,19 +610,6 @@ rflect.cal.ui.MainBody.prototype.onEventPaneDelete_ = function(aEvent) {
  * Settings pane cancel listener.
  */
 rflect.cal.ui.MainBody.prototype.onSettingsPaneCancel_ = function() {
-  this.showSettingsPane(false);
-}
-
-
-/**
- * Settings pane save listener.
- * @param {Event} aEvent Event object.
- */
-rflect.cal.ui.MainBody.prototype.onSettingsPaneSave_ = function(aEvent) {
-  aEvent.preventDefault();
-
-  this.updateMainPane_();
-
   this.showSettingsPane(false);
 }
 

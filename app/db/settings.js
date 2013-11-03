@@ -9,8 +9,9 @@
 
 
 var entityDAO = require('./entity');
-var dbUtil = require('./util');
-var DEFAULT_SETTINGS = require('../config/defaultsettings').DEFAULT_SETTINGS;
+var merge = require('merge');
+var DEFAULT_USER_SETTINGS =
+    require('../config/defaultusersettings').DEFAULT_USER_SETTINGS;
 
 
 /**
@@ -22,7 +23,7 @@ var DEFAULT_SETTINGS = require('../config/defaultsettings').DEFAULT_SETTINGS;
 exports.getSettingsAsync = function(aOnSettingsLoad){
   console.log('getSettingsAsync');
   entityDAO.getEntitiesAsync('settings', {}, aOnSettingsLoad,
-      settingsToTransportJSON, DEFAULT_SETTINGS);
+      settingsToTransportJSON, DEFAULT_USER_SETTINGS);
 };
 
 
@@ -45,8 +46,12 @@ exports.saveSettingsAsync = function(aSettingsJSON, aOnSettingsSave){
  */
 function settingsToTransportJSON(aSettings) {
 
-  //NOTE(alexk): some settings may be restricted for transporting.
-  return aSettings;
+  //We could have some old settings object in db, without some newly introduced
+  // properties. In that case, provide defaults.
+
+  var settings = merge(DEFAULT_USER_SETTINGS, aSettings);
+
+  return settings;
 };
 
 

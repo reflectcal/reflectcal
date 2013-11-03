@@ -158,6 +158,22 @@ rflect.cal.ui.SettingsPane.EventTypes = {
 
 
 /**
+ * Event that is fired after saving of settings.
+ * @param {Object} aSettings Settings object.
+ * @param {boolean} aChanged Whether settings were changed.
+ * @extends {goog.events.Event}
+ * @constructor
+ */
+rflect.cal.ui.SettingsPane.SaveSettingsEvent = function(aSettings, aChanged) {
+  goog.events.Event.call(this, rflect.cal.ui.SettingsPane.EventTypes.SAVE);
+
+  this.settings = aSettings;
+  this.settingsChanged = aChanged;
+}
+goog.inherits(rflect.cal.ui.SettingsPane.SaveSettingsEvent, goog.events.Event);
+
+
+/**
  * @type {string}
  * @const
  */
@@ -282,6 +298,12 @@ rflect.cal.ui.SettingsPane.prototype.viewIndex_;
 rflect.cal.ui.SettingsPane.prototype.isVisible = function() {
   return this.visible_;
 };
+
+
+/**
+ * @type {boolean} Whether reload is needed to apply changed settings.
+ */
+rflect.cal.ui.SettingsPane.prototype.reloadIsNeeded_ = false;
 
 
 /**
@@ -416,17 +438,23 @@ rflect.cal.ui.SettingsPane.prototype.createTabContents1_ =
     'for': 'settings-languages',
     className: rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME
   }, 'Languages');
-  var selectLanguages = aDom.createDom('select', {
+  this.selectLanguages_ = aDom.createDom('select', {
     id: 'settings-languages',
     className: goog.getCssName('event-cal-select') + ' ' +
       goog.getCssName('event-edit-pane-cal-select')
     });
 
-
+  goog.array.forEach(LANGUAGE_NAMES, function(aLocaleLangPair) {
+    this.selectLanguages_.appendChild(aDom.createDom('option', {
+      id: 'lang-' + aLocaleLangPair[0],
+      className: '',
+      value: aLocaleLangPair[0]
+    }, aLocaleLangPair[1]));
+  }, this);
 
   var languagesCont = aDom.createDom('div', {
     className: goog.getCssName('event-edit-pane-cont')
-    }, labelLanguages, selectLanguages);
+    }, labelLanguages, this.selectLanguages_);
 
   return aDom.createDom('div', [goog.getCssName('tabs-content'), goog.getCssName('settings-tab-content')],
       languagesCont);
@@ -883,7 +911,7 @@ rflect.cal.ui.SettingsPane.prototype.onCalendarsColorLinkClick_ =
 
 /**
  * Save calendar event listener.
- * @param {rflect.cal.Transport.SaveCalendar} aEvent Event object.
+ * @param {rflect.cal.Transport.SaveCalendarEvent} aEvent Event object.
  * @private
  */
 rflect.cal.ui.SettingsPane.prototype.onSaveCalendarResponse_ =
@@ -903,7 +931,7 @@ rflect.cal.ui.SettingsPane.prototype.onSaveCalendarResponse_ =
 
 /**
  * Delete calendar button event listener.
- * @param {rflect.cal.Transport.DeleteCalendar} aEvent Event object.
+ * @param {rflect.cal.Transport.DeleteCalendarEvent} aEvent Event object.
  * @private
  */
 rflect.cal.ui.SettingsPane.prototype.onDeleteCalendarAction_ =
@@ -924,7 +952,7 @@ rflect.cal.ui.SettingsPane.prototype.onDeleteCalendarAction_ =
 
 /**
  * Delete calendar remote operation listener.
- * @param {rflect.cal.Transport.DeleteCalendar} aEvent Event object.
+ * @param {rflect.cal.Transport.DeleteCalendarEvent} aEvent Event object.
  * TODO(alexk): there undo action will be possible, so differentiate this event
  * from one that comes right after button click.
  * @private
@@ -1037,11 +1065,10 @@ rflect.cal.ui.SettingsPane.prototype.onSaveSettings_ = function() {
 
   if (this.scanSettingsValues_()) {
 
-    this.transport_.saveSettingsAsync();
-    // Settings could change pretty anything - so to dispatch event here is
-    // useful.
-    if (this.dispatchEvent(new goog.events.Event(
-        rflect.cal.ui.SettingsPane.EventTypes.SAVE))) {
+    this.transport_.saveSettingsAsync(this.settings, this.reloadIsNeeded_);
+
+    if (this.dispatchEvent(new rflect.cal.ui.SettingsPane.SaveSettingsEvent(
+        this.settings, false))) {
       this.setVisible(false);
     }
 
@@ -1084,7 +1111,7 @@ rflect.cal.ui.SettingsPane.prototype.setVisible = function(visible) {
     this.render(this.parentEl_);
   }
 
-  //this.displaySettingsValues_();
+  this.displaySettingsValues_();
 
   this.showElement_(visible);
 
@@ -1106,9 +1133,17 @@ rflect.cal.ui.SettingsPane.prototype.showElement_ = function(visible) {
  * Displays settings in form.
  */
 rflect.cal.ui.SettingsPane.prototype.displaySettingsValues_ = function() {
-  //this.buttonDeleteCalendar_.setVisible(!this.newCalendarMode_);
 
-  //this.inputCalendarName_.value = settings.getSummary();
+  var languageIndex = goog.array.findIndex(LANGUAGE_NAMES,
+      function(aLocaleLangPair){
+    //SETTINGS.language could be undefined, so rely on hardcoded locale.
+    return SETTINGS.language ? aLocaleLangPair[0] == SETTINGS.language :
+        aLocaleLangPair[0] == goog.LOCALE;
+  });
+
+  this.selectLanguages_.selectedIndex = languageIndex;
+
+  this.checkboxDebug_.setChecked(this.settings.debug);
 };
 
 
@@ -1118,9 +1153,16 @@ rflect.cal.ui.SettingsPane.prototype.displaySettingsValues_ = function() {
  */
 rflect.cal.ui.SettingsPane.prototype.scanSettingsValues_ = function() {
   var valid = true;
-  /*if (valid) {
-    settings.setEndDate(endDateShim);
-  }*/
+  if (valid) {
+    this.settings.language = this.selectLanguages_.value;
+    this.settings.debug = this.checkboxDebug_.isChecked();
+
+    if (this.settings.language != SETTINGS.language ||
+        this.settings.debug != SETTINGS.debug)
+      this.reloadIsNeeded_ = true;
+    else
+      this.reloadIsNeeded_ = false;
+  }
 
   return valid;
 };

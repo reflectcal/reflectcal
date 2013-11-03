@@ -1688,7 +1688,7 @@ rflect.cal.ui.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
 
 
 /**
- * @param {rflect.cal.Transport.SaveEvent} aEvent Event object.
+ * @param {rflect.cal.Transport.SaveEventEvent} aEvent Event object.
  */
 rflect.cal.ui.MainPane.prototype.onSaveEvent_ = function(aEvent) {
   var eventId = aEvent.eventId;

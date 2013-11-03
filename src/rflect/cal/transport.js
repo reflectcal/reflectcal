@@ -105,7 +105,8 @@ rflect.cal.Transport.EventTypes = {
   DELETE_EVENT: 'deleteevent',
   LOAD_EVENT: 'loadevent',
   SAVE_CALENDAR: 'savecalendar',
-  DELETE_CALENDAR: 'deletecalendar'
+  DELETE_CALENDAR: 'deletecalendar',
+  SAVE_SETTINGS: 'savesettings'
 }
 
 
@@ -117,7 +118,8 @@ rflect.cal.Transport.OperationUrls = {
   LOAD_EVENT: '../events/load/',
   DELETE_EVENT: '../events/delete/',
   SAVE_CALENDAR: '../calendars/save/',
-  DELETE_CALENDAR: '../calendars/delete/'
+  DELETE_CALENDAR: '../calendars/delete/',
+  SAVE_SETTINGS: '../settings/save/'
 }
 
 
@@ -125,9 +127,9 @@ rflect.cal.Transport.OperationUrls = {
  * Event that is fired after save.
  * @param {number} aEventId Event id.
  * @param {string} aLongId Event long id.
- * @constructor.
+ * @constructor
  */
-rflect.cal.Transport.SaveEvent = function(aEventId, aLongId) {
+rflect.cal.Transport.SaveEventEvent = function(aEventId, aLongId) {
   this.type = rflect.cal.Transport.EventTypes.SAVE_EVENT;
   this.eventId = aEventId;
   this.longId = aLongId;
@@ -135,11 +137,11 @@ rflect.cal.Transport.SaveEvent = function(aEventId, aLongId) {
 
 
 /**
- * Event that is fired after delete.
+ * Event that is fired after loading of events.
  * @param {rflect.date.Interval} aInterval Interval.
- * @constructor.
+ * @constructor
  */
-rflect.cal.Transport.LoadEvent = function(aInterval) {
+rflect.cal.Transport.LoadEventEvent = function(aInterval) {
   this.type = rflect.cal.Transport.EventTypes.LOAD_EVENT;
   this.interval = aInterval;
 }
@@ -148,9 +150,9 @@ rflect.cal.Transport.LoadEvent = function(aInterval) {
 /**
  * Event that is fired after delete.
  * @param {number} aEventId Event id.
- * @constructor.
+ * @constructor
  */
-rflect.cal.Transport.DeleteEvent = function(aEventId) {
+rflect.cal.Transport.DeleteEventEvent = function(aEventId) {
   this.type = rflect.cal.Transport.EventTypes.DELETE_EVENT;
   this.eventId = aEventId;
 }
@@ -161,9 +163,9 @@ rflect.cal.Transport.DeleteEvent = function(aEventId) {
  * @param {number} aCalendarId Calendar id.
  * @param {rflect.cal.events.Calendar} aCalendar Calendar itself, to be removed
  * from pending list in settings pane.
- * @constructor.
+ * @constructor
  */
-rflect.cal.Transport.SaveCalendar = function(aCalendarId, aCalendar) {
+rflect.cal.Transport.SaveCalendarEvent = function(aCalendarId, aCalendar) {
   this.type = rflect.cal.Transport.EventTypes.SAVE_CALENDAR;
   this.calendarId = aCalendarId;
   this.calendar = aCalendar;
@@ -173,11 +175,24 @@ rflect.cal.Transport.SaveCalendar = function(aCalendarId, aCalendar) {
 /**
  * Event that is fired after delete of calendar.
  * @param {string} aCalendarId Calendar id.
- * @constructor.
+ * @constructor
  */
-rflect.cal.Transport.DeleteCalendar = function(aCalendarId) {
+rflect.cal.Transport.DeleteCalendarEvent = function(aCalendarId) {
   this.type = rflect.cal.Transport.EventTypes.DELETE_CALENDAR;
   this.calendarId = aCalendarId;
+}
+
+
+/**
+ * Event that is fired after saving of settings.
+ * @param {Object} aSettings Settings object.
+ * @param {boolean} aReload Whether reload is needed after settings are applied.
+ * @constructor
+ */
+rflect.cal.Transport.SaveSettingsEvent = function(aSettings, aReload) {
+  this.type = rflect.cal.Transport.EventTypes.SAVE_SETTINGS;
+  this.settings = aSettings;
+  this.reload = aReload;
 }
 
 
@@ -253,7 +268,7 @@ rflect.cal.Transport.prototype.onSaveEvent_ = function(aCalEventId, aEvent) {
 
   this.eventManager_.setEventIsInProgress(aCalEventId, false);
 
-  this.dispatchEvent(new rflect.cal.Transport.SaveEvent(aCalEventId, longId));
+  this.dispatchEvent(new rflect.cal.Transport.SaveEventEvent(aCalEventId, longId));
 
 };
 
@@ -292,7 +307,7 @@ rflect.cal.Transport.prototype.onDeleteEvent_ = function(aCalEventId, aLongId,
     this.eventManager_.setEventIsInProgress(aCalEventId, false);
   }
 
-  this.dispatchEvent(new rflect.cal.Transport.DeleteEvent(aCalEventId));
+  this.dispatchEvent(new rflect.cal.Transport.DeleteEventEvent(aCalEventId));
 
 };
 
@@ -357,7 +372,7 @@ rflect.cal.Transport.prototype.onLoadEvents_ = function(aInterval, aEvent) {
 
   // We only dispatch event when interval is relevant.
   if (this.timeManager_.interval.overlaps(aInterval))
-    this.dispatchEvent(new rflect.cal.Transport.LoadEvent(aInterval));
+    this.dispatchEvent(new rflect.cal.Transport.LoadEventEvent(aInterval));
 
 };
 
@@ -530,7 +545,7 @@ rflect.cal.Transport.prototype.onSaveCalendar_ = function(aCalendar, aEvent) {
 
   this.eventManager_.setCalendarIsInProgress(calendar.id, false);
 
-  this.dispatchEvent(new rflect.cal.Transport.SaveCalendar(calendar.id,
+  this.dispatchEvent(new rflect.cal.Transport.SaveCalendarEvent(calendar.id,
       calendar));
 
 };
@@ -567,36 +582,31 @@ rflect.cal.Transport.prototype.onDeleteCalendar_ = function(aCalendarId,
     this.eventManager_.setCalendarIsInProgress(aCalendarId, false);
   }
 
-  this.dispatchEvent(new rflect.cal.Transport.DeleteCalendar(aCalendarId));
+  this.dispatchEvent(new rflect.cal.Transport.DeleteCalendarEvent(aCalendarId));
 
 };
 
 
 /**
- * Initializes settings from their list.
+ * Initializes settings from their object.
  */
 rflect.cal.Transport.prototype.loadSettings = function() {
-
-  /*if (goog.global.SETTINGS && goog.global.SETTINGS.length)
-    goog.array.forEach(goog.global.SETTINGS, function(aCalArray){
-
-    }, this);
-
-  else
-    this.eventManager_.addSettings(this.eventManager_.createSettings(0));*/
 }
 
 
 /**
  * Saves settings.
+ * @param {Object} aSettings Settings object.
+ * @param {boolean} aReload Whether reload is needed after settings are saved.
  */
-rflect.cal.Transport.prototype.saveSettingsAsync = function() {
+rflect.cal.Transport.prototype.saveSettingsAsync = function(aSettings,
+                                                            aReload) {
 
-  /*goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.SAVE_SETTINGS,
-      goog.bind(this.onSaveSettings_, this, aSettings),
+  goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.SAVE_SETTINGS,
+      goog.bind(this.onSaveSettings_, this, aSettings, aReload),
       'POST',
       rflect.cal.Transport.serialize(aSettings),
-      rflect.cal.Transport.DEFAULT_POST_HEADERS);*/
+      rflect.cal.Transport.DEFAULT_POST_HEADERS);
 
 };
 
@@ -607,16 +617,16 @@ rflect.cal.Transport.prototype.saveSettingsAsync = function() {
  * @param {Object} aSettings Settings.
  * @param {goog.events.Event} aEvent Event object.
  */
-rflect.cal.Transport.prototype.onSaveSettings_ = function(aSettings, aEvent) {
-  /*var x = *//**@type {goog.net.XhrIo}*//* (aEvent.target);
+rflect.cal.Transport.prototype.onSaveSettings_ = function(aSettings, aReload,
+                                                          aEvent) {
+  var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
 
   var response = rflect.cal.Transport.getResponseJSON(x);
 
-  if (response != 0) {
-  } else if (response == 0) {
-  }
+  /*if (response == 0) {
+  }*/
 
-  this.dispatchEvent(new rflect.cal.Transport.SaveSettings(settings.id));*/
+  this.dispatchEvent(new rflect.cal.Transport.SaveSettingsEvent(aSettings, aReload));
 
 };
 

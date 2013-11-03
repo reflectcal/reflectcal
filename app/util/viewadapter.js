@@ -27,13 +27,16 @@ exports.getCompiledTargetAsync = function(aRequest, aOnGetCompiledTarget){
 
     //Set default target.
     var target;
-    var languages = getLocales(aSettings, aRequest);
+    var languages = getLocales(aSettings[0], aRequest);
     var userAgentObject = ua.detect(aRequest.headers['user-agent']);
     var userAgent = getUserAgentName(userAgentObject);
 
+    console.log('languages', languages);
+
     for (var counter = 0; counter < languages.length && !target;
         counter++) {
-      target = targetFinder(TARGETS, languages[counter], true, '', userAgent);
+      target = targetFinder(TARGETS, languages[counter], !!aSettings[0].debug,
+          '', userAgent);
     }
 
     console.log('userAgent', userAgent);
