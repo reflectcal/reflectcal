@@ -129,6 +129,10 @@
   font-weight: bold;
 }
 
+.cal-link {
+  padding: 0
+}
+
 .cal-link-in-progress {
   color: #888;
   text-decoration: none !important;
