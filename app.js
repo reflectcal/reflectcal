@@ -28,13 +28,13 @@ app.use(express.cookieParser(
 app.use(express.session());
 app.use(app.router);
 app.use('/static', express.static(path.join(__dirname, 'static')));
+// development only
+if ('development' == app.get('env')) {
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/src', express.static(path.join(__dirname, 'src')));
 app.use('/templates', express.static(path.join(__dirname, 'templates')));
-app.use('/img', express.static(path.join(__dirname, 'img')));
+app.use('/font', express.static(path.join(__dirname, 'font')));
 
-// development only
-if ('development' == app.get('env')) {
   app.use(express.errorHandler());
   app.locals.pretty = true;
 }
