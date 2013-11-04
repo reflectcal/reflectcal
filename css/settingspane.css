@@ -108,6 +108,9 @@
 }
 
 .settings-link {
+  font: 13px 'Roboto',arial,sans-serif;
+  background: none;
+  border: none;
   cursor: pointer;
   padding: 8px 6px;
   color: #333;

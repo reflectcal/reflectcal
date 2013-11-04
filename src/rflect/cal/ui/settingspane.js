@@ -191,13 +191,6 @@ rflect.cal.ui.SettingsPane.BUTTON_CLASS_NAME =
 
 
 /**
- * @type {string}
- * @const
- */
-rflect.cal.ui.SettingsPane.HOLLOW_LINK_HREF = 'javascript:void 0';
-
-
-/**
  * @type {number}
  * @const
  */
@@ -625,8 +618,7 @@ rflect.cal.ui.SettingsPane.createCalendarsTd_ =
 
       var linkParameters = {
         className: goog.getCssName('settings-link') + ' ' +
-            goog.getCssName('cal-link'),
-        href: rflect.cal.ui.SettingsPane.HOLLOW_LINK_HREF
+            goog.getCssName('cal-link')
       };
       if (inProgress)
         linkParameters.className +=
@@ -634,7 +626,7 @@ rflect.cal.ui.SettingsPane.createCalendarsTd_ =
       if (calendar.id) linkParameters.id =
           rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX + calendar.id;
 
-      var link = aDom.createDom('a', linkParameters, calendar.getUIName());
+      var link = aDom.createDom('button', linkParameters, calendar.getUIName());
       aTd.appendChild(link);
     };break;
     case 1: {
@@ -665,11 +657,10 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarEditForm_ = function(aDom) {
   goog.dom.classes.add(this.buttonDeleteCalendar_.getElement(),
       rflect.cal.ui.SettingsPane.BUTTON_CLASS_NAME,
       goog.getCssName('event-edit-pane-button-delete'));
-  var backLink = aDom.createDom('a', {
+  var backLink = aDom.createDom('button', {
     className: goog.getCssName('goog-inline-block') +
         ' ' + goog.getCssName('settings-link') + ' ' +
-        goog.getCssName('cal-list-link'),
-    href: rflect.cal.ui.SettingsPane.HOLLOW_LINK_HREF
+        goog.getCssName('cal-list-link')
   }, '< Back to calendars');
 
   buttonsCont.appendChild(backLink);
@@ -739,11 +730,10 @@ rflect.cal.ui.SettingsPane.createColorsTd_ = function(aDom, aTd, aRowIndex,
 
   var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[colorCodeIndex];
 
-  var colorLink = aDom.createDom('a', {
+  var colorLink = aDom.createDom('button', {
     id: 'calendar-color' + colorCodeIndex,
     className: goog.getCssName('calitem-color-cont') + ' ' +
-        goog.getCssName('calendar-color') + ' ' + colorCode.eventClass,
-    href: rflect.cal.ui.SettingsPane.HOLLOW_LINK_HREF
+        goog.getCssName('calendar-color') + ' ' + colorCode.eventClass
   });
   aTd.appendChild(colorLink);
 
@@ -825,7 +815,7 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
 rflect.cal.ui.SettingsPane.prototype.onLinkClick_ = function(aEvent) {
   var target = /**@type {Element}*/ (aEvent.target);
 
-  if (!target.tagName || target.tagName.toLowerCase() != 'a')
+  if (!target.tagName || target.tagName.toLowerCase() != 'button')
     return;
 
   var id = target.id;
