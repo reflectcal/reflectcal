@@ -14,6 +14,7 @@
   font-weight: normal;
   font-style: normal;
 }
+
 .icon {
   display: inline-block;
   font-family: FontAwesome;
@@ -23,32 +24,67 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.icon-triangle-left {
+
+/* Border-width based triangle. Default is pointing right.*/
+.icon-triangle {
   width: 0;
   height: 0;
   border-style: solid;
-  border-right-width: 10px;
-  border-left-width: 7px;
-  border-top-width: 7px;
-  border-bottom-width: 7px;
-  border-right-color: black;
-  border-left-color: transparent;
-  border-top-color: transparent;
-  border-bottom-color: transparent;
-}
-.icon-triangle-right {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-right-width: 7px;
+
+  /*This is because button height = 18px, so icon 2x9 will fit in button.*/
+  border-top-width: 9px;
+  border-right-width: 0;
+  border-bottom-width: 9px;
   border-left-width: 10px;
-  border-top-width: 7px;
-  border-bottom-width: 7px;
-  border-right-color: transparent;
-  border-left-color: black;
+
   border-top-color: transparent;
+  border-right-color: transparent;
   border-bottom-color: transparent;
+  border-left-color: #000;
+  border-left-color: currentcolor;
 }
+
+.icon-nav-left {
+  vertical-align: top;
+  border-right-width: 10px;
+  border-left-width: 0;
+  border-right-color: #000;
+  border-right-color: currentcolor;
+  border-left-color: transparent;
+}
+
+.icon-nav-right {
+  vertical-align: top;
+}
+
+.goog-zippy-expanded, .wk-col-zippy-collapsed, .mn-row-zippy-expanded {
+  border-top-width: 6px;
+  border-right-width: 6px;
+  border-bottom-width: 6px;
+  border-left-width: 6px;
+  border-top-color: #6b6b6b;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+}
+
+.goog-zippy-collapsed, .wk-col-zippy-expanded, .mn-row-zippy-collapsed {
+  border-top-width: 6px;
+  border-right-width: 6px;
+  border-bottom-width: 6px;
+  border-left-width: 6px;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: #6b6b6b;
+}
+
+.icon-settings {
+  font-size: 21px;
+  position: relative;
+  top: -1.5px; /*(21 - 18) / 2*/
+}
+
 /* makes the font 33% larger relative to the icon container */
 .icon-lg {
   font-size: 1.3333333333333333em;
@@ -934,16 +970,16 @@
 .icon-angle-double-down:before {
   content: "\f103";
 }
-.icon-angle-left:before {
+.icon-angle-left:before, .expand-sign-wk-collapsed:before, .expand-sign-wk-collapsed:before {
   content: "\f104";
 }
-.icon-angle-right:before {
+.icon-angle-right:before, .expand-sign-wk-expanded:before, .expand-sign-wk-expanded:before {
   content: "\f105";
 }
-.icon-angle-up:before {
+.icon-angle-up:before, .expand-sign-wk-ad-expanded:before, .expand-sign-mn-expanded:before {
   content: "\f106";
 }
-.icon-angle-down:before {
+.icon-angle-down:before, .expand-sign-wk-ad-collapsed:before, .expand-sign-mn-collapsed:before {
   content: "\f107";
 }
 .icon-desktop:before {

@@ -13,7 +13,7 @@
 }
 
 .goog-checkbox-checked.cal-checkbox-blue {
-  box-shadow: 0 0 3px 2px #6699EE;
+  box-shadow: 0 0 6px 1px #6699EE;
   /* @alternate */
   background: -webkit-linear-gradient(top, rgba(102, 153, 238, 0.5) 0px, #6699EE 50%, rgba(102, 153, 238, 0.5) 100%);
   /* @alternate */
@@ -60,7 +60,7 @@
 }
 
 .goog-checkbox-checked.cal-checkbox-red {
-  box-shadow: 0 0 3px 2px #f44050;
+  box-shadow: 0 0 6px 1px #f44050;
   /* @alternate */
   background: -webkit-linear-gradient(top, #fecdce 0px, #f44050 50%, #fecdce 100%);
   /* @alternate */
@@ -107,7 +107,7 @@
 }
 
 .goog-checkbox-checked.cal-checkbox-green {
-  box-shadow: 0 0 3px 2px #51be32;
+  box-shadow: 0 0 6px 1px #51be32;
   /* @alternate */
   background: -webkit-linear-gradient(top, #96f481 0px, #51be32 50%, #96f481 100%);
   /* @alternate */

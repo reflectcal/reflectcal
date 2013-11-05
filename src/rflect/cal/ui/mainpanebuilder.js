@@ -145,7 +145,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   '<div id="daynames-prefix-wk" style="width:' +
       /*Daynames prefix width in pixels (40).*/
       rflect.cal.i18n.predefined.DAYNAMES_PREFIX_WEEK_WIDTH,
-  'px"><div id="daynames-zippy" class="' + goog.getCssName('zippy') + ' ',
+  'px"><div id="daynames-zippy" class="' + goog.getCssName('zippy') + ' ' + goog.getCssName('icon-triangle') + ' ',
   /* Zippy state is here
   (goog-zippy-collapsed, goog-zippy-expanded).*/
   '"></div>',
@@ -212,7 +212,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   '" class="' + goog.getCssName('wk-ad-decoration-layer') + '">',
   // Expand sign
   '<div class="' + goog.getCssName('expand-sign-wk-ad-cont') + '">',
-  '<div class="' + goog.getCssName('expand-sign-wk-ad') + ' ',
+  '<div class="' + goog.getCssName('expand-sign-wk-ad') + ' ' + goog.getCssName('icon') + ' ',
   /*Expand sign state is here
   (expand-sign-wk-ad-collapsed, expand-sign-wk-ad-expanded).*/
   '"></div></div>',
@@ -246,7 +246,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   '%;top:',/*Individual zippy top in percent (0).*/
   '%">',
   '<div id="wk-zippy-col',/*Id of zippy (wk-zippy-col2).*/
-  '" class="' + goog.getCssName('zippy') + ' ' + goog.getCssName('wk-col-zippy') + ' ',/*State of zippy
+  '" class="' + goog.getCssName('zippy') + ' ' + goog.getCssName('wk-col-zippy') + ' ' + goog.getCssName('icon-triangle') + ' ',/*State of zippy
   (goog-zippy-expanded, goog-zippy-collapsed).*/
   '"></div>',
   '</div>',
@@ -315,7 +315,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   '<div id="wk-dec-layer-in-col',/*Id of individual decoration layer (wk-dec-layer-in-col0).*/
   '" class="' + goog.getCssName('wk-decoration-layer') + '">',
   // Expand sign.
-  '<div class="' + goog.getCssName('expand-sign-wk-cont') + '"><div class="' + goog.getCssName('expand-sign-wk') + ' ',
+  '<div class="' + goog.getCssName('expand-sign-wk-cont') + '"><div class="' + goog.getCssName('expand-sign-wk') + ' ' + goog.getCssName('icon') + ' ',
   /* Expand sign state (expand-sign-wk-collapsed, expand-sign-wk-expanded).*/
   '"></div></div>',
   // Today mask.
@@ -410,7 +410,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '<div class="' + goog.getCssName('mn-row-zippy-cont') + '">',
   '<div id="mn-zippy-row',
   /*Id of individual zippy (0)*/
-  '" class="' + goog.getCssName('zippy') + ' ' + goog.getCssName('mn-row-zippy') + ' ',
+  '" class="' + goog.getCssName('zippy') + ' ' + goog.getCssName('mn-row-zippy') + ' ' + goog.getCssName('icon-triangle') + ' ',
   /*State of individual zippy (mn-row-zippy-collapsed).*/
   '"></div>',
   '</div>',
@@ -475,7 +475,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '<td class="' + goog.getCssName('daycell') + '"><div class="' + goog.getCssName('daycell-decoration-cont') + '">',
   '<div class="' + goog.getCssName('today-mask-mn') + '"></div>',
   /*Decoration container content (<div class="today-mask-mn"></div>).*/
-  '</div><div class="' + goog.getCssName('daycell-daynum-outer-cont') + '"><div class="' + goog.getCssName('expand-sign-mn-cont') + '"><div class="' + goog.getCssName('expand-sign-mn') + ' ',
+  '</div><div class="' + goog.getCssName('daycell-daynum-outer-cont') + '"><div class="' + goog.getCssName('expand-sign-mn-cont') + '"><div class="' + goog.getCssName('expand-sign-mn') + ' ' + goog.getCssName('icon') + ' ',
   /*Individual expand sign state
   (expand-sign-mn-collapsed, expand-sign-mn-expanded).*/
   '"></div>',

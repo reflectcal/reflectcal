@@ -76,19 +76,27 @@ body {
  */
 
 .cal-menu-button {
-  width: 50px; /*default button width*/
+  min-width: 50px; /*default button width*/
+  padding-left: 10px;
+  padding-right: 10px;
   text-align: center;
 }
 
 .cal-menu-button-now {
+  padding-left: 6px;
+  padding-right: 6px;
   width: 50px;
 }
 
 .cal-menu-button-back {
+  padding-left: 6px;
+  padding-right: 6px;
   width: 25px;  /* (140 - (.cal-menu-button-now width + 12 + 2) ) / 2 - (12 + 1) */
 }
 
 .cal-menu-button-forward {
+  padding-left: 6px;
+  padding-right: 6px;
   width: 25px;
 }
 
@@ -103,6 +111,7 @@ body {
 
 .cal-menu-button-options {
   width: 25px;
+  height: 18px
 }
 
 .button-sign {
@@ -168,7 +177,7 @@ body {
 
 #sidebar-controls {
   float: left;
-  width: 148px;
+  width: 208px;
   margin: 0;
 }
 
@@ -444,7 +453,7 @@ body {
 
 #daynames-zippy {
   position: absolute;
-  right: 0;
+  right: 3px;
   top: 20px;
 }
 

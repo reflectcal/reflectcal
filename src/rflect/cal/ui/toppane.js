@@ -124,12 +124,12 @@ rflect.cal.ui.TopPane.prototype.buildInternal = function(aSb) {
     '<div id="' + rflect.cal.predefined.BUTTON_PREV_ID +
         '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
     goog.getCssName('goog-flat-button-collapse-right') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-both') + ' ',
-    goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-back') + '"><div class="' + goog.getCssName('icon-triangle-left') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div>',
+    goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-back') + '"><div class="' + goog.getCssName('icon-triangle') + ' ' + goog.getCssName('icon-nav-left') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div>',
 
     // Forward button.
     '<div id="' + rflect.cal.predefined.BUTTON_NEXT_ID + '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
     goog.getCssName('cal-menu-rightmost-button') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-left') + ' ',
-    goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-forward') + '"><div class="' + goog.getCssName('icon-triangle-right') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div></div>',
+    goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-forward') + '"><div class="' + goog.getCssName('icon-triangle') + ' ' + goog.getCssName('icon-nav-right') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div></div>',
 
     '<div id="main-pane-controls"><div id="main-pane-controls-right">',
     '<div style="margin-right: 0px;" class="' + goog.getCssName('goog-inline-block') + '">',
@@ -153,7 +153,7 @@ rflect.cal.ui.TopPane.prototype.buildInternal = function(aSb) {
     // Options button.
     '<div id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '" class="' + goog.getCssName('goog-flat-button') + ' ' + goog.getCssName('cal-menu-rightmost-button') + ' ' + goog.getCssName('cal-menu-button') + ' ',
     goog.getCssName('cal-menu-button-options') + '">',
-    '<div class="' + goog.getCssName('icon') + ' ' + goog.getCssName('icon-cog') + '"></div>',
+    '<div class="' + goog.getCssName('icon') + ' ' + goog.getCssName('icon-cog') + ' ' + goog.getCssName('icon-settings') + '"></div>',
     '</div></div>',
     '<div id="main-pane-controls-left"><div id="main-pane-controls-left-left">',
     // New event button.
