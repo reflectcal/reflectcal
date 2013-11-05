@@ -10,7 +10,8 @@
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../font/fontawesome-webfont.woff');
+  src: url('../font/fontawesome-webfont.eot?#iefix') format('embedded-opentype'),
+      url('../font/fontawesome-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
