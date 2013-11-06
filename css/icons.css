@@ -10,7 +10,7 @@
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../font/fontawesome-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('../font/fontawesome-webfont.eot?#ie8fix') format('embedded-opentype'),
       url('../font/fontawesome-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
@@ -86,8 +86,41 @@
   top: -1.5px; /*(21 - 18) / 2*/
 }
 
+.icon-check:before {
+  content: "\f00c";
+}
+
+.icon-times:before {
+  content: "\f00d";
+}
+
+.icon-angle-left:before, .expand-sign-wk-collapsed:before, .expand-sign-wk-collapsed:before {
+  content: "\f104";
+}
+
+.icon-angle-right:before, .expand-sign-wk-expanded:before, .expand-sign-wk-expanded:before {
+  content: "\f105";
+}
+
+.icon-angle-up:before, .expand-sign-wk-ad-expanded:before, .expand-sign-mn-expanded:before {
+  content: "\f106";
+}
+
+.icon-angle-down:before, .expand-sign-wk-ad-collapsed:before, .expand-sign-mn-collapsed:before {
+  content: "\f107";
+}
+
+.icon-gear:before,
+.icon-cog:before {
+  content: "\f013";
+}
+
+.icon-wrench:before {
+  content: "\f0ad";
+}
+
 /* makes the font 33% larger relative to the icon container */
-.icon-lg {
+/*.icon-lg {
   font-size: 1.3333333333333333em;
   line-height: 0.75em;
   vertical-align: -15%;
@@ -253,8 +286,8 @@
 .icon-inverse {
   color: #ffffff;
 }
-/* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
-   readers do not read off random characters that represent icons */
+*//* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
+   readers do not read off random characters that represent icons *//*
 .icon-glass:before {
   content: "\f000";
 }
@@ -291,12 +324,6 @@
 .icon-th-list:before {
   content: "\f00b";
 }
-.icon-check:before {
-  content: "\f00c";
-}
-.icon-times:before {
-  content: "\f00d";
-}
 .icon-search-plus:before {
   content: "\f00e";
 }
@@ -308,10 +335,6 @@
 }
 .icon-signal:before {
   content: "\f012";
-}
-.icon-gear:before,
-.icon-cog:before {
-  content: "\f013";
 }
 .icon-trash-o:before {
   content: "\f014";
@@ -751,9 +774,6 @@
 .icon-globe:before {
   content: "\f0ac";
 }
-.icon-wrench:before {
-  content: "\f0ad";
-}
 .icon-tasks:before {
   content: "\f0ae";
 }
@@ -970,18 +990,6 @@
 }
 .icon-angle-double-down:before {
   content: "\f103";
-}
-.icon-angle-left:before, .expand-sign-wk-collapsed:before, .expand-sign-wk-collapsed:before {
-  content: "\f104";
-}
-.icon-angle-right:before, .expand-sign-wk-expanded:before, .expand-sign-wk-expanded:before {
-  content: "\f105";
-}
-.icon-angle-up:before, .expand-sign-wk-ad-expanded:before, .expand-sign-mn-expanded:before {
-  content: "\f106";
-}
-.icon-angle-down:before, .expand-sign-wk-ad-collapsed:before, .expand-sign-mn-collapsed:before {
-  content: "\f107";
 }
 .icon-desktop:before {
   content: "\f108";
@@ -1401,4 +1409,4 @@
 }
 .icon-plus-square-o:before {
   content: "\f196";
-}
+}*/

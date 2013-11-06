@@ -555,7 +555,8 @@ rflect.ui.Dialog.prototype.createDom = function() {
       this.titleTextEl_ = dom.createDom(
           'span', goog.getCssName(this.class_, 'title-text'), this.title_),
       this.titleCloseEl_ = dom.createDom(
-          'span', goog.getCssName(this.class_, 'title-close'))),
+          'span', [goog.getCssName('icon'), goog.getCssName('icon-times'),
+          goog.getCssName(this.class_, 'title-close')])),
   goog.dom.append(element, this.titleEl_,
       this.contentEl_ = dom.createDom('div',
           goog.getCssName(this.class_, 'content')),
