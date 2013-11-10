@@ -145,7 +145,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   '<div id="daynames-prefix-wk" style="width:' +
       /*Daynames prefix width in pixels (40).*/
       rflect.cal.i18n.predefined.DAYNAMES_PREFIX_WEEK_WIDTH,
-  'px"><div id="daynames-zippy" class="' + goog.getCssName('zippy') + ' ' + goog.getCssName('icon-triangle') + ' ',
+  'px"><div id="daynames-zippy" class="' + goog.getCssName('zippy') + ' ' + goog.getCssName('wk-ad-zippy') + ' ' + goog.getCssName('icon-triangle') + ' ',
   /* Zippy state is here
   (goog-zippy-collapsed, goog-zippy-expanded).*/
   '"></div>',
@@ -716,8 +716,9 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth = function(aSb,
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesZippy_ =
     function(aSb, aOffset) {
-  aSb.append(this.blockPoolAllDay_.expanded ? goog.getCssName('goog-zippy-expanded') :
-      goog.getCssName('goog-zippy-collapsed'));
+  aSb.append(this.blockPoolAllDay_.expanded ?
+      goog.getCssName('wk-ad-zippy-expanded') :
+      goog.getCssName('wk-ad-zippy-collapsed'));
 };
 
 

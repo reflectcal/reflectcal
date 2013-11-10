@@ -451,12 +451,6 @@ body {
   height: 100%;
 }
 
-#daynames-zippy {
-  position: absolute;
-  right: 3px;
-  top: 20px;
-}
-
 .main-pane-header-container-wk {
   margin-left: 41px; /*+1 pixel to match #grid-table border*/
 }
@@ -606,7 +600,7 @@ body {
 #main-pane-header-wk-zippies {
   position: relative;
   overflow: hidden;
-  height: 11px;
+  height: 12px;
   margin-right: 19px;
 }
 
@@ -860,25 +854,6 @@ overflow:hidden
   position: absolute;
   filter: alpha(opacity = 50);
   opacity: 0.5;
-}
-
-.zippy {
-  width: 11px;
-  height: 11px;
-  background-image: url('../static/rflectcalendar-images.png');
-  cursor: pointer;
-}
-
-.zippy-highlighted {
-  background-color: #eee;
-}
-
-.goog-zippy-expanded, .wk-col-zippy-collapsed, .mn-row-zippy-expanded{
-  background-position: 0 -11px;
-}
-
-.goog-zippy-collapsed, .wk-col-zippy-expanded, .mn-row-zippy-collapsed{
-  background-position: 0 0;
 }
 
 .event-rect-wk {

@@ -96,6 +96,7 @@ module.exports = function(grunt) {
     '--allowed-non-standard-function progid:DXImageTransform.Microsoft.gradient',
     '--allowed-unrecognized-property -moz-outline',
     'css/common.css',
+    'css/icons.css',
     'css/autocomplete.css',
     'css/flatbutton.css',
     'css/datepicker.css',
@@ -107,7 +108,7 @@ module.exports = function(grunt) {
     'css/checkbox.css',
     'css/rflectcalendar.css',
     'css/colorcodes.css',
-    'css/settingspane.css'
+    'css/settingspane.css',
   ].join(' ');
 
   // Closure builder task without targets.

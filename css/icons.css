@@ -10,8 +10,8 @@
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../font/fontawesome-webfont.eot?#ie8fix') format('embedded-opentype'),
-      url('../font/fontawesome-webfont.woff') format('woff');
+  src: url('//netdna.bootstrapcdn.com/font-awesome/4.0.3/fonts/fontawesome-webfont.eot?#ie8fix') format('embedded-opentype'),
+      url('//netdna.bootstrapcdn.com/font-awesome/4.0.3/fonts/fontawesome-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -58,7 +58,21 @@
   vertical-align: top;
 }
 
-.goog-zippy-expanded, .wk-col-zippy-collapsed, .mn-row-zippy-expanded {
+.zippy {
+  position: relative;
+  cursor: pointer;
+  transition: top .2s, left .2s;
+  left: 3px;
+  top: 0;
+}
+
+.zippy-highlighted {
+  background-color: #eee;
+}
+
+.goog-zippy-expanded, .wk-col-zippy-collapsed, .mn-row-zippy-expanded, .wk-ad-zippy-expanded {
+  left: 0;
+  top: 3px;
   border-top-width: 6px;
   border-right-width: 6px;
   border-bottom-width: 6px;
@@ -69,7 +83,8 @@
   border-left-color: transparent;
 }
 
-.goog-zippy-collapsed, .wk-col-zippy-expanded, .mn-row-zippy-collapsed {
+.goog-zippy-collapsed, .wk-col-zippy-expanded, .mn-row-zippy-collapsed,
+.wk-ad-zippy-collapsed  {
   border-top-width: 6px;
   border-right-width: 6px;
   border-bottom-width: 6px;
@@ -78,6 +93,23 @@
   border-right-color: transparent;
   border-bottom-color: transparent;
   border-left-color: #6b6b6b;
+}
+
+.wk-ad-zippy {
+  position: absolute;
+  right: 3px;
+  top: 20px;
+  left: auto;
+}
+
+.wk-ad-zippy-expanded {
+  top: 23px;
+  right: 3px;
+}
+
+.wk-ad-zippy-collapsed {
+  top: 20px;
+  right: 0;
 }
 
 .icon-settings {
