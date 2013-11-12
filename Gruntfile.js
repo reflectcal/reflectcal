@@ -7,7 +7,6 @@ module.exports = function(grunt) {
   var fs = require('fs');
   var appConfig = require('./app/config/appconfig');
 
-
   /**
    * Production flag.
    * If it's true, it means that app is built for external world - sources,
@@ -31,6 +30,22 @@ module.exports = function(grunt) {
   var USER_AGENT = (PRODUCTION || !FAST_DEBUG) ?
       ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'] : [''];
 
+  var cssFileNames = [
+    'css/icons.css',
+    'css/common.css',
+    'css/autocomplete.css',
+    'css/flatbutton.css',
+    'css/datepicker.css',
+    'css/dialog.css',
+    'css/savedialog.css',
+    'css/tab.css',
+    'css/tabbar.css',
+    'css/eventpane.css',
+    'css/checkbox.css',
+    'css/rflectcalendar.css',
+    'css/colorcodes.css',
+    'css/settingspane.css'
+  ];
 
   function makeListOfCompileTargets() {
     var targets = [];
@@ -95,21 +110,7 @@ module.exports = function(grunt) {
     '--output-file build/_temp.closure-stylesheets.css',
     '--allowed-non-standard-function progid:DXImageTransform.Microsoft.gradient',
     '--allowed-unrecognized-property -moz-outline',
-    'css/common.css',
-    'css/icons.css',
-    'css/autocomplete.css',
-    'css/flatbutton.css',
-    'css/datepicker.css',
-    'css/dialog.css',
-    'css/savedialog.css',
-    'css/tab.css',
-    'css/tabbar.css',
-    'css/eventpane.css',
-    'css/checkbox.css',
-    'css/rflectcalendar.css',
-    'css/colorcodes.css',
-    'css/settingspane.css',
-  ].join(' ');
+  ].concat(cssFileNames).join(' ');
 
   // Closure builder task without targets.
   var closureBuilderTask = {

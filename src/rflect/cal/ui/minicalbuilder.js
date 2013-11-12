@@ -59,10 +59,12 @@ rflect.cal.ui.MiniCalBuilder.HTML_PARTS_ = [
   '"><td colspan="7">' + '<div class="' +
       goog.getCssName('goog-date-picker-buttons') + '">' +
       '<div class="' + goog.getCssName('goog-date-picker-btn') + ' ' +
+      goog.getCssName('icon-triangle') + ' ' +
       goog.getCssName('month-sel-btn') + ' ' +
       goog.getCssName('month-sel-btn-back') +
       '">&nbsp;</div>' +
       '<div class="' + goog.getCssName('goog-date-picker-btn') + ' ' +
+      goog.getCssName('icon-triangle') + ' ' +
       goog.getCssName('month-sel-btn') + ' ' +
       goog.getCssName('month-sel-btn-forward') +
       '">&nbsp;</div></div>',

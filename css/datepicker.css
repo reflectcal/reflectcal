@@ -99,7 +99,6 @@
 .goog-date-picker-btn {
   padding: 0px;
   margin: 1px 0;
-  border: 0;
   color: #2c2c2c;
   font-weight: normal;
   background: transparent;
@@ -124,23 +123,36 @@
 
 .month-sel-btn {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  background-image: url('../static/rflectcalendar-images.png');
   cursor: pointer;
 }
 
 .month-sel-btn-back {
   left: 0;
   top: 2px; /*16px / 2 - 1px of td padding*/
-  background-position: -78px -11px;
   margin-right: 10px;
+
+  border-top-width: 6px;
+  border-right-width: 6px;
+  border-bottom-width: 6px;
+  border-left-width: 0;
+  border-top-color: transparent;
+  border-right-color: currentcolor;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
 }
 
 .month-sel-btn-forward {
   left: 20px;
   top: 2px;
-  background-position: -78px 0;
+
+  border-top-width: 6px;
+  border-right-width: 0;
+  border-bottom-width: 6px;
+  border-left-width: 6px;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: currentcolor;
 }
 
 .goog-date-picker-date {

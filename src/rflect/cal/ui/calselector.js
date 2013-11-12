@@ -55,7 +55,7 @@ rflect.cal.ui.CalSelector.HTML_PARTS_ = [
   '" class="' + goog.getCssName('listitem-cont') + ' ' + goog.getCssName('calitem-label-active') + '" id="calitem-label-item',
   '"><div class="' + goog.getCssName('goog-checkbox') + ' ' + goog.getCssName('calitem-color-cont') + ' ',
   '" id="calitem-color-item',
-  '"><div class="' + goog.getCssName('checked-sign') + ' ' + goog.getCssName('checked-sign-calselector') + '" style="display:none"></div></div><div class="' + goog.getCssName('listitem-label') + '">',
+  '"><div style="display:none"></div></div><div class="' + goog.getCssName('listitem-label') + '">',
   /*Name here*/
   '</div></div><div class="' + goog.getCssName('listitem-opt-cont') + '" id="calitem-opt-item',
   '"></div></div>'
