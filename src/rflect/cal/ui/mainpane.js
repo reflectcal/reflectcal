@@ -671,10 +671,10 @@ rflect.cal.ui.MainPane.prototype.updateByRedrawMonthGrid_ = function() {
 rflect.cal.ui.MainPane.prototype.updateConditionally_ = function(
     aConditionToUpdateAllDay, aConditionToUpdateWeek, aConditionToUpdateMonth) {
 
-  // We need to detect IE8 because it doesn't allow changing of table's
+  // We need to detect IE9 because it doesn't allow changing of table's
   // innerHTML.
-  var isIE8OrLower = goog.userAgent.IE &&
-      goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0;
+  var isIE9OrLower = goog.userAgent.IE &&
+      goog.string.compareVersions(goog.userAgent.VERSION, '9') <= 0;
 
   this.eventManager_.run();
 
@@ -683,7 +683,7 @@ rflect.cal.ui.MainPane.prototype.updateConditionally_ = function(
   if (this.viewManager_.isInWeekMode() &&
       !this.blockManager_.blockPoolWeek.expanded &&
       !this.blockManager_.blockPoolAllDay.expanded &&
-      !isIE8OrLower) {
+      !isIE9OrLower) {
 
     if (aConditionToUpdateAllDay)
       this.updateByRedrawAllDayGrid_();
@@ -692,7 +692,7 @@ rflect.cal.ui.MainPane.prototype.updateConditionally_ = function(
       this.updateByRedrawWeekGrid_();
 
   } else if (this.viewManager_.isInMonthMode() &&
-      !this.blockManager_.blockPoolMonth.expanded && !isIE8OrLower) {
+      !this.blockManager_.blockPoolMonth.expanded && !isIE9OrLower) {
 
     if (aConditionToUpdateMonth)
       this.updateByRedrawMonthGrid_();
