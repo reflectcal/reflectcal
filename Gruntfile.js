@@ -110,6 +110,7 @@ module.exports = function(grunt) {
     '--output-file build/_temp.closure-stylesheets.css',
     '--allowed-non-standard-function progid:DXImageTransform.Microsoft.gradient',
     '--allowed-unrecognized-property -moz-outline',
+    '--allowed-unrecognized-property -moz-osx-font-smoothing'
   ].concat(cssFileNames).join(' ');
 
   // Closure builder task without targets.

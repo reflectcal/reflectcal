@@ -41,7 +41,9 @@
   border-top-color: transparent;
   border-right-color: transparent;
   border-bottom-color: transparent;
+  /* @alternate */
   border-left-color: #000;
+  /* @alternate */
   border-left-color: currentcolor;
 }
 
@@ -49,7 +51,9 @@
   vertical-align: top;
   border-right-width: 10px;
   border-left-width: 0;
+  /* @alternate */
   border-right-color: #000;
+  /* @alternate */
   border-right-color: currentcolor;
   border-left-color: transparent;
 }
