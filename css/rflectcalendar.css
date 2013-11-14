@@ -414,13 +414,13 @@ body {
 }
 
 #daynames-prefix-wk {
-  width: 41px;
+  width: 61px;
   position: relative;
   height: 100%;
 }
 
 .main-pane-header-container-wk {
-  margin-left: 41px; /*+1 pixel to match #grid-table border*/
+  margin-left: 61px; /*+1 pixel to match #grid-table border*/
 }
 
 #main-pane-header-wk-daynames {
@@ -636,7 +636,8 @@ body {
 #hours-container {
   float: left;
   position: absolute;
-  width: 40px;
+  width: 60px;
+  border-right: 1px solid #d5d5d5;
   margin: 0;
   left: 0; /*This will be set to scrollable scrollLeft in expanded mode*/
 }
@@ -644,10 +645,13 @@ body {
 #grid-table-wrapper-wk {
   position: relative;
   height: 1152px;
-  margin-left: 40px;
+  margin-left: 61px;
   width: auto;
   /*overflow: hidden;*/
-  border-left: 1px solid #d5d5d5;
+
+  /*This two rules fix too high .grid-table-wk-outer in IE9-11.*/
+  padding-bottom: 24px;
+  overflow:hidden;
 }
 
 .wk-grid-rows-cont {
