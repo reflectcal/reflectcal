@@ -8,7 +8,6 @@
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
-goog.require('rflect.cal.i18n.predefined');
 goog.require('goog.math.Size');
 
 goog.provide('rflect.cal.predefined');
@@ -353,6 +352,22 @@ rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_HEIGHT_DIFFERENCE_WEEK =
 
 
 /**
+ * Width of hours container, in pixels.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.HOURS_CONTAINER_WIDTH = 60;
+
+
+/**
+ * Daynames week prefix width.
+ * @type {number}
+ * @const
+ */
+rflect.cal.predefined.DAYNAMES_PREFIX_WEEK_WIDTH = 61;
+
+
+/**
  * Difference between outer container and main scrollable widths in week mode,
  * in pixels.
  * @type {number}
@@ -363,7 +378,7 @@ rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_WIDTH_DIFFERENCE_WEEK =
     rflect.cal.predefined.BODY_MARGIN_RIGHT +
     rflect.cal.predefined.SIDE_PANE_WIDTH +
     // Locale dependent width of hours block.
-    rflect.cal.i18n.predefined.HOURS_CONTAINER_WIDTH +
+    rflect.cal.predefined.HOURS_CONTAINER_WIDTH +
     // No need to take into account width of scrollbar of main scrollable
     // because layout does it already. Grid width set to 100% will result in
     // grid container width - scrollbar width.
@@ -378,7 +393,7 @@ rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_WIDTH_DIFFERENCE_WEEK =
  */
 rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_WEEK =
     // Locale dependent width of hours block.
-    rflect.cal.i18n.predefined.HOURS_CONTAINER_WIDTH +
+    rflect.cal.predefined.HOURS_CONTAINER_WIDTH +
     rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2;
 
 

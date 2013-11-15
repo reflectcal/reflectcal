@@ -10,7 +10,6 @@
 goog.provide('rflect.cal.ui.MiniCalBuilder');
 
 goog.require('goog.i18n.DateTimeSymbols');
-goog.require('rflect.cal.i18n.predefined');
 
 
 
