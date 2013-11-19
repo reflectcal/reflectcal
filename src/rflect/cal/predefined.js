@@ -16,11 +16,17 @@ goog.provide('rflect.cal.predefined.chips');
 
 //TODO(alexk): much of this file will go to cfg
 /**
- * Whether debug should be silent.
+ * @define {string} UI type constant. Defined on compile time.
+ */
+rflect.UI_TYPE = '';
+
+
+/**
+ * Whether ui type is mobile.
  * @type {boolean}
  * @const
  */
-rflect.SILENT = false;
+rflect.UI_MOBILE = rflect.UI_TYPE == 'MOBILE';
 
 
 /**

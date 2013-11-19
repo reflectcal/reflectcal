@@ -651,7 +651,7 @@ body {
 
   /*This two rules fix too high .grid-table-wk-outer in IE9-11.*/
   padding-bottom: 24px;
-  overflow:hidden;
+  overflow-x:hidden;
 }
 
 .wk-grid-rows-cont {

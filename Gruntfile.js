@@ -79,7 +79,7 @@ module.exports = function(grunt) {
       // DEBUG.
       target.defines.push("'goog.DEBUG=" + target.debug + "'");
       // UI type.
-      //target.defines.push("rflect.UI_TYPE='" + target.uiType + "'");
+      target.defines.push("rflect.UI_TYPE='" + target.uiType + "'");
       // Assumptions on user agent.
       if (target.userAgent)
         target.defines.push("'goog.userAgent.ASSUME_" + target.userAgent + "=true'");
