@@ -19,7 +19,7 @@
 .goog-flat-button-mixin {
   position: relative;
   margin: 2px;
-  border: 1px solid #d5d5d5;
+  border: 1px solid  #d5d5d5;
   color: #2c2c2c;
   .gradient(#f2f2f2, #efefef);
   cursor: pointer;
@@ -37,7 +37,7 @@
   -webkit-transition: -webkit-box-shadow .2s;
   /* @alternate */
   transition: box-shadow .1s, border .2s;
-}
+}                                              xcbvxcvb
 
 .goog-flat-button when (@ui-type == '') {
   .goog-flat-button-mixin

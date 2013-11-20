@@ -354,8 +354,26 @@ module.exports = function(grunt) {
         }
       }
 
+    },
+    less: {
+      dev: {
+        options: {
+          modifyVariables: ['ui-type=MOBILE'],
+          verbose: true,
+          files: {
+            'css/flatbutton.css': 'less/flatbutton.less.css',
+            'css/flatbutton.css': 'less/flatbutton.less'
+          }
+        },
+      }
+    },
+    watch: {
+      less: {
+        files: ['less/*.less.css', 'less/*.less'],
+        tasks: ['less:dev'],
+        options: {}
+      }
     }
-
   });
 
   grunt.registerTask('exportTargets', function() {
@@ -389,6 +407,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-filerev');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-renaming-wrap');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-less');
 
   // Default task(s).
   grunt.registerTask('default', [
