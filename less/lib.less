@@ -1,0 +1,48 @@
+/*
+ * Copyright (c) 2013. Rflect, Alex K.
+ */
+
+//
+// Common less rules.
+// In order for this file to be pluggable everywhere, let there be pure less.
+//
+// @author alexeykofficial@gmail.com (Alex K)
+//
+
+// This variable is overriden at compile time with UI type.
+@UI_TYPE: '';
+
+.gradient(@colorStart, @colorStop) {
+  background-color: @colorStop;
+  /* @alternate */
+  background: -moz-linear-gradient(top, @colorStart 0, @colorStop 100%);
+  /* @alternate */
+  background: -webkit-gradient(linear, center top, center top, from(@colorStart), to(@colorStop));
+  /* @alternate */
+  background: -webkit-linear-gradient(top, @colorStart 0, @colorStop 100%);
+  /* @alternate */
+  background: -ms-linear-gradient(top, @colorStart 0, @colorStop 100%);
+  filter: e(%('progid:DXImageTransform.Microsoft.gradient(startColorStr = "%d", endColorStr = "%d"', @colorStart, @colorStop));
+  /* @alternate */
+  background: -o-linear-gradient(top, @colorStart 0, @colorStop 100%);
+  /* @alternate */
+  background: linear-gradient(top, @colorStart 0, @colorStop 100%);
+}
+
+.border-radius(@radius) {
+  /* @alternate */
+  -moz-border-radius: @radius;
+  /* @alternate */
+  -webkit-border-radius: @radius;
+  /* @alternate */
+  border-radius: @radius;
+}
+
+.box-shadow(@shadow) {
+  /* @alternate */
+  -moz-box-shadow: @shadow;
+  /* @alternate */
+  -webkit-box-shadow: @shadow;
+  /* @alternate */
+  box-shadow: @shadow;
+}

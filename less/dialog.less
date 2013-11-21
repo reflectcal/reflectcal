@@ -1,0 +1,90 @@
+/*
+ * Copyright (c) 2013. Rflect, Alex K.
+ */
+
+/*
+ * Standard styling for goog.ui.Dialog.
+ *
+ * @author ssaviano@google.com (Steven Saviano)
+ * @author attila@google.com (Attila Bodis)
+ * @author alexeykofficial@gmail.com (Alex K)
+ */
+
+
+.modal-dialog {
+  background: #c1d9ff;
+  border: 1px solid #d5d5d5;
+  overflow:hidden;/*This is to make border-radius clear.*/
+  color: #000;
+  /*padding: 4px;*/
+  position: absolute;
+  z-index: 100;
+  border-radius: 3px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+
+  outline: none;
+}
+
+.modal-dialog a,
+.modal-dialog a:link,
+.modal-dialog a:visited  {
+  color: #06c;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.modal-dialog a:hover {
+  text-decoration: underline;
+}
+
+.modal-dialog-bg {
+  background: #fff;
+  left: 0;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+
+.modal-dialog-title {
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+  font-size: 120%;
+  font-weight: bold;
+
+  /* Add padding on the right to ensure the close button has room. */
+  padding: 8px 31px 8px 8px;
+
+  position: relative;
+  border-bottom: 1px solid #DDDDDD;
+  _zoom: 1; /* Ensures proper width in IE6 RTL. */
+}
+
+.modal-dialog-title-close {
+  cursor: default;
+  height: 15px;
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  width: 15px;
+  vertical-align: middle;
+}
+
+.modal-dialog-buttons,
+.modal-dialog-content {
+  background-color: #fff;
+  padding: 8px;
+}
+
+.modal-dialog-buttons {
+}
+
+.goog-buttonset-default {
+  font-weight: bold;
+}
+
+.dialog-button {
+  padding-left: 25px;
+  padding-right: 25px;
+  margin-right: 10px;
+}

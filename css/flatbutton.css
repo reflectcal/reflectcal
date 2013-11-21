@@ -4,21 +4,20 @@
  * Use of this source code is governed by the Apache License, Version 2.0.
  * See the COPYING file for details.
  */
-
 /*
  * Styling for flat buttons created by goog.ui.FlatButtonRenderer.
  *
  * @author brianp@google.com (Brian Peterson)
  * @author alexeykofficial@gmail.com (Alex K)
  */
-
+/*
+ * Copyright (c) 2013. Rflect, Alex K.
+ */
 .goog-flat-button {
   position: relative;
   margin: 2px;
-  border: 1px solid #d5d5d5;
-  padding: 5px 6px;
+  border: 1px solid  #d5d5d5;
   color: #2c2c2c;
-  font: bold 13px/18px 'Roboto', Tahoma, Arial, sans-serif;
   background-color: #efefef;
   /* @alternate */
   background: -moz-linear-gradient(top, #f2f2f2 0, #efefef 100%);
@@ -28,49 +27,42 @@
   background: -webkit-linear-gradient(top, #f2f2f2 0, #efefef 100%);
   /* @alternate */
   background: -ms-linear-gradient(top, #f2f2f2 0, #efefef 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = "#f2f2f2", endColorStr = "#efefef");
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = "#f2f2f2", endColorStr = "#efefef";
   /* @alternate */
   background: -o-linear-gradient(top, #f2f2f2 0, #efefef 100%);
   /* @alternate */
   background: linear-gradient(top, #f2f2f2 0, #efefef 100%);
   cursor: pointer;
-
   outline: none;
   -moz-outline: none;
   vertical-align: top;
-
-  /* @alternate */
-  -moz-border-radius: 2px;
-  /* @alternate */
-  -webkit-border-radius: 2px;
-  /* @alternate */
   border-radius: 2px;
-
   /* @alternate */
-  -moz-transition: -moz-box-shadow .2s;
+  -moz-transition: -moz-box-shadow 0.2s;
   /* @alternate */
-  -webkit-transition: -webkit-box-shadow .2s;
+  -webkit-transition: -webkit-box-shadow 0.2s;
   /* @alternate */
-  transition: box-shadow .1s, border .2s;
+  transition: box-shadow 0.1s, border 0.2s;
+  padding: 5px 6px;
+  font: bold 13px/18px 'Roboto', Tahoma, Arial, sans-serif;
 }
-
 /* State: disabled. */
 .goog-flat-button-disabled {
   color: #979797;
   cursor: default;
 }
-
 /* State: hover. */
 .goog-flat-button-hover {
   border-color: #bbbbbb;
   color: #202020;
   z-index: 1;
-
+  /* @alternate */
   -moz-box-shadow: 1px 1px 1px #e9e9e9;
+  /* @alternate */
   -webkit-box-shadow: 1px 1px 1px #e9e9e9;
+  /* @alternate */
   box-shadow: 1px 1px 1px #e9e9e9;
 }
-
 /* State: active, selected, checked. */
 .goog-flat-button-active,
 .goog-flat-button-selected,
@@ -78,7 +70,6 @@
   color: #0f0f0f;
   border-color: #bbbbbb !important;
   background-color: #e0e0e0;
-
   /* @alternate */
   background: -moz-linear-gradient(top, #e9e9e9 0, #e0e0e0 100%);
   /* @alternate */
@@ -87,12 +78,11 @@
   background: -webkit-linear-gradient(top, #e9e9e9 0, #e0e0e0 100%);
   /* @alternate */
   background: -ms-linear-gradient(top, #e9e9e9 0, #e0e0e0 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = "#e9e9e9", endColorStr = "#e0e0e0");
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = "#e9e9e9", endColorStr = "#e0e0e0";
   /* @alternate */
   background: -o-linear-gradient(top, #e9e9e9 0, #e0e0e0 100%);
   /* @alternate */
   background: linear-gradient(top, #e9e9e9 0, #e0e0e0 100%);
-
   /* @alternate */
   -moz-box-shadow: inset 0 2px 5px #d0d0d0 !important;
   /* @alternate */
@@ -100,106 +90,107 @@
   /* @alternate */
   box-shadow: inset 0 2px 5px #d0d0d0 !important;
 }
-
 /* State: focused. */
 .goog-flat-button-focused {
   border-color: #6699ee;
-
   /*-moz-box-shadow: 0px 0px 1px #6699ee;
   -webkit-box-shadow: 0px 0px 1px #6699ee;
   box-shadow: 0px 0px 1px #6699ee;*/
-
   z-index: 1;
 }
-
 /* Pill (collapsed border) styles. */
 .goog-flat-button-collapse-right {
   margin-right: 0;
 }
-
 .goog-flat-button-collapse-left {
   margin-left: -1px;
 }
-
 /* Border radi should be treated separately in collapsed cases. */
 .goog-flat-button-bord-rad-collapse-right {
+  /* @alternate */
   -moz-border-radius: 2px 0 0 2px;
+  /* @alternate */
   -webkit-border-radius: 2px 0 0 2px;
+  /* @alternate */
   border-radius: 2px 0 0 2px;
 }
-
 .goog-flat-button-bord-rad-collapse-left {
+  /* @alternate */
   -moz-border-radius: 0 2px 2px 0;
+  /* @alternate */
   -webkit-border-radius: 0 2px 2px 0;
+  /* @alternate */
   border-radius: 0 2px 2px 0;
 }
-
 .goog-flat-button-bord-rad-collapse-both {
+  /* @alternate */
   -moz-border-radius: 0;
+  /* @alternate */
   -webkit-border-radius: 0;
+  /* @alternate */
   border-radius: 0;
 }
-
 /*Button with more important-meaning*/
 .emphasis-button.goog-flat-button {
   background-color: #4080fe;
   /* @alternate */
-  background: -moz-linear-gradient(center top, #468ffe 0px, #4080fe 100%) repeat scroll 0 0 transparent;
+  background: -moz-linear-gradient(top, #468ffe 0, #4080fe 100%);
   /* @alternate */
   background: -webkit-gradient(linear, center top, center top, from(#468ffe), to(#4080fe));
   /* @alternate */
   background: -webkit-linear-gradient(top, #468ffe 0, #4080fe 100%);
   /* @alternate */
   background: -ms-linear-gradient(top, #468ffe 0, #4080fe 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = "#468ffe", endColorStr = "#4080fe");
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = "#468ffe", endColorStr = "#4080fe";
   /* @alternate */
   background: -o-linear-gradient(top, #468ffe 0, #4080fe 100%);
   /* @alternate */
   background: linear-gradient(top, #468ffe 0, #4080fe 100%);
-
   border-color: #3399ff;
   color: white;
 }
-
 .emphasis-button.goog-flat-button-hover {
   border-color: #1f5d9d;
+  /* @alternate */
   -moz-box-shadow: none;
+  /* @alternate */
   -webkit-box-shadow: none;
+  /* @alternate */
   box-shadow: none;
 }
-
 .emphasis-button.goog-flat-button-active,
 .emphasis-button.goog-flat-button-selected,
 .emphasis-button.goog-flat-button-checked {
   color: white;
   border-color: #1f5d9d !important;
   background-color: #366afe;
-
   /* @alternate */
-  background: -moz-linear-gradient(center top, #3c79fe 0px, #366afe 100%) repeat scroll 0 0 transparent;
+  background: -moz-linear-gradient(top, #3c79fe 0, #366afe 100%);
   /* @alternate */
   background: -webkit-gradient(linear, center top, center top, from(#3c79fe), to(#366afe));
   /* @alternate */
   background: -webkit-linear-gradient(top, #3c79fe 0, #366afe 100%);
   /* @alternate */
   background: -ms-linear-gradient(top, #3c79fe 0, #366afe 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = "#3c79fe", endColorStr="#366afe");
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = "#3c79fe", endColorStr = "#366afe";
   /* @alternate */
   background: -o-linear-gradient(top, #3c79fe 0, #366afe 100%);
   /* @alternate */
   background: linear-gradient(top, #3c79fe 0, #366afe 100%);
-
+  /* @alternate */
   -moz-box-shadow: inset 0 2px 5px 1px #2e61fe !important;
+  /* @alternate */
   -webkit-box-shadow: inset 0 2px 5px 1px #2e61fe !important;
+  /* @alternate */
   box-shadow: inset 0 2px 5px 1px #2e61fe !important;
-
 }
-
 /* State: focused. */
 .emphasis-button.goog-flat-button-focused {
+  /* @alternate */
   -moz-box-shadow: 0 0 5px 0 #3879fe;
+  /* @alternate */
   -webkit-box-shadow: 0 0 5px 0 #3879fe;
+  /* @alternate */
   box-shadow: 0 0 5px 0 #3879fe;
-
   z-index: 1;
 }

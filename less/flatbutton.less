@@ -1,0 +1,133 @@
+/*
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/*
+ * Styling for flat buttons created by goog.ui.FlatButtonRenderer.
+ *
+ * @author brianp@google.com (Brian Peterson)
+ * @author alexeykofficial@gmail.com (Alex K)
+ */
+
+@import 'lib.less';
+
+.goog-flat-button() {
+  position: relative;
+  margin: 2px;
+  border: 1px solid  #d5d5d5;
+  color: #2c2c2c;
+  .gradient(#f2f2f2, #efefef);
+  cursor: pointer;
+
+  outline: none;
+  -moz-outline: none;
+  vertical-align: top;
+
+  border-radius:(2px);
+
+  /* @alternate */
+  -moz-transition: -moz-box-shadow .2s;
+  /* @alternate */
+  -webkit-transition: -webkit-box-shadow .2s;
+  /* @alternate */
+  transition: box-shadow .1s, border .2s;
+}
+
+.goog-flat-button when (@UI_TYPE = '') {
+  .goog-flat-button();
+  padding: 5px 6px;
+  font: bold 13px/18px 'Roboto', Tahoma, Arial, sans-serif;
+}
+
+.goog-flat-button when (@UI_TYPE = 'MOBILE') {
+  .goog-flat-button();
+  padding: 15px 16px;
+  font: bold 23px/28px 'Roboto', Tahoma, Arial, sans-serif;
+}
+
+/* State: disabled. */
+.goog-flat-button-disabled {
+  color: #979797;
+  cursor: default;
+}
+
+/* State: hover. */
+.goog-flat-button-hover {
+  border-color: #bbbbbb;
+  color: #202020;
+  z-index: 1;
+  .box-shadow(1px 1px 1px #e9e9e9);
+}
+
+/* State: active, selected, checked. */
+.goog-flat-button-active,
+.goog-flat-button-selected,
+.goog-flat-button-checked {
+  color: #0f0f0f;
+  border-color: #bbbbbb !important;
+  .gradient(#e9e9e9, #e0e0e0);
+  .box-shadow(inset 0 2px 5px #d0d0d0) !important;
+}
+
+/* State: focused. */
+.goog-flat-button-focused {
+  border-color: #6699ee;
+
+  /*-moz-box-shadow: 0px 0px 1px #6699ee;
+  -webkit-box-shadow: 0px 0px 1px #6699ee;
+  box-shadow: 0px 0px 1px #6699ee;*/
+
+  z-index: 1;
+}
+
+/* Pill (collapsed border) styles. */
+.goog-flat-button-collapse-right {
+  margin-right: 0;
+}
+
+.goog-flat-button-collapse-left {
+  margin-left: -1px;
+}
+
+/* Border radi should be treated separately in collapsed cases. */
+.goog-flat-button-bord-rad-collapse-right {
+  .border-radius(2px 0 0 2px);
+}
+
+.goog-flat-button-bord-rad-collapse-left {
+  .border-radius(0 2px 2px 0);
+}
+
+.goog-flat-button-bord-rad-collapse-both {
+  .border-radius(0);
+}
+
+/*Button with more important-meaning*/
+.emphasis-button.goog-flat-button {
+  .gradient(#468ffe, #4080fe);
+  border-color: #3399ff;
+  color: white;
+}
+
+.emphasis-button.goog-flat-button-hover {
+  border-color: #1f5d9d;
+  .box-shadow(none);
+}
+
+.emphasis-button.goog-flat-button-active,
+.emphasis-button.goog-flat-button-selected,
+.emphasis-button.goog-flat-button-checked {
+  color: white;
+  border-color: #1f5d9d !important;
+  .gradient(#3c79fe, #366afe);
+  .box-shadow(inset 0 2px 5px 1px #2e61fe) !important;
+}
+
+/* State: focused. */
+.emphasis-button.goog-flat-button-focused {
+  .box-shadow(0 0 5px 0 #3879fe);
+  z-index: 1;
+}

@@ -124,6 +124,32 @@
             <arg line="--compiler_flags=&quot;--externs=${basedir}\src\externs.js&quot;"/>
         </exec>
     </target>
+    <target name="compile_less"
+            description="Compilation of less to css"
+            depends="">
+        <exec executable="lessc" dir="${basedir}">
+            <arg value="--root=${basedir}\src\closure-library"/>
+            <arg value="--root=${basedir}\src\rflect"/>
+            <arg value=">"/>
+            <arg value=">"/>
+            <arg line="--compiler_jar=&quot;${basedir}\bin\compiler.jar&quot;"/>
+            <arg line="--output_file=&quot;${basedir}\build\outputcompiled.js&quot;"/>
+            <arg line="--compiler_flags=&quot;--compilation_level=ADVANCED_OPTIMIZATIONS&quot;"/>
+            <arg line="--compiler_flags=&quot;--summary_detail_level=3&quot;"/>
+            <arg line="--compiler_flags=&quot;--warning_level=VERBOSE&quot;"/>
+            <!--To prevent warnings from compiler.-->
+            <arg line="--compiler_flags=&quot;--js=${basedir}\src\closure-library\closure\goog\deps.js&quot;"/>
+            <arg line="--compiler_flags=&quot;--js=${basedir}\src\deps.js&quot;"/>
+            <arg value="--namespace=rflect.cal.Loader"/>
+            <arg line="--compiler_flags=&quot;--define=&quot;goog.DEBUG=false&quot;&quot;"/>
+            <arg line="--compiler_flags=&quot;--source_map_format=V3&quot;"/>
+            <arg line="--compiler_flags=&quot;--create_source_map=${basedir}\build\outputcompiled.js.map&quot;"/>
+
+            <arg line="--compiler_flags=&quot;--js=${basedir}\build\css-renaming-map.js&quot;"/>
+
+            <arg line="--compiler_flags=&quot;--externs=${basedir}\src\externs.js&quot;"/>
+        </exec>
+    </target>
     <!--Dependency writer, creates deps.js-->
     <target name="depswriter" description="dependencies writer">
         <exec executable="python" dir="${basedir}">
