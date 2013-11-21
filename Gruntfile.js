@@ -72,17 +72,20 @@ module.exports = function(grunt) {
     var targets = [];
 
     aTargets.forEach(function(target) {
-      target.defines = [];
+      target.jsCompDefines = [];
+      target.lessDefines = [];
 
       // Locale.
-      target.defines.push("goog.LOCALE='" + target.locale + "'");
+      target.jsCompDefines.push("goog.LOCALE='" + target.locale + "'");
       // DEBUG.
-      target.defines.push("'goog.DEBUG=" + target.debug + "'");
+      target.jsCompDefines.push("'goog.DEBUG=" + target.debug + "'");
       // UI type.
-      target.defines.push("rflect.UI_TYPE='" + target.uiType + "'");
+      target.jsCompDefines.push("rflect.UI_TYPE='" + target.uiType + "'");
+      target.lessDefines.push("UI_TYPE='" + target.uiType + "'");
       // Assumptions on user agent.
       if (target.userAgent)
-        target.defines.push("'goog.userAgent.ASSUME_" + target.userAgent + "=true'");
+        target.jsCompDefines.push("'goog.userAgent.ASSUME_" + target.userAgent + "=true'");
+
     });
 
     return aTargets;
@@ -90,7 +93,8 @@ module.exports = function(grunt) {
 
   /**
    * @typedef {{locale:String, debug:boolean, uiType:string, userAgent:string,
-   *    defines:Array.<string>, jsFilename:string, cssFilename:string}}
+   *    jsCompDefines:Array.<string>, lessDefines:Array.<string>,
+   *    jsFilename:string, cssFilename:string}}
    */
   var Target;
 
@@ -221,7 +225,7 @@ module.exports = function(grunt) {
           sourceMapName;
     }
 
-    targetOptions.options.compilerOpts.define = aTarget.defines;
+    targetOptions.options.compilerOpts.define = aTarget.jsCompDefines;
 
     targetOptions.dest = 'build/' + '_temp' + aIndex + '.outputcompiled-' +
         aTarget.locale +
@@ -358,7 +362,7 @@ module.exports = function(grunt) {
     less: {
       dev: {
         options: {
-          modifyVariables: ['ui-type=MOBILE'],
+          modifyVariables: ['UI_TYPE=MOBILE'],
           verbose: true,
           files: {
             'css/flatbutton.css': 'less/flatbutton.less.css',
@@ -366,14 +370,8 @@ module.exports = function(grunt) {
           }
         },
       }
-    },
-    watch: {
-      less: {
-        files: ['less/*.less.css', 'less/*.less'],
-        tasks: ['less:dev'],
-        options: {}
-      }
     }
+
   });
 
   grunt.registerTask('exportTargets', function() {
@@ -381,8 +379,8 @@ module.exports = function(grunt) {
     var targetsFileName = 'build/app/config/targets.js';
 
     TARGETS.forEach(function(aTarget){
-      // We do not need defines for export.
-      delete aTarget.defines;
+      // We do not need jsCompDefines for export.
+      delete aTarget.jsCompDefines;
     });
 
     grunt.log.writeln('TARGETS that will be written: ', TARGETS);

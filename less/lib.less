@@ -1,7 +1,5 @@
-/*
- * Copyright (c) 2013. Rflect, Alex K.
- */
-
+//
+// Copyright (c) 2013. Rflect, Alex K.
 //
 // Common less rules.
 // In order for this file to be pluggable everywhere, let there be pure less.
@@ -45,4 +43,10 @@
   -webkit-box-shadow: @shadow;
   /* @alternate */
   box-shadow: @shadow;
+}
+
+.opacity(@opacity: 0.5) {
+  opacity: @opacity;
+  @opperc: @opacity * 100;
+  filter: ~'alpha(opacity=@{opperc})';
 }

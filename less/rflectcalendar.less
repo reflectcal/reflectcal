@@ -561,8 +561,7 @@ body {
   position: absolute;
   height: 100%;
   background: #cecece;
-  opacity: 0.5;
-  filter: alpha(opacity = 50);
+  .opacity(0.5);
 }
 
 #main-pane-header-wk-zippies {
@@ -734,8 +733,7 @@ overflow:hidden
   background-color: #cf221a;
   /*High enough number to cover chips with z-indexes 1, 2, etc.*/
   z-index: 1000;
-  opacity: 0.4;
-  filter: alpha(opacity=40);
+  .opacity(0.4);
 
   -moz-border-radius: 0.5px;
   -webkit-border-radius: 0.5px;
@@ -795,8 +793,7 @@ overflow:hidden
   height: 100%;
   width: 100%;
   background-color: #cecece;
-  opacity: 0.25;
-  filter: alpha(opacity = 25);
+  .opacity(0.25);
 }
 
 .today-mask-mn {
@@ -807,8 +804,7 @@ overflow:hidden
 .mask {
   background-color: #cecece;
   position: absolute;
-  filter: alpha(opacity = 50);
-  opacity: 0.5;
+  .opacity(0.5);
 }
 
 .mainpane-mask {
@@ -818,8 +814,7 @@ overflow:hidden
 .wk-mask {
   background-color: #cecece;
   position: absolute;
-  filter: alpha(opacity = 50);
-  opacity: 0.5;
+  .opacity(0.5);
 }
 
 .event-rect-wk {
@@ -1178,8 +1173,7 @@ overflow:hidden
 .mn-mask {
   background-color: #cecece;
   position: absolute;
-  filter: alpha(opacity = 50);
-  opacity: 0.5;
+  .opacity(0.5);
 }
 /**
  * regulates height of main body, but take into account additional 2px from borders of
