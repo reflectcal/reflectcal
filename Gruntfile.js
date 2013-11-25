@@ -39,21 +39,6 @@ var lessFileNames = [
   'less/rflectcalendar-gss-compatible.less'
 ];
 
-// Inputs for less compiler. These are for further cssmin minification.
-var lessFileNamesNoGss = [
-  'less/rflectcalendar-gss-incompatible.less'
-];
-
-// Inputs for gss compiler, at the same time outputs from less.
-var cssFileNames = [
-  'build/css/rflectcalendar-gss-compatible.css'
-];
-
-// Inputs for cssmin task, at the same time outputs from less.
-var cssFileNamesNoGss = [
-  'build/css/rflectcalendar-gss-incompatible.css'
-];
-
 function makeListOfCompileTargets() {
   var targets = [];
 
@@ -109,6 +94,12 @@ var Target;
  * @type {Array.<Target>}
  */
 var TARGETS = fillCompileTargetsWithDefines(makeListOfCompileTargets());
+
+/**
+ * Map of css compilation index to array of associated target indexes.
+ * @type {Object.<number,number>}
+ */
+var cssKeysToTargetIndexes = {};
 
 var gssCommand = [
   'java',
@@ -223,7 +214,7 @@ var compilationTargetTemplate = {
 };
 
 
-function targetJsFileMapper(aTarget, aIndex){
+function targetToJsFileMapper(aTarget, aIndex){
   var targetOptions = deepClone(compilationTargetTemplate);
 
   if (!PRODUCTION) {
@@ -245,10 +236,93 @@ function targetJsFileMapper(aTarget, aIndex){
 
 }
 
+function jsFileToTargetMapper(dest, src){
+  var fileName = src.substring(src.indexOf('/'));
+  var fileNameParts = fileName.split('.');
+  var fileIndexStr = fileNameParts.splice(0, 1)[0];
+  var fileIndex = /\d+/.exec(fileIndexStr);
+  var newFileName = fileNameParts.join('.');
 
-TARGETS.forEach(targetJsFileMapper);
+  if (!TARGETS[fileIndex].jsFileNames)
+    TARGETS[fileIndex].jsFileNames = [];
+  TARGETS[fileIndex].jsFileNames.push(newFileName);
 
-TARGETS.forEach(targetJsFileMapper);
+  grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
+      newFileName, '.');
+
+  return dest + newFileName;
+}
+
+var lessTask = {};
+
+var lessTargetTemplate = {
+
+  options: {
+    modifyVariables: [],
+    verbose: true,
+    compress: true,
+    files: {
+    }
+  }
+
+}
+
+function targetToCssFileMapper(aTarget, aIndex){
+  var targetOptions = deepClone(lessTargetTemplate);
+
+  //TODO(alexk): for now, css are only defined by ui type.
+  var key = aTarget.uiType;
+
+  if (!cssKeysToTargetIndexes[key]) {
+    cssKeysToTargetIndexes = [];
+
+    targetOptions.modifyVariables = aTarget.lessDefines;
+
+    targetOptions.files['build/' + '_temp.' + key + '.outputcompiled-' +
+        aTarget.locale +
+        (aTarget.userAgent ? '-' + aTarget.userAgent : '')  +
+        (aTarget.userAgent ? '-' + aTarget.uiType : '')  +
+        (aTarget.debug ? '-debug' : '')  +
+        '.css'] = lessFileNames;
+
+    if (!PRODUCTION) {
+      /*var sourceMapName = 'build/outputcompiled-' + aTarget.locale + '.js.' +
+          aIndex + '.map'
+      targetOptions.options.compilerOpts.create_source_map =
+          sourceMapName;*/
+    }
+
+    lessTask['lessForTarget-' + key] = targetOptions;
+  }
+
+  cssKeysToTargetIndexes[key].push(aIndex);
+}
+
+function cssFileToTargetMapper(dest, src) {
+  var fileName = src.substring(src.indexOf('/'));
+  var fileNameParts = fileName.split('.');
+  var fileKey = fileNameParts.splice(1, 1)[0];
+  var newFileName = fileNameParts.join('.');
+
+  // TODO(alexk): here we're adding one css name for all targets, but
+  // in future css compilation will also be targeted, for different
+  // locales, ui types, user agents.
+  TARGETS.forEach(function(aTarget, aIndex){
+    if (!aTarget.cssFileNames)
+      aTarget.cssFileNames = [];
+    if (cssKeysToTargetIndexes[fileKey])
+      aTarget.cssFileNames = cssKeysToTargetIndexes[fileKey].slice(0);
+  });
+
+  grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
+      newFileName, '.');
+
+  return dest + newFileName;
+}
+
+TARGETS.forEach(targetToJsFileMapper);
+
+TARGETS.forEach(targetToCssFileMapper);
 
 module.exports = function(grunt) {
   // Measure build time.
@@ -257,31 +331,12 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    exec: {
-      gss: {
-        command: gssCommand
-      }
-    },
-    cssmin: {
-      combine: {
-        files: {
-          'build/_temp.no-closure-stylesheets.css':
-              ['css/rflectcalendar-advanced.css']
-        }
-      }
-    },
-    concat: {
-      css: {
-        src: ['build/_temp.closure-stylesheets.css',
-            'build/_temp.no-closure-stylesheets.css'],
-        dest: 'build/_temp0.outputcompiled.css',
-      }
-    },
     clean: {
       all: ['build/*'],
       temp: ['build/_temp*', 'build/*.map']
     },
     closureBuilder: closureBuilderTask,
+    less: lessTask,
     copy: {
       app: {
         expand: true,
@@ -312,28 +367,7 @@ module.exports = function(grunt) {
         dest: 'build/static/css/',
         options: {
           separator: '',
-          rename: function(dest, src) {
-            var fileName = src.substring(src.indexOf('/'));
-            var fileNameParts = fileName.split('.');
-            var fileIndexStr = fileNameParts.splice(0, 1)[0];
-            var fileIndex = /\d+/.exec(fileIndexStr);
-            var newFileName = fileNameParts.join('.');
-
-            // TODO(alexk): here we're adding one css name for all targets, but
-            // in future css compilation will also be targeted, for different
-            // locales, ui types, user agents.
-            TARGETS.forEach(function(aTarget){
-              if (!aTarget.cssFileNames)
-                aTarget.cssFileNames = [];
-              aTarget.cssFileNames.push(newFileName);
-            });
-            //TARGETS[fileIndex].cssFileName = newFileName;
-
-            grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
-                newFileName, '.');
-
-            return dest + newFileName;
-          }
+          rename: cssFileToTargetMapper
         }
       },
       renameJs: {
@@ -341,22 +375,7 @@ module.exports = function(grunt) {
         dest: 'build/static/js/',
         options: {
           separator: '',
-          rename: function(dest, src) {
-            var fileName = src.substring(src.indexOf('/'));
-            var fileNameParts = fileName.split('.');
-            var fileIndexStr = fileNameParts.splice(0, 1)[0];
-            var fileIndex = /\d+/.exec(fileIndexStr);
-            var newFileName = fileNameParts.join('.');
-
-            if (!TARGETS[fileIndex].jsFileNames)
-              TARGETS[fileIndex].jsFileNames = [];
-            TARGETS[fileIndex].jsFileNames.push(newFileName);
-
-            grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
-                newFileName, '.');
-
-            return dest + newFileName;
-          },
+          rename: jsFileToTargetMapper,
           wrapper: function(src, options) {
             var fileName = src.substring(src.indexOf('/'));
 
@@ -375,18 +394,6 @@ module.exports = function(grunt) {
         }
       }
 
-    },
-    less: {
-      dev: {
-        options: {
-          modifyVariables: ['UI_TYPE=MOBILE'],
-          verbose: true,
-          files: {
-            'css/flatbutton.css': ['build/css/rflect.less.css'],
-            'css/flatbutton.css': 'less/flatbutton.less'
-          }
-        },
-      }
     }
 
   });
@@ -429,9 +436,7 @@ module.exports = function(grunt) {
   // Default task(s).
   grunt.registerTask('default', [
     'clean:all',
-    'exec:gss',
-    'cssmin:combine',
-    'concat:css',
+    'less',
     'closureBuilder',
     'filerev',
     'wrap:renameCss',
