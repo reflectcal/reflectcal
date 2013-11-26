@@ -18,7 +18,7 @@ var appConfig = require('./app/config/appconfig');
  * If it's false, app includes it all and could be tested on server in close
  * to production form.
  */
-var PRODUCTION = true;
+var PRODUCTION = false;
 /**
  * This flag specifies that minimal number of compile targets will be
  * produced.
@@ -29,14 +29,14 @@ var FAST_DEBUG = true;
 // targets is product of array lengths.
 var LOCALES = PRODUCTION ? appConfig.LOCALES : ['en'];
 var DEBUG = PRODUCTION ? [true, false] : [true];
-var UI_TYPE = [''];
+var UI_TYPE = ['', 'MOBILE'];
 // Empty string means that user agent is not specified.
 var USER_AGENT = (PRODUCTION || !FAST_DEBUG) ?
     ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'] : [''];
 
 // Inputs for less compiler. These are for further gss minification.
 var lessFileNames = [
-  'less/rflectcalendar-gss-compatible.less'
+  'less/combined.less'
 ];
 
 function makeListOfCompileTargets() {
@@ -73,7 +73,7 @@ function fillCompileTargetsWithDefines(aTargets) {
     target.jsCompDefines.push("'goog.DEBUG=" + target.debug + "'");
     // UI type.
     target.jsCompDefines.push("rflect.UI_TYPE='" + target.uiType + "'");
-    target.lessDefines.push("UI_TYPE='" + target.uiType + "'");
+    target.lessDefines.push('@' + 'UI_TYPE' + ': ' + target.uiType + ';\n');
     // Assumptions on user agent.
     if (target.userAgent)
       target.jsCompDefines.push("'goog.userAgent.ASSUME_" + target.userAgent + "=true'");
@@ -96,24 +96,10 @@ var Target;
 var TARGETS = fillCompileTargetsWithDefines(makeListOfCompileTargets());
 
 /**
- * Map of css compilation index to array of associated target indexes.
- * @type {Object.<number,number>}
+ * Map of css compilation key to array of associated target indexes.
+ * @type {Object.<string,number>}
  */
 var cssKeysToTargetIndexes = {};
-
-var gssCommand = [
-  'java',
-  '-showversion',
-  '-jar',
-  'bin/closure-stylesheets.jar',
-  '--output-renaming-map build/_temp-css-renaming-map.js',
-  '--output-renaming-map-format CLOSURE_COMPILED',
-  '--rename CLOSURE',
-  '--output-file build/_temp.closure-stylesheets.css',
-  '--allowed-non-standard-function progid:DXImageTransform.Microsoft.gradient',
-  '--allowed-unrecognized-property -moz-outline',
-  '--allowed-unrecognized-property -moz-osx-font-smoothing'
-].concat(cssFileNames).join(' ');
 
 // Closure builder task without targets.
 var closureBuilderTask = {
@@ -195,8 +181,7 @@ var compilationTargetTemplate = {
       compilation_level: 'ADVANCED_OPTIMIZATIONS',
       summary_detail_level: 3,
       warning_level: 'VERBOSE',
-      js: ['src/deps.js', 'src/closure-library/closure/goog/deps.js',
-          'build/_temp-css-renaming-map.js'],
+      js: ['src/deps.js', 'src/closure-library/closure/goog/deps.js'],
       define: [],
       debug: false,
       source_map_format: 'V3',
@@ -229,6 +214,7 @@ function targetToJsFileMapper(aTarget, aIndex){
   targetOptions.dest = 'build/' + '_temp' + aIndex + '.outputcompiled-' +
       aTarget.locale +
       (aTarget.userAgent ? '-' + aTarget.userAgent : '')  +
+      (aTarget.uiType ? '-' + aTarget.uiType : '')  +
       (aTarget.debug ? '-debug' : '')  +
       '.js';
 
@@ -236,36 +222,26 @@ function targetToJsFileMapper(aTarget, aIndex){
 
 }
 
-function jsFileToTargetMapper(dest, src){
-  var fileName = src.substring(src.indexOf('/'));
-  var fileNameParts = fileName.split('.');
-  var fileIndexStr = fileNameParts.splice(0, 1)[0];
-  var fileIndex = /\d+/.exec(fileIndexStr);
-  var newFileName = fileNameParts.join('.');
-
-  if (!TARGETS[fileIndex].jsFileNames)
-    TARGETS[fileIndex].jsFileNames = [];
-  TARGETS[fileIndex].jsFileNames.push(newFileName);
-
-  grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
-      newFileName, '.');
-
-  return dest + newFileName;
-}
-
 var lessTask = {};
 
 var lessTargetTemplate = {
-
   options: {
     modifyVariables: [],
     verbose: true,
-    compress: true,
-    files: {
-    }
+    compress: true
+  },
+  files: {
   }
-
 }
+
+var gssCommand = [
+  'lessc',
+  '-verbose'
+  ].concat(lessFileNames).concat(['>', outputFileName])
+  .concat(aTarget.lessDefines.map(function(aDefine){
+    return '--modify-var' + aDefine;
+  }))
+  .join(' ');
 
 function targetToCssFileMapper(aTarget, aIndex){
   var targetOptions = deepClone(lessTargetTemplate);
@@ -274,15 +250,12 @@ function targetToCssFileMapper(aTarget, aIndex){
   var key = aTarget.uiType;
 
   if (!cssKeysToTargetIndexes[key]) {
-    cssKeysToTargetIndexes = [];
+    cssKeysToTargetIndexes[key] = [];
 
-    targetOptions.modifyVariables = aTarget.lessDefines;
+    targetOptions.options.modifyVariables = aTarget.lessDefines.join('');
 
-    targetOptions.files['build/' + '_temp.' + key + '.outputcompiled-' +
-        aTarget.locale +
-        (aTarget.userAgent ? '-' + aTarget.userAgent : '')  +
-        (aTarget.userAgent ? '-' + aTarget.uiType : '')  +
-        (aTarget.debug ? '-debug' : '')  +
+    targetOptions.files['build/' + '_temp.' + key + '.outputcompiled' +
+        (aTarget.uiType ? '-' + aTarget.uiType : '')  +
         '.css'] = lessFileNames;
 
     if (!PRODUCTION) {
@@ -298,28 +271,6 @@ function targetToCssFileMapper(aTarget, aIndex){
   cssKeysToTargetIndexes[key].push(aIndex);
 }
 
-function cssFileToTargetMapper(dest, src) {
-  var fileName = src.substring(src.indexOf('/'));
-  var fileNameParts = fileName.split('.');
-  var fileKey = fileNameParts.splice(1, 1)[0];
-  var newFileName = fileNameParts.join('.');
-
-  // TODO(alexk): here we're adding one css name for all targets, but
-  // in future css compilation will also be targeted, for different
-  // locales, ui types, user agents.
-  TARGETS.forEach(function(aTarget, aIndex){
-    if (!aTarget.cssFileNames)
-      aTarget.cssFileNames = [];
-    if (cssKeysToTargetIndexes[fileKey])
-      aTarget.cssFileNames = cssKeysToTargetIndexes[fileKey].slice(0);
-  });
-
-  grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
-      newFileName, '.');
-
-  return dest + newFileName;
-}
-
 TARGETS.forEach(targetToJsFileMapper);
 
 TARGETS.forEach(targetToCssFileMapper);
@@ -327,6 +278,43 @@ TARGETS.forEach(targetToCssFileMapper);
 module.exports = function(grunt) {
   // Measure build time.
   require('time-grunt')(grunt);
+
+  function jsFileToTargetMapper(dest, src){
+    var fileName = src.substring(src.indexOf('/'));
+    var fileNameParts = fileName.split('.');
+    var fileIndexStr = fileNameParts.splice(0, 1)[0];
+    var fileIndex = /\d+/.exec(fileIndexStr);
+    var newFileName = fileNameParts.join('.');
+
+    if (!TARGETS[fileIndex].jsFileNames)
+      TARGETS[fileIndex].jsFileNames = [];
+    TARGETS[fileIndex].jsFileNames.push(newFileName);
+
+    grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
+        newFileName, '.');
+
+    return dest + newFileName;
+  }
+
+  function cssFileToTargetMapper(dest, src) {
+    var fileName = src.substring(src.indexOf('/'));
+    var fileNameParts = fileName.split('.');
+    var fileKey = fileNameParts.splice(0, 2)[0];
+    var newFileName = fileNameParts.join('.');
+
+    TARGETS.forEach(function(aTarget, aIndex){
+      if (!aTarget.cssFileNames)
+        aTarget.cssFileNames = [];
+      if (cssKeysToTargetIndexes[fileKey] &&
+          cssKeysToTargetIndexes[fileKey].indexOf(aIndex) > -1)
+        aTarget.cssFileNames.push(newFileName);
+    });
+
+    grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
+        newFileName, '.');
+
+    return dest + newFileName;
+  }
 
   // Project configuration.
   grunt.initConfig({
