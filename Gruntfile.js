@@ -73,10 +73,11 @@ function fillCompileTargetsWithDefines(aTargets) {
     target.jsCompDefines.push("'goog.DEBUG=" + target.debug + "'");
     // UI type.
     target.jsCompDefines.push("rflect.UI_TYPE='" + target.uiType + "'");
-    target.lessDefines.push('@' + 'UI_TYPE' + ': ' + target.uiType + ';\n');
+    target.lessDefines.push("UI_TYPE='" + target.uiType + "'");
     // Assumptions on user agent.
     if (target.userAgent)
-      target.jsCompDefines.push("'goog.userAgent.ASSUME_" + target.userAgent + "=true'");
+      target.jsCompDefines.push("'goog.userAgent.ASSUME_" + target.userAgent +
+          "=true'");
 
   });
 
@@ -225,23 +226,20 @@ function targetToJsFileMapper(aTarget, aIndex){
 var lessTask = {};
 
 var lessTargetTemplate = {
-  options: {
-    modifyVariables: [],
-    verbose: true,
-    compress: true
-  },
-  files: {
-  }
+  command: ''
 }
 
-var gssCommand = [
-  'lessc',
-  '-verbose'
-  ].concat(lessFileNames).concat(['>', outputFileName])
-  .concat(aTarget.lessDefines.map(function(aDefine){
-    return '--modify-var' + aDefine;
-  }))
-  .join(' ');
+function makeLessCompCommand(aKey, aTarget) {
+  var outputFileName = 'build/' + '_temp.' + aKey + '.outputcompiled' +
+      (aTarget.uiType ? '-' + aTarget.uiType : '')  +
+      '.css'
+
+  return ['lessc', '--verbose']
+      .concat(lessFileNames).concat(['>', outputFileName])
+      .concat(aTarget.lessDefines.map(function(aDefine){
+    return '--modify-var=' + aDefine;
+  })).join(' ');
+}
 
 function targetToCssFileMapper(aTarget, aIndex){
   var targetOptions = deepClone(lessTargetTemplate);
@@ -252,12 +250,6 @@ function targetToCssFileMapper(aTarget, aIndex){
   if (!cssKeysToTargetIndexes[key]) {
     cssKeysToTargetIndexes[key] = [];
 
-    targetOptions.options.modifyVariables = aTarget.lessDefines.join('');
-
-    targetOptions.files['build/' + '_temp.' + key + '.outputcompiled' +
-        (aTarget.uiType ? '-' + aTarget.uiType : '')  +
-        '.css'] = lessFileNames;
-
     if (!PRODUCTION) {
       /*var sourceMapName = 'build/outputcompiled-' + aTarget.locale + '.js.' +
           aIndex + '.map'
@@ -265,6 +257,7 @@ function targetToCssFileMapper(aTarget, aIndex){
           sourceMapName;*/
     }
 
+    targetOptions.command = makeLessCompCommand(key, aTarget);
     lessTask['lessForTarget-' + key] = targetOptions;
   }
 
@@ -299,8 +292,11 @@ module.exports = function(grunt) {
   function cssFileToTargetMapper(dest, src) {
     var fileName = src.substring(src.indexOf('/'));
     var fileNameParts = fileName.split('.');
-    var fileKey = fileNameParts.splice(0, 2)[0];
+    var fileKey = fileNameParts.splice(0, 2)[1];
     var newFileName = fileNameParts.join('.');
+
+    grunt.log.writeln('fileKey ', fileKey);
+    grunt.log.writeln('cssKeysToTargetIndexes ', cssKeysToTargetIndexes);
 
     TARGETS.forEach(function(aTarget, aIndex){
       if (!aTarget.cssFileNames)
@@ -324,7 +320,7 @@ module.exports = function(grunt) {
       temp: ['build/_temp*', 'build/*.map']
     },
     closureBuilder: closureBuilderTask,
-    less: lessTask,
+    exec: lessTask,
     copy: {
       app: {
         expand: true,
@@ -424,7 +420,8 @@ module.exports = function(grunt) {
   // Default task(s).
   grunt.registerTask('default', [
     'clean:all',
-    'less',
+    //less
+    'exec',
     'closureBuilder',
     'filerev',
     'wrap:renameCss',
