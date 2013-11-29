@@ -18,7 +18,7 @@ var appConfig = require('./app/config/appconfig');
  * If it's false, app includes it all and could be tested on server in close
  * to production form.
  */
-var PRODUCTION = false;
+var PRODUCTION = true;
 /**
  * This flag specifies that minimal number of compile targets will be
  * produced.
@@ -234,7 +234,7 @@ function makeLessCompCommand(aKey, aTarget) {
       (aTarget.uiType ? '-' + aTarget.uiType : '')  +
       '.css'
 
-  return ['lessc', '--verbose']
+  return ['lessc', '--verbose', '--compress']
       .concat(lessFileNames).concat(['>', outputFileName])
       .concat(aTarget.lessDefines.map(function(aDefine){
     return '--modify-var=' + aDefine;

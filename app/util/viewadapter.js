@@ -30,13 +30,14 @@ exports.getCompiledTargetAsync = function(aRequest, aOnGetCompiledTarget){
     var languages = getLocales(aSettings[0], aRequest);
     var userAgentObject = ua.detect(aRequest.headers['user-agent']);
     var userAgent = getUserAgentName(userAgentObject);
+    var uiType = getUIType(userAgentObject);
 
     console.log('languages', languages);
 
     for (var counter = 0; counter < languages.length && !target;
         counter++) {
       target = targetFinder(TARGETS, languages[counter], !!aSettings[0].debug,
-          '', userAgent);
+          uiType, userAgent);
     }
 
     console.log('userAgent', userAgent);
@@ -88,6 +89,18 @@ function getUserAgentName(aUAObject) {
   });
 
   return userAgentName;
+}
+
+
+function getUIType(aUAObject) {
+  var uiType = '';
+
+  ['MOBILE'].forEach(function(aProperty){
+    if (aUAObject[aProperty])
+      uiType = aProperty;
+  });
+
+  return uiType;
 }
 
 
