@@ -39,10 +39,18 @@ body {
   padding: 8px 0 0 0;
 }
 
-#top-pane {
+#top-pane() {
   padding: 10px 0;
-  height: 28px;
   overflow: hidden;
+}
+
+#top-pane when (@UI_TYPE = '') {
+  #top-pane();
+  height: 28px;
+}
+
+#top-pane when (@UI_TYPE = 'MOBILE') {
+  #top-pane();
 }
 
 #main-pane-controls-left {
@@ -72,7 +80,7 @@ body {
 }
 
 /**
- * Buttons
+ * Buttons.
  */
 
 .cal-menu-button {
@@ -112,6 +120,10 @@ body {
 .cal-menu-button-options {
   width: 25px;
   height: 18px
+}
+
+.cal-menu-next-button when (@UI_TYPE = 'MOBILE') {
+  margin-left: 10px;
 }
 
 #left-navtable {
@@ -162,10 +174,21 @@ body {
   margin: 0;
 }
 
-#left-pane {
+#left-pane() when (@UI_TYPE = ''){
   float: left;
   width: 150px;
   margin: 0;
+}
+
+#left-pane() when (@UI_TYPE = 'MOBILE'){
+  height: 100%;
+  margin: 0;
+  position: absolute;
+  width: 150px;
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
 }
 
 #left-main-pane {
@@ -187,11 +210,19 @@ body {
   white-space: nowrap;
 }
 
-#main-pane {
+#main-pane() {
   float: none;
-  margin-left: 160px;
   width: auto;
   cursor: default; /*IE7 shows text cursor.*/
+}
+
+#main-pane when (@UI_TYPE = '') {
+  #main-pane();
+  margin-left: 160px;
+}
+
+#main-pane when (@UI_TYPE = 'MOBILE') {
+  #main-pane();
 }
 
 #main-pane-header {
@@ -454,15 +485,20 @@ body {
   text-decoration: underline;
 }
 
-#main-pane-header-scrollable {
+#main-pane-header-scrollable() {
   border: 1px solid #d5d5d5;
   /*we need this for ie7 as nested relative positioned elements
   don't get affected by overflow without it*/
   position: relative;
+}
 
-  /*-moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;*/
+#main-pane-header-scrollable when (@UI_TYPE = ''){
+  #main-pane-header-scrollable();
+}
+
+#main-pane-header-scrollable when (@UI_TYPE = 'MOBILE'){
+  #main-pane-header-scrollable();
+  border-bottom-width: 0;
 }
 
 /**

@@ -130,16 +130,11 @@
             description="Compilation of less to css"
             depends="">
         <exec executable="${nodejspath}\lessc.cmd" dir="${basedir}">
-            <arg value="${basedir}\less\rflectcalendar-gss-compatible.less"/>
+            <arg value="${basedir}\less\combined.less"/>
             <arg value=">"/>
-            <arg value="${basedir}\css\rflectcalendar-gss-compatible.css"/>
+            <arg value="${basedir}\css\rflectcalendar.css"/>
             <arg value="--verbose"/>
-        </exec>
-        <exec executable="${nodejspath}\lessc.cmd" dir="${basedir}">
-            <arg value="${basedir}\less\rflectcalendar-gss-incompatible.less"/>
-            <arg value=">"/>
-            <arg value="${basedir}\css\rflectcalendar-gss-incompatible.css"/>
-            <arg value="--verbose"/>
+            <arg value="--modify-var=UI_TYPE='MOBILE'"/>
         </exec>
     </target>
     <!--Dependency writer, creates deps.js-->
