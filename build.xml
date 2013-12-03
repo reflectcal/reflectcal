@@ -15,6 +15,7 @@
     </description>
 
     <property name="nodejspath" value="d:/NodeJS"></property>
+    <property name="UI_TYPE" value="MOBILE"></property>
 
     <!-- Linter. -->
     <target name="gjslinter" description="linter">
@@ -134,7 +135,7 @@
             <arg value=">"/>
             <arg value="${basedir}\css\rflectcalendar.css"/>
             <arg value="--verbose"/>
-            <arg value="--modify-var=UI_TYPE='MOBILE'"/>
+            <arg value="--modify-var=UI_TYPE='${UI_TYPE}'"/>
         </exec>
     </target>
     <!--Dependency writer, creates deps.js-->

@@ -2,6 +2,8 @@
 <head>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport"
+        content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
   <title>Rflect events</title>
   <link
       href="../css/rflectcalendar.css"
@@ -23,7 +25,8 @@
 <script
     src="/static/js/outputcompiled-by-WEBKIT-MOBILE-debug.9e08c7e7de69a519adcfdc6559173305.js"></script>
 
-<div id="cal-container" class="cal-container">
+<main id="cal-container" class="cal-container">
+
 <div id="left-pane" style="display:none">
   <ul>
     <li>Settings</li>
@@ -125,49 +128,33 @@
     </div>
   </div>
 </div>
-<div id="top-pane">
-  <div class="upper-controls goog-inline-block">
-    <div
-        class="cal-menu-leftmost-button cal-menu-button cal-menu-next-button goog-inline-block goog-flat-button"
-        id="nb1" aria-pressed="true" role="button" tabindex="0">
-      <div class="icon icon-bars goog-inline-block"></div>
-    </div>
-    <div
-        class="cal-menu-button goog-inline-block goog-flat-button cal-menu-next-button"
-        id="nb1" aria-pressed="true" role="button" tabindex="0">Now
-    </div>
-    <div
-        class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right goog-inline-block goog-flat-button cal-menu-next-button"
-        id="nb1" aria-pressed="true" role="button" tabindex="0">Day
-    </div><div
-        class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-inline-block goog-flat-button"
-        id="nb1" aria-pressed="true" role="button" tabindex="0">Month
-    </div>
 
+<nav id="top-pane">
+
+  <div
+      class="cal-menu-leftmost-button cal-menu-button cal-menu-next-button goog-inline-block goog-flat-button"
+      id="nb1" aria-pressed="true" role="button" tabindex="0">
+    <div class="icon icon-bars goog-inline-block"></div>
   </div>
-  <div class="lower-controls goog-inline-block">
 
-    <div
-        class="cal-menu-button cal-menu-button-new-event emphasis-button cal-menu-leftmost-button goog-inline-block goog-flat-button cal-menu-next-button"
-        id="nb7" role="button" tabindex="0">Новая падзея
-    </div>
-
-    <div
-        class="goog-flat-button-collapse-right goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button cal-menu-button-back goog-inline-block goog-flat-button cal-menu-next-button"
-        id="nb2" role="button" tabindex="0">
-      <div class="icon-triangle icon-nav-left goog-inline-block"></div>
-    </div><div
-        class="goog-flat-button-collapse-left cal-menu-rightmost-button goog-flat-button-bord-rad-collapse-left cal-menu-button cal-menu-button-forward goog-inline-block goog-flat-button"
-        id="nb3" role="button" tabindex="0">
-      <div class="icon-triangle icon-nav-right goog-inline-block"></div>
-    </div>
-
+  <div
+      class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right goog-inline-block goog-flat-button cal-menu-next-button"
+      id="nb1" aria-pressed="true" role="button" tabindex="0">Day
   </div>
-</div>
-<div id="main-body">
+  <div
+      class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-inline-block goog-flat-button"
+      id="nb1" aria-pressed="true" role="button" tabindex="0">Month
+  </div>
+  <div
+      class="cal-menu-button cal-menu-button-new-event emphasis-button cal-menu-rightmost-button goog-inline-block goog-flat-button cal-menu-next-button"
+      id="nb7" role="button" tabindex="0">
+    <div class="icon icon-plus goog-inline-block"></div>
+  </div>
+</nav>
 
-<div class="main-pane" id="main-pane">
-<div id="main-pane-header">
+
+
+<div id="main-pane-header" style="flex: 1 1 0;">
 <div class="main-pane-header-container-wk"
      id="main-pane-header-container">
 <div id="main-pane-header-wk-daynames">
@@ -488,7 +475,7 @@
 </div>
 </div>
 </div>
-<div class="mpbs-wk-scroll-horz-off" style="height:254px"
+<div class="mpbs-wk-scroll-horz-off" style="flex: 1 1 0;"
      id="main-pane-body-scrollable-wk">
 <div id="hours-container">
   <div class="time-marker-head" style="top:827.9px;"
@@ -977,9 +964,28 @@
 </div>
 </div>
 </div>
-</div>
-</div>
-</div>
+
+
+
+<nav id="bottom-pane">
+
+  <div
+      class="cal-menu-button goog-inline-block goog-flat-button cal-menu-next-button"
+      id="nb1" aria-pressed="true" role="button" tabindex="0">Now
+  </div>
+
+  <div
+      class="goog-flat-button-collapse-right goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button cal-menu-button-back goog-inline-block goog-flat-button cal-menu-next-button"
+      id="nb2" role="button" tabindex="0">
+    <div class="icon-triangle icon-nav-left goog-inline-block"></div>
+  </div>
+  <div
+      class="goog-flat-button-collapse-left cal-menu-rightmost-button goog-flat-button-bord-rad-collapse-left cal-menu-button cal-menu-button-forward goog-inline-block goog-flat-button"
+      id="nb3" role="button" tabindex="0">
+    <div class="icon-triangle icon-nav-right goog-inline-block"></div>
+  </div>
+</nav>
+</main>
 <div class="faraway-cont"></div>
 </body>
 </html>
