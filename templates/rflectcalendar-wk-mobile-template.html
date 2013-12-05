@@ -130,31 +130,35 @@
 </div>
 
 <nav id="top-pane">
-
-  <div
-      class="cal-menu-leftmost-button cal-menu-button cal-menu-next-button goog-inline-block goog-flat-button"
-      id="nb1" aria-pressed="true" role="button" tabindex="0">
-    <div class="icon icon-bars goog-inline-block"></div>
+  <div class="pane-left">
+    <div
+        class="cal-menu-button goog-flat-button goog-inline-block button-icon"
+        id="nb1" aria-pressed="true" role="button" tabindex="0">
+      <div class="icon icon-bars goog-inline-block"></div>
+    </div>
   </div>
 
-  <div
-      class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right goog-inline-block goog-flat-button cal-menu-next-button"
-      id="nb1" aria-pressed="true" role="button" tabindex="0">Day
+  <div class="pane-right">
+    <div
+        class="cal-menu-button-new-event emphasis-button cal-menu-button goog-flat-button goog-inline-block button-icon"
+        id="nb4" role="button" tabindex="0">
+      <div class="icon icon-plus goog-inline-block"></div>
+    </div>
   </div>
-  <div
-      class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-inline-block goog-flat-button"
-      id="nb1" aria-pressed="true" role="button" tabindex="0">Month
-  </div>
-  <div
-      class="cal-menu-button cal-menu-button-new-event emphasis-button cal-menu-rightmost-button goog-inline-block goog-flat-button cal-menu-next-button"
-      id="nb7" role="button" tabindex="0">
-    <div class="icon icon-plus goog-inline-block"></div>
+
+  <div class="pane-center">
+    <div
+        class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block"
+        id="nb2" aria-pressed="true" role="button" tabindex="0">Day
+    </div><div
+        class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block"
+        id="nb3" aria-pressed="true" role="button" tabindex="0">Month
+    </div>
   </div>
 </nav>
 
 
-
-<div id="main-pane-header" style="flex: 1 1 0;">
+<div id="main-pane-header">
 <div class="main-pane-header-container-wk"
      id="main-pane-header-container">
 <div id="main-pane-header-wk-daynames">
@@ -475,8 +479,8 @@
 </div>
 </div>
 </div>
-<div class="mpbs-wk-scroll-horz-off" style="flex: 1 1 0;"
-     id="main-pane-body-scrollable-wk">
+<div class="mpbs-wk-scroll-horz-off"
+     id="main-pane-body-scrollable-wk" style="height:300px">
 <div id="hours-container">
   <div class="time-marker-head" style="top:827.9px;"
        id="time-marker-head"></div>
@@ -966,25 +970,27 @@
 </div>
 
 
-
 <nav id="bottom-pane">
-
-  <div
-      class="cal-menu-button goog-inline-block goog-flat-button cal-menu-next-button"
-      id="nb1" aria-pressed="true" role="button" tabindex="0">Now
+  <div class="pane-left">
+    <div
+        class="cal-menu-button goog-flat-button goog-inline-block"
+        id="nb5" aria-pressed="true" role="button" tabindex="0">Now
+    </div>
   </div>
 
-  <div
-      class="goog-flat-button-collapse-right goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button cal-menu-button-back goog-inline-block goog-flat-button cal-menu-next-button"
-      id="nb2" role="button" tabindex="0">
-    <div class="icon-triangle icon-nav-left goog-inline-block"></div>
-  </div>
-  <div
-      class="goog-flat-button-collapse-left cal-menu-rightmost-button goog-flat-button-bord-rad-collapse-left cal-menu-button cal-menu-button-forward goog-inline-block goog-flat-button"
-      id="nb3" role="button" tabindex="0">
-    <div class="icon-triangle icon-nav-right goog-inline-block"></div>
+  <div class="pane-right">
+    <div
+        class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block"
+        id="nb6" role="button" tabindex="0">
+      <div class="icon-triangle icon-nav-left goog-inline-block"></div>
+    </div><div
+        class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block"
+        id="nb7" role="button" tabindex="0">
+      <div class="icon-triangle icon-nav-right goog-inline-block"></div>
+    </div>
   </div>
 </nav>
+
 </main>
 <div class="faraway-cont"></div>
 </body>

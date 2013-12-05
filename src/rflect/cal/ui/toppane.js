@@ -29,10 +29,13 @@ goog.require('rflect.cal.predefined');
  * Top pane main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
+ * @param {boolean=} opt_topPane Optional - whether pane is in top
+ * configuration. True - top, false - bottom. Omitted - both configurations
+ * combined.
  * @constructor
  * @extends {rflect.ui.Component}
  */
-rflect.cal.ui.TopPane = function(aViewManager, aTimeManager) {
+rflect.cal.ui.TopPane = function(aViewManager, aTimeManager, opt_topPane) {
   rflect.ui.Component.call(this);
 
   /**
@@ -48,6 +51,9 @@ rflect.cal.ui.TopPane = function(aViewManager, aTimeManager) {
    * @private
    */
   this.timeManager_ = aTimeManager;
+
+  this.configTop_ =
+  this.configTop_ =
 
   // Add buttons. No need for captions or content here, because we've decorated
   // them.
@@ -99,84 +105,129 @@ rflect.cal.ui.TopPane.prototype.decorateInternal = function(aElement,
 };
 
 
-/**
- * Builds body of component.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
- * @see rflect.ui.Component#build
- * @protected
- */
-rflect.cal.ui.TopPane.prototype.buildInternal = function(aSb) {
-  // TODO(alexk): concatenate strings.
-  var parts = [
-    '<div id="top-pane">',
-    '<div id="sidebar-controls">',
-    // First button container.
-    // 'Now' button.
-    '<div id="' + rflect.cal.predefined.BUTTON_NOW_ID +
-        '" class="' + goog.getCssName('goog-flat-button-collapse-right') + ' ',
-    goog.getCssName('cal-menu-leftmost-button') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-right'),
-    ' ' + goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-now') + '">',
-    rflect.cal.i18n.Symbols.NOW,
-    '</div>',
+if (rflect.MOBILE) {
+  /**
+   * Builds body of component.
+   * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
+   * to.
+   * @see rflect.ui.Component#build
+   * @protected
+   */
+  rflect.cal.ui.TopPane.prototype.buildInternal = function(aSb) {
+    var parts = [
+      '<nav id="top-pane">',
+      '<div class="pane-left">',
+      '<div class="cal-menu-button goog-flat-button goog-inline-block button-icon"'
+          + 'id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '">' +
+          '<div class="icon icon-bars goog-inline-block"></div>',
+      '</div>',
+      '</div>',
+      '<div class="pane-right">',
+      '<div class="cal-menu-button-new-event emphasis-button cal-menu-button goog-flat-button goog-inline-block button-icon"',
+      'id="' + rflect.cal.predefined.BUTTON_NEW_EVENT_ID + '">',
+      '<div class="icon icon-plus goog-inline-block"></div>',
+      '</div>',
+      '</div>',
+      '<div class="pane-center">',
+      '<div class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block"',
+      'id="' + rflect.cal.predefined.BUTTON_DAY_ID + '">',
+      rflect.cal.i18n.Symbols.DAY,
+      '</div>',
+      '<div class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block"',
+      'id="' + rflect.cal.predefined.BUTTON_MONTH_ID + '">',
+      rflect.cal.i18n.Symbols.MONTH,
+      '</div>',
+      '</div>',
+      '</nav>'
+    ];
 
-    // Back button.
-    '<div id="' + rflect.cal.predefined.BUTTON_PREV_ID +
-        '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
-    goog.getCssName('goog-flat-button-collapse-right') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-both') + ' ',
-    goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-back') + '"><div class="' + goog.getCssName('icon-triangle') + ' ' + goog.getCssName('icon-nav-left') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div>',
+    // Form html. From index 1, because 0 is the html of outer container, which
+    // we don't create in that method but just decorate.
+    for (var counter = 1, length = parts.length - 1;
+         counter < length; counter++) {
+      aSb.append(parts[counter]);
+    }
+  };
+} else {
+  /**
+   * Builds body of component.
+   * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
+   * to.
+   * @see rflect.ui.Component#build
+   * @protected
+   */
+  rflect.cal.ui.TopPane.prototype.buildInternal = function(aSb) {
+    // TODO(alexk): concatenate strings.
+    var parts = [
+      '<div id="top-pane">',
+      '<div id="sidebar-controls">',
+      // First button container.
+      // 'Now' button.
+      '<div id="' + rflect.cal.predefined.BUTTON_NOW_ID +
+          '" class="' + goog.getCssName('goog-flat-button-collapse-right') + ' ',
+      goog.getCssName('cal-menu-leftmost-button') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-right'),
+      ' ' + goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-now') + '">',
+      rflect.cal.i18n.Symbols.NOW,
+      '</div>',
 
-    // Forward button.
-    '<div id="' + rflect.cal.predefined.BUTTON_NEXT_ID + '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
-    goog.getCssName('cal-menu-rightmost-button') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-left') + ' ',
-    goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-forward') + '"><div class="' + goog.getCssName('icon-triangle') + ' ' + goog.getCssName('icon-nav-right') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div></div>',
+      // Back button.
+      '<div id="' + rflect.cal.predefined.BUTTON_PREV_ID +
+          '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
+      goog.getCssName('goog-flat-button-collapse-right') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-both') + ' ',
+      goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-back') + '"><div class="' + goog.getCssName('icon-triangle') + ' ' + goog.getCssName('icon-nav-left') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div>',
 
-    '<div id="main-pane-controls"><div id="main-pane-controls-right">',
-    '<div style="margin-right: 0px;" class="' + goog.getCssName('goog-inline-block') + '">',
-    // Day button.
-    '<div id="' + rflect.cal.predefined.BUTTON_DAY_ID + '" class="' + goog.getCssName('goog-flat-button-collapse-right') + ' ' + goog.getCssName('goog-toggle-button') + ' ',
-    goog.getCssName('goog-flat-button-bord-rad-collapse-right') + ' ' + goog.getCssName('cal-menu-button') + '">',
-    rflect.cal.i18n.Symbols.DAY,
-    '</div>',
-    // Week button.
-    '<div id="' + rflect.cal.predefined.BUTTON_WEEK_ID + '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ' + goog.getCssName('goog-toggle-button') + ' ',
-    goog.getCssName('goog-flat-button-collapse-right') + ' ',
-    goog.getCssName('goog-flat-button-bord-rad-collapse-both') + ' ' + goog.getCssName('cal-menu-button') + '">',
-    rflect.cal.i18n.Symbols.WEEK,
-    '</div>',
-    // Month button.
-    '<div id="' + rflect.cal.predefined.BUTTON_MONTH_ID + '" class="' + goog.getCssName('goog-flat-button') + ' ' + goog.getCssName('goog-flat-button-collapse-left') + ' ' + goog.getCssName('goog-toggle-button') + ' ',
-    goog.getCssName('goog-flat-button-bord-rad-collapse-left') + ' ' + goog.getCssName('cal-menu-button') + ' ',
-    goog.getCssName('cal-menu-button-month-view') + '">',
-    rflect.cal.i18n.Symbols.MONTH,
-    '</div></div>',
-    // Options button.
-    '<div id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '" class="' + goog.getCssName('goog-flat-button') + ' ' + goog.getCssName('cal-menu-rightmost-button') + ' ' + goog.getCssName('cal-menu-button') + ' ',
-    goog.getCssName('cal-menu-button-options') + '">',
-    '<div class="' + goog.getCssName('icon') + ' ' + goog.getCssName('icon-cog') + ' ' + goog.getCssName('icon-settings') + '"></div>',
-    '</div></div>',
-    '<div id="main-pane-controls-left"><div id="main-pane-controls-left-left">',
-    // New event button.
-    '<div id="' + rflect.cal.predefined.BUTTON_NEW_EVENT_ID + '" class="' + goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-new-event') + ' ' + goog.getCssName('emphasis-button') + ' ',
-    goog.getCssName('cal-menu-leftmost-button') + '">',
-    rflect.cal.i18n.Symbols.NEW_EVENT,
-    '</div></div>',
-    '<div id="main-pane-controls-left-right">',
-    // Time period label.
-    '<div id="time-period-label">',
-    this.getDateHeader(),
-    '</div></div>',
-    '</div></div>',
-    '</div>'
-  ];
+      // Forward button.
+      '<div id="' + rflect.cal.predefined.BUTTON_NEXT_ID + '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
+      goog.getCssName('cal-menu-rightmost-button') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-left') + ' ',
+      goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-forward') + '"><div class="' + goog.getCssName('icon-triangle') + ' ' + goog.getCssName('icon-nav-right') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div></div>',
 
-  // Form html. From index 1, because 0 is the html of outer container, which
-  // we don't create in that method but just decorate.
-  for (var counter = 1, length = parts.length - 1;
-       counter < length; counter++) {
-    aSb.append(parts[counter]);
-  }
-};
+      '<div id="main-pane-controls"><div id="main-pane-controls-right">',
+      '<div style="margin-right: 0px;" class="' + goog.getCssName('goog-inline-block') + '">',
+      // Day button.
+      '<div id="' + rflect.cal.predefined.BUTTON_DAY_ID + '" class="' + goog.getCssName('goog-flat-button-collapse-right') + ' ' + goog.getCssName('goog-toggle-button') + ' ',
+      goog.getCssName('goog-flat-button-bord-rad-collapse-right') + ' ' + goog.getCssName('cal-menu-button') + '">',
+      rflect.cal.i18n.Symbols.DAY,
+      '</div>',
+      // Week button.
+      '<div id="' + rflect.cal.predefined.BUTTON_WEEK_ID + '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ' + goog.getCssName('goog-toggle-button') + ' ',
+      goog.getCssName('goog-flat-button-collapse-right') + ' ',
+      goog.getCssName('goog-flat-button-bord-rad-collapse-both') + ' ' + goog.getCssName('cal-menu-button') + '">',
+      rflect.cal.i18n.Symbols.WEEK,
+      '</div>',
+      // Month button.
+      '<div id="' + rflect.cal.predefined.BUTTON_MONTH_ID + '" class="' + goog.getCssName('goog-flat-button') + ' ' + goog.getCssName('goog-flat-button-collapse-left') + ' ' + goog.getCssName('goog-toggle-button') + ' ',
+      goog.getCssName('goog-flat-button-bord-rad-collapse-left') + ' ' + goog.getCssName('cal-menu-button') + ' ',
+      goog.getCssName('cal-menu-button-month-view') + '">',
+      rflect.cal.i18n.Symbols.MONTH,
+      '</div></div>',
+      // Options button.
+      '<div id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '" class="' + goog.getCssName('goog-flat-button') + ' ' + goog.getCssName('cal-menu-rightmost-button') + ' ' + goog.getCssName('cal-menu-button') + ' ',
+      goog.getCssName('cal-menu-button-options') + '">',
+      '<div class="' + goog.getCssName('icon') + ' ' + goog.getCssName('icon-cog') + ' ' + goog.getCssName('icon-settings') + '"></div>',
+      '</div></div>',
+      '<div id="main-pane-controls-left"><div id="main-pane-controls-left-left">',
+      // New event button.
+      '<div id="' + rflect.cal.predefined.BUTTON_NEW_EVENT_ID + '" class="' + goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-new-event') + ' ' + goog.getCssName('emphasis-button') + ' ',
+      goog.getCssName('cal-menu-leftmost-button') + '">',
+      rflect.cal.i18n.Symbols.NEW_EVENT,
+      '</div></div>',
+      '<div id="main-pane-controls-left-right">',
+      // Time period label.
+      '<div id="time-period-label">',
+      this.getDateHeader(),
+      '</div></div>',
+      '</div></div>',
+      '</div>'
+    ];
+
+    // Form html. From index 1, because 0 is the html of outer container, which
+    // we don't create in that method but just decorate.
+    for (var counter = 1, length = parts.length - 1;
+         counter < length; counter++) {
+      aSb.append(parts[counter]);
+    }
+  };
+}
 
 
 /**
