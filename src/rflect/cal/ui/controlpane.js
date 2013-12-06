@@ -7,7 +7,7 @@
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
-goog.provide('rflect.cal.ui.TopPane');
+goog.provide('rflect.cal.ui.ControlPane');
 
 goog.require('goog.array');
 goog.require('goog.events.EventType');
@@ -26,16 +26,15 @@ goog.require('rflect.cal.predefined');
 
 
 /**
- * Top pane main class.
+ * Control pane main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
- * @param {boolean=} opt_topPane Optional - whether pane is in top
- * configuration. True - top, false - bottom. Omitted - both configurations
- * combined.
+ * @param {boolean=} opt_configTop Optional - whether pane is in top or bottom
+ * configuration. True - top, false - bottom. Makes sense only for mobile.
  * @constructor
  * @extends {rflect.ui.Component}
  */
-rflect.cal.ui.TopPane = function(aViewManager, aTimeManager, opt_topPane) {
+rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, opt_configTop) {
   rflect.ui.Component.call(this);
 
   /**
@@ -52,29 +51,55 @@ rflect.cal.ui.TopPane = function(aViewManager, aTimeManager, opt_topPane) {
    */
   this.timeManager_ = aTimeManager;
 
-  this.configTop_ =
-  this.configTop_ =
+  /**
+   * Whether configuration is top.
+   * @type {boolean}
+   * @private
+   */
+  this.configTop_ = rflect.MOBILE && opt_configTop;
+
+  /**
+   * Whether configuration is bottom.
+   * @type {boolean}
+   * @private
+   */
+  this.configBottom_ = rflect.MOBILE && opt_configBottom;
+
+  /**
+   * Whether configuration is combined - one top pane only.
+   * @type {boolean}
+   * @private
+   */
+  this.configCombined_ = !rflect.MOBILE;
 
   // Add buttons. No need for captions or content here, because we've decorated
   // them.
-  this.addChild(this.buttonNow_ = new goog.ui.ToggleButton(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.buttonPrev_ = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.buttonNext_ = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.buttonNewEvent_ = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.buttonDay_ = new goog.ui.ToggleButton(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.buttonWeek_ = new goog.ui.ToggleButton(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.buttonMonth_ = new goog.ui.ToggleButton(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.buttonOptions_ = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+  if (this.configBottom_ || this.configCombined_)
+    this.addChild(this.buttonNow_ = new goog.ui.ToggleButton(null,
+        goog.ui.FlatButtonRenderer.getInstance()));
+  if (this.configBottom_ || this.configCombined_)
+    this.addChild(this.buttonPrev_ = new goog.ui.Button(null,
+        goog.ui.FlatButtonRenderer.getInstance()));
+  if (this.configBottom_ || this.configCombined_)
+    this.addChild(this.buttonNext_ = new goog.ui.Button(null,
+        goog.ui.FlatButtonRenderer.getInstance()));
+  if (this.configTop_ || this.configCombined_)
+    this.addChild(this.buttonNewEvent_ = new goog.ui.Button(null,
+        goog.ui.FlatButtonRenderer.getInstance()));
+  if (this.configTop_ || this.configCombined_)
+    this.addChild(this.buttonDay_ = new goog.ui.ToggleButton(null,
+        goog.ui.FlatButtonRenderer.getInstance()));
+  if (this.configCombined_)
+    this.addChild(this.buttonWeek_ = new goog.ui.ToggleButton(null,
+        goog.ui.FlatButtonRenderer.getInstance()));
+  if (this.configTop_ || this.configCombined_)
+    this.addChild(this.buttonMonth_ = new goog.ui.ToggleButton(null,
+        goog.ui.FlatButtonRenderer.getInstance()));
+  if (this.configCombined_)
+    this.addChild(this.buttonOptions_ = new goog.ui.Button(null,
+        goog.ui.FlatButtonRenderer.getInstance()));
 };
-goog.inherits(rflect.cal.ui.TopPane, rflect.ui.Component);
+goog.inherits(rflect.cal.ui.ControlPane, rflect.ui.Component);
 
 
 /**
@@ -82,13 +107,13 @@ goog.inherits(rflect.cal.ui.TopPane, rflect.ui.Component);
  * @type {Element}
  * @private
  */
-rflect.cal.ui.TopPane.prototype.timeLabel_ = null;
+rflect.cal.ui.ControlPane.prototype.timeLabel_ = null;
 
 
 /**
  * Creates Top Pane on an empty div element.
  */
-rflect.cal.ui.TopPane.prototype.createDom = function() {
+rflect.cal.ui.ControlPane.prototype.createDom = function() {
   this.decorateInternal(this.dom_.createElement('div'));
 };
 
@@ -97,25 +122,26 @@ rflect.cal.ui.TopPane.prototype.createDom = function() {
  * Decorates an existing html div element as a Top Pane.
  * @override
  */
-rflect.cal.ui.TopPane.prototype.decorateInternal = function(aElement,
+rflect.cal.ui.ControlPane.prototype.decorateInternal = function(aElement,
                                                          opt_doNotBuildBody) {
   // Set this.element_.
-  rflect.cal.ui.TopPane.superClass_.decorateInternal.call(this, aElement,
+  rflect.cal.ui.ControlPane.superClass_.decorateInternal.call(this, aElement,
       opt_doNotBuildBody);
 };
 
 
-if (rflect.MOBILE) {
-  /**
-   * Builds body of component.
-   * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
-   * to.
-   * @see rflect.ui.Component#build
-   * @protected
-   */
-  rflect.cal.ui.TopPane.prototype.buildInternal = function(aSb) {
+/**
+ * Builds body of component.
+ * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
+ * to.
+ * @see rflect.ui.Component#build
+ * @protected
+ */
+rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
+  if (this.configTop_) {
+
     var parts = [
-      '<nav id="top-pane">',
+      '<nav id="top-pane" class="control-pane">',
       '<div class="pane-left">',
       '<div class="cal-menu-button goog-flat-button goog-inline-block button-icon"'
           + 'id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '">' +
@@ -141,25 +167,33 @@ if (rflect.MOBILE) {
       '</nav>'
     ];
 
-    // Form html. From index 1, because 0 is the html of outer container, which
-    // we don't create in that method but just decorate.
-    for (var counter = 1, length = parts.length - 1;
-         counter < length; counter++) {
-      aSb.append(parts[counter]);
-    }
-  };
-} else {
-  /**
-   * Builds body of component.
-   * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
-   * to.
-   * @see rflect.ui.Component#build
-   * @protected
-   */
-  rflect.cal.ui.TopPane.prototype.buildInternal = function(aSb) {
-    // TODO(alexk): concatenate strings.
-    var parts = [
-      '<div id="top-pane">',
+  if (this.configBottom_) {
+
+    parts = [
+      '<nav id="bottom-pane" class="control-pane">',
+      '<div class="pane-left">',
+      '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
+          'id="' + rflect.cal.predefined.BUTTON_NOW_ID + '">',
+      rflect.cal.i18n.Symbols.NOW
+      '</div>',
+      '</div>',
+      '<div class="pane-right">',
+      '<div class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block"',
+      'id="' + rflect.cal.predefined.BUTTON_PREV_ID + '">',
+      '<div class="icon-triangle icon-nav-left goog-inline-block"></div>',
+      '</div>',
+      '<div class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block"',
+      'id="' + rflect.cal.predefined.BUTTON_NEXT_ID + ''">',
+      '<div class="icon-triangle icon-nav-right goog-inline-block"></div>',
+      '</div>',
+      '</div>',
+      '</nav>'
+    ];
+
+  } else {
+
+    parts = [
+      '<div id="top-pane" class="' + goog.getCssName('control-pane') + '">',
       '<div id="sidebar-controls">',
       // First button container.
       // 'Now' button.
@@ -220,46 +254,47 @@ if (rflect.MOBILE) {
       '</div>'
     ];
 
-    // Form html. From index 1, because 0 is the html of outer container, which
-    // we don't create in that method but just decorate.
-    for (var counter = 1, length = parts.length - 1;
-         counter < length; counter++) {
-      aSb.append(parts[counter]);
-    }
-  };
+  }
+
+  // Form html. From index 1, because 0 is the html of outer container, which
+  // we don't create in that method but just decorate.
+  for (var counter = 1, length = parts.length - 1;
+       counter < length; counter++) {
+    aSb.append(parts[counter]);
+  }
 }
 
 
 /**
  * Decorates buttons, attaches event handlers for them.
  */
-rflect.cal.ui.TopPane.prototype.enterDocument = function() {
-  this.buttonNow_.decorate(this.dom_.getElement(
+rflect.cal.ui.ControlPane.prototype.enterDocument = function() {
+  this.buttonNow_ && this.buttonNow_.decorate(this.dom_.getElement(
       rflect.cal.predefined.BUTTON_NOW_ID));
-  this.buttonPrev_.decorate(this.dom_.getElement(
+  this.buttonPrev_ && this.buttonPrev_.decorate(this.dom_.getElement(
       rflect.cal.predefined.BUTTON_PREV_ID));
-  this.buttonNext_.decorate(this.dom_.getElement(
+  this.buttonNext_ && this.buttonNext_.decorate(this.dom_.getElement(
       rflect.cal.predefined.BUTTON_NEXT_ID));
 
-  this.buttonNewEvent_.decorate(this.dom_.getElement(
+  this.buttonNewEvent_ && this.buttonNewEvent_.decorate(this.dom_.getElement(
       rflect.cal.predefined.BUTTON_NEW_EVENT_ID));
 
-  this.buttonDay_.decorate(this.dom_.getElement(
+  this.buttonDay_ && this.buttonDay_.decorate(this.dom_.getElement(
       rflect.cal.predefined.BUTTON_DAY_ID));
-  this.buttonWeek_.decorate(this.dom_.getElement(
+  this.buttonWeek_ && this.buttonWeek_.decorate(this.dom_.getElement(
       rflect.cal.predefined.BUTTON_WEEK_ID));
-  this.buttonMonth_.decorate(this.dom_.getElement(
+  this.buttonMonth_ && this.buttonMonth_.decorate(this.dom_.getElement(
       rflect.cal.predefined.BUTTON_MONTH_ID));
-  this.buttonOptions_.decorate(this.dom_.getElement(
+  this.buttonOptions_ && this.buttonOptions_.decorate(this.dom_.getElement(
       rflect.cal.predefined.BUTTON_SETTINGS_ID));
 
-  rflect.cal.ui.TopPane.superClass_.enterDocument.call(this);
+  rflect.cal.ui.ControlPane.superClass_.enterDocument.call(this);
 
   // Update buttons.
   this.updateButtons_();
 
   // Attaching event handlers.
-  this.getHandler().listen(this.buttonNewEvent_,
+  this.buttonNewEvent_ && this.getHandler().listen(this.buttonNewEvent_,
       goog.ui.Component.EventType.ACTION, function(aEvent) {
         this.dispatchEvent(rflect.cal.EventType.MENU_COMMAND_NEW_EVENT);
         aEvent.target.setFocused(false);
@@ -270,7 +305,7 @@ rflect.cal.ui.TopPane.prototype.enterDocument = function() {
 /**
  * @return {string} Date header in formatted form.
  */
-rflect.cal.ui.TopPane.prototype.getDateHeader = function() {
+rflect.cal.ui.ControlPane.prototype.getDateHeader = function() {
   var startDate = this.timeManager_.daySeries[0];
   var endDate = /** @type {rflect.date.DateShim} */
       (goog.array.peek(this.timeManager_.daySeries));
@@ -325,16 +360,16 @@ rflect.cal.ui.TopPane.prototype.getDateHeader = function() {
  * No-op is used in order not to allow updateBeforeRedraw to be called on
  * buttons which don't have it.
  */
-rflect.cal.ui.TopPane.prototype.updateBeforeRedraw = goog.nullFunction;
+rflect.cal.ui.ControlPane.prototype.updateBeforeRedraw = goog.nullFunction;
 
 
 /**
  * Updates top pane by setting new date header.
  */
-rflect.cal.ui.TopPane.prototype.updateByRedraw = function() {
+rflect.cal.ui.ControlPane.prototype.updateByRedraw = function() {
   if (!this.timeLabel_)
     this.timeLabel_ = this.dom_.getElement('time-period-label');
-  this.timeLabel_.innerHTML = this.getDateHeader();
+  this.timeLabel_ && this.timeLabel_.innerHTML = this.getDateHeader();
   // Update buttons.
   this.updateButtons_();
 };
@@ -344,13 +379,16 @@ rflect.cal.ui.TopPane.prototype.updateByRedraw = function() {
  * Updates buttons according to current view.
  * @private
  */
-rflect.cal.ui.TopPane.prototype.updateButtons_ = function() {
+rflect.cal.ui.ControlPane.prototype.updateButtons_ = function() {
   var viewsToButtons = {};
   viewsToButtons[rflect.cal.ViewType.DAY] = this.buttonDay_;
   viewsToButtons[rflect.cal.ViewType.WEEK] = this.buttonWeek_;
   viewsToButtons[rflect.cal.ViewType.MONTH] = this.buttonMonth_;
   for (var view in viewsToButtons) {
     var button = viewsToButtons[view];
+    // Not all view buttons are present in some configurations.
+    if (!button)
+      continue;
     if (this.viewManager_.currentView == view) {
       button.setChecked(true);
       button.setFocused(false);
@@ -360,6 +398,10 @@ rflect.cal.ui.TopPane.prototype.updateButtons_ = function() {
       button.setAutoStates(goog.ui.Component.State.CHECKED, true);
     }
   }
+  
+  if (!this.buttonNow_)
+    return;
+  
   if (this.timeManager_.isInNowPoint) {
     this.buttonNow_.setChecked(true);
     this.buttonNow_.setFocused(false);
@@ -379,8 +421,8 @@ rflect.cal.ui.TopPane.prototype.updateButtons_ = function() {
  * @override
  * @protected
  */
-rflect.cal.ui.TopPane.prototype.disposeInternal = function() {
-  rflect.cal.ui.TopPane.superClass_.disposeInternal.call(this);
+rflect.cal.ui.ControlPane.prototype.disposeInternal = function() {
+  rflect.cal.ui.ControlPane.superClass_.disposeInternal.call(this);
 
   this.timeManager_ = null;
 

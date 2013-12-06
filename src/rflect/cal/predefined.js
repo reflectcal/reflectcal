@@ -4,6 +4,8 @@
 
 /**
  * @fileoverview Set of predefined constants for component. Corresponds to file.
+ * TODO(alexk): get rid of most of these constants, as there's no hardcode
+ * anymore.
  * @see {../../../css/rflectcalendar.css}.
  * @author alexeykofficial@gmail.com (Alex K.)
  */
@@ -26,7 +28,7 @@ rflect.UI_TYPE = '';
  * @type {boolean}
  * @const
  */
-rflect.UI_MOBILE = rflect.UI_TYPE == 'MOBILE';
+rflect.MOBILE = rflect.UI_TYPE == 'MOBILE';
 
 
 /**

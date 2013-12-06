@@ -18,7 +18,7 @@ goog.require('rflect.cal.ui.EventPane');
 goog.require('rflect.cal.ui.EventPane.EventTypes');
 goog.require('rflect.cal.ui.MainPane');
 goog.require('rflect.cal.ui.MiniCal');
-goog.require('rflect.cal.ui.TopPane');
+goog.require('rflect.cal.ui.ControlPane');
 goog.require('rflect.cal.ui.CalSelector');
 goog.require('rflect.cal.ui.CalSelector.EventType');
 goog.require('rflect.cal.ui.TaskSelector');
@@ -87,8 +87,15 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
 
   // Add child components in order for them to be included in propagation of
   // string building and updating.
-  this.addChild(this.topPane_ = new rflect.cal.ui.TopPane(this.viewManager_,
-      this.timeManager_));
+  if (rflect.MOBILE) {
+    this.addChild(this.topPane_ = new rflect.cal.ui.ControlPane(
+        this.viewManager_, this.timeManager_, true));
+    this.addChild(this.bottomPane_ = new rflect.cal.ui.ControlPane(
+        this.viewManager_, this.timeManager_, false));
+  } else {
+    this.addChild(this.topPane_ = new rflect.cal.ui.ControlPane(this.viewManager_,
+        this.timeManager_));
+  }
   this.addChild(this.mainPane_ = new rflect.cal.ui.MainPane(this.viewManager_,
         this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
         this.blockManager_, this.transport_));
@@ -660,6 +667,7 @@ rflect.cal.ui.MainBody.prototype.disposeInternal = function() {
   rflect.cal.ui.MainBody.superClass_.disposeInternal.call(this);
 
   this.topPane_ = null;
+  this.bottomPane_ = null;
   this.miniCal = null;
   this.mainPane_ = null;
   this.viewManager_ = null;
