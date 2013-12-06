@@ -14,16 +14,17 @@ goog.require('goog.style');
 goog.require('rflect.ui.Component');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.Transport');
+goog.require('rflect.cal.ui.ControlPane');
 goog.require('rflect.cal.ui.EventPane');
 goog.require('rflect.cal.ui.EventPane.EventTypes');
 goog.require('rflect.cal.ui.MainPane');
 goog.require('rflect.cal.ui.MiniCal');
-goog.require('rflect.cal.ui.ControlPane');
 goog.require('rflect.cal.ui.CalSelector');
 goog.require('rflect.cal.ui.CalSelector.EventType');
 goog.require('rflect.cal.ui.TaskSelector');
 goog.require('rflect.cal.ui.SettingsPane');
 goog.require('rflect.cal.ui.SettingsPane.EventTypes');
+goog.require('rflect.cal.ui.SidePane');
 
 
 
@@ -88,6 +89,8 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
   // Add child components in order for them to be included in propagation of
   // string building and updating.
   if (rflect.MOBILE) {
+    this.addChild(this.sidePane_ = new rflect.cal.ui.SidePane(
+        this.viewManager_, this.timeManager_));
     this.addChild(this.topPane_ = new rflect.cal.ui.ControlPane(
         this.viewManager_, this.timeManager_, true));
     this.addChild(this.bottomPane_ = new rflect.cal.ui.ControlPane(
@@ -123,7 +126,17 @@ goog.inherits(rflect.cal.ui.MainBody, rflect.ui.Component);
  * @const
  * @private
  */
-rflect.cal.ui.MainBody.HTML_PARTS_ = [
+rflect.cal.ui.MainBody.HTML_PARTS_ = rflect.MOBILE ? [
+  '<main id="cal-container" class="cal-container">',
+  '<div id="left-pane" style="display:none">',
+  '</div>',
+  '<nav id="top-pane" class="control-pane">',
+  '</nav>',
+
+  '<nav id="bottom-pane" class="control-pane">',
+  '</nav>',
+  '</main>'
+  ] : [
   '<div id="cal-container" class="' + goog.getCssName('cal-container') + '">',
   '<div id="top-pane">',
   '</div>',
@@ -256,33 +269,65 @@ rflect.cal.ui.MainBody.prototype.decorateInternal = function(aElement,
  */
 rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
   var parts = rflect.cal.ui.MainBody.HTML_PARTS_;
-  // Form html. From index 1, because 0 is the html of outer container, which
-  // we don't create in that method but just decorate.
-  for (var counter = 1, length = parts.length - 1;
-       counter < length; counter++) {
-    aSb.append(parts[counter]);
-    switch (counter) {
-      // Include top pane in common buffer.
-      case 1: {
-        this.topPane_.build(aSb);
-      };break;
-      case 6: {
-        this.miniCal.build(aSb);
-      };break;
-      case 8: {
-        this.calSelector_.build(aSb);
-      };break;
-      case 10: {
-        this.taskSelector_.build(aSb);
-      };break;
-      // Include main pane in common buffer.
-      case 16: {
-        this.mainPane_.build(aSb);
-      };break;
 
-      default: break;
+  if (rflect.MOBILE) {
+
+    // Form html. From index 1, because 0 is the html of outer container, which
+    // we don't create in that method but just decorate.
+    for (var counter = 1, length = parts.length - 1;
+         counter < length; counter++) {
+      aSb.append(parts[counter]);
+      switch (counter) {
+        // Include top pane in common buffer.
+        case 1: {
+          this.sidePane_.build(aSb);
+        };break;
+        case 3: {
+          this.topPane_.build(aSb);
+        };break;
+        case 4: {
+          this.mainPane_.build(aSb);
+        };break;
+        case 4: {
+          this.bottomPane_.build(aSb);
+        };break;
+
+        default: break;
+      }
     }
+
+  } else {
+
+    // Form html. From index 1, because 0 is the html of outer container, which
+    // we don't create in that method but just decorate.
+    for (var counter = 1, length = parts.length - 1;
+         counter < length; counter++) {
+      aSb.append(parts[counter]);
+      switch (counter) {
+        // Include top pane in common buffer.
+        case 1: {
+          this.topPane_.build(aSb);
+        };break;
+        case 6: {
+          this.miniCal.build(aSb);
+        };break;
+        case 8: {
+          this.calSelector_.build(aSb);
+        };break;
+        case 10: {
+          this.taskSelector_.build(aSb);
+        };break;
+        // Include main pane in common buffer.
+        case 16: {
+          this.mainPane_.build(aSb);
+        };break;
+
+        default: break;
+      }
+    }
+
   }
+
 };
 
 
