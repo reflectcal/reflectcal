@@ -20,7 +20,7 @@ goog.provide('rflect.cal.predefined.chips');
 /**
  * @define {string} UI type constant. Defined on compile time.
  */
-rflect.UI_TYPE = '';
+rflect.UI_TYPE = 'MOBILE';
 
 
 /**

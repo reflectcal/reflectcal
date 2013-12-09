@@ -53,17 +53,17 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, opt_configTop) 
 
   /**
    * Whether configuration is top.
-   * @type {boolean}
+   * @type {boolean|undefined}
    * @private
    */
   this.configTop_ = rflect.MOBILE && opt_configTop;
 
   /**
    * Whether configuration is bottom.
-   * @type {boolean}
+   * @type {boolean|undefined}
    * @private
    */
-  this.configBottom_ = rflect.MOBILE && opt_configBottom;
+  this.configBottom_ = rflect.MOBILE && opt_configTop;
 
   /**
    * Whether configuration is combined - one top pane only.
@@ -167,14 +167,14 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       '</nav>'
     ];
 
-  if (this.configBottom_) {
+  } else if (this.configBottom_) {
 
     parts = [
       '<nav id="bottom-pane" class="control-pane">',
       '<div class="pane-left">',
       '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
           'id="' + rflect.cal.predefined.BUTTON_NOW_ID + '">',
-      rflect.cal.i18n.Symbols.NOW
+      rflect.cal.i18n.Symbols.NOW,
       '</div>',
       '</div>',
       '<div class="pane-right">',
@@ -183,7 +183,7 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       '<div class="icon-triangle icon-nav-left goog-inline-block"></div>',
       '</div>',
       '<div class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block"',
-      'id="' + rflect.cal.predefined.BUTTON_NEXT_ID + ''">',
+      'id="' + rflect.cal.predefined.BUTTON_NEXT_ID + '">',
       '<div class="icon-triangle icon-nav-right goog-inline-block"></div>',
       '</div>',
       '</div>',
@@ -369,7 +369,7 @@ rflect.cal.ui.ControlPane.prototype.updateBeforeRedraw = goog.nullFunction;
 rflect.cal.ui.ControlPane.prototype.updateByRedraw = function() {
   if (!this.timeLabel_)
     this.timeLabel_ = this.dom_.getElement('time-period-label');
-  this.timeLabel_ && this.timeLabel_.innerHTML = this.getDateHeader();
+  this.timeLabel_ && (this.timeLabel_.innerHTML = this.getDateHeader());
   // Update buttons.
   this.updateButtons_();
 };

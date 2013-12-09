@@ -89,25 +89,28 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
   // Add child components in order for them to be included in propagation of
   // string building and updating.
   if (rflect.MOBILE) {
-    this.addChild(this.sidePane_ = new rflect.cal.ui.SidePane(
-        this.viewManager_, this.timeManager_));
     this.addChild(this.topPane_ = new rflect.cal.ui.ControlPane(
         this.viewManager_, this.timeManager_, true));
+    this.addChild(this.mainPane_ = new rflect.cal.ui.MainPane(this.viewManager_,
+        this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
+        this.blockManager_, this.transport_));
+    this.addChild(this.sidePane_ = new rflect.cal.ui.SidePane(
+        this.viewManager_, this.timeManager_));
     this.addChild(this.bottomPane_ = new rflect.cal.ui.ControlPane(
         this.viewManager_, this.timeManager_, false));
   } else {
-    this.addChild(this.topPane_ = new rflect.cal.ui.ControlPane(this.viewManager_,
-        this.timeManager_));
-  }
-  this.addChild(this.mainPane_ = new rflect.cal.ui.MainPane(this.viewManager_,
+    this.addChild(this.topPane_ = new rflect.cal.ui.ControlPane(
+        this.viewManager_, this.timeManager_));
+    this.addChild(this.mainPane_ = new rflect.cal.ui.MainPane(this.viewManager_,
         this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
         this.blockManager_, this.transport_));
-  this.addChild(this.miniCal = new rflect.cal.ui.MiniCal(this.viewManager_,
-      this.timeManager_));
-  this.addChild(this.calSelector_ = new rflect.cal.ui.CalSelector(this.viewManager_,
-      this.containerSizeMonitor_, this.eventManager_));
-  this.addChild(this.taskSelector_ = new rflect.cal.ui.TaskSelector(
-      this.viewManager_, this.containerSizeMonitor_));
+    this.addChild(this.miniCal = new rflect.cal.ui.MiniCal(this.viewManager_,
+        this.timeManager_));
+    this.addChild(this.calSelector_ = new rflect.cal.ui.CalSelector(
+        this.viewManager_, this.containerSizeMonitor_, this.eventManager_));
+    this.addChild(this.taskSelector_ = new rflect.cal.ui.TaskSelector(
+        this.viewManager_, this.containerSizeMonitor_));
+  }
 
   if (goog.DEBUG) {
     _inspect('topPane_', this.topPane_);
@@ -166,12 +169,21 @@ rflect.cal.ui.MainBody.HTML_PARTS_ = rflect.MOBILE ? [
  * updated.
  * @enum {number}
  */
-rflect.cal.ui.MainBody.ComponentsIndexes = {
-  TOP_PANE: 0,
-  MAIN_PANE: 1,
-  MINI_CAL: 2,
-  CAL_SELECTOR: 3,
-  TASK_SELECTOR: 4
+if (rflect.MOBILE) {
+  rflect.cal.ui.MainBody.ComponentsIndexes = {
+    TOP_PANE: 0,
+    MAIN_PANE: 1,
+    MINI_CAL: 2,
+    CAL_SELECTOR: 3,
+    TASK_SELECTOR: 4
+  }
+} else {
+  rflect.cal.ui.MainBody.ComponentsIndexes = {
+    TOP_PANE: 0,
+    MAIN_PANE: 1,
+    SIDE_PANE: 2,
+    BOTTOM_PANE: 3
+  }
 }
 
 
@@ -359,13 +371,18 @@ rflect.cal.ui.MainBody.prototype.updateBeforeRedraw = function(opt_exclusions,
       rflect.cal.ui.MainBody.ComponentsIndexes.MAIN_PANE)) {
     this.mainPane_.updateBeforeRedraw(null, undefined, opt_updateByNavigation);
   }
-  if (!rflect.ui.Component.indexIsInExclusions(opt_exclusions,
-      rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR)) {
-    this.calSelector_.updateBeforeRedraw(null, this.firstBuildLeftPane);
-  }
-  if (!rflect.ui.Component.indexIsInExclusions(opt_exclusions,
-      rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR)) {
-    this.taskSelector_.updateBeforeRedraw(null, this.firstBuildLeftPane);
+
+  if (!rflect.MOBILE) {
+
+    if (!rflect.ui.Component.indexIsInExclusions(opt_exclusions,
+        rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR)) {
+      this.calSelector_.updateBeforeRedraw(null, this.firstBuildLeftPane);
+    }
+    if (!rflect.ui.Component.indexIsInExclusions(opt_exclusions,
+        rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR)) {
+      this.taskSelector_.updateBeforeRedraw(null, this.firstBuildLeftPane);
+    }
+
   }
 };
 
@@ -378,24 +395,44 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
   // but to preserve pattern (that if we want reliable presence of component in
   // DOM, we should address it in enterDocument), we do it here.
   this.topPane_.decorateInternal(this.getDomHelper().getElement('top-pane'), true);
-  this.miniCal.decorateInternal(this.getDomHelper().getElement('month-selector'), true);
   this.mainPane_.decorateInternal(this.getDomHelper().getElement('main-pane'), true);
-  this.calSelector_.decorateInternal(this.getDomHelper().getElement('calendars-selector'),
-      true);
-  this.taskSelector_.decorateInternal(this.getDomHelper().getElement('tasks-selector'),
-      true);
+
+  if (rflect.MOBILE) {
+
+    this.bottomPane_.decorateInternal(
+        this.getDomHelper().getElement('top-pane'), true);
+    this.sidePane_.decorateInternal(
+        this.getDomHelper().getElement('side-pane'), true);
+
+  } else {
+
+    this.miniCal.decorateInternal(
+        this.getDomHelper().getElement('month-selector'), true);
+    this.calSelector_.decorateInternal(
+        this.getDomHelper().getElement('calendars-selector'), true);
+    this.taskSelector_.decorateInternal(
+        this.getDomHelper().getElement('tasks-selector'), true);
+
+  }
+
   // Propagate call to children.
   rflect.cal.ui.MainBody.superClass_.enterDocument.call(this);
 
   this.getHandler().listen(this.topPane_, goog.ui.Component.EventType.ACTION,
       this.onTopPaneAction_, false, this)
-      .listen(this.calSelector_, rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
-      this.onCalendarSwitch_, false, this)
-      .listen(this.transport_, rflect.cal.Transport.EventTypes.LOAD_EVENT,
-      this.onLoadEvents_, false, this);
+  if (!rflect.MOBILE)
+    this.getHandler().listen(this.calSelector_,
+        rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
+        this.onCalendarSwitch_, false, this)
+  this.getHandler().listen(this.transport_,
+      rflect.cal.Transport.EventTypes.LOAD_EVENT, this.onLoadEvents_, false,
+      this);
 
   this.rebuildMainPaneWithSizes();
-  this.rebuildLeftPaneWithSizes();
+
+  if (!rflect.MOBILE)
+    //Mobile UI's left pane doesn't affect main pane width.
+    this.rebuildLeftPaneWithSizes();
 };
 
 

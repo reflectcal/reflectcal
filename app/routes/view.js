@@ -12,6 +12,7 @@ var calendarDAO = require('../db/calendar');
 var settingsDAO = require('../db/settings');
 var viewAdapter = require('../util/viewadapter');
 var appConfig = require('../config/appconfig');
+var ua = require('../util/useragent');
 
 /**
  * Renders main page for compiled view.
@@ -20,7 +21,10 @@ exports.view = function(req, res){
   var onCalendarsLoad = function(aCalendars) {
     viewAdapter.getCompiledTargetAsync(req, function(aTarget, aSettings){
 
-      res.render('rflectcalendar-compiled', {
+      var templateName = aTarget.uiType == 'MOBILE' ?
+          'rflectcalendar-mobile-compiled': 'rflectcalendar-compiled';
+
+      res.render(templateName, {
         calendars: JSON.stringify(aCalendars),
         settings: JSON.stringify(aSettings[0], null, '  '),
         jsFileNames: aTarget.jsFileNames,
@@ -42,8 +46,14 @@ exports.view = function(req, res){
  */
 exports.viewSource = function(req, res){
   var onCalendarsLoad = function(aCalendars) {
+
     settingsDAO.getSettingsAsync(function(aSettings) {
-      res.render('rflectcalendar-source', {
+
+      var userAgentObject = ua.detect(req.headers['user-agent']);
+      var templateName = userAgentObject.MOBILE ?
+          'rflectcalendar-mobile-source': 'rflectcalendar-source';
+
+      res.render(templateName, {
         calendars: JSON.stringify(aCalendars, null, '  '),
         settings: JSON.stringify(aSettings[0], null, '  '),
         languageNames: JSON.stringify(appConfig.LANGUAGE_NAMES, null, '  ')

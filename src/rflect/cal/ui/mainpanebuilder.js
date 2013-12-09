@@ -355,6 +355,41 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
 ];
 
 
+// Remove some parts for mobile UI by replacing parts with empty strings, so
+// that index order will be intact.
+if (rflect.MOBILE) {
+  (function() {
+    var indexesToRemove = {
+      //All-day zippy.
+      2: 1,
+      3: 1,
+      4: 1,
+      5: 1,
+      //Week zippies.
+      48: 1,
+      49: 1,
+      50: 1,
+      51: 1,
+      52: 1,
+      53: 1,
+      54: 1,
+      55: 1,
+      56: 1,
+      57: 1,
+      58: 1,
+      59: 1
+    };
+
+    goog.array.forEach(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_,
+        function(aPart, aIndex){
+      if (aIndex in indexesToRemove)
+        rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aIndex] = '';
+    });
+
+  })();
+}
+
+
 /**
  * String parts for builder, for monthmode.
  * @type {Array.<string>}
@@ -546,58 +581,118 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
     // array items, we reflect it here by incrementing offset by more than 1,
     // or not incrementing at all, according to the number of 'eaten' parts.
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[offset]);
-    switch (offset) {
-      case 3: {
-        this.buildDayNamesZippy_(aSb, offset);
-      };break;
-      case 8: {
-        this.buildDayNamesWeek_(aSb, offset);
-        offset += 8;
-      };break;
-      case 19: {
-        this.buildScrollableAllday_(aSb, offset);
+    if (rflect.MOBILE) {
+
+      switch (offset) {
+        case 3: if (!rflect.MOBILE) {
+          this.buildDayNamesZippy_(aSb, offset);
+        };break;
+        case 8: {
+          this.buildDayNamesWeek_(aSb, offset);
+          offset += 8;
+        };break;
+        case 19: {
+          this.buildScrollableAllday_(aSb, offset);
+            offset += 2;
+        };break;
+        case 21: {
+          if (aFirstBuild)
+            offset += 26;
+        };break;
+        case 23: {
+          this.buildAllDayGrid_(aSb, offset);
           offset += 2;
-      };break;
-      case 21: {
-        if (aFirstBuild)
+        };break;
+        case 27: {
+          this.buildWeekGridAdCols_(aSb, offset);
+          offset += 17;
+        };break;
+        case 49: if (!rflect.MOBILE) {
+          this.buildWeekColZippies_(aSb, offset);
+          offset += 9;
+        };break;
+        case 63: {
+          this.buildScrollableWeek_(aSb, offset);
+          offset++;
+        };break;
+        case 65: {
+          if (aFirstBuild)
+            offset += 45;
+        };break;
+        case 66: {
+          this.timeMarker_.buildHead(aSb);
+        };break;
+        case 67: {
+          this.buildHoursAndGridRows_(aSb, offset);
+          offset += 9;
+        };break;
+        case 78: {
+          this.buildGridTableWeek_(aSb, offset);
+          offset++;
+        };break;
+        case 81: {
+          this.buildWeekGridCols_(aSb, offset);
           offset += 26;
-      };break;
-      case 23: {
-        this.buildAllDayGrid_(aSb, offset);
-        offset += 2;
-      };break;
-      case 27: {
-        this.buildWeekGridAdCols_(aSb, offset);
-        offset += 17;
-      };break;
-      case 49: {
-        this.buildWeekColZippies_(aSb, offset);
-        offset += 9;
-      };break;
-      case 63: {
-        this.buildScrollableWeek_(aSb, offset);
-        offset++;
-      };break;
-      case 65: {
-        if (aFirstBuild)
-          offset += 45;
-      };break;
-      case 66: {
-        this.timeMarker_.buildHead(aSb);
-      };break;
-      case 67: {
-        this.buildHoursAndGridRows_(aSb, offset);
-        offset += 9;
-      };break;
-      case 78: {
-        this.buildGridTableWeek_(aSb, offset);
-        offset++;
-      };break;
-      case 81: {
-        this.buildWeekGridCols_(aSb, offset);
-        offset += 26;
-      };break;
-      default: break;
+        };break;
+        default: break;
+      }
+
+    } else {
+
+      switch (offset) {
+        case 3: {
+          this.buildDayNamesZippy_(aSb, offset);
+        };break;
+        case 8: {
+          this.buildDayNamesWeek_(aSb, offset);
+          offset += 8;
+        };break;
+        case 19: {
+          this.buildScrollableAllday_(aSb, offset);
+            offset += 2;
+        };break;
+        case 21: {
+          if (aFirstBuild)
+            offset += 26;
+        };break;
+        case 23: {
+          this.buildAllDayGrid_(aSb, offset);
+          offset += 2;
+        };break;
+        case 27: {
+          this.buildWeekGridAdCols_(aSb, offset);
+          offset += 17;
+        };break;
+        case 49: {
+          this.buildWeekColZippies_(aSb, offset);
+          offset += 9;
+        };break;
+        case 63: {
+          this.buildScrollableWeek_(aSb, offset);
+          offset++;
+        };break;
+        case 65: {
+          if (aFirstBuild)
+            offset += 45;
+        };break;
+        case 66: {
+          this.timeMarker_.buildHead(aSb);
+        };break;
+        case 67: {
+          this.buildHoursAndGridRows_(aSb, offset);
+          offset += 9;
+        };break;
+        case 78: {
+          this.buildGridTableWeek_(aSb, offset);
+          offset++;
+        };break;
+        case 81: {
+          this.buildWeekGridCols_(aSb, offset);
+          offset += 26;
+        };break;
+        default: break;
+      }
+
     }
   }
 };

@@ -18,7 +18,7 @@ var appConfig = require('./app/config/appconfig');
  * If it's false, app includes it all and could be tested on server in close
  * to production form.
  */
-var PRODUCTION = true;
+var PRODUCTION = false;
 /**
  * This flag specifies that minimal number of compile targets will be
  * produced.
@@ -34,7 +34,7 @@ var UI_TYPE = ['', 'MOBILE'];
 var USER_AGENT = (PRODUCTION || !FAST_DEBUG) ?
     ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'] : [''];
 
-// Inputs for less compiler. These are for further gss minification.
+// Inputs for less compiler.
 var lessFileNames = [
   'less/combined.less'
 ];
@@ -420,8 +420,7 @@ module.exports = function(grunt) {
   // Default task(s).
   grunt.registerTask('default', [
     'clean:all',
-    //less
-    'exec',
+    'exec',//less
     'closureBuilder',
     'filerev',
     'wrap:renameCss',
