@@ -63,7 +63,7 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, opt_configTop) 
    * @type {boolean|undefined}
    * @private
    */
-  this.configBottom_ = rflect.MOBILE && opt_configTop;
+  this.configBottom_ = rflect.MOBILE && !opt_configTop;
 
   /**
    * Whether configuration is combined - one top pane only.

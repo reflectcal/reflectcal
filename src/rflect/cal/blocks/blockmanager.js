@@ -72,6 +72,7 @@ rflect.cal.blocks.BlockManager = function(aViewManager, aTimeManager,
       this.eventManager_);
   this.blockPoolAllDay.fill(1);
   this.blockPoolAllDay.setBlocksNumber(1);
+  this.blockPoolAllDay.expandBlock(0, rflect.MOBILE);
 
 
 };

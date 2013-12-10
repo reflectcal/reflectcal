@@ -166,7 +166,7 @@ body when (@UI_TYPE = 'MOBILE') {
 }
 
 .button-icon when (@UI_TYPE = 'MOBILE') {
-  font-size: 24px;
+  font-size: 21px;
 }
 
 #left-navtable {
@@ -559,8 +559,16 @@ body when (@UI_TYPE = 'MOBILE') {
   margin-bottom: 5px;
 }
 
-.mphs-scroll-horz-off {
+.mphs-scroll-horz-off() {
   overflow-x: visible;
+}
+
+.mphs-scroll-horz-off when (@UI_TYPE = 'MOBILE'){
+  .mphs-scroll-horz-off();
+}
+
+.mphs-scroll-horz-off when (@UI_TYPE = ''){
+  .mphs-scroll-horz-off();
   margin-bottom: 22px;
 }
 

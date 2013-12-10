@@ -130,15 +130,16 @@ goog.inherits(rflect.cal.ui.MainBody, rflect.ui.Component);
  * @private
  */
 rflect.cal.ui.MainBody.HTML_PARTS_ = rflect.MOBILE ? [
-  '<main id="cal-container" class="cal-container">',
+  '<div id="cal-container" class="cal-container">',
   '<div id="left-pane" style="display:none">',
   '</div>',
   '<nav id="top-pane" class="control-pane">',
   '</nav>',
-
+  '<main id="main-pane">',
+  '</main>',
   '<nav id="bottom-pane" class="control-pane">',
   '</nav>',
-  '</main>'
+  '</div>'
   ] : [
   '<div id="cal-container" class="' + goog.getCssName('cal-container') + '">',
   '<div id="top-pane">',
@@ -292,15 +293,15 @@ rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
       switch (counter) {
         // Include top pane in common buffer.
         case 1: {
-          this.sidePane_.build(aSb);
+          //this.sidePane_.build(aSb);
         };break;
         case 3: {
           this.topPane_.build(aSb);
         };break;
-        case 4: {
+        case 5: {
           this.mainPane_.build(aSb);
         };break;
-        case 4: {
+        case 6: {
           this.bottomPane_.build(aSb);
         };break;
 
