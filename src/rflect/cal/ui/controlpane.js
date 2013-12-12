@@ -74,6 +74,9 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, opt_configTop) 
 
   // Add buttons. No need for captions or content here, because we've decorated
   // them.
+  if (this.configTop_)
+    this.addChild(this.buttonMenu_ = new goog.ui.Button(null,
+        goog.ui.FlatButtonRenderer.getInstance()));
   if (this.configBottom_ || this.configCombined_)
     this.addChild(this.buttonNow_ = new goog.ui.ToggleButton(null,
         goog.ui.FlatButtonRenderer.getInstance()));
@@ -143,8 +146,8 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
     var parts = [
       '<nav id="top-pane" class="control-pane">',
       '<div class="pane-left">',
-      '<div class="cal-menu-button goog-flat-button goog-inline-block button-icon"'
-          + 'id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '">' +
+      '<div class="cal-menu-button goog-flat-button goog-inline-block button-icon"' +
+          'id="' + rflect.cal.predefined.BUTTON_MENU_ID + '">' +
           '<div class="icon icon-bars goog-inline-block"></div>',
       '</div>',
       '</div>',
@@ -287,6 +290,8 @@ rflect.cal.ui.ControlPane.prototype.enterDocument = function() {
       rflect.cal.predefined.BUTTON_MONTH_ID));
   this.buttonOptions_ && this.buttonOptions_.decorate(this.dom_.getElement(
       rflect.cal.predefined.BUTTON_SETTINGS_ID));
+  this.buttonMenu_ && this.buttonMenu_.decorate(this.dom_.getElement(
+      rflect.cal.predefined.BUTTON_MENU_ID));
 
   rflect.cal.ui.ControlPane.superClass_.enterDocument.call(this);
 
@@ -436,4 +441,5 @@ rflect.cal.ui.ControlPane.prototype.disposeInternal = function() {
   this.buttonWeek_ = null;
   this.buttonMonth_ = null;
   this.buttonOptions_ = null;
+  this.buttonMenu_ = null;
 };

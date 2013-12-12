@@ -525,6 +525,14 @@ rflect.cal.predefined.BUTTON_SETTINGS_ID = 'nb8';
 
 
 /**
+ * Menu button id.
+ * @type {string}
+ * @const
+ */
+rflect.cal.predefined.BUTTON_MENU_ID = 'nb9';
+
+
+/**
  * Minical mask area width.
  * @type {number}
  * @const
