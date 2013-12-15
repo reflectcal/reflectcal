@@ -293,7 +293,7 @@ rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
       switch (counter) {
         // Include top pane in common buffer.
         case 1: {
-          //this.sidePane_.build(aSb);
+          this.sidePane_.build(aSb);
         };break;
         case 3: {
           this.topPane_.build(aSb);
@@ -591,6 +591,16 @@ rflect.cal.ui.MainBody.prototype.onCalendarSwitch_ = function(aEvent) {
 rflect.cal.ui.MainBody.prototype.onLoadEvents_ = function(aEvent) {
   this.eventManager_.run();
   this.mainPane_.update();
+}
+
+
+/**
+ * Shows side pane.
+ * @param {boolean} aShow Whether to show event pane.
+ */
+rflect.cal.ui.MainBody.prototype.showSidePane = function(aShow) {
+  this.sidePane_.setVisible(aShow);
+  this.showCalendar_(!aShow);
 }
 
 

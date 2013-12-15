@@ -54,6 +54,9 @@ rflect.ui.Component.prototype.createDom = function() {
 
 /**
  * Decorates an existing html div element as a component.
+ * TODO(alexk): for public use, we may rename this method to something else,
+ * 'cause original decorateInternal is protected. Something like
+ * decorateByBuild.
  * @param {Element} aElement The div element to decorate.
  * @param {boolean=} opt_doNotBuildBody Whether to build body or not.
  */

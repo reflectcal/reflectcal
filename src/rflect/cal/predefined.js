@@ -533,6 +533,14 @@ rflect.cal.predefined.BUTTON_MENU_ID = 'nb9';
 
 
 /**
+ * 'To calendar' button id.
+ * @type {string}
+ * @const
+ */
+rflect.cal.predefined.BUTTON_TO_CALENDAR_ID = 'nb10';
+
+
+/**
  * Minical mask area width.
  * @type {number}
  * @const

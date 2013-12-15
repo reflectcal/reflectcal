@@ -1500,3 +1500,17 @@ overflow:hidden
   left: 0;
   top: -10000px;
 }
+
+@SIDE_PANE_WIDTH = 200px;
+.side-pane when (@UI_TYPE = 'MOBILE') {
+  position: absolute;
+  left: -@SIDE_PANE_WIDTH;
+  width: @SIDE_PANE_WIDTH;
+  height: 100%;
+  transition: transform .2s;
+  border-right: 1px solid #d5d5d5;
+}
+
+.slide-pane-shown {
+  transform: translate3d(0, 200px, 0);
+}
