@@ -142,7 +142,7 @@ rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
 
 /**
  * Sets the visibility of the event pane and moves focus to the
- * event name input. Lazily renders the component if needed.
+ * event name input.
  * @param {boolean} visible Whether the pane should be visible.
  */
 rflect.cal.ui.SettingsPane.prototype.setVisible = function(visible) {

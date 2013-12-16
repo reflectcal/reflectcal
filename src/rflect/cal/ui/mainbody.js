@@ -249,6 +249,14 @@ rflect.cal.ui.MainBody.prototype.settingsPane_;
 
 
 /**
+ * Side pane.
+ * @type {rflect.cal.ui.SidePane}
+ * @private
+ */
+rflect.cal.ui.MainBody.prototype.sidePane_;
+
+
+/**
  * Creates main body on an empty div element.
  */
 rflect.cal.ui.MainBody.prototype.createDom = function() {
@@ -563,6 +571,10 @@ rflect.cal.ui.MainBody.prototype.onTopPaneAction_ = function(aEvent) {
 
     this.showSettingsPane(true);
 
+  } else if (rflect.MOBILE && id == rflect.cal.predefined.BUTTON_MENU_ID) {
+
+    this.showSidePane(true);
+
   }
 }
 
@@ -600,7 +612,7 @@ rflect.cal.ui.MainBody.prototype.onLoadEvents_ = function(aEvent) {
  */
 rflect.cal.ui.MainBody.prototype.showSidePane = function(aShow) {
   this.sidePane_.setVisible(aShow);
-  this.showCalendar_(!aShow);
+  //this.showCalendar_(!aShow);
 }
 
 
