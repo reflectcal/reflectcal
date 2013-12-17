@@ -562,13 +562,12 @@ rflect.cal.ui.EventPane.prototype.setVisible = function(visible,
     return;
   }
 
-  this.newEventMode_ = opt_creatingNewEvent || false;
-
   // If the pane hasn't been rendered yet, render it now.
   if (!this.isInDocument()) {
     this.render(this.parentEl_);
   }
 
+  this.newEventMode_ = opt_creatingNewEvent || false;
   this.displayValues();
 
   this.showElement_(visible);
