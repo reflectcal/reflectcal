@@ -1087,8 +1087,7 @@ rflect.cal.ui.SettingsPane.prototype.onSaveCalendar_ = function() {
 
 
 /**
- * Sets the visibility of the event pane and moves focus to the
- * event name input. Lazily renders the component if needed.
+ * Sets the visibility of the pane. Lazily renders the component if needed.
  * @param {boolean} visible Whether the pane should be visible.
  */
 rflect.cal.ui.SettingsPane.prototype.setVisible = function(visible) {
