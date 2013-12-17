@@ -245,7 +245,10 @@ rflect.cal.ui.ListSelector.prototype.buildListBodyClass_ = function(aSb) {
  *
  */
 rflect.cal.ui.ListSelector.prototype.buildScrollableHeight_ = function(aSb) {
-  aSb.append(this.scrollableSize_.height);
+  if (rflect.MOBILE)
+    aSb.append('');
+  else
+    aSb.append(this.scrollableSize_.height);
 }
 
 
@@ -267,6 +270,9 @@ rflect.cal.ui.ListSelector.prototype.buildContent = goog.abstractMethod;
  */
 rflect.cal.ui.ListSelector.prototype.updateBeforeRedraw = function(opt_exclusions,
     opt_firstTime) {
+  if (rflect.MOBILE)
+    return;
+
   // Take current viewport size.
   this.scrollableSize_ = this.containerSizeMonitor_.getSize();
 
@@ -288,6 +294,9 @@ rflect.cal.ui.ListSelector.prototype.updateBeforeRedraw = function(opt_exclusion
  * Redraws list selector. This default version changes scrollable size.
  */
 rflect.cal.ui.ListSelector.prototype.updateByRedraw = function() {
+  if (rflect.MOBILE)
+    return;
+
   this.scrollableEl.style.height = this.scrollableSize_.height + 'px';
 };
 

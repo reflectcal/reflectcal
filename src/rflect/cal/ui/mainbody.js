@@ -95,7 +95,8 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
         this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
         this.blockManager_, this.transport_));
     this.addChild(this.sidePane_ = new rflect.cal.ui.SidePane(
-        this.viewManager_, this.timeManager_));
+        this.viewManager_, this.timeManager_, this.eventManager_,
+        this.containerSizeMonitor_));
     this.addChild(this.bottomPane_ = new rflect.cal.ui.ControlPane(
         this.viewManager_, this.timeManager_, false));
   } else {
@@ -131,8 +132,8 @@ goog.inherits(rflect.cal.ui.MainBody, rflect.ui.Component);
  */
 rflect.cal.ui.MainBody.HTML_PARTS_ = rflect.MOBILE ? [
   '<div id="cal-container" class="cal-container">',
-  '<div id="left-pane" style="display:none">',
-  '</div>',
+  '<nav id="side-pane" class="side-pane" style="display:none">',
+  '</nav>',
   '<nav id="top-pane" class="control-pane">',
   '</nav>',
   '<main id="main-pane">',
@@ -428,11 +429,21 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
   rflect.cal.ui.MainBody.superClass_.enterDocument.call(this);
 
   this.getHandler().listen(this.topPane_, goog.ui.Component.EventType.ACTION,
-      this.onTopPaneAction_, false, this)
-  if (!rflect.MOBILE)
-    this.getHandler().listen(this.calSelector_,
+      this.onControlPaneAction_, false, this);
+  if (rflect.MOBILE) {
+    this.getHandler().listen(this.bottomPane_,
+        goog.ui.Component.EventType.ACTION, this.onControlPaneAction_, false,
+        this);
+    this.getHandler().listen(this.sidePane_,
         rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
         this.onCalendarSwitch_, false, this)
+        .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
+        this.onSidePaneAction_, false, this);
+  } else {
+    this.getHandler().listen(this.calSelector_,
+          rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
+          this.onCalendarSwitch_, false, this);
+  }
   this.getHandler().listen(this.transport_,
       rflect.cal.Transport.EventTypes.LOAD_EVENT, this.onLoadEvents_, false,
       this);
@@ -554,11 +565,11 @@ rflect.cal.ui.MainBody.prototype.getMinimalSize = function() {
 
 
 /**
- * Top pane action handler.
+ * Control pane action handler.
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
-rflect.cal.ui.MainBody.prototype.onTopPaneAction_ = function(aEvent) {
+rflect.cal.ui.MainBody.prototype.onControlPaneAction_ = function(aEvent) {
   var id = aEvent.target.getId();
 
   if (id == rflect.cal.predefined.BUTTON_NEW_EVENT_ID) {
@@ -574,6 +585,23 @@ rflect.cal.ui.MainBody.prototype.onTopPaneAction_ = function(aEvent) {
   } else if (rflect.MOBILE && id == rflect.cal.predefined.BUTTON_MENU_ID) {
 
     this.showSidePane(true);
+
+  }
+}
+
+
+/**
+ * Side pane action handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.MainBody.prototype.onSidePaneAction_ = function(aEvent) {
+  var id = aEvent.target.getId();
+
+  if (id == rflect.cal.predefined.BUTTON_SETTINGS_ID) {
+
+    this.showSidePane(false);
+    this.showSettingsPane(true);
 
   }
 }
@@ -611,7 +639,7 @@ rflect.cal.ui.MainBody.prototype.onLoadEvents_ = function(aEvent) {
  * @param {boolean} aShow Whether to show event pane.
  */
 rflect.cal.ui.MainBody.prototype.showSidePane = function(aShow) {
-  this.sidePane_.setVisible(aShow);
+  this.sidePane_.showBehavior.setVisible(aShow);
   //this.showCalendar_(!aShow);
 }
 
@@ -658,8 +686,8 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
 
     // Save settings handler is in view manager.
     this.getHandler().listen(this.settingsPane_,
-        rflect.cal.ui.SettingsPane.EventTypes.CANCEL, this.onSettingsPaneCancel_,
-        false, this).listen(this.settingsPane_,
+        rflect.cal.ui.SettingsPane.EventTypes.CANCEL,
+        this.onSettingsPaneCancel_, false, this).listen(this.settingsPane_,
         rflect.cal.ui.SettingsPane.EventTypes.CALENDAR_UPDATE,
         this.onSettingsPaneCalendarUpdate_, false, this);
 

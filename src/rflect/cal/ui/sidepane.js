@@ -22,6 +22,7 @@ goog.require('rflect.ui.Component');
 goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.predefined');
+goog.require('rflect.cal.ui.PaneShowBehavior');
 
 
 
@@ -29,10 +30,14 @@ goog.require('rflect.cal.predefined');
  * Side pane main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
+ * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
+ * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
+ * container size monitor.
  * @constructor
  * @extends {rflect.ui.Component}
  */
-rflect.cal.ui.SidePane = function(aViewManager, aTimeManager) {
+rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
+    aContainerSizeMonitor) {
   rflect.ui.Component.call(this);
 
   /**
@@ -49,6 +54,27 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager) {
    */
   this.timeManager_ = aTimeManager;
 
+  /**
+   * Link to event manager.
+   * @type {rflect.cal.events.EventManager}
+   * @private
+   */
+  this.eventManager_ = aEventManager;
+
+  /**
+   * Link to container size monitor.
+   * @type {rflect.cal.ContainerSizeMonitor}
+   * @private
+   */
+  this.containerSizeMonitor_ = aContainerSizeMonitor;
+
+  /**
+   * Pane show behavior.
+   * @type {rflect.cal.ui.PaneShowBehavior}
+   */
+  this.showBehavior = new rflect.cal.ui.PaneShowBehavior(this, 
+      this.getDomHelper().getElement('main-container'));
+
   this.addChild(this.buttonCalendar_ = new goog.ui.Button(null,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.calSelector_ = new rflect.cal.ui.CalSelector(
@@ -56,6 +82,14 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager) {
 
 };
 goog.inherits(rflect.cal.ui.SidePane, rflect.ui.Component);
+
+
+/**
+ * @enum {string}
+ */
+rflect.cal.ui.SidePane.EventTypes = {
+  CANCEL: 'settingsCancel'
+};
 
 
 /**
@@ -71,6 +105,17 @@ rflect.cal.ui.SidePane.prototype.decorateInternal = function(aElement,
 
 
 /**
+ * Builds menu of side pane.
+ * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
+ * to.
+ * @see rflect.ui.Component#build
+ * @private
+ */
+rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
+}
+
+
+/**
  * Builds body of component.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
@@ -80,7 +125,7 @@ rflect.cal.ui.SidePane.prototype.decorateInternal = function(aElement,
 rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
 
   var parts = [
-    '<nav id="side-pane" class="side-pane">',
+    '<nav id="side-pane" class="side-pane" style="display:none">',
     '<div class="control-pane">',
     '<div class="pane-left">',
     '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
@@ -132,48 +177,12 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
  * Cancel action listener.
  * Default action is to hide pane.
  */
-rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
+rflect.cal.ui.SidePane.prototype.onCancel_ = function() {
   if (this.dispatchEvent(new goog.events.Event(
-      rflect.cal.ui.SettingsPane.EventTypes.CANCEL)))
-    this.setVisible(false);
+      rflect.cal.ui.SidePane.EventTypes.CANCEL)))
+    this.showBehavior.setVisible(false);
 
 }
-
-
-/**
- * Sets the visibility of the event pane and moves focus to the
- * event name input.
- * @param {boolean} visible Whether the pane should be visible.
- */
-rflect.cal.ui.SettingsPane.prototype.setVisible = function(visible) {
-  if (visible == this.visible_) {
-    return;
-  }
-
-  this.showElement_(visible);
-
-  this.visible_ = visible;
-};
-
-
-/**
- * Shows or hides the pane element.
- * @param {boolean} visible Shows the element if true, hides if false.
- * @private
- */
-rflect.cal.ui.SettingsPane.prototype.showElement_ = function(visible) {
-  if (visible)
-    goog.dom.classes.remove(this.getElement(), 'slide-pane-shown');
-  else
-    goog.dom.classes.add(this.getElement(), 'slide-pane-shown');
-};
-
-
-/**
- * No-op is used in order not to allow updateBeforeRedraw to be called on
- * buttons which don't have it.
- */
-rflect.cal.ui.SidePane.prototype.updateBeforeRedraw = goog.nullFunction;
 
 
 /**

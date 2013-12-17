@@ -1501,16 +1501,17 @@ overflow:hidden
   top: -10000px;
 }
 
-@SIDE_PANE_WIDTH = 200px;
 .side-pane when (@UI_TYPE = 'MOBILE') {
   position: absolute;
-  left: -@SIDE_PANE_WIDTH;
-  width: @SIDE_PANE_WIDTH;
+  transform: translate3d(-100%, 0, 0);
+  width: 200px;
   height: 100%;
+  z-index: 10;
   transition: transform .2s;
   border-right: 1px solid #d5d5d5;
+  background: #fff;
 }
 
-.slide-pane-shown {
-  transform: translate3d(0, 200px, 0);
+.slide-pane-shown-left when (@UI_TYPE = 'MOBILE') {
+  transform: translate3d(0%, 0, 0);
 }
