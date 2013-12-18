@@ -300,7 +300,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
 
   var labelAllDay = dom.createDom('label', {
     'for': 'event-all-day',
-    className: labelClassName
+    className: labelClassName + ' event-edit-pane-label-long'
   }, 'All-day event');
   var allDaySubCont = dom.createDom('span', null, labelAllDay,
       this.checkboxDebug_.getElement());
@@ -343,7 +343,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     labelDesc, this.textAreaDesc_);
 
   var body = dom.createDom('div', goog.getCssName('settings-body'),
-      nameCont, dateCont, allDayCont, calendarsCont, descCont);
+      nameCont, allDayCont, dateCont, calendarsCont, descCont);
 
   var root = dom.createDom('div', {
     className: goog.getCssName('settings-pane') + (rflect.MOBILE ?
