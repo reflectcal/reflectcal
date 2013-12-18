@@ -45,7 +45,7 @@ rflect.cal.i18n.Symbols_en_MOBILE = {
   TASKS_LABEL: 'Tasks',
   NO_NAME_EVENT: '(Untitled)',
   CALENDAR_POSTFIX: ' calendar',
-  TO_CALENDAR: 'Calendar'
+  TO_CALENDAR: '< Calendar'
 };
 
 
@@ -78,7 +78,7 @@ rflect.cal.i18n.Symbols_ru_MOBILE = {
   TASKS_LABEL: 'Задачи',
   NO_NAME_EVENT: '(Без имени)',
   CALENDAR_POSTFIX: ' календарь',
-  TO_CALENDAR: 'Календарь'
+  TO_CALENDAR: '< Календарь'
 };
 
 
@@ -111,7 +111,7 @@ rflect.cal.i18n.Symbols_by_MOBILE = {
   TASKS_LABEL: 'Задачы',
   NO_NAME_EVENT: '(Без імя)',
   CALENDAR_POSTFIX: ' каляндар',
-  TO_CALENDAR: 'Каляндар'
+  TO_CALENDAR: '< Каляндар'
 };
 
 
@@ -144,7 +144,7 @@ rflect.cal.i18n.Symbols_fr_MOBILE = {
   TASKS_LABEL: 'Tâches',
   NO_NAME_EVENT: '(pas de nom)',
   CALENDAR_POSTFIX: ' calendrier',
-  TO_CALENDAR: 'Сalendrier'
+  TO_CALENDAR: '< Сalendrier'
 };
 
 

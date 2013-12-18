@@ -143,6 +143,13 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
 
   this.buttonSaveCalendar1_.setVisible(false);
   this.buttonSaveCalendar2_.setVisible(false);
+
+  /**
+   * Pane show behavior.
+   * @type {rflect.cal.ui.PaneShowBehavior}
+   */
+  this.showBehavior = new rflect.cal.ui.PaneShowBehavior(this,
+      this.getDomHelper().getElement('main-container'));
 };
 goog.inherits(rflect.cal.ui.SettingsPane, goog.ui.Component);
 
@@ -332,7 +339,8 @@ rflect.cal.ui.SettingsPane.prototype.createDom = function() {
   var settingsPaneButtonsLower = this.createSettingsPaneButtonsLower_(dom);
 
   var root = dom.createDom('div', {
-      className: goog.getCssName('settings-pane'),
+      className: goog.getCssName('settings-pane') + (rflect.MOBILE ?
+          ' slide-pane-left' : ''),
       id: 'settings-pane'
     }, settingsHeader, settingsPaneButtonsUpper, settingsBody,
     settingsPaneButtonsLower);
@@ -804,6 +812,10 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
 
       .listen(document,
           goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this);
+
+  this.showBehavior.setBeforeVisibleAction(function(){
+    this.displaySettingsValues_();
+  });
 };
 
 
@@ -1084,38 +1096,6 @@ rflect.cal.ui.SettingsPane.prototype.onSaveCalendar_ = function() {
     this.switchContent_(rflect.cal.ui.SettingsPane.PageIndexes.CALENDARS);
   }
 }
-
-
-/**
- * Sets the visibility of the pane. Lazily renders the component if needed.
- * @param {boolean} visible Whether the pane should be visible.
- */
-rflect.cal.ui.SettingsPane.prototype.setVisible = function(visible) {
-  if (visible == this.visible_) {
-    return;
-  }
-
-  // If the pane hasn't been rendered yet, render it now.
-  if (!this.isInDocument()) {
-    this.render(this.parentEl_);
-  }
-
-  this.displaySettingsValues_();
-
-  this.showElement_(visible);
-
-  this.visible_ = visible;
-};
-
-
-/**
- * Shows or hides the pane element.
- * @param {boolean} visible Shows the element if true, hides if false.
- * @private
- */
-rflect.cal.ui.SettingsPane.prototype.showElement_ = function(visible) {
-  goog.style.showElement(this.getElement(), visible);
-};
 
 
 /**

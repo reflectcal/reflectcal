@@ -132,7 +132,7 @@ goog.inherits(rflect.cal.ui.MainBody, rflect.ui.Component);
  */
 rflect.cal.ui.MainBody.HTML_PARTS_ = rflect.MOBILE ? [
   '<div id="cal-container" class="cal-container">',
-  '<nav id="side-pane" class="side-pane" style="display:none">',
+  '<nav id="side-pane" class="side-pane slide-pane-left">',
   '</nav>',
   '<nav id="top-pane" class="control-pane">',
   '</nav>',
@@ -640,7 +640,6 @@ rflect.cal.ui.MainBody.prototype.onLoadEvents_ = function(aEvent) {
  */
 rflect.cal.ui.MainBody.prototype.showSidePane = function(aShow) {
   this.sidePane_.showBehavior.setVisible(aShow);
-  //this.showCalendar_(!aShow);
 }
 
 
@@ -666,9 +665,10 @@ rflect.cal.ui.MainBody.prototype.showEventPane = function(aShow,
         false, this)
   }
 
-  this.eventPane_.setVisible(aShow, opt_creatingNewEvent);
+  this.eventPane_.setNewEventMode(opt_creatingNewEvent);
+  this.eventPane_.showBehavior.setVisible(aShow);
   //NOTE(alexk): do we need smarter logic here than just hide calendar?
-  this.showCalendar_(!aShow);
+  if (!rflect.MOBILE) this.showCalendar_(!aShow);
 }
 
 
@@ -696,9 +696,9 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
     }
   }
 
-  this.settingsPane_.setVisible(aShow);
+  this.settingsPane_.showBehavior.setVisible(aShow);
   //NOTE(alexk): do we need smarter logic here than just hide calendar?
-  this.showCalendar_(!aShow);
+  if (!rflect.MOBILE) this.showCalendar_(!aShow);
 }
 
 

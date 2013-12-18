@@ -8,7 +8,7 @@
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
-goog.provide('rflect.pagevis');
+goog.provide('rflect.browser.pagevisibility');
 
 
 /**
@@ -16,7 +16,7 @@ goog.provide('rflect.pagevis');
  * @type {Array.<string>}
  * @const
  */
-rflect.pagevis.VENDOR_HIDDEN_NAMES = [
+rflect.browser.pagevisibility.VENDOR_HIDDEN_NAMES = [
   'hidden',
   'msHidden',
   'mozHidden',
@@ -29,7 +29,7 @@ rflect.pagevis.VENDOR_HIDDEN_NAMES = [
  * @type {Array.<string>}
  * @const
  */
-rflect.pagevis.VENDOR_VISIBILITYCHANGE_NAMES = [
+rflect.browser.pagevisibility.VENDOR_VISIBILITYCHANGE_NAMES = [
   'visibilitychange',
   'msvisibilitychange',
   'mozvisibilitychange',
@@ -40,9 +40,9 @@ rflect.pagevis.VENDOR_VISIBILITYCHANGE_NAMES = [
 /**
  * @return {boolean} Whether page is visible according to Page Visibility API.
  */
-rflect.pagevis.pageIsVisible = function() {
-  return !rflect.pagevis.isAvailable() ||
-      !document[rflect.pagevis.nameOfHiddenProperty_];
+rflect.browser.pagevisibility.pageIsVisible = function() {
+  return !rflect.browser.pagevisibility.isAvailable() ||
+      !document[rflect.browser.pagevisibility.nameOfHiddenProperty_];
 }
 
 
@@ -50,9 +50,9 @@ rflect.pagevis.pageIsVisible = function() {
  * @return {boolean} Whether Page Visibility API is available. Should be called
  * after <code>detect</code>.
  */
-rflect.pagevis.isAvailable = function() {
-  return !!(rflect.pagevis.nameOfHiddenProperty_ &&
-      rflect.pagevis.nameOfVisibilityChangeEvent);
+rflect.browser.pagevisibility.isAvailable = function() {
+  return !!(rflect.browser.pagevisibility.nameOfHiddenProperty_ &&
+      rflect.browser.pagevisibility.nameOfVisibilityChangeEvent);
 }
 
 
@@ -61,27 +61,27 @@ rflect.pagevis.isAvailable = function() {
  * @type {string}
  * @private
  */
-rflect.pagevis.nameOfHiddenProperty_;
+rflect.browser.pagevisibility.nameOfHiddenProperty_;
 
 
 /**
  * Visibility change event name for current environment.
  * @type {string}
  */
-rflect.pagevis.nameOfVisibilityChangeEvent;
+rflect.browser.pagevisibility.nameOfVisibilityChangeEvent;
 
 
 /**
  * Tests whether Page Visibility API is available and with which vendor prefix.
  */
 (function() {
-  var vendorHiddenNames = rflect.pagevis.VENDOR_HIDDEN_NAMES;
+  var vendorHiddenNames = rflect.browser.pagevisibility.VENDOR_HIDDEN_NAMES;
   for (var vendorCounter = 0; vendorCounter <
       vendorHiddenNames.length; vendorCounter++){
     if (vendorHiddenNames[vendorCounter] in document){
-      rflect.pagevis.nameOfHiddenProperty_ = vendorHiddenNames[vendorCounter];
-      rflect.pagevis.nameOfVisibilityChangeEvent =
-          rflect.pagevis.VENDOR_VISIBILITYCHANGE_NAMES[vendorCounter];
+      rflect.browser.pagevisibility.nameOfHiddenProperty_ = vendorHiddenNames[vendorCounter];
+      rflect.browser.pagevisibility.nameOfVisibilityChangeEvent =
+          rflect.browser.pagevisibility.VENDOR_VISIBILITYCHANGE_NAMES[vendorCounter];
       break;
     }
   }

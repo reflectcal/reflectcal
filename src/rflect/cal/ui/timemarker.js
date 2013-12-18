@@ -14,7 +14,7 @@ goog.require('goog.date.Date');
 goog.require('goog.date.DateTime');
 goog.require('goog.dom');
 goog.require('goog.events');
-goog.require('rflect.pagevis');
+goog.require('rflect.browser.pagevisibility');
 goog.require('rflect.date');
 
 
@@ -42,9 +42,9 @@ rflect.cal.ui.TimeMarker = function(aViewManager, aTimeManager) {
    */
   this.timeManager_ = aTimeManager;
 
-  if (rflect.pagevis.isAvailable())
+  if (rflect.browser.pagevisibility.isAvailable())
     this.evKey_ = goog.events.listen(document,
-        rflect.pagevis.nameOfVisibilityChangeEvent, this.onTick_, false, this);
+        rflect.browser.pagevisibility.nameOfVisibilityChangeEvent, this.onTick_, false, this);
 
 };
 goog.inherits(rflect.cal.ui.TimeMarker, goog.Disposable);
@@ -82,7 +82,7 @@ rflect.cal.ui.TimeMarker.prototype.timer_;
  * @private
  */
 rflect.cal.ui.TimeMarker.prototype.onTick_ = function(opt_event) {
-  if (rflect.pagevis.pageIsVisible() && this.viewManager_.isInWeekMode()) {
+  if (rflect.browser.pagevisibility.pageIsVisible() && this.viewManager_.isInWeekMode()) {
     var today = new goog.date.DateTime();
     var headEl = goog.dom.getElement('time-marker-head');
     if (headEl)

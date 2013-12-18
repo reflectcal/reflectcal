@@ -9,10 +9,12 @@
 goog.provide('rflect.cal.ui.PaneShowBehavior');
 
 
+goog.require('goog.Disposable');
 goog.require('goog.dom.classes');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.style');
+goog.require('rflect.browser.transitionend');
 
 
 
@@ -21,8 +23,10 @@ goog.require('goog.style');
  * @param {goog.ui.Component} aComponent Component to decorate.
  * @param {Element} aParentElement Element in which pane will be rendered.
  * @constructor
+ * @extends {goog.Disposable}
  */
 rflect.cal.ui.PaneShowBehavior = function(aComponent, aParentElement) {
+  goog.Disposable.call(this);
 
   /**
    * @type {goog.ui.Component}
@@ -34,6 +38,7 @@ rflect.cal.ui.PaneShowBehavior = function(aComponent, aParentElement) {
    */
   this.parentEl_ = aParentElement;
 }
+goog.inherits(rflect.cal.ui.PaneShowBehavior, goog.Disposable);
 
 
 /**
@@ -76,15 +81,31 @@ rflect.cal.ui.PaneShowBehavior.prototype.setVisible = function(visible) {
     this.component.render(this.parentEl_);
   }
 
-  if (rflect.MOBILE && !visible) this.slideElement_(false);
+  if (rflect.MOBILE && !this.transitionEndKey_){
+    this.transitionEndKey_ = goog.events.listen(
+        this.component.getElement(),
+        rflect.browser.transitionend.VENDOR_TRANSITION_END_NAMES,
+        this.onSlideEnd_, false, this);
+  }
 
-  if (visible) this.beforeVisibleAction_();
+  if (rflect.MOBILE) {
 
-  this.showElement_(visible);
+    if (visible) {
+      this.beforeVisibleAction_();
+      this.showElement_(visible);
+      this.afterVisibleAction_();
+    }
+    setTimeout(goog.bind(function() {
+      this.slideElement_(visible);
+    }, this), 0);
 
-  if (visible) this.afterVisibleAction_();
+  } else {
 
-  if (rflect.MOBILE && visible) this.slideElement_(true);
+    if (visible) this.beforeVisibleAction_();
+    this.showElement_(visible);
+    if (visible) this.afterVisibleAction_();
+
+  }
 
   this.visible_ = visible;
 };
@@ -96,7 +117,7 @@ rflect.cal.ui.PaneShowBehavior.prototype.setVisible = function(visible) {
  * with this set to pane object.
  */
 rflect.cal.ui.PaneShowBehavior.prototype.getVisCallback_ = function(aFn) {
-  return goog.bind(aFn, this) || goog.nullFunction;
+  return goog.bind(aFn, this.component) || goog.nullFunction;
 }
 
 
@@ -138,9 +159,38 @@ rflect.cal.ui.PaneShowBehavior.prototype.showElement_ = function(visible) {
 rflect.cal.ui.PaneShowBehavior.prototype.slideElement_ = function(visible) {
   if (visible)
     goog.dom.classes.add(this.component.getElement(),
-        'slide-pane-shown-left');
+        'slide-pane-left-visible');
   else
     goog.dom.classes.remove(this.component.getElement(),
-        'slide-pane-shown-left');
+        'slide-pane-left-visible');
 };
 
+
+/**
+ * Slide end listener.
+ * @param {Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.PaneShowBehavior.prototype.onSlideEnd_ = function(aEvent) {
+  if (aEvent.target != this.component.getElement())
+    return;
+
+  if (goog.DEBUG)
+    _log('slide end');
+    if (goog.DEBUG)
+      _log('aEvent.type', aEvent.type);
+  if (false == this.visible_)
+    this.showElement_(false);
+}
+
+
+/**
+ * Disposes of the object.
+ * @override
+ * @protected
+ */
+rflect.cal.ui.PaneShowBehavior.prototype.disposeInternal = function() {
+  rflect.cal.ui.PaneShowBehavior.superClass_.disposeInternal.call(this);
+
+  goog.events.unlistenByKey(this.transitionEndKey_);
+};

@@ -75,7 +75,7 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
   this.showBehavior = new rflect.cal.ui.PaneShowBehavior(this, 
       this.getDomHelper().getElement('main-container'));
 
-  this.addChild(this.buttonCalendar_ = new goog.ui.Button(null,
+  this.addChild(this.buttonToCalendar_ = new goog.ui.Button(null,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.calSelector_ = new rflect.cal.ui.CalSelector(
       this.viewManager_, this.containerSizeMonitor_, this.eventManager_));
@@ -125,7 +125,7 @@ rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
 rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
 
   var parts = [
-    '<nav id="side-pane" class="side-pane" style="display:none">',
+    '<nav id="side-pane" class="side-pane slide-pane-left" style="display:none">',
     '<div class="control-pane">',
     '<div class="pane-left">',
     '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
@@ -134,9 +134,11 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
     '</div>',
     '</div>',
     '</div>',
+    '<div class="side-pane-body">',
     '<ul class="pane-menu">',
     '</ul>',
     '<div id="calendars-selector" class="list-selector">',
+    '</div>',
     '</div>',
     '</nav>'
   ];
@@ -148,10 +150,10 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
     aSb.append(parts[counter]);
     switch (counter) {
       // Include top pane in common buffer.
-      case 9: {
+      case 10: {
         this.buildMenu_(aSb);
       };break;
-      case 11: {
+      case 12: {
         this.calSelector_.build(aSb);
       };break;
       default: break;
@@ -165,10 +167,13 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
  */
 rflect.cal.ui.SidePane.prototype.enterDocument = function() {
 
+  this.buttonToCalendar_.decorate(this.dom_.getElement(
+        rflect.cal.predefined.BUTTON_TO_CALENDAR_ID));
+  
   rflect.cal.ui.SidePane.superClass_.enterDocument.call(this);
 
   // Attaching event handlers.
-  this.getHandler().listen(this.buttonCalendar_,
+  this.getHandler().listen(this.buttonToCalendar_,
       goog.ui.Component.EventType.ACTION, this.onCancel_, false, this);
 };
 
@@ -181,7 +186,6 @@ rflect.cal.ui.SidePane.prototype.onCancel_ = function() {
   if (this.dispatchEvent(new goog.events.Event(
       rflect.cal.ui.SidePane.EventTypes.CANCEL)))
     this.showBehavior.setVisible(false);
-
 }
 
 
@@ -196,5 +200,5 @@ rflect.cal.ui.SidePane.prototype.onCancel_ = function() {
 rflect.cal.ui.SidePane.prototype.disposeInternal = function() {
   rflect.cal.ui.SidePane.superClass_.disposeInternal.call(this);
 
-  this.buttonCalendar_ = null;
+  this.buttonToCalendar_ = null;
 };

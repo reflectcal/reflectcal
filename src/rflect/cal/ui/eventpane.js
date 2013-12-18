@@ -102,6 +102,13 @@ rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
   this.inputDatePicker_ = new rflect.cal.ui.InputDatePicker(this.viewManager_,
       rflect.cal.ui.EventPane.getDateFormatString());
 
+  /**
+   * Pane show behavior.
+   * @type {rflect.cal.ui.PaneShowBehavior}
+   */
+  this.showBehavior = new rflect.cal.ui.PaneShowBehavior(this,
+      this.getDomHelper().getElement('main-container'));
+
 };
 goog.inherits(rflect.cal.ui.EventPane, goog.ui.Component);
 
@@ -339,7 +346,8 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
       nameCont, dateCont, allDayCont, calendarsCont, descCont);
 
   var root = dom.createDom('div', {
-    className: goog.getCssName('settings-pane'),
+    className: goog.getCssName('settings-pane') + (rflect.MOBILE ?
+        ' slide-pane-left' : ''),
     id: 'event-edit-pane'
     }, headerCont, buttonsCont1, body, buttonsCont2);
 
@@ -400,8 +408,30 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
   this.inputDatePicker_.addInput(this.inputStartDate_);
   this.inputDatePicker_.addInput(this.inputEndDate_);
 
-
+  //Show/hide actions.
+  this.showBehavior.setBeforeVisibleAction(function(){
+    this.displayValues();
+  });
+  if (!rflect.MOBILE) this.showBehavior.setAfterVisibleAction(function(){
+    /** @preserveTry */
+    try {
+      this.inputName_.focus();
+      this.inputName_.select();
+    } catch(e) {
+      // IE8- shows error that it couldn't set focus but nevertheless, sets it.
+    }
+  });
 };
+
+
+/**
+ * @param {boolean=} opt_creatingNewEvent Whether event pane is in new
+ * event mode.
+ */
+rflect.cal.ui.EventPane.prototype.setNewEventMode = function(
+    opt_creatingNewEvent) {
+  this.newEventMode_ = opt_creatingNewEvent || false;
+}
 
 
 /**
@@ -485,7 +515,7 @@ rflect.cal.ui.EventPane.prototype.updateAC_ = function(aAC) {
 rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
   if (this.dispatchEvent(new goog.events.Event(
       rflect.cal.ui.EventPane.EventTypes.CANCEL))) {
-    this.setVisible(false);
+    this.showBehavior.setVisible(false);
   }
 }
 
@@ -500,7 +530,7 @@ rflect.cal.ui.EventPane.prototype.onSave_ = function() {
         this.eventManager_.eventHolder.getCurrentEvent());
     if (this.dispatchEvent(new goog.events.Event(
         rflect.cal.ui.EventPane.EventTypes.SAVE))) {
-      this.setVisible(false);
+      this.showBehavior.setVisible(false);
     }
   }
 }
@@ -518,7 +548,7 @@ rflect.cal.ui.EventPane.prototype.onDelete_ = function(aEvent) {
 
   if (this.dispatchEvent(new goog.events.Event(
       rflect.cal.ui.EventPane.EventTypes.DELETE))) {
-    this.setVisible(false);
+    this.showBehavior.setVisible(false);
   }
 }
 
@@ -548,50 +578,6 @@ rflect.cal.ui.EventPane.prototype.showTimeInputs_ = function(aShow) {
   goog.style.showElement(this.inputStartTime_, aShow);
   goog.style.showElement(this.inputEndTime_, aShow);
 }
-
-
-/**
- * Sets the visibility of the event pane and moves focus to the
- * event name input. Lazily renders the component if needed.
- * @param {boolean} visible Whether the pane should be visible.
- * @param {boolean=} opt_creatingNewEvent Whether we're creating new event.
- */
-rflect.cal.ui.EventPane.prototype.setVisible = function(visible,
-    opt_creatingNewEvent) {
-  if (visible == this.visible_) {
-    return;
-  }
-
-  // If the pane hasn't been rendered yet, render it now.
-  if (!this.isInDocument()) {
-    this.render(this.parentEl_);
-  }
-
-  this.newEventMode_ = opt_creatingNewEvent || false;
-  this.displayValues();
-
-  this.showElement_(visible);
-
-  /** @preserveTry */
-  try {
-    this.inputName_.focus();
-    this.inputName_.select();
-  } catch(e) {
-    // IE8- shows error that it couldn't set focus but nevertheless, sets it.
-  }
-
-  this.visible_ = visible;
-};
-
-
-/**
- * Shows or hides the pane element.
- * @param {boolean} visible Shows the element if true, hides if false.
- * @private
- */
-rflect.cal.ui.EventPane.prototype.showElement_ = function(visible) {
-  goog.style.showElement(this.getElement(), visible);
-};
 
 
 /**
