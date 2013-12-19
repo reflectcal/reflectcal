@@ -28,6 +28,8 @@ goog.require('rflect.cal.ui.ac');
 goog.require('rflect.cal.ui.CalendarsSelect');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.InputDatePicker');
+goog.require('rflect.cal.ui.PaneShowBehavior');
+goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.date.util');
 goog.require('rflect.ui.Checkbox');
 goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
@@ -87,7 +89,7 @@ rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
   this.addChild(this.buttonDelete_ = new goog.ui.Button(
       rflect.cal.ui.EditDialog.ButtonCaptions.DELETE,
       goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.checkboxDebug_ = new rflect.ui.Checkbox());
+  this.addChild(this.checkboxAllDay_ = new rflect.ui.Checkbox());
   this.addChild(this.buttonCancel2_ = new goog.ui.Button(
       rflect.ui.Dialog.DefaultButtonCaptions.CANCEL,
       goog.ui.FlatButtonRenderer.getInstance()));
@@ -303,8 +305,8 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     className: labelClassName + ' event-edit-pane-label-long'
   }, 'All-day event');
   var allDaySubCont = dom.createDom('span', null, labelAllDay,
-      this.checkboxDebug_.getElement());
-  this.checkboxDebug_.setLabel(allDaySubCont);
+      this.checkboxAllDay_.getElement());
+  this.checkboxAllDay_.setLabel(allDaySubCont);
   var allDayCont = dom.createDom('div', {
     id: 'all-day-label',
     className: goog.getCssName('description-cont') + ' ' +
@@ -385,7 +387,7 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
       this.onSave_, false, this)
       .listen(this.buttonDelete_,
       goog.ui.Component.EventType.ACTION, this.onDelete_, false, this)
-      .listen(this.checkboxDebug_,
+      .listen(this.checkboxAllDay_,
       goog.ui.Component.EventType.CHANGE, this.onCheck_, false, this)
 
       .listen(this.inputStartDate_,
@@ -409,18 +411,23 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
   this.inputDatePicker_.addInput(this.inputEndDate_);
 
   //Show/hide actions.
-  this.showBehavior.setBeforeVisibleAction(function(){
+  this.getHandler().listen(this.showBehavior,
+      rflect.cal.ui.PaneShowBehavior.EventTypes.BEFORE_SHOW, function(){
     this.displayValues();
-  });
-  if (!rflect.MOBILE) this.showBehavior.setAfterVisibleAction(function(){
-    /** @preserveTry */
-    try {
-      this.inputName_.focus();
-      this.inputName_.select();
-    } catch(e) {
-      // IE8- shows error that it couldn't set focus but nevertheless, sets it.
-    }
-  });
+  }, false, this);
+
+  if (!rflect.MOBILE)
+    this.getHandler().listen(this.showBehavior,
+        rflect.cal.ui.PaneShowBehavior.EventTypes.AFTER_SHOW, function(){
+      /** @preserveTry */
+      try {
+        this.inputName_.focus();
+        this.inputName_.select();
+      } catch(e) {
+        // IE8- shows error that it couldn't set focus but nevertheless, sets
+        // it.
+      }
+    }, false, this);
 };
 
 
@@ -560,8 +567,8 @@ rflect.cal.ui.EventPane.prototype.onDelete_ = function(aEvent) {
 rflect.cal.ui.EventPane.prototype.onCheck_ = function(aEvent) {
   var eh = this.eventManager_.eventHolder;
   var checked;
-  if (aEvent.target == this.checkboxDebug_) {
-    checked = this.checkboxDebug_.isChecked();
+  if (aEvent.target == this.checkboxAllDay_) {
+    checked = this.checkboxAllDay_.isChecked();
     this.showTimeInputs_(!checked);
     eh.setAllDay(checked);
 
@@ -594,7 +601,7 @@ rflect.cal.ui.EventPane.prototype.displayValues = function() {
 
   this.textAreaDesc_.innerHTML = eh.getDescription();
 
-  this.checkboxDebug_.setChecked(eh.getAllDay());
+  this.checkboxAllDay_.setChecked(eh.getAllDay());
 
   this.selectCalendars_.update();
   this.selectCalendars_.setCalendarId(eh.getCalendarId());

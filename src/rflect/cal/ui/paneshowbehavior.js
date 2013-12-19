@@ -7,11 +7,14 @@
  */
 
 goog.provide('rflect.cal.ui.PaneShowBehavior');
+goog.provide('rflect.cal.ui.PaneShowBehavior.EventTypes');
+goog.provide('rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent');
 
 
-goog.require('goog.Disposable');
+goog.require('goog.events.EventTarget');
 goog.require('goog.dom.classes');
 goog.require('goog.events');
+goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.style');
 goog.require('rflect.browser.transitionend');
@@ -23,10 +26,10 @@ goog.require('rflect.browser.transitionend');
  * @param {goog.ui.Component} aComponent Component to decorate.
  * @param {Element} aParentElement Element in which pane will be rendered.
  * @constructor
- * @extends {goog.Disposable}
+ * @extends {goog.events.EventTarget}
  */
 rflect.cal.ui.PaneShowBehavior = function(aComponent, aParentElement) {
-  goog.Disposable.call(this);
+  goog.events.EventTarget.call(this);
 
   /**
    * @type {goog.ui.Component}
@@ -38,7 +41,36 @@ rflect.cal.ui.PaneShowBehavior = function(aComponent, aParentElement) {
    */
   this.parentEl_ = aParentElement;
 }
-goog.inherits(rflect.cal.ui.PaneShowBehavior, goog.Disposable);
+goog.inherits(rflect.cal.ui.PaneShowBehavior, goog.events.EventTarget);
+
+
+/**
+ * @enum {string}
+ */
+rflect.cal.ui.PaneShowBehavior.EventTypes = {
+  BEFORE_SHOW: 'beforeShow',
+  AFTER_SHOW: 'afterShow',
+  SLIDE_BREAK_POINT: 'slideBreakPoint'
+};
+
+
+/**
+ * Event that is fired at the start of pane sliding.
+ * @param {boolean} aStart Whether this point is start, or end.
+ * @param {boolean} aShowing Whether sliding process is showing pane, 'opening'.
+ * @extends {goog.events.Event}
+ * @constructor
+ */
+rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent = function(aStart,
+    aShowing) {
+  goog.events.Event.call(this,
+      rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT);
+
+  this.start = aStart;
+  this.showing = aShowing;
+}
+goog.inherits(rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent,
+    goog.events.Event);
 
 
 /**
@@ -88,12 +120,16 @@ rflect.cal.ui.PaneShowBehavior.prototype.setVisible = function(visible) {
         this.onSlideEnd_, false, this);
   }
 
+  // Here we emit events before pane becomes visible and after that.
   if (rflect.MOBILE) {
 
     if (visible) {
-      this.beforeVisibleAction_();
-      this.showElement_(visible);
-      this.afterVisibleAction_();
+      if (this.dispatchEvent(new goog.events.Event(
+          rflect.cal.ui.PaneShowBehavior.EventTypes.BEFORE_SHOW))) {
+        this.showElement_(visible);
+      }
+      this.dispatchEvent(new goog.events.Event(
+          rflect.cal.ui.PaneShowBehavior.EventTypes.AFTER_SHOW));
     }
     setTimeout(goog.bind(function() {
       this.slideElement_(visible);
@@ -101,9 +137,16 @@ rflect.cal.ui.PaneShowBehavior.prototype.setVisible = function(visible) {
 
   } else {
 
-    if (visible) this.beforeVisibleAction_();
-    this.showElement_(visible);
-    if (visible) this.afterVisibleAction_();
+    if (visible) {
+      if (this.dispatchEvent(new goog.events.Event(
+          rflect.cal.ui.PaneShowBehavior.EventTypes.BEFORE_SHOW))) {
+        this.showElement_(visible);
+      }
+    } else
+      this.showElement_(visible);
+    if (visible)
+      this.dispatchEvent(new goog.events.Event(
+          rflect.cal.ui.PaneShowBehavior.EventTypes.AFTER_SHOW));
 
   }
 
@@ -157,12 +200,15 @@ rflect.cal.ui.PaneShowBehavior.prototype.showElement_ = function(visible) {
  * @private
  */
 rflect.cal.ui.PaneShowBehavior.prototype.slideElement_ = function(visible) {
-  if (visible)
-    goog.dom.classes.add(this.component.getElement(),
-        'slide-pane-left-visible');
-  else
-    goog.dom.classes.remove(this.component.getElement(),
-        'slide-pane-left-visible');
+  if (this.dispatchEvent(
+      new rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent(true, visible))) {
+    if (visible)
+      goog.dom.classes.add(this.component.getElement(),
+          'slide-pane-left-visible');
+    else
+      goog.dom.classes.remove(this.component.getElement(),
+          'slide-pane-left-visible');
+  }
 };
 
 
@@ -175,12 +221,14 @@ rflect.cal.ui.PaneShowBehavior.prototype.onSlideEnd_ = function(aEvent) {
   if (aEvent.target != this.component.getElement())
     return;
 
-  if (goog.DEBUG)
-    _log('slide end');
-    if (goog.DEBUG)
-      _log('aEvent.type', aEvent.type);
-  if (false == this.visible_)
-    this.showElement_(false);
+  if (this.dispatchEvent(
+      new rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent(false,
+          this.visible_))) {
+
+    if (false == this.visible_)
+      this.showElement_(false);
+
+  }
 }
 
 

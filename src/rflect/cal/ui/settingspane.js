@@ -30,6 +30,8 @@ goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.Transport');
 goog.require('rflect.cal.Transport.EventTypes');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
+goog.require('rflect.cal.ui.PaneShowBehavior');
+goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.string');
 goog.require('rflect.ui.Checkbox');
 goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
@@ -811,11 +813,12 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
           this.onDeleteCalendarResponse_, false, this)
 
       .listen(document,
-          goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this);
+          goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
 
-  this.showBehavior.setBeforeVisibleAction(function(){
-    this.displaySettingsValues_();
-  });
+      .listen(this.showBehavior,
+          rflect.cal.ui.PaneShowBehavior.EventTypes.BEFORE_SHOW, function(){
+        this.displaySettingsValues_();
+      }, false, this);
 };
 
 
@@ -1055,7 +1058,7 @@ rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
     else
       if (this.dispatchEvent(new goog.events.Event(
           rflect.cal.ui.SettingsPane.EventTypes.CANCEL)))
-        this.setVisible(false);
+        this.showBehavior.setVisible(false);
 
 }
 
@@ -1071,7 +1074,7 @@ rflect.cal.ui.SettingsPane.prototype.onSaveSettings_ = function() {
 
     if (this.dispatchEvent(new rflect.cal.ui.SettingsPane.SaveSettingsEvent(
         this.settings, false))) {
-      this.setVisible(false);
+      this.showBehavior.setVisible(false);
     }
 
   }

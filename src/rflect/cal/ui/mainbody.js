@@ -14,13 +14,15 @@ goog.require('goog.style');
 goog.require('rflect.ui.Component');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.Transport');
+goog.require('rflect.cal.ui.CalSelector');
+goog.require('rflect.cal.ui.CalSelector.EventType');
 goog.require('rflect.cal.ui.ControlPane');
 goog.require('rflect.cal.ui.EventPane');
 goog.require('rflect.cal.ui.EventPane.EventTypes');
 goog.require('rflect.cal.ui.MainPane');
 goog.require('rflect.cal.ui.MiniCal');
-goog.require('rflect.cal.ui.CalSelector');
-goog.require('rflect.cal.ui.CalSelector.EventType');
+goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
+goog.require('rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent');
 goog.require('rflect.cal.ui.TaskSelector');
 goog.require('rflect.cal.ui.SettingsPane');
 goog.require('rflect.cal.ui.SettingsPane.EventTypes');
@@ -430,6 +432,7 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
 
   this.getHandler().listen(this.topPane_, goog.ui.Component.EventType.ACTION,
       this.onControlPaneAction_, false, this);
+
   if (rflect.MOBILE) {
     this.getHandler().listen(this.bottomPane_,
         goog.ui.Component.EventType.ACTION, this.onControlPaneAction_, false,
@@ -437,6 +440,9 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
     this.getHandler().listen(this.sidePane_,
         rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
         this.onCalendarSwitch_, false, this)
+        .listen(this.sidePane_.showBehavior,
+        rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT,
+        this.onSlideStartOrEnd_, false, this)
         .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
         this.onSidePaneAction_, false, this);
   } else {
@@ -662,7 +668,12 @@ rflect.cal.ui.MainBody.prototype.showEventPane = function(aShow,
         rflect.cal.ui.EventPane.EventTypes.SAVE, this.onEventPaneSave_,
         false, this).listen(this.eventPane_,
         rflect.cal.ui.EventPane.EventTypes.DELETE, this.onEventPaneDelete_,
-        false, this)
+        false, this);
+
+    if (rflect.MOBILE)
+      this.getHandler().listen(this.eventPane_.showBehavior,
+          rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT,
+          this.onSlideStartOrEnd_, false, this);
   }
 
   this.eventPane_.setNewEventMode(opt_creatingNewEvent);
@@ -691,6 +702,11 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
         rflect.cal.ui.SettingsPane.EventTypes.CALENDAR_UPDATE,
         this.onSettingsPaneCalendarUpdate_, false, this);
 
+    if (rflect.MOBILE)
+      this.getHandler().listen(this.settingsPane_.showBehavior,
+          rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT,
+          this.onSlideStartOrEnd_, false, this);
+
     if (goog.DEBUG) {
       _inspect('settingsPane_', this.settingsPane_);
     }
@@ -709,6 +725,29 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
 rflect.cal.ui.MainBody.prototype.showCalendar_ = function(aShow) {
   goog.style.showElement(this.getDomHelper().getElement('cal-container'),
       aShow);
+}
+
+
+/**
+ * @param {rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent} aEvent Event
+ * object.
+ */
+rflect.cal.ui.MainBody.prototype.onSlideStartOrEnd_ = function(aEvent) {
+
+  switch (aEvent.target.component) {
+    case this.settingsPane_: ;
+    case this.eventPane_: {
+      // If closing pane, show calendar on start.
+      if (aEvent.start && !aEvent.showing) this.showCalendar_(true);
+      // If opening pane, hide calendar on end.
+      if (!aEvent.start && aEvent.showing) this.showCalendar_(false);
+    };break;
+    case this.sidePane_: {
+      //if (slideStart && !aEvent.showing) this.lightCalendar_(true);
+      //if (slideEnd && aEvent.showing) this.lightCalendar_(false);
+    };
+    default:break;
+  }
 }
 
 
