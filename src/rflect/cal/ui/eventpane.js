@@ -263,7 +263,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
       goog.getCssName('event-edit-pane-cont')],
     labelName, this.inputName_);
 
-  var labelStartDate = dom.createDom('label', {
+  var labelDate = dom.createDom('label', {
     'for': 'event-start-date',
     className: labelClassName
   }, 'Date');
@@ -289,16 +289,21 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     className: goog.getCssName('event-time-input')
   });
 
-  var startInputCont = dom.createDom('div',
+  var startDateSubCont = dom.createDom('div', 'date-sub-cont',
+      this.inputStartDate_, this.inputStartTime_);
+  var endDateSubCont = dom.createDom('div', 'date-sub-cont',
+      this.inputEndDate_, this.inputEndTime_);
+
+  var dateInputCont = dom.createDom('div',
       [goog.getCssName('start-input-cont'),
         goog.getCssName('event-edit-pane-cont-inner')],
-      labelStartDate, this.inputStartDate_, this.inputStartTime_,
-      ' - ', this.inputEndDate_, this.inputEndTime_);
+      labelDate, startDateSubCont,
+      ' - ', endDateSubCont);
 
   var dateCont = dom.createDom('div',
     [goog.getCssName('date-input-cont'),
       goog.getCssName('event-edit-pane-cont')],
-    startInputCont);
+    dateInputCont);
 
   var labelAllDay = dom.createDom('label', {
     'for': 'event-all-day',
