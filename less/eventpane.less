@@ -41,11 +41,13 @@
 }
 
 .ep-event-name-input {
-  width: 482px;
-  height: 19px !important;
-  line-height: 19px !important;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  @paddingTop: 8px;
+  @contentHeight: 19px;
+
+  height: @contentHeight + 2 * @paddingTop + @borderWidthDouble !important;
+  line-height: @contentHeight !important;
+  padding-top: @paddingTop;
+  padding-bottom: @paddingTop;
 
   font-size: 16px;
   font-family: 'Roboto', arial, sans-serif;
@@ -78,7 +80,6 @@
 }
 
 .event-description {
-  width: 490px;
   height: 100px;
 }
 
@@ -89,6 +90,10 @@
 
 .event-edit-pane-label-long {
   width: 150px;
+}
+
+.event-edit-pane-label-block when (@UI_TYPE = 'MOBILE'){
+  display: block;
 }
 
 .event-edit-pane-button {
@@ -104,6 +109,10 @@
 
 .event-edit-pane-cal-select {
   display: inline;
+}
+
+.event-cal-select {
+  padding: 5px 4px 5px 8px;
 }
 
 .event-pane-buttons-upper {

@@ -41,13 +41,16 @@
 }
 
 input[type="email"], input[type="number"], input[type="password"], input[type="tel"], input[type="text"], input[type="url"] {
-  /*-moz-box-sizing: border-box;
-  box-sizing: border-box;*/
-  line-height: 14px/*to enclose 13px font, override this if needed*/;
-  height: 14px/*to enclose 13px font, override this if needed*/;
+  @paddingTop: 6px;
+  @contentHeight: 14px;
+
+  .box-sizing();
+
+  line-height: @contentHeight/*to enclose 13px font, override this if needed*/;
+  height: @contentHeight + 2 * @paddingTop + @borderWidthDouble/*to enclose 13px font, override this if needed*/;
   /*Padding is needed to avoid giant cursor in webkit, which we get if
   height = line-height = 22px.*/
-  padding: 6px 8px;
+  padding: @paddingTop 8px;
 
   background: none;
   border-color: #C0C0C0 #D9D9D9 #D9D9D9;
@@ -77,6 +80,10 @@ input[type="text"]:hover {
 }
 
 textarea {
+  @padding: 4px;
+  @contentHeight: 29px;
+
+  .box-sizing();
   font-family: 'Roboto', arial, sans-serif;
   background: none;
   border-color: #C0C0C0 #D9D9D9 #D9D9D9;
@@ -86,9 +93,9 @@ textarea {
   border-style: solid;
   border-width: 1px;
   display: inline-block;
-  height: 29px;
+  height: @contentHeight + 2 * @padding + @borderWidthDouble;
   margin: 0;
-  padding: 4px;
+  padding: @padding;
 
   transition: box-shadow .1s;
 }
@@ -101,4 +108,27 @@ textarea:focus {
 
 textarea:hover {
   border-color: #aeaeae #c1bfbf #c1bfbf #c1bfbf;
+}
+
+select {
+  .box-sizing();
+}
+
+/*Default control wrapper is inline.*/
+.control-wrapper {
+  display:inline-block;
+  padding-right: 15px;
+  width: 400px
+}
+
+.control-wrapper input, .control-wrapper textarea, .control-wrapper select {
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .control-wrapper {
+    display:block;
+    width: auto;
+    padding-right: 15px;
+  }
 }

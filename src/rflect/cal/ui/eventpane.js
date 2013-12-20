@@ -31,6 +31,7 @@ goog.require('rflect.cal.ui.InputDatePicker');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.date.util');
+goog.require('rflect.dom');
 goog.require('rflect.ui.Checkbox');
 goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
 
@@ -261,11 +262,11 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     [goog.getCssName('event-name-input-cont'),
       goog.getCssName('event-edit-pane-cont-first'),
       goog.getCssName('event-edit-pane-cont')],
-    labelName, this.inputName_);
+    labelName, rflect.dom.wrapControl(this.inputName_));
 
   var labelDate = dom.createDom('label', {
     'for': 'event-start-date',
-    className: labelClassName
+    className: labelClassName + ' event-edit-pane-label-block'
   }, 'Date');
   this.inputStartDate_ = dom.createDom('input', {
     'type': 'text',
@@ -289,10 +290,10 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     className: goog.getCssName('event-time-input')
   });
 
-  var startDateSubCont = dom.createDom('div', 'date-sub-cont',
-      this.inputStartDate_, this.inputStartTime_);
-  var endDateSubCont = dom.createDom('div', 'date-sub-cont',
-      this.inputEndDate_, this.inputEndTime_);
+  var startDateSubCont = dom.createDom('div', ['date-sub-cont',
+      'goog-inline-block'], this.inputStartDate_, this.inputStartTime_);
+  var endDateSubCont = dom.createDom('div', ['date-sub-cont',
+      'goog-inline-block'], this.inputEndDate_, this.inputEndTime_);
 
   var dateInputCont = dom.createDom('div',
       [goog.getCssName('start-input-cont'),
@@ -333,7 +334,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   var calendarsCont = dom.createDom('div', {
     id: 'all-day-label',
     className: goog.getCssName('event-edit-pane-cont')
-    }, labelCalendars, selectCalendarsEl);
+    }, labelCalendars, rflect.dom.wrapControl(selectCalendarsEl));
 
   var labelDesc = dom.createDom('label', {
     'for': 'event-description',
@@ -347,7 +348,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   var descCont = dom.createDom('div', [
     goog.getCssName('description-cont'),
       goog.getCssName('event-edit-pane-cont')],
-    labelDesc, this.textAreaDesc_);
+    labelDesc, rflect.dom.wrapControl(this.textAreaDesc_));
 
   var body = dom.createDom('div', goog.getCssName('settings-body'),
       nameCont, allDayCont, dateCont, calendarsCont, descCont);
