@@ -421,19 +421,38 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
     this.displayValues();
   }, false, this);
 
-  if (!rflect.MOBILE)
-    this.getHandler().listen(this.showBehavior,
-        rflect.cal.ui.PaneShowBehavior.EventTypes.AFTER_SHOW, function(){
-      /** @preserveTry */
-      try {
-        this.inputName_.focus();
-        this.inputName_.select();
-      } catch(e) {
-        // IE8- shows error that it couldn't set focus but nevertheless, sets
-        // it.
-      }
-    }, false, this);
+  if (rflect.MOBILE) {
+    var eventNameForInputFocus =
+        rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT;
+  } else {
+    var eventNameForInputFocus =
+        rflect.cal.ui.PaneShowBehavior.EventTypes.AFTER_SHOW;
+  }
+
+  this.getHandler().listen(this.showBehavior, eventNameForInputFocus,
+      this.onPaneReady_, false, this);
 };
+
+
+/**
+ * @param {rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent} aEvent Event
+ * object.
+ */
+rflect.cal.ui.EventPane.prototype.onPaneReady_ = function(aEvent) {
+  // Do this only at the end of sliding-in pane.
+  if (rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT ==
+      aEvent.type && !(!aEvent.start && aEvent.showing))
+    return;
+
+  /** @preserveTry */
+  try {
+    this.inputName_.focus();
+    this.inputName_.select();
+  } catch(e) {
+    // IE8- shows error that it couldn't set focus but nevertheless, sets
+    // it.
+  }
+}
 
 
 /**
