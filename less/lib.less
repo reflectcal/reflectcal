@@ -52,3 +52,9 @@
   @opperc: @opacity * 100;
   filter: ~'alpha(opacity=@{opperc})';
 }
+
+.box-sizing(@box-sizing: border-box) {
+  -webkit-box-sizing: @box-sizing;
+  -moz-box-sizing: @box-sizing;
+  box-sizing: @box-sizing;
+}
