@@ -211,7 +211,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   var dom = this.getDomHelper();
 
   /**@const*/
-  var labelClassName = goog.getCssName('goog-inline-block') + ' ' +
+  var labelClassName = goog.getCssName('label-fluid') + ' ' +
       goog.getCssName('event-edit-pane-label');
 
   this.forEachChild(function(child){
@@ -266,7 +266,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
 
   var labelDate = dom.createDom('label', {
     'for': 'event-start-date',
-    className: labelClassName + ' event-edit-pane-label-block'
+    className: labelClassName
   }, 'Date');
   this.inputStartDate_ = dom.createDom('input', {
     'type': 'text',
@@ -295,20 +295,22 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   var endDateSubCont = dom.createDom('div', ['date-sub-cont',
       'goog-inline-block'], this.inputEndDate_, this.inputEndTime_);
 
-  var dateInputCont = dom.createDom('div',
+  /*var dateInputCont = dom.createDom('div',
       [goog.getCssName('start-input-cont'),
         goog.getCssName('event-edit-pane-cont-inner')],
-      labelDate, startDateSubCont,
-      ' - ', endDateSubCont);
+      labelDate, controlWrapperMultiple);*/
+      
+  var controlWrapperMultiple = dom.createDom('div', 'control-wrapper-multiple', 
+      startDateSubCont, ' - ', endDateSubCont);
 
   var dateCont = dom.createDom('div',
     [goog.getCssName('date-input-cont'),
       goog.getCssName('event-edit-pane-cont')],
-    dateInputCont);
+    labelDate, controlWrapperMultiple);
 
   var labelAllDay = dom.createDom('label', {
     'for': 'event-all-day',
-    className: labelClassName + ' event-edit-pane-label-long'
+    className: 'goog-inline-block event-edit-pane-label'
   }, 'All-day event');
   var allDaySubCont = dom.createDom('span', null, labelAllDay,
       this.checkboxAllDay_.getElement());

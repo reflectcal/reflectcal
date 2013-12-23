@@ -121,6 +121,16 @@ select {
   width: 400px
 }
 
+/*Class to place multiple controls in one line.*/
+.control-wrapper-multiple {
+  display:inline-block;
+  white-space: nowrap;
+}
+
+.label-fluid {
+  display:inline-block;
+}
+
 .control-wrapper input, .control-wrapper textarea, .control-wrapper select {
   width: 100%;
 }
@@ -130,5 +140,14 @@ select {
     display:block;
     width: auto;
     padding-right: 15px;
+  }
+
+  .control-wrapper-multiple {
+    display:block;
+    white-space: normal;
+  }
+
+  .label-fluid {
+    display:block;
   }
 }
