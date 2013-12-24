@@ -238,20 +238,22 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
 
     var paneLeft1 = dom.createDom('div', 'pane-left');
     var paneRight1 = dom.createDom('div', 'pane-right');
+    var paneCenter2 = dom.createDom('div', 'pane-center');
     var paneRight2 = dom.createDom('div', 'pane-right');
 
     paneLeft1.appendChild(this.buttonBack_.getElement());
-    paneRight1.appendChild(this.buttonDelete_.getElement());
     paneRight1.appendChild(this.buttonSave1_.getElement());
     paneRight1.appendChild(this.buttonCancel1_.getElement());
 
     var buttonsCont1 = dom.createDom('div', 'control-pane', paneRight1,
         paneLeft1);
 
+    paneCenter2.appendChild(this.buttonDelete_.getElement());
     paneRight2.appendChild(this.buttonSave2_.getElement());
     paneRight2.appendChild(this.buttonCancel2_.getElement());
 
-    var buttonsCont2 = dom.createDom('div', 'control-pane', paneRight2);
+    var buttonsCont2 = dom.createDom('div', 'control-pane', paneRight2,
+        paneCenter2);
 
   } else {
     var buttonsCont1 = dom.createDom('div',
