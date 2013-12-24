@@ -29,7 +29,7 @@ rflect.cal.i18n.Symbols_en = {
   TASKS_LABEL: 'Tasks',
   NO_NAME_EVENT: '(Untitled)',
   CALENDAR_POSTFIX: ' calendar',
-  TO_CALENDAR: 'Calendar',
+  TO_CALENDAR: ' Calendar',
 
   SAVE: 'Save',
   CANCEL: 'Cancel',
@@ -51,7 +51,7 @@ rflect.cal.i18n.Symbols_ru = {
   TASKS_LABEL: 'Задачи',
   NO_NAME_EVENT: '(Без имени)',
   CALENDAR_POSTFIX: ' календарь',
-  TO_CALENDAR: 'Календарь',
+  TO_CALENDAR: ' Календарь',
 
   SAVE: 'Сохранить',
   CANCEL: 'Отмена',
@@ -73,7 +73,7 @@ rflect.cal.i18n.Symbols_by = {
   TASKS_LABEL: 'Задачы',
   NO_NAME_EVENT: '(Без імя)',
   CALENDAR_POSTFIX: ' каляндар',
-  TO_CALENDAR: 'Каляндар',
+  TO_CALENDAR: ' Каляндар',
 
   SAVE: 'Захаваць',
   CANCEL: 'Адмена',
@@ -95,7 +95,7 @@ rflect.cal.i18n.Symbols_fr = {
   TASKS_LABEL: 'Tâches',
   NO_NAME_EVENT: '(pas de nom)',
   CALENDAR_POSTFIX: ' calendrier',
-  TO_CALENDAR: 'Сalendrier',
+  TO_CALENDAR: ' Сalendrier',
 
   SAVE: 'Enregistrer',
   CANCEL: 'Annuler',

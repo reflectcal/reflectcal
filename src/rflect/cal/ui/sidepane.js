@@ -130,6 +130,7 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
     '<div class="pane-left">',
     '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
         'id="' + rflect.cal.predefined.BUTTON_TO_CALENDAR_ID + '">',
+    '<i class="icon icon-chevron-left"></i>',
     rflect.cal.i18n.Symbols.TO_CALENDAR,
     '</div>',
     '</div>',
@@ -150,10 +151,10 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
     aSb.append(parts[counter]);
     switch (counter) {
       // Include top pane in common buffer.
-      case 10: {
+      case 11: {
         this.buildMenu_(aSb);
       };break;
-      case 12: {
+      case 13: {
         this.calSelector_.build(aSb);
       };break;
       default: break;
