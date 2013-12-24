@@ -26,14 +26,15 @@ goog.require('goog.ui.FlatButtonRenderer');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.ac');
 goog.require('rflect.cal.ui.CalendarsSelect');
-goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
+goog.require('rflect.cal.ui.common');
+goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.InputDatePicker');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.date.util');
 goog.require('rflect.dom');
 goog.require('rflect.ui.Checkbox');
-goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
+goog.require('rflect.cal.i18n.Symbols');
 
 
 /**
@@ -82,20 +83,22 @@ rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
   this.parentEl_ = aParentElement;
 
   this.addChild(this.buttonCancel1_ = new goog.ui.Button(
-      rflect.ui.Dialog.DefaultButtonCaptions.CANCEL,
+      rflect.cal.i18n.Symbols.CANCEL,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonSave1_ = new goog.ui.Button(
-      rflect.ui.Dialog.DefaultButtonCaptions.SAVE,
+      rflect.cal.i18n.Symbols.SAVE,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonDelete_ = new goog.ui.Button(
-      rflect.cal.ui.EditDialog.ButtonCaptions.DELETE,
+      rflect.cal.i18n.Symbols.DELETE,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.checkboxAllDay_ = new rflect.ui.Checkbox());
   this.addChild(this.buttonCancel2_ = new goog.ui.Button(
-      rflect.ui.Dialog.DefaultButtonCaptions.CANCEL,
+      rflect.cal.i18n.Symbols.CANCEL,
+      goog.ui.FlatButtonRenderer.getInstance()));
+  this.addChild(this.buttonBack_ = new goog.ui.Button(null,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonSave2_ = new goog.ui.Button(
-      rflect.ui.Dialog.DefaultButtonCaptions.SAVE,
+      rflect.cal.i18n.Symbols.SAVE,
       goog.ui.FlatButtonRenderer.getInstance()));
 
   /**
@@ -218,8 +221,11 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     child.createDom();
     if (child instanceof goog.ui.Button)
       goog.dom.classes.add(child.getElement(),
-          goog.getCssName('event-edit-pane-button'));
+          goog.getCssName('cal-menu-button'));
   });
+
+  rflect.cal.ui.common.setBackButtonContent(this.buttonBack_);
+  rflect.cal.ui.common.setDeleteButtonContent(this.buttonDelete_);
 
   goog.dom.classes.add(this.buttonSave1_.getElement(),
       goog.getCssName('emphasis-button'));
@@ -228,24 +234,40 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
   goog.dom.classes.add(this.buttonDelete_.getElement(),
       goog.getCssName('event-edit-pane-button-delete'));
 
-  var headerCont = dom.createDom('div', [
-       goog.getCssName('settings-pane-header-cont'),
-       goog.getCssName('event-pane-header-cont'),
-       goog.getCssName('goog-inline-block')],
-       dom.createDom('h3', goog.getCssName('event-edit-pane-header'),
-       'Event'));
-  var buttonsCont1 = dom.createDom('div',
-      [goog.getCssName('settings-pane-buttons'),
-      goog.getCssName('event-pane-buttons-upper'),
-      goog.getCssName('goog-inline-block')],
-      this.buttonSave1_.getElement(),
-      this.buttonCancel1_.getElement(),
-      this.buttonDelete_.getElement());
-  var buttonsCont2 = dom.createDom('div',
-      [goog.getCssName('settings-pane-buttons'),
-       goog.getCssName('event-pane-buttons-lower')],
-      this.buttonSave2_.getElement(),
-      this.buttonCancel2_.getElement());
+  if (rflect.MOBILE) {
+
+    var paneLeft1 = dom.createDom('div', 'pane-left');
+    var paneRight1 = dom.createDom('div', 'pane-right');
+    var paneRight2 = dom.createDom('div', 'pane-right');
+
+    paneLeft1.appendChild(this.buttonBack_.getElement());
+    paneRight1.appendChild(this.buttonDelete_.getElement());
+    paneRight1.appendChild(this.buttonSave1_.getElement());
+    paneRight1.appendChild(this.buttonCancel1_.getElement());
+
+    var buttonsCont1 = dom.createDom('div', 'control-pane', paneRight1,
+        paneLeft1);
+
+    paneRight2.appendChild(this.buttonSave2_.getElement());
+    paneRight2.appendChild(this.buttonCancel2_.getElement());
+
+    var buttonsCont2 = dom.createDom('div', 'control-pane', paneRight2);
+
+  } else {
+    var buttonsCont1 = dom.createDom('div',
+        [goog.getCssName('settings-pane-buttons'),
+        goog.getCssName('event-pane-buttons-upper'),
+        goog.getCssName('goog-inline-block')],
+        this.buttonBack_.getElement(),
+        this.buttonSave1_.getElement(),
+        this.buttonCancel1_.getElement(),
+        this.buttonDelete_.getElement());
+    var buttonsCont2 = dom.createDom('div',
+        [goog.getCssName('settings-pane-buttons'),
+         goog.getCssName('event-pane-buttons-lower')],
+        this.buttonSave2_.getElement(),
+        this.buttonCancel2_.getElement());
+  }
 
   var labelName = dom.createDom('label', {
     'for': 'ep-event-name-input',
@@ -359,7 +381,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     className: goog.getCssName('settings-pane') + (rflect.MOBILE ?
         ' slide-pane-left' : ''),
     id: 'event-edit-pane'
-    }, headerCont, buttonsCont1, body, buttonsCont2);
+    }, buttonsCont1, body, buttonsCont2);
 
   this.setElementInternal(root);
 
@@ -388,6 +410,8 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
   this.getHandler().listen(this.buttonCancel1_,
       goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
       .listen(this.buttonCancel2_, goog.ui.Component.EventType.ACTION,
+      this.onCancel_, false, this)
+      .listen(this.buttonBack_, goog.ui.Component.EventType.ACTION,
       this.onCancel_, false, this)
       .listen(this.buttonSave1_,
       goog.ui.Component.EventType.ACTION, this.onSave_, false, this)
