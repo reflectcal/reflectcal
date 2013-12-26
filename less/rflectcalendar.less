@@ -325,10 +325,19 @@ body when (@UI_TYPE = 'MOBILE') {
   overflow-y: scroll;
 }
 
-.listitem-cont {
+.listitem-cont() {
   border-left: 2px solid transparent;
   padding: 5px 2px 5px 6px;
+}
+
+.listitem-cont when (@UI_TYPE = ''){
+  .listitem-cont();
   height: 16px;
+}
+
+.listitem-cont when (@UI_TYPE = 'MOBILE'){
+  .listitem-cont();
+  height: 30px;
 }
 
 .listitem-cont-focused {
@@ -354,16 +363,26 @@ body when (@UI_TYPE = 'MOBILE') {
   border-radius: 3px;
 }
 
-.calitem-color-cont {
+.calitem-color-cont() {
   position: relative;
   float: left;
-  width: 16px; /*considering that visible edge of element is the border of contained element*/
-  height: 16px;
   cursor: pointer;
 
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
+}
+
+.calitem-color-cont when (@UI_TYPE = '') {
+  .calitem-color-cont();
+  width: 16px; /*considering that visible edge of element is the border of contained element*/
+  height: 16px;
+}
+
+.calitem-color-cont when (@UI_TYPE = 'MOBILE') {
+  .calitem-color-cont();
+  width: 30px;
+  height: 30px;
 }
 
 .goog-checkbox-hover.calitem-color-cont {
@@ -372,7 +391,7 @@ body when (@UI_TYPE = 'MOBILE') {
   box-shadow: none;
 }
 
-.listitem-label {
+.listitem-label() {
   position: relative;
   margin-left: 16px;
   float: none;
@@ -382,6 +401,16 @@ body when (@UI_TYPE = 'MOBILE') {
   white-space: nowrap;
   color: #2c2c2c;
   line-height: 18px;
+}
+
+.listitem-label when (@UI_TYPE = '') {
+  .listitem-label();
+  line-height: 18px;
+}
+
+.listitem-label when (@UI_TYPE = 'MOBILE') {
+  .listitem-label();
+  line-height: 30px;
 }
 
 .calitem-label-active {

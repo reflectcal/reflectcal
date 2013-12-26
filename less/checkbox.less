@@ -6,19 +6,30 @@
 
 /* Sample 3-state checkbox styles. */
 
-.goog-checkbox {
+.goog-checkbox() {
   position: relative;
   border: 1px solid #c5c5c5;
   display: -moz-inline-box;
   display: inline-block;
-  height: 11px;
   margin: 0 4px 0 1px;
   vertical-align: text-bottom;
-  width: 11px;
 
-  border-radius: 2px;
+  .border-radius(2px);
   cursor: default;
   transition: border-color .2s, box-shadow .2s;
+}
+
+.goog-checkbox when (@UI_TYPE = '') {
+  .goog-checkbox();
+  width: 11px;
+  height: 11px;
+}
+
+.goog-checkbox when (@UI_TYPE = 'MOBILE') {
+  .goog-checkbox();
+  height: 28px;
+  width: 28px;
+  font-size: 28px;
 }
 
 .goog-checkbox-hover {

@@ -88,6 +88,20 @@
   padding-bottom: 5px;
 }
 
+.all-day-label() {
+  vertical-align: top;
+}
+
+.all-day-label when (@UI_TYPE = '') {
+  .all-day-label();
+  line-height: 11px;
+}
+
+.all-day-label when (@UI_TYPE = 'MOBILE') {
+  .all-day-label();
+  line-height: 30px;
+}
+
 .event-edit-pane-button {
   padding-left: 20px;
   padding-right: 20px;

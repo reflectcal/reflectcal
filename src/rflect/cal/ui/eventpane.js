@@ -336,7 +336,7 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
 
   var labelAllDay = dom.createDom('label', {
     'for': 'event-all-day',
-    className: 'goog-inline-block event-edit-pane-label'
+    className: 'goog-inline-block event-edit-pane-label all-day-label'
   }, 'All-day event');
   var allDaySubCont = dom.createDom('span', null, labelAllDay,
       this.checkboxAllDay_.getElement());
