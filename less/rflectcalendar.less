@@ -123,12 +123,32 @@ body when (@UI_TYPE = 'MOBILE') {
   .cal-menu-button();
 }
 
+
 @media (max-width: 480px) {
   .cal-menu-button when (@UI_TYPE = 'MOBILE') {
     .cal-menu-button();
     margin: 0;
     .border-radius(0);
     border: none;
+  }
+}
+
+.cal-menu-button-simple when (@UI_TYPE = 'MOBILE') {
+  .cal-menu-button();
+  margin: 0;
+  .border-radius(0);
+  border: none;
+  background: #fff;
+  padding-top: 11px;
+  padding-bottom: 11px;
+}
+
+@media (max-width: 480px) {
+  .cal-menu-button-simple when (@UI_TYPE = 'MOBILE') {
+    .cal-menu-button-simple();
+    padding-top: 8px;
+    padding-bottom: 8px;
+    .gradient(#f2f2f2, #efefef);
   }
 }
 

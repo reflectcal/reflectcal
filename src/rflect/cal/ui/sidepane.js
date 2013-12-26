@@ -128,7 +128,7 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
     '<nav id="side-pane" class="side-pane slide-pane-left" style="display:none">',
     '<div class="control-pane">',
     '<div class="pane-left">',
-    '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
+    '<div class="cal-menu-button goog-flat-button goog-inline-block cal-menu-button-simple"' +
         'id="' + rflect.cal.predefined.BUTTON_TO_CALENDAR_ID + '">',
     '<i class="icon icon-chevron-left"></i>',
     rflect.cal.i18n.Symbols.TO_CALENDAR,
