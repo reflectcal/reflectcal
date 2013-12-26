@@ -226,6 +226,8 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
 
   rflect.cal.ui.common.setBackButtonContent(this.buttonBack_);
   rflect.cal.ui.common.setDeleteButtonContent(this.buttonDelete_);
+  goog.dom.classes.add(this.buttonBack_.getElement(),
+      'cal-menu-button-simple');
 
   goog.dom.classes.add(this.buttonSave1_.getElement(),
       goog.getCssName('emphasis-button'));
