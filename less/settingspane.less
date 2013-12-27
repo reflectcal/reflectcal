@@ -148,17 +148,23 @@
   cursor: default;
 }
 
+.side-pane() when (@UI_TYPE = ''){
+  float: left;
+  width: 150px;
+  margin: 0;
+}
+
 /*Slide pane.*/
 .side-pane when (@UI_TYPE = 'MOBILE') {
   width: 250px;
   height: 100%;
+  overflow: auto;
   z-index: @paneZIndex;
   border-right: 1px solid #d5d5d5;
   background: #fff;
-}
 
-.side-pane-body when (@UI_TYPE = 'MOBILE') {
-  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
 }
 
 .slide-pane-left when (@UI_TYPE = 'MOBILE') {
