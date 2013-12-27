@@ -793,6 +793,7 @@ rflect.cal.ui.EventPane.prototype.disposeInternal = function() {
   this.startTimeAC_.dispose();
   this.endTimeAC_.dispose();
   this.selectCalendars_.dispose();
+  this.showBehavior.dispose();
 
   rflect.cal.ui.EventPane.superClass_.disposeInternal.call(this);
 };

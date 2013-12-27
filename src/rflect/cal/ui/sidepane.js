@@ -199,7 +199,8 @@ rflect.cal.ui.SidePane.prototype.onCancel_ = function() {
  * @protected
  */
 rflect.cal.ui.SidePane.prototype.disposeInternal = function() {
-  rflect.cal.ui.SidePane.superClass_.disposeInternal.call(this);
-
+  this.showBehavior.dispose();
   this.buttonToCalendar_ = null;
+
+  rflect.cal.ui.SidePane.superClass_.disposeInternal.call(this);
 };

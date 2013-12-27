@@ -1209,6 +1209,7 @@ rflect.cal.ui.SettingsPane.prototype.displayCalendarColor_ = function(aIndex) {
  */
 rflect.cal.ui.SettingsPane.prototype.disposeInternal = function() {
   this.tabContents2_ = null;
+  this.showBehavior.dispose();
 
   rflect.cal.ui.SettingsPane.superClass_.disposeInternal.call(this);
 };
