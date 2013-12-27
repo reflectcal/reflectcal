@@ -66,7 +66,15 @@ rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent = function(aStart,
   goog.events.Event.call(this,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT);
 
+  /*
+   * Whether this is start of transition.
+   * @type {boolean}
+   */
   this.start = aStart;
+  /*
+   * Whether we opening or closing pane.
+   * @type {boolean}
+   */
   this.showing = aShowing;
 }
 goog.inherits(rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent,
