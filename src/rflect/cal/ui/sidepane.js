@@ -78,6 +78,13 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
   this.showBehavior = new rflect.cal.ui.PaneShowBehavior(this, 
       this.getDomHelper().getElement('main-container'));
 
+  this.menuItems_ = [
+    new rflect.cal.ui.SidePane.MenuItem(
+      '<i class="icon icon-cog"></i> ' + rflect.cal.i18n.Symbols.SETTINGS,
+      rflect.cal.ui.SidePane.EventTypes.SHOW_SETTINGS
+    )
+  ];
+
   this.addChild(this.calSelector_ = new rflect.cal.ui.CalSelector(
       this.viewManager_, this.containerSizeMonitor_, this.eventManager_));
 
@@ -89,7 +96,28 @@ goog.inherits(rflect.cal.ui.SidePane, rflect.ui.Component);
  * @enum {string}
  */
 rflect.cal.ui.SidePane.EventTypes = {
-  CANCEL: 'settingsCancel'
+  CANCEL: 'sidePaneCancel',
+  SHOW_SETTINGS: 'showSettings'
+};
+
+
+/**
+ * @param {string} aContent HTML content of menu item.
+ * @param {rflect.cal.ui.SidePane.EventTypes} aEventType Event type associated
+ * with menu item.
+ * @constructor
+ */
+rflect.cal.ui.SidePane.MenuItem = function(aContent, aEventType) {
+
+  /**
+   * @type {string}
+   */
+  this.content = aContent;
+
+  /**
+   * @type {rflect.cal.ui.SidePane.EventTypes}
+   */
+  this.eventType = aEventType;
 };
 
 
@@ -121,6 +149,15 @@ rflect.cal.ui.SidePane.prototype.decorateInternal = function(aElement,
  * @private
  */
 rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
+  aSb.append('<li class="side-pane-menu">');
+  goog.array.forEach(this.menuItems_, function(aMenuItem, aIndex){
+    aSb.append('<button class="side-pane-button" data-index="');
+    aSb.append(aIndex);
+    aSb.append('">');
+    aSb.append(aMenuItem.content);
+    aSb.append('</button>');
+  });
+  aSb.append('</li>');
 }
 
 

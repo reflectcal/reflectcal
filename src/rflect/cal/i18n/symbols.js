@@ -34,7 +34,8 @@ rflect.cal.i18n.Symbols_en = {
   SAVE: 'Save',
   CANCEL: 'Cancel',
   DELETE: 'Delete',
-  EDIT: 'Edit'
+  EDIT: 'Edit',
+  SETTINGS: 'Settings'
 };
 
 
@@ -56,7 +57,8 @@ rflect.cal.i18n.Symbols_ru = {
   SAVE: 'Сохранить',
   CANCEL: 'Отмена',
   DELETE: 'Удалить',
-  EDIT: 'Правка'
+  EDIT: 'Правка',
+  SETTINGS: 'Настройки'
 };
 
 
@@ -78,7 +80,8 @@ rflect.cal.i18n.Symbols_by = {
   SAVE: 'Захаваць',
   CANCEL: 'Адмена',
   DELETE: 'Выдаліць',
-  EDIT: 'Праўка'
+  EDIT: 'Праўка',
+  SETTINGS: 'Налады'
 };
 
 
@@ -100,7 +103,8 @@ rflect.cal.i18n.Symbols_fr = {
   SAVE: 'Enregistrer',
   CANCEL: 'Annuler',
   DELETE: 'Supprimer',
-  EDIT: 'Modifier'
+  EDIT: 'Modifier',
+  SETTINGS: 'Préférences'
 };
 
 
