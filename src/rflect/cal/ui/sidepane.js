@@ -165,7 +165,10 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
  * Decorates buttons, attaches event handlers for them.
  */
 rflect.cal.ui.SidePane.prototype.enterDocument = function() {
-  
+
+  this.calSelector_.decorateInternal(
+          this.getDomHelper().getElement('calendars-selector'), true);
+
   rflect.cal.ui.SidePane.superClass_.enterDocument.call(this);
 
   // Attaching event handlers.
