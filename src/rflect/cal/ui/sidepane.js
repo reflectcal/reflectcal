@@ -149,7 +149,7 @@ rflect.cal.ui.SidePane.prototype.decorateInternal = function(aElement,
  * @private
  */
 rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
-  aSb.append('<li class="side-pane-menu">');
+  aSb.append('<li class="side-pane-menu-item">');
   goog.array.forEach(this.menuItems_, function(aMenuItem, aIndex){
     aSb.append('<button class="side-pane-button" data-index="');
     aSb.append(aIndex);
@@ -172,7 +172,7 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
 
   var parts = [
     '<nav id="side-pane" class="side-pane slide-pane-left" style="display:none">',
-    '<ul class="pane-menu">',
+    '<ul class="side-pane-menu">',
     '</ul>',
     '<div id="calendars-selector" class="list-selector">',
     '</div>',
