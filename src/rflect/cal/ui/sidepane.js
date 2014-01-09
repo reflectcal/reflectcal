@@ -80,7 +80,7 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
 
   this.menuItems_ = [
     new rflect.cal.ui.SidePane.MenuItem(
-      '<i class="icon icon-cog"></i> ' + rflect.cal.i18n.Symbols.SETTINGS,
+      '<i class="icon icon-in-button icon-cog"></i> ' + rflect.cal.i18n.Symbols.SETTINGS,
       rflect.cal.ui.SidePane.EventTypes.SHOW_SETTINGS
     )
   ];

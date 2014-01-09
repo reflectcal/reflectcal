@@ -34,11 +34,10 @@ rflect.cal.ui.common.setBackButtonContent = function(aButton, opt_right) {
 rflect.cal.ui.common.setDeleteButtonContent = function(aButton) {
   if (rflect.MOBILE) {
     var content = goog.dom.createDom('i',
-        ['icon', 'icon-trash-o']);
+        ['icon', 'icon-in-button', 'icon-trash-o']);
   } else {
     var content = rflect.cal.i18n.Symbols.DELETE;
   }
 
-  goog.dom.classes.add(aButton.getElement(), 'button-icon');
   aButton.setContent(content);
 };

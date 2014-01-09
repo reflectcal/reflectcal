@@ -146,15 +146,15 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
     var parts = [
       '<nav id="top-pane" class="control-pane">',
       '<div class="pane-left">',
-      '<div class="cal-menu-button goog-flat-button goog-inline-block button-icon"' +
+      '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
           'id="' + rflect.cal.predefined.BUTTON_MENU_ID + '">' +
-          '<div class="icon icon-bars goog-inline-block"></div>',
+          '<div class="icon icon-in-button icon-bars goog-inline-block"></div>',
       '</div>',
       '</div>',
       '<div class="pane-right">',
-      '<div class="cal-menu-button-new-event emphasis-button cal-menu-button goog-flat-button goog-inline-block button-icon"',
+      '<div class="cal-menu-button-new-event emphasis-button cal-menu-button goog-flat-button goog-inline-block"',
       'id="' + rflect.cal.predefined.BUTTON_NEW_EVENT_ID + '">',
-      '<div class="icon icon-plus goog-inline-block"></div>',
+      '<div class="icon icon-in-button icon-plus goog-inline-block"></div>',
       '</div>',
       '</div>',
       '<div class="pane-center">',
