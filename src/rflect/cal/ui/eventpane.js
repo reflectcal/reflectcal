@@ -359,10 +359,9 @@ rflect.cal.ui.EventPane.prototype.createDom = function() {
     });
   this.selectCalendars_ = new rflect.cal.ui.CalendarsSelect(selectCalendarsEl,
       this.eventManager_);
-  var calendarsCont = dom.createDom('div', {
-    id: 'all-day-label',
-    className: goog.getCssName('event-edit-pane-cont')
-    }, labelCalendars, rflect.dom.wrapControl(selectCalendarsEl));
+  var calendarsCont = dom.createDom('div',
+      goog.getCssName('event-edit-pane-cont'), labelCalendars,
+      rflect.dom.wrapControl(selectCalendarsEl));
 
   var labelDesc = dom.createDom('label', {
     'for': 'event-description',
