@@ -17,7 +17,6 @@
   padding: 8px;
   text-decoration: none;
   cursor: pointer;
-  border-left: 4px solid transparent;
 }
 
 .goog-tab-bar-top .goog-tab {
@@ -45,6 +44,7 @@
   margin: 0 0 4px 1px;
   border-right: 0;
   min-width: 80px;
+  border-left: 4px solid transparent;
 }
 
 .goog-tab-bar-end .goog-tab {
@@ -68,7 +68,6 @@
   background: #fff;
   text-decoration: none;
   font-weight: bold;
-  border-left-color: #6699ee;
   cursor: default;
 }
 
@@ -97,10 +96,27 @@
 .goog-tab-bar-start .goog-tab-selected {
   margin-left: 0;
   padding-right: 9px;
+  border-left-color: #6699ee;
 }
 
 .goog-tab-bar-end .goog-tab-selected {
   left: -1px;
   margin-right: 0;
   padding-left: 9px;
+}
+
+@media (max-width: 480px) {
+  .goog-tab {
+    display: inline-block;
+    text-align: center;
+  }
+
+  .goog-tab-bar-start .goog-tab {
+    border-top: 4px solid transparent;
+    border-left: none;
+  }
+
+  .goog-tab-bar-start .goog-tab-selected {
+    border-top-color: #6699ee;
+  }
 }

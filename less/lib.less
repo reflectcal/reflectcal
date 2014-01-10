@@ -66,3 +66,8 @@
   -moz-box-sizing: @box-sizing;
   box-sizing: @box-sizing;
 }
+
+.transition(@property, @transition-time: .2s) {
+  -webkit-transition: @property @transition_time;
+  transition: @property @transition_time;
+}

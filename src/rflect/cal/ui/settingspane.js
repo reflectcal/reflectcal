@@ -29,9 +29,11 @@ goog.require('rflect.cal.i18n.SettingsSymbols');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.Transport');
 goog.require('rflect.cal.Transport.EventTypes');
+goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
+goog.require('rflect.dom');
 goog.require('rflect.string');
 goog.require('rflect.ui.Checkbox');
 goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
@@ -116,6 +118,8 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
    */
   this.viewsElements_ = [];
 
+  this.addChild(this.buttonBack_ = new goog.ui.Button(null,
+      goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonCancel1_ = new goog.ui.Button(
       rflect.ui.Dialog.DefaultButtonCaptions.CANCEL,
       goog.ui.FlatButtonRenderer.getInstance()));
@@ -188,7 +192,8 @@ goog.inherits(rflect.cal.ui.SettingsPane.SaveSettingsEvent, goog.events.Event);
  */
 rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME =
     goog.getCssName('goog-inline-block') + ' ' +
-    goog.getCssName('event-edit-pane-label');
+    goog.getCssName('event-edit-pane-label') + ' ' +
+    'lavel-fluid';
 
 
 /**
@@ -320,9 +325,14 @@ rflect.cal.ui.SettingsPane.prototype.createDom = function() {
 
   this.forEachChild(function(child){
     child.createDom();
-    if (child instanceof goog.ui.Button)
-      goog.dom.classes.add(child.getElement(),
-          goog.getCssName('event-edit-pane-button'));
+  });
+
+  goog.array.forEach([this.buttonBack_, this.buttonSaveSettings1_,
+      this.buttonSaveSettings2_, this.buttonSaveCalendar1_,
+      this.buttonSaveCalendar2_, this.buttonCancel1_, this.buttonCancel2_],
+      function(button){
+    goog.dom.classes.add(button.getElement(),
+        goog.getCssName('cal-menu-button'));
   });
 
   goog.array.forEach([this.buttonSaveSettings1_, this.buttonSaveSettings2_,
@@ -344,7 +354,7 @@ rflect.cal.ui.SettingsPane.prototype.createDom = function() {
       className: goog.getCssName('settings-pane') + (rflect.MOBILE ?
           ' slide-pane-left' : ''),
       id: 'settings-pane'
-    }, settingsHeader, settingsPaneButtonsUpper, settingsBody,
+    }, settingsPaneButtonsUpper, settingsBody,
     settingsPaneButtonsLower);
 
   this.setElementInternal(root);
@@ -371,6 +381,21 @@ rflect.cal.ui.SettingsPane.prototype.createSettingsHeader_ = function(aDom) {
 rflect.cal.ui.SettingsPane.prototype.createSettingsPaneButtonsUpper_ =
     function(aDom) {
 
+  if (rflect.MOBILE) {
+    var paneLeft1 = aDom.createDom('div', 'pane-left');
+    var paneRight1 = aDom.createDom('div', 'pane-right');
+
+    rflect.cal.ui.common.setBackButtonContent(this.buttonBack_);
+
+    paneLeft1.appendChild(this.buttonBack_.getElement());
+    paneRight1.appendChild(this.buttonSaveSettings1_.getElement());
+    paneRight1.appendChild(this.buttonSaveCalendar1_.getElement());
+    paneRight1.appendChild(this.buttonCancel1_.getElement());
+
+    return aDom.createDom('div', 'control-pane', paneRight1,
+        paneLeft1);
+  }
+
   return aDom.createDom('div',
       [goog.getCssName('settings-pane-buttons'),
       goog.getCssName('settings-pane-buttons-upper'),
@@ -388,6 +413,16 @@ rflect.cal.ui.SettingsPane.prototype.createSettingsPaneButtonsUpper_ =
  */
 rflect.cal.ui.SettingsPane.prototype.createSettingsPaneButtonsLower_ =
     function(aDom) {
+
+  if (rflect.MOBILE) {
+    var paneRight2 = aDom.createDom('div', 'pane-right');
+
+    paneRight2.appendChild(this.buttonSaveSettings2_.getElement());
+    paneRight2.appendChild(this.buttonSaveCalendar2_.getElement());
+    paneRight2.appendChild(this.buttonCancel2_.getElement());
+
+    return aDom.createDom('div', 'control-pane', paneRight2);
+  }
 
   return aDom.createDom('div',
       [goog.getCssName('settings-pane-buttons'),
@@ -457,7 +492,7 @@ rflect.cal.ui.SettingsPane.prototype.createTabContents1_ =
 
   var languagesCont = aDom.createDom('div', {
     className: goog.getCssName('event-edit-pane-cont')
-    }, labelLanguages, this.selectLanguages_);
+    }, labelLanguages, rflect.dom.wrapControl(this.selectLanguages_));
 
   return aDom.createDom('div', [goog.getCssName('tabs-content'), goog.getCssName('settings-tab-content')],
       languagesCont);
@@ -677,7 +712,7 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarEditForm_ = function(aDom) {
   buttonsCont.appendChild(this.buttonDeleteCalendar_.getElement());
 
   var labelName = aDom.createDom('label', {
-    'for': 'ep-event-name-input',
+    'for': 'sp-calendar-name-input',
     className: rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME
   }, 'Name');
   this.inputCalendarName_ = aDom.createDom('input', {
@@ -690,7 +725,7 @@ rflect.cal.ui.SettingsPane.prototype.createCalendarEditForm_ = function(aDom) {
   var nameCont = aDom.createDom('div',
       [goog.getCssName('event-name-input-cont'),
         goog.getCssName('event-edit-pane-cont')],
-      labelName, this.inputCalendarName_);
+      labelName, rflect.dom.wrapControl(this.inputCalendarName_));
 
   var labelColor = aDom.createDom('label', {
     'for': 'calendar-colors',
@@ -759,19 +794,19 @@ rflect.cal.ui.SettingsPane.createColorsTd_ = function(aDom, aTd, aRowIndex,
 rflect.cal.ui.SettingsPane.prototype.createTabContents3_ = function(aDom) {
   var labelDebug = aDom.createDom('label', {
     'for': 'settings-debug-mode',
-    className: rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME
+    className: 'goog-inline-block event-edit-pane-label'
   }, 'Debug mode');
   var debugSubCont = aDom.createDom('span', null, labelDebug,
       this.checkboxDebug_.getElement());
   this.checkboxDebug_.setLabel(debugSubCont);
-  var allDayCont = aDom.createDom('div', {
+  var debugCont = aDom.createDom('div', {
     id: 'all-day-label',
     className: goog.getCssName('description-cont') + ' ' +
         goog.getCssName('event-edit-pane-cont')
   }, debugSubCont);
 
-  return aDom.createDom('div', [goog.getCssName('tabs-content'), goog.getCssName('settings-tab-content')],
-      allDayCont);
+  return aDom.createDom('div', [goog.getCssName('tabs-content'),
+      goog.getCssName('settings-tab-content')], debugCont);
 }
 
 

@@ -177,16 +177,16 @@ if (rflect.MOBILE) {
   rflect.cal.ui.MainBody.ComponentsIndexes = {
     TOP_PANE: 0,
     MAIN_PANE: 1,
-    MINI_CAL: 2,
-    CAL_SELECTOR: 3,
-    TASK_SELECTOR: 4
+    SIDE_PANE: 2,
+    BOTTOM_PANE: 3
   }
 } else {
   rflect.cal.ui.MainBody.ComponentsIndexes = {
     TOP_PANE: 0,
     MAIN_PANE: 1,
-    SIDE_PANE: 2,
-    BOTTOM_PANE: 3
+    MINI_CAL: 2,
+    CAL_SELECTOR: 3,
+    TASK_SELECTOR: 4
   }
 }
 
@@ -482,6 +482,7 @@ rflect.cal.ui.MainBody.prototype.rebuildMainPaneWithSizes = function() {
  * Rebuilds main pane after sizes of all static panes are known.
  */
 rflect.cal.ui.MainBody.prototype.rebuildLeftPaneWithSizes = function() {
+  window.console.log('sizes');
   this.measureLeftPaneStaticSizes();
 
   this.firstBuildLeftPane = false;
@@ -742,10 +743,6 @@ rflect.cal.ui.MainBody.prototype.onSlideStartOrEnd_ = function(aEvent) {
       // If opening pane, hide calendar on end.
       if (!aEvent.start && aEvent.showing) this.showCalendar_(false);
     };break;
-    case this.sidePane_: {
-      //if (slideStart && !aEvent.showing) this.lightCalendar_(true);
-      //if (slideEnd && aEvent.showing) this.lightCalendar_(false);
-    };
     default:break;
   }
 }
