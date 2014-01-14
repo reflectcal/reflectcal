@@ -272,13 +272,13 @@ rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsUpper_ =
       paneLeft1);
 
   return aDom.createDom('div',
-      [goog.getCssName('settings-pane-buttons'),
-      goog.getCssName('settings-pane-buttons-upper'),
-      goog.getCssName('goog-inline-block')],
-      this.buttonSaveSettings1_.getElement(),
-      this.buttonSaveCalendar1_.getElement(),
-      this.buttonCancel1_.getElement()
-      );
+    [goog.getCssName('settings-pane-buttons'),
+    goog.getCssName('settings-pane-buttons-upper'),
+    goog.getCssName('goog-inline-block')],
+    this.buttonSaveSettings1_.getElement(),
+    this.buttonSaveCalendar1_.getElement(),
+    this.buttonCancel1_.getElement()
+  );
 }
 
 
