@@ -8,39 +8,20 @@
  */
 
 goog.provide('rflect.cal.ui.ExternalPane');
-goog.provide('rflect.cal.ui.ExternalPane.EventTypes');
 
 goog.require('goog.array');
 goog.require('goog.dom.classes');
-goog.require('goog.events.Event');
-goog.require('goog.events.EventType');
-goog.require('goog.events.KeyCodes');
-goog.require('goog.i18n.DateTimeParse');
-goog.require('goog.i18n.DateTimeSymbols');
-goog.require('goog.object');
-goog.require('goog.style');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.FlatButtonRenderer');
-goog.require('goog.ui.Tab');
-goog.require('goog.ui.TabBar');
-goog.require('rflect.cal.i18n.PREDEFINED_COLOR_CODES');
-goog.require('rflect.cal.i18n.SettingsSymbols');
 goog.require('rflect.cal.i18n.Symbols');
-goog.require('rflect.cal.Transport');
-goog.require('rflect.cal.Transport.EventTypes');
 goog.require('rflect.cal.ui.common');
-goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.PaneShowBehavior');
-goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
-goog.require('rflect.dom');
-goog.require('rflect.string');
-goog.require('rflect.ui.Checkbox');
-goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
+
 
 
 /**
- * Settings pane main class.
+ * External pane main class.
  * TODO(alexk): Currently only creation through render is supported. Add decorate.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
@@ -114,6 +95,34 @@ goog.inherits(rflect.cal.ui.ExternalPane, goog.ui.Component);
 
 
 /**
+ * @type {goog.ui.Button}
+ * @protected
+ */
+rflect.cal.ui.ExternalPane.prototype.buttonBack1;
+
+
+/**
+ * @type {goog.ui.Button}
+ * @protected
+ */
+rflect.cal.ui.ExternalPane.prototype.buttonBack2;
+
+
+/**
+ * @type {goog.ui.Button}
+ * @protected
+ */
+rflect.cal.ui.ExternalPane.prototype.buttonSave1;
+
+
+/**
+ * @type {goog.ui.Button}
+ * @protected
+ */
+rflect.cal.ui.ExternalPane.prototype.buttonSave2;
+
+
+/**
  * @type {Object.<string, Element>} Map of sub pane config -> sub pane element.
  * @private
  */
@@ -125,10 +134,6 @@ rflect.cal.ui.ExternalPane.prototype.subPanes_;
  */
 rflect.cal.ui.ExternalPane.prototype.createDom = function() {
   var dom = this.getDomHelper();
-
-  /**@const*/
-  var labelClassName = goog.getCssName('goog-inline-block') + ' ' +
-      goog.getCssName('event-edit-pane-label');
 
   //Buttons.
   this.forEachChild(function(child){
@@ -148,52 +153,85 @@ rflect.cal.ui.ExternalPane.prototype.createDom = function() {
         goog.getCssName('emphasis-button'));
   });
 
-  this.settingsPaneButtonsUpper_ = dom.createDom('div', 'control-pane');
-  this.settingsBody = this.createSettingsBody_(dom);
-  this.settingsPaneButtonsLower_ = dom.createDom('div', 'control-pane');
-
-  rflect.cal.ui.common.setBackButtonContent(this.buttonBack1);
-  this.getPaneUpperLeft().appendChild(this.buttonBack1.getElement());
-  this.getPaneUpperLeft().appendChild(this.buttonSave1.getElement());
-
-  rflect.cal.ui.common.setBackButtonContent(this.buttonBack2);
-  this.getPaneLowerLeft().appendChild(this.buttonBack2.getElement());
-  this.getPaneLowerLeft().appendChild(this.buttonSave2.getElement());
+  this.createSettingsPaneButtonsUpper_();
+  this.createSettingsPaneButtonsLower_();
+  this.settingsBody = this.createSettingsBody(dom);
 
   var root = dom.createDom('div', {
     className: goog.getCssName('settings-pane') + (rflect.MOBILE ?
-        ' slide-pane-left' : ''),
-    id: 'settings-pane'
-  }, settingsPaneButtonsUpper, settingsBody, settingsPaneButtonsLower);
+        ' slide-pane-left' : '')
+  }, this.getControlPane_(true), settingsBody, this.getControlPane_(false));
 
   this.setElementInternal(root);
 }
 
 
+/**
+ * @param {boolean} aUpper Whether pane is upper one.
+ * @return {Element} Upper or lower control pane.
+ * @private
+ */
+rflect.cal.ui.ExternalPane.prototype.getControlPane_ = function(aUpper) {
+  if (!this.subPanes_[aUpper]) {
+    this.subPanes_[aUpper] = this.getDomHelper().createDom('div',
+        'control-pane');
+  }
+
+  return this.subPanes_[aUpper];
+}
 
 
 /**
  * @param {boolean} aUpper Whether pane is upper one.
  * @param {number} aLeftRight 0,1,2 - left, center, right.
  * @return {Element} Sub pane.
+ * @private
  */
-rflect.cal.ui.ExternalPane.prototype.getSubPane = function(aUpper, aLeftRight) {
+rflect.cal.ui.ExternalPane.prototype.getSubPane_ = function(aUpper, aLeftRight) {
   var key = aUpper + aLeftRight;
 
   if (!this.subPanes_[key]) {
+    var controlPane = this.getControlPane_(aUpper);
     var className = aLeftRight == 0 ? 'pane-left' : (aLeftRight == 1 ?
         'pane-center' : 'pane-right');
-
-    this.subPanes_[key] = this.getDomHelper().createDom('div', className);
+    var subPane = this.subPanes_[key] =
+        this.getDomHelper().createDom('div', className);
 
     //Auto-attach sub pane to upper or lower controls.
-    if (aUpper)
-      this.settingsPaneButtonsUpper_ &&
-          this.settingsPaneButtonsUpper_.appendChild(this.subPanes_[key]);
-    else
-      this.settingsPaneButtonsLower_ &&
-          this.settingsPaneButtonsLower_.appendChild(this.subPanes_[key]);
+    // We should add sub-panes in this order, due to float:
+    // 1. left.
+    // 2. right.
+    // 3. middle.
 
+    var firstChild = controlPane.firstChild;
+    switch (aLeftRight) {
+
+      // Left.
+      case: 0:{
+        if (firstChild) {
+          goog.dom.insertSiblingBefore(subPane, firstChild);
+        } else {
+          controlPane.appendChild(subPane);
+        }
+      };break;
+      // Right.
+      case: 2:{
+        var lastChild = controlPane.lastChild;
+        if (firstChild && lastChild)
+          goog.dom.insertSiblingBefore(subPane, lastChild);
+        else if (firstChild && firstChild.className == 'pane-center') {
+          goog.dom.insertSiblingBefore(subPane, firstChild);
+        } else
+          controlPane.appendChild(subPane);
+      };break;
+      // Middle.
+      case: 1:{
+        controlPane.appendChild(
+          subPane);
+      };break;
+      default;break;
+
+    }
   }
 
   return this.subPanes_[key];
@@ -202,110 +240,88 @@ rflect.cal.ui.ExternalPane.prototype.getSubPane = function(aUpper, aLeftRight) {
 
 /**
  * @return {Element} Upper left sub pane.
+ * @protected
  */
 rflect.cal.ui.ExternalPane.prototype.getPaneUpperLeft =
     function() {
-  return this.getSubPane(true, 0);
+  return this.getSubPane_(true, 0);
 }
 
 
 /**
  * @return {Element} Upper center sub pane.
+ * @protected
  */
 rflect.cal.ui.ExternalPane.prototype.getPaneUpperCenter =
     function() {
-  return this.getSubPane(true, 1);
+  return this.getSubPane_(true, 1);
 }
 
 
 /**
  * @return {Element} Upper right sub pane.
+ * @protected
  */
 rflect.cal.ui.ExternalPane.prototype.getPaneUpperRight =
     function() {
-  return this.getSubPane(true, 2);
+  return this.getSubPane_(true, 2);
 }
 
 
 /**
  * @return {Element} Lower left sub pane.
+ * @protected
  */
 rflect.cal.ui.ExternalPane.prototype.getPaneLowerLeft =
     function() {
-  return this.getSubPane(false, 0);
+  return this.getSubPane_(false, 0);
 }
 
 
 /**
  * @return {Element} Lower center sub pane.
+ * @protected
  */
 rflect.cal.ui.ExternalPane.prototype.getPaneLowerCenter =
     function() {
-  return this.getSubPane(false, 1);
+  return this.getSubPane_(false, 1);
 }
 
 
 /**
  * @return {Element} Lower right sub pane.
+ * @protected
  */
 rflect.cal.ui.ExternalPane.prototype.getPaneLowerRight =
     function() {
-  return this.getSubPane(false, 2);
+  return this.getSubPane_(false, 2);
 }
 
 
 /**
  * @param {!goog.dom.DomHelper} aDom Dom helper.
- * @return {Element} Upper button container.
+ * @private
  */
 rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsUpper_ =
     function(aDom) {
-
-  var paneLeft1 = aDom.getPaneUpperLeft();
 
   rflect.cal.ui.common.setBackButtonContent(this.buttonBack_);
 
   this.getPaneUpperLeft().appendChild(this.buttonBack1.getElement());
   this.getPaneUpperLeft().appendChild(this.buttonSave1.getElement());
-
-  return aDom.createDom('div', 'control-pane', paneRight1,
-      paneLeft1);
-
-  return aDom.createDom('div',
-    [goog.getCssName('settings-pane-buttons'),
-    goog.getCssName('settings-pane-buttons-upper'),
-    goog.getCssName('goog-inline-block')],
-    this.buttonSaveSettings1_.getElement(),
-    this.buttonSaveCalendar1_.getElement(),
-    this.buttonCancel1_.getElement()
-  );
 }
 
 
 /**
  * @param {!goog.dom.DomHelper} aDom Dom helper.
- * @return {Element} Lower button container.
+ * @private
  */
 rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsLower_ =
     function(aDom) {
+  rflect.cal.ui.common.setBackButtonContent(this.buttonBack_);
 
-  if (rflect.MOBILE) {
-    var paneRight2 = aDom.createDom('div', 'pane-right');
-
-    paneRight2.appendChild(this.buttonSaveSettings2_.getElement());
-    paneRight2.appendChild(this.buttonSaveCalendar2_.getElement());
-    paneRight2.appendChild(this.buttonCancel2_.getElement());
-
-    return aDom.createDom('div', 'control-pane', paneRight2);
-  }
-
-  return aDom.createDom('div',
-      [goog.getCssName('settings-pane-buttons'),
-      goog.getCssName('settings-pane-buttons-lower')],
-      this.buttonSaveSettings2_.getElement(),
-      this.buttonSaveCalendar2_.getElement(),
-      this.buttonCancel2_.getElement()
-      );
+  this.getPaneLowerLeft().appendChild(this.buttonBack1.getElement());
+  this.getPaneLowerLeft().appendChild(this.buttonSave1.getElement());
 }
 
 
@@ -313,6 +329,7 @@ rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsLower_ =
  * Must be overridden.
  * @param {!goog.dom.DomHelper} aDom Dom helper.
  * @return {Element} Settings body.
+ * @protected
  */
 rflect.cal.ui.ExternalPane.prototype.createSettingsBody =
     function(aDom) {
