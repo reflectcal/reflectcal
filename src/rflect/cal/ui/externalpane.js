@@ -87,6 +87,7 @@ rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
   /**
    * Pane show behavior.
    * @type {rflect.cal.ui.PaneShowBehavior}
+   * @protected
    */
   this.showBehavior = new rflect.cal.ui.PaneShowBehavior(this,
       this.getDomHelper().getElement('main-container'));
@@ -242,8 +243,7 @@ rflect.cal.ui.ExternalPane.prototype.getSubPane_ = function(aUpper, aLeftRight) 
  * @return {Element} Upper left sub pane.
  * @protected
  */
-rflect.cal.ui.ExternalPane.prototype.getPaneUpperLeft =
-    function() {
+rflect.cal.ui.ExternalPane.prototype.getPaneUpperLeft = function() {
   return this.getSubPane_(true, 0);
 }
 
@@ -252,8 +252,7 @@ rflect.cal.ui.ExternalPane.prototype.getPaneUpperLeft =
  * @return {Element} Upper center sub pane.
  * @protected
  */
-rflect.cal.ui.ExternalPane.prototype.getPaneUpperCenter =
-    function() {
+rflect.cal.ui.ExternalPane.prototype.getPaneUpperCenter = function() {
   return this.getSubPane_(true, 1);
 }
 
@@ -262,8 +261,7 @@ rflect.cal.ui.ExternalPane.prototype.getPaneUpperCenter =
  * @return {Element} Upper right sub pane.
  * @protected
  */
-rflect.cal.ui.ExternalPane.prototype.getPaneUpperRight =
-    function() {
+rflect.cal.ui.ExternalPane.prototype.getPaneUpperRight = function() {
   return this.getSubPane_(true, 2);
 }
 
@@ -272,8 +270,7 @@ rflect.cal.ui.ExternalPane.prototype.getPaneUpperRight =
  * @return {Element} Lower left sub pane.
  * @protected
  */
-rflect.cal.ui.ExternalPane.prototype.getPaneLowerLeft =
-    function() {
+rflect.cal.ui.ExternalPane.prototype.getPaneLowerLeft = function() {
   return this.getSubPane_(false, 0);
 }
 
@@ -282,8 +279,7 @@ rflect.cal.ui.ExternalPane.prototype.getPaneLowerLeft =
  * @return {Element} Lower center sub pane.
  * @protected
  */
-rflect.cal.ui.ExternalPane.prototype.getPaneLowerCenter =
-    function() {
+rflect.cal.ui.ExternalPane.prototype.getPaneLowerCenter = function() {
   return this.getSubPane_(false, 1);
 }
 
@@ -292,8 +288,7 @@ rflect.cal.ui.ExternalPane.prototype.getPaneLowerCenter =
  * @return {Element} Lower right sub pane.
  * @protected
  */
-rflect.cal.ui.ExternalPane.prototype.getPaneLowerRight =
-    function() {
+rflect.cal.ui.ExternalPane.prototype.getPaneLowerRight = function() {
   return this.getSubPane_(false, 2);
 }
 

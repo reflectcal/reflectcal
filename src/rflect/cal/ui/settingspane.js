@@ -31,12 +31,14 @@ goog.require('rflect.cal.Transport');
 goog.require('rflect.cal.Transport.EventTypes');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
+goog.require('rflect.cal.ui.ExternalPane');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.dom');
 goog.require('rflect.string');
 goog.require('rflect.ui.Checkbox');
 goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
+
 
 
 /**
@@ -48,7 +50,7 @@ goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
  * @param {Element} aParentElement Element in which pane will be rendered.
  * @param {rflect.cal.Transport} aTransport Link to transport.
  * @constructor
- * @extends {goog.ui.Component}
+ * @extends {rflect.cal.ui.ExternalPane}
  */
 rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
     aParentElement, aTransport) {
@@ -110,12 +112,6 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
   this.buttonSaveCalendar1_.setVisible(false);
   this.buttonSaveCalendar2_.setVisible(false);
 
-  /**
-   * Pane show behavior.
-   * @type {rflect.cal.ui.PaneShowBehavior}
-   */
-  this.showBehavior = new rflect.cal.ui.PaneShowBehavior(this,
-      this.getDomHelper().getElement('main-container'));
 };
 goog.inherits(rflect.cal.ui.SettingsPane, rflect.cal.ui.ExternalPane);
 
@@ -153,7 +149,7 @@ goog.inherits(rflect.cal.ui.SettingsPane.SaveSettingsEvent, goog.events.Event);
 rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME =
     goog.getCssName('goog-inline-block') + ' ' +
     goog.getCssName('event-edit-pane-label') + ' ' +
-    'lavel-fluid';
+    'label-fluid';
 
 
 /**
@@ -786,7 +782,7 @@ rflect.cal.ui.SettingsPane.prototype.onCalendarsListLinkClick_ =
 }
 
 
-/**                                               \
+/**
  * 'New calendar' button listener.
  * @param {goog.events.Event} aEvent Event object.
  * @private
@@ -1115,7 +1111,6 @@ rflect.cal.ui.SettingsPane.prototype.displayCalendarColor_ = function(aIndex) {
  */
 rflect.cal.ui.SettingsPane.prototype.disposeInternal = function() {
   this.tabContents2_ = null;
-  this.showBehavior.dispose();
 
   rflect.cal.ui.SettingsPane.superClass_.disposeInternal.call(this);
 };
