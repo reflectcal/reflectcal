@@ -131,6 +131,14 @@ rflect.cal.ui.ExternalPane.prototype.subPanes_;
 
 
 /**
+ * @return {rflect.cal.ui.PaneShowBehavior} Show behavior.
+ */
+rflect.cal.ui.ExternalPane.prototype.getShowBehavior = function() {
+  return this.showBehavior;
+}
+
+
+/**
  * @override
  */
 rflect.cal.ui.ExternalPane.prototype.createDom = function() {
@@ -154,14 +162,14 @@ rflect.cal.ui.ExternalPane.prototype.createDom = function() {
         goog.getCssName('emphasis-button'));
   });
 
-  this.createSettingsPaneButtonsUpper_();
-  this.createSettingsPaneButtonsLower_();
+  this.createSettingsPaneButtonsUpper_(dom);
+  this.createSettingsPaneButtonsLower_(dom);
   this.settingsBody = this.createSettingsBody(dom);
 
   var root = dom.createDom('div', {
     className: goog.getCssName('settings-pane') + (rflect.MOBILE ?
         ' slide-pane-left' : '')
-  }, this.getControlPane_(true), settingsBody, this.getControlPane_(false));
+  }, this.getControlPane_(true), this.settingsBody, this.getControlPane_(false));
 
   this.setElementInternal(root);
 }
@@ -173,12 +181,13 @@ rflect.cal.ui.ExternalPane.prototype.createDom = function() {
  * @private
  */
 rflect.cal.ui.ExternalPane.prototype.getControlPane_ = function(aUpper) {
-  if (!this.subPanes_[aUpper]) {
-    this.subPanes_[aUpper] = this.getDomHelper().createDom('div',
+  var index = String(aUpper);
+  if (!this.subPanes_[index]) {
+    this.subPanes_[index] = this.getDomHelper().createDom('div',
         'control-pane');
   }
 
-  return this.subPanes_[aUpper];
+  return this.subPanes_[index];
 }
 
 
@@ -189,7 +198,7 @@ rflect.cal.ui.ExternalPane.prototype.getControlPane_ = function(aUpper) {
  * @private
  */
 rflect.cal.ui.ExternalPane.prototype.getSubPane_ = function(aUpper, aLeftRight) {
-  var key = aUpper + aLeftRight;
+  var key = String(aUpper) + aLeftRight;
 
   if (!this.subPanes_[key]) {
     var controlPane = this.getControlPane_(aUpper);
@@ -208,7 +217,7 @@ rflect.cal.ui.ExternalPane.prototype.getSubPane_ = function(aUpper, aLeftRight) 
     switch (aLeftRight) {
 
       // Left.
-      case: 0:{
+      case 0:{
         if (firstChild) {
           goog.dom.insertSiblingBefore(subPane, firstChild);
         } else {
@@ -216,7 +225,7 @@ rflect.cal.ui.ExternalPane.prototype.getSubPane_ = function(aUpper, aLeftRight) 
         }
       };break;
       // Right.
-      case: 2:{
+      case 2:{
         var lastChild = controlPane.lastChild;
         if (firstChild && lastChild)
           goog.dom.insertSiblingBefore(subPane, lastChild);
@@ -226,11 +235,11 @@ rflect.cal.ui.ExternalPane.prototype.getSubPane_ = function(aUpper, aLeftRight) 
           controlPane.appendChild(subPane);
       };break;
       // Middle.
-      case: 1:{
+      case 1:{
         controlPane.appendChild(
           subPane);
       };break;
-      default;break;
+      default:break;
 
     }
   }
@@ -300,7 +309,7 @@ rflect.cal.ui.ExternalPane.prototype.getPaneLowerRight = function() {
 rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsUpper_ =
     function(aDom) {
 
-  rflect.cal.ui.common.setBackButtonContent(this.buttonBack_);
+  rflect.cal.ui.common.setBackButtonContent(this.buttonBack1);
 
   this.getPaneUpperLeft().appendChild(this.buttonBack1.getElement());
   this.getPaneUpperLeft().appendChild(this.buttonSave1.getElement());
@@ -313,7 +322,7 @@ rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsUpper_ =
  */
 rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsLower_ =
     function(aDom) {
-  rflect.cal.ui.common.setBackButtonContent(this.buttonBack_);
+  rflect.cal.ui.common.setBackButtonContent(this.buttonBack2);
 
   this.getPaneLowerLeft().appendChild(this.buttonBack1.getElement());
   this.getPaneLowerLeft().appendChild(this.buttonSave1.getElement());
@@ -328,6 +337,7 @@ rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsLower_ =
  */
 rflect.cal.ui.ExternalPane.prototype.createSettingsBody =
     function(aDom) {
+  goog.abstractMethod();
   return null;
 }
 

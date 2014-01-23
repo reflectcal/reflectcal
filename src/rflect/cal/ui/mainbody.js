@@ -704,7 +704,7 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
         this.onSettingsPaneCalendarUpdate_, false, this);
 
     if (rflect.MOBILE)
-      this.getHandler().listen(this.settingsPane_.showBehavior,
+      this.getHandler().listen(this.settingsPane_.getShowBehavior(),
           rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT,
           this.onSlideStartOrEnd_, false, this);
 
@@ -713,7 +713,7 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
     }
   }
 
-  this.settingsPane_.showBehavior.setVisible(aShow);
+  this.settingsPane_.getShowBehavior().setVisible(aShow);
   //NOTE(alexk): do we need smarter logic here than just hide calendar?
   if (!rflect.MOBILE) this.showCalendar_(!aShow);
 }
@@ -811,18 +811,31 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
  */
 rflect.cal.ui.MainBody.prototype.updateMainPane_ = function() {
   this.eventManager_.run();
-  this.updateBeforeRedraw([
-      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR),
-      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR),
-      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL),
-      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE)]
-  );
-  this.updateByRedraw([
-      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR),
-      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR),
-      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL),
-      /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE)]
-  );
+  if (rflect.MOBILE) {
+    this.updateBeforeRedraw([
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR),
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR),
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL),
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE)]
+    );
+    this.updateByRedraw([
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR),
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR),
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL),
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE)]
+    );
+  } else {
+    this.updateBeforeRedraw([
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.BOTTOM_PANE),
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.SIDE_PANE),
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE)]
+    );
+    this.updateByRedraw([
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.BOTTOM_PANE),
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.SIDE_PANE),
+        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE)]
+    );
+  }
 }
 
 

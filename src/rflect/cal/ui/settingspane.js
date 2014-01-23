@@ -273,7 +273,7 @@ rflect.cal.ui.SettingsPane.prototype.reloadIsNeeded_ = false;
  * @override
  */
 rflect.cal.ui.SettingsPane.prototype.createDom = function() {
-  rflect.cal.ui.SettingsPane.super_.createDom.call(this);
+  rflect.cal.ui.SettingsPane.superClass_.createDom.call(this);
 
   var dom = this.getDomHelper();
 
