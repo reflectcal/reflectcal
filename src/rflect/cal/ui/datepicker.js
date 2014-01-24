@@ -139,7 +139,7 @@ rflect.cal.ui.DatePicker.prototype.endSelectionIndex = -1;
  * Updates mini cal with new data before redraw.
  * If called parameterless, takes basis from external time manager, otherwise
  * we should use internal one.
- * @param {Array.<number>=} opt_exclusions Index(es) of component's children
+ * @param {Array.<goog.ui.Component>=} opt_exclusions Index(es) of component's children
  * which should be excluded from update.
  * @param {boolean=} opt_internal Whether method was called internally.
  * @param {rflect.cal.TimeManager.Direction=} opt_direction Direction where to

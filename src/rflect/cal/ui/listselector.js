@@ -265,7 +265,7 @@ rflect.cal.ui.ListSelector.prototype.buildContent = goog.abstractMethod;
 
 /**
  * Updates list selector with new data before redraw. Includes size adjustment.
- * @param {Array.<number>=} opt_exclusions Exclusion indexes.
+ * @param {Array.<goog.ui.Component>=} opt_exclusions Exclusion indexes.
  * @param {boolean=} opt_firstTime Whether it's a first time update.
  */
 rflect.cal.ui.ListSelector.prototype.updateBeforeRedraw = function(opt_exclusions,

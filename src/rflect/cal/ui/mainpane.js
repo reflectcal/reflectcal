@@ -386,8 +386,8 @@ rflect.cal.ui.MainPane.prototype.setDefaultSizes_ = function() {
 
 /**
  * Updates main pane with new data before redraw. Includes size adjustment.
- * @param {Array.<number>=} opt_exclusions Index(es) of component's children
- * which should be excluded from update.
+ * @param {Array.<goog.ui.Component>=} opt_exclusions Index(es) of component's
+ * children which should be excluded from update.
  * @param {boolean=} opt_doNotRemoveScrollListeners Whether not to remove scroll
  * listeners.
  * @param {boolean=} opt_updateByNavigation Whether this update initiated by

@@ -128,6 +128,9 @@ rflect.cal.ui.CalSelector.prototype.disposeCheckboxes = function () {
  * @override
  */
 rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
+  if (rflect.MOBILE)
+    return;
+
   if (this.redrawIsNeeded) {
     this.redrawIsNeeded = false;
 

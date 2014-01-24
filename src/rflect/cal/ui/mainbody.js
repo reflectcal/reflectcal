@@ -107,7 +107,7 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
     this.addChild(this.mainPane_ = new rflect.cal.ui.MainPane(this.viewManager_,
         this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
         this.blockManager_, this.transport_));
-    this.addChild(this.miniCal = new rflect.cal.ui.MiniCal(this.viewManager_,
+    this.addChild(this.miniCal_ = new rflect.cal.ui.MiniCal(this.viewManager_,
         this.timeManager_));
     this.addChild(this.calSelector_ = new rflect.cal.ui.CalSelector(
         this.viewManager_, this.containerSizeMonitor_, this.eventManager_));
@@ -117,7 +117,7 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
 
   if (goog.DEBUG) {
     _inspect('topPane_', this.topPane_);
-    _inspect('miniCal', this.miniCal);
+    _inspect('miniCal_', this.miniCal_);
     _inspect('mainPane_', this.mainPane_);
     _inspect('taskSelector_', this.taskSelector_);
     _inspect('calSelector_', this.calSelector_);
@@ -260,6 +260,62 @@ rflect.cal.ui.MainBody.prototype.sidePane_;
 
 
 /**
+ * @return {goog.ui.Component}
+ */
+rflect.cal.ui.MainBody.prototype.getSidePane = function() {
+  return this.sidePane_;
+};
+
+
+/**
+ * @return {goog.ui.Component}
+ */
+rflect.cal.ui.MainBody.prototype.getTopPane = function() {
+  return this.topPane_;
+};
+
+
+/**
+ * @return {goog.ui.Component}
+ */
+rflect.cal.ui.MainBody.prototype.getMainPane = function() {
+  return this.mainPane_;
+};
+
+
+/**
+ * @return {goog.ui.Component}
+ */
+rflect.cal.ui.MainBody.prototype.getBottomPane = function() {
+  return this.bottomPane_;
+};
+
+
+/**
+ * @return {goog.ui.Component}
+ */
+rflect.cal.ui.MainBody.prototype.getCalSelector = function() {
+  return this.calSelector_;
+};
+
+
+/**
+ * @return {goog.ui.Component}
+ */
+rflect.cal.ui.MainBody.prototype.getTaskSelector = function() {
+  return this.taskSelector_;
+};
+
+
+/**
+ * @return {goog.ui.Component}
+ */
+rflect.cal.ui.MainBody.prototype.getMiniCal = function() {
+  return this.miniCal_;
+};
+
+
+/**
  * Creates main body on an empty div element.
  */
 rflect.cal.ui.MainBody.prototype.createDom = function() {
@@ -333,7 +389,7 @@ rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
           this.topPane_.build(aSb);
         };break;
         case 6: {
-          this.miniCal.build(aSb);
+          this.miniCal_.build(aSb);
         };break;
         case 8: {
           this.calSelector_.build(aSb);
@@ -357,7 +413,7 @@ rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
 
 /**
  * Redirects parameter to main pane, other children are updated normally.
- * @param {Array.<number>=} opt_exclusions Index(es) of component's children
+ * @param {Array.<goog.ui.Component>=} opt_exclusions Children components
  * which should be excluded from update.
  * @param {boolean=} opt_updateByNavigation Whether this update initiated by
  * buttons of top pane or minical.
@@ -368,30 +424,28 @@ rflect.cal.ui.MainBody.prototype.updateBeforeRedraw = function(opt_exclusions,
   // We will update main pane separately.
   var exclusions = opt_exclusions ?
       opt_exclusions.slice() :
-      [rflect.cal.ui.MainBody.ComponentsIndexes.MAIN_PANE,
-          rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR,
-          rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR];
+      [this.getMainPane(), this.getCalSelector(), this.getTaskSelector()];
 
   // Nothing wrong to have duplicates in exclusion indexes.
-  exclusions.push(rflect.cal.ui.MainBody.ComponentsIndexes.MAIN_PANE);
-  exclusions.push(rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR);
-  exclusions.push(rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR);
+  exclusions.push(this.getMainPane());
+  exclusions.push(this.getCalSelector());
+  exclusions.push(this.getTaskSelector());
 
   rflect.cal.ui.MainBody.superClass_.updateBeforeRedraw.call(this, exclusions);
 
-  if (!rflect.ui.Component.indexIsInExclusions(opt_exclusions,
-      rflect.cal.ui.MainBody.ComponentsIndexes.MAIN_PANE)) {
+  if (!rflect.ui.Component.componentIsInExclusions(opt_exclusions,
+      this.getMainPane())) {
     this.mainPane_.updateBeforeRedraw(null, undefined, opt_updateByNavigation);
   }
 
   if (!rflect.MOBILE) {
 
-    if (!rflect.ui.Component.indexIsInExclusions(opt_exclusions,
-        rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR)) {
+    if (!rflect.ui.Component.componentIsInExclusions(opt_exclusions,
+        this.getCalSelector())) {
       this.calSelector_.updateBeforeRedraw(null, this.firstBuildLeftPane);
     }
-    if (!rflect.ui.Component.indexIsInExclusions(opt_exclusions,
-        rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR)) {
+    if (!rflect.ui.Component.componentIsInExclusions(opt_exclusions,
+        this.getTaskSelector())) {
       this.taskSelector_.updateBeforeRedraw(null, this.firstBuildLeftPane);
     }
 
@@ -418,7 +472,7 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
 
   } else {
 
-    this.miniCal.decorateInternal(
+    this.miniCal_.decorateInternal(
         this.getDomHelper().getElement('month-selector'), true);
     this.calSelector_.decorateInternal(
         this.getDomHelper().getElement('calendars-selector'), true);
@@ -801,8 +855,8 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
   this.calSelector_.redrawIsNeeded = true;
   this.taskSelector_.redrawIsNeeded = true;
   this.update([
-    /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL),
-    /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE)]);
+    this.getMiniCal(),
+    this.getTopPane()]);
 }
 
 
@@ -813,27 +867,27 @@ rflect.cal.ui.MainBody.prototype.updateMainPane_ = function() {
   this.eventManager_.run();
   if (rflect.MOBILE) {
     this.updateBeforeRedraw([
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR),
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR),
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL),
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE)]
+      this.getBottomPane(),
+      this.getSidePane(),
+      this.getTopPane()]
     );
     this.updateByRedraw([
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.CAL_SELECTOR),
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TASK_SELECTOR),
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.MINI_CAL),
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE)]
+      this.getBottomPane(),
+      this.getSidePane(),
+      this.getTopPane()]
     );
   } else {
     this.updateBeforeRedraw([
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.BOTTOM_PANE),
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.SIDE_PANE),
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE)]
+      this.getCalSelector(),
+      this.getTaskSelector(),
+      this.getMiniCal(),
+      this.getTopPane()]
     );
     this.updateByRedraw([
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.BOTTOM_PANE),
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.SIDE_PANE),
-        /**@type {number}*/(rflect.cal.ui.MainBody.ComponentsIndexes.TOP_PANE)]
+      this.getCalSelector(),
+      this.getTaskSelector(),
+      this.getMiniCal(),
+      this.getTopPane()]
     );
   }
 }
@@ -850,7 +904,7 @@ rflect.cal.ui.MainBody.prototype.disposeInternal = function() {
 
   this.topPane_ = null;
   this.bottomPane_ = null;
-  this.miniCal = null;
+  this.miniCal_ = null;
   this.mainPane_ = null;
   this.viewManager_ = null;
   this.timeManager_ = null;
