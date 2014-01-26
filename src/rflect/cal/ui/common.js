@@ -41,3 +41,17 @@ rflect.cal.ui.common.setDeleteButtonContent = function(aButton) {
 
   aButton.setContent(content);
 };
+
+
+
+/**
+ * Marks input as invalid or removes that mark.
+ * @param {boolean} aValid Whether input is valid.
+ * @param {Element} aInputEl Input element.
+ */
+rflect.cal.ui.common.markInput = function(aValid, aInputEl) {
+  if (!aValid)
+    goog.dom.classes.add(aInputEl, goog.getCssName('input-invalid'));
+  else
+    goog.dom.classes.remove(aInputEl, goog.getCssName('input-invalid'));
+}

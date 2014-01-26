@@ -14,6 +14,7 @@ goog.require('goog.style');
 goog.require('rflect.ui.Component');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.Transport');
+goog.require('rflect.cal.ui.CalendarsPane.EventTypes');
 goog.require('rflect.cal.ui.CalSelector');
 goog.require('rflect.cal.ui.CalSelector.EventType');
 goog.require('rflect.cal.ui.ControlPane');
@@ -754,7 +755,7 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
     this.getHandler().listen(this.settingsPane_,
         rflect.cal.ui.SettingsPane.EventTypes.CANCEL,
         this.onSettingsPaneCancel_, false, this).listen(this.settingsPane_,
-        rflect.cal.ui.SettingsPane.EventTypes.CALENDAR_UPDATE,
+        rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
         this.onSettingsPaneCalendarUpdate_, false, this);
 
     if (rflect.MOBILE)

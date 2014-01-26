@@ -131,6 +131,13 @@ rflect.cal.ui.ExternalPane.prototype.subPanes_;
 
 
 /**
+ * @type {Element} Body part of pane.
+ * @protected
+ */
+rflect.cal.ui.ExternalPane.prototype.settingsBody;
+
+
+/**
  * @return {rflect.cal.ui.PaneShowBehavior} Show behavior.
  */
 rflect.cal.ui.ExternalPane.prototype.getShowBehavior = function() {
@@ -164,7 +171,7 @@ rflect.cal.ui.ExternalPane.prototype.createDom = function() {
 
   this.createSettingsPaneButtonsUpper_(dom);
   this.createSettingsPaneButtonsLower_(dom);
-  this.settingsBody = this.createSettingsBody(dom);
+  this.settingsBody = this.createBody(dom);
 
   var root = dom.createDom('div', {
     className: goog.getCssName('settings-pane') + (rflect.MOBILE ?
@@ -324,8 +331,8 @@ rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsLower_ =
     function(aDom) {
   rflect.cal.ui.common.setBackButtonContent(this.buttonBack2);
 
-  this.getPaneLowerLeft().appendChild(this.buttonBack1.getElement());
-  this.getPaneLowerLeft().appendChild(this.buttonSave1.getElement());
+  this.getPaneLowerLeft().appendChild(this.buttonBack2.getElement());
+  this.getPaneLowerLeft().appendChild(this.buttonSave2.getElement());
 }
 
 
@@ -335,7 +342,7 @@ rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsLower_ =
  * @return {Element} Settings body.
  * @protected
  */
-rflect.cal.ui.ExternalPane.prototype.createSettingsBody =
+rflect.cal.ui.ExternalPane.prototype.createBody =
     function(aDom) {
   goog.abstractMethod();
   return null;

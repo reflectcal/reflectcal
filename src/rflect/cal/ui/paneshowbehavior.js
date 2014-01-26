@@ -108,6 +108,15 @@ rflect.cal.ui.PaneShowBehavior.prototype.afterVisibleAction_ =
 
 
 /**
+ * @return {boolean} Whether the pane  is visible.
+ */
+rflect.cal.ui.PaneShowBehavior.prototype.isVisible = function() {
+  return this.visible_;
+}
+
+
+
+/**
  * Sets the visibility of the pane. Lazily renders the component if needed.
  * @param {boolean} visible Whether the pane should be visible.
  */
