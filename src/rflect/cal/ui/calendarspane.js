@@ -369,8 +369,7 @@ rflect.cal.ui.CalendarsPane.prototype.onCalendarsColorLinkClick_ =
     var id = target.id;
     aEvent.preventDefault();
 
-    var index = +rflect.string.getIdWithoutPrefix(id,
-        rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX);
+    var index = +/\d/.exec(id);
 
     this.currentCalendar_.colorCode =
         rflect.cal.i18n.PREDEFINED_COLOR_CODES[index];
@@ -432,6 +431,8 @@ rflect.cal.ui.CalendarsPane.prototype.onSaveCalendar_ = function() {
         rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE));
 
     this.setCurrentCalendar(null);
+
+    this.showBehavior.setVisible(false);
   }
 };
 

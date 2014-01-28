@@ -853,8 +853,11 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
     function(aEvent) {
 
   this.eventManager_.run();
-  this.calSelector_.redrawIsNeeded = true;
-  this.taskSelector_.redrawIsNeeded = true;
+  if (rflect.MOBILE) {
+  } else {
+    this.calSelector_.redrawIsNeeded = true;
+    this.taskSelector_.redrawIsNeeded = true;
+  }
   this.update([
     this.getMiniCal(),
     this.getTopPane()]);
