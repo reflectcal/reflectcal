@@ -854,6 +854,10 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
 
   this.eventManager_.run();
   if (rflect.MOBILE) {
+    // This is cal selector #1.
+    this.sidePane_.getChildAt(0).redrawIsNeeded = true;
+    // This is cal selector #2.
+    //this.sidePane_.getChildAt(1).redrawIsNeeded = true;
   } else {
     this.calSelector_.redrawIsNeeded = true;
     this.taskSelector_.redrawIsNeeded = true;

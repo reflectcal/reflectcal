@@ -128,8 +128,6 @@ rflect.cal.ui.CalSelector.prototype.disposeCheckboxes = function () {
  * @override
  */
 rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
-  if (rflect.MOBILE)
-    return;
 
   if (this.redrawIsNeeded) {
     this.redrawIsNeeded = false;
@@ -142,10 +140,13 @@ rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
     this.enterDocumentForCheckboxes();
 
     // Save reference to scrollable element.
-    this.scrollableEl = goog.dom.getChildren(this.getElement())[1];
+    if (!rflect.MOBILE)
+      this.scrollableEl = goog.dom.getChildren(this.getElement())[1];
 
   }
-  this.scrollableEl.style.height = this.scrollableSize_.height + 'px';
+
+  if (!rflect.MOBILE)
+    this.scrollableEl.style.height = this.scrollableSize_.height + 'px';
 };
 
 
