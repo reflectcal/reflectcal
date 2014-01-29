@@ -63,13 +63,6 @@ body when (@UI_TYPE = 'MOBILE') {
   height: 46px;
 }
 
-@media (max-width: 480px) {
-  .control-pane when (@UI_TYPE = 'MOBILE') {
-    height: 40px;
-    .gradient(#f2f2f2, #efefef);
-  }
-}
-
 .pane-left when (@UI_TYPE = 'MOBILE') {
   float: left;
 }
@@ -121,16 +114,6 @@ body when (@UI_TYPE = 'MOBILE') {
 
 .cal-menu-button when (@UI_TYPE = '') {
   .cal-menu-button();
-}
-
-
-@media (max-width: 480px) {
-  .cal-menu-button when (@UI_TYPE = 'MOBILE') {
-    .cal-menu-button();
-    margin: 0;
-    .border-radius(0);
-    border: none;
-  }
 }
 
 .cal-menu-button-simple when (@UI_TYPE = 'MOBILE') {
