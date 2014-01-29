@@ -48,10 +48,10 @@ exports.deleteCalendarAsync = function(aCalendarId, aOnCalendarDelete){
   var events = db.get('events');
 
   entityDAO.deleteEntityAsync('calendars', aCalendarId,
-      function(aError, aCalResult){
+      function(aCalResult){
     // Removing all events of this calendar.
     events.remove({ calendarId: aCalendarId }, {},
-        function(aError, aEventsResult){
+        function(aError, aNumberOfDeleted){
       // Passing result to callback.
       aOnCalendarDelete(aCalResult);
     });

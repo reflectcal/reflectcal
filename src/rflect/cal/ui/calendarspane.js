@@ -482,9 +482,10 @@ rflect.cal.ui.CalendarsPane.prototype.onDeleteCalendarAction_ =
  */
 rflect.cal.ui.CalendarsPane.prototype.onDeleteCalendarResponse_ =
     function(aEvent) {
-      this.dispatchEvent(new goog.events.Event(
-          rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE));
-    }
+  this.dispatchEvent(new goog.events.Event(
+      rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE));
+  this.showBehavior.setVisible(false);
+}
 
 
 /**

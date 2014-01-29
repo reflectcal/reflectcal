@@ -121,8 +121,9 @@ exports.saveEntityAsync = function(aCollectionName, aEntityJSON, aOnEntitySave,
 exports.deleteEntityAsync = function(aCollectionName, aEntityId, 
     aOnEntityDelete){
   var collection = db.get(aCollectionName);
-  collection.remove({ _id: aEntityId }, {}, function(aError, aResult){
+  collection.remove({ _id: aEntityId }, {}, function(aError, aNumberOfDeleted){
     // Passing result to callback.
-    aOnEntityDelete(aResult);
+    var result = aNumberOfDeleted > 0 ? 0 : -1;
+    aOnEntityDelete(result);
   });
 };
