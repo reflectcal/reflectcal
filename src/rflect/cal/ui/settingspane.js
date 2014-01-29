@@ -497,13 +497,13 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
  * Shows calendars pane and lazily instantiates it at the first
  * time.
  * @param {boolean} aShow Whether to show settings pane.
- * @param {rflect.cal.events.Calendar} aCalendar Calendar with which to
+ * @param {rflect.cal.events.Calendar=} opt_calendar Calendar with which to
  * initialize calendars pane.
- * @param {boolean} aNewCalendarMode Whether to delete button in calendars pane,
- * i.e. whether calendar is existing or new.
+ * @param {boolean=} opt_newCalendarMode Whether to delete button in calendars
+ * pane, i.e. whether calendar is existing or new.
  */
 rflect.cal.ui.SettingsPane.prototype.showCalendarsPane = function(aShow,
-    aCalendar, aNewCalendarMode) {
+    opt_calendar, opt_newCalendarMode) {
   if (!this.calendarsPane_) {
     this.calendarsPane_ = new rflect.cal.ui.CalendarsPane(this.viewManager,
         this.timeManager, this.eventManager,
@@ -512,6 +512,9 @@ rflect.cal.ui.SettingsPane.prototype.showCalendarsPane = function(aShow,
 
     // Save settings handler is in view manager.
     this.getHandler().listen(this.calendarsPane_,
+        rflect.cal.ui.CalendarsPane.EventTypes.CANCEL,
+        this.onCalendarsPaneCancel_, false, this)
+        .listen(this.calendarsPane_,
         rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
         this.onCalendarUpdate_, false, this);
 
@@ -520,9 +523,20 @@ rflect.cal.ui.SettingsPane.prototype.showCalendarsPane = function(aShow,
     }
   }
 
-  this.calendarsPane_.setCurrentCalendar(aCalendar);
-  this.calendarsPane_.setNewCalendarMode(aNewCalendarMode);
+  if (aShow) {
+    this.calendarsPane_.setCurrentCalendar(opt_calendar);
+    this.calendarsPane_.setNewCalendarMode(opt_newCalendarMode);
+  }
   this.calendarsPane_.getShowBehavior().setVisible(aShow);
+  this.getShowBehavior().setVisible(!aShow);
+}
+
+
+/**
+ * Calendars pane cancel listener.
+ */
+rflect.cal.ui.SettingsPane.prototype.onCalendarsPaneCancel_ = function() {
+  this.showCalendarsPane(false);
 }
 
 
