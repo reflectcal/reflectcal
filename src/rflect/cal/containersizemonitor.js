@@ -50,7 +50,7 @@ rflect.cal.ContainerSizeMonitor = function(aViewManager, aContainer,
    */
   this.containerSize_ = this.getContainerSize_();
 
-  this.scrollbarWidth = goog.style.getScrollbarWidth();
+  this.scrollbarWidth = rflect.MOBILE ? 0 : goog.style.getScrollbarWidth();
 
 };
 goog.inherits(rflect.cal.ContainerSizeMonitor, rflect.dom.ViewportSizeMonitor);

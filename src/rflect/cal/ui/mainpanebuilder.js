@@ -940,7 +940,12 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesMonth_ = function(aSb, aOff
     // We need to shift position by 1 because array of weekdays starts from
     // sunday and WEEKDAY gives weekday number starting from monday.
     dayNameNumber = (dayNamesFirstNumber + counter + 1) % 7;
-    aSb.append(goog.i18n.DateTimeSymbols.WEEKDAYS[dayNameNumber]);
+
+    //TODO(alexk): make this dependent on screen size.
+    if (rflect.MOBILE)
+      aSb.append(goog.i18n.DateTimeSymbols.SHORTWEEKDAYS[dayNameNumber]);
+    else
+      aSb.append(goog.i18n.DateTimeSymbols.WEEKDAYS[dayNameNumber]);
 
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 2]);
   }

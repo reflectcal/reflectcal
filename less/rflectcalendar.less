@@ -506,6 +506,7 @@ body when (@UI_TYPE = 'MOBILE') {
 #main-pane-header-wk-daynames() {
   position: relative;
   overflow: hidden;
+  clear:both;
   height: 20px;
   line-height: 20px;
 }
@@ -1141,9 +1142,12 @@ overflow:hidden
   float: left;
 }
 
-.main-pane-header-container-mn {
+.main-pane-header-container-mn when (@UI_TYPE = '') {
   margin-left: 28px; /*11+ 1 pixels from zippies, 15 + 1 pixels from weeknums*/
-  float: none;
+}
+
+.main-pane-header-container-mn when (@UI_TYPE = 'MOBILE') {
+  margin-left: 16px; /*15 + 1 pixels from weeknums*/
 }
 
 #main-pane-body-scrollable-mn {
