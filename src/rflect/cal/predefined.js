@@ -171,7 +171,7 @@ rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_WIDTH_DIFFERENCE_MONTH =
  * @type {number}
  * @const
  */
-rflect.cal.predefined.MN_EVENT_HEIGHT = 17;
+rflect.cal.predefined.MN_EVENT_HEIGHT = rflect.MOBILE ? 33 : 17;
 
 
 /**

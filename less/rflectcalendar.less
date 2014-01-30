@@ -1014,11 +1014,10 @@ overflow:hidden
   margin: 0 1px 0 1px;
 }
 
-.event-rect-mn-inner {
+.event-rect-mn-inner() {
   border: 1px solid #28518e;
   padding: 0 5px 0 5px;
   width: auto;
-  height: 14px; /*line-height * number_of_lines + 2px padding*/
   background-color: #6699ee;
   overflow: hidden;
   font-size: 12px;
@@ -1027,13 +1026,16 @@ overflow:hidden
   line-height: 14px;
   vertical-align: top;
   cursor: pointer;
+}
 
-  /*-moz-border-radius: 8px;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
-  -moz-box-shadow: 1px 1px 1px #777777;
-  -webkit-box-shadow: 1px 1px 1px #777777;
-  box-shadow: 1px 1px 1px #777777;*/
+.event-rect-mn-inner when (@UI_TYPE='') {
+  .event-rect-mn-inner();
+  height: 14px; /*line-height * number_of_lines + 2px padding*/
+}
+
+.event-rect-mn-inner when (@UI_TYPE='MOBILE') {
+  .event-rect-mn-inner();
+  height: 30px; /*line-height * number_of_lines + 2px padding*/
 }
 
 .event-rect-mn-inner-twoline {
