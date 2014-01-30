@@ -748,45 +748,87 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth = function(aSb,
   var length = rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_.length;
   while (++offset < length - 1) {
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[offset]);
-    switch (offset) {
-      case 5: {
-        this.buildMainPaneHeaderMonth_(aSb);
-      };break;
-      case 8: {
-        this.buildDayNamesMonth_(aSb, offset);
-        offset += 2;
-      };break;
-      case 15: {
-        this.buildScrollableWrapperMn_(aSb, offset);
-      };break;
-      case 19: {
-        this.buildMnRowZippies_(aSb, offset);
-        offset += 7;
-      };break;
-      case 30: {
-        this.buildScrollableMonth_(aSb, offset);
-      };break;
-      case 31: {
-        if (aFirstBuild)
-          offset += 55;
-      };break;
-      case 32: {
-        this.buildGridTableWrapperOuter_(aSb, offset);
-      };break;
-      case 35: {
-        this.buildWeekNumbers_(aSb, offset);
-        offset += 3;
-      };break;
-      case 43: {
-        this.buildMonthGridCols_(aSb, offset);
-        offset++;
-      };break;
-      case 49: {
-        this.buildMonthGridRows_(aSb, offset);
-        offset += 32;
-      };break;
-      default: break;
+    if (rflect.MOBILE) {
+      switch (offset) {
+        case 5: {
+          this.buildMainPaneHeaderMonth_(aSb);
+        };break;
+        case 8: {
+          this.buildDayNamesMonth_(aSb, offset);
+          offset += 2;
+        };break;
+        case 15: {
+          this.buildScrollableWrapperMn_(aSb, offset);
+        };break;
+        case 16: {
+          offset += 13;
+        };break;
+        case 30: {
+          this.buildScrollableMonth_(aSb, offset);
+        };break;
+        case 31: {
+          if (aFirstBuild)
+            offset += 55;
+        };break;
+        case 32: {
+          this.buildGridTableWrapperOuter_(aSb, offset);
+        };break;
+        case 35: {
+          this.buildWeekNumbers_(aSb, offset);
+          offset += 3;
+        };break;
+        case 43: {
+          this.buildMonthGridCols_(aSb, offset);
+          offset++;
+        };break;
+        case 49: {
+          this.buildMonthGridRows_(aSb, offset);
+          offset += 32;
+        };break;
+        default: break;
+      }
+    } else {
+      switch (offset) {
+        case 5: {
+          this.buildMainPaneHeaderMonth_(aSb);
+        };break;
+        case 8: {
+          this.buildDayNamesMonth_(aSb, offset);
+          offset += 2;
+        };break;
+        case 15: {
+          this.buildScrollableWrapperMn_(aSb, offset);
+        };break;
+        case 19: {
+          this.buildMnRowZippies_(aSb, offset);
+          offset += 7;
+        };break;
+        case 30: {
+          this.buildScrollableMonth_(aSb, offset);
+        };break;
+        case 31: {
+          if (aFirstBuild)
+            offset += 55;
+        };break;
+        case 32: {
+          this.buildGridTableWrapperOuter_(aSb, offset);
+        };break;
+        case 35: {
+          this.buildWeekNumbers_(aSb, offset);
+          offset += 3;
+        };break;
+        case 43: {
+          this.buildMonthGridCols_(aSb, offset);
+          offset++;
+        };break;
+        case 49: {
+          this.buildMonthGridRows_(aSb, offset);
+          offset += 32;
+        };break;
+        default: break;
+      }
     }
+
   }
 };
 

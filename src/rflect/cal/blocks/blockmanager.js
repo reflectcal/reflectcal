@@ -63,6 +63,12 @@ rflect.cal.blocks.BlockManager = function(aViewManager, aTimeManager,
   this.blockPoolMonth = new rflect.cal.blocks.BlockPool(false,
       this.eventManager_);
   this.blockPoolMonth.fill(6);
+  this.blockPoolMonth.expandBlock(0, rflect.MOBILE);
+  this.blockPoolMonth.expandBlock(1, rflect.MOBILE);
+  this.blockPoolMonth.expandBlock(2, rflect.MOBILE);
+  this.blockPoolMonth.expandBlock(3, rflect.MOBILE);
+  this.blockPoolMonth.expandBlock(4, rflect.MOBILE);
+  this.blockPoolMonth.expandBlock(5, rflect.MOBILE);
 
   /**
    * Block pool for allday.
