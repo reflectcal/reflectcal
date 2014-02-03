@@ -357,6 +357,7 @@ rflect.cal.ui.CalendarsPane.prototype.enterDocument = function() {
 /**
  * @param {goog.events.Event} aEvent Event object.
  * @private
+ * @private
  */
 rflect.cal.ui.CalendarsPane.prototype.onCalendarsColorLinkClick_ =
     function(aEvent) {
@@ -432,7 +433,9 @@ rflect.cal.ui.CalendarsPane.prototype.onSaveCalendar_ = function() {
 
     this.setCurrentCalendar(null);
 
-    this.showBehavior.setVisible(false);
+    if (this.dispatchEvent(new goog.events.Event(
+        rflect.cal.ui.CalendarsPane.EventTypes.CANCEL)))
+      this.showBehavior.setVisible(false);
   }
 };
 
