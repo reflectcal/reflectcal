@@ -146,7 +146,7 @@ rflect.cal.ui.MainBody.HTML_PARTS_ = rflect.MOBILE ? [
   '</div>'
   ] : [
   '<div id="cal-container" class="' + goog.getCssName('cal-container') + '">',
-  '<div id="top-pane">',
+  '<div id="top-pane" class="control-pane">',
   '</div>',
   '<div id="main-body">',
   '<div id="left-pane" class="side-pane">',

@@ -196,7 +196,7 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
   } else {
 
     parts = [
-      '<div id="top-pane" class="' + goog.getCssName('control-pane') + '">',
+      '<div id="top-pane" class="control-pane">',
       '<div id="sidebar-controls">',
       // First button container.
       // 'Now' button.
@@ -240,7 +240,7 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       // Options button.
       '<div id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '" class="' + goog.getCssName('goog-flat-button') + ' ' + goog.getCssName('cal-menu-rightmost-button') + ' ' + goog.getCssName('cal-menu-button') + ' ',
       goog.getCssName('cal-menu-button-options') + '">',
-      '<div class="' + goog.getCssName('icon') + ' ' + goog.getCssName('icon-cog') + ' ' + goog.getCssName('icon-settings') + '"></div>',
+      '<div class="icon icon-cog icon-settings icon-in-button"></div>',
       '</div></div>',
       '<div id="main-pane-controls-left"><div id="main-pane-controls-left-left">',
       // New event button.
