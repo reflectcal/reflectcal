@@ -567,6 +567,7 @@ rflect.cal.ui.MainBody.prototype.measureStaticSizes = function() {
         allDayPaneSize.width +
         rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2, totalSize.height -
         allDayPaneSize.height - weekPaneSize.height +
+        rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 4 +
         //TODO(alexk): fix these two pixels in layout
         2);
   } else if (this.viewManager_.isInMonthMode()) {
