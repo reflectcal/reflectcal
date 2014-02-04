@@ -251,7 +251,6 @@ body when (@UI_TYPE = 'MOBILE') {
 
 #month-selector {
   padding-top: 20px;
-  height: 152px;
 }
 
 .list-selector, #calendars-selector, #tasks-selector {
@@ -544,6 +543,7 @@ body when (@UI_TYPE = 'MOBILE') {
 }
 
 #main-pane-header-scrollable() {
+  .box-sizing(border-box);
   border: 1px solid #d5d5d5;
   /*we need this for ie7 as nested relative positioned elements
   don't get affected by overflow without it*/
@@ -709,6 +709,7 @@ body when (@UI_TYPE = 'MOBILE') {
 }
 
 #main-pane-body-scrollable-wk() {
+  .box-sizing(border-box);
   overflow-y: scroll;
   /*overflow-x: visible;*/
   border: 1px solid #d5d5d5;
