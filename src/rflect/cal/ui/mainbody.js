@@ -607,7 +607,9 @@ rflect.cal.ui.MainBody.prototype.measureLeftPaneStaticSizes = function() {
       calContainerBB.top + calContainerBB.bottom +
       calContainerPB.top + calContainerPB.bottom +
       topPaneSize.height + minicalSize.height + calSelectorSize.height +
-      taskSelectorSize.height;
+      taskSelectorSize.height
+      //TODO(alexk): fix these two pixels in layout
+      + 2;
 
   this.staticSizesLeftPane = new goog.math.Size(0, totalHeight);
 }
