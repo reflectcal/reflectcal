@@ -758,7 +758,6 @@ body when (@UI_TYPE = 'MOBILE') {
 
   /*This two rules fix too high .grid-table-wk-outer in IE9-11.*/
   padding-bottom: 24px;
-  overflow-x:hidden;
 }
 
 .wk-grid-rows-cont {
@@ -766,8 +765,10 @@ body when (@UI_TYPE = 'MOBILE') {
 }
 
 .grid-table-wk-outer {
-position:relative;top:-1152px;margin-bottom:-1176px;height:1176px;
-overflow:hidden
+  position:absolute;
+  top:0;
+  height:1176px;
+  overflow:hidden
 }
 
 
