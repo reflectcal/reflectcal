@@ -517,10 +517,6 @@ rflect.cal.ui.SettingsPane.prototype.showCalendarsPane = function(aShow,
         .listen(this.calendarsPane_,
         rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
         this.onCalendarUpdate_, false, this);
-
-    if (goog.DEBUG) {
-      _inspect('calendarsPane_', this.calendarsPane_);
-    }
   }
 
   if (aShow) {
