@@ -76,17 +76,16 @@ rflect.cal.ui.SaveDialog.HTML_PARTS_ =
     '<div class="' + goog.getCssName('event-name-cont') + '">' +
         '<label for="event-name" class="' + goog.getCssName('event-name-label') + '">Event name</label>' +
         '<input type="text" value="" id="event-name" name="event-name" ' +
-        'class="' + goog.getCssName('event-name-input') + '" spellcheck="false" placeholder="' +
+        'class="event-name-input ep-event-name-input" spellcheck="false" placeholder="' +
         rflect.cal.i18n.Symbols.NO_NAME_EVENT +
         '"/>' +
         '</div>' +
 
         '<label for="event-cal" class="' + goog.getCssName('event-name-label') + '">Calendar</label>' +
-        '<select id="event-cal" class="' + goog.getCssName('event-cal-select') + '"></select>' +
+        '<select id="event-cal" class="event-cal-select dialog-event-cal-select"></select>' +
 
-        '<a id="event-edit" class="' + goog.getCssName('event-edit-link') + ' ' + goog.getCssName('goog-inline-block') + '" ' +
-        'href="javascript:void(0)">' +
-        'Edit options</a>';
+        '<button id="event-edit" class="event-edit-link">' +
+        'Edit options</button>';
 
 
 /**
