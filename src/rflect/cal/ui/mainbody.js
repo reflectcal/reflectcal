@@ -731,13 +731,13 @@ rflect.cal.ui.MainBody.prototype.showEventPane = function(aShow,
         false, this);
 
     if (rflect.MOBILE)
-      this.getHandler().listen(this.eventPane_.showBehavior,
+      this.getHandler().listen(this.eventPane_.getShowBehavior(),
           rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT,
           this.onSlideStartOrEnd_, false, this);
   }
 
   this.eventPane_.setNewEventMode(opt_creatingNewEvent);
-  this.eventPane_.showBehavior.setVisible(aShow);
+  this.eventPane_.getShowBehavior().setVisible(aShow);
   //NOTE(alexk): do we need smarter logic here than just hide calendar?
   if (!rflect.MOBILE) this.showCalendar_(!aShow);
 }
