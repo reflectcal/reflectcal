@@ -317,6 +317,8 @@ rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsUpper_ =
     function(aDom) {
 
   rflect.cal.ui.common.setBackButtonContent(this.buttonBack1);
+  goog.dom.classes.add(this.buttonBack1.getElement(),
+      'cal-menu-leftmost-button');
 
   this.getPaneUpperLeft().appendChild(this.buttonBack1.getElement());
   this.getPaneUpperLeft().appendChild(this.buttonSave1.getElement());
@@ -330,6 +332,8 @@ rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsUpper_ =
 rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsLower_ =
     function(aDom) {
   rflect.cal.ui.common.setBackButtonContent(this.buttonBack2);
+  goog.dom.classes.add(this.buttonBack2.getElement(),
+      'cal-menu-leftmost-button');
 
   this.getPaneLowerLeft().appendChild(this.buttonBack2.getElement());
   this.getPaneLowerLeft().appendChild(this.buttonSave2.getElement());
