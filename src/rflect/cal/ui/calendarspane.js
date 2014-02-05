@@ -357,7 +357,6 @@ rflect.cal.ui.CalendarsPane.prototype.enterDocument = function() {
 /**
  * @param {goog.events.Event} aEvent Event object.
  * @private
- * @private
  */
 rflect.cal.ui.CalendarsPane.prototype.onCalendarsColorLinkClick_ =
     function(aEvent) {
