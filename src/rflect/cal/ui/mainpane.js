@@ -16,17 +16,18 @@ goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('goog.string');
 goog.require('goog.userAgent');
-goog.require('rflect.ui.Component');
 goog.require('rflect.cal.ui.MainPaneBuilder');
 goog.require('rflect.cal.ui.MainPaneSelectionMask');
-goog.require('rflect.ui.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.predefined.chips');
 goog.require('rflect.cal.Transport.EventTypes');
 goog.require('rflect.cal.ui.TimeMarker');
-goog.require('rflect.string');
 goog.require('rflect.cal.ui.EditDialog');
 goog.require('rflect.cal.ui.SaveDialog');
+goog.require('rflect.ui.Component');
+goog.require('rflect.ui.MomentumScroller');
+goog.require('rflect.ui.MouseOverRegistry');
+goog.require('rflect.string');
 
 
 
@@ -191,6 +192,7 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
 
   this.addChild(this.editDialog_);
 
+  new rflect.ui.MomentumScroller();
 };
 goog.inherits(rflect.cal.ui.MainPane, rflect.ui.Component);
 
