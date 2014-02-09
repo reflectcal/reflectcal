@@ -192,7 +192,7 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
 
   this.addChild(this.editDialog_);
 
-  new rflect.ui.MomentumScroller();
+  this.momentumScroller_ = new rflect.ui.MomentumScroller();
 };
 goog.inherits(rflect.cal.ui.MainPane, rflect.ui.Component);
 
@@ -283,6 +283,14 @@ rflect.cal.ui.MainPane.prototype.leftContMn_;
  * @private
  */
 rflect.cal.ui.MainPane.prototype.rightContMn_;
+
+
+/**
+ * Momentum scroller.
+ * @type {rflect.ui.MomentumScroller}
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.momentumScroller_;
 
 
 /**
@@ -488,6 +496,8 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_exclusions,
   if (!opt_doNotRemoveScrollListeners)
     this.removeScrollListeners_();
 
+  this.removeMomentumScroller_();
+
   if (opt_updateByNavigation)
     this.setHandyScrollPosition_();
 
@@ -554,6 +564,32 @@ rflect.cal.ui.MainPane.prototype.removeScrollListeners_ = function() {
 
 
 /**
+ * Removes scroll listeners on each update.
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.removeMomentumScroller_ = function() {
+
+  this.momentumScroller_.enable(false);
+};
+
+
+/**
+ * Removes scroll listeners on each update.
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.addMomentumScroller_ = function() {
+  var element = this.getDomHelper().getElement('grid-table-cont');
+  var frameElement = this.getDomHelper()
+      .getElement('main-pane-body-scrollable-wk');
+
+  if (element) {
+    this.momentumScroller_.setElements(element, frameElement);
+    this.momentumScroller_.enable(true);
+  }
+};
+
+
+/**
  * Updates block manager.
  */
 rflect.cal.ui.MainPane.prototype.updateBlockManager = function() {
@@ -581,6 +617,10 @@ rflect.cal.ui.MainPane.prototype.updateByRedraw = function() {
 
   // We add scroll listeners on freshly built content.
   this.addScrollListeners_();
+
+
+  this.addMomentumScroller_();
+
   // Return to previous scrollTop, scrollLeft values, if any.
   if (this.viewManager_.isInWeekMode()) {
     var headerScrollable =
@@ -743,11 +783,14 @@ rflect.cal.ui.MainPane.prototype.decorateInternal = function(aElement,
  * @inheritDoc
  */
 rflect.cal.ui.MainPane.prototype.enterDocument = function() {
+  if (goog.DEBUG)
+
+  _log('enterDocument');
   rflect.cal.ui.MainPane.superClass_.enterDocument.call(this);
 
   this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
       this.onClick_, false, this)
-      .listen(this.getElement(), goog.events.EventType.DBLCLICK,
+      /*.listen(this.getElement(), goog.events.EventType.DBLCLICK,
       this.onDoubleClick_, false, this)
       .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
       this.onMouseOver_, false, this)
@@ -760,7 +803,7 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
       .listen(document, goog.events.EventType.MOUSEMOVE,
       this.onMouseMove_, false, this)
       .listen(document, goog.events.EventType.MOUSEUP,
-      this.onMouseUp_, false, this)
+      this.onMouseUp_, false, this)*/
       .listen(this.saveDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
       this.onEventEdit_, false, this)
       .listen(this.saveDialog_, rflect.ui.Dialog.EventType.SELECT,
@@ -1772,6 +1815,8 @@ rflect.cal.ui.MainPane.prototype.disposeInternal = function() {
   this.rightContMn_ = null;
   this.leftContAd_ = null;
   this.rightContAd_ = null;
+
+  this.momentumScroller_.dispose();
 
   rflect.cal.ui.MainPane.superClass_.disposeInternal.call(this);
 };

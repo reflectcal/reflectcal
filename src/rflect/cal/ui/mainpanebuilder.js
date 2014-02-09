@@ -256,7 +256,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   /*Scrollable height in pixels (400).*/
   'px" class="',/*Scrollable state is here
   (mpbs-wk-scroll-horz-on, mpbs-wk-scroll-horz-of).*/
-  '">',
+  '"><div id="grid-table-cont">',
   // Hours container.
   '<div id="hours-container">',
   /*Time marker head
@@ -348,7 +348,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   // End of grid table wrapper.
   '</div>',
   // End of main pane scrollable body.
-  '</div>',
+  '</div></div>',
 
   // End of main pane.
   '</div>'
