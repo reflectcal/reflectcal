@@ -280,10 +280,6 @@ rflect.ui.MomentumScroller.prototype.isEnabled = function() {
 rflect.ui.MomentumScroller.prototype.enterDocument = function() {
   this.attachDocumentListener_();
 
-  if (goog.DEBUG)
-
-  _log('this.element',this.element.id);
-
   this.listen(this.element, goog.events.EventType.TOUCHSTART,
       this.onTouchStart);
   this.listen(this.element, goog.events.EventType.TOUCHMOVE, this.onTouchMove);
@@ -341,10 +337,6 @@ rflect.ui.MomentumScroller.onDocumentTouchMove_ = function(aEvent) {
  * @param {goog.events.Event} aEvent Event object.
  */
 rflect.ui.MomentumScroller.prototype.onTouchStart = function(aEvent) {
-  if (goog.DEBUG)
-
-  _log('onTouchStart');
-
   // This will be shown in part 4.
   this.stopMomentum();
 
@@ -355,33 +347,6 @@ rflect.ui.MomentumScroller.prototype.onTouchStart = function(aEvent) {
   this.previousMoment_ = this.currentMoment_ = goog.now();
 
   this.isDragging_ = true;
-
-  if (goog.DEBUG)
-
-  _log('this.startTouchY',this.startTouchY);
-  if (goog.DEBUG)
-
-  _log('this.contentStartOffsetY',this.contentStartOffsetY);
-  if (goog.DEBUG)
-
-  _log('this.contentOffsetY',this.contentOffsetY);
-  if (goog.DEBUG)
-
-  _log('this.previousPoint_',this.previousPoint_);
-  if (goog.DEBUG)
-
-  _log('this.currentPoint_',this.currentPoint_);
-  if (goog.DEBUG)
-
-  _log('this.previousMoment_',this.previousMoment_);
-  if (goog.DEBUG)
-
-  _log('this.currentMoment_',this.currentMoment_);
-
-
-
-
-
 }
 
 
@@ -389,8 +354,6 @@ rflect.ui.MomentumScroller.prototype.onTouchStart = function(aEvent) {
  * @param {goog.events.Event} aEvent Event object.
  */
 rflect.ui.MomentumScroller.prototype.onTouchMove = function(aEvent) {
-  if (goog.DEBUG)
-    _log('onTouchMove');
   if (this.isDragging()) {
     var currentY = aEvent.getBrowserEvent().touches[0].clientY;
     var deltaY = currentY - this.startTouchY;
@@ -411,13 +374,6 @@ rflect.ui.MomentumScroller.prototype.onTouchMove = function(aEvent) {
  * @param {Event} aEvent object.
  */
 rflect.ui.MomentumScroller.prototype.onTouchEnd = function(aEvent) {
-  if (goog.DEBUG)
-
-  _log('onTouchEnd');
-
-  if (goog.DEBUG)
-    _log('this.isOutOfBounds()',this.isOutOfBounds());
-
   if (this.isDragging()) {
 
     if (this.shouldStartMomentum()) {
@@ -441,17 +397,24 @@ rflect.ui.MomentumScroller.prototype.onTouchEnd = function(aEvent) {
  */
 rflect.ui.MomentumScroller.prototype.onTransitionEnd = function(aEvent) {
 
-  /*switch (this.queuedTransitionStage_) {
+  switch (this.queuedTransitionStage_) {
     case rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.NONE:{
-      */this.element.style.webkitTransition = '';
-      this.isDecelerating_ = false;
-    /*};break;
-    case rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.TO_BOUNDS:{
       this.element.style.webkitTransition = '';
       this.isDecelerating_ = false;
     };break;
+    case rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.TO_BOUNDS:{
+      this.setUpTransitionStage2();
+    };break;
+    case rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.BOUNCED_OUT:{
+      this.setUpTransitionStage3();
+    };break;
+    case rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.BOUNCED_BACK:{
+      this.queuedTransitionStage_ =
+          rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.NONE;
+      this.isDecelerating_ = false;
+    };break;
     default:break;
-  }*/
+  }
 }
 
 
@@ -604,20 +567,26 @@ rflect.ui.MomentumScroller.prototype.doMomentum = function() {
 
 
 rflect.ui.MomentumScroller.prototype.setUpTransitionStage1 = function() {
+  if (goog.DEBUG)
+  _log('stage1');
   var velocity = this.getEndVelocity();
   var acceleration = this.getAcceleration(velocity);
   var displacement;
 
   if (velocity > 0) {
-    displacement = this.contentOffsetY;
+    displacement = -this.contentOffsetY;
     this.contentOffsetY = 0;
   } else {
     displacement = this.getLowestContentPosition() - this.contentOffsetY;
     this.contentOffsetY = this.getLowestContentPosition();
   }
+  if (goog.DEBUG)
+  _log('displacement',displacement);
 
   this.endMomentumVelocity_ = (velocity < 0 ? -1 : 1) *
       this.getEndMomentumVelocity(velocity, displacement, acceleration);
+  if (goog.DEBUG)
+    _log('this.endMomentumVelocity_', this.endMomentumVelocity_);
   var time = Math.abs((velocity - this.endMomentumVelocity_) / acceleration);
 
   this.element.style.webkitTransition = '-webkit-transform ' + time +
@@ -631,23 +600,28 @@ rflect.ui.MomentumScroller.prototype.setUpTransitionStage1 = function() {
 
 
 rflect.ui.MomentumScroller.prototype.setUpTransitionStage2 = function() {
+  if (goog.DEBUG)
+  _log('stage2');
   var velocity = this.endMomentumVelocity_;
-  var acceleration = this.getAcceleration(velocity);
+  var acceleration = this.getAcceleration(velocity) * 100;
   var displacement = - (velocity * velocity) / (2 * acceleration);
   var time = - velocity / acceleration;
 
+  if (goog.DEBUG)
+    _log('velocity',velocity);
+
   if (velocity > 0) {
-    displacement = this.contentOffsetY;
-    this.contentOffsetY = 0;
+    var newY = displacement;
   } else {
-    displacement = this.getLowestContentPosition() - this.contentOffsetY;
-    this.contentOffsetY = this.getLowestContentPosition();
+    var newY = this.contentOffsetY + displacement;
   }
+
+  this.contentOffsetY = newY;
 
   this.element.style.webkitTransition = '-webkit-transform ' + time +
       'ms cubic-bezier(0.33, 0.66, 0.66, 1)';
   this.element.style.webkitTransform = 'translate3d(0, ' +
-      this.contentOffsetY + 'px, 0)';
+      newY + 'px, 0)';
 
   this.queuedTransitionStage_ =
       rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.BOUNCED_OUT;
@@ -656,6 +630,9 @@ rflect.ui.MomentumScroller.prototype.setUpTransitionStage2 = function() {
 
 
 rflect.ui.MomentumScroller.prototype.setUpTransitionStage3 = function() {
+  this.snapToBounds();
+  this.queuedTransitionStage_ =
+      rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.BOUNCED_BACK;
 }
 
 
