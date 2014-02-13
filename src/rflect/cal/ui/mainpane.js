@@ -568,7 +568,6 @@ rflect.cal.ui.MainPane.prototype.removeScrollListeners_ = function() {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.removeMomentumScroller_ = function() {
-
   this.momentumScroller_.enable(false);
 };
 
@@ -578,11 +577,20 @@ rflect.cal.ui.MainPane.prototype.removeMomentumScroller_ = function() {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.addMomentumScroller_ = function() {
-  var element = this.getDomHelper().getElement('grid-table-cont');
-  var frameElement = this.getDomHelper()
-      .getElement('main-pane-body-scrollable-wk');
+  var element;
+  var frameElement;
 
-  if (element) {
+  if (this.viewManager_.isInWeekMode()) {
+    element = this.getDomHelper().getElement('grid-table-cont');
+    frameElement = this.getDomHelper()
+        .getElement('main-pane-body-scrollable-wk');
+  } else if (this.viewManager_.isInMonthMode()) {
+    element = this.getDomHelper().getElement('grid-table-wrapper-outer');
+    frameElement = this.getDomHelper()
+        .getElement('main-pane-body-scrollable-mn');
+  }
+
+  if (element && frameElement) {
     this.momentumScroller_.setElements(element, frameElement);
     this.momentumScroller_.enable(true);
   }
@@ -790,20 +798,6 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
 
   this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
       this.onClick_, false, this)
-      /*.listen(this.getElement(), goog.events.EventType.DBLCLICK,
-      this.onDoubleClick_, false, this)
-      .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
-      this.onMouseOver_, false, this)
-      .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
-      this.onMouseOut_, false, this)
-      .listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
-      this.onMouseDown_, false, this)
-      .listen(this.getElement(), goog.events.EventType.SELECTSTART,
-      this.onSelectStart_, false, this)
-      .listen(document, goog.events.EventType.MOUSEMOVE,
-      this.onMouseMove_, false, this)
-      .listen(document, goog.events.EventType.MOUSEUP,
-      this.onMouseUp_, false, this)*/
       .listen(this.saveDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
       this.onEventEdit_, false, this)
       .listen(this.saveDialog_, rflect.ui.Dialog.EventType.SELECT,
@@ -814,6 +808,24 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
       this.onEditDialogButtonSelect_, false, this)
       .listen(this.transport_, rflect.cal.Transport.EventTypes.SAVE_EVENT,
       this.onSaveEvent_, false, this);
+
+  //Mouse events.
+  if (!rflect.MOBILE) {
+    this.getHandler().listen(this.getElement(), goog.events.EventType.DBLCLICK,
+        this.onDoubleClick_, false, this)
+        .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
+        this.onMouseOver_, false, this)
+        .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
+        this.onMouseOut_, false, this)
+        .listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
+        this.onMouseDown_, false, this)
+        .listen(this.getElement(), goog.events.EventType.SELECTSTART,
+        this.onSelectStart_, false, this)
+        .listen(document, goog.events.EventType.MOUSEMOVE,
+        this.onMouseMove_, false, this)
+        .listen(document, goog.events.EventType.MOUSEUP,
+        this.onMouseUp_, false, this);
+  }
 
   this.timeMarker_.start();
 };

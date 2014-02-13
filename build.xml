@@ -49,6 +49,7 @@
                     value="d:\work\rflectevents\src\closure-library\closure\bin\build\closurebuilder.py"/>
             <arg value="--root=${basedir}\src\closure-library"/>
             <arg value="--root=${basedir}\src\rflect"/>
+            <arg value="--root=${basedir}\src\third-party"/>
             <arg value="--output_mode=compiled"/>
             <arg line="--compiler_jar=&quot;${basedir}\bin\compiler.jar&quot;"/>
             <arg line="--output_file=&quot;${basedir}\build\outputcompiled.js&quot;"/>
@@ -79,6 +80,7 @@
             value="d:\work\rflectevents\src\closure-library\closure\bin\build\closurebuilder.py"/>
             <arg value="--root=${basedir}\src\closure-library"/>
             <arg value="--root=${basedir}\src\rflect"/>
+            <arg value="--root=${basedir}\src\third-party"/>
             <arg value="--output_mode=compiled"/>
             <arg line="--compiler_jar=&quot;${basedir}\bin\compiler.jar&quot;"/>
             <arg line="--output_file=&quot;${basedir}\build\outputcompiled.js&quot;"/>
@@ -108,6 +110,7 @@
             value="d:\work\rflectevents\src\closure-library\closure\bin\build\closurebuilder.py"/>
             <arg value="--root=${basedir}\src\closure-library"/>
             <arg value="--root=${basedir}\src\rflect"/>
+            <arg value="--root=${basedir}\src\third-party"/>
             <arg value="--output_mode=compiled"/>
             <arg line="--compiler_jar=&quot;${basedir}\bin\compiler.jar&quot;"/>
             <arg line="--output_file=&quot;${basedir}\build\outputcompiled.js&quot;"/>
@@ -141,10 +144,9 @@
     <!--Dependency writer, creates deps.js-->
     <target name="depswriter" description="dependencies writer">
         <exec executable="python" dir="${basedir}">
-            <arg
-                    value="${basedir}\src\closure-library\closure\bin\build\depswriter.py"/>
-            <arg
-                    line="--root_with_prefix=&quot;${basedir}\src\rflect ../../../rflect&quot;"/>
+            <arg value="${basedir}\src\closure-library\closure\bin\build\depswriter.py"/>
+            <arg line="--root_with_prefix=&quot;${basedir}\src\rflect ../../../rflect&quot;"/>
+            <arg line="--root_with_prefix=&quot;${basedir}\src\third-party ../../../third-party&quot;"/>
             <arg line="--output_file=&quot;${basedir}\src\deps.js&quot;"/>
         </exec>
     </target>

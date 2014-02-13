@@ -16,7 +16,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
 goog.require('goog.style');
 goog.require('rflect.browser.transitionend');
-//goog.require('CSSMatrix');
+goog.require('rflect.browser.cssmatrix');
 
 
 
@@ -58,7 +58,7 @@ rflect.ui.MomentumScroller.ACCELERATION_SLIDING = 0.0005;
  * Acceleration for bounce back.
  * @type {number}
  */
-rflect.ui.MomentumScroller.ACCELERATION_BOUNCE_BACK = 0.0005;
+rflect.ui.MomentumScroller.ACCELERATION_BOUNCE_BACK_COEFF = 100;
 
 
 /**
@@ -518,7 +518,8 @@ rflect.ui.MomentumScroller.prototype.getEndMomentumVelocity = function(
  */
 rflect.ui.MomentumScroller.prototype.getAcceleration = function(
     aVelocity) {
-  return aVelocity < 0 ? 0.0005 : -0.0005;
+  return aVelocity < 0 ? rflect.ui.MomentumScroller.ACCELERATION_SLIDING :
+      -rflect.ui.MomentumScroller.ACCELERATION_SLIDING;
 }
 
 
@@ -603,7 +604,8 @@ rflect.ui.MomentumScroller.prototype.setUpTransitionStage2 = function() {
   if (goog.DEBUG)
   _log('stage2');
   var velocity = this.endMomentumVelocity_;
-  var acceleration = this.getAcceleration(velocity) * 100;
+  var acceleration = this.getAcceleration(velocity) *
+      rflect.ui.MomentumScroller.ACCELERATION_BOUNCE_BACK_COEFF;
   var displacement = - (velocity * velocity) / (2 * acceleration);
   var time = - velocity / acceleration;
 
@@ -641,7 +643,8 @@ rflect.ui.MomentumScroller.prototype.stopMomentum = function() {
     // Get the computed style object.
     var style = document.defaultView.getComputedStyle(this.element, null);
     // Computed the transform in a matrix object given the style.
-    var transform = new WebKitCSSMatrix(style.webkitTransform);
+    var transform = rflect.browser.cssmatrix.getInstance(
+        style.webkitTransform);
 
     // Clear the active transition so it doesn’t apply to our next transform.
     this.element.style.webkitTransition = '';

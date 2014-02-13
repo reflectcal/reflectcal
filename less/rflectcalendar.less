@@ -1165,15 +1165,23 @@ body when (@UI_TYPE = 'MOBILE') {
   border-radius: 2px;*/
 }
 
-.mpbs-mn-scroll-vert-on {
-  overflow-y: scroll;
+.mpbs-mn-scroll-vert-on() {
   margin-right: 0;
   border-right: none !important;
 }
 
+.mpbs-mn-scroll-vert-on when (@UI_TYPE = '') {
+  .mpbs-mn-scroll-vert-on();
+  overflow-y: scroll;
+}
+
+.mpbs-mn-scroll-vert-on when (@UI_TYPE = 'MOBILE') {
+  .mpbs-mn-scroll-vert-on();
+  overflow-y: hidden;
+}
+
 .mpbs-mn-scroll-vert-off {
   overflow-y: hidden;
-  /*margin-right: 17px;*/
 }
 
 #grid-table-wrapper-outer {
