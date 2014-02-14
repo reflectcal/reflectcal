@@ -13,9 +13,9 @@
 goog.provide('rflect.cal.Loader');
 
 goog.require('goog.events');
-goog.require('rflect.Debug');
 goog.require('rflect.cal.Main');
-goog.require('rflect.predefined');
+goog.require('rflect.cal.predefined');
+goog.require('rflect.Debug');
 goog.require('ftlabs.fastclick.FastClick');
 
 
