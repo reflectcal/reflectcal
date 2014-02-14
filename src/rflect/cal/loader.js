@@ -15,6 +15,7 @@ goog.provide('rflect.cal.Loader');
 goog.require('goog.events');
 goog.require('rflect.Debug');
 goog.require('rflect.cal.Main');
+goog.require('ftlabs.fastclick.FastClick');
 
 
 
@@ -29,22 +30,28 @@ rflect.cal.Loader = function(){}
  * Binds creation of cal instance to load events.
  */
 rflect.cal.Loader.prototype.enterDocument = function() {
-  goog.events.listenOnce(window, 'load', function(aEvent) {
-    // Load event will fire later than dom ready.
-    if (!this.documentLoaded_)
-      this.calInstance_ = new rflect.cal.Main();
-  }, false, this);
+  goog.events.listenOnce(window, 'load', this.onLoad, false, this);
 
-  goog.events.listenOnce(window, 'DOMContentLoaded', function(aEvent) {
-    this.documentLoaded_ = true;
-    this.calInstance_ = new rflect.cal.Main();
-  }, false, this);
+  goog.events.listenOnce(window, 'DOMContentLoaded', this.onLoad, false, this);
 
   goog.events.listenOnce(window, 'unload', function(aEvent) {
     if (this.calInstance_)
       this.calInstance_.dispose();
   }, false, this);
 };
+
+
+/**
+ * Binds creation of cal instance to load events.
+ */
+rflect.cal.Loader.prototype.onLoad = function() {
+  // Load event will fire later than dom ready.
+  if (!this.documentLoaded_) {
+    this.documentLoaded_ = true;
+    this.calInstance_ = new rflect.cal.Main();
+    ftlabs.fastclick.FastClick.attach(document.body);
+  }
+}
 
 
 /**

@@ -19,7 +19,7 @@ goog.addDependency('../../../rflect/cal/eventtype.js', ['rflect.cal.EventType'],
 goog.addDependency('../../../rflect/cal/i18n/colorcodes.js', ['rflect.cal.i18n.PREDEFINED_COLOR_CODES', 'rflect.cal.i18n.PREDEFINED_COLOR_CODES_BY', 'rflect.cal.i18n.PREDEFINED_COLOR_CODES_EN', 'rflect.cal.i18n.PREDEFINED_COLOR_CODES_RU'], ['rflect.cal.events.ColorCode']);
 goog.addDependency('../../../rflect/cal/i18n/settingssymbols.js', ['rflect.cal.i18n.SettingsSymbols', 'rflect.cal.i18n.SettingsSymbols_by', 'rflect.cal.i18n.SettingsSymbols_en', 'rflect.cal.i18n.SettingsSymbols_en_US', 'rflect.cal.i18n.SettingsSymbols_fr', 'rflect.cal.i18n.SettingsSymbols_ru'], []);
 goog.addDependency('../../../rflect/cal/i18n/symbols.js', ['rflect.cal.i18n.Symbols', 'rflect.cal.i18n.Symbols_by', 'rflect.cal.i18n.Symbols_en', 'rflect.cal.i18n.Symbols_en_US', 'rflect.cal.i18n.Symbols_fr', 'rflect.cal.i18n.Symbols_ru'], []);
-goog.addDependency('../../../rflect/cal/loader.js', ['rflect.cal.Loader'], ['goog.events', 'rflect.Debug', 'rflect.cal.Main']);
+goog.addDependency('../../../rflect/cal/loader.js', ['rflect.cal.Loader'], ['ftlabs.fastclick.FastClick', 'goog.events', 'rflect.Debug', 'rflect.cal.Main']);
 goog.addDependency('../../../rflect/cal/main.js', ['rflect.cal.Main'], ['goog.Disposable', 'rflect.cal.ViewManager']);
 goog.addDependency('../../../rflect/cal/predefined.js', ['rflect.cal.predefined', 'rflect.cal.predefined.chips'], ['goog.math.Size']);
 goog.addDependency('../../../rflect/cal/timemanager.js', ['rflect.cal.TimeManager', 'rflect.cal.TimeManager.Direction'], ['goog.array', 'goog.date', 'goog.date.Date', 'goog.date.Interval', 'goog.i18n.DateTimeFormat', 'goog.i18n.DateTimeSymbols', 'rflect.cal.ViewType', 'rflect.date', 'rflect.date.DateShim', 'rflect.date.Interval', 'rflect.math']);
@@ -78,6 +78,7 @@ goog.addDependency('../../../rflect/ui/ac/richremote.js', ['rflect.ui.ac.RichRem
 goog.addDependency('../../../rflect/ui/ac/richremotearraymatcher.js', ['rflect.ui.ac.RichRemoteArrayMatcher'], ['rflect.ui.ac.RemoteArrayMatcher']);
 goog.addDependency('../../../rflect/ui/checkbox.js', ['rflect.ui.Checkbox'], ['goog.ui.Checkbox', 'rflect.ui.CheckboxRenderer']);
 goog.addDependency('../../../rflect/ui/checkboxrenderer.js', ['rflect.ui.CheckboxRenderer'], ['goog.style', 'goog.ui.CheckboxRenderer']);
+goog.addDependency('../../../rflect/ui/clickbuster.js', ['rflect.ui.clickBuster'], ['goog.Disposable', 'goog.events', 'goog.events.EventType']);
 goog.addDependency('../../../rflect/ui/component.js', ['rflect.ui.Component'], ['goog.array', 'goog.string.StringBuffer', 'goog.ui.Component']);
 goog.addDependency('../../../rflect/ui/dialog.js', ['rflect.ui.Dialog', 'rflect.ui.Dialog.ButtonSet', 'rflect.ui.Dialog.DefaultButtonCaptions', 'rflect.ui.Dialog.DefaultButtonKeys', 'rflect.ui.Dialog.Event', 'rflect.ui.Dialog.EventType'], ['goog.a11y.aria', 'goog.a11y.aria.Role', 'goog.a11y.aria.State', 'goog.asserts', 'goog.dom', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.dom.classes', 'goog.events', 'goog.events.Event', 'goog.events.EventType', 'goog.events.KeyCodes', 'goog.fx.Dragger', 'goog.math.Rect', 'goog.structs', 'goog.structs.Map', 'goog.style', 'goog.ui.ModalPopup', 'goog.userAgent']);
 goog.addDependency('../../../rflect/ui/dialogmousemissbehavior.js', ['rflect.ui.DialogMouseMissBehavior'], ['rflect.ui.Dialog', 'rflect.ui.MouseMissBehavior']);
@@ -85,3 +86,4 @@ goog.addDependency('../../../rflect/ui/momentumscroller.js', ['rflect.ui.Momentu
 goog.addDependency('../../../rflect/ui/mousemissbehavior.js', ['rflect.ui.MouseMissBehavior'], ['goog.events', 'goog.events.EventType']);
 goog.addDependency('../../../rflect/ui/mouseoverregistry.js', ['rflect.ui.MouseOverRegistry'], []);
 goog.addDependency('../../../third-party/arian/cssmatrix.js', ['CSSMatrix'], []);
+goog.addDependency('../../../third-party/ftlabs/fastclick/fastclick.js', ['ftlabs.fastclick.FastClick'], []);
