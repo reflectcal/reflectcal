@@ -15,6 +15,7 @@ goog.provide('rflect.cal.Loader');
 goog.require('goog.events');
 goog.require('rflect.Debug');
 goog.require('rflect.cal.Main');
+goog.require('rflect.predefined');
 goog.require('ftlabs.fastclick.FastClick');
 
 
@@ -49,7 +50,8 @@ rflect.cal.Loader.prototype.onLoad = function() {
   if (!this.documentLoaded_) {
     this.documentLoaded_ = true;
     this.calInstance_ = new rflect.cal.Main();
-    ftlabs.fastclick.FastClick.attach(document.body);
+    if (rflect.MOBILE)
+      ftlabs.fastclick.FastClick.attach(document.body);
   }
 }
 
