@@ -9,7 +9,7 @@
 
 goog.provide('rflect.browser.cssmatrix');
 
-goog.require('CSSMatrix');
+goog.require('arian.CSSMatrix');
 
 
 /**
@@ -18,13 +18,14 @@ goog.require('CSSMatrix');
  * @return {Object} CSSMatrix instance for this style.
  */
 rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
-  //Current browser implementations do not support unprefixed CSSMatrix, so
-  //shim will be used, make it last.
+  if (window.CSSMatrix)
+    return new CSSMatrix(aComputedStyle);
   if (window.WebKitCSSMatrix)
     return new WebKitCSSMatrix(aComputedStyle);
   if (window.MSCSSMatrix)
     return new MSCSSMatrix(aComputedStyle);
-  return new CSSMatrix(aComputedStyle);
+  //Shim is last.
+  return new arian.CSSMatrix(aComputedStyle);
 };
 
 

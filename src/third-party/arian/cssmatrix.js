@@ -1,6 +1,6 @@
 /**
- * @fileoverview CSSMatrix shim.
- * @see {https://github.com/arian/CSSMatrix/blob/master/CSSMatrix.js}
+ * @fileoverview arian.CSSMatrix shim.
+ * @see {https://github.com/arian/arian.CSSMatrix/blob/master/arian.CSSMatrix.js}
  * @see {http://www.w3.org/TR/css3-3d-transforms/#cssmatrix-interface}
  * @see {http://www.w3.org/TR/css3-2d-transforms/#cssmatrix-interface}
  * @suppress {duplicate}
@@ -8,7 +8,7 @@
 
 "use strict";
 
-goog.provide('CSSMatrix');
+goog.provide('arian.CSSMatrix');
 
 
 
@@ -16,11 +16,11 @@ goog.provide('CSSMatrix');
  * CSSMatrix Shim
  * @constructor
  */
-var CSSMatrix = function(){
+arian.CSSMatrix = function(){
 	var a = [].slice.call(arguments),
 		m = this;
 	if (a.length) for (var i = a.length; i--;){
-		if (Math.abs(a[i]) < CSSMatrix.SMALL_NUMBER) a[i] = 0;
+		if (Math.abs(a[i]) < arian.CSSMatrix.SMALL_NUMBER) a[i] = 0;
 	}
 	m.setIdentity();
 	if (a.length == 16){
@@ -40,12 +40,12 @@ var CSSMatrix = function(){
 };
 
 // decimal values in WebKitCSSMatrix.prototype.toString are truncated to 6 digits
-CSSMatrix.SMALL_NUMBER = 1e-6;
+arian.CSSMatrix.SMALL_NUMBER = 1e-6;
 
 // Transformations
 
 // http://en.wikipedia.org/wiki/Rotation_matrix
-CSSMatrix.Rotate = function(rx, ry, rz){
+arian.CSSMatrix.Rotate = function(rx, ry, rz){
 	rx *= Math.PI / 180;
 	ry *= Math.PI / 180;
 	rz *= Math.PI / 180;
@@ -53,7 +53,7 @@ CSSMatrix.Rotate = function(rx, ry, rz){
 	var cosx = Math.cos(rx), sinx = - Math.sin(rx);
 	var cosy = Math.cos(ry), siny = - Math.sin(ry);
 	var cosz = Math.cos(rz), sinz = - Math.sin(rz);
-	var m = new CSSMatrix();
+	var m = new arian.CSSMatrix();
 
 	m.m11 = m.a = cosy * cosz;
 	m.m12 = m.b = - cosy * sinz;
@@ -70,7 +70,7 @@ CSSMatrix.Rotate = function(rx, ry, rz){
 	return m;
 };
 
-CSSMatrix.RotateAxisAngle = function(x, y, z, angle){
+arian.CSSMatrix.RotateAxisAngle = function(x, y, z, angle){
 	angle *= Math.PI / 360;
 
 	var sinA = Math.sin(angle), cosA = Math.cos(angle), sinA2 = sinA * sinA;
@@ -89,7 +89,7 @@ CSSMatrix.RotateAxisAngle = function(x, y, z, angle){
 
 	var x2 = x * x, y2 = y * y, z2 = z * z;
 
-	var m = new CSSMatrix();
+	var m = new arian.CSSMatrix();
 	m.m11 = m.a = 1 - 2 * (y2 + z2) * sinA2;
 	m.m12 = m.b = 2 * (x * y * sinA2 + z * sinA * cosA);
 	m.m13 = 2 * (x * z * sinA2 - y * sinA * cosA);
@@ -106,55 +106,55 @@ CSSMatrix.RotateAxisAngle = function(x, y, z, angle){
 	return m;
 };
 
-CSSMatrix.ScaleX = function(x){
-	var m = new CSSMatrix();
+arian.CSSMatrix.ScaleX = function(x){
+	var m = new arian.CSSMatrix();
 	m.m11 = m.a = x;
 	return m;
 };
 
-CSSMatrix.ScaleY = function(y){
-	var m = new CSSMatrix();
+arian.CSSMatrix.ScaleY = function(y){
+	var m = new arian.CSSMatrix();
 	m.m22 = m.d = y;
 	return m;
 };
 
-CSSMatrix.ScaleZ = function(z){
-	var m = new CSSMatrix();
+arian.CSSMatrix.ScaleZ = function(z){
+	var m = new arian.CSSMatrix();
 	m.m33 = z;
 	return m;
 };
 
-CSSMatrix.Scale = function(x, y, z){
-	var m = new CSSMatrix();
+arian.CSSMatrix.Scale = function(x, y, z){
+	var m = new arian.CSSMatrix();
 	m.m11 = m.a = x;
 	m.m22 = m.d = y;
 	m.m33 = z;
 	return m;
 };
 
-CSSMatrix.SkewX = function(angle){
+arian.CSSMatrix.SkewX = function(angle){
 	angle *= Math.PI / 180;
-	var m = new CSSMatrix();
+	var m = new arian.CSSMatrix();
 	m.m21 = m.c = Math.tan(angle);
 	return m;
 };
 
-CSSMatrix.SkewY = function(angle){
+arian.CSSMatrix.SkewY = function(angle){
 	angle *= Math.PI / 180;
-	var m = new CSSMatrix();
+	var m = new arian.CSSMatrix();
 	m.m12 = m.b = Math.tan(angle);
 	return m;
 };
 
-CSSMatrix.Translate = function(x, y, z){
-	var m = new CSSMatrix();
+arian.CSSMatrix.Translate = function(x, y, z){
+	var m = new arian.CSSMatrix();
 	m.m41 = m.e = x;
 	m.m42 = m.f = y;
 	m.m43 = z;
 	return m;
 };
 
-CSSMatrix.multiply = function(m1, m2){
+arian.CSSMatrix.multiply = function(m1, m2){
 
 	var m11 = m2.m11 * m1.m11 + m2.m12 * m1.m21 + m2.m13 * m1.m31 + m2.m14 * m1.m41,
 		m12 = m2.m11 * m1.m12 + m2.m12 * m1.m22 + m2.m13 * m1.m32 + m2.m14 * m1.m42,
@@ -176,7 +176,7 @@ CSSMatrix.multiply = function(m1, m2){
 		m43 = m2.m41 * m1.m13 + m2.m42 * m1.m23 + m2.m43 * m1.m33 + m2.m44 * m1.m43,
 		m44 = m2.m41 * m1.m14 + m2.m42 * m1.m24 + m2.m43 * m1.m34 + m2.m44 * m1.m44;
 
-	return new CSSMatrix(
+	return new arian.CSSMatrix(
 		m11, m12, m13, m14,
 		m21, m22, m23, m24,
 		m31, m32, m33, m34,
@@ -192,7 +192,7 @@ CSSMatrix.multiply = function(m1, m2){
  * transform property in a CSS style rule.
  * @param {String} string The string to parse.
  */
-CSSMatrix.prototype.setMatrixValue = function(string){
+arian.CSSMatrix.prototype.setMatrixValue = function(string){
 	string = String(string).trim();
 	var m = this;
 	m.setIdentity();
@@ -218,15 +218,15 @@ CSSMatrix.prototype.setMatrixValue = function(string){
 };
 
 /**
- * The multiply method returns a new CSSMatrix which is the result of this
+ * The multiply method returns a new arian.CSSMatrix which is the result of this
  * matrix multiplied by the passed matrix, with the passed matrix to the right.
  * This matrix is not modified.
  *
- * @param {CSSMatrix} m2
- * @return {CSSMatrix} The result matrix.
+ * @param {arian.CSSMatrix} m2
+ * @return {arian.CSSMatrix} The result matrix.
  */
-CSSMatrix.prototype.multiply = function(m2){
-	return CSSMatrix.multiply(this, m2);
+arian.CSSMatrix.prototype.multiply = function(m2){
+	return arian.CSSMatrix.multiply(this, m2);
 };
 
 /**
@@ -235,7 +235,7 @@ CSSMatrix.prototype.multiply = function(m2){
  *
  * method not implemented yet
  */
-CSSMatrix.prototype.inverse = function(){
+arian.CSSMatrix.prototype.inverse = function(){
 	throw new Error('the inverse() method is not implemented (yet).');
 };
 
@@ -248,11 +248,11 @@ CSSMatrix.prototype.inverse = function(){
  * @param {number} x X component of the translation value.
  * @param {number} y Y component of the translation value.
  * @param {number=} z Z component of the translation value.
- * @return {CSSMatrix} The result matrix
+ * @return {arian.CSSMatrix} The result matrix
  */
-CSSMatrix.prototype.translate = function(x, y, z){
+arian.CSSMatrix.prototype.translate = function(x, y, z){
 	if (z == null) z = 0;
-	return CSSMatrix.multiply(this, CSSMatrix.Translate(x, y, z));
+	return arian.CSSMatrix.multiply(this, arian.CSSMatrix.Translate(x, y, z));
 };
 
 /**
@@ -264,12 +264,12 @@ CSSMatrix.prototype.translate = function(x, y, z){
  * @param {number} x The X component of the scale value.
  * @param {number=} y The Y component of the scale value.
  * @param {number=} z The Z component of the scale value.
- * @return {CSSMatrix} The result matrix
+ * @return {arian.CSSMatrix} The result matrix
  */
-CSSMatrix.prototype.scale = function(x, y, z){
+arian.CSSMatrix.prototype.scale = function(x, y, z){
 	if (y == null) y = x;
 	if (z == null) z = 1;
-	return CSSMatrix.multiply(this, CSSMatrix.Scale(x, y, z));
+	return arian.CSSMatrix.multiply(this, arian.CSSMatrix.Scale(x, y, z));
 };
 
 /**
@@ -282,12 +282,12 @@ CSSMatrix.prototype.scale = function(x, y, z){
  * @param {number} rx The X component of the rotation value, or the Z component if the rotY and rotZ parameters are undefined.
  * @param {number=} ry The (optional) Y component of the rotation value.
  * @param {number=} rz The (optional) Z component of the rotation value.
- * @return {CSSMatrix} The result matrix
+ * @return {arian.CSSMatrix} The result matrix
  */
-CSSMatrix.prototype.rotate = function(rx, ry, rz){
+arian.CSSMatrix.prototype.rotate = function(rx, ry, rz){
 	if (ry == null) ry = rx;
 	if (rz == null) rz = rx;
-	return CSSMatrix.multiply(this, CSSMatrix.Rotate(rx, ry, rz));
+	return arian.CSSMatrix.multiply(this, arian.CSSMatrix.Rotate(rx, ry, rz));
 };
 
 /**
@@ -300,12 +300,12 @@ CSSMatrix.prototype.rotate = function(rx, ry, rz){
  * @param {number=} y The Y component of the axis vector.
  * @param {number=} z The Z component of the axis vector.
  * @param {number} angle The angle of rotation about the axis vector, in degrees.
- * @return {CSSMatrix} The result matrix
+ * @return {arian.CSSMatrix} The result matrix
  */
-CSSMatrix.prototype.rotateAxisAngle = function(x, y, z, angle){
+arian.CSSMatrix.prototype.rotateAxisAngle = function(x, y, z, angle){
 	if (y == null) y = x;
 	if (z == null) z = x;
-	return CSSMatrix.multiply(this, CSSMatrix.RotateAxisAngle(x, y, z, angle));
+	return arian.CSSMatrix.multiply(this, arian.CSSMatrix.RotateAxisAngle(x, y, z, angle));
 };
 
 // Defined in WebKitCSSMatrix, but not in the w3c draft
@@ -314,27 +314,27 @@ CSSMatrix.prototype.rotateAxisAngle = function(x, y, z, angle){
  * Specifies a skew transformation along the x-axis by the given angle.
  *
  * @param {number} angle The angle amount in degrees to skew.
- * @return {CSSMatrix} The result matrix
+ * @return {arian.CSSMatrix} The result matrix
  */
-CSSMatrix.prototype.skewX = function(angle){
-	return CSSMatrix.multiply(this, CSSMatrix.SkewX(angle));
+arian.CSSMatrix.prototype.skewX = function(angle){
+	return arian.CSSMatrix.multiply(this, arian.CSSMatrix.SkewX(angle));
 };
 
 /**
  * Specifies a skew transformation along the x-axis by the given angle.
  *
  * @param {number} angle The angle amount in degrees to skew.
- * @return {CSSMatrix} The result matrix
+ * @return {arian.CSSMatrix} The result matrix
  */
-CSSMatrix.prototype.skewY = function(angle){
-	return CSSMatrix.multiply(this, CSSMatrix.SkewY(angle));
+arian.CSSMatrix.prototype.skewY = function(angle){
+	return arian.CSSMatrix.multiply(this, arian.CSSMatrix.SkewY(angle));
 };
 
 /**
  * Returns a string representation of the matrix.
  * @return {string}
  */
-CSSMatrix.prototype.toString = function(){
+arian.CSSMatrix.prototype.toString = function(){
 	var m = this;
 
 	if (this.affine){
@@ -359,9 +359,9 @@ CSSMatrix.prototype.toString = function(){
 /**
  * Set the current matrix to the identity form
  *
- * @return {CSSMatrix} this matrix
+ * @return {arian.CSSMatrix} this matrix
  */
-CSSMatrix.prototype.setIdentity = function(){
+arian.CSSMatrix.prototype.setIdentity = function(){
 	var m = this;
 	m.m11 = m.a = 1; m.m12 = m.b = 0; m.m13 = 0; m.m14 = 0;
 	m.m21 = m.c = 0; m.m22 = m.d = 1; m.m23 = 0; m.m24 = 0;
@@ -371,12 +371,12 @@ CSSMatrix.prototype.setIdentity = function(){
 };
 
 /**
- * Transform a tuple (3d point) with this CSSMatrix
+ * Transform a tuple (3d point) with this arian.CSSMatrix
  *
  * @param {Tuple} an object with x, y, z and w properties
  * @return {Tuple} the passed tuple
  */
-CSSMatrix.prototype.transform = function(t /* tuple */ ){
+arian.CSSMatrix.prototype.transform = function(t /* tuple */ ){
 	var m = this;
 
 	var x = m.m11 * t.x + m.m12 * t.y + m.m13 * t.z + m.m14 * t.w,
@@ -391,7 +391,7 @@ CSSMatrix.prototype.transform = function(t /* tuple */ ){
 	return t;
 };
 
-CSSMatrix.prototype.toFullString = function(){
+arian.CSSMatrix.prototype.toFullString = function(){
 	var m = this;
 	return [
 		[m.m11, m.m12, m.m13, m.m14].join(', '),
@@ -401,4 +401,4 @@ CSSMatrix.prototype.toFullString = function(){
 	].join('\n');
 };
 
-//module.exports = CSSMatrix;
+//module.exports = arian.CSSMatrix;
