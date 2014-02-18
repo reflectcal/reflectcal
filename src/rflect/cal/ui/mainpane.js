@@ -192,7 +192,8 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
 
   this.addChild(this.editDialog_);
 
-  this.momentumScroller_ = new rflect.ui.MomentumScroller();
+  if (rflect.MOBILE)
+    this.momentumScroller_ = new rflect.ui.MomentumScroller();
 };
 goog.inherits(rflect.cal.ui.MainPane, rflect.ui.Component);
 
@@ -518,8 +519,11 @@ rflect.cal.ui.MainPane.prototype.setHandyScrollPosition_ = function() {
   else if (this.timeManager_.isInNowPoint)
     scrollTop = this.timeMarker_.getPosition(true);
 
-  this.blockManager_.blockPoolWeek.scrollTop =
-      scrollTop;
+  if (this.momentumScroller_) {
+    this.momentumScroller_.animateTo(scrollTop);
+  } else
+    this.blockManager_.blockPoolWeek.scrollTop =
+        scrollTop;
 }
 
 
