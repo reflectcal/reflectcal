@@ -369,7 +369,7 @@ rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
         case 5: {
           this.mainPane_.build(aSb);
         };break;
-        case 6: {
+        case 7: {
           this.bottomPane_.build(aSb);
         };break;
 
