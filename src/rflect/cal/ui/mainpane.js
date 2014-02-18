@@ -499,7 +499,7 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_exclusions,
 
   this.removeMomentumScroller();
 
-  if (opt_updateByNavigation)
+  if (opt_updateByNavigation && !this.momentumScroller_)
     this.setHandyScrollPosition_();
 
 };
@@ -519,10 +519,7 @@ rflect.cal.ui.MainPane.prototype.setHandyScrollPosition_ = function() {
   else if (this.timeManager_.isInNowPoint)
     scrollTop = this.timeMarker_.getPosition(true);
 
-  if (this.momentumScroller_) {
-    this.momentumScroller_.animateTo(scrollTop);
-  } else
-    this.blockManager_.blockPoolWeek.scrollTop =
+  this.blockManager_.blockPoolWeek.scrollTop =
         scrollTop;
 }
 
