@@ -569,7 +569,6 @@ rflect.cal.ui.MainPane.prototype.removeScrollListeners_ = function() {
 
 /**
  * Removes scroll listeners on each update.
- * @private
  */
 rflect.cal.ui.MainPane.prototype.removeMomentumScroller = function() {
   this.momentumScroller_.enable(false);
@@ -578,7 +577,6 @@ rflect.cal.ui.MainPane.prototype.removeMomentumScroller = function() {
 
 /**
  * Removes scroll listeners on each update.
- * @private
  */
 rflect.cal.ui.MainPane.prototype.addMomentumScroller = function() {
   var element;
