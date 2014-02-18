@@ -3,8 +3,10 @@
  * @see {https://github.com/arian/arian.CSSMatrix/blob/master/arian.CSSMatrix.js}
  * @see {http://www.w3.org/TR/css3-3d-transforms/#cssmatrix-interface}
  * @see {http://www.w3.org/TR/css3-2d-transforms/#cssmatrix-interface}
- * @suppress {duplicate}
+ * @suppress {accessControls,ambiguousFunctionDecl,checkDebuggerStatement,checkRegExp,checkStructDictInheritance,checkTypes,checkVars,const,constantProperty,deprecated,duplicate,es5Strict,checkProvides,extraProvide,extraRequire,fileoverviewTags,globalThis,invalidCasts,misplacedTypeAnnotation,missingProperties,missingProvide,missingRequire,missingReturn,nonStandardJsDocs,reportUnknownTypes,strictModuleDepCheck,suspiciousCode,undefinedNames,undefinedVars,underscore,unknownDefines,uselessCode,visibility,with}
  */
+
+
 
 "use strict";
 
