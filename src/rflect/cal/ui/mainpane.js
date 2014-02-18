@@ -496,7 +496,7 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_exclusions,
   if (!opt_doNotRemoveScrollListeners)
     this.removeScrollListeners_();
 
-  this.removeMomentumScroller_();
+  this.removeMomentumScroller();
 
   if (opt_updateByNavigation)
     this.setHandyScrollPosition_();
@@ -567,7 +567,7 @@ rflect.cal.ui.MainPane.prototype.removeScrollListeners_ = function() {
  * Removes scroll listeners on each update.
  * @private
  */
-rflect.cal.ui.MainPane.prototype.removeMomentumScroller_ = function() {
+rflect.cal.ui.MainPane.prototype.removeMomentumScroller = function() {
   this.momentumScroller_.enable(false);
 };
 
@@ -576,7 +576,7 @@ rflect.cal.ui.MainPane.prototype.removeMomentumScroller_ = function() {
  * Removes scroll listeners on each update.
  * @private
  */
-rflect.cal.ui.MainPane.prototype.addMomentumScroller_ = function() {
+rflect.cal.ui.MainPane.prototype.addMomentumScroller = function() {
   var element;
   var frameElement;
 
@@ -627,7 +627,7 @@ rflect.cal.ui.MainPane.prototype.updateByRedraw = function() {
   this.addScrollListeners_();
 
 
-  this.addMomentumScroller_();
+  this.addMomentumScroller();
 
   // Return to previous scrollTop, scrollLeft values, if any.
   if (this.viewManager_.isInWeekMode()) {

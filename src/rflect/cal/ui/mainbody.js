@@ -798,10 +798,24 @@ rflect.cal.ui.MainBody.prototype.onSlideStartOrEnd_ = function(aEvent) {
     case this.settingsPane_: ;
     case this.eventPane_: {
       // If closing pane, show calendar on start.
-      if (aEvent.start && !aEvent.showing) this.showCalendar_(true);
+      if (aEvent.start && !aEvent.showing) {
+        this.showCalendar_(true);
+        this.mainPane_.addMomentumScroller();
+      }
       // If opening pane, hide calendar on end.
-      if (!aEvent.start && aEvent.showing) this.showCalendar_(false);
+      if (!aEvent.start && aEvent.showing) {
+        this.showCalendar_(false);
+        this.mainPane_.removeMomentumScroller();
+      }
     };break;
+    case this.sidePane_: {
+      if (aEvent.start && !aEvent.showing) {
+        this.mainPane_.addMomentumScroller();
+      }
+      if (!aEvent.start && aEvent.showing) {
+        this.mainPane_.removeMomentumScroller();
+      }
+    };
     default:break;
   }
 }
