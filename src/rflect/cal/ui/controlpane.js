@@ -144,7 +144,7 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
   if (this.configTop_) {
 
     var parts = [
-      '<nav id="top-pane" class="control-pane">',
+      '<nav id="top-pane">',
       '<div class="pane-left">',
       '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
           'id="' + rflect.cal.predefined.BUTTON_MENU_ID + '">' +
@@ -157,16 +157,21 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       '<div class="icon icon-in-button icon-plus goog-inline-block"></div>',
       '</div>',
       '</div>',
-      '<div class="pane-center">',
-      '<div class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block"',
-      'id="' + rflect.cal.predefined.BUTTON_DAY_ID + '">',
-      rflect.cal.i18n.Symbols.DAY,
+
+      '<div class="pane-center pane-center-nav">',
+      '<div id="time-period-label" class="time-period-label">',
+      this.getDateHeader(),
       '</div>',
-      '<div class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block"',
-      'id="' + rflect.cal.predefined.BUTTON_MONTH_ID + '">',
-      rflect.cal.i18n.Symbols.MONTH,
+      '<div class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"',
+      'id="' + rflect.cal.predefined.BUTTON_PREV_ID + '">',
+      '<div class="icon-triangle icon-nav-left goog-inline-block"></div>',
+      '</div>',
+      '<div class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"',
+      'id="' + rflect.cal.predefined.BUTTON_NEXT_ID + '">',
+      '<div class="icon-triangle icon-nav-right goog-inline-block"></div>',
       '</div>',
       '</div>',
+
       '</nav>'
     ];
 
@@ -180,14 +185,14 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       rflect.cal.i18n.Symbols.NOW,
       '</div>',
       '</div>',
-      '<div class="pane-right">',
+      '<div class="pane-center">',
       '<div class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block"',
-      'id="' + rflect.cal.predefined.BUTTON_PREV_ID + '">',
-      '<div class="icon-triangle icon-nav-left goog-inline-block"></div>',
+      'id="' + rflect.cal.predefined.BUTTON_DAY_ID + '">',
+      rflect.cal.i18n.Symbols.DAY,
       '</div>',
       '<div class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block"',
-      'id="' + rflect.cal.predefined.BUTTON_NEXT_ID + '">',
-      '<div class="icon-triangle icon-nav-right goog-inline-block"></div>',
+      'id="' + rflect.cal.predefined.BUTTON_MONTH_ID + '">',
+      rflect.cal.i18n.Symbols.MONTH,
       '</div>',
       '</div>',
       '</nav>'
@@ -250,7 +255,7 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       '</div></div>',
       '<div id="main-pane-controls-left-right">',
       // Time period label.
-      '<div id="time-period-label">',
+      '<div id="time-period-label" class="time-period-label">',
       this.getDateHeader(),
       '</div></div>',
       '</div></div>',
