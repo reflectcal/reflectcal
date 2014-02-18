@@ -137,7 +137,7 @@ rflect.cal.ui.MainBody.HTML_PARTS_ = rflect.MOBILE ? [
   '<div id="cal-container" class="cal-container">',
   '<nav id="side-pane" class="side-pane slide-pane-left">',
   '</nav>',
-  '<nav id="top-pane" class="control-pane">',
+  '<nav id="top-pane">',
   '</nav>',
   '<main id="main-pane">',
   '</main>',
