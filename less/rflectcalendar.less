@@ -152,6 +152,11 @@ body when (@UI_TYPE = 'MOBILE') {
   width: 25px;  /* (140 - (.cal-menu-button-now width + 12 + 2) ) / 2 - (12 + 1) */
 }
 
+.cal-menu-button-nav when (@UI_TYPE = 'MOBILE'){
+  width: 50px;
+}
+
+
 .cal-menu-button-forward {
   padding-left: 6px;
   padding-right: 6px;
@@ -200,7 +205,7 @@ body when (@UI_TYPE = 'MOBILE') {
   margin-right: 0;
 }
 
-#time-period-label {
+.time-period-label when (@UI_TYPE = '') {
   margin: auto;
   /*white-space: nowrap;*/
   overflow: hidden;
@@ -208,6 +213,15 @@ body when (@UI_TYPE = 'MOBILE') {
   font-weight: bold;
   line-height: 46px; /*height of .goog-flat-button*/
   text-align: center;
+}
+
+.time-period-label when (@UI_TYPE = 'MOBILE') {
+  font-size: 18px;
+  padding: 5px 0;
+}
+
+.pane-center-nav when (@UI_TYPE = 'MOBILE') {
+  height: 100px;
 }
 
 #sidebar-controls {
