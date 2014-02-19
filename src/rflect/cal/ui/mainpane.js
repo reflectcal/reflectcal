@@ -796,9 +796,7 @@ rflect.cal.ui.MainPane.prototype.decorateInternal = function(aElement,
  * @inheritDoc
  */
 rflect.cal.ui.MainPane.prototype.enterDocument = function() {
-  if (goog.DEBUG)
 
-  _log('enterDocument');
   rflect.cal.ui.MainPane.superClass_.enterDocument.call(this);
 
   this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
