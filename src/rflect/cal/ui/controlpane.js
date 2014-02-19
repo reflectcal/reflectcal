@@ -178,7 +178,7 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
   } else if (this.configBottom_) {
 
     parts = [
-      '<nav id="bottom-pane" class="control-pane">',
+      '<nav id="bottom-pane" class="control-pane bottom-pane">',
       '<div class="pane-left">',
       '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
           'id="' + rflect.cal.predefined.BUTTON_NOW_ID + '">',

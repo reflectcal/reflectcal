@@ -444,7 +444,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '</tbody></table>',
   '</div>',
   // Main pane scrollable.
-  '<div id="main-pane-body-scrollable-mn" class="',
+  '<div id="main-pane-body-scrollable-mn" class="main-pane-body-scrollable-mn ',
   /*Main pane scrollable state
   (mpbs-mn-scroll-vert-off, mpbs-mn-scroll-vert-on).*/
   '">',

@@ -4,7 +4,7 @@
 
 html {
   height: 100%;
-  overflow-y: auto; /*To prevent appearance of scrollbar in IE7.*/
+  overflow-y: hidden; /*To prevent appearance of scrollbar in IE10+.*/
 }
 
 @font-face {
@@ -52,10 +52,7 @@ body when (@UI_TYPE = 'MOBILE') {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-.cal-container when (@UI_TYPE = '') {
-}
-
-.cal-container when (@UI_TYPE = 'MOBILE') {
+.cal-container {
 }
 
 /* Navigation panels. */
@@ -65,6 +62,18 @@ body when (@UI_TYPE = 'MOBILE') {
 }
 
 .control-pane when (@UI_TYPE = 'MOBILE') {
+  height: 46px;
+}
+
+.bottom-pane when (@UI_TYPE = 'MOBILE') {
+  position: absolute;
+  width: 100%;
+  height: 46px;
+  left: 0;
+  bottom: 0;
+}
+
+.bottom-pane-spacer when (@UI_TYPE = 'MOBILE') {
   height: 46px;
 }
 
@@ -211,6 +220,7 @@ body when (@UI_TYPE = 'MOBILE') {
   overflow: hidden;
   color: #2c2c2c;
   font-weight: bold;
+  font-size: 18px;
   line-height: 46px; /*height of .goog-flat-button*/
   text-align: center;
 }
@@ -1174,17 +1184,19 @@ body when (@UI_TYPE = 'MOBILE') {
   margin-left: 16px; /*15 + 1 pixels from weeknums*/
 }
 
-#main-pane-body-scrollable-mn {
-  /*overflow-y: visible;*/
+.main-pane-body-scrollable-mn() {
   overflow-x: hidden;
   border: 1px solid #d5d5d5;
-  /*margin-right: 17px;*/ /*scroll placeholder*/
   position: relative;
   height: 100%;
+}
 
-  /*-moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;*/
+.main-pane-body-scrollable-mn when (@UI_TYPE = '') {
+  .main-pane-body-scrollable-mn();
+}
+
+.main-pane-body-scrollable-mn when (@UI_TYPE = 'MOBILE') {
+  .main-pane-body-scrollable-mn();
 }
 
 .mpbs-mn-scroll-vert-on() {

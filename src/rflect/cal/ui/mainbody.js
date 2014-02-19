@@ -141,8 +141,9 @@ rflect.cal.ui.MainBody.HTML_PARTS_ = rflect.MOBILE ? [
   '</nav>',
   '<main id="main-pane">',
   '</main>',
-  '<nav id="bottom-pane" class="control-pane">',
+  '<nav id="bottom-pane" class="control-pane bottom-pane">',
   '</nav>',
+  '<div class="bottom-pane-spacer"></div>',
   '</div>'
   ] : [
   '<div id="cal-container" class="' + goog.getCssName('cal-container') + '">',
@@ -537,7 +538,6 @@ rflect.cal.ui.MainBody.prototype.rebuildMainPaneWithSizes = function() {
  * Rebuilds main pane after sizes of all static panes are known.
  */
 rflect.cal.ui.MainBody.prototype.rebuildLeftPaneWithSizes = function() {
-  window.console.log('sizes');
   this.measureLeftPaneStaticSizes();
 
   this.firstBuildLeftPane = false;
@@ -556,10 +556,13 @@ rflect.cal.ui.MainBody.prototype.measureStaticSizes = function() {
   var totalSize = goog.style.getSize(dom.getElement('cal-container'));
 
   if (this.viewManager_.isInWeekMode()) {
+
     var allDayPaneSize = goog.style.getSize(
         dom.getElement('main-pane-header-scrollable'));
     var weekPaneSize = goog.style.getSize(
         dom.getElement('main-pane-body-scrollable-wk'));
+    //TODO(alexk): fix these pixels in layout
+    var additionalPixelsWeek = 0;
 
     // Border widths are present because they are also "static" relative to
     // pure sizes of grid containers.
@@ -567,12 +570,15 @@ rflect.cal.ui.MainBody.prototype.measureStaticSizes = function() {
         allDayPaneSize.width +
         rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2, totalSize.height -
         allDayPaneSize.height - weekPaneSize.height +
-        rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 4 +
-        //TODO(alexk): fix these two pixels in layout
-        2);
+        rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 4);
+
   } else if (this.viewManager_.isInMonthMode()) {
+
     var monthPaneSize = goog.style.getSize(
         dom.getElement('main-pane-body-scrollable-mn'));
+    var additionalPixelsMonth = 0;
+    if (rflect.MOBILE)
+      additionalPixelsMonth = 1;
 
     this.staticSizesMn = new goog.math.Size(totalSize.width -
         monthPaneSize.width +
@@ -580,7 +586,9 @@ rflect.cal.ui.MainBody.prototype.measureStaticSizes = function() {
         , totalSize.height -
         monthPaneSize.height +
         //TODO(alexk): why do I need 4px here and not 2?
-        rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 4);
+        rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 4 +
+        additionalPixelsMonth);
+
   }
 }
 
