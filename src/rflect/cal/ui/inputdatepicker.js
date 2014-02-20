@@ -165,7 +165,7 @@ rflect.cal.ui.InputDatePicker.prototype.onInputMouseDown_ = function (aEvent) {
 rflect.cal.ui.InputDatePicker.prototype.showDatePicker_ = function (aInput) {
   this.currentInput_ = aInput;
 
-  var pos = goog.style.getPosition(aInput);
+  var pos = goog.style.getClientPosition(aInput);
   var size = goog.style.getSize(aInput);
 
   pos.y += size.height;
@@ -229,8 +229,7 @@ rflect.cal.ui.InputDatePicker.prototype.onDateChanged_ = function (aEvent) {
  * @override
  */
 rflect.cal.ui.InputDatePicker.prototype.createDom = function () {
-  var cont = this.getDomHelper().createDom('div',
-      goog.getCssName('rflect-input-datepicker'));
+  var cont = this.getDomHelper().createDom('div', 'rflect-input-datepicker');
   this.decorateInternal(cont);
 };
 
