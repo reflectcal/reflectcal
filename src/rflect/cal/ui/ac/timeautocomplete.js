@@ -25,7 +25,7 @@ goog.require('rflect.ui.ac.AutoComplete');
 
 
 /**
- * Rime AutoComplete main class.
+ * Time AutoComplete main class.
  *
  * @param {Object} matcher A data source and row matcher, implements
  *        <code>requestMatchingRows(token, maxMatches, matchCallback)</code>.
