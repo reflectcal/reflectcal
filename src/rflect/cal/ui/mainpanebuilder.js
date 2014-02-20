@@ -344,7 +344,9 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   // End of individual weekgrid col.
   '</div>',
   // End of grid table.
-  '</div></div>',
+  '</div>',
+  // End of grid table cont.
+  '</div>',
   // End of grid table wrapper.
   '</div>',
   // End of main pane scrollable body.
@@ -768,7 +770,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth = function(aSb,
         };break;
         case 31: {
           if (aFirstBuild)
-            offset += 55;
+            offset += 54;
         };break;
         case 32: {
           this.buildGridTableWrapperOuter_(aSb, offset);
