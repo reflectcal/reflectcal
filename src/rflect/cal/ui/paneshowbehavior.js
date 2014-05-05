@@ -8,7 +8,7 @@
 
 goog.provide('rflect.cal.ui.PaneShowBehavior');
 goog.provide('rflect.cal.ui.PaneShowBehavior.EventTypes');
-goog.provide('rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent');
+goog.provide('rflect.cal.ui.PaneShowBehavior.SlideEvent');
 
 
 goog.require('goog.events.EventTarget');
@@ -61,7 +61,7 @@ rflect.cal.ui.PaneShowBehavior.EventTypes = {
  * @extends {goog.events.Event}
  * @constructor
  */
-rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent = function(aStart,
+rflect.cal.ui.PaneShowBehavior.SlideEvent = function(aStart,
     aShowing) {
   goog.events.Event.call(this,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT);
@@ -77,7 +77,7 @@ rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent = function(aStart,
    */
   this.showing = aShowing;
 }
-goog.inherits(rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent,
+goog.inherits(rflect.cal.ui.PaneShowBehavior.SlideEvent,
     goog.events.Event);
 
 
@@ -218,7 +218,7 @@ rflect.cal.ui.PaneShowBehavior.prototype.showElement_ = function(visible) {
  */
 rflect.cal.ui.PaneShowBehavior.prototype.slideElement_ = function(visible) {
   if (this.dispatchEvent(
-      new rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent(true, visible))) {
+      new rflect.cal.ui.PaneShowBehavior.SlideEvent(true, visible))) {
     if (visible)
       goog.dom.classes.add(this.component.getElement(),
           'slide-pane-left-visible');
@@ -239,7 +239,7 @@ rflect.cal.ui.PaneShowBehavior.prototype.onSlideEnd_ = function(aEvent) {
     return;
 
   if (this.dispatchEvent(
-      new rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent(false,
+      new rflect.cal.ui.PaneShowBehavior.SlideEvent(false,
           this.visible_))) {
 
     if (false == this.visible_)

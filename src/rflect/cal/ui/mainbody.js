@@ -23,8 +23,7 @@ goog.require('rflect.cal.ui.EventPane.EventTypes');
 goog.require('rflect.cal.ui.MainPane');
 goog.require('rflect.cal.ui.MiniCal');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
-goog.require('rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent');
-goog.require('rflect.cal.ui.TaskSelector');
+goog.require('rflect.cal.ui.PaneShowBehavior.SlideEvent');
 goog.require('rflect.cal.ui.SettingsPane');
 goog.require('rflect.cal.ui.SettingsPane.EventTypes');
 goog.require('rflect.cal.ui.SidePane');
@@ -110,18 +109,20 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
         this.blockManager_, this.transport_));
     this.addChild(this.miniCal_ = new rflect.cal.ui.MiniCal(this.viewManager_,
         this.timeManager_));
-    this.addChild(this.calSelector_ = new rflect.cal.ui.CalSelector(
-        this.viewManager_, this.containerSizeMonitor_, this.eventManager_));
-    this.addChild(this.taskSelector_ = new rflect.cal.ui.TaskSelector(
-        this.viewManager_, this.containerSizeMonitor_));
+    this.addChild(this.calSelectorMy_ = new rflect.cal.ui.CalSelector(
+        this.viewManager_, this.containerSizeMonitor_, this.eventManager_,
+        rflect.cal.i18n.Symbols.CALENDARS_LABEL_MY, true));
+    this.addChild(this.calSelectorOther_ = new rflect.cal.ui.CalSelector(
+        this.viewManager_, this.containerSizeMonitor_, this.eventManager_,
+        rflect.cal.i18n.Symbols.CALENDARS_LABEL_OTHER, false));
   }
 
   if (goog.DEBUG) {
     _inspect('topPane_', this.topPane_);
     _inspect('miniCal_', this.miniCal_);
     _inspect('mainPane_', this.mainPane_);
-    _inspect('taskSelector_', this.taskSelector_);
-    _inspect('calSelector_', this.calSelector_);
+    _inspect('calSelectorOther_', this.calSelectorOther_);
+    _inspect('calSelectorMy_', this.calSelectorMy_);
   }
 };
 goog.inherits(rflect.cal.ui.MainBody, rflect.ui.Component);
@@ -297,7 +298,7 @@ rflect.cal.ui.MainBody.prototype.getBottomPane = function() {
  * @return {goog.ui.Component}
  */
 rflect.cal.ui.MainBody.prototype.getCalSelector = function() {
-  return this.calSelector_;
+  return this.calSelectorMy_;
 };
 
 
@@ -305,7 +306,7 @@ rflect.cal.ui.MainBody.prototype.getCalSelector = function() {
  * @return {goog.ui.Component}
  */
 rflect.cal.ui.MainBody.prototype.getTaskSelector = function() {
-  return this.taskSelector_;
+  return this.calSelectorOther_;
 };
 
 
@@ -394,10 +395,10 @@ rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
           this.miniCal_.build(aSb);
         };break;
         case 8: {
-          this.calSelector_.build(aSb);
+          this.calSelectorMy_.build(aSb);
         };break;
         case 10: {
-          this.taskSelector_.build(aSb);
+          this.calSelectorOther_.build(aSb);
         };break;
         // Include main pane in common buffer.
         case 16: {
@@ -444,11 +445,11 @@ rflect.cal.ui.MainBody.prototype.updateBeforeRedraw = function(opt_exclusions,
 
     if (!rflect.ui.Component.componentIsInExclusions(opt_exclusions,
         this.getCalSelector())) {
-      this.calSelector_.updateBeforeRedraw(null, this.firstBuildLeftPane);
+      this.calSelectorMy_.updateBeforeRedraw(null, this.firstBuildLeftPane);
     }
     if (!rflect.ui.Component.componentIsInExclusions(opt_exclusions,
         this.getTaskSelector())) {
-      this.taskSelector_.updateBeforeRedraw(null, this.firstBuildLeftPane);
+      this.calSelectorOther_.updateBeforeRedraw(null, this.firstBuildLeftPane);
     }
 
   }
@@ -476,9 +477,9 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
 
     this.miniCal_.decorateInternal(
         this.getDomHelper().getElement('month-selector'), true);
-    this.calSelector_.decorateInternal(
+    this.calSelectorMy_.decorateInternal(
         this.getDomHelper().getElement('calendars-selector'), true);
-    this.taskSelector_.decorateInternal(
+    this.calSelectorOther_.decorateInternal(
         this.getDomHelper().getElement('tasks-selector'), true);
 
   }
@@ -502,7 +503,7 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
         .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
         this.onSidePaneAction_, false, this);
   } else {
-    this.getHandler().listen(this.calSelector_,
+    this.getHandler().listen(this.calSelectorMy_,
           rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
           this.onCalendarSwitch_, false, this);
   }
@@ -542,8 +543,8 @@ rflect.cal.ui.MainBody.prototype.rebuildLeftPaneWithSizes = function() {
 
   this.firstBuildLeftPane = false;
 
-  this.calSelector_.updateBeforeRedraw();
-  this.calSelector_.updateByRedraw();
+  this.calSelectorMy_.updateBeforeRedraw();
+  this.calSelectorMy_.updateByRedraw();
 
 }
 
@@ -797,7 +798,7 @@ rflect.cal.ui.MainBody.prototype.showCalendar_ = function(aShow) {
 
 
 /**
- * @param {rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent} aEvent Event
+ * @param {rflect.cal.ui.PaneShowBehavior.SlideEvent} aEvent Event
  * object.
  */
 rflect.cal.ui.MainBody.prototype.onSlideStartOrEnd_ = function(aEvent) {
@@ -885,8 +886,8 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
     // This is cal selector #2.
     //this.sidePane_.getChildAt(1).redrawIsNeeded = true;
   } else {
-    this.calSelector_.redrawIsNeeded = true;
-    this.taskSelector_.redrawIsNeeded = true;
+    this.calSelectorMy_.redrawIsNeeded = true;
+    this.calSelectorOther_.redrawIsNeeded = true;
   }
   this.update([
     this.getMiniCal(),

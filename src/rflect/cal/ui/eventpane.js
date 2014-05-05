@@ -355,7 +355,7 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
 
 
 /**
- * @param {rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent} aEvent Event
+ * @param {rflect.cal.ui.PaneShowBehavior.SlideEvent} aEvent Event
  * object.
  */
 rflect.cal.ui.EventPane.prototype.onPaneReady_ = function(aEvent) {

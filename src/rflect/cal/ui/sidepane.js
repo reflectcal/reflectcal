@@ -92,8 +92,9 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
     )
   ];
 
-  this.addChild(this.calSelector_ = new rflect.cal.ui.CalSelector(
-      this.viewManager_, this.containerSizeMonitor_, this.eventManager_));
+  this.addChild(this.calSelectorMy_ = new rflect.cal.ui.CalSelector(
+      this.viewManager_, this.containerSizeMonitor_, this.eventManager_,
+      rflect.cal.i18n.Symbols.CALENDARS_LABEL_MY, true));
 
 };
 goog.inherits(rflect.cal.ui.SidePane, rflect.ui.Component);
@@ -213,7 +214,7 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
         this.buildMenu_(aSb);
       };break;
       case 3: {
-        this.calSelector_.build(aSb);
+        this.calSelectorMy_.build(aSb);
       };break;
       default: break;
     }
@@ -226,7 +227,7 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
  */
 rflect.cal.ui.SidePane.prototype.enterDocument = function() {
 
-  this.calSelector_.decorateInternal(
+  this.calSelectorMy_.decorateInternal(
           this.getDomHelper().getElement('calendars-selector'), true);
   this.buttonSettings_ = goog.dom.getElement(
       rflect.cal.predefined.BUTTON_SETTINGS_ID);
@@ -276,7 +277,7 @@ rflect.cal.ui.SidePane.prototype.getGlassElement_ = function() {
 
 /**
  * Slide start/stop listener.
- * @param {rflect.cal.ui.PaneShowBehavior.SlideBreakPointEvent} aEvent Event
+ * @param {rflect.cal.ui.PaneShowBehavior.SlideEvent} aEvent Event
  * object.
  */
 rflect.cal.ui.SidePane.prototype.onSlideBreakPoint_ = function(aEvent) {

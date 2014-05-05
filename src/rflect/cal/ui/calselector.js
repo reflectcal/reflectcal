@@ -3,34 +3,73 @@
  */
 
 /**
- * @fileoverview Calendars list component.
+ * @fileoverview Component representing list of items, such as list
+ * of calendars or tasks.
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
 goog.provide('rflect.cal.ui.CalSelector');
 goog.provide('rflect.cal.ui.CalSelector.EventType');
 
-goog.require('goog.dom.classes');
-goog.require('goog.ui.Component.EventType');
-goog.require('rflect.cal.i18n.Symbols');
+goog.require('goog.dom');
+goog.require('goog.events');
+goog.require('goog.events.EventType');
+goog.require('rflect.ui.Component');
+goog.require('rflect.ui.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
-goog.require('rflect.cal.ui.ListSelector');
 goog.require('rflect.string');
-goog.require('rflect.ui.Checkbox');
+
 
 
 /**
- * Calendars selector general class.
+ * List selector general class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
+ * @param {string} aLabel Widget label.
+ * @param {boolean} aMyCalendars Whether component lists my calendars.
  * @constructor
- * @extends {rflect.cal.ui.ListSelector}
+ * @extends {rflect.ui.Component}
  */
-rflect.cal.ui.CalSelector = function (aViewManager, aContainerSizeMonitor,
-    aEventManager) {
-  rflect.cal.ui.ListSelector.call(this, aViewManager, aContainerSizeMonitor);
+rflect.cal.ui.CalSelector = function(aViewManager, aContainerSizeMonitor,
+    aEventManager, aLabel, aMyCalendars) {
+  rflect.ui.Component.call(this);
+
+  /**
+   * Link to view manager.
+   * @type {rflect.cal.ViewManager}
+   * @private
+   */
+  this.viewManager_ = aViewManager;
+
+  /**
+   * Link to container size monitor.
+   * @type {rflect.cal.ContainerSizeMonitor}
+   * @private
+   */
+  this.containerSizeMonitor_ = aContainerSizeMonitor;
+
+  // Sizes.
+  /**
+   * Size of list selector scrollable, the only part that could vary in size.
+   * @type {goog.math.Size}
+   */
+  this.scrollableSize_ = null;
+
+  /**
+   * Mouse over registry for whole component.
+   * @type {rflect.ui.MouseOverRegistry}
+   * @private
+   */
+  this.moRegistryForWhole_ = new rflect.ui.MouseOverRegistry();
+
+  /**
+   * Mouse over registry for parts of component.
+   * @type {rflect.ui.MouseOverRegistry}
+   * @private
+   */
+  this.moRegistryForParts_ = new rflect.ui.MouseOverRegistry();
 
   /**
    * Link to event manager.
@@ -39,9 +78,12 @@ rflect.cal.ui.CalSelector = function (aViewManager, aContainerSizeMonitor,
    */
   this.eventManager_ = aEventManager;
 
-  this.label = rflect.cal.i18n.Symbols.CALENDARS_LABEL;
+  this.label = aLabel || '';
+
+  this.isMyCalendars = aMyCalendars;
+
 };
-goog.inherits(rflect.cal.ui.CalSelector, rflect.cal.ui.ListSelector);
+goog.inherits(rflect.cal.ui.CalSelector, rflect.ui.Component);
 
 
 /**
@@ -51,6 +93,31 @@ goog.inherits(rflect.cal.ui.CalSelector, rflect.cal.ui.ListSelector);
  * @const
  */
 rflect.cal.ui.CalSelector.HTML_PARTS_ = [
+  '<div id="calendars-selector" class="' + goog.getCssName('list-selector') + '">',
+  '<div id="calendars-label-cont" class="' + goog.getCssName('list-label-cont') + '">' +
+      '<div id="calendars-label" class="' + goog.getCssName('list-label') + '">',
+  /* List selector label (calendars). */
+  '</div>',
+  /* List selector menu signs (<div class="listitem-opt"></div>)*/
+  '</div>',
+  '<div id="calendars-body" class="' + goog.getCssName('list-body') + ' ',
+  /* Class indicating whether list body is overflown (list-body-overflown). */
+  '" style="height:',
+  /* Height of list selector's body in pixels (150). */
+  'px">',
+  /* Content. */
+  '</div>',
+  '</div>'
+];
+
+
+/**
+ * String parts for builder.
+ * @type {Array.<string>}
+ * @private
+ * @const
+ */
+rflect.cal.ui.CalSelector.HTML_PARTS_CONTENT_ = [
   '<div class="' + goog.getCssName('listitem-cont-outer') + '"><div title="',
   '" class="' + goog.getCssName('listitem-cont') + ' ' + goog.getCssName('calitem-label-active') + '" id="calitem-label-item',
   '"><div class="' + goog.getCssName('goog-checkbox') + ' ' + goog.getCssName('calitem-color-cont') + ' ',
@@ -72,15 +139,297 @@ rflect.cal.ui.CalSelector.EventType = {
 
 
 /**
+ * Header element.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.CalSelector.prototype.header_;
+
+
+/**
+ * Label shown in header.
+ * @type {string}
+ * @protected
+ */
+rflect.cal.ui.CalSelector.prototype.label;
+
+
+/**
+ * Scrollable element.
+ * @type {Element}
+ * @protected
+ */
+rflect.cal.ui.CalSelector.prototype.scrollableEl;
+
+
+/**
+ * Regexp for detection of item.
+ * @type {RegExp}
+ * @private
+ */
+rflect.cal.ui.CalSelector.prototype.itemRe_;
+
+
+/**
+ * Regexp for detection of header.
+ * @type {RegExp}
+ * @private
+ */
+rflect.cal.ui.CalSelector.prototype.headerRe_;
+
+
+/**
+ * Regexp for detection of options button.
+ * @type {RegExp}
+ * @private
+ */
+rflect.cal.ui.CalSelector.prototype.buttonRe_;
+
+
+/**
+ * Whether full redraw is needed when calling updateByRedraw.
+ * @see {rflect.cal.ui.CalSelector#updateByRedraw}
+ * @type {boolean}
+ */
+rflect.cal.ui.CalSelector.prototype.redrawIsNeeded = false;
+
+
+/**
+ * Whether component lists my calendars.
+ * @type {boolean}
+ */
+rflect.cal.ui.CalSelector.prototype.isMyCalendars = false;
+
+
+/**
+ * Builds body of component.
+ * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
+ * to.
+ * @protected
+ * @see {rflect.cal.ui.MainPaneBuilder#buildBodyInternalWeek}
+ */
+rflect.cal.ui.CalSelector.prototype.buildInternal = function(aSb) {
+  var offset = 0;
+  var length = rflect.cal.ui.CalSelector.HTML_PARTS_.length;
+  while (++offset < length - 1) {
+    aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[offset]);
+    switch (offset) {
+      case 1: {
+        this.buildLabel_(aSb);
+      };break;
+      case 2: {
+        this.buildOptions(aSb);
+      };break;
+      /*case 4: {
+        this.buildListBodyClass_(aSb);
+      };break;*/
+      case 5: {
+        this.buildScrollableHeight_(aSb);
+      };break;
+      case 6: {
+        this.buildContent(aSb);
+      };break;
+      default: break;
+    }
+  }
+};
+
+
+/**
+ * Builds list selector's label.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @private
+ *
+ *'<div id="calendars-selector" class="' + goog.getCssName('list-selector') + '">',
+ * '<div id="calendars-label-cont" class="' + goog.getCssName('list-label-cont') + '">' +
+ *     '<div id="calendars-label" class="' + goog.getCssName('list-label') + '">',
+ *  List selector label (calendars). 
+ *
+ */
+rflect.cal.ui.CalSelector.prototype.buildLabel_ = function(aSb) {
+  aSb.append(this.label);
+};
+
+
+/**
+ * @return {Element} List selector's header element.
+ */
+rflect.cal.ui.CalSelector.prototype.getHeader = function() {
+  return this.header_ ||
+      (this.header_ = this.dom_.getFirstElementChild(this.getElement()));
+};
+
+
+/**
+ * Builds list selector's options controls.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @protected
+ *
+ * '</div>',
+ *  List selector menu signs (<div class="listitem-opt"></div>)
+ *
+ */
+rflect.cal.ui.CalSelector.prototype.buildOptions = function (aSb) {
+  aSb.append('');
+};
+
+
+/**
+ * Builds list body class indicating whether scrollbars should appear.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @private
+ *
+ * '<div id="calendars-body" class="list-body ',
+ *  Class indicating whether list body is overflown (list-body-overflown). 
+ *
+ */
+rflect.cal.ui.CalSelector.prototype.buildListBodyClass_ = function(aSb) {
+  aSb.append(goog.getCssName('list-body-overflown'));
+}
+
+
+/**
+ * Builds list selector scrollable's height.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @private
+ *
+ *'" style="height:',
+ *  Height of list selector's body in pixels (150). 
+ *
+ */
+rflect.cal.ui.CalSelector.prototype.buildScrollableHeight_ = function(aSb) {
+  if (rflect.MOBILE)
+    aSb.append('');
+  else
+    aSb.append(this.scrollableSize_.height);
+}
+
+
+/**
+ * Builds list selector content.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @protected
+ *
+ * 'px">',
+ *  Content.
+ *
+ */
+rflect.cal.ui.CalSelector.prototype.buildContent = function (aSb) {
+  this.eventManager_.forEachCalendar(function(calendar, calendarId) {
+    if (calendar.own == this.isMyCalendars){
+      aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_CONTENT_[0]);
+      aSb.append(calendar.getUIName());
+      aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_CONTENT_[1]);
+      aSb.append(calendarId);
+      aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_CONTENT_[2]);
+      aSb.append(calendar.colorCode && calendar.colorCode.checkboxClass);
+      aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_CONTENT_[3]);
+      aSb.append(calendarId);
+      aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_CONTENT_[4]);
+      aSb.append(calendar.getUIName());
+      aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_CONTENT_[5]);
+      aSb.append(calendarId);
+      aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_CONTENT_[6]);
+    }
+  }, this);
+};
+
+
+/**
+ * Updates list selector with new data before redraw. Includes size adjustment.
+ * @param {Array.<goog.ui.Component>=} opt_exclusions Exclusion indexes.
+ * @param {boolean=} opt_firstTime Whether it's a first time update.
+ */
+rflect.cal.ui.CalSelector.prototype.updateBeforeRedraw = function(opt_exclusions,
+    opt_firstTime) {
+  if (rflect.MOBILE)
+    return;
+
+  // Take current viewport size.
+  this.scrollableSize_ = this.containerSizeMonitor_.getSize();
+
+  if (opt_firstTime)
+    this.scrollableSize_.height = 0;
+  else {
+    var staticSizes = this.getParent().staticSizesLeftPane;
+    this.scrollableSize_.height -= staticSizes.height;
+  }
+
+  // Default behaviour is to have two selectors in a column, so divide height
+  // by 2.
+  if (!opt_firstTime)
+    this.scrollableSize_.height /= 2;
+};
+
+
+/**
+ * Redraws list selector. This default version changes scrollable size.
+ * @override
+ */
+rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
+
+  if (this.redrawIsNeeded) {
+    this.redrawIsNeeded = false;
+
+    // Dereference scrollable element.
+    this.scrollableEl = null;
+
+    this.disposeCheckboxes();
+    this.getElement().innerHTML = this.build();
+    this.enterDocumentForCheckboxes();
+
+    // Save reference to scrollable element.
+    if (!rflect.MOBILE)
+      this.scrollableEl = goog.dom.getChildren(this.getElement())[1];
+
+  }
+
+  if (!rflect.MOBILE)
+    this.scrollableEl.style.height = this.scrollableSize_.height + 'px';
+};
+
+
+/**
+ * Disposes of checkboxes.
+ */
+rflect.cal.ui.CalSelector.prototype.disposeCheckboxes = function () {
+  this.forEachChild(function(checkbox) {
+    checkbox.dispose();
+  });
+
+  this.removeChildren();
+}
+
+
+/**
+ * Decorates an existing html div element as a list selector.
+ * @override
+ */
+rflect.cal.ui.CalSelector.prototype.decorateInternal = function(aElement,
+    opt_doNotBuildBody) {
+  // Set this.element_.
+  rflect.cal.ui.CalSelector.superClass_.decorateInternal.call(this, aElement,
+      opt_doNotBuildBody);
+};
+
+
+/**
  * @inheritDoc
  */
-rflect.cal.ui.CalSelector.prototype.enterDocument = function () {
+rflect.cal.ui.CalSelector.prototype.enterDocument = function() {
   rflect.cal.ui.CalSelector.superClass_.enterDocument.call(this);
+
+  this.getHandler().listen(this.getElement(), goog.events.EventType.MOUSEOVER,
+      this.onMouseOver_, false, this)
+      .listen(this.getElement(), goog.events.EventType.MOUSEOUT,
+      this.onMouseOut_, false, this).listen(this,
+      goog.ui.Component.EventType.CHANGE, this.onCheck_, false, this)
+
+  // Save reference to scrollable element.
+  this.scrollableEl = goog.dom.getChildren(this.getElement())[1];
 
   this.enterDocumentForCheckboxes();
 
-  this.getHandler().listen(this, goog.ui.Component.EventType.CHANGE,
-      this.onCheck_, false, this)
 };
 
 
@@ -112,42 +461,47 @@ rflect.cal.ui.CalSelector.prototype.enterDocumentForCheckboxes = function () {
 
 
 /**
- * Disposes of checkboxes.
+ * List selector mouseout handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
  */
-rflect.cal.ui.CalSelector.prototype.disposeCheckboxes = function () {
-  this.forEachChild(function(checkbox) {
-    checkbox.dispose();
-  });
-
-  this.removeChildren();
+rflect.cal.ui.CalSelector.prototype.onMouseOut_ = function(aEvent) {
+  var target = aEvent.target;
+  var id = target.id;
+  var className = target.className;
+  if (!aEvent.relatedTarget ||
+      !this.dom_.contains(this.getElement(), aEvent.relatedTarget))
+    this.showOptions(false);
+  if (!this.isItem(className) || !this.isHeader(className) ||
+      !this.isButton(className))
+    this.moRegistryForParts_.deregisterTarget();
 }
 
 
 /**
- * Redraws list selector. This default version changes scrollable size.
- * @override
+ * List selector mouseover handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
  */
-rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
+rflect.cal.ui.CalSelector.prototype.onMouseOver_ = function(aEvent) {
+  var target = /**@type {Element}*/ (aEvent.target);
+  var id = target.id;
+  var className = target.className;
 
-  if (this.redrawIsNeeded) {
-    this.redrawIsNeeded = false;
-
-    // Dereference scrollable element.
-    this.scrollableEl = null;
-
-    this.disposeCheckboxes();
-    this.getElement().innerHTML = this.build();
-    this.enterDocumentForCheckboxes();
-
-    // Save reference to scrollable element.
-    if (!rflect.MOBILE)
-      this.scrollableEl = goog.dom.getChildren(this.getElement())[1];
-
-  }
-
-  if (!rflect.MOBILE)
-    this.scrollableEl.style.height = this.scrollableSize_.height + 'px';
-};
+  // Highlight of whole element.
+  this.showOptions(true);
+  // Highlight of element's parts.
+  if (this.isHeader(className))
+    this.moRegistryForParts_.registerTarget(this.getHeader(),
+      goog.getCssName('list-label-cont-highlighted'));
+  else if (this.isButton(className))
+    this.moRegistryForParts_.registerTarget(target,
+        goog.getCssName('list-selector-options-button-highlighted'));
+  else if (this.isItem(className))
+    this.moRegistryForParts_.registerTarget(
+        rflect.cal.ui.CalSelector.getItem(target),
+        goog.getCssName('list-selector-item-highlighted'));
+}
 
 
 /**
@@ -192,11 +546,33 @@ rflect.cal.ui.CalSelector.prototype.onBlur_ = function(aEvent) {
 
 
 /**
+ * Searches for closest target ancestor that is item.
+ * @param {Element} aTarget Target to start search for item.
+ * @return {Element} Item element or null.
+ * @protected
+ */
+rflect.cal.ui.CalSelector.getItem = function(aTarget) {
+  return /**@type {Element}*/ (goog.dom.getAncestor(aTarget, function(aNode) {
+    return aNode.className == goog.getCssName('listitem-cont-outer');
+  }, true, 2));
+}
+
+
+/**
+ * Highlights list selector header, where label is situated, shows additional
+ * option elements. Should be overridden.
+ * @param {boolean} aShow Whether options are shown.
+ * @protected
+ */
+rflect.cal.ui.CalSelector.prototype.showOptions = function(aShow) {
+};
+
+
+/**
  * @param {string} aClassName Class name of element to test whether it indicates
  * of item.
  * @return {boolean} Whether class name indicates that this is an item.
  * @protected
- * @override
  */
 rflect.cal.ui.CalSelector.prototype.isItem = function (aClassName) {
   var re = rflect.string.buildClassNameRe(
@@ -213,7 +589,6 @@ rflect.cal.ui.CalSelector.prototype.isItem = function (aClassName) {
  * of header.
  * @return {boolean} Whether class name indicates that this is a header.
  * @protected
- * @override
  */
 rflect.cal.ui.CalSelector.prototype.isHeader = function(aClassName) {
   var re = rflect.string.buildClassNameRe(
@@ -229,7 +604,6 @@ rflect.cal.ui.CalSelector.prototype.isHeader = function(aClassName) {
  * @return {boolean} Whether class name indicates that this is an options
  * button.
  * @protected
- * @override
  */
 rflect.cal.ui.CalSelector.prototype.isButton = function (aClassName) {
   return false;
@@ -237,46 +611,15 @@ rflect.cal.ui.CalSelector.prototype.isButton = function (aClassName) {
 
 
 /**
- * Builds list selector's options controls.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
- * @protected
+ * Disposes of the list selector.
  * @override
- *
- * '</div>',
- *  List selector menu signs (<div class="listitem-opt"></div>)
- *
- */
-rflect.cal.ui.CalSelector.prototype.buildOptions = function (aSb) {
-  aSb.append('');
-};
-
-
-/**
- * Builds list selector content.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @protected
- * @override
- *
- * 'px">',
- *  Content.
- *
  */
-rflect.cal.ui.CalSelector.prototype.buildContent = function (aSb) {
-  this.eventManager_.forEachCalendar(function(calendar, calendarId) {
+rflect.cal.ui.CalSelector.prototype.disposeInternal = function() {
+  rflect.cal.ui.CalSelector.superClass_.disposeInternal.call(this);
 
-    aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[0]);
-    aSb.append(calendar.getUIName());
-    aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[1]);
-    aSb.append(calendarId);
-    aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[2]);
-    aSb.append(calendar.colorCode && calendar.colorCode.checkboxClass);
-    aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[3]);
-    aSb.append(calendarId);
-    aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[4]);
-    aSb.append(calendar.getUIName());
-    aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[5]);
-    aSb.append(calendarId);
-    aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[6]);
-
-  }, this);
+  // Dereference scrollable element.
+  this.scrollableEl = null;
+  this.viewManager_ = null;
+  this.containerSizeMonitor_ = null;
 };
