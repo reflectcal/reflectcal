@@ -183,15 +183,14 @@ rflect.cal.ui.InputDatePicker.prototype.showDatePicker_ = function (aInput) {
 rflect.cal.ui.InputDatePicker.prototype.onInputBlur_ = function (aEvent) {
   var input = /**@type{Element}*/(aEvent.target);
   if (this.currentInput_ == input)
-    if (goog.userAgent.IE) {
-      if (goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0)
+    if (goog.userAgent.IE &&
+        goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0){
         if (this.mouseDownOnPicker_) {
           this.mouseDownOnPicker_ = false;
           this.currentInput_.focus();
         }
         else
           this.setVisible(false);
-
     } else
       this.setVisible(false);
 
