@@ -451,11 +451,12 @@ rflect.cal.ui.EventPane.prototype.onTimeInputMouseDown_ = function(aEvent) {
  * @param {rflect.cal.ui.ac.TimeAutoComplete} aAC Autocomplete.
  */
 rflect.cal.ui.EventPane.prototype.updateAC_ = function(aAC) {
-  if (goog.userAgent.IE) {
-    if (goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0)
-      setTimeout(goog.bind(function(){aAC.update(true)}, this), 0);
-  } else
+  if (goog.userAgent.IE &&
+      goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0){
+    setTimeout(goog.bind(function(){aAC.update(true)}, this), 0);
+  } else {
     aAC.update(true);
+  }
 }
 
 
