@@ -39,8 +39,9 @@ goog.require('goog.positioning.Overflow');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.IdGenerator');
-goog.require('rflect.ui.ac.AutoComplete.EventType');
 goog.require('goog.userAgent');
+goog.require('rflect.style');
+goog.require('rflect.ui.ac.AutoComplete.EventType');
 
 
 
@@ -623,7 +624,7 @@ rflect.ui.ac.Renderer.prototype.redraw = function() {
 
   // Make the autocompleter unselectable, so that it
   // doesn't steal focus from the input field when clicked.
-  goog.style.setUnselectable(this.element_, true);
+  rflect.style.setUnselectable(this.element_, true);
 };
 
 
@@ -954,6 +955,8 @@ rflect.ui.ac.Renderer.prototype.handleClick_ = function(e) {
       row: this.rows_[index].id
     }));
   }
+  if (goog.DEBUG)
+    _log('click index', index);
   e.stopPropagation();
 };
 
@@ -964,6 +967,8 @@ rflect.ui.ac.Renderer.prototype.handleClick_ = function(e) {
  * @private
  */
 rflect.ui.ac.Renderer.prototype.handleMouseDown_ = function(e) {
+  if (goog.DEBUG)
+    _log('mousedown');
   e.stopPropagation();
   e.preventDefault();
 };
