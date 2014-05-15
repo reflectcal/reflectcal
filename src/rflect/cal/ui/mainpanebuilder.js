@@ -167,7 +167,12 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   /*Dayname label class (dayname-wk-inner).*/
   '">',
   /*Dayname is here (Monday).*/
-  '</span></div>',
+  '</span>',
+  '<div id="wk-zippy-col',/*Id of zippy (wk-zippy-col2).*/
+    '" class="' + goog.getCssName('zippy') + ' ' + goog.getCssName('wk-col-zippy') + ' ' + goog.getCssName('icon-triangle') + ' ',/*State of zippy
+    (goog-zippy-expanded, goog-zippy-collapsed).*/
+    '"></div>',
+  '</div>',
   '</div>',
   '</div>',
   // Scrollable in header.
@@ -357,41 +362,6 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
 ];
 
 
-// Remove some parts for mobile UI by replacing parts with empty strings, so
-// that index order will be intact.
-if (rflect.MOBILE) {
-  (function() {
-    var indexesToRemove = {
-      //All-day zippy.
-      2: 1,
-      3: 1,
-      4: 1,
-      5: 1,
-      //Week zippies.
-      48: 1,
-      49: 1,
-      50: 1,
-      51: 1,
-      52: 1,
-      53: 1,
-      54: 1,
-      55: 1,
-      56: 1,
-      57: 1,
-      58: 1,
-      59: 1
-    };
-
-    goog.array.forEach(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_,
-        function(aPart, aIndex){
-      if (aIndex in indexesToRemove)
-        rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aIndex] = '';
-    });
-
-  })();
-}
-
-
 /**
  * String parts for builder, for monthmode.
  * @type {Array.<string>}
@@ -569,7 +539,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
  * @param {boolean} aFirstBuild Whether we build for the fist time.
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
-                                                                       aFirstBuild) {
+    aFirstBuild) {
   // Form html. From index 1 (see offset increment before append), because 0
   // is the html of outer container, which we don't create in that method but
   // just decorate.
@@ -583,119 +553,65 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
     // array items, we reflect it here by incrementing offset by more than 1,
     // or not incrementing at all, according to the number of 'eaten' parts.
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[offset]);
-    if (rflect.MOBILE) {
 
-      switch (offset) {
-        case 3: if (!rflect.MOBILE) {
-          this.buildDayNamesZippy_(aSb, offset);
-        };break;
-        case 8: {
-          this.buildDayNamesWeek_(aSb, offset);
-          offset += 8;
-        };break;
-        case 19: {
-          this.buildScrollableAllday_(aSb, offset);
-            offset += 2;
-        };break;
-        case 21: {
-          if (aFirstBuild)
-            offset += 26;
-        };break;
-        case 23: {
-          this.buildAllDayGrid_(aSb, offset);
+    switch (offset) {
+      case 2: if (rflect.MOBILE) {
+        //Skipping all-day zippy.
+        offset += 3;
+      };break;
+      case 3: if (!rflect.MOBILE) {
+        this.buildDayNamesZippy_(aSb, offset);
+      };break;
+      case 8: {
+        this.buildDayNamesWeek_(aSb, offset);
+        offset += 12;
+      };break;
+      case 23: {
+        this.buildScrollableAllday_(aSb, offset);
           offset += 2;
-        };break;
-        case 27: {
-          this.buildWeekGridAdCols_(aSb, offset);
-          offset += 17;
-        };break;
-        case 49: if (!rflect.MOBILE) {
-          this.buildWeekColZippies_(aSb, offset);
-          offset += 9;
-        };break;
-        case 63: {
-          this.buildScrollableWeek_(aSb, offset);
-          offset++;
-        };break;
-        case 65: {
-          if (aFirstBuild)
-            offset += 45;
-        };break;
-        case 66: {
-          this.timeMarker_.buildHead(aSb);
-        };break;
-        case 67: {
-          this.buildHoursAndGridRows_(aSb, offset);
-          offset += 9;
-        };break;
-        case 78: {
-          this.buildGridTableWeek_(aSb, offset);
-          offset++;
-        };break;
-        case 81: {
-          this.buildWeekGridCols_(aSb, offset);
+      };break;
+      case 25: {
+        if (aFirstBuild)
           offset += 26;
-        };break;
-        default: break;
-      }
-
-    } else {
-
-      switch (offset) {
-        case 3: {
-          this.buildDayNamesZippy_(aSb, offset);
-        };break;
-        case 8: {
-          this.buildDayNamesWeek_(aSb, offset);
-          offset += 8;
-        };break;
-        case 19: {
-          this.buildScrollableAllday_(aSb, offset);
-            offset += 2;
-        };break;
-        case 21: {
-          if (aFirstBuild)
-            offset += 26;
-        };break;
-        case 23: {
-          this.buildAllDayGrid_(aSb, offset);
-          offset += 2;
-        };break;
-        case 27: {
-          this.buildWeekGridAdCols_(aSb, offset);
-          offset += 17;
-        };break;
-        case 49: {
-          this.buildWeekColZippies_(aSb, offset);
-          offset += 9;
-        };break;
-        case 63: {
-          this.buildScrollableWeek_(aSb, offset);
-          offset++;
-        };break;
-        case 65: {
-          if (aFirstBuild)
-            offset += 45;
-        };break;
-        case 66: {
-          this.timeMarker_.buildHead(aSb);
-        };break;
-        case 67: {
-          this.buildHoursAndGridRows_(aSb, offset);
-          offset += 9;
-        };break;
-        case 78: {
-          this.buildGridTableWeek_(aSb, offset);
-          offset++;
-        };break;
-        case 81: {
-          this.buildWeekGridCols_(aSb, offset);
-          offset += 26;
-        };break;
-        default: break;
-      }
-
+      };break;
+      case 27: {
+        this.buildAllDayGrid_(aSb, offset);
+        offset += 2;
+      };break;
+      case 31: {
+        this.buildWeekGridAdCols_(aSb, offset);
+        offset += 17;
+      };break;
+      case 51: {
+        //Skipping week col zippies.
+        offset += 13;
+      };break;
+      case 67: {
+        this.buildScrollableWeek_(aSb, offset);
+        offset++;
+      };break;
+      case 69: {
+        if (aFirstBuild)
+          offset += 45;
+      };break;
+      case 70: {
+        this.timeMarker_.buildHead(aSb);
+      };break;
+      case 71: {
+        this.buildHoursAndGridRows_(aSb, offset);
+        offset += 9;
+      };break;
+      case 82: {
+        this.buildGridTableWeek_(aSb, offset);
+        offset++;
+      };break;
+      case 85: {
+        this.buildWeekGridCols_(aSb, offset);
+        offset += 26;
+      };break;
+      default: break;
     }
+
   }
 };
 
@@ -706,9 +622,9 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
  * to.
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGrid = function(aSb) {
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[80]);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[81]);
-  this.buildWeekGridCols_(aSb, 81);
+  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[84]);
+  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[85]);
+  this.buildWeekGridCols_(aSb, 85);
 }
 
 
@@ -718,9 +634,9 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGrid = function(aSb) {
  * to.
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildAllDayGrid = function(aSb) {
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[26]);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[27]);
-  this.buildWeekGridAdCols_(aSb, 27);
+  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[30]);
+  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[31]);
+  this.buildWeekGridAdCols_(aSb, 31);
 }
 
 
@@ -902,11 +818,31 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesWeek_ =
     // Day name formatted.
     aSb.append(this.weekDayNameFormatWeek_.format(daySeries[colCounter]));
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
+
+    this.buildWeekColZippy_(aSb, aOffset + 8, colCounter);
+
+    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 12]);
   }
 };
 
 
 /**
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @param {number} aOffset Current offset.
+ * @param {number} aColCounter Column number.
+ */
+rflect.cal.ui.MainPaneBuilder.prototype.buildWeekColZippy_ = function(aSb,
+    aOffset, aColCounter) {
+  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
+  aSb.append(aColCounter);
+  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
+  aSb.append(this.blockPoolWeek_.blocks[aColCounter].expanded ?
+      goog.getCssName('wk-col-zippy-expanded') :
+      goog.getCssName('wk-col-zippy-collapsed'));
+  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
+}
+
+ /**
  *'<div id="main-pane-header-wk-daynames" style="margin-right:>',
  *  Main pane header container margin left (19).
  * 'px"><table id="weekmode-daynames-table" cellspacing="0" cellpadding="0">',

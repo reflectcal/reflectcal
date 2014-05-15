@@ -482,9 +482,6 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_exclusions,
     this.gridContainerSize.height = this.scrollablesCombinedWkSize_.height -
             this.alldayGridContainerSize.height;
 
-    this.alldayGridContainerSize.height +=
-        this.getScrollbarWidthBelowAllday();
-
     // Check if main scrollable size is greater than grid height.
     if (this.gridContainerSize.height >
         rflect.cal.predefined.WEEK_GRID_HEIGHT)
@@ -1790,8 +1787,6 @@ rflect.cal.ui.MainPane.prototype.onMainPaneScrollableScroll_ = function(aEvent) 
 
       this.blockManager_.blockPoolAllDay.scrollLeft = scrollLeft;
 
-      this.getDomHelper().getElement('weekmode-zippies-table').style.left =
-          '-' + scrollLeft + 'px';
       this.getDomHelper().getElement('weekmode-daynames-table').style.left =
           '-' + scrollLeft + 'px';
       this.getDomHelper().getElement('main-pane-header-scrollable').scrollLeft =
