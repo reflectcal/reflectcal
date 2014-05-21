@@ -175,6 +175,7 @@ rflect.cal.ui.MainBody.HTML_PARTS_ = rflect.MOBILE ? [
  * useful when we try to tell update{...} methods which child shouldn't be
  * updated.
  * @enum {number}
+ * @deprecated Use direct references to components instead.
  */
 if (rflect.MOBILE) {
   rflect.cal.ui.MainBody.ComponentsIndexes = {
@@ -498,7 +499,7 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
         rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
         this.onCalendarSwitch_, false, this)
         .listen(this.sidePane_.showBehavior,
-        rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT,
+        rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
         this.onSlideStartOrEnd_, false, this)
         .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
         this.onSidePaneAction_, false, this);
@@ -741,7 +742,7 @@ rflect.cal.ui.MainBody.prototype.showEventPane = function(aShow,
 
     if (rflect.MOBILE)
       this.getHandler().listen(this.eventPane_.getShowBehavior(),
-          rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT,
+          rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
           this.onSlideStartOrEnd_, false, this);
   }
 
@@ -773,7 +774,7 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
 
     if (rflect.MOBILE)
       this.getHandler().listen(this.settingsPane_.getShowBehavior(),
-          rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT,
+          rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
           this.onSlideStartOrEnd_, false, this);
 
     if (goog.DEBUG) {

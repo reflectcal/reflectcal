@@ -343,7 +343,7 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
 
   if (rflect.MOBILE) {
     var eventNameForInputFocus =
-        rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT;
+        rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK;
   } else {
     var eventNameForInputFocus =
         rflect.cal.ui.PaneShowBehavior.EventTypes.AFTER_SHOW;
@@ -360,7 +360,7 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
  */
 rflect.cal.ui.EventPane.prototype.onPaneReady_ = function(aEvent) {
   // Do this only at the end of sliding-in pane.
-  if (rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT ==
+  if (rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK ==
       aEvent.type && !(!aEvent.start && aEvent.showing))
     return;
 

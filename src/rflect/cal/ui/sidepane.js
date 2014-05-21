@@ -240,8 +240,8 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
       .listen(this.buttonSettings_,
       goog.events.EventType.CLICK, this.onSettingsClick_, false, this)
       .listen(this.showBehavior,
-      rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT,
-      this.onSlideBreakPoint_, false, this);
+      rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
+      this.onSlideBreak_, false, this);
 };
 
 
@@ -280,7 +280,7 @@ rflect.cal.ui.SidePane.prototype.getGlassElement_ = function() {
  * @param {rflect.cal.ui.PaneShowBehavior.SlideEvent} aEvent Event
  * object.
  */
-rflect.cal.ui.SidePane.prototype.onSlideBreakPoint_ = function(aEvent) {
+rflect.cal.ui.SidePane.prototype.onSlideBreak_ = function(aEvent) {
   if (aEvent.showing && aEvent.start){
     document.body.appendChild(this.getGlassElement_());
     setTimeout(goog.bind(function(){

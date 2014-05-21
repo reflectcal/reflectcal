@@ -50,7 +50,7 @@ goog.inherits(rflect.cal.ui.PaneShowBehavior, goog.events.EventTarget);
 rflect.cal.ui.PaneShowBehavior.EventTypes = {
   BEFORE_SHOW: 'beforeShow',
   AFTER_SHOW: 'afterShow',
-  SLIDE_BREAK_POINT: 'slideBreakPoint'
+  SLIDE_BREAK: 'slideBreakPoint'
 };
 
 
@@ -64,7 +64,7 @@ rflect.cal.ui.PaneShowBehavior.EventTypes = {
 rflect.cal.ui.PaneShowBehavior.SlideEvent = function(aStart,
     aShowing) {
   goog.events.Event.call(this,
-      rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK_POINT);
+      rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK);
 
   /**
    * Whether this is start of transition.
