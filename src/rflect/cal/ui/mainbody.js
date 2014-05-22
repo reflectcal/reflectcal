@@ -151,16 +151,12 @@ rflect.cal.ui.MainBody.HTML_PARTS_ = rflect.MOBILE ? [
   '<div id="top-pane" class="control-pane">',
   '</div>',
   '<div id="main-body">',
-  '<div id="left-pane" class="side-pane">',
-  '<div id="left-main-pane">',
+  '<div id="left-pane" class="left-pane side-pane">',
   '<div id="month-selector">',
   '</div>',
   '<div id="calendars-selector" class="' + goog.getCssName('list-selector') + '">',
   '</div>',
   '<div id="tasks-selector" class="' + goog.getCssName('list-selector') + '">',
-  '</div>',
-  '</div>',
-  '<div id="left-aux-pane">',
   '</div>',
   '</div>',
   '<div id="main-pane" class="' + goog.getCssName('main-pane') + '">',
@@ -392,17 +388,17 @@ rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
         case 1: {
           this.topPane_.build(aSb);
         };break;
-        case 6: {
+        case 5: {
           this.miniCal_.build(aSb);
         };break;
-        case 8: {
+        case 7: {
           this.calSelectorMy_.build(aSb);
         };break;
-        case 10: {
+        case 9: {
           this.calSelectorOther_.build(aSb);
         };break;
         // Include main pane in common buffer.
-        case 16: {
+        case 12: {
           this.mainPane_.build(aSb);
         };break;
 

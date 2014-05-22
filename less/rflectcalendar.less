@@ -241,23 +241,19 @@ body when (@UI_TYPE = 'MOBILE') {
   margin: 0;
 }
 
-#left-main-pane {
-  float: left;
+.left-pane {
+  position: absolute;
   width: 210px;
   margin: 0;
+  transition: transform .2s linear;
 }
 
-#left-aux-pane {
-  float: none;
-  /*width: 140px;
-  margin-left: 145px;*/
-}
 
 #main-pane-controls {
-  float: none;
   margin-left: 220px;
   width: auto;
   white-space: nowrap;
+  transition: margin-left .2s linear;
 }
 
 #main-pane() {
