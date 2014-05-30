@@ -33,7 +33,6 @@ rflect.cal.ui.EditDialog = function(opt_class, opt_useIframeMask,
     opt_domHelper) {
   rflect.ui.DialogMouseMissBehavior.call(this, undefined, undefined, undefined);
 
-  this.setTitle('Edit event');
   this.setModal(false);
   this.setBackgroundElementOpacity(0);
   this.setButtonSet(rflect.cal.ui.EditDialog.createButtonSet());

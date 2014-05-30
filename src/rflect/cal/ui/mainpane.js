@@ -964,6 +964,8 @@ rflect.cal.ui.MainPane.prototype.showEventEditComponent_ = function(aTarget,
       this.editDialog_.setVisible(false);
     } else {
       this.editDialog_.setVisible(true);
+      this.editDialog_.setTitle(event.summary ||
+          rflect.cal.i18n.Symbols.NO_NAME_EVENT);
       this.editDialog_.setEventName(event.summary);
       this.editDialog_.setEventTimeString(event.toHumanString());
     }
