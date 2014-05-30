@@ -342,6 +342,7 @@ rflect.cal.ViewManager.prototype.onMenuCommandOptions_ = function() {
 rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
 
   this.timeManager.shiftToPoint(aEvent.date);
+  this.eventManager_.run();
 
   this.mainBody_.getMiniCal().updateBeforeRedraw();
   this.mainBody_.getMiniCal().updateByRedraw();
