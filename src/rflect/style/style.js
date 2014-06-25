@@ -44,7 +44,7 @@ rflect.style.unselectableStyleDetected_ = false;
 
 
 /**
- * @param {string} aName User select style name in question.
+ * @param {string|null} aName User select style name in question.
  * @return {boolean} Whether found user select style name is IE one.
  */
 rflect.style.isIEUserSelect = function(aName){
