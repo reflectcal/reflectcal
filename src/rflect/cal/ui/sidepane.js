@@ -81,6 +81,7 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
   this.showBehavior = new rflect.cal.ui.PaneShowBehavior(this,
       this.getDomHelper().getElement('main-container'));
   this.showBehavior.setSlidingIsEnabled(true);
+  this.showBehavior.setVisibleWithoutRender(true);
 
   /**
    * Whether glass pane is enabled.

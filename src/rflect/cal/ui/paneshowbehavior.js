@@ -133,6 +133,19 @@ rflect.cal.ui.PaneShowBehavior.prototype.setSlidingIsEnabled =
 
 
 /**
+ * Sets the visibility of the pane. Does not render the component.
+ * @param {boolean} visible Whether the pane should be visible.
+ */
+rflect.cal.ui.PaneShowBehavior.prototype.setVisibleWithoutRender =
+    function(visible) {
+  if (visible == this.visible_) {
+    return;
+  }
+
+  this.visible_ = visible;
+}
+
+/**
  * Sets the visibility of the pane. Lazily renders the component if needed.
  * @param {boolean} visible Whether the pane should be visible.
  */
