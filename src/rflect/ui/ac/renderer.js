@@ -955,8 +955,6 @@ rflect.ui.ac.Renderer.prototype.handleClick_ = function(e) {
       row: this.rows_[index].id
     }));
   }
-  if (goog.DEBUG)
-    _log('click index', index);
   e.stopPropagation();
 };
 
@@ -967,8 +965,6 @@ rflect.ui.ac.Renderer.prototype.handleClick_ = function(e) {
  * @private
  */
 rflect.ui.ac.Renderer.prototype.handleMouseDown_ = function(e) {
-  if (goog.DEBUG)
-    _log('mousedown');
   e.stopPropagation();
   e.preventDefault();
 };
