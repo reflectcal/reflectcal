@@ -91,6 +91,7 @@ rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
    */
   this.showBehavior = new rflect.cal.ui.PaneShowBehavior(this,
       this.getDomHelper().getElement('main-container'));
+  this.showBehavior.setSlidingIsEnabled(rflect.MOBILE);
 };
 goog.inherits(rflect.cal.ui.ExternalPane, goog.ui.Component);
 

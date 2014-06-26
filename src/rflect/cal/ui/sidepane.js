@@ -36,11 +36,14 @@ goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
+ * @param {boolean=} opt_miniCal Whether mini cal is enabled.
+ * @param {boolean=} opt_menu Whether menu items are enabled.
+ * @param {boolean=} opt_glassPane Whether glass pane is enabled.
  * @constructor
  * @extends {rflect.ui.Component}
  */
 rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
-    aContainerSizeMonitor) {
+    aContainerSizeMonitor, opt_miniCal, opt_menu, opt_glassPane) {
   rflect.ui.Component.call(this);
 
   /**
@@ -77,24 +80,52 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
    */
   this.showBehavior = new rflect.cal.ui.PaneShowBehavior(this,
       this.getDomHelper().getElement('main-container'));
+  this.showBehavior.setSlidingIsEnabled(true);
+
+  /**
+   * Whether glass pane is enabled.
+   * @type {boolean}
+   * @private
+   */
+  this.glassPaneIsEnabled_ = !!opt_glassPane;
+  
+  /**
+   * Whether menu is enabled.
+   * @type {boolean}
+   * @private
+   */
+  this.menuIsEnabled_ = !!opt_menu;
 
   /**
    * Menu items.
    * @type {Array.<rflect.cal.ui.SidePane.MenuItem>}
    * @private
    */
-  this.menuItems_ = [
+  this.menuItems_ = opt_menu ? [
     new rflect.cal.ui.SidePane.MenuItem(
       rflect.cal.predefined.BUTTON_SETTINGS_ID,
       '<i class="icon icon-in-button icon-cog"></i> ' +
           rflect.cal.i18n.Symbols.SETTINGS,
       rflect.cal.ui.SidePane.EventTypes.SHOW_SETTINGS
     )
-  ];
+  ] : [];
 
+  if (opt_miniCal){
+    this.addChild(this.miniCal_ = new rflect.cal.ui.MiniCal(this.viewManager_,
+        this.timeManager_));
+  }
   this.addChild(this.calSelectorMy_ = new rflect.cal.ui.CalSelector(
       this.viewManager_, this.containerSizeMonitor_, this.eventManager_,
       rflect.cal.i18n.Symbols.CALENDARS_LABEL_MY, true));
+  this.addChild(this.calSelectorOther_ = new rflect.cal.ui.CalSelector(
+      this.viewManager_, this.containerSizeMonitor_, this.eventManager_,
+      rflect.cal.i18n.Symbols.CALENDARS_LABEL_OTHER, false));
+
+  if (goog.DEBUG) {
+    _inspect('miniCal_', this.miniCal_);
+    _inspect('calSelectorMy_', this.calSelectorMy_);
+    _inspect('calSelectorOther_', this.calSelectorOther_);
+  }
 
 };
 goog.inherits(rflect.cal.ui.SidePane, rflect.ui.Component);
@@ -164,6 +195,30 @@ rflect.cal.ui.SidePane.prototype.decorateInternal = function(aElement,
 
 
 /**
+ * @return {goog.ui.Component}
+ */
+rflect.cal.ui.SidePane.prototype.getMiniCal = function() {
+  return this.miniCal_;
+};
+
+
+/**
+ * @return {goog.ui.Component}
+ */
+rflect.cal.ui.SidePane.prototype.getCalSelector = function() {
+  return this.calSelectorMy_;
+};
+
+
+/**
+ * @return {goog.ui.Component}
+ */
+rflect.cal.ui.SidePane.prototype.getTaskSelector = function() {
+  return this.calSelectorOther_;
+};
+
+
+/**
  * Builds menu of side pane.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
@@ -171,6 +226,7 @@ rflect.cal.ui.SidePane.prototype.decorateInternal = function(aElement,
  * @private
  */
 rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
+  aSb.append('<ul class="side-pane-menu">');
   aSb.append('<li class="side-pane-menu-item">');
   goog.array.forEach(this.menuItems_, function(aMenuItem, aIndex){
     aSb.append('<button id="');
@@ -182,6 +238,7 @@ rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
     aSb.append('</button>');
   });
   aSb.append('</li>');
+  aSb.append('</ul>');
 }
 
 
@@ -195,10 +252,12 @@ rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
 rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
 
   var parts = [
-    '<nav id="side-pane" class="side-pane slide-pane-left" style="display:none">',
-    '<ul class="side-pane-menu">',
-    '</ul>',
+    '<nav id="side-pane" class="side-pane slide-pane-left">',
+    '<div id="month-selector">',
+    '</div>',
     '<div id="calendars-selector" class="list-selector">',
+    '</div>',
+    '<div id="tasks-selector" class="list-selector">',
     '</div>',
     '</nav>'
   ];
@@ -210,11 +269,17 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
     aSb.append(parts[counter]);
     switch (counter) {
       // Include top pane in common buffer.
+      case 0: {
+        if (!this.menuIsEnabled_) this.buildMenu_(aSb);
+      };break;
       case 1: {
-        this.buildMenu_(aSb);
+        if (this.miniCal_) this.miniCal_.build(aSb);
       };break;
       case 3: {
         this.calSelectorMy_.build(aSb);
+      };break;
+      case 5: {
+        this.calSelectorOther_.build(aSb);
       };break;
       default: break;
     }
@@ -227,19 +292,30 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
  */
 rflect.cal.ui.SidePane.prototype.enterDocument = function() {
 
+  if (this.miniCal_){
+    this.miniCal_.decorateInternal(
+        this.getDomHelper().getElement('month-selector'), true);
+  }
   this.calSelectorMy_.decorateInternal(
-          this.getDomHelper().getElement('calendars-selector'), true);
-  this.buttonSettings_ = goog.dom.getElement(
-      rflect.cal.predefined.BUTTON_SETTINGS_ID);
+      this.getDomHelper().getElement('calendars-selector'), true);
+  this.calSelectorOther_.decorateInternal(
+      this.getDomHelper().getElement('tasks-selector'), true);
+
 
   rflect.cal.ui.SidePane.superClass_.enterDocument.call(this);
 
   // Attaching event handlers.
-  this.getHandler().listen(this.getGlassElement_(),
-      goog.events.EventType.CLICK, this.onCancel_, false, this)
-      .listen(this.buttonSettings_,
-      goog.events.EventType.CLICK, this.onSettingsClick_, false, this)
-      .listen(this.showBehavior,
+  if (this.glassPaneIsEnabled_){
+    this.getHandler().listen(this.getGlassElement_(),
+        goog.events.EventType.CLICK, this.onCancel_, false, this);
+  }
+  if (this.menuIsEnabled_){
+    this.buttonSettings_ = goog.dom.getElement(
+        rflect.cal.predefined.BUTTON_SETTINGS_ID);
+    this.getHandler().listen(this.buttonSettings_,
+        goog.events.EventType.CLICK, this.onSettingsClick_, false, this);
+  }
+  this.getHandler().listen(this.showBehavior,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
       this.onSlideBreak_, false, this);
 };
@@ -281,19 +357,20 @@ rflect.cal.ui.SidePane.prototype.getGlassElement_ = function() {
  * object.
  */
 rflect.cal.ui.SidePane.prototype.onSlideBreak_ = function(aEvent) {
-  if (aEvent.showing && aEvent.start){
-    document.body.appendChild(this.getGlassElement_());
-    setTimeout(goog.bind(function(){
-      goog.dom.classes.add(this.getGlassElement_(), 'glass-pane-opaque');
-    }, this), 0);
+  if (this.glassPaneIsEnabled_){
+    if (aEvent.showing && aEvent.start){
+      document.body.appendChild(this.getGlassElement_());
+      setTimeout(goog.bind(function(){
+        goog.dom.classes.add(this.getGlassElement_(), 'glass-pane-opaque');
+      }, this), 0);
+    }
+    if (!aEvent.showing && aEvent.start){
+      goog.dom.classes.remove(this.getGlassElement_(), 'glass-pane-opaque');
+    }
+    if (!aEvent.showing && !aEvent.start){
+      goog.dom.removeNode(this.getGlassElement_());
+    }
   }
-  if (!aEvent.showing && aEvent.start){
-    goog.dom.classes.remove(this.getGlassElement_(), 'glass-pane-opaque');
-  }
-  if (!aEvent.showing && !aEvent.start){
-    goog.dom.removeNode(this.getGlassElement_());
-  }
-
 }
 
 
@@ -308,6 +385,9 @@ rflect.cal.ui.SidePane.prototype.onSlideBreak_ = function(aEvent) {
 rflect.cal.ui.SidePane.prototype.disposeInternal = function() {
   this.showBehavior.dispose();
   this.glassElement_ = null;
+  this.miniCal_ = null;
+  this.calSelectorMy_ = null;
+  this.calSelectorOther_ = null;
 
   rflect.cal.ui.SidePane.superClass_.disposeInternal.call(this);
 };

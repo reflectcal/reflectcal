@@ -104,48 +104,48 @@ rflect.ui.Component.prototype.buildInternal = function(aSb) {
  * component's update logic need to be separated from redraw. Propagates to
  * component's children by default. For custom behavior, should be overridden by
  * subclasses.
- * @param {Array.<goog.ui.Component>=} opt_exclusions Children components which
- * should be excluded from update.
+ * @param {boolean=} opt_deep Whether to update children.
  */
 rflect.ui.Component.prototype.updateBeforeRedraw =
-    function(opt_exclusions) {
-  this.forEachChild(function(aChild) {
-    if (aChild.updateBeforeRedraw &&
-        !rflect.ui.Component.componentIsInExclusions(opt_exclusions, aChild))
-      aChild.updateBeforeRedraw();
-  });
+    function(opt_deep) {
+  if (opt_deep){
+    this.forEachChild(function(aChild) {
+      if (aChild.updateBeforeRedraw)
+        aChild.updateBeforeRedraw(opt_deep);
+    });
+  }
 };
 
 
 /**
  * Updates body of component by redraw. This is a second and final part of
  * component update sequence.
- * @param {Array.<goog.ui.Component>=} opt_exclusions Index(es) of component's
- * children which should be excluded from update.
+ * @param {boolean=} opt_deep Whether to update children.
  * @see {rflect.cal.ui.MainBody#updateBeforeRedraw}.
  */
 rflect.ui.Component.prototype.updateByRedraw =
-    function(opt_exclusions) {
+    function(opt_deep) {
   // Propagate call to child components that have a DOM, if any.
-  this.forEachChild(function(aChild) {
-    if (aChild.updateByRedraw && aChild.isInDocument() && aChild.getElement() &&
-        !rflect.ui.Component.componentIsInExclusions(opt_exclusions, aChild)) {
-      aChild.updateByRedraw();
-    }
-  });
+  if (opt_deep){
+    this.forEachChild(function(aChild) {
+      if (aChild.updateByRedraw && aChild.isInDocument() &&
+          aChild.getElement()) {
+        aChild.updateByRedraw(opt_deep);
+      }
+    });
+  }
 };
 
 
 /**
  * Updates component in whole update sequence.
- * @param {Array.<goog.ui.Component>=} opt_exclusions Index(es) of component's
- * children which should be excluded from update.
+ * @param {boolean=} opt_deep Whether to update children.
  * @see {rflect.cal.ui.MainBody#updateBeforeRedraw}.
  */
 rflect.ui.Component.prototype.update =
-    function(opt_exclusions) {
-  this.updateBeforeRedraw(opt_exclusions);
-  this.updateByRedraw(opt_exclusions);
+    function(opt_deep) {
+  this.updateBeforeRedraw(opt_deep);
+  this.updateByRedraw(opt_deep);
 };
 
 

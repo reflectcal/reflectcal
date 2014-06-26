@@ -337,10 +337,10 @@ rflect.cal.ui.CalSelector.prototype.buildContent = function (aSb) {
 
 /**
  * Updates list selector with new data before redraw. Includes size adjustment.
- * @param {Array.<goog.ui.Component>=} opt_exclusions Exclusion indexes.
+ * @param {boolean=} opt_deep Whether to update children.
  * @param {boolean=} opt_firstTime Whether it's a first time update.
  */
-rflect.cal.ui.CalSelector.prototype.updateBeforeRedraw = function(opt_exclusions,
+rflect.cal.ui.CalSelector.prototype.updateBeforeRedraw = function(opt_deep,
     opt_firstTime) {
   if (rflect.MOBILE)
     return;
@@ -352,7 +352,7 @@ rflect.cal.ui.CalSelector.prototype.updateBeforeRedraw = function(opt_exclusions
     this.scrollableSize_.height = 0;
   else {
     var staticSizes = this.getParent().staticSizesLeftPane;
-    this.scrollableSize_.height -= staticSizes.height;
+    //this.scrollableSize_.height -= staticSizes.height;
   }
 
   // Default behaviour is to have two selectors in a column, so divide height

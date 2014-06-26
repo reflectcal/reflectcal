@@ -108,12 +108,28 @@ rflect.cal.ui.PaneShowBehavior.prototype.afterVisibleAction_ =
 
 
 /**
+ * Whether sliding is enabled.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.ui.PaneShowBehavior.prototype.slidingIsEnabled_ = false;
+
+
+/**
  * @return {boolean} Whether the pane  is visible.
  */
 rflect.cal.ui.PaneShowBehavior.prototype.isVisible = function() {
   return this.visible_;
 }
 
+
+/**
+ * @param {boolean} aSlidingIsEnabled Whether sliding is enabled.
+ */
+rflect.cal.ui.PaneShowBehavior.prototype.setSlidingIsEnabled =
+    function(aSlidingIsEnabled) {
+  this.slidingIsEnabled_ = aSlidingIsEnabled;
+}
 
 
 /**
@@ -130,7 +146,7 @@ rflect.cal.ui.PaneShowBehavior.prototype.setVisible = function(visible) {
     this.component.render(this.parentEl_);
   }
 
-  if (rflect.MOBILE && !this.transitionEndKey_){
+  if (this.slidingIsEnabled_ && !this.transitionEndKey_){
     this.transitionEndKey_ = goog.events.listen(
         this.component.getElement(),
         rflect.browser.transitionend.VENDOR_TRANSITION_END_NAMES,
@@ -138,7 +154,7 @@ rflect.cal.ui.PaneShowBehavior.prototype.setVisible = function(visible) {
   }
 
   // Here we emit events before pane becomes visible and after that.
-  if (rflect.MOBILE) {
+  if (this.slidingIsEnabled_) {
 
     if (visible) {
       if (this.dispatchEvent(new goog.events.Event(

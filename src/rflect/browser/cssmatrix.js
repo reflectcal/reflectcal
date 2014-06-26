@@ -9,8 +9,6 @@
 
 goog.provide('rflect.browser.cssmatrix');
 
-goog.require('arian.CSSMatrix');
-
 
 /**
  * @param {string} aComputedStyle Computed style of transform -
@@ -24,8 +22,7 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
     return new WebKitCSSMatrix(aComputedStyle);
   if (window.MSCSSMatrix)
     return new MSCSSMatrix(aComputedStyle);
-  //Shim is last.
-  return new arian.CSSMatrix(aComputedStyle);
+  return null;
 };
 
 

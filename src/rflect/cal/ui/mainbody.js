@@ -90,39 +90,29 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
 
   // Add child components in order for them to be included in propagation of
   // string building and updating.
+  this.addChild(this.topPane_ = new rflect.cal.ui.ControlPane(
+      this.viewManager_, this.timeManager_));
+  this.addChild(this.mainPane_ = new rflect.cal.ui.MainPane(this.viewManager_,
+      this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
+      this.blockManager_, this.transport_));
+
+  var miniCalIsEnabled = !rflect.MOBILE;
+  var menuIsEnabled = rflect.MOBILE;
+  var glassPaneIsEnabled = rflect.MOBILE;
+
+  this.addChild(this.sidePane_ = new rflect.cal.ui.SidePane(
+      this.viewManager_, this.timeManager_, this.eventManager_,
+      this.containerSizeMonitor_, miniCalIsEnabled, menuIsEnabled,
+      glassPaneIsEnabled));
   if (rflect.MOBILE) {
-    this.addChild(this.topPane_ = new rflect.cal.ui.ControlPane(
-        this.viewManager_, this.timeManager_, true));
-    this.addChild(this.mainPane_ = new rflect.cal.ui.MainPane(this.viewManager_,
-        this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
-        this.blockManager_, this.transport_));
-    this.addChild(this.sidePane_ = new rflect.cal.ui.SidePane(
-        this.viewManager_, this.timeManager_, this.eventManager_,
-        this.containerSizeMonitor_));
     this.addChild(this.bottomPane_ = new rflect.cal.ui.ControlPane(
         this.viewManager_, this.timeManager_, false));
-  } else {
-    this.addChild(this.topPane_ = new rflect.cal.ui.ControlPane(
-        this.viewManager_, this.timeManager_));
-    this.addChild(this.mainPane_ = new rflect.cal.ui.MainPane(this.viewManager_,
-        this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
-        this.blockManager_, this.transport_));
-    this.addChild(this.miniCal_ = new rflect.cal.ui.MiniCal(this.viewManager_,
-        this.timeManager_));
-    this.addChild(this.calSelectorMy_ = new rflect.cal.ui.CalSelector(
-        this.viewManager_, this.containerSizeMonitor_, this.eventManager_,
-        rflect.cal.i18n.Symbols.CALENDARS_LABEL_MY, true));
-    this.addChild(this.calSelectorOther_ = new rflect.cal.ui.CalSelector(
-        this.viewManager_, this.containerSizeMonitor_, this.eventManager_,
-        rflect.cal.i18n.Symbols.CALENDARS_LABEL_OTHER, false));
   }
 
   if (goog.DEBUG) {
     _inspect('topPane_', this.topPane_);
-    _inspect('miniCal_', this.miniCal_);
     _inspect('mainPane_', this.mainPane_);
-    _inspect('calSelectorOther_', this.calSelectorOther_);
-    _inspect('calSelectorMy_', this.calSelectorMy_);
+    _inspect('sidePane_', this.sidePane_);
   }
 };
 goog.inherits(rflect.cal.ui.MainBody, rflect.ui.Component);
@@ -147,48 +137,17 @@ rflect.cal.ui.MainBody.HTML_PARTS_ = rflect.MOBILE ? [
   '<div class="bottom-pane-spacer"></div>',
   '</div>'
   ] : [
-  '<div id="cal-container" class="' + goog.getCssName('cal-container') + '">',
+  '<div id="cal-container" class="cal-container">',
   '<div id="top-pane" class="control-pane">',
   '</div>',
   '<div id="main-body">',
-  '<div id="left-pane" class="left-pane side-pane">',
-  '<div id="month-selector">',
-  '</div>',
-  '<div id="calendars-selector" class="' + goog.getCssName('list-selector') + '">',
-  '</div>',
-  '<div id="tasks-selector" class="' + goog.getCssName('list-selector') + '">',
-  '</div>',
+  '<div id="side-pane" class="side-pane slide-pane-left slide-pane-left-visible">',
   '</div>',
   '<div id="main-pane" class="' + goog.getCssName('main-pane') + '">',
   '</div>',
   '</div>',
   '</div>'
 ];
-
-
-/**
- * Indexes of main body child components, in order they were added. These are
- * useful when we try to tell update{...} methods which child shouldn't be
- * updated.
- * @enum {number}
- * @deprecated Use direct references to components instead.
- */
-if (rflect.MOBILE) {
-  rflect.cal.ui.MainBody.ComponentsIndexes = {
-    TOP_PANE: 0,
-    MAIN_PANE: 1,
-    SIDE_PANE: 2,
-    BOTTOM_PANE: 3
-  }
-} else {
-  rflect.cal.ui.MainBody.ComponentsIndexes = {
-    TOP_PANE: 0,
-    MAIN_PANE: 1,
-    MINI_CAL: 2,
-    CAL_SELECTOR: 3,
-    TASK_SELECTOR: 4
-  }
-}
 
 
 /**
@@ -295,7 +254,7 @@ rflect.cal.ui.MainBody.prototype.getBottomPane = function() {
  * @return {goog.ui.Component}
  */
 rflect.cal.ui.MainBody.prototype.getCalSelector = function() {
-  return this.calSelectorMy_;
+  return this.sidePane_.getCalSelector();
 };
 
 
@@ -303,7 +262,7 @@ rflect.cal.ui.MainBody.prototype.getCalSelector = function() {
  * @return {goog.ui.Component}
  */
 rflect.cal.ui.MainBody.prototype.getTaskSelector = function() {
-  return this.calSelectorOther_;
+  return this.sidePane_.getTaskSelector();
 };
 
 
@@ -311,7 +270,7 @@ rflect.cal.ui.MainBody.prototype.getTaskSelector = function() {
  * @return {goog.ui.Component}
  */
 rflect.cal.ui.MainBody.prototype.getMiniCal = function() {
-  return this.miniCal_;
+  return this.sidePane_.getMiniCal();
 };
 
 
@@ -388,17 +347,11 @@ rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
         case 1: {
           this.topPane_.build(aSb);
         };break;
-        case 5: {
-          this.miniCal_.build(aSb);
-        };break;
-        case 7: {
-          this.calSelectorMy_.build(aSb);
-        };break;
-        case 9: {
-          this.calSelectorOther_.build(aSb);
+        case 4: {
+          this.sidePane_.build(aSb);
         };break;
         // Include main pane in common buffer.
-        case 12: {
+        case 6: {
           this.mainPane_.build(aSb);
         };break;
 
@@ -413,42 +366,23 @@ rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
 
 /**
  * Redirects parameter to main pane, other children are updated normally.
- * @param {Array.<goog.ui.Component>=} opt_exclusions Children components
- * which should be excluded from update.
+ * @param {boolean=} opt_deep Whether to update children.
  * @param {boolean=} opt_updateByNavigation Whether this update initiated by
  * buttons of top pane or minical.
  * @override
  */
-rflect.cal.ui.MainBody.prototype.updateBeforeRedraw = function(opt_exclusions,
+rflect.cal.ui.MainBody.prototype.updateBeforeRedraw = function(opt_deep,
     opt_updateByNavigation) {
-  // We will update main pane separately.
-  var exclusions = opt_exclusions ?
-      opt_exclusions.slice() :
-      [this.getMainPane(), this.getCalSelector(), this.getTaskSelector()];
-
-  // Nothing wrong to have duplicates in exclusion indexes.
-  exclusions.push(this.getMainPane());
-  exclusions.push(this.getCalSelector());
-  exclusions.push(this.getTaskSelector());
-
-  rflect.cal.ui.MainBody.superClass_.updateBeforeRedraw.call(this, exclusions);
-
-  if (!rflect.ui.Component.componentIsInExclusions(opt_exclusions,
-      this.getMainPane())) {
-    this.mainPane_.updateBeforeRedraw(null, undefined, opt_updateByNavigation);
+  if (opt_deep){
+    this.forEachChild(function(aChild) {
+      if (aChild.updateBeforeRedraw && aChild != this.mainPane_)
+        aChild.updateBeforeRedraw(opt_deep);
+    });
   }
 
-  if (!rflect.MOBILE) {
-
-    if (!rflect.ui.Component.componentIsInExclusions(opt_exclusions,
-        this.getCalSelector())) {
-      this.calSelectorMy_.updateBeforeRedraw(null, this.firstBuildLeftPane);
-    }
-    if (!rflect.ui.Component.componentIsInExclusions(opt_exclusions,
-        this.getTaskSelector())) {
-      this.calSelectorOther_.updateBeforeRedraw(null, this.firstBuildLeftPane);
-    }
-
+  if (opt_deep){
+    // We will update main pane separately to pass params.
+    this.mainPane_.updateBeforeRedraw(false, undefined, opt_updateByNavigation);
   }
 };
 
@@ -460,24 +394,17 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
   // We could decorate children right after superclass decorateInternal call,
   // but to preserve pattern (that if we want reliable presence of component in
   // DOM, we should address it in enterDocument), we do it here.
-  this.topPane_.decorateInternal(this.getDomHelper().getElement('top-pane'), true);
-  this.mainPane_.decorateInternal(this.getDomHelper().getElement('main-pane'), true);
+  this.topPane_.decorateInternal(this.getDomHelper().getElement('top-pane'),
+      true);
+  this.mainPane_.decorateInternal(this.getDomHelper().getElement('main-pane'),
+      true);
+  this.sidePane_.decorateInternal(this.getDomHelper().getElement('side-pane'),
+      true);
 
   if (rflect.MOBILE) {
 
     this.bottomPane_.decorateInternal(
         this.getDomHelper().getElement('top-pane'), true);
-    this.sidePane_.decorateInternal(
-        this.getDomHelper().getElement('side-pane'), true);
-
-  } else {
-
-    this.miniCal_.decorateInternal(
-        this.getDomHelper().getElement('month-selector'), true);
-    this.calSelectorMy_.decorateInternal(
-        this.getDomHelper().getElement('calendars-selector'), true);
-    this.calSelectorOther_.decorateInternal(
-        this.getDomHelper().getElement('tasks-selector'), true);
 
   }
 
@@ -491,19 +418,16 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
     this.getHandler().listen(this.bottomPane_,
         goog.ui.Component.EventType.ACTION, this.onControlPaneAction_, false,
         this);
-    this.getHandler().listen(this.sidePane_,
-        rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
-        this.onCalendarSwitch_, false, this)
-        .listen(this.sidePane_.showBehavior,
-        rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
-        this.onSlideStartOrEnd_, false, this)
-        .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
-        this.onSidePaneAction_, false, this);
-  } else {
-    this.getHandler().listen(this.calSelectorMy_,
-          rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
-          this.onCalendarSwitch_, false, this);
   }
+  this.getHandler().listen(this.sidePane_,
+      rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
+      this.onCalendarSwitch_, false, this)
+      .listen(this.sidePane_.showBehavior,
+      rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
+      this.onSlideBreak_, false, this)
+      .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
+      this.onSidePaneAction_, false, this);
+
   this.getHandler().listen(this.transport_,
       rflect.cal.Transport.EventTypes.LOAD_EVENT, this.onLoadEvents_, false,
       this);
@@ -540,8 +464,10 @@ rflect.cal.ui.MainBody.prototype.rebuildLeftPaneWithSizes = function() {
 
   this.firstBuildLeftPane = false;
 
-  this.calSelectorMy_.updateBeforeRedraw();
-  this.calSelectorMy_.updateByRedraw();
+  this.getCalSelector().updateBeforeRedraw();
+  this.getCalSelector().updateByRedraw();
+  this.getTaskSelector().updateBeforeRedraw();
+  this.getTaskSelector().updateByRedraw();
 
 }
 
@@ -644,20 +570,18 @@ rflect.cal.ui.MainBody.prototype.getMinimalSize = function() {
 rflect.cal.ui.MainBody.prototype.onControlPaneAction_ = function(aEvent) {
   var id = aEvent.target.getId();
 
-  if (id == rflect.cal.predefined.BUTTON_NEW_EVENT_ID) {
-    // TODO(alexk): check whether module is loaded
-
-    this.eventManager_.startEventCreationSession();
-
-    this.showEventPane(true, true);
-  } else if (id == rflect.cal.predefined.BUTTON_SETTINGS_ID) {
-
-    this.showSettingsPane(true);
-
-  } else if (rflect.MOBILE && id == rflect.cal.predefined.BUTTON_MENU_ID) {
-
-    this.showSidePane(true);
-
+  switch(id){
+    case rflect.cal.predefined.BUTTON_NEW_EVENT_ID: {
+      this.eventManager_.startEventCreationSession();
+      this.showEventPane(true, true);
+    };break;
+    case rflect.cal.predefined.BUTTON_SETTINGS_ID: {
+      this.showSettingsPane(true);
+    };break;
+    case rflect.cal.predefined.BUTTON_MENU_ID: {
+      this.toggleSidePane();
+    };break;
+    default:break;
   }
 }
 
@@ -671,10 +595,8 @@ rflect.cal.ui.MainBody.prototype.onSidePaneAction_ = function(aEvent) {
   var id = aEvent.target.getId();
 
   if (id == rflect.cal.predefined.BUTTON_SETTINGS_ID) {
-
     this.showSidePane(false);
     this.showSettingsPane(true);
-
   }
 }
 
@@ -716,6 +638,15 @@ rflect.cal.ui.MainBody.prototype.showSidePane = function(aShow) {
 
 
 /**
+ * Toggles side pane.
+ */
+rflect.cal.ui.MainBody.prototype.toggleSidePane = function() {
+  this.sidePane_.showBehavior.setVisible(
+      !this.sidePane_.showBehavior.isVisible());
+}
+
+
+/**
  * Shows event pane when possible and lazily instantiates it at the first time.
  * @param {boolean} aShow Whether to show event pane.
  * @param {boolean=} opt_creatingNewEvent Whether we're creating new event.
@@ -739,7 +670,7 @@ rflect.cal.ui.MainBody.prototype.showEventPane = function(aShow,
     if (rflect.MOBILE)
       this.getHandler().listen(this.eventPane_.getShowBehavior(),
           rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
-          this.onSlideStartOrEnd_, false, this);
+          this.onSlideBreak_, false, this);
   }
 
   this.eventPane_.setNewEventMode(opt_creatingNewEvent);
@@ -771,7 +702,7 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
     if (rflect.MOBILE)
       this.getHandler().listen(this.settingsPane_.getShowBehavior(),
           rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
-          this.onSlideStartOrEnd_, false, this);
+          this.onSlideBreak_, false, this);
 
     if (goog.DEBUG) {
       _inspect('settingsPane_', this.settingsPane_);
@@ -798,7 +729,7 @@ rflect.cal.ui.MainBody.prototype.showCalendar_ = function(aShow) {
  * @param {rflect.cal.ui.PaneShowBehavior.SlideEvent} aEvent Event
  * object.
  */
-rflect.cal.ui.MainBody.prototype.onSlideStartOrEnd_ = function(aEvent) {
+rflect.cal.ui.MainBody.prototype.onSlideBreak_ = function(aEvent) {
 
   switch (aEvent.target.component) {
     case this.settingsPane_: ;
@@ -806,20 +737,20 @@ rflect.cal.ui.MainBody.prototype.onSlideStartOrEnd_ = function(aEvent) {
       // If closing pane, show calendar on start.
       if (aEvent.start && !aEvent.showing) {
         this.showCalendar_(true);
-        this.mainPane_.addMomentumScroller();
+        if (rflect.MOBILE) this.mainPane_.addMomentumScroller();
       }
       // If opening pane, hide calendar on end.
       if (!aEvent.start && aEvent.showing) {
         this.showCalendar_(false);
-        this.mainPane_.removeMomentumScroller();
+        if (rflect.MOBILE) this.mainPane_.removeMomentumScroller();
       }
     };break;
     case this.sidePane_: {
       if (aEvent.start && !aEvent.showing) {
-        this.mainPane_.addMomentumScroller();
+        if (rflect.MOBILE) this.mainPane_.addMomentumScroller();
       }
       if (!aEvent.start && aEvent.showing) {
-        this.mainPane_.removeMomentumScroller();
+        if (rflect.MOBILE) this.mainPane_.removeMomentumScroller();
       }
     };
     default:break;
@@ -877,18 +808,14 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
     function(aEvent) {
 
   this.eventManager_.run();
-  if (rflect.MOBILE) {
-    // This is cal selector #1.
-    this.sidePane_.getChildAt(0).redrawIsNeeded = true;
-    // This is cal selector #2.
-    //this.sidePane_.getChildAt(1).redrawIsNeeded = true;
-  } else {
-    this.calSelectorMy_.redrawIsNeeded = true;
-    this.calSelectorOther_.redrawIsNeeded = true;
-  }
-  this.update([
-    this.getMiniCal(),
-    this.getTopPane()]);
+  this.getCalSelector().redrawIsNeeded = true;
+  this.getTaskSelector().redrawIsNeeded = true;
+
+  this.sidePane_.update();
+  this.sidePane_.getCalSelector().update();
+  this.sidePane_.getTaskSelector().update();
+  this.mainPane_.update();
+
 }
 
 
@@ -897,31 +824,8 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
  */
 rflect.cal.ui.MainBody.prototype.updateMainPane_ = function() {
   this.eventManager_.run();
-  if (rflect.MOBILE) {
-    this.updateBeforeRedraw([
-      this.getBottomPane(),
-      this.getSidePane(),
-      this.getTopPane()]
-    );
-    this.updateByRedraw([
-      this.getBottomPane(),
-      this.getSidePane(),
-      this.getTopPane()]
-    );
-  } else {
-    this.updateBeforeRedraw([
-      this.getCalSelector(),
-      this.getTaskSelector(),
-      this.getMiniCal(),
-      this.getTopPane()]
-    );
-    this.updateByRedraw([
-      this.getCalSelector(),
-      this.getTaskSelector(),
-      this.getMiniCal(),
-      this.getTopPane()]
-    );
-  }
+
+  this.getMainPane().updateBeforeRedraw();
 }
 
 
@@ -936,7 +840,6 @@ rflect.cal.ui.MainBody.prototype.disposeInternal = function() {
 
   this.topPane_ = null;
   this.bottomPane_ = null;
-  this.miniCal_ = null;
   this.mainPane_ = null;
   this.viewManager_ = null;
   this.timeManager_ = null;

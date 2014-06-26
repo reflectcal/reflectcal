@@ -74,7 +74,7 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, opt_configTop) 
 
   // Add buttons. No need for captions or content here, because we've decorated
   // them.
-  if (this.configTop_)
+  if (this.configTop_ || this.configCombined_)
     this.addChild(this.buttonMenu_ = new goog.ui.Button(null,
         goog.ui.FlatButtonRenderer.getInstance()));
   if (this.configBottom_ || this.configCombined_)
@@ -204,6 +204,11 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       '<div id="top-pane" class="control-pane">',
       '<div id="sidebar-controls">',
       // First button container.
+      // 'Menu' button.
+      '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
+          'id="' + rflect.cal.predefined.BUTTON_MENU_ID + '">' +
+          '<div class="icon icon-in-button icon-bars goog-inline-block"></div>',
+      '</div>',
       // 'Now' button.
       '<div id="' + rflect.cal.predefined.BUTTON_NOW_ID +
           '" class="' + goog.getCssName('goog-flat-button-collapse-right') + ' ',

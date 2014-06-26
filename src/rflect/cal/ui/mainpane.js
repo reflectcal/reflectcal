@@ -397,14 +397,13 @@ rflect.cal.ui.MainPane.prototype.setDefaultSizes_ = function() {
 
 /**
  * Updates main pane with new data before redraw. Includes size adjustment.
- * @param {Array.<goog.ui.Component>=} opt_exclusions Index(es) of component's
- * children which should be excluded from update.
+ * @param {boolean=} opt_deep Whether to update children.
  * @param {boolean=} opt_doNotRemoveScrollListeners Whether not to remove scroll
  * listeners.
  * @param {boolean=} opt_updateByNavigation Whether this update initiated by
  * buttons of top pane or minical.
  */
-rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_exclusions,
+rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
     opt_doNotRemoveScrollListeners, opt_updateByNavigation) {
   if (this.getParent().firstBuildWk && this.viewManager_.isInWeekMode() ||
       this.getParent().firstBuildMn && this.viewManager_.isInMonthMode())
@@ -1516,7 +1515,7 @@ rflect.cal.ui.MainPane.prototype.isGrip_ = function(aClassName) {
 rflect.cal.ui.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
   this.containerSizeMonitor_.checkForContainerSizeChange();
-  this.updateBeforeRedraw(null, true);
+  this.updateBeforeRedraw(false, true);
 
   var className = aEvent.target.className;
   var preventDefaultIsNeeded = false;
