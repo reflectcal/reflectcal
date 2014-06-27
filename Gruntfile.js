@@ -320,6 +320,45 @@ module.exports = function(grunt) {
       temp: ['build/_temp*', 'build/*.map']
     },
     closureBuilder: closureBuilderTask,
+    closureDepsWriter: {
+      options: {
+        // [REQUIRED] To find the depswriter executable we need either the path
+        // to closure library or the depswriter executable full path:
+        closureLibraryPath: 'src/closure-library',
+
+        // [OPTIONAL] Define the full path to the executable directly.
+        // If set it trumps 'closureLibraryPath' which will not be required.
+        // filepath to depswriter
+        depswriter: 'src/closure-library/closure/bin/build/depswriter.py',
+
+        // [OPTIONAL] Root directory to scan. Can be string or array
+        //root: [],
+
+        // [OPTIONAL] Root with prefix takes a pair of strings separated with a
+        // space, so proper way to use it is to surround with quotes.
+        // can be a string or array
+        root_with_prefix: [
+          '"src/rflect ../../../rflect"',
+          '"src/third-party ../../../third-party"'
+        ]
+
+        // [OPTIONAL] string or array
+        //path_with_depspath: ''
+
+
+      },
+       // any name that describes your operation
+      sourceDependencies: {
+
+        // [OPTIONAL] Set file targets. Can be a string, array or
+        //    grunt file syntax (<config:...> or *)
+        src: 'src/**.js',
+
+        // [OPTIONAL] If not set, will output to stdout
+        dest: 'src/deps.js'
+
+      }
+    },
     exec: lessTask,
     copy: {
       app: {
@@ -378,8 +417,17 @@ module.exports = function(grunt) {
         }
       }
 
+    },
+    less: {
+      development: {
+        options: {
+          paths: ['less']
+        },
+        files: {
+          'css/rflectcalendar.css': 'less/combined.less'
+        }
+      }
     }
-
   });
 
   grunt.registerTask('exportTargets', function() {
@@ -429,6 +477,14 @@ module.exports = function(grunt) {
     'copy:app',
     'exportTargets',
     'clean:temp'
+  ]);
+
+  grunt.registerTask('compile-less', [
+    'less:development'
+  ]);
+
+  grunt.registerTask('depswriter', [
+    'closureDepsWriter'
   ]);
 
 };
