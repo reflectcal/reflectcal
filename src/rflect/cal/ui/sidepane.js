@@ -292,7 +292,6 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
  * Decorates buttons, attaches event handlers for them.
  */
 rflect.cal.ui.SidePane.prototype.enterDocument = function() {
-
   if (this.miniCal_){
     this.miniCal_.decorateInternal(
         this.getDomHelper().getElement('month-selector'), true);
@@ -316,6 +315,11 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
     this.getHandler().listen(this.buttonSettings_,
         goog.events.EventType.CLICK, this.onSettingsClick_, false, this);
   }
+
+  if (this.showBehavior.isVisible()) {
+    this.showBehavior.assignEvents();
+  }
+
   this.getHandler().listen(this.showBehavior,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
       this.onSlideBreak_, false, this);

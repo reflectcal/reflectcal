@@ -248,19 +248,24 @@ body when (@UI_TYPE = 'MOBILE') {
   transition: margin-left .2s linear;
 }
 
-#main-pane() {
+.main-pane() {
   float: none;
   width: auto;
   cursor: default; /*IE7 shows text cursor.*/
+  transition: margin .2s;
 }
 
-#main-pane when (@UI_TYPE = '') {
-  #main-pane();
+.main-pane when (@UI_TYPE = '') {
+  .main-pane();
   margin-left: 230px;
 }
 
-#main-pane when (@UI_TYPE = 'MOBILE') {
-  #main-pane();
+.main-pane when (@UI_TYPE = 'MOBILE') {
+  .main-pane();
+}
+
+.main-pane-expanded {
+  margin-left: 0;
 }
 
 #main-pane-header {

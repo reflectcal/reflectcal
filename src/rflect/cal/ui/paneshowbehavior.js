@@ -145,6 +145,20 @@ rflect.cal.ui.PaneShowBehavior.prototype.setVisibleWithoutRender =
   this.visible_ = visible;
 }
 
+
+/**
+ * Assign transition end event listener.
+ */
+rflect.cal.ui.PaneShowBehavior.prototype.assignEvents =
+    function() {
+  if (this.slidingIsEnabled_ && !this.transitionEndKey_){
+    this.transitionEndKey_ = goog.events.listen(
+        this.component.getElement(),
+        rflect.browser.transitionend.VENDOR_TRANSITION_END_NAMES,
+        this.onSlideEnd_, false, this);
+  }
+}
+
 /**
  * Sets the visibility of the pane. Lazily renders the component if needed.
  * @param {boolean} visible Whether the pane should be visible.
@@ -159,12 +173,7 @@ rflect.cal.ui.PaneShowBehavior.prototype.setVisible = function(visible) {
     this.component.render(this.parentEl_);
   }
 
-  if (this.slidingIsEnabled_ && !this.transitionEndKey_){
-    this.transitionEndKey_ = goog.events.listen(
-        this.component.getElement(),
-        rflect.browser.transitionend.VENDOR_TRANSITION_END_NAMES,
-        this.onSlideEnd_, false, this);
-  }
+  this.assignEvents();
 
   // Here we emit events before pane becomes visible and after that.
   if (this.slidingIsEnabled_) {
@@ -270,7 +279,6 @@ rflect.cal.ui.PaneShowBehavior.prototype.onSlideEnd_ = function(aEvent) {
   if (this.dispatchEvent(
       new rflect.cal.ui.PaneShowBehavior.SlideEvent(false,
           this.visible_))) {
-
     if (false == this.visible_)
       this.showElement_(false);
 

@@ -602,6 +602,49 @@ rflect.cal.ui.MainBody.prototype.onSidePaneAction_ = function(aEvent) {
 
 
 /**
+ * Side pane slide handler.
+ * @param {rflect.cal.ui.PaneShowBehavior.SlideEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
+  if (aEvent.start && !aEvent.showing) {
+    if (rflect.MOBILE)
+      this.mainPane_.addMomentumScroller();
+    else
+      //NOTE(alexk): we can use rflect.cal.ui.MainBody.prototype.toggleSidePane
+      // instead which fires directly on button press.
+      this.mainPane_.expandElement(true);
+  }
+  if (!aEvent.start && aEvent.showing) {
+    if (rflect.MOBILE)
+      this.mainPane_.removeMomentumScroller();
+  }
+  if (aEvent.start && aEvent.showing) {
+    this.mainPane_.expandElement(false);
+  }
+}
+
+
+/**
+ * External pane slide handler.
+ * @param {rflect.cal.ui.PaneShowBehavior.SlideEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.MainBody.prototype.onExternalPaneSlide_ = function(aEvent) {
+  // If closing pane, show calendar on start.
+  if (aEvent.start && !aEvent.showing) {
+    this.showCalendar_(true);
+    if (rflect.MOBILE) this.mainPane_.addMomentumScroller();
+  }
+  // If opening pane, hide calendar on end.
+  if (!aEvent.start && aEvent.showing) {
+    this.showCalendar_(false);
+    if (rflect.MOBILE) this.mainPane_.removeMomentumScroller();
+  }
+}
+
+
+/**
  * Cal selector action handler.
  * @param {{type: string, visible: boolean, calendarId: string}} aEvent
  * Event object.
@@ -643,6 +686,9 @@ rflect.cal.ui.MainBody.prototype.showSidePane = function(aShow) {
 rflect.cal.ui.MainBody.prototype.toggleSidePane = function() {
   this.sidePane_.showBehavior.setVisible(
       !this.sidePane_.showBehavior.isVisible());
+  //NOTE(alexk): we can use main pane expand here instead if transition end
+  //event in rflect.cal.ui.MainBody.prototype.onSidePaneSlide_.
+  //this.mainPane_.expandElement(!this.sidePane_.showBehavior.isVisible());
 }
 
 
@@ -730,29 +776,10 @@ rflect.cal.ui.MainBody.prototype.showCalendar_ = function(aShow) {
  * object.
  */
 rflect.cal.ui.MainBody.prototype.onSlideBreak_ = function(aEvent) {
-
   switch (aEvent.target.component) {
     case this.settingsPane_: ;
-    case this.eventPane_: {
-      // If closing pane, show calendar on start.
-      if (aEvent.start && !aEvent.showing) {
-        this.showCalendar_(true);
-        if (rflect.MOBILE) this.mainPane_.addMomentumScroller();
-      }
-      // If opening pane, hide calendar on end.
-      if (!aEvent.start && aEvent.showing) {
-        this.showCalendar_(false);
-        if (rflect.MOBILE) this.mainPane_.removeMomentumScroller();
-      }
-    };break;
-    case this.sidePane_: {
-      if (aEvent.start && !aEvent.showing) {
-        if (rflect.MOBILE) this.mainPane_.addMomentumScroller();
-      }
-      if (!aEvent.start && aEvent.showing) {
-        if (rflect.MOBILE) this.mainPane_.removeMomentumScroller();
-      }
-    };
+    case this.eventPane_: this.onExternalPaneSlide_(aEvent);break;
+    case this.sidePane_: this.onSidePaneSlide_(aEvent);break;
     default:break;
   }
 }

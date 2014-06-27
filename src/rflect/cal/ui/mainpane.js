@@ -974,6 +974,18 @@ rflect.cal.ui.MainPane.prototype.showEventEditComponent_ = function(aTarget,
 
 
 /**
+ * Expands main pane element by removing side margin.
+ * @param {boolean} aExpand Whether to expand.
+ */
+rflect.cal.ui.MainPane.prototype.expandElement = function(aExpand) {
+  if (aExpand)
+    goog.dom.classes.add(this.getElement(), 'main-pane-expanded');
+  else
+    goog.dom.classes.remove(this.getElement(), 'main-pane-expanded');
+}
+
+
+/**
  * Main pane mouseout handler.
  */
 rflect.cal.ui.MainPane.prototype.onMouseOut_ = function(aEvent) {
