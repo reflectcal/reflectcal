@@ -11,266 +11,261 @@ var deepClone = require('clone');
 var fs = require('fs');
 var appConfig = require('./app/config/appconfig');
 
-/**
- * Production flag.
- * If it's true, it means that app is built for external world - sources,
- * source maps, source maps links won't be present in compiled code.
- * If it's false, app includes it all and could be tested on server in close
- * to production form.
- */
-var PRODUCTION = false;
-/**
- * This flag specifies that minimal number of compile targets will be
- * produced.
- */
-var FAST_DEBUG = true;
+module.exports = function(grunt) {
+  // Measure build time.
+  require('time-grunt')(grunt);
 
-// These are compilation target axises. So, total number of compilation
-// targets is product of array lengths.
-var LOCALES = PRODUCTION ? appConfig.LOCALES : ['en'];
-var DEBUG = PRODUCTION ? [true, false] : [true];
-var UI_TYPE = ['', 'MOBILE'];
-// Empty string means that user agent is not specified.
-var USER_AGENT = (PRODUCTION || !FAST_DEBUG) ?
-    ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'] : [''];
+  /**
+   * Production flag.
+   * If it's true, it means that app is built for external world - sources,
+   * source maps, source maps links won't be present in compiled code.
+   * If it's false, app includes it all and could be tested on server in close
+   * to production form.
+   */
+  var PRODUCTION = grunt.option('prod') || false;
 
-// Inputs for less compiler.
-var lessFileNames = [
-  'less/combined.less'
-];
+  // These are compilation target axises. So, total number of compilation
+  // targets is product of array lengths.
+  var LOCALES = PRODUCTION ? appConfig.LOCALES : ['en'];
+  var DEBUG = PRODUCTION ? [true, false] : [true];
+  var UI_TYPE = PRODUCTION ? ['', 'MOBILE'] : [''];
+  // Empty string means that user agent is not specified.
+  var USER_AGENT = PRODUCTION ?
+      ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'] : [''];
 
-function makeListOfCompileTargets() {
-  var targets = [];
+  // Inputs for less compiler.
+  var lessFileNames = [
+    'less/combined.less'
+  ];
 
-  LOCALES.forEach(function(locale) {
-    DEBUG.forEach(function(debug) {
-      UI_TYPE.forEach(function(uiType) {
-        USER_AGENT.forEach(function(userAgent) {
-          targets.push({
-            locale: locale,
-            debug: debug,
-            uiType: uiType,
-            userAgent: userAgent
+  function makeListOfCompileTargets() {
+    var targets = [];
+
+    LOCALES.forEach(function(locale) {
+      DEBUG.forEach(function(debug) {
+        UI_TYPE.forEach(function(uiType) {
+          USER_AGENT.forEach(function(userAgent) {
+            targets.push({
+              locale: locale,
+              debug: debug,
+              uiType: uiType,
+              userAgent: userAgent
+            });
           });
         });
       });
     });
-  });
 
-  return targets;
-}
+    return targets;
+  }
 
-function fillCompileTargetsWithDefines(aTargets) {
-  var targets = [];
+  function fillCompileTargetsWithDefines(aTargets) {
+    var targets = [];
 
-  aTargets.forEach(function(target) {
-    target.jsCompDefines = [];
-    target.lessDefines = [];
+    aTargets.forEach(function(target) {
+      target.jsCompDefines = [];
+      target.lessDefines = [];
 
-    // Locale.
-    target.jsCompDefines.push("goog.LOCALE='" + target.locale + "'");
-    // DEBUG.
-    target.jsCompDefines.push("'goog.DEBUG=" + target.debug + "'");
-    // UI type.
-    target.jsCompDefines.push("rflect.UI_TYPE='" + target.uiType + "'");
-    target.lessDefines.push("UI_TYPE='" + target.uiType + "'");
-    // Assumptions on user agent.
-    if (target.userAgent)
-      target.jsCompDefines.push("'goog.userAgent.ASSUME_" + target.userAgent +
-          "=true'");
+      // Locale.
+      target.jsCompDefines.push("goog.LOCALE='" + target.locale + "'");
+      // DEBUG.
+      target.jsCompDefines.push("'goog.DEBUG=" + target.debug + "'");
+      // UI type.
+      target.jsCompDefines.push("rflect.UI_TYPE='" + target.uiType + "'");
+      target.lessDefines.push("UI_TYPE='" + target.uiType + "'");
+      // Assumptions on user agent.
+      if (target.userAgent)
+        target.jsCompDefines.push("'goog.userAgent.ASSUME_" + target.userAgent +
+            "=true'");
 
-  });
+    });
 
-  return aTargets;
-}
+    return aTargets;
+  }
 
-/**
- * @typedef {{locale:String, debug:boolean, uiType:string, userAgent:string,
- *    jsCompDefines:Array.<string>, lessDefines:Array.<string>,
- *    jsFilename:string, cssFilename:string}}
- */
-var Target;
+  /**
+   * @typedef {{locale:String, debug:boolean, uiType:string, userAgent:string,
+   *    jsCompDefines:Array.<string>, lessDefines:Array.<string>,
+   *    jsFilename:string, cssFilename:string}}
+   */
+  var Target;
 
-/**
- * @type {Array.<Target>}
- */
-var TARGETS = fillCompileTargetsWithDefines(makeListOfCompileTargets());
+  /**
+   * @type {Array.<Target>}
+   */
+  var TARGETS = fillCompileTargetsWithDefines(makeListOfCompileTargets());
 
-/**
- * Map of css compilation key to array of associated target indexes.
- * @type {Object.<string,number>}
- */
-var cssKeysToTargetIndexes = {};
+  /**
+   * Map of css compilation key to array of associated target indexes.
+   * @type {Object.<string,number>}
+   */
+  var cssKeysToTargetIndexes = {};
 
-// Closure builder task without targets.
-var closureBuilderTask = {
-  options: {
-    // [REQUIRED] To find the builder executable we need either the path to
-    //    closure library or directly the filepath to the builder:
-    closureLibraryPath: 'src/closure-library', // path to closure library
-    // [OPTIONAL] You can define an alternative path of the builder.
-    //    If set it trumps 'closureLibraryPath' which will not be required.
-    //builder: 'path/to/closurebuilder.py',
+  // Closure builder task without targets.
+  var closureBuilderTask = {
+    options: {
+      // [REQUIRED] To find the builder executable we need either the path to
+      //    closure library or directly the filepath to the builder:
+      closureLibraryPath: 'src/closure-library', // path to closure library
+      // [OPTIONAL] You can define an alternative path of the builder.
+      //    If set it trumps 'closureLibraryPath' which will not be required.
+      //builder: 'path/to/closurebuilder.py',
 
-    // [REQUIRED] One of the two following options is required:
-    //inputs: ['src/closure-library', 'src/rflect'], // input files (can just be the entry point)
-    namespaces: ['rflect.cal.Loader'], // namespaces
+      // [REQUIRED] One of the two following options is required:
+      //inputs: ['src/closure-library', 'src/rflect'], // input files (can just be the entry point)
+      namespaces: ['rflect.cal.Loader'], // namespaces
 
-    // [OPTIONAL] The location of the compiler.jar
-    // This is required if you set the option "compile" to true.
-    compilerFile: 'bin/compiler.jar',
+      // [OPTIONAL] The location of the compiler.jar
+      // This is required if you set the option "compile" to true.
+      compilerFile: 'bin/compiler.jar',
 
-    // [OPTIONAL] output_mode can be 'list', 'script' or 'compiled'.
-    //    If compile is set to true, 'compiled' mode is enforced.
-    //    Default is 'script'.
-    //output_mode: '',
+      // [OPTIONAL] output_mode can be 'list', 'script' or 'compiled'.
+      //    If compile is set to true, 'compiled' mode is enforced.
+      //    Default is 'script'.
+      //output_mode: '',
 
-    // [OPTIONAL] if we want builder to perform compile
-    compile: true, // boolean
+      // [OPTIONAL] if we want builder to perform compile
+      compile: true, // boolean
 
-    compilerOpts: {
-      /**
-       * Go wild here...
-       * any key will be used as an option for the compiler
-       * value can be a string or an array
-       * If no value is required use null
-       */
+      compilerOpts: {
+        /**
+         * Go wild here...
+         * any key will be used as an option for the compiler
+         * value can be a string or an array
+         * If no value is required use null
+         */
 
 
-      /**
-       * Keys will be used as directives for the compiler
-       * values can be strings or arrays.
-       * If no value is required use null
-       *
-       * The directive 'externs' is treated as a special case
-       * allowing a grunt file syntax (<config:...>, *)
-       *
-       * Following are some directive samples...
-       */
-      compilation_level: 'ADVANCED_OPTIMIZATIONS',
-      summary_detail_level: 3,
-      warning_level: 'VERBOSE',
-      js: ['src/deps.js', 'src/closure-library/closure/goog/deps.js'],
-      define: ["'goog.DEBUG=false'"],
-      debug: false,
-      source_map_format: 'V3',
-      create_source_map: 'build/outputcompiled.js.map',
-      formatting: ['PRETTY_PRINT', 'PRINT_INPUT_DELIMITER'],
-      closure_entry_point: 'rflect.cal.Loader',
+        /**
+         * Keys will be used as directives for the compiler
+         * values can be strings or arrays.
+         * If no value is required use null
+         *
+         * The directive 'externs' is treated as a special case
+         * allowing a grunt file syntax (<config:...>, *)
+         *
+         * Following are some directive samples...
+         */
+        compilation_level: 'ADVANCED_OPTIMIZATIONS',
+        summary_detail_level: 3,
+        warning_level: 'VERBOSE',
+        js: ['src/deps.js', 'src/closure-library/closure/goog/deps.js'],
+        define: ["'goog.DEBUG=false'"],
+        debug: false,
+        source_map_format: 'V3',
+        create_source_map: 'build/outputcompiled.js.map',
+        formatting: ['PRETTY_PRINT', 'PRINT_INPUT_DELIMITER'],
+        closure_entry_point: 'rflect.cal.Loader',
 
-      externs: ['src/externs.js'],
+        externs: ['src/externs.js'],
+      },
+      // [OPTIONAL] Set exec method options
+      execOpts: {
+        /**
+         * Set maxBuffer if you got message "Error: maxBuffer exceeded."
+         * Node default: 200*1024
+         * maxBuffer: 999999 * 1024
+         */
+        maxBuffer: 200 * 1024
+      }
+
+    }
+
+  }
+
+  // Any closureBuilder task target must inherit this template.
+  var compilationTargetTemplate = {
+    options: {
+      compilerOpts: {
+        charset: 'utf-8',
+        compilation_level: 'ADVANCED_OPTIMIZATIONS',
+        summary_detail_level: 3,
+        warning_level: 'VERBOSE',
+        js: ['src/deps.js', 'src/closure-library/closure/goog/deps.js'],
+        define: [],
+        debug: false,
+        source_map_format: 'V3',
+        closure_entry_point: 'rflect.cal.Loader',
+
+        externs: ['src/externs.js']
+      }
     },
-    // [OPTIONAL] Set exec method options
-    execOpts: {
-      /**
-       * Set maxBuffer if you got message "Error: maxBuffer exceeded."
-       * Node default: 200*1024
-       * maxBuffer: 999999 * 1024
-       */
-      maxBuffer: 200 * 1024
-    }
 
-  }
+    // [REQUIRED] paths to be traversed to build the dependencies
+    src: ['src/closure-library', 'src/rflect'],
 
-}
-
-// Any closureBuilder task target must inherit this template.
-var compilationTargetTemplate = {
-  options: {
-    compilerOpts: {
-      charset: 'utf-8',
-      compilation_level: 'ADVANCED_OPTIMIZATIONS',
-      summary_detail_level: 3,
-      warning_level: 'VERBOSE',
-      js: ['src/deps.js', 'src/closure-library/closure/goog/deps.js'],
-      define: [],
-      debug: false,
-      source_map_format: 'V3',
-      closure_entry_point: 'rflect.cal.Loader',
-
-      externs: ['src/externs.js']
-    }
-  },
-
-  // [REQUIRED] paths to be traversed to build the dependencies
-  src: ['src/closure-library', 'src/rflect'],
-
-  // [OPTIONAL] if not set, will output to stdout
-  dest: 'build/outputcompiled.js'
-};
+    // [OPTIONAL] if not set, will output to stdout
+    dest: 'build/outputcompiled.js'
+  };
 
 
-function targetToJsFileMapper(aTarget, aIndex){
-  var targetOptions = deepClone(compilationTargetTemplate);
-
-  if (!PRODUCTION) {
-    var sourceMapName = 'build/outputcompiled-' + aTarget.locale + '.js.' +
-        aIndex + '.map'
-    targetOptions.options.compilerOpts.create_source_map =
-        sourceMapName;
-  }
-
-  targetOptions.options.compilerOpts.define = aTarget.jsCompDefines;
-
-  targetOptions.dest = 'build/' + '_temp' + aIndex + '.outputcompiled-' +
-      aTarget.locale +
-      (aTarget.userAgent ? '-' + aTarget.userAgent : '')  +
-      (aTarget.uiType ? '-' + aTarget.uiType : '')  +
-      (aTarget.debug ? '-debug' : '')  +
-      '.js';
-
-  closureBuilderTask['compileForTarget-' + aIndex] = targetOptions;
-
-}
-
-var lessTask = {};
-
-var lessTargetTemplate = {
-  command: ''
-}
-
-function makeLessCompCommand(aKey, aTarget) {
-  var outputFileName = 'build/' + '_temp.' + aKey + '.outputcompiled' +
-      (aTarget.uiType ? '-' + aTarget.uiType : '')  +
-      '.css'
-
-  return ['lessc', '--verbose', '--compress']
-      .concat(lessFileNames).concat(['>', outputFileName])
-      .concat(aTarget.lessDefines.map(function(aDefine){
-    return '--modify-var=' + aDefine;
-  })).join(' ');
-}
-
-function targetToCssFileMapper(aTarget, aIndex){
-  var targetOptions = deepClone(lessTargetTemplate);
-
-  //TODO(alexk): for now, css are only defined by ui type.
-  var key = aTarget.uiType;
-
-  if (!cssKeysToTargetIndexes[key]) {
-    cssKeysToTargetIndexes[key] = [];
+  function targetToJsFileMapper(aTarget, aIndex){
+    var targetOptions = deepClone(compilationTargetTemplate);
 
     if (!PRODUCTION) {
-      /*var sourceMapName = 'build/outputcompiled-' + aTarget.locale + '.js.' +
+      var sourceMapName = 'build/outputcompiled-' + aTarget.locale + '.js.' +
           aIndex + '.map'
       targetOptions.options.compilerOpts.create_source_map =
-          sourceMapName;*/
+          sourceMapName;
     }
 
-    targetOptions.command = makeLessCompCommand(key, aTarget);
-    lessTask['lessForTarget-' + key] = targetOptions;
+    targetOptions.options.compilerOpts.define = aTarget.jsCompDefines;
+
+    targetOptions.dest = 'build/' + '_temp' + aIndex + '.outputcompiled-' +
+        aTarget.locale +
+        (aTarget.userAgent ? '-' + aTarget.userAgent : '')  +
+        (aTarget.uiType ? '-' + aTarget.uiType : '')  +
+        (aTarget.debug ? '-debug' : '')  +
+        '.js';
+
+    closureBuilderTask['compileForTarget-' + aIndex] = targetOptions;
+
   }
 
-  cssKeysToTargetIndexes[key].push(aIndex);
-}
+  var lessTask = {};
 
-TARGETS.forEach(targetToJsFileMapper);
+  var lessTargetTemplate = {
+    command: ''
+  }
 
-TARGETS.forEach(targetToCssFileMapper);
+  function makeLessCompCommand(aKey, aTarget) {
+    var outputFileName = 'build/' + '_temp.' + aKey + '.outputcompiled' +
+        (aTarget.uiType ? '-' + aTarget.uiType : '')  +
+        '.css'
 
-module.exports = function(grunt) {
-  // Measure build time.
-  require('time-grunt')(grunt);
+    return ['lessc', '--verbose', '--compress']
+        .concat(lessFileNames).concat(['>', outputFileName])
+        .concat(aTarget.lessDefines.map(function(aDefine){
+      return '--modify-var=' + aDefine;
+    })).join(' ');
+  }
+
+  function targetToCssFileMapper(aTarget, aIndex){
+    var targetOptions = deepClone(lessTargetTemplate);
+
+    //TODO(alexk): for now, css are only defined by ui type.
+    var key = aTarget.uiType;
+
+    if (!cssKeysToTargetIndexes[key]) {
+      cssKeysToTargetIndexes[key] = [];
+
+      if (!PRODUCTION) {
+        /*var sourceMapName = 'build/outputcompiled-' + aTarget.locale + '.js.' +
+            aIndex + '.map'
+        targetOptions.options.compilerOpts.create_source_map =
+            sourceMapName;*/
+      }
+
+      targetOptions.command = makeLessCompCommand(key, aTarget);
+      lessTask['lessForTarget-' + key] = targetOptions;
+    }
+
+    cssKeysToTargetIndexes[key].push(aIndex);
+  }
+
+  TARGETS.forEach(targetToJsFileMapper);
+
+  TARGETS.forEach(targetToCssFileMapper);
 
   function jsFileToTargetMapper(dest, src){
     var fileName = src.substring(src.indexOf('/'));
@@ -317,7 +312,8 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     clean: {
       all: ['build/*'],
-      temp: ['build/_temp*', 'build/*.map']
+      temp: ['build/_temp*', 'build/*.map'],
+      css: ['css/*.css']
     },
     closureBuilder: closureBuilderTask,
     closureDepsWriter: {
@@ -480,6 +476,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('compile-less', [
+    'clean:css',
     'less:development'
   ]);
 
@@ -487,4 +484,8 @@ module.exports = function(grunt) {
     'closureDepsWriter'
   ]);
 
+  grunt.registerTask('compile', [
+    'clean:all',
+    'closureBuilder'
+  ]);
 };
