@@ -222,11 +222,19 @@ module.exports = function(grunt) {
 
   }
 
-  var lessTask = {};
+  /**
+   * Common exec task.
+   */
+  var execTask = {};
 
-  var lessTargetTemplate = {
+  var execTaskTemplate = {
     command: ''
   }
+
+  /**
+   * Less task names, like lessForTarget-* .
+   */
+  var lessTaskNames = [];
 
   function makeLessCompCommand(aKey, aTarget) {
     var outputFileName = 'build/' + '_temp.' + aKey + '.outputcompiled' +
@@ -241,7 +249,7 @@ module.exports = function(grunt) {
   }
 
   function targetToCssFileMapper(aTarget, aIndex){
-    var targetOptions = deepClone(lessTargetTemplate);
+    var targetOptions = deepClone(execTaskTemplate);
 
     //TODO(alexk): for now, css are only defined by ui type.
     var key = aTarget.uiType;
@@ -257,7 +265,9 @@ module.exports = function(grunt) {
       }
 
       targetOptions.command = makeLessCompCommand(key, aTarget);
-      lessTask['lessForTarget-' + key] = targetOptions;
+      var lessTaskName = 'lessForTarget-' + key;
+      execTask[lessTaskName] = targetOptions;
+      lessTaskNames.push('exec:' + lessTaskName);
     }
 
     cssKeysToTargetIndexes[key].push(aIndex);
@@ -355,7 +365,7 @@ module.exports = function(grunt) {
 
       }
     },
-    exec: lessTask,
+    exec: execTask,
     copy: {
       app: {
         expand: true,
@@ -462,9 +472,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
 
   // Default task(s).
-  grunt.registerTask('default', [
+  var buildTask = [
     'clean:all',
-    'exec',//less
+    //Less tasks will be inserted here, since they share common exec task, we
+    // must place them all explicitly by name, to not interfere with other exec
+    // tasks.
+    ,
     'closureBuilder',
     'filerev',
     'wrap:renameCss',
@@ -473,7 +486,13 @@ module.exports = function(grunt) {
     'copy:app',
     'exportTargets',
     'clean:temp'
-  ]);
+  ];
+  //Insert less exec tasks.
+  Array.prototype.splice.apply(buildTask, [1, 1].concat(lessTaskNames));
+
+  grunt.registerTask('default', buildTask);
+
+  grunt.registerTask('build', buildTask);
 
   grunt.registerTask('compile-less', [
     'clean:css',
