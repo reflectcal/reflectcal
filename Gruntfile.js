@@ -231,6 +231,26 @@ module.exports = function(grunt) {
     command: ''
   }
 
+  var gJsLintTaskName = 'gjslinter';
+  var fixJsStyleTaskName = 'fixjsstyle';
+
+  //Creating linter tasks;
+  (function(){
+    var targetOptions = deepClone(execTaskTemplate);
+
+    targetOptions.command = ['python', 'bin/gjslint.py',
+        '--strict', '-r', 'src/rflect'].join(' ');
+    execTask[gJsLintTaskName] = targetOptions;
+  })();
+
+  (function(){
+    var targetOptions = deepClone(execTaskTemplate);
+
+    targetOptions.command = ['python', 'bin/fixjsstyle.py',
+        '--strict', '-r', 'src/rflect'].join(' ');
+    execTask[fixJsStyleTaskName] = targetOptions;
+  })();
+
   /**
    * Less task names, like lessForTarget-* .
    */
@@ -470,6 +490,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-renaming-wrap');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-closure-linter');
 
   // Default task(s).
   var buildTask = [
@@ -477,7 +498,7 @@ module.exports = function(grunt) {
     //Less tasks will be inserted here, since they share common exec task, we
     // must place them all explicitly by name, to not interfere with other exec
     // tasks.
-    ,
+    /*exec:lessForTarget-1*/,
     'closureBuilder',
     'filerev',
     'wrap:renameCss',
@@ -506,5 +527,13 @@ module.exports = function(grunt) {
   grunt.registerTask('compile', [
     'clean:all',
     'closureBuilder'
+  ]);
+
+  grunt.registerTask('gjslinter', [
+    'exec:' + gJsLintTaskName
+  ]);
+
+  grunt.registerTask('fixjstyle', [
+    'exec:' + fixJsStyleTaskName
   ]);
 };
