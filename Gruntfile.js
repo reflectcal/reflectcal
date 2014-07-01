@@ -473,7 +473,7 @@ module.exports = function(grunt) {
     });
 
     var contents = templateContents.replace('/*{TARGETS_JSON}*/[]',
-        JSON.stringify(TARGETS, null, '  '));
+        JSON.stringify(TARGETS, null, '  ').replace(/\"/g,"'"));
 
     fs.writeFileSync(targetsFileName, contents);
 
