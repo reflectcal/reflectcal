@@ -18,7 +18,7 @@ mkdir mongostorage
 mongod --dbpath mongostorage
 ```
 
-3. Globally install following node modules - Express, Grunt, Less.
+4. Globally install following node modules - Express, Grunt, Less.
 
 ```
 npm install express -g
@@ -26,20 +26,20 @@ npm install less -g
 npm install grunt-cli -g
 ```
 
-4. Locally to project, install all needed node modules.
+5. Locally to project, install all needed node modules.
 
 ```
 cd reflectcal
 npm install
 ```
 
-5. Compile css from less.
+6. Compile css from less.
 
 ```
 grunt compile-less
 ```
 
-6. Launch an application.
+7. Launch an application.
 
 ```
 node app
