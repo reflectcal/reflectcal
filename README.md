@@ -13,37 +13,37 @@ Installation and run
 3. Install [MongoDB][mongodb]. Create storage folder for it, may as well start
 an instance.
 
-```
-mkdir mongostorage
-mongod --dbpath mongostorage
-```
+  ```
+  mkdir mongostorage
+  mongod --dbpath mongostorage
+  ```
 
 4. Globally install following node modules - Express, Grunt, Less.
 
-```
-npm install express -g
-npm install less -g
-npm install grunt-cli -g
-```
+  ```
+  npm install express -g
+  npm install less -g
+  npm install grunt-cli -g
+  ```
 
 5. Locally to project, install all needed node modules.
 
-```
-cd reflectcal
-npm install
-```
+  ```
+  cd reflectcal
+  npm install
+  ```
 
 6. Compile css from less.
 
-```
-grunt compile-less
-```
+  ```
+  grunt compile-less
+  ```
 
 7. Launch an application.
 
-```
-node app
-```
+  ```
+  node app
+  ```
 
 And go to [http://localhost:3000/view-source/](http://localhost:3000/view-source/)
 
