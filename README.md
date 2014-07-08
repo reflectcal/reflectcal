@@ -18,7 +18,8 @@ an instance.
   mongod --dbpath mongostorage
   ```
 
-4. Globally install following node modules - Express, Grunt, Less.
+4. Globally install following node modules - [Express][express], [Grunt][grunt], 
+        [Less][less].
 
   ```
   npm install express -g
