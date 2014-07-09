@@ -515,6 +515,9 @@ rflect.cal.ui.SettingsPane.prototype.showCalendarsPane = function(aShow,
         rflect.cal.ui.CalendarsPane.EventTypes.CANCEL,
         this.onCalendarsPaneCancel_, false, this)
         .listen(this.calendarsPane_,
+        rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_DELETE,
+        this.onCalendarsPaneDelete_, false, this)
+        .listen(this.calendarsPane_,
         rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
         this.onCalendarUpdate_, false, this);
   }
@@ -537,6 +540,14 @@ rflect.cal.ui.SettingsPane.prototype.onCalendarsPaneCancel_ = function() {
 
 
 /**
+ * Calendars pane delete listener.
+ */
+rflect.cal.ui.SettingsPane.prototype.onCalendarsPaneDelete_ = function() {
+  this.showCalendarsPane(false);
+}
+
+
+/**
  * Settings pane link calendar update listener.
  * @param {goog.events.Event} aEvent Event object.
  * @private
@@ -544,7 +555,6 @@ rflect.cal.ui.SettingsPane.prototype.onCalendarsPaneCancel_ = function() {
 rflect.cal.ui.SettingsPane.prototype.onCalendarUpdate_ =
     function(aEvent) {
   this.updateCalendarTables_(this.getDomHelper(), this.tabContents2_);
-  this.showCalendarsPane(false);
 }
 
 

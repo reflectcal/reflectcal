@@ -475,7 +475,9 @@ rflect.cal.ui.CalendarsPane.prototype.onDeleteCalendarAction_ =
 
   this.setCurrentCalendar(null);
 
-  this.showBehavior.setVisible(false);
+  if (this.dispatchEvent(new goog.events.Event(
+        rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_DELETE)))
+    this.showBehavior.setVisible(false);
 
 }
 
