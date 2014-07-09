@@ -853,6 +853,7 @@ rflect.cal.ui.MainBody.prototype.updateMainPane_ = function() {
   this.eventManager_.run();
 
   this.getMainPane().updateBeforeRedraw();
+  this.getMainPane().updateByRedraw();
 }
 
 
