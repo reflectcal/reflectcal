@@ -32,7 +32,8 @@
     "time-grunt": "~0.1.1",
     "less": "~1.5.1",
     "grunt-contrib-watch": "~0.5.3",
-    "grunt-contrib-less": "~0.8.2"
+    "grunt-contrib-less": "~0.8.2",
+    "grunt-closure-linter": "~0.1.4"
   },
   "dependencies": {
     "express": "~3.4.3",
