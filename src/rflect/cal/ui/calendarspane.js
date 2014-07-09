@@ -72,7 +72,8 @@ goog.inherits(rflect.cal.ui.CalendarsPane, rflect.cal.ui.ExternalPane);
 rflect.cal.ui.CalendarsPane.EventTypes = {
   CANCEL: 'calendarsPaneCancel',
   SAVE: 'save',
-  CALENDAR_UPDATE: 'calendarUpdate'
+  CALENDAR_UPDATE: 'calendarUpdate',
+  CALENDAR_DELETE: 'calendarDelete'
 };
 
 
@@ -464,15 +465,19 @@ rflect.cal.ui.CalendarsPane.prototype.onSaveCalendarResponse_ =
  */
 rflect.cal.ui.CalendarsPane.prototype.onDeleteCalendarAction_ =
     function(aEvent) {
-      this.eventManager.deleteCalendar(this.currentCalendar_);
+  this.eventManager.deleteCalendar(this.currentCalendar_);
 
-      this.transport.deleteCalendarAsync(
-          this.currentCalendar_);
+  this.transport.deleteCalendarAsync(
+      this.currentCalendar_);
 
-      this.dispatchEvent(new goog.events.Event(
-          rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE));
+  this.dispatchEvent(new goog.events.Event(
+      rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE));
 
-    }
+  this.setCurrentCalendar(null);
+
+  this.showBehavior.setVisible(false);
+
+}
 
 
 /**
@@ -486,7 +491,6 @@ rflect.cal.ui.CalendarsPane.prototype.onDeleteCalendarResponse_ =
     function(aEvent) {
   this.dispatchEvent(new goog.events.Event(
       rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE));
-  this.showBehavior.setVisible(false);
 }
 
 

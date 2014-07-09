@@ -544,6 +544,7 @@ rflect.cal.ui.SettingsPane.prototype.onCalendarsPaneCancel_ = function() {
 rflect.cal.ui.SettingsPane.prototype.onCalendarUpdate_ =
     function(aEvent) {
   this.updateCalendarTables_(this.getDomHelper(), this.tabContents2_);
+  this.showCalendarsPane(false);
 }
 
 
