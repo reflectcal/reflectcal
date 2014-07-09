@@ -338,27 +338,28 @@ rflect.cal.ui.CalSelector.prototype.buildContent = function (aSb) {
 /**
  * Updates list selector with new data before redraw. Includes size adjustment.
  * @param {boolean=} opt_deep Whether to update children.
- * @param {boolean=} opt_firstTime Whether it's a first time update.
  */
-rflect.cal.ui.CalSelector.prototype.updateBeforeRedraw = function(opt_deep,
-    opt_firstTime) {
+rflect.cal.ui.CalSelector.prototype.updateBeforeRedraw = function(opt_deep) {
   if (rflect.MOBILE)
     return;
+
+  // Whether we building left pane fist time as a hollow elements. We do so to
+  // measure their sizes.
+  var firstBuildLeftPane = this.getParent().getParent().firstBuildLeftPane;
 
   // Take current viewport size.
   this.scrollableSize_ = this.containerSizeMonitor_.getSize();
 
-  if (opt_firstTime)
+  if (firstBuildLeftPane){
     this.scrollableSize_.height = 0;
-  else {
-    var staticSizes = this.getParent().staticSizesLeftPane;
-    //this.scrollableSize_.height -= staticSizes.height;
+  } else {
+    var staticSizes = this.getParent().getParent().staticSizesLeftPane;
+    this.scrollableSize_.height -= staticSizes.height;
   }
 
   // Default behaviour is to have two selectors in a column, so divide height
   // by 2.
-  if (!opt_firstTime)
-    this.scrollableSize_.height /= 2;
+  this.scrollableSize_.height /= 2;
 };
 
 
