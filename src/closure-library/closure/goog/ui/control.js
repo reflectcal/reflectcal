@@ -231,6 +231,15 @@ goog.ui.Control.prototype.handleMouseEvents_ = true;
 
 
 /**
+ * Whether the control should listen for and handle touch events; defaults to
+ * true.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.Control.prototype.handleTouchEvents_ = true;
+
+
+/**
  * Whether the control allows text selection within its DOM.  Defaults to false.
  * @type {boolean}
  * @private
@@ -263,6 +272,14 @@ goog.ui.Control.prototype.isHandleMouseEvents = function() {
 
 
 /**
+ * @return {boolean} Whether the control handles its own touch events.
+ */
+goog.ui.Control.prototype.isHandleTouchEvents = function() {
+  return this.handleTouchEvents_;
+};
+
+
+/**
  * Enables or disables mouse event handling for the control.  Containers may
  * use this method to disable mouse event handling in their child controls.
  * Considered protected; should only be used within this package and by
@@ -275,6 +292,18 @@ goog.ui.Control.prototype.setHandleMouseEvents = function(enable) {
     this.enableMouseEventHandling_(enable);
   }
   this.handleMouseEvents_ = enable;
+};
+
+
+/**
+ * @param {boolean} enable Whether to enable or disable touch event handling.
+ */
+goog.ui.Control.prototype.setHandleTouchEvents = function(enable) {
+  if (this.isInDocument() && enable != this.handleTouchEvents_) {
+    // Already in the document; need to update event handler.
+    this.enableTouchEventHandling_(enable);
+  }
+  this.handleTouchEvents_ = enable;
 };
 
 
@@ -535,6 +564,10 @@ goog.ui.Control.prototype.enterDocument = function() {
       this.enableMouseEventHandling_(true);
     }
 
+    if (this.isHandleTouchEvents()) {
+      this.enableTouchEventHandling_(true);
+    }
+
     // Initialize keyboard event handling if the control is focusable and has
     // a key event target.  (Controls hosted in containers typically aren't
     // focusable, allowing their container to handle keyboard events for them.)
@@ -593,6 +626,76 @@ goog.ui.Control.prototype.enableMouseEventHandling_ = function(enable) {
     if (goog.userAgent.IE) {
       handler.unlisten(element, goog.events.EventType.DBLCLICK,
           this.handleDblClick);
+    }
+  }
+};
+
+
+/**
+ * Enables or disables touch event handling on the control.
+ * @param {boolean} enable Whether to enable touch event handling.
+ * @private
+ */
+goog.ui.Control.prototype.enableTouchEventHandling_ = function(enable) {
+  var handler = this.getHandler();
+  var element = this.getElement();
+  if (enable) {
+    handler.
+        listen(element, goog.events.EventType.TOUCHSTART,
+            this.handleTouchStart).
+        listen(element, goog.events.EventType.TOUCHEND, this.handleTouchEnd);
+
+  } else {
+    handler.
+        unlisten(element, goog.events.EventType.TOUCHSTART,
+            this.handleTouchStart).
+        unlisten(element, goog.events.EventType.TOUCHEND, this.handleTouchEnd);
+  }
+};
+
+
+/**
+ * Handles touchdown events.  If the component is enabled, highlights and
+ * activates it.  If the component isn't configured for keyboard access,
+ * prevents it from receiving keyboard focus.  Considered protected; should
+ * only be used within this package andy by subclasses.
+ * @param {goog.events.Event} e Touch event to handle.
+ */
+goog.ui.Control.prototype.handleTouchStart = function(e) {
+  if (this.isEnabled()) {
+    // Activate the control, and focus its key event
+    // target (if supported).
+
+    if (this.isAutoState(goog.ui.Component.State.ACTIVE)) {
+      this.setActive(true);
+    }
+    if (this.renderer_.isFocusable(this)) {
+      this.getKeyEventTarget().focus();
+    }
+
+  }
+
+  // Cancel the default action unless the control allows text selection.
+  if (!this.isAllowTextSelection() && e.isMouseActionButton()) {
+    e.preventDefault();
+  }
+};
+
+
+/**
+ * Handles touchup events.  If the component is enabled, highlights it.  If
+ * the component has previously been activated, performs its associated action
+ * by calling {@link performActionInternal}, then deactivates it.  Considered
+ * protected; should only be used within this package and by subclasses.
+ * @param {goog.events.Event} e Touch event to handle.
+ */
+goog.ui.Control.prototype.handleTouchEnd = function(e) {
+  if (this.isEnabled()) {
+
+    if (this.isActive() &&
+        this.performActionInternal(e) &&
+        this.isAutoState(goog.ui.Component.State.ACTIVE)) {
+      this.setActive(false);
     }
   }
 };
