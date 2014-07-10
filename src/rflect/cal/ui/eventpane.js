@@ -391,7 +391,9 @@ rflect.cal.ui.EventPane.prototype.setNewEventMode = function(
  * @private
  */
 rflect.cal.ui.EventPane.prototype.onKeyDown_ = function(aEvent) {
-  if (this.visible_ && !this.startTimeAC_.getRenderer().isVisible() &&
+
+  if (this.showBehavior.isVisible() &&
+      !this.startTimeAC_.getRenderer().isVisible() &&
       !this.endTimeAC_.getRenderer().isVisible()) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
