@@ -181,6 +181,8 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
    mphs-scroll-vert-on, mphs-scroll-horz-on).*/
   '" style="height:',
   /*Height of scrollable in pixels (100).*/
+  'px;margin-right:',
+  /*Margin that replaces scroll bar(16).*/
   'px">',
   // Allday events grid wrapper.
   '<div id="alldayevents-grid-wrapper">',
@@ -909,8 +911,10 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildScrollableAllday_ =
   else
     aSb.append(goog.getCssName('mphs-scroll-horz-off'));
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
-  // Size off allday scrollable.
+  // Size of allday scrollable.
   aSb.append(this.blockPoolAllDay_.gridContainerSize.height);
+  // Margin that replaces scrollbar.
+  aSb.append(this.containerSizeMonitor_.scrollbarWidth - 1);
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
 };
 

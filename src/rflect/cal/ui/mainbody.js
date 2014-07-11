@@ -615,12 +615,16 @@ rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
       // instead which fires directly on button press.
       this.mainPane_.expandElement(true);
   }
-  if (!aEvent.start && aEvent.showing) {
-    if (rflect.MOBILE)
-      this.mainPane_.removeMomentumScroller();
+  if (!aEvent.start && !aEvent.showing) {
+    this.measureStaticSizes();
   }
   if (aEvent.start && aEvent.showing) {
     this.mainPane_.expandElement(false);
+  }
+  if (!aEvent.start && aEvent.showing) {
+    if (rflect.MOBILE)
+      this.mainPane_.removeMomentumScroller();
+    this.measureStaticSizes();
   }
 }
 
