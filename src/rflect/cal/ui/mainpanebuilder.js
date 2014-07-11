@@ -570,44 +570,44 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
       };break;
       case 23: {
         this.buildScrollableAllday_(aSb, offset);
-          offset += 2;
+          offset += 3;
       };break;
-      case 25: {
+      case 26: {
         if (aFirstBuild)
           offset += 26;
       };break;
-      case 27: {
+      case 28: {
         this.buildAllDayGrid_(aSb, offset);
         offset += 2;
       };break;
-      case 31: {
+      case 32: {
         this.buildWeekGridAdCols_(aSb, offset);
         offset += 17;
       };break;
-      case 51: {
+      case 52: {
         //Skipping week col zippies.
         offset += 13;
       };break;
-      case 67: {
+      case 68: {
         this.buildScrollableWeek_(aSb, offset);
         offset++;
       };break;
-      case 69: {
+      case 70: {
         if (aFirstBuild)
           offset += 45;
       };break;
-      case 70: {
+      case 71: {
         this.timeMarker_.buildHead(aSb);
       };break;
-      case 71: {
+      case 72: {
         this.buildHoursAndGridRows_(aSb, offset);
         offset += 9;
       };break;
-      case 82: {
+      case 83: {
         this.buildGridTableWeek_(aSb, offset);
         offset++;
       };break;
-      case 85: {
+      case 86: {
         this.buildWeekGridCols_(aSb, offset);
         offset += 26;
       };break;
@@ -913,9 +913,13 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildScrollableAllday_ =
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
   // Size of allday scrollable.
   aSb.append(this.blockPoolAllDay_.gridContainerSize.height);
-  // Margin that replaces scrollbar.
-  aSb.append(this.containerSizeMonitor_.scrollbarWidth - 1);
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
+  // Margin that replaces scrollbar.
+  if (this.blockPoolAllDay_.expanded)
+    aSb.append(0);
+  else
+    aSb.append(this.containerSizeMonitor_.scrollbarWidth - 1);
+  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
 };
 
 
