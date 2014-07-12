@@ -624,9 +624,9 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
  * to.
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGrid = function(aSb) {
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[84]);
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[85]);
-  this.buildWeekGridCols_(aSb, 85);
+  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[86]);
+  this.buildWeekGridCols_(aSb, 86);
 }
 
 
@@ -636,9 +636,9 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGrid = function(aSb) {
  * to.
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildAllDayGrid = function(aSb) {
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[30]);
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[31]);
-  this.buildWeekGridAdCols_(aSb, 31);
+  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[32]);
+  this.buildWeekGridAdCols_(aSb, 32);
 }
 
 
