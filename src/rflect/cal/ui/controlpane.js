@@ -29,12 +29,14 @@ goog.require('rflect.cal.predefined');
  * Control pane main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
+ * @param {rflect.cal.Navigator} aNavigator Link to navigator.
  * @param {boolean=} opt_configTop Optional - whether pane is in top or bottom
  * configuration. True - top, false - bottom. Makes sense only for mobile.
  * @constructor
  * @extends {rflect.ui.Component}
  */
-rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, opt_configTop) {
+rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, aNavigator,
+    opt_configTop) {
   rflect.ui.Component.call(this);
 
   /**
@@ -71,6 +73,14 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, opt_configTop) 
    * @private
    */
   this.configCombined_ = !rflect.MOBILE;
+
+  /**
+   * Link to navigator.
+   * @type {rflect.cal.Navigator}
+   * @private
+   */
+  this.navigator_ = aNavigator;
+
 
   // Add buttons. No need for captions or content here, because we've decorated
   // them.
@@ -141,7 +151,7 @@ rflect.cal.ui.ControlPane.prototype.decorateInternal = function(aElement,
  * @protected
  */
 rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
-  if (this.configTop_) {
+  if (this.navigator_.isSmallScreen()) {
 
     var parts = [
       '<nav id="top-pane">',
@@ -172,29 +182,6 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       '</div>',
       '</div>',
 
-      '</nav>'
-    ];
-
-  } else if (this.configBottom_) {
-
-    parts = [
-      '<nav id="bottom-pane" class="control-pane bottom-pane">',
-      '<div class="pane-left">',
-      '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
-          'id="' + rflect.cal.predefined.BUTTON_NOW_ID + '">',
-      rflect.cal.i18n.Symbols.NOW,
-      '</div>',
-      '</div>',
-      '<div class="pane-center">',
-      '<div class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block"',
-      'id="' + rflect.cal.predefined.BUTTON_DAY_ID + '">',
-      rflect.cal.i18n.Symbols.DAY,
-      '</div>',
-      '<div class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block"',
-      'id="' + rflect.cal.predefined.BUTTON_MONTH_ID + '">',
-      rflect.cal.i18n.Symbols.MONTH,
-      '</div>',
-      '</div>',
       '</nav>'
     ];
 

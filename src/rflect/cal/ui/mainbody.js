@@ -39,11 +39,12 @@ goog.require('rflect.cal.ui.SidePane');
  * container size monitor.
  * @param {rflect.cal.blocks.BlockManager} aBlockManager Link to block manager.
  * @param {rflect.cal.Transport} aTransport Link to transport.
+ * @param {rflect.cal.Navigator} aNavigator Link to navigator.
  * @constructor
  * @extends {rflect.ui.Component}
  */
 rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
-    aContainerSizeMonitor, aBlockManager, aTransport) {
+    aContainerSizeMonitor, aBlockManager, aTransport, aNavigator) {
   rflect.ui.Component.call(this);
 
   /**
@@ -88,25 +89,27 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
    */
   this.transport_ = aTransport;
 
+  /**
+   * Link to navigator.
+   * @type {rflect.cal.Navigator}
+   * @private
+   */
+  this.navigator_ = aNavigator;
+
   // Add child components in order for them to be included in propagation of
   // string building and updating.
   this.addChild(this.topPane_ = new rflect.cal.ui.ControlPane(
-      this.viewManager_, this.timeManager_));
+      this.viewManager_, this.timeManager_, this.navigator_));
   this.addChild(this.mainPane_ = new rflect.cal.ui.MainPane(this.viewManager_,
       this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
       this.blockManager_, this.transport_));
 
-  var miniCalIsEnabled = !rflect.MOBILE;
-  var menuIsEnabled = rflect.MOBILE;
-  var glassPaneIsEnabled = rflect.MOBILE;
-
   this.addChild(this.sidePane_ = new rflect.cal.ui.SidePane(
       this.viewManager_, this.timeManager_, this.eventManager_,
-      this.containerSizeMonitor_, miniCalIsEnabled, menuIsEnabled,
-      glassPaneIsEnabled));
+      this.containerSizeMonitor_, this.navigator_));
   if (rflect.MOBILE) {
     this.addChild(this.bottomPane_ = new rflect.cal.ui.ControlPane(
-        this.viewManager_, this.timeManager_, false));
+        this.viewManager_, this.timeManager_, this.navigator_, false));
   }
 
   if (goog.DEBUG) {

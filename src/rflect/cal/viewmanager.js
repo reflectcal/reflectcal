@@ -16,6 +16,7 @@ goog.require('rflect.cal.blocks.BlockManager');
 goog.require('rflect.cal.ContainerSizeMonitor');
 goog.require('rflect.cal.events.EventManager');
 goog.require('rflect.cal.EventType');
+goog.require('rflect.cal.Navigator');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
@@ -86,13 +87,20 @@ rflect.cal.ViewManager = function(aMainInstance) {
       this.eventManager_);
 
   /**
+   * Navigator.
+   * @type {rflect.cal.Navigator}
+   * @private
+   */
+  this.navigator_ = new rflect.cal.Navigator(window);
+
+  /**
    * Main body component.
    * @type {rflect.cal.ui.MainBody}
    * @private
    */
   this.mainBody_ = new rflect.cal.ui.MainBody(this, this.timeManager,
       this.eventManager_, this.containerSizeMonitor_, this.blockManager_,
-      this.transport_);
+      this.transport_, this.navigator_);
 
   if (goog.DEBUG)
     _inspect('mainBody_', this.mainBody_);
