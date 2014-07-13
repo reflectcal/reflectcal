@@ -107,10 +107,6 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
   this.addChild(this.sidePane_ = new rflect.cal.ui.SidePane(
       this.viewManager_, this.timeManager_, this.eventManager_,
       this.containerSizeMonitor_, this.navigator_));
-  if (rflect.MOBILE) {
-    this.addChild(this.bottomPane_ = new rflect.cal.ui.ControlPane(
-        this.viewManager_, this.timeManager_, this.navigator_, false));
-  }
 
   if (goog.DEBUG) {
     _inspect('topPane_', this.topPane_);
@@ -127,19 +123,7 @@ goog.inherits(rflect.cal.ui.MainBody, rflect.ui.Component);
  * @const
  * @private
  */
-rflect.cal.ui.MainBody.HTML_PARTS_ = rflect.MOBILE ? [
-  '<div id="cal-container" class="cal-container">',
-  '<nav id="side-pane" class="side-pane slide-pane-left">',
-  '</nav>',
-  '<nav id="top-pane">',
-  '</nav>',
-  '<main id="main-pane">',
-  '</main>',
-  '<nav id="bottom-pane" class="control-pane bottom-pane">',
-  '</nav>',
-  '<div class="bottom-pane-spacer"></div>',
-  '</div>'
-  ] : [
+rflect.cal.ui.MainBody.HTML_PARTS_ = [
   '<div id="cal-container" class="cal-container">',
   '<div id="top-pane" class="control-pane">',
   '</div>',
@@ -312,56 +296,26 @@ rflect.cal.ui.MainBody.prototype.decorateInternal = function(aElement,
 rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
   var parts = rflect.cal.ui.MainBody.HTML_PARTS_;
 
-  if (rflect.MOBILE) {
+  // Form html. From index 1, because 0 is the html of outer container, which
+  // we don't create in that method but just decorate.
+  for (var counter = 1, length = parts.length - 1;
+       counter < length; counter++) {
+    aSb.append(parts[counter]);
+    switch (counter) {
+      // Include top pane in common buffer.
+      case 1: {
+        this.topPane_.build(aSb);
+      };break;
+      case 4: {
+        this.sidePane_.build(aSb);
+      };break;
+      // Include main pane in common buffer.
+      case 6: {
+        this.mainPane_.build(aSb);
+      };break;
 
-    // Form html. From index 1, because 0 is the html of outer container, which
-    // we don't create in that method but just decorate.
-    for (var counter = 1, length = parts.length - 1;
-         counter < length; counter++) {
-      aSb.append(parts[counter]);
-      switch (counter) {
-        // Include top pane in common buffer.
-        case 1: {
-          this.sidePane_.build(aSb);
-        };break;
-        case 3: {
-          this.topPane_.build(aSb);
-        };break;
-        case 5: {
-          this.mainPane_.build(aSb);
-        };break;
-        case 7: {
-          this.bottomPane_.build(aSb);
-        };break;
-
-        default: break;
-      }
+      default: break;
     }
-
-  } else {
-
-    // Form html. From index 1, because 0 is the html of outer container, which
-    // we don't create in that method but just decorate.
-    for (var counter = 1, length = parts.length - 1;
-         counter < length; counter++) {
-      aSb.append(parts[counter]);
-      switch (counter) {
-        // Include top pane in common buffer.
-        case 1: {
-          this.topPane_.build(aSb);
-        };break;
-        case 4: {
-          this.sidePane_.build(aSb);
-        };break;
-        // Include main pane in common buffer.
-        case 6: {
-          this.mainPane_.build(aSb);
-        };break;
-
-        default: break;
-      }
-    }
-
   }
 
 };
@@ -404,25 +358,14 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
   this.sidePane_.decorateInternal(this.getDomHelper().getElement('side-pane'),
       true);
 
-  if (rflect.MOBILE) {
-
-    this.bottomPane_.decorateInternal(
-        this.getDomHelper().getElement('top-pane'), true);
-
-  }
-
   // Propagate call to children.
   rflect.cal.ui.MainBody.superClass_.enterDocument.call(this);
 
   this.getHandler().listen(this.topPane_, goog.ui.Component.EventType.ACTION,
-      this.onControlPaneAction_, false, this);
-
-  if (rflect.MOBILE) {
-    this.getHandler().listen(this.bottomPane_,
-        goog.ui.Component.EventType.ACTION, this.onControlPaneAction_, false,
-        this);
-  }
-  this.getHandler().listen(this.sidePane_,
+      this.onControlPaneAction_, false, this)
+      .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
+      this.onControlPaneAction_, false, this)
+      .listen(this.sidePane_,
       rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
       this.onCalendarSwitch_, false, this)
       .listen(this.sidePane_.showBehavior,
@@ -437,7 +380,7 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
 
   this.rebuildMainPaneWithSizes();
 
-  if (!rflect.MOBILE)
+  if (!this.navigator_.isSmallScreen())
     //Mobile UI's left pane doesn't affect main pane width.
     this.rebuildLeftPaneWithSizes();
 };
@@ -504,8 +447,6 @@ rflect.cal.ui.MainBody.prototype.measureStaticSizes = function() {
     var monthPaneSize = goog.style.getSize(
         dom.getElement('main-pane-body-scrollable-mn'));
     var additionalPixelsMonth = 0;
-    if (rflect.MOBILE)
-      additionalPixelsMonth = 1;
 
     this.staticSizesMn = new goog.math.Size(totalSize.width -
         monthPaneSize.width +

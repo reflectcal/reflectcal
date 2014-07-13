@@ -30,13 +30,10 @@ goog.require('rflect.cal.predefined');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.Navigator} aNavigator Link to navigator.
- * @param {boolean=} opt_configTop Optional - whether pane is in top or bottom
- * configuration. True - top, false - bottom. Makes sense only for mobile.
  * @constructor
  * @extends {rflect.ui.Component}
  */
-rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, aNavigator,
-    opt_configTop) {
+rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, aNavigator) {
   rflect.ui.Component.call(this);
 
   /**
@@ -54,27 +51,6 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, aNavigator,
   this.timeManager_ = aTimeManager;
 
   /**
-   * Whether configuration is top.
-   * @type {boolean|undefined}
-   * @private
-   */
-  this.configTop_ = rflect.MOBILE && opt_configTop;
-
-  /**
-   * Whether configuration is bottom.
-   * @type {boolean|undefined}
-   * @private
-   */
-  this.configBottom_ = rflect.MOBILE && !opt_configTop;
-
-  /**
-   * Whether configuration is combined - one top pane only.
-   * @type {boolean}
-   * @private
-   */
-  this.configCombined_ = !rflect.MOBILE;
-
-  /**
    * Link to navigator.
    * @type {rflect.cal.Navigator}
    * @private
@@ -82,35 +58,31 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, aNavigator,
   this.navigator_ = aNavigator;
 
 
+  var isSmallScreen = this.navigator_.isSmallScreen();
+
   // Add buttons. No need for captions or content here, because we've decorated
   // them.
-  if (this.configTop_ || (this.configCombined_ && rflect.SIDE_PANE_MOVABLE))
+  if (rflect.SIDE_PANE_MOVABLE)
     this.addChild(this.buttonMenu_ = new goog.ui.Button(null,
         goog.ui.FlatButtonRenderer.getInstance()));
-  if (this.configBottom_ || this.configCombined_)
-    this.addChild(this.buttonNow_ = new goog.ui.ToggleButton(null,
-        goog.ui.FlatButtonRenderer.getInstance()));
-  if (this.configBottom_ || this.configCombined_)
-    this.addChild(this.buttonPrev_ = new goog.ui.Button(null,
-        goog.ui.FlatButtonRenderer.getInstance()));
-  if (this.configBottom_ || this.configCombined_)
-    this.addChild(this.buttonNext_ = new goog.ui.Button(null,
-        goog.ui.FlatButtonRenderer.getInstance()));
-  if (this.configTop_ || this.configCombined_)
-    this.addChild(this.buttonNewEvent_ = new goog.ui.Button(null,
-        goog.ui.FlatButtonRenderer.getInstance()));
-  if (this.configTop_ || this.configCombined_)
+  this.addChild(this.buttonNow_ = new goog.ui.ToggleButton(null,
+      goog.ui.FlatButtonRenderer.getInstance()));
+  this.addChild(this.buttonPrev_ = new goog.ui.Button(null,
+      goog.ui.FlatButtonRenderer.getInstance()));
+  this.addChild(this.buttonNext_ = new goog.ui.Button(null,
+      goog.ui.FlatButtonRenderer.getInstance()));
+  this.addChild(this.buttonNewEvent_ = new goog.ui.Button(null,
+      goog.ui.FlatButtonRenderer.getInstance()));
+  if (!isSmallScreen){
     this.addChild(this.buttonDay_ = new goog.ui.ToggleButton(null,
         goog.ui.FlatButtonRenderer.getInstance()));
-  if (this.configCombined_)
     this.addChild(this.buttonWeek_ = new goog.ui.ToggleButton(null,
         goog.ui.FlatButtonRenderer.getInstance()));
-  if (this.configTop_ || this.configCombined_)
     this.addChild(this.buttonMonth_ = new goog.ui.ToggleButton(null,
         goog.ui.FlatButtonRenderer.getInstance()));
-  if (this.configCombined_)
     this.addChild(this.buttonOptions_ = new goog.ui.Button(null,
         goog.ui.FlatButtonRenderer.getInstance()));
+  }
 };
 goog.inherits(rflect.cal.ui.ControlPane, rflect.ui.Component);
 
@@ -173,6 +145,10 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       this.getDateHeader(),
       '</div>',
       '<div class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"',
+      'id="' + rflect.cal.predefined.BUTTON_NOW_ID + '">',
+      rflect.cal.i18n.Symbols.NOW,
+      '</div>',
+      '<div class="goog-flat-button-collapse-left goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"',
       'id="' + rflect.cal.predefined.BUTTON_PREV_ID + '">',
       '<div class="icon-triangle icon-nav-left goog-inline-block"></div>',
       '</div>',
@@ -274,26 +250,31 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
  * Decorates buttons, attaches event handlers for them.
  */
 rflect.cal.ui.ControlPane.prototype.enterDocument = function() {
-  this.buttonNow_ && this.buttonNow_.decorate(this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_NOW_ID));
-  this.buttonPrev_ && this.buttonPrev_.decorate(this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_PREV_ID));
-  this.buttonNext_ && this.buttonNext_.decorate(this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_NEXT_ID));
+  var isSmallScreen = this.navigator_.isSmallScreen();
 
-  this.buttonNewEvent_ && this.buttonNewEvent_.decorate(this.dom_.getElement(
+  if (!isSmallScreen) {
+    this.buttonPrev_.decorate(this.dom_.getElement(
+        rflect.cal.predefined.BUTTON_PREV_ID));
+    this.buttonNext_.decorate(this.dom_.getElement(
+        rflect.cal.predefined.BUTTON_NEXT_ID));
+    this.buttonOptions_.decorate(this.dom_.getElement(
+        rflect.cal.predefined.BUTTON_SETTINGS_ID));
+    this.buttonDay_.decorate(this.dom_.getElement(
+        rflect.cal.predefined.BUTTON_DAY_ID));
+    this.buttonWeek_.decorate(this.dom_.getElement(
+        rflect.cal.predefined.BUTTON_WEEK_ID));
+    this.buttonMonth_.decorate(this.dom_.getElement(
+        rflect.cal.predefined.BUTTON_MONTH_ID));
+  }
+
+  this.buttonNow_.decorate(this.dom_.getElement(
+      rflect.cal.predefined.BUTTON_NOW_ID));
+  this.buttonNewEvent_.decorate(this.dom_.getElement(
       rflect.cal.predefined.BUTTON_NEW_EVENT_ID));
 
-  this.buttonDay_ && this.buttonDay_.decorate(this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_DAY_ID));
-  this.buttonWeek_ && this.buttonWeek_.decorate(this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_WEEK_ID));
-  this.buttonMonth_ && this.buttonMonth_.decorate(this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_MONTH_ID));
-  this.buttonOptions_ && this.buttonOptions_.decorate(this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_SETTINGS_ID));
-  this.buttonMenu_ && this.buttonMenu_.decorate(this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_MENU_ID));
+  if (rflect.SIDE_PANE_MOVABLE)
+    this.buttonMenu_ && this.buttonMenu_.decorate(this.dom_.getElement(
+        rflect.cal.predefined.BUTTON_MENU_ID));
 
   rflect.cal.ui.ControlPane.superClass_.enterDocument.call(this);
 
@@ -301,11 +282,13 @@ rflect.cal.ui.ControlPane.prototype.enterDocument = function() {
   this.updateButtons_();
 
   // Attaching event handlers.
-  this.buttonNewEvent_ && this.getHandler().listen(this.buttonNewEvent_,
-      goog.ui.Component.EventType.ACTION, function(aEvent) {
-        this.dispatchEvent(rflect.cal.EventType.MENU_COMMAND_NEW_EVENT);
-        aEvent.target.setFocused(false);
-      }, false, this);
+  if (!isSmallScreen) {
+    this.getHandler().listen(this.buttonNewEvent_,
+        goog.ui.Component.EventType.ACTION, function(aEvent) {
+      this.dispatchEvent(rflect.cal.EventType.MENU_COMMAND_NEW_EVENT);
+      aEvent.target.setFocused(false);
+    }, false, this);
+  }
 };
 
 

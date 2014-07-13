@@ -46,12 +46,13 @@ rflect.cal.Navigator.SMALL_SCREEN_QUERY = '(max-width: 480px)';
  * @return {boolean} Whether screen is small according to media query.
  */
 rflect.cal.Navigator.prototype.isSmallScreen = function() {
-  if (this.window.matchMedia &&
+  /*if (this.window.matchMedia &&
       this.window.matchMedia(rflect.cal.Navigator.SMALL_SCREEN_QUERY).matches) {
     return true;
   } else {
     return false;
-  }
+  }*/
+  return true;
 }
 
 

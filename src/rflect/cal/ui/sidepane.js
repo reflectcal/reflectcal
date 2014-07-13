@@ -104,28 +104,8 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
    */
   this.menuIsEnabled_ = isSmallScreen;
 
-  /**
-   * Menu items.
-   * @type {Array.<rflect.cal.ui.SidePane.MenuItem>}
-   * @private
-   */
-  this.menuItems_ = this.menuIsEnabled_ ? [
-    new rflect.cal.ui.SidePane.MenuItem(
-      rflect.cal.predefined.BUTTON_DAY_ID,
-      rflect.cal.i18n.Symbols.DAY),
-    new rflect.cal.ui.SidePane.MenuItem(
-      rflect.cal.predefined.BUTTON_WEEK_ID,
-      rflect.cal.i18n.Symbols.WEEK),
-    new rflect.cal.ui.SidePane.MenuItem(
-      rflect.cal.predefined.BUTTON_MONTH_ID,
-      rflect.cal.i18n.Symbols.MONTH),
-    new rflect.cal.ui.SidePane.MenuItem(
-      rflect.cal.predefined.BUTTON_SETTINGS_ID,
-      '<i class="icon icon-in-button icon-cog"></i> ' +
-          rflect.cal.i18n.Symbols.SETTINGS)
-  ] : [];
+  if (isSmallScreen) {
 
-  if (this.menuIsEnabled_) {
     this.addChild(this.buttonNow_ = new goog.ui.ToggleButton(null,
         goog.ui.FlatButtonRenderer.getInstance()));
     this.addChild(this.buttonDay_ = new goog.ui.ToggleButton(null,
@@ -136,11 +116,12 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
         goog.ui.FlatButtonRenderer.getInstance()));
     this.addChild(this.buttonOptions_ = new goog.ui.Button(null,
         goog.ui.FlatButtonRenderer.getInstance()));
-  };
 
-  if (!isSmallScreen){
+  } else {
+
     this.addChild(this.miniCal_ = new rflect.cal.ui.MiniCal(this.viewManager_,
         this.timeManager_));
+
   }
 
   this.addChild(this.calSelectorMy_ = new rflect.cal.ui.CalSelector(
@@ -255,19 +236,39 @@ rflect.cal.ui.SidePane.prototype.getTaskSelector = function() {
  * @private
  */
 rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
-  aSb.append('<ul class="side-pane-menu">');
-  aSb.append('<li class="side-pane-menu-item">');
-  goog.array.forEach(this.menuItems_, function(aMenuItem, aIndex){
-    aSb.append('<button id="');
-    aSb.append(aMenuItem.elementId);
-    aSb.append('" class="side-pane-button" data-index="');
-    aSb.append(aIndex);
-    aSb.append('">');
-    aSb.append(aMenuItem.content);
-    aSb.append('</button>');
-  });
-  aSb.append('</li>');
-  aSb.append('</ul>');
+
+  var parts = [
+    '<li class="side-pane-menu-item">',
+    // Day button.
+    '<div id="' + rflect.cal.predefined.BUTTON_DAY_ID + '" class="side-pane-button">',
+    rflect.cal.i18n.Symbols.DAY,
+    '</div>',
+    '</li>',
+    '<li class="side-pane-menu-item">',
+    // Week button.
+    '<div id="' + rflect.cal.predefined.BUTTON_WEEK_ID + '" class="side-pane-button">',
+    rflect.cal.i18n.Symbols.WEEK,
+    '</div>',
+    '</li>',
+    '<li class="side-pane-menu-item">',
+    // Month button.
+    '<div id="' + rflect.cal.predefined.BUTTON_MONTH_ID + '" class="side-pane-button">',
+    rflect.cal.i18n.Symbols.MONTH,
+    '</div>',
+    '</li>',
+    '<li class="side-pane-menu-item">',
+    // Options button.
+    '<div id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '" class="side-pane-button">',
+    '<div class="icon icon-cog icon-settings icon-in-button"></div>',
+    '</div>',
+    '</li>'
+  ];
+
+
+  for (var counter = 0, length = parts.length;
+       counter < length; counter++) {
+    aSb.append(parts[counter]);
+  }
 }
 
 
@@ -279,9 +280,12 @@ rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
  * @protected
  */
 rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
+  var isSmallScreen = this.navigator_.isSmallScreen();
 
   var parts = [
     '<nav id="side-pane" class="side-pane slide-pane-left">',
+    '<ul class="side-pane-menu">',
+    '</ul>',
     '<div id="month-selector">',
     '</div>',
     '<div id="calendars-selector" class="list-selector">',
@@ -298,16 +302,16 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
     aSb.append(parts[counter]);
     switch (counter) {
       // Include top pane in common buffer.
-      case 0: {
-        if (!this.menuIsEnabled_) this.buildMenu_(aSb);
-      };break;
       case 1: {
-        if (this.miniCal_) this.miniCal_.build(aSb);
+        if (isSmallScreen) this.buildMenu_(aSb);
       };break;
       case 3: {
-        this.calSelectorMy_.build(aSb);
+        if (!isSmallScreen) this.miniCal_.build(aSb);
       };break;
       case 5: {
+        this.calSelectorMy_.build(aSb);
+      };break;
+      case 7: {
         this.calSelectorOther_.build(aSb);
       };break;
       default: break;
@@ -320,38 +324,34 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
  * Decorates buttons, attaches event handlers for them.
  */
 rflect.cal.ui.SidePane.prototype.enterDocument = function() {
-  if (this.miniCal_){
-    this.miniCal_.decorateInternal(
-        this.getDomHelper().getElement('month-selector'), true);
-  }
+  var isSmallScreen = this.navigator_.isSmallScreen();
 
   this.calSelectorMy_.decorateInternal(
       this.getDomHelper().getElement('calendars-selector'), true);
   this.calSelectorOther_.decorateInternal(
       this.getDomHelper().getElement('tasks-selector'), true);
 
-  this.buttonDay_ && this.buttonDay_.decorate(this.getDomHelper().getElement(
-      rflect.cal.predefined.BUTTON_DAY_ID));
-  this.buttonWeek_ && this.buttonWeek_.decorate(this.getDomHelper().getElement(
-      rflect.cal.predefined.BUTTON_WEEK_ID));
-  this.buttonMonth_ && this.buttonMonth_.decorate(this.getDomHelper().getElement(
-      rflect.cal.predefined.BUTTON_MONTH_ID));
-  this.buttonOptions_ && this.buttonOptions_.decorate(
-      this.getDomHelper().getElement(rflect.cal.predefined.BUTTON_SETTINGS_ID));
-  
+  if (isSmallScreen){
+    this.buttonDay_.decorate(this.getDomHelper().getElement(
+        rflect.cal.predefined.BUTTON_DAY_ID));
+    this.buttonWeek_.decorate(this.getDomHelper().getElement(
+        rflect.cal.predefined.BUTTON_WEEK_ID));
+    this.buttonMonth_.decorate(
+        this.getDomHelper().getElement(rflect.cal.predefined.BUTTON_MONTH_ID));
+    this.buttonOptions_.decorate(
+        this.getDomHelper().getElement(
+        rflect.cal.predefined.BUTTON_SETTINGS_ID));
+  } else {
+    this.miniCal_.decorateInternal(
+        this.getDomHelper().getElement('month-selector'), true);
+  }
 
   rflect.cal.ui.SidePane.superClass_.enterDocument.call(this);
 
   // Attaching event handlers.
-  if (this.glassPaneIsEnabled_){
+  if (isSmallScreen){
     this.getHandler().listen(this.getGlassElement_(),
         goog.events.EventType.CLICK, this.onCancel_, false, this);
-  }
-  if (this.menuIsEnabled_){
-    this.buttonSettings_ = goog.dom.getElement(
-        rflect.cal.predefined.BUTTON_SETTINGS_ID);
-    this.getHandler().listen(this.buttonSettings_,
-        goog.events.EventType.CLICK, this.onSettingsClick_, false, this);
   }
 
   if (this.showBehavior.isVisible()) {
