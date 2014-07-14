@@ -253,10 +253,6 @@ rflect.cal.ui.ControlPane.prototype.enterDocument = function() {
   var isSmallScreen = this.navigator_.isSmallScreen();
 
   if (!isSmallScreen) {
-    this.buttonPrev_.decorate(this.dom_.getElement(
-        rflect.cal.predefined.BUTTON_PREV_ID));
-    this.buttonNext_.decorate(this.dom_.getElement(
-        rflect.cal.predefined.BUTTON_NEXT_ID));
     this.buttonOptions_.decorate(this.dom_.getElement(
         rflect.cal.predefined.BUTTON_SETTINGS_ID));
     this.buttonDay_.decorate(this.dom_.getElement(
@@ -267,6 +263,10 @@ rflect.cal.ui.ControlPane.prototype.enterDocument = function() {
         rflect.cal.predefined.BUTTON_MONTH_ID));
   }
 
+  this.buttonPrev_.decorate(this.dom_.getElement(
+      rflect.cal.predefined.BUTTON_PREV_ID));
+  this.buttonNext_.decorate(this.dom_.getElement(
+      rflect.cal.predefined.BUTTON_NEXT_ID));
   this.buttonNow_.decorate(this.dom_.getElement(
       rflect.cal.predefined.BUTTON_NOW_ID));
   this.buttonNewEvent_.decorate(this.dom_.getElement(
