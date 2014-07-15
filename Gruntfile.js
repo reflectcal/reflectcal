@@ -520,7 +520,7 @@ module.exports = function(grunt) {
     'less:development'
   ]);
 
-  grunt.registerTask('depswriter', [
+  grunt.registerTask('deps', [
     'closureDepsWriter'
   ]);
 
