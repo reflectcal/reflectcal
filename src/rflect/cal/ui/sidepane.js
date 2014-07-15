@@ -238,6 +238,12 @@ rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
   var parts = [
     '<li class="side-pane-menu-item">',
     // Day button.
+    '<div id="' + rflect.cal.predefined.BUTTON_TO_CALENDAR_ID + '" class="side-pane-button">',
+    rflect.cal.i18n.Symbols.TO_CALENDAR,
+    '</div>',
+    '</li>',
+    '<li class="side-pane-menu-item">',
+    // Day button.
     '<div id="' + rflect.cal.predefined.BUTTON_DAY_ID + '" class="side-pane-button">',
     rflect.cal.i18n.Symbols.DAY,
     '</div>',
@@ -252,6 +258,8 @@ rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
     // Options button.
     '<div id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '" class="side-pane-button">',
     '<div class="icon icon-cog icon-settings icon-in-button"></div>',
+    '&nbsp;',
+    rflect.cal.i18n.Symbols.SETTINGS,
     '</div>',
     '</li>'
   ];
