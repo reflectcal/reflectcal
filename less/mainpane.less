@@ -1,0 +1,178 @@
+/*
+ * Copyright (c) 2014. Reflect, Alex K.
+ */
+
+/* Author:alexeykofficial@gmail.com (Alex K.) */
+
+/* Styles for main pane. */
+
+
+.main-pane() {
+  float: none;
+  width: auto;
+  cursor: default; /*IE7 shows text cursor.*/
+  transition: margin .2s;
+}
+
+.main-pane when (@UI_TYPE = '') {
+  .main-pane();
+  margin-left: 230px;
+}
+
+.main-pane when (@UI_TYPE = 'MOBILE') {
+  .main-pane();
+}
+
+.main-pane-expanded {
+  margin-left: 0;
+}
+
+#main-pane-header {
+  /*width: 100%;*/
+}
+
+.main-pane-header-container-wk {
+  margin-left: 61px; /*+1 pixel to match #grid-table border*/
+}
+
+#main-pane-header-wk-daynames() {
+  position: relative;
+  overflow: hidden;
+  height: 20px;
+  line-height: 20px;
+}
+
+#main-pane-header-wk-daynames when (@UI_TYPE = ''){
+  #main-pane-header-wk-daynames();
+  margin-right: 19px; /*to compensate 17px scrollbar + 2px from borders of upper table*/
+}
+
+#main-pane-header-wk-daynames when (@UI_TYPE = 'MOBILE'){
+  #main-pane-header-wk-daynames();
+  clear:both;
+}
+
+#main-pane-header-scrollable() {
+  border: 1px solid #e5e5e5;
+  border-bottom-width: 0;
+  /*we need this for ie7 as nested relative positioned elements
+  don't get affected by overflow without it*/
+  position: relative;
+}
+
+#main-pane-header-scrollable when (@UI_TYPE = ''){
+  #main-pane-header-scrollable();
+}
+
+#main-pane-header-scrollable when (@UI_TYPE = 'MOBILE'){
+  #main-pane-header-scrollable();
+  border-right-width: 0;
+}
+
+/**
+ * Helper classes for scroll manipulation.
+ * Note: scrollbar size may be different, on Mac, for example.
+ */
+.mphs-scroll-horz-on {
+  overflow-x: hidden;
+}
+
+.mphs-scroll-horz-off {
+  overflow-x: visible;
+}
+
+.mphs-scroll-vert-on when (@UI_TYPE = ''){
+  overflow-y: scroll;
+  margin-right: 0;
+  border-right: none !important;
+}
+
+.mphs-scroll-vert-on when (@UI_TYPE = 'MOBILE'){
+  overflow-y: hidden;
+  margin-right: 0;
+  border-right: none !important;
+}
+
+.mphs-scroll-vert-off {
+  overflow-y: visible;
+  margin-right: 16px; /*17px of scrollbar - 1px of border.*/
+}
+
+#main-pane-body-scrollable-wk() {
+  /*overflow-x: visible;*/
+  border: 1px solid #e5e5e5;
+  border-right: none;
+  height: 400px;
+  position: relative;
+}
+
+#main-pane-body-scrollable-wk when (@UI_TYPE = '') {
+  overflow-y: scroll;
+  #main-pane-body-scrollable-wk();
+}
+
+#main-pane-body-scrollable-wk when (@UI_TYPE = 'MOBILE') {
+  #main-pane-body-scrollable-wk();
+  overflow-y: hidden;
+  z-index: 0;
+}
+
+#grid-table-outer-wrapper {
+  width: auto;
+  zoom: 1;
+}
+
+.mpbs-wk-scroll-horz-on {
+  overflow-x: scroll;
+  margin-bottom: 0;
+}
+
+.mpbs-wk-scroll-horz-off {
+  overflow-x: visible;
+}
+
+.main-pane-header-container-mn when (@UI_TYPE = '') {
+  margin-left: 28px; /*11+ 1 pixels from zippies, 15 + 1 pixels from weeknums*/
+}
+
+.main-pane-header-container-mn when (@UI_TYPE = 'MOBILE') {
+  margin-left: 16px; /*15 + 1 pixels from weeknums*/
+}
+
+.main-pane-body-scrollable-mn() {
+  overflow-x: hidden;
+  border: 1px solid #e5e5e5;
+  position: relative;
+  height: 100%;
+}
+
+.main-pane-body-scrollable-mn when (@UI_TYPE = '') {
+  .main-pane-body-scrollable-mn();
+}
+
+.main-pane-body-scrollable-mn when (@UI_TYPE = 'MOBILE') {
+  .main-pane-body-scrollable-mn();
+}
+
+.mpbs-mn-scroll-vert-on() {
+  margin-right: 0;
+  border-right: none !important;
+}
+
+.mpbs-mn-scroll-vert-on when (@UI_TYPE = '') {
+  .mpbs-mn-scroll-vert-on();
+  overflow-y: scroll;
+}
+
+.mpbs-mn-scroll-vert-on when (@UI_TYPE = 'MOBILE') {
+  .mpbs-mn-scroll-vert-on();
+  overflow-y: hidden;
+}
+
+.mpbs-mn-scroll-vert-off {
+  overflow-y: hidden;
+}
+
+#main-pane-placeholder {
+  border: 1px solid #e5e5e5;
+}

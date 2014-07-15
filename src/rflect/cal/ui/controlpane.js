@@ -62,7 +62,7 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, aNavigator) {
 
   // Add buttons. No need for captions or content here, because we've decorated
   // them.
-  if (rflect.SIDE_PANE_MOVABLE)
+  if (rflect.SIDE_PANE_MOVABLE || isSmallScreen)
     this.addChild(this.buttonMenu_ = new goog.ui.Button(null,
         goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonNow_ = new goog.ui.ToggleButton(null,
@@ -272,8 +272,8 @@ rflect.cal.ui.ControlPane.prototype.enterDocument = function() {
   this.buttonNewEvent_.decorate(this.dom_.getElement(
       rflect.cal.predefined.BUTTON_NEW_EVENT_ID));
 
-  if (rflect.SIDE_PANE_MOVABLE)
-    this.buttonMenu_ && this.buttonMenu_.decorate(this.dom_.getElement(
+  if (isSmallScreen || rflect.SIDE_PANE_MOVABLE)
+    this.buttonMenu_.decorate(this.dom_.getElement(
         rflect.cal.predefined.BUTTON_MENU_ID));
 
   rflect.cal.ui.ControlPane.superClass_.enterDocument.call(this);

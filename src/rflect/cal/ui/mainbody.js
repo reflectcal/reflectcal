@@ -551,24 +551,30 @@ rflect.cal.ui.MainBody.prototype.onSidePaneAction_ = function(aEvent) {
  * @private
  */
 rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
+  var isSmallScreen = this.navigator_.isSmallScreen();
+
   if (aEvent.start && !aEvent.showing) {
-    if (rflect.MOBILE)
+    if (rflect.MOBILE){
       this.mainPane_.addMomentumScroller();
-    else
+    } else {
       //NOTE(alexk): we can use rflect.cal.ui.MainBody.prototype.toggleSidePane
       // instead which fires directly on button press.
-      this.mainPane_.expandElement(true);
+      if (rflect.SIDE_PANE_MOVABLE)
+        this.mainPane_.expandElement(true);
+    }
   }
   if (!aEvent.start && !aEvent.showing) {
-    this.measureStaticSizes();
+    if (rflect.SIDE_PANE_MOVABLE)
+      this.measureStaticSizes();
   }
-  if (aEvent.start && aEvent.showing) {
+  if (rflect.SIDE_PANE_MOVABLE && aEvent.start && aEvent.showing) {
     this.mainPane_.expandElement(false);
   }
   if (!aEvent.start && aEvent.showing) {
     if (rflect.MOBILE)
       this.mainPane_.removeMomentumScroller();
-    this.measureStaticSizes();
+    if (rflect.SIDE_PANE_MOVABLE)
+      this.measureStaticSizes();
   }
 }
 

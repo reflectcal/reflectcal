@@ -55,29 +55,7 @@ body when (@UI_TYPE = 'MOBILE') {
 .cal-container {
 }
 
-.main-pane() {
-  float: none;
-  width: auto;
-  cursor: default; /*IE7 shows text cursor.*/
-  transition: margin .2s;
-}
 
-.main-pane when (@UI_TYPE = '') {
-  .main-pane();
-  margin-left: 230px;
-}
-
-.main-pane when (@UI_TYPE = 'MOBILE') {
-  .main-pane();
-}
-
-.main-pane-expanded {
-  margin-left: 0;
-}
-
-#main-pane-header {
-  /*width: 100%;*/
-}
 
 #month-selector {
   padding-top: 20px;
@@ -328,26 +306,7 @@ body when (@UI_TYPE = 'MOBILE') {
   height: 100%;
 }
 
-.main-pane-header-container-wk {
-  margin-left: 61px; /*+1 pixel to match #grid-table border*/
-}
 
-#main-pane-header-wk-daynames() {
-  position: relative;
-  overflow: hidden;
-  height: 20px;
-  line-height: 20px;
-}
-
-#main-pane-header-wk-daynames when (@UI_TYPE = ''){
-  #main-pane-header-wk-daynames();
-  margin-right: 19px; /*to compensate 17px scrollbar + 2px from borders of upper table*/
-}
-
-#main-pane-header-wk-daynames when (@UI_TYPE = 'MOBILE'){
-  #main-pane-header-wk-daynames();
-  clear:both;
-}
 
 #weekmode-daynames-table {
   table-layout: fixed;
@@ -372,51 +331,7 @@ body when (@UI_TYPE = 'MOBILE') {
   text-decoration: underline;
 }
 
-#main-pane-header-scrollable() {
-  border: 1px solid #e5e5e5;
-  border-bottom-width: 0;
-  /*we need this for ie7 as nested relative positioned elements
-  don't get affected by overflow without it*/
-  position: relative;
-}
 
-#main-pane-header-scrollable when (@UI_TYPE = ''){
-  #main-pane-header-scrollable();
-}
-
-#main-pane-header-scrollable when (@UI_TYPE = 'MOBILE'){
-  #main-pane-header-scrollable();
-  border-right-width: 0;
-}
-
-/**
- * Helper classes for scroll manipulation.
- * Note: scrollbar size may be different, on Mac, for example.
- */
-.mphs-scroll-horz-on {
-  overflow-x: hidden;
-}
-
-.mphs-scroll-horz-off {
-  overflow-x: visible;
-}
-
-.mphs-scroll-vert-on when (@UI_TYPE = ''){
-  overflow-y: scroll;
-  margin-right: 0;
-  border-right: none !important;
-}
-
-.mphs-scroll-vert-on when (@UI_TYPE = 'MOBILE'){
-  overflow-y: hidden;
-  margin-right: 0;
-  border-right: none !important;
-}
-
-.mphs-scroll-vert-off {
-  overflow-y: visible;
-  margin-right: 16px; /*17px of scrollbar - 1px of border.*/
-}
 
 /**
  * In ie7, underlying table, being set to 100% gets its width
@@ -531,39 +446,6 @@ body when (@UI_TYPE = 'MOBILE') {
 
 .no-tborder-right {
   border-right: 0;
-}
-
-#main-pane-body-scrollable-wk() {
-  /*overflow-x: visible;*/
-  border: 1px solid #e5e5e5;
-  border-right: none;
-  height: 400px;
-  position: relative;
-}
-
-#main-pane-body-scrollable-wk when (@UI_TYPE = '') {
-  overflow-y: scroll;
-  #main-pane-body-scrollable-wk();
-}
-
-#main-pane-body-scrollable-wk when (@UI_TYPE = 'MOBILE') {
-  #main-pane-body-scrollable-wk();
-  overflow-y: hidden;
-  z-index: 0;
-}
-
-#grid-table-outer-wrapper {
-  width: auto;
-  zoom: 1;
-}
-
-.mpbs-wk-scroll-horz-on {
-  overflow-x: scroll;
-  margin-bottom: 0;
-}
-
-.mpbs-wk-scroll-horz-off {
-  overflow-x: visible;
 }
 
 #hours-container {
@@ -967,47 +849,7 @@ body when (@UI_TYPE = 'MOBILE') {
   float: left;
 }
 
-.main-pane-header-container-mn when (@UI_TYPE = '') {
-  margin-left: 28px; /*11+ 1 pixels from zippies, 15 + 1 pixels from weeknums*/
-}
 
-.main-pane-header-container-mn when (@UI_TYPE = 'MOBILE') {
-  margin-left: 16px; /*15 + 1 pixels from weeknums*/
-}
-
-.main-pane-body-scrollable-mn() {
-  overflow-x: hidden;
-  border: 1px solid #e5e5e5;
-  position: relative;
-  height: 100%;
-}
-
-.main-pane-body-scrollable-mn when (@UI_TYPE = '') {
-  .main-pane-body-scrollable-mn();
-}
-
-.main-pane-body-scrollable-mn when (@UI_TYPE = 'MOBILE') {
-  .main-pane-body-scrollable-mn();
-}
-
-.mpbs-mn-scroll-vert-on() {
-  margin-right: 0;
-  border-right: none !important;
-}
-
-.mpbs-mn-scroll-vert-on when (@UI_TYPE = '') {
-  .mpbs-mn-scroll-vert-on();
-  overflow-y: scroll;
-}
-
-.mpbs-mn-scroll-vert-on when (@UI_TYPE = 'MOBILE') {
-  .mpbs-mn-scroll-vert-on();
-  overflow-y: hidden;
-}
-
-.mpbs-mn-scroll-vert-off {
-  overflow-y: hidden;
-}
 
 #grid-table-wrapper-outer {
 
@@ -1126,6 +968,7 @@ body when (@UI_TYPE = 'MOBILE') {
   position: absolute;
   .opacity(0.5);
 }
+
 /**
  * regulates height of main body, but take into account additional 2px from borders of
  * #main-pane-header-mn-zippies and #main-pane-body-scrollable-mn
@@ -1335,10 +1178,6 @@ body when (@UI_TYPE = 'MOBILE') {
   left: 2px;
 }
 
-#main-pane-placeholder {
-  border: 1px solid #e5e5e5;
-}
-
 #month-selector .goog-date-picker {
   border-left: none;
   height: 215px;/*For Roboto, 150px for arial*/
@@ -1349,21 +1188,4 @@ body when (@UI_TYPE = 'MOBILE') {
   position:absolute;
   left: 0;
   top: -10000px;
-}
-
-.glass-pane {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  .opacity(0);
-  background-color: #000;
-  z-index: @glassPaneZIndex;
-  transition: opacity .2s;
-  -webkit-transition: opacity .2s;
-}
-
-.glass-pane-opaque {
-  .opacity(0.5);
 }

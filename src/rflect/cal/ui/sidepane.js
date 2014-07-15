@@ -126,10 +126,10 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
 
   this.addChild(this.calSelectorMy_ = new rflect.cal.ui.CalSelector(
       this.viewManager_, this.containerSizeMonitor_, this.eventManager_,
-      rflect.cal.i18n.Symbols.CALENDARS_LABEL_MY, true));
+      this.navigator_, rflect.cal.i18n.Symbols.CALENDARS_LABEL_MY, true));
   this.addChild(this.calSelectorOther_ = new rflect.cal.ui.CalSelector(
       this.viewManager_, this.containerSizeMonitor_, this.eventManager_,
-      rflect.cal.i18n.Symbols.CALENDARS_LABEL_OTHER, false));
+      this.navigator_, rflect.cal.i18n.Symbols.CALENDARS_LABEL_OTHER, false));
 
   if (goog.DEBUG) {
     _inspect('miniCal_', this.miniCal_);

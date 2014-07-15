@@ -33,10 +33,9 @@ rflect.MOBILE = rflect.UI_TYPE == 'MOBILE';
 
 /**
  * Feature flag - whether side pane can be hidden.
- * @type {boolean}
- * @const
+ * @define {boolean}
  */
-rflect.SIDE_PANE_MOVABLE = rflect.UI_TYPE == 'MOBILE';
+rflect.SIDE_PANE_MOVABLE = false;
 
 
 /**
