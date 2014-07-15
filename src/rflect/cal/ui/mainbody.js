@@ -128,9 +128,10 @@ rflect.cal.ui.MainBody.HTML_PARTS_ = [
   '<div id="top-pane" class="control-pane">',
   '</div>',
   '<div id="main-body">',
-  '<div id="side-pane" class="side-pane slide-pane-left slide-pane-left-visible">',
+  '<div id="side-pane" class="side-pane slide-pane-left ',
+  '">',
   '</div>',
-  '<div id="main-pane" class="' + goog.getCssName('main-pane') + '">',
+  '<div id="main-pane" class="main-pane">',
   '</div>',
   '</div>',
   '</div>'
@@ -307,10 +308,14 @@ rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
         this.topPane_.build(aSb);
       };break;
       case 4: {
+        aSb.append(this.sidePane_.showBehavior.isVisible() ?
+            'slide-pane-left-visible' : '');
+      };break;
+      case 5: {
         this.sidePane_.build(aSb);
       };break;
       // Include main pane in common buffer.
-      case 6: {
+      case 7: {
         this.mainPane_.build(aSb);
       };break;
 

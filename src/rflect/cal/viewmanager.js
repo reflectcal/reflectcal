@@ -45,8 +45,6 @@ rflect.cal.ViewManager = function(aMainInstance) {
 
   this.isOnStartup_ = true;
 
-  // Set initial view.
-  this.currentView = rflect.cal.ViewType.WEEK;
 
   /**
    * Time manager instance.
@@ -115,6 +113,9 @@ rflect.cal.ViewManager = function(aMainInstance) {
   if (goog.DEBUG)
     _inspect('transport_', this.transport_);
 
+  // Set initial view.
+  this.currentView = this.navigator_.isSmallScreen() ?
+      rflect.cal.ViewType.DAY : rflect.cal.ViewType.WEEK;
   this.showView(this.currentView);
 };
 goog.inherits(rflect.cal.ViewManager, goog.events.EventHandler);

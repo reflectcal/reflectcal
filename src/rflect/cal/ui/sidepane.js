@@ -88,7 +88,7 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
   this.showBehavior = new rflect.cal.ui.PaneShowBehavior(this,
       this.getDomHelper().getElement('main-container'));
   this.showBehavior.setSlidingIsEnabled(true);
-  this.showBehavior.setVisibleWithoutRender(true);
+  this.showBehavior.setVisibleWithoutRender(!this.navigator_.isSmallScreen());
 
   /**
    * Whether glass pane is enabled.
@@ -109,8 +109,6 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
     this.addChild(this.buttonNow_ = new goog.ui.ToggleButton(null,
         goog.ui.FlatButtonRenderer.getInstance()));
     this.addChild(this.buttonDay_ = new goog.ui.ToggleButton(null,
-        goog.ui.FlatButtonRenderer.getInstance()));
-    this.addChild(this.buttonWeek_ = new goog.ui.ToggleButton(null,
         goog.ui.FlatButtonRenderer.getInstance()));
     this.addChild(this.buttonMonth_ = new goog.ui.ToggleButton(null,
         goog.ui.FlatButtonRenderer.getInstance()));
@@ -245,12 +243,6 @@ rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
     '</div>',
     '</li>',
     '<li class="side-pane-menu-item">',
-    // Week button.
-    '<div id="' + rflect.cal.predefined.BUTTON_WEEK_ID + '" class="side-pane-button">',
-    rflect.cal.i18n.Symbols.WEEK,
-    '</div>',
-    '</li>',
-    '<li class="side-pane-menu-item">',
     // Month button.
     '<div id="' + rflect.cal.predefined.BUTTON_MONTH_ID + '" class="side-pane-button">',
     rflect.cal.i18n.Symbols.MONTH,
@@ -334,8 +326,6 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
   if (isSmallScreen){
     this.buttonDay_.decorate(this.getDomHelper().getElement(
         rflect.cal.predefined.BUTTON_DAY_ID));
-    this.buttonWeek_.decorate(this.getDomHelper().getElement(
-        rflect.cal.predefined.BUTTON_WEEK_ID));
     this.buttonMonth_.decorate(
         this.getDomHelper().getElement(rflect.cal.predefined.BUTTON_MONTH_ID));
     this.buttonOptions_.decorate(
