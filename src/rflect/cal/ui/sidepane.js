@@ -106,7 +106,7 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
 
   if (isSmallScreen) {
 
-    this.addChild(this.buttonNow_ = new goog.ui.ToggleButton(null,
+    this.addChild(this.buttonBack_ = new goog.ui.Button(null,
         goog.ui.FlatButtonRenderer.getInstance()));
     this.addChild(this.buttonDay_ = new goog.ui.ToggleButton(null,
         goog.ui.FlatButtonRenderer.getInstance()));
@@ -237,7 +237,7 @@ rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
 
   var parts = [
     '<li class="side-pane-menu-item">',
-    // Day button.
+    // Back button.
     '<div id="' + rflect.cal.predefined.BUTTON_TO_CALENDAR_ID + '" class="side-pane-button">',
     rflect.cal.i18n.Symbols.TO_CALENDAR,
     '</div>',
@@ -332,6 +332,8 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
       this.getDomHelper().getElement('tasks-selector'), true);
 
   if (isSmallScreen){
+    this.buttonBack_.decorate(this.getDomHelper().getElement(
+        rflect.cal.predefined.BUTTON_TO_CALENDAR_ID));
     this.buttonDay_.decorate(this.getDomHelper().getElement(
         rflect.cal.predefined.BUTTON_DAY_ID));
     this.buttonMonth_.decorate(
@@ -349,7 +351,9 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
   // Attaching event handlers.
   if (isSmallScreen){
     this.getHandler().listen(this.getGlassElement_(),
-        goog.events.EventType.CLICK, this.onCancel_, false, this);
+        goog.events.EventType.CLICK, this.onCancel_, false, this)
+        .listen(this.buttonBack_,
+        goog.ui.Component.EventType.ACTION, this.onCancel_, false, this);
   }
 
   if (this.showBehavior.isVisible()) {
