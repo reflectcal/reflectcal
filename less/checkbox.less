@@ -6,7 +6,7 @@
 
 /* Sample 3-state checkbox styles. */
 
-.goog-checkbox() {
+.goog-checkbox {
   .no-tap-delay();
   position: relative;
   border: 1px solid #c5c5c5;
@@ -18,19 +18,17 @@
   .border-radius(2px);
   cursor: default;
   transition: border-color .2s, box-shadow .2s;
-}
 
-.goog-checkbox when (@UI_TYPE = '') {
-  .goog-checkbox();
   width: 11px;
   height: 11px;
 }
 
-.goog-checkbox when (@UI_TYPE = 'MOBILE') {
-  .goog-checkbox();
-  height: 28px;
-  width: 28px;
-  font-size: 28px;
+@media (max-width: 480px) {
+  .goog-checkbox {
+    height: 28px;
+    width: 28px;
+    font-size: 28px;
+  }
 }
 
 .goog-checkbox-hover {
