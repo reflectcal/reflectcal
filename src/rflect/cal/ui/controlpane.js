@@ -336,9 +336,14 @@ rflect.cal.ui.ControlPane.prototype.getDateHeader = function() {
     header = formatStart.format(startDate) + formatEnd.format(endDate);
 
   } else {
+
     // Single day case.
-    formatStart = new goog.i18n.DateTimeFormat('EEEE, ' +
-        goog.i18n.DateTimePatterns.MONTH_DAY_FULL + ', yyyy');
+    if (this.navigator_.isSmallScreen()){
+      formatStart = new goog.i18n.DateTimeFormat('EEE, MMM dd, yyyy');
+    } else {
+      formatStart = new goog.i18n.DateTimeFormat('EEEE, ' +
+          goog.i18n.DateTimePatterns.MONTH_DAY_FULL + ', yyyy');
+    }
     header = formatStart.format(startDate);
 
   }
