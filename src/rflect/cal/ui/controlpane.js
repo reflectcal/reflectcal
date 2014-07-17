@@ -22,6 +22,7 @@ goog.require('rflect.ui.Component');
 goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.predefined');
+goog.require('rflect.cal.ui.ViewButtonUpdater');
 
 
 
@@ -57,6 +58,13 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, aNavigator) {
    */
   this.navigator_ = aNavigator;
 
+  /**
+   * View button updater.
+   * @type {rflect.cal.ui.ViewButtonUpdater}
+   * @private
+   */
+  this.viewButtonUpdater_ = new rflect.cal.ui.ViewButtonUpdater(this,
+      this.viewManager_, this.timeManager_);
 
   var isSmallScreen = this.navigator_.isSmallScreen();
 
@@ -93,6 +101,38 @@ goog.inherits(rflect.cal.ui.ControlPane, rflect.ui.Component);
  * @private
  */
 rflect.cal.ui.ControlPane.prototype.timeLabel_ = null;
+
+
+/**
+ * @return {goog.ui.ToggleButton}
+ */
+rflect.cal.ui.ControlPane.prototype.getButtonDay = function(){
+  return this.buttonDay_;
+};
+
+
+/**
+ * @return {goog.ui.ToggleButton}
+ */
+rflect.cal.ui.ControlPane.prototype.getButtonWeek = function(){
+  return this.buttonWeek_;
+};
+
+
+/**
+ * @return {goog.ui.ToggleButton}
+ */
+rflect.cal.ui.ControlPane.prototype.getButtonMonth = function(){
+  return this.buttonMonth_;
+};
+
+
+/**
+ * @return {goog.ui.ToggleButton}
+ */
+rflect.cal.ui.ControlPane.prototype.getButtonNow = function(){
+  return this.buttonNow_;
+};
 
 
 /**
@@ -279,7 +319,7 @@ rflect.cal.ui.ControlPane.prototype.enterDocument = function() {
   rflect.cal.ui.ControlPane.superClass_.enterDocument.call(this);
 
   // Update buttons.
-  this.updateButtons_();
+  this.viewButtonUpdater_.updateButtons();
 
   // Attaching event handlers.
   if (!isSmallScreen) {
@@ -366,45 +406,7 @@ rflect.cal.ui.ControlPane.prototype.updateByRedraw = function() {
     this.timeLabel_ = this.dom_.getElement('time-period-label');
   this.timeLabel_ && (this.timeLabel_.innerHTML = this.getDateHeader());
   // Update buttons.
-  this.updateButtons_();
-};
-
-
-/**
- * Updates buttons according to current view.
- * @private
- */
-rflect.cal.ui.ControlPane.prototype.updateButtons_ = function() {
-  var viewsToButtons = {};
-  viewsToButtons[rflect.cal.ViewType.DAY] = this.buttonDay_;
-  viewsToButtons[rflect.cal.ViewType.WEEK] = this.buttonWeek_;
-  viewsToButtons[rflect.cal.ViewType.MONTH] = this.buttonMonth_;
-  for (var view in viewsToButtons) {
-    var button = viewsToButtons[view];
-    // Not all view buttons are present in some configurations.
-    if (!button)
-      continue;
-    if (this.viewManager_.currentView == view) {
-      button.setChecked(true);
-      button.setFocused(false);
-      button.setAutoStates(goog.ui.Component.State.CHECKED, false);
-    } else {
-      button.setChecked(false);
-      button.setAutoStates(goog.ui.Component.State.CHECKED, true);
-    }
-  }
-  
-  if (!this.buttonNow_)
-    return;
-  
-  if (this.timeManager_.isInNowPoint) {
-    this.buttonNow_.setChecked(true);
-    this.buttonNow_.setFocused(false);
-    this.buttonNow_.setAutoStates(goog.ui.Component.State.CHECKED, false);
-  } else {
-    this.buttonNow_.setChecked(false);
-    this.buttonNow_.setAutoStates(goog.ui.Component.State.CHECKED, true);
-  }
+  this.viewButtonUpdater_.updateButtons();
 };
 
 

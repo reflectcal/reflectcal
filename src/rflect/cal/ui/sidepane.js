@@ -26,6 +26,7 @@ goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
+goog.require('rflect.cal.ui.ViewButtonUpdater');
 
 
 
@@ -78,6 +79,14 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
    * @private
    */
   this.navigator_ = aNavigator;
+
+  /**
+   * View button updater.
+   * @type {rflect.cal.ui.ViewButtonUpdater}
+   * @private
+   */
+  this.viewButtonUpdater_ = new rflect.cal.ui.ViewButtonUpdater(this,
+      this.viewManager_, this.timeManager_);
 
   var isSmallScreen = this.navigator_.isSmallScreen();
 
@@ -183,11 +192,43 @@ rflect.cal.ui.SidePane.prototype.glassElement_;
 
 
 /**
- * Menu button, settings.
- * @type {Element}
+ * Week mode menu button.
+ * @type {goog.ui.ToggleButton}
  * @private
  */
-rflect.cal.ui.SidePane.prototype.buttonSettings_;
+rflect.cal.ui.SidePane.prototype.buttonWeek_;
+
+
+/**
+ * @return {goog.ui.ToggleButton}
+ */
+rflect.cal.ui.SidePane.prototype.getButtonDay = function(){
+  return this.buttonDay_;
+};
+
+
+/**
+ * @return {goog.ui.ToggleButton}
+ */
+rflect.cal.ui.SidePane.prototype.getButtonWeek = function(){
+  return this.buttonWeek_;
+};
+
+
+/**
+ * @return {goog.ui.ToggleButton}
+ */
+rflect.cal.ui.SidePane.prototype.getButtonMonth = function(){
+  return this.buttonMonth_;
+};
+
+
+/**
+ * @return {goog.ui.ToggleButton}
+ */
+rflect.cal.ui.SidePane.prototype.getButtonNow = function(){
+  return this.buttonMonth_;
+};
 
 
 /**
@@ -348,6 +389,9 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
 
   rflect.cal.ui.SidePane.superClass_.enterDocument.call(this);
 
+  // Update buttons.
+  this.viewButtonUpdater_.updateButtons();
+
   // Attaching event handlers.
   if (isSmallScreen){
     this.getHandler().listen(this.getGlassElement_(),
@@ -417,6 +461,16 @@ rflect.cal.ui.SidePane.prototype.onSlideBreak_ = function(aEvent) {
     }
   }
 }
+
+
+/**
+ * Updates top pane by setting new date header.
+ * @param {boolean=} opt_deep Whether to update children.
+ */
+rflect.cal.ui.SidePane.prototype.updateByRedraw = function(opt_deep) {
+  // Update buttons.
+  this.viewButtonUpdater_.updateButtons();
+};
 
 
 /**
