@@ -20,7 +20,8 @@
     left: 0;
     width: 250px;
     height: 100%;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     z-index: @paneZIndex;
     border-right: 1px solid #d5d5d5;
     background: #fff;
@@ -53,12 +54,25 @@
 
 .side-pane-button {
   font-family: 'Roboto', Arial, sans-serif;
+  .box-sizing();
   width: 100%;
   height: 100%;
+  margin: 0;
   line-height: 21px;
   text-align: left;
   border: none;
+  .border-radius(0);
   background: none;
+  box-shadow: none;
+}
+
+.side-pane-button.goog-flat-button-active,
+.side-pane-button.goog-flat-button-selected,
+.side-pane-button.goog-flat-button-checked {
+  background: none;
+  box-shadow: none;
+  color: #0f0f0f;
+  .gradient(#e9e9e9, #e0e0e0);
 }
 
 .glass-pane {
