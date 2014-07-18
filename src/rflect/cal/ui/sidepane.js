@@ -200,6 +200,14 @@ rflect.cal.ui.SidePane.prototype.buttonWeek_;
 
 
 /**
+ * Week mode menu button.
+ * @type {goog.ui.ToggleButton}
+ * @private
+ */
+rflect.cal.ui.SidePane.prototype.buttonNow_;
+
+
+/**
  * @return {goog.ui.ToggleButton}
  */
 rflect.cal.ui.SidePane.prototype.getButtonDay = function(){
