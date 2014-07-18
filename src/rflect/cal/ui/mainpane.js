@@ -40,11 +40,12 @@ goog.require('rflect.string');
  * container size monitor.
  * @param {rflect.cal.blocks.BlockManager} aBlockManager Link to block manager.
  * @param {rflect.cal.Transport} aTransport Link to transport.
+ * @param {rflect.cal.Navigator} aNavigator Link to navigator.
  * @constructor
  * @extends {rflect.ui.Component}
  */
 rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
-    aContainerSizeMonitor, aBlockManager, aTransport) {
+    aContainerSizeMonitor, aBlockManager, aTransport, aNavigator) {
   rflect.ui.Component.call(this);
 
   /**
@@ -90,6 +91,13 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
   this.transport_ = aTransport;
 
   /**
+   * Link to navigator.
+   * @type {rflect.cal.Navigator}
+   * @private
+   */
+  this.navigator_ = aNavigator;
+
+  /**
    * Time marker.
    * @type {rflect.cal.ui.TimeMarker}
    * @private
@@ -104,7 +112,7 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
   this.mainPaneBuilder_ = new rflect.cal.ui.MainPaneBuilder(this.viewManager_,
       this, aTimeManager, this.eventManager_, this.blockManager_.blockPoolWeek,
       this.blockManager_.blockPoolAllDay, this.blockManager_.blockPoolMonth,
-      this.containerSizeMonitor_, this.timeMarker_);
+      this.containerSizeMonitor_, this.navigator_, this.timeMarker_);
   if (goog.DEBUG)
     _inspect('mainPaneBuilder', this.mainPaneBuilder_);
 

@@ -102,7 +102,7 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
       this.viewManager_, this.timeManager_, this.navigator_));
   this.addChild(this.mainPane_ = new rflect.cal.ui.MainPane(this.viewManager_,
       this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
-      this.blockManager_, this.transport_));
+      this.blockManager_, this.transport_, this.navigator_));
 
   this.addChild(this.sidePane_ = new rflect.cal.ui.SidePane(
       this.viewManager_, this.timeManager_, this.eventManager_,

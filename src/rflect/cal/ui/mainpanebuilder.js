@@ -30,12 +30,13 @@ goog.require('rflect.date.util');
  * @param {rflect.cal.blocks.BlockPool} aBlockPoolMonth Link to month block pool.
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
+ * @param {rflect.cal.Navigator} aNavigator Link to navigator.
  * @param {rflect.cal.ui.TimeMarker} aTimeMarker Link to time marker.
  * @constructor
  */
 rflect.cal.ui.MainPaneBuilder = function(aViewManager, aMainPane, aTimeManager,
     aEventManager, aBlockPoolWeek, aBlockPoolAllday, aBlockPoolMonth,
-    aContainerSizeMonitor, aTimeMarker) {
+    aContainerSizeMonitor, aNavigator, aTimeMarker) {
   /**
    * Link to view manager.
    * @type {rflect.cal.ViewManager}
@@ -91,6 +92,13 @@ rflect.cal.ui.MainPaneBuilder = function(aViewManager, aMainPane, aTimeManager,
    * @private
    */
   this.containerSizeMonitor_ = aContainerSizeMonitor;
+
+  /**
+   * Link to navigator.
+   * @type {rflect.cal.Navigator}
+   * @private
+   */
+  this.navigator_ = aNavigator;
 
   /**
    * Link to time marker.
@@ -547,6 +555,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
   // just decorate.
   var offset = 0;
   var length = rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_.length;
+  var isSmallScreen = this.navigator_.isSmallScreen();
+
   while (++offset < length - 1) {
     // We move through parts array and increment offset. Each cycle, we append
     // some part and increment offset by 1. Sometimes we find special case when
@@ -557,11 +567,11 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[offset]);
 
     switch (offset) {
-      case 2: if (rflect.MOBILE) {
+      case 2: if (isSmallScreen) {
         //Skipping all-day zippy.
         offset += 3;
       };break;
-      case 3: if (!rflect.MOBILE) {
+      case 3: if (!isSmallScreen) {
         this.buildDayNamesZippy_(aSb, offset);
       };break;
       case 8: {
@@ -666,9 +676,11 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth = function(aSb,
     aFirstBuild) {
   var offset = 0;
   var length = rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_.length;
+  var isSmallScreen = this.navigator_.isSmallScreen();
+
   while (++offset < length - 1) {
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[offset]);
-    if (rflect.MOBILE) {
+    if (isSmallScreen) {
       switch (offset) {
         case 5: {
           this.buildMainPaneHeaderMonth_(aSb);
@@ -867,7 +879,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildMainPaneHeaderMonth_ = function(aSb
  * // End of individual dayname.
  * '</td>',
  */
-rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesMonth_ = function(aSb, aOffset) {
+rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesMonth_ = function(aSb,
+    aOffset) {
   var dayNamesFirstNumber = goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK;
   var dayNameNumber = 0;
 
@@ -881,8 +894,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesMonth_ = function(aSb, aOff
     // sunday and WEEKDAY gives weekday number starting from monday.
     dayNameNumber = (dayNamesFirstNumber + counter + 1) % 7;
 
-    //TODO(alexk): make this dependent on screen size.
-    if (rflect.MOBILE)
+    if (this.navigator_.isSmallScreen())
       aSb.append(goog.i18n.DateTimeSymbols.SHORTWEEKDAYS[dayNameNumber]);
     else
       aSb.append(goog.i18n.DateTimeSymbols.WEEKDAYS[dayNameNumber]);
