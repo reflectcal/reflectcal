@@ -227,7 +227,7 @@ rflect.cal.ui.SidePane.prototype.getButtonMonth = function(){
  * @return {goog.ui.ToggleButton}
  */
 rflect.cal.ui.SidePane.prototype.getButtonNow = function(){
-  return this.buttonMonth_;
+  return this.buttonNow_;
 };
 
 

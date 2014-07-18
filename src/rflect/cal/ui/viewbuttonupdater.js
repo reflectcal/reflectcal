@@ -55,6 +55,7 @@ rflect.cal.ui.ViewButtonUpdater.prototype.updateButtons = function() {
   viewsToButtons[rflect.cal.ViewType.DAY] = this.component.getButtonDay();
   viewsToButtons[rflect.cal.ViewType.WEEK] = this.component.getButtonWeek();
   viewsToButtons[rflect.cal.ViewType.MONTH] = this.component.getButtonMonth();
+
   for (var view in viewsToButtons) {
     var button = viewsToButtons[view];
     // Not all view buttons are present in some configurations.

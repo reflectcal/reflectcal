@@ -427,54 +427,62 @@ rflect.cal.ViewManager.prototype.onDateDrag_ = function(aEvent) {
 rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
   var viewHasChanged = this.currentView != aType;
   var calledExternally = opt_caller != undefined;
-  var calledByMiniCal = opt_caller == this.mainBody_.getMiniCal();
+  var miniCal = this.mainBody_.getSidePane().getMiniCal();
+  var calledByMiniCal = calledExternally && opt_caller == miniCal;
 
-  if (!viewHasChanged && !calledExternally && !this.isOnStartup_)
-    return;
+  if (viewHasChanged || calledExternally || this.isOnStartup_){
 
-  this.currentView = aType;
-  // Run time manager.
-  this.timeManager.configuration =
-      /** @type {rflect.cal.TimeManager.Configuration} */ (this.currentView);
-  this.timeManager.run();
-  this.eventManager_.run();
+    this.currentView = aType;
+    // Run time manager.
+    this.timeManager.configuration =
+        /** @type {rflect.cal.TimeManager.Configuration} */ (this.currentView);
+    this.timeManager.run();
+    this.eventManager_.run();
 
-  if (this.isOnStartup_) {
+    if (this.isOnStartup_) {
 
-    this.transport_.loadCalendars();
+      this.transport_.loadCalendars();
 
-    this.mainBody_.updateBeforeRedraw(true, true);
-    // Render main body and places it in document.body.
-    this.mainBody_.render();
-    this.assignEvents_();
-    this.isOnStartup_ = false;
+      this.mainBody_.updateBeforeRedraw(true, true);
+      // Render main body and places it in document.body.
+      this.mainBody_.render();
+      this.assignEvents_();
+      this.isOnStartup_ = false;
 
-  } else if (calledByMiniCal) {
-    
-    this.mainBody_.updateBeforeRedraw();
-    this.mainBody_.getMainPane().updateBeforeRedraw();
-    this.mainBody_.getTopPane().updateBeforeRedraw();
-    this.mainBody_.updateByRedraw();
-    this.mainBody_.getTopPane().updateByRedraw();
-    this.mainBody_.getMainPane().updateByRedraw();
-  
-  } else {
+    } else if (calledByMiniCal) {
 
-    this.mainBody_.updateBeforeRedraw();
-    this.mainBody_.getMainPane().updateBeforeRedraw(false, false, true);
-    this.mainBody_.getTopPane().updateBeforeRedraw();
-    this.mainBody_.getSidePane().updateBeforeRedraw();
-    this.mainBody_.getSidePane().getMiniCal().updateBeforeRedraw();
-    
-    this.mainBody_.updateByRedraw();
-    this.mainBody_.getMainPane().updateByRedraw();
-    this.mainBody_.getTopPane().updateByRedraw();
-    this.mainBody_.getSidePane().updateByRedraw();
-    this.mainBody_.getSidePane().getMiniCal().updateByRedraw();
+      this.mainBody_.updateBeforeRedraw();
+      this.mainBody_.getTopPane().updateBeforeRedraw();
+      this.mainBody_.getSidePane().updateBeforeRedraw();
+      this.mainBody_.getMainPane().updateBeforeRedraw();
+
+      this.mainBody_.updateByRedraw();
+      this.mainBody_.getTopPane().updateByRedraw();
+      this.mainBody_.getSidePane().updateByRedraw();
+      this.mainBody_.getMainPane().updateByRedraw();
+
+    } else {
+
+      this.mainBody_.updateBeforeRedraw();
+      this.mainBody_.getMainPane().updateBeforeRedraw(false, false, true);
+      this.mainBody_.getTopPane().updateBeforeRedraw();
+      this.mainBody_.getSidePane().updateBeforeRedraw();
+      if (miniCal){
+        this.mainBody_.getSidePane().getMiniCal().updateBeforeRedraw();
+      }
+
+      this.mainBody_.updateByRedraw();
+      this.mainBody_.getMainPane().updateByRedraw();
+      this.mainBody_.getTopPane().updateByRedraw();
+      this.mainBody_.getSidePane().updateByRedraw();
+      if (miniCal){
+        this.mainBody_.getSidePane().getMiniCal().updateByRedraw();
+      }
+    }
+
+    this.transport_.loadEventsAsync();
 
   }
-
-  this.transport_.loadEventsAsync();
 };
 
 
