@@ -440,8 +440,8 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
     // No need to subtract scrollbar width here because layout already takes
     // it into account.
 
-    this.alldayGridContainerSize.height =
-        rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE.height;
+    this.alldayGridContainerSize.height = this.navigator_.isSmallScreen() ?
+        0 : rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE.height;
     this.alldayGridSize = this.alldayGridContainerSize.clone();
 
     // ... else, in case when allday scrollable is expanded, we should
@@ -470,7 +470,8 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
   if (this.viewManager_.isInWeekMode()) {
 
     // Case when either allday scrollable is expanded.
-    if (this.isAlldayScrollableExpandedVer()) {
+    if (!this.navigator_.isSmallScreen() &&
+        this.isAlldayScrollableExpandedVer()) {
       var alldayBlockMaxHeight = 0;
 
       alldayBlockMaxHeight = Math.floor(
@@ -539,7 +540,8 @@ rflect.cal.ui.MainPane.prototype.addScrollListeners_ = function() {
         this.getDomHelper().getElement('main-pane-body-scrollable-wk'),
         goog.events.EventType.SCROLL, this.onMainPaneScrollableScroll_, false,
         this));
-    if (this.blockManager_.blockPoolAllDay.expanded)
+    if (!this.navigator_.isSmallScreen() &&
+        this.blockManager_.blockPoolAllDay.expanded)
       this.scrollListenersKeys_.push(goog.events.listen(
           this.getDomHelper().getElement('main-pane-header-scrollable'),
           goog.events.EventType.SCROLL, this.onMainPaneScrollableScroll_, false,
@@ -649,7 +651,8 @@ rflect.cal.ui.MainPane.prototype.updateByRedraw = function() {
       mainScrollable.scrollLeft =
           headerScrollable.scrollLeft =
           this.blockManager_.blockPoolWeek.scrollLeft;
-    if (this.blockManager_.blockPoolAllDay.expanded)
+    if (!this.navigator_.isSmallScreen() &&
+        this.blockManager_.blockPoolAllDay.expanded)
       headerScrollable.scrollTop =
           this.blockManager_.blockPoolAllDay.scrollTop;
 

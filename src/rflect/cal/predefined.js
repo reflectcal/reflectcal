@@ -32,10 +32,40 @@ rflect.MOBILE = rflect.UI_TYPE == 'MOBILE';
 
 
 /**
- * Feature flag - whether side pane can be hidden.
+ * Feature flag - whether side pane can be hidden for big screen.
  * @define {boolean}
  */
 rflect.SIDE_PANE_MOVABLE = false;
+
+
+/**
+ * Feature flag - whether horizontal expand is possible through UI.
+ * @define {boolean}
+ */
+rflect.HORIZONTAL_EXPAND_ENABLED = false;
+
+
+/**
+ * Feature flag - whether vertical expand is possible through UI.
+ * @define {boolean}
+ */
+rflect.VERTICAL_EXPAND_ENABLED = false;
+
+
+/**
+ * Whether horizontal blocks are expanded by default.
+ * @type {boolean}
+ * @const
+ */
+rflect.HORIZONTAL_EXPAND_DEFAULT_STATE = false;
+
+
+/**
+ * Whether vertical blocks are expanded by default.
+ * @type {boolean}
+ * @const
+ */
+rflect.VERTICAL_EXPAND_DEFAULT_STATE = !rflect.VERTICAL_EXPAND_ENABLED;
 
 
 /**
