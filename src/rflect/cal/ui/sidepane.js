@@ -405,6 +405,10 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
     this.getHandler().listen(this.getGlassElement_(),
         goog.events.EventType.CLICK, this.onCancel_, false, this)
         .listen(this.buttonBack_,
+        goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
+        .listen(this.buttonDay_,
+        goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
+        .listen(this.buttonMonth_,
         goog.ui.Component.EventType.ACTION, this.onCancel_, false, this);
   }
 
