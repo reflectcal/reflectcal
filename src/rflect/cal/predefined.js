@@ -56,7 +56,7 @@ rflect.VERTICAL_EXPAND_ENABLED = false;
  * Feature flag - whether larger targets enabled, for touch.
  * @define {boolean}
  */
-rflect.LARGE_TOUCH_TARGETS_ENABLED = rflect.MOBILE || true;
+rflect.LARGE_TOUCH_TARGETS_ENABLED = rflect.MOBILE;
 
 
 /**
