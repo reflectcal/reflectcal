@@ -567,11 +567,11 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[offset]);
 
     switch (offset) {
-      case 2: if (isSmallScreen) {
-        //Skipping all-day zippy.
-        offset += 3;
+      case 1: if (isSmallScreen) {
+        //Skipping main pane header.
+        offset += 65;
       };break;
-      case 3: if (!isSmallScreen) {
+      case 3: {
         this.buildDayNamesZippy_(aSb, offset);
       };break;
       case 8: {

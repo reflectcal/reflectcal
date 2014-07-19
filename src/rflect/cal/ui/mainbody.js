@@ -432,8 +432,9 @@ rflect.cal.ui.MainBody.prototype.measureStaticSizes = function() {
 
   if (this.viewManager_.isInWeekMode()) {
 
-    var allDayPaneSize = goog.style.getSize(
-        dom.getElement('main-pane-header-scrollable'));
+    var allDayPaneSize = this.navigator_.isSmallScreen() ?
+        new goog.math.Size(0, 0) :
+        goog.style.getSize(dom.getElement('main-pane-header-scrollable'));
     var weekPaneSize = goog.style.getSize(
         dom.getElement('main-pane-body-scrollable-wk'));
     //TODO(alexk): fix these pixels in layout
