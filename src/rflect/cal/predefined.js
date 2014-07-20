@@ -56,7 +56,7 @@ rflect.VERTICAL_EXPAND_ENABLED = false;
  * Feature flag - whether larger targets enabled, for touch.
  * @define {boolean}
  */
-rflect.TOUCH_INTERFACE_ENABLED = true;
+rflect.TOUCH_INTERFACE_ENABLED = rflect.UI_TYPE == 'TOUCH';
 
 
 /**
