@@ -70,7 +70,7 @@
   border-radius: 3px;
 }
 
-.calitem-color-cont {
+.calitem-color-cont() {
   position: relative;
   float: left;
   cursor: pointer;
@@ -78,16 +78,18 @@
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
+}
 
+.calitem-color-cont when (@UI_TYPE='') {
+  .calitem-color-cont();
   width: 16px; /*considering that visible edge of element is the border of contained element*/
   height: 16px;
 }
 
-@media (max-width: 480px) {
-  .calitem-color-cont {
-    width: 30px;
-    height: 30px;
-  }
+.calitem-color-cont when (@UI_TYPE='TOUCH') {
+  .calitem-color-cont();
+  width: 30px;
+  height: 30px;
 }
 
 .goog-checkbox-hover.calitem-color-cont {

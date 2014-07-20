@@ -66,21 +66,12 @@ body {
   margin-left: 61px; /*+1 pixel to match #grid-table border*/
 }
 
-#main-pane-header-wk-daynames() {
+#main-pane-header-wk-daynames {
   position: relative;
   overflow: hidden;
   height: 20px;
   line-height: 20px;
-}
-
-#main-pane-header-wk-daynames when (@UI_TYPE = ''){
-  #main-pane-header-wk-daynames();
   margin-right: 19px; /*to compensate 17px scrollbar + 2px from borders of upper table*/
-}
-
-#main-pane-header-wk-daynames when (@UI_TYPE = 'MOBILE'){
-  #main-pane-header-wk-daynames();
-  clear:both;
 }
 
 #weekmode-daynames-table {
@@ -106,21 +97,12 @@ body {
   text-decoration: underline;
 }
 
-#main-pane-header-scrollable() {
+#main-pane-header-scrollable {
   border: 1px solid #e5e5e5;
   border-bottom-width: 0;
   /*we need this for ie7 as nested relative positioned elements
   don't get affected by overflow without it*/
   position: relative;
-}
-
-#main-pane-header-scrollable when (@UI_TYPE = ''){
-  #main-pane-header-scrollable();
-}
-
-#main-pane-header-scrollable when (@UI_TYPE = 'MOBILE'){
-  #main-pane-header-scrollable();
-  border-right-width: 0;
 }
 
 /**
@@ -135,14 +117,8 @@ body {
   overflow-x: visible;
 }
 
-.mphs-scroll-vert-on when (@UI_TYPE = ''){
+.mphs-scroll-vert-on {
   overflow-y: scroll;
-  margin-right: 0;
-  border-right: none !important;
-}
-
-.mphs-scroll-vert-on when (@UI_TYPE = 'MOBILE'){
-  overflow-y: hidden;
   margin-right: 0;
   border-right: none !important;
 }
@@ -280,7 +256,7 @@ body {
   #main-pane-body-scrollable-wk();
 }
 
-#main-pane-body-scrollable-wk when (@UI_TYPE = 'MOBILE') {
+#main-pane-body-scrollable-wk when (@UI_TYPE = 'TOUCH') {
   #main-pane-body-scrollable-wk();
   overflow-y: hidden;
   z-index: 0;
@@ -512,19 +488,11 @@ body {
   margin-left: 16px; /*15 + 1 pixels from weeknums*/
 }
 
-.main-pane-body-scrollable-mn() {
+.main-pane-body-scrollable-mn {
   overflow-x: hidden;
   border: 1px solid #e5e5e5;
   position: relative;
   height: 100%;
-}
-
-.main-pane-body-scrollable-mn when (@UI_TYPE = '') {
-  .main-pane-body-scrollable-mn();
-}
-
-.main-pane-body-scrollable-mn when (@UI_TYPE = 'MOBILE') {
-  .main-pane-body-scrollable-mn();
 }
 
 .mpbs-mn-scroll-vert-on() {
@@ -537,7 +505,7 @@ body {
   overflow-y: scroll;
 }
 
-.mpbs-mn-scroll-vert-on when (@UI_TYPE = 'MOBILE') {
+.mpbs-mn-scroll-vert-on when (@UI_TYPE = 'TOUCH') {
   .mpbs-mn-scroll-vert-on();
   overflow-y: hidden;
 }
