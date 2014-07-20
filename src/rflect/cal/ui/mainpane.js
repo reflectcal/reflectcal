@@ -200,7 +200,7 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
 
   this.addChild(this.editDialog_);
 
-  if (rflect.MOBILE)
+  if (rflect.TOUCH_INTERFACE_ENABLED)
     this.momentumScroller_ = new rflect.ui.MomentumScroller();
 };
 goog.inherits(rflect.cal.ui.MainPane, rflect.ui.Component);
@@ -574,7 +574,7 @@ rflect.cal.ui.MainPane.prototype.removeScrollListeners_ = function() {
  * Removes scroll listeners on each update.
  */
 rflect.cal.ui.MainPane.prototype.removeMomentumScroller = function() {
-  if (!rflect.MOBILE)
+  if (!rflect.TOUCH_INTERFACE_ENABLED)
     return;
 
   this.momentumScroller_.enable(false);
@@ -585,7 +585,7 @@ rflect.cal.ui.MainPane.prototype.removeMomentumScroller = function() {
  * Removes scroll listeners on each update.
  */
 rflect.cal.ui.MainPane.prototype.addMomentumScroller = function() {
-  if (!rflect.MOBILE)
+  if (!rflect.TOUCH_INTERFACE_ENABLED)
     return;
 
   var element;
@@ -1809,12 +1809,14 @@ rflect.cal.ui.MainPane.prototype.onMainPaneScrollableScroll_ = function(aEvent) 
       this.blockManager_.blockPoolWeek.scrollLeft = scrollLeft;
       this.blockManager_.blockPoolWeek.scrollTop = scrollTop;
 
-      this.blockManager_.blockPoolAllDay.scrollLeft = scrollLeft;
+      if (!this.navigator_.isSmallScreen()){
+        this.blockManager_.blockPoolAllDay.scrollLeft = scrollLeft;
 
-      this.getDomHelper().getElement('weekmode-daynames-table').style.left =
-          '-' + scrollLeft + 'px';
-      this.getDomHelper().getElement('main-pane-header-scrollable').scrollLeft =
-          scrollLeft;
+        this.getDomHelper().getElement('weekmode-daynames-table').style.left =
+            '-' + scrollLeft + 'px';
+        this.getDomHelper().getElement('main-pane-header-scrollable')
+            .scrollLeft = scrollLeft;
+      }
     }
 
   } else if (this.viewManager_.isInMonthMode()) {

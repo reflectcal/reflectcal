@@ -56,7 +56,7 @@ rflect.VERTICAL_EXPAND_ENABLED = false;
  * Feature flag - whether larger targets enabled, for touch.
  * @define {boolean}
  */
-rflect.LARGE_TOUCH_TARGETS_ENABLED = rflect.MOBILE;
+rflect.TOUCH_INTERFACE_ENABLED = true;
 
 
 /**
@@ -215,7 +215,7 @@ rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_WIDTH_DIFFERENCE_MONTH =
  * @type {number}
  * @const
  */
-rflect.cal.predefined.MN_EVENT_HEIGHT = rflect.LARGE_TOUCH_TARGETS_ENABLED ?
+rflect.cal.predefined.MN_EVENT_HEIGHT = rflect.TOUCH_INTERFACE_ENABLED ?
     41 : 17;
 
 

@@ -560,7 +560,7 @@ rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
   var isSmallScreen = this.navigator_.isSmallScreen();
 
   if (aEvent.start && !aEvent.showing) {
-    if (rflect.MOBILE){
+    if (rflect.TOUCH_INTERFACE_ENABLED){
       this.mainPane_.addMomentumScroller();
     } else {
       //NOTE(alexk): we can use rflect.cal.ui.MainBody.prototype.toggleSidePane
@@ -577,7 +577,7 @@ rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
     this.mainPane_.expandElement(false);
   }
   if (!aEvent.start && aEvent.showing) {
-    if (rflect.MOBILE)
+    if (rflect.TOUCH_INTERFACE_ENABLED)
       this.mainPane_.removeMomentumScroller();
     if (rflect.SIDE_PANE_MOVABLE)
       this.measureStaticSizes();
@@ -594,12 +594,12 @@ rflect.cal.ui.MainBody.prototype.onExternalPaneSlide_ = function(aEvent) {
   // If closing pane, show calendar on start.
   if (aEvent.start && !aEvent.showing) {
     this.showCalendar_(true);
-    if (rflect.MOBILE) this.mainPane_.addMomentumScroller();
+    if (rflect.TOUCH_INTERFACE_ENABLED) this.mainPane_.addMomentumScroller();
   }
   // If opening pane, hide calendar on end.
   if (!aEvent.start && aEvent.showing) {
     this.showCalendar_(false);
-    if (rflect.MOBILE) this.mainPane_.removeMomentumScroller();
+    if (rflect.TOUCH_INTERFACE_ENABLED) this.mainPane_.removeMomentumScroller();
   }
 }
 
