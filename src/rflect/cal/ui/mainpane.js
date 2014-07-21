@@ -504,7 +504,7 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
 
   this.removeMomentumScroller();
 
-  if (opt_updateByNavigation && !rflect.MOBILE)
+  if (opt_updateByNavigation && !rflect.TOUCH_INTERFACE_ENABLED)
     this.setHandyScrollPosition_();
 
 };
@@ -820,7 +820,7 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
       this.onSaveEvent_, false, this);
 
   //Mouse events.
-  if (!rflect.MOBILE) {
+  if (!rflect.TOUCH_INTERFACE_ENABLED) {
     this.getHandler().listen(this.getElement(), goog.events.EventType.DBLCLICK,
         this.onDoubleClick_, false, this)
         .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
@@ -1852,7 +1852,7 @@ rflect.cal.ui.MainPane.prototype.disposeInternal = function() {
   this.leftContAd_ = null;
   this.rightContAd_ = null;
 
-  if (rflect.MOBILE)
+  if (rflect.TOUCH_INTERFACE_ENABLED)
     this.momentumScroller_.dispose();
 
   rflect.cal.ui.MainPane.superClass_.disposeInternal.call(this);

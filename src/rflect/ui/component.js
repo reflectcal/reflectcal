@@ -150,6 +150,42 @@ rflect.ui.Component.prototype.update =
 
 
 /**
+ * Enables touch interface.
+ * @param {boolean} aEnable Whether to enable it.
+ * @param {boolean=} opt_deep Whether to enable it in children.
+ */
+rflect.ui.Component.prototype.enableTouchInterface =
+    function(aEnable, opt_deep) {
+  this.forEachChild(function(aChild) {
+    if (aChild.setHandleTouchEvents) {
+      aChild.setHandleTouchEvents(aEnable);
+    }
+    if (opt_deep && aChild.enableTouchInterface) {
+      aChild.enableTouchInterface(aEnable, opt_deep);
+    }
+  });
+};
+
+
+/**
+ * Enables mouse interface.
+ * @param {boolean} aEnable Whether to enable it.
+ * @param {boolean=} opt_deep Whether to enable it in children.
+ */
+rflect.ui.Component.prototype.enableMouseInterface =
+    function(aEnable, opt_deep) {
+  this.forEachChild(function(aChild) {
+    if (aChild.setHandleMouseEvents) {
+      aChild.setHandleMouseEvents(aEnable);
+    }
+    if (opt_deep && aChild.enableMouseInterface) {
+      aChild.enableMouseInterface(aEnable, opt_deep);  
+    }
+  });
+};
+
+
+/**
  * Disposes of component.
  * @override
  * @protected

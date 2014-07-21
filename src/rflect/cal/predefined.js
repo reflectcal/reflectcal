@@ -60,6 +60,13 @@ rflect.TOUCH_INTERFACE_ENABLED = true;
 
 
 /**
+ * Whether wireless communication is used.
+ * @define {boolean}
+ */
+rflect.WIRELESS_COMMUNICATION_IS_USED = false;
+
+
+/**
  * Whether horizontal blocks are expanded by default.
  * @type {boolean}
  * @const
