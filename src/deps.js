@@ -77,7 +77,7 @@ goog.addDependency('../../../rflect/ui/ac/renderoptions.js', ['rflect.ui.ac.Rend
 goog.addDependency('../../../rflect/ui/ac/richinputhandler.js', ['rflect.ui.ac.RichInputHandler'], ['rflect.ui.ac.InputHandler']);
 goog.addDependency('../../../rflect/ui/ac/richremote.js', ['rflect.ui.ac.RichRemote'], ['rflect.ui.ac.AutoComplete', 'rflect.ui.ac.Remote', 'rflect.ui.ac.Renderer', 'rflect.ui.ac.RichInputHandler', 'rflect.ui.ac.RichRemoteArrayMatcher']);
 goog.addDependency('../../../rflect/ui/ac/richremotearraymatcher.js', ['rflect.ui.ac.RichRemoteArrayMatcher'], ['rflect.ui.ac.RemoteArrayMatcher']);
-goog.addDependency('../../../rflect/ui/checkbox.js', ['rflect.ui.Checkbox'], ['goog.ui.Checkbox', 'rflect.ui.CheckboxRenderer']);
+goog.addDependency('../../../rflect/ui/checkbox.js', ['rflect.ui.Checkbox'], ['goog.a11y.aria', 'goog.a11y.aria.State', 'goog.asserts', 'goog.events.EventType', 'goog.events.KeyCodes', 'goog.ui.Checkbox.State', 'goog.ui.Component.EventType', 'goog.ui.Component.State', 'goog.ui.Control', 'goog.ui.registry', 'rflect.ui.CheckboxRenderer']);
 goog.addDependency('../../../rflect/ui/checkboxrenderer.js', ['rflect.ui.CheckboxRenderer'], ['goog.style', 'goog.ui.CheckboxRenderer']);
 goog.addDependency('../../../rflect/ui/clickbuster.js', ['rflect.ui.clickBuster'], ['goog.Disposable', 'goog.events', 'goog.events.EventType']);
 goog.addDependency('../../../rflect/ui/component.js', ['rflect.ui.Component'], ['goog.array', 'goog.string.StringBuffer', 'goog.ui.Component']);
