@@ -806,8 +806,8 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
 
   rflect.cal.ui.MainPane.superClass_.enterDocument.call(this);
 
-  this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
-      this.onClick_, false, this)
+  this.getHandler().listen(this.getElement(), goog.events.EventType.TOUCHEND,
+      this.onTouchEnd_, false, this)
       .listen(this.saveDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
       this.onEventEdit_, false, this)
       .listen(this.saveDialog_, rflect.ui.Dialog.EventType.SELECT,
@@ -821,7 +821,9 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
 
   //Mouse events.
   if (!rflect.TOUCH_INTERFACE_ENABLED) {
-    this.getHandler().listen(this.getElement(), goog.events.EventType.DBLCLICK,
+    this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
+        this.onClick_, false, this)
+        .listen(this.getElement(), goog.events.EventType.DBLCLICK,
         this.onDoubleClick_, false, this)
         .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
         this.onMouseOver_, false, this)
@@ -899,6 +901,25 @@ rflect.cal.ui.MainPane.prototype.onClick_ = function(aEvent) {
       !this.selectionMask_.wasDragged()) {
 
     this.showEventEditComponent_(target, className);
+
+  }
+};
+
+
+/**
+ * Main pane touch end handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.onTouchEnd_ = function(aEvent) {
+  var target = /** @type {Element}*/ (aEvent.target);
+  var id = target.id;
+  var className = target.className;
+
+  if ((this.isChipOrChild_(className) || this.isGrip_(className)) &&
+      !this.selectionMask_.wasDragged()) {
+
+    this.getParent().showEventPane(true, false);
 
   }
 };
