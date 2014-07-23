@@ -36,7 +36,7 @@ goog.inherits(rflect.ui.MomentumScroller, goog.events.EventHandler);
 /**
  * @type {number}
  */
-rflect.ui.MomentumScroller.DRAG_THRESHHOLD = 5;
+rflect.ui.MomentumScroller.DRAG_THRESHOLD = 5;
 
 
 /**
@@ -482,7 +482,7 @@ rflect.ui.MomentumScroller.prototype.getLowestContentPosition = function() {
  */
 rflect.ui.MomentumScroller.prototype.isDragging = function() {
   return this.isDragging_ || (this.isDragging_ = (Math.abs(this.currentPoint_ -
-      this.startTouchY) >= rflect.ui.MomentumScroller.DRAG_THRESHHOLD));
+      this.startTouchY) >= rflect.ui.MomentumScroller.DRAG_THRESHOLD));
 }
 
 
