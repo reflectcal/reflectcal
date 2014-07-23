@@ -131,6 +131,14 @@ goog.ui.Control.decorate = /** @type {function(Element): goog.ui.Control} */ (
 
 
 /**
+ * Distance that is allowed to be dragged over control after touchstart to still
+ * enable action on touchend.
+ * @type {number}
+ */
+goog.ui.Control.DRAG_THRESHOLD = 25;
+
+
+/**
  * Renderer associated with the component.
  * @type {goog.ui.ControlRenderer|undefined}
  * @private
@@ -666,6 +674,8 @@ goog.ui.Control.prototype.handleTouchStart = function(e) {
     // Activate the control, and focus its key event
     // target (if supported).
 
+    this.saveStartTouch(e);
+
     if (this.isAutoState(goog.ui.Component.State.ACTIVE)) {
       this.setActive(true);
     }
@@ -692,13 +702,46 @@ goog.ui.Control.prototype.handleTouchStart = function(e) {
 goog.ui.Control.prototype.handleTouchEnd = function(e) {
   if (this.isEnabled()) {
 
-    if (this.isActive() &&
-        this.performActionInternal(e) &&
-        this.isAutoState(goog.ui.Component.State.ACTIVE)) {
-      this.setActive(false);
+    if (this.isActive()){
+      if (!this.touchWasMoved(e)) {
+        if (this.performActionInternal(e) &&
+            this.isAutoState(goog.ui.Component.State.ACTIVE)) {
+          this.setActive(false);
+        }
+      } else {
+        this.setActive(false);
+      }
     }
   }
 };
+
+
+/**
+ * Saves touch start coordinates to be later tested whether touch was moved.
+ * @param {goog.events.Event} e Touch event.
+ * @protected
+ */
+goog.ui.Control.prototype.saveStartTouch = function(e) {
+  this.startTouchX_ = e.getBrowserEvent().touches[0].clientX;
+  this.startTouchY_ = e.getBrowserEvent().touches[0].clientY;
+}
+
+
+/**
+ * @return {boolean} Whether touch end was moved from touch start more than
+ * threshold.
+ * @param {goog.events.Event} e Touch event.
+ * @protected
+ */
+goog.ui.Control.prototype.touchWasMoved = function(e) {
+
+  var endTouchX = e.getBrowserEvent().touches[0].clientX;
+  var endTouchY = e.getBrowserEvent().touches[0].clientY;
+
+  return Math.abs(this.startTouchX_ - endTouchX) >
+      goog.ui.Control.DRAG_THRESHOLD || Math.abs(this.startTouchY_ -
+      endTouchY) > goog.ui.Control.DRAG_THRESHOLD;
+}
 
 
 /**

@@ -202,12 +202,17 @@ rflect.ui.Checkbox.prototype.enterDocument = function() {
     var handler = this.getHandler();
     if (this.label_) {
       handler.
+          listen(this.label_, goog.events.EventType.TOUCHSTART,
+              this.saveStartTouch).
           listen(this.label_, goog.events.EventType.TOUCHEND,
               this.handleClickOrSpace_);
     }
     // Checkbox needs to explicitly listen for touchend event.
-    handler.listen(this.getElement(),
-        goog.events.EventType.TOUCHEND, this.handleClickOrSpace_);
+    handler.
+        listen(this.getElement(), goog.events.EventType.TOUCHSTART,
+            this.saveStartTouch).
+        listen(this.getElement(), goog.events.EventType.TOUCHEND,
+            this.handleClickOrSpace_);
   }
 
   // Set aria label.
@@ -250,10 +255,18 @@ rflect.ui.Checkbox.prototype.handleClickOrSpace_ = function(e) {
   e.stopPropagation();
   var eventType = this.checked_ ? goog.ui.Component.EventType.UNCHECK :
       goog.ui.Component.EventType.CHECK;
-  if (this.isEnabled() && this.dispatchEvent(eventType)) {
-    e.preventDefault();  // Prevent scrolling in Chrome if SPACE is pressed.
-    this.toggle();
-    this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+
+  if (this.isEnabled()) {
+
+    if (!this.touchWasMoved(e) &&
+        this.dispatchEvent(eventType)) {
+
+      e.preventDefault();  // Prevent scrolling in Chrome if SPACE is pressed.
+      this.toggle();
+      this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+
+    }
+
   }
 };
 
