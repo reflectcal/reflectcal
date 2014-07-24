@@ -453,6 +453,9 @@ rflect.cal.ui.CalSelector.prototype.enterDocumentForCheckboxes = function () {
   goog.array.forEach(nodes, function(node, index) {
 
     var cb = new rflect.ui.Checkbox();
+    cb.setHandleMouseEvents(!rflect.TOUCH_INTERFACE_ENABLED);
+    cb.setHandleTouchEvents(rflect.TOUCH_INTERFACE_ENABLED);
+
     this.addChild(cb);
     cb.decorate(node);
     cb.setLabel(node.parentNode);

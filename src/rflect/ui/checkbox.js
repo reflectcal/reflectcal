@@ -258,7 +258,7 @@ rflect.ui.Checkbox.prototype.handleClickOrSpace_ = function(e) {
 
   if (this.isEnabled()) {
 
-    if (!this.touchWasMoved(e) &&
+    if ((e.type != goog.events.EventType.TOUCHEND || !this.touchWasMoved(e)) &&
         this.dispatchEvent(eventType)) {
 
       e.preventDefault();  // Prevent scrolling in Chrome if SPACE is pressed.

@@ -735,8 +735,8 @@ goog.ui.Control.prototype.saveStartTouch = function(e) {
  */
 goog.ui.Control.prototype.touchWasMoved = function(e) {
 
-  var endTouchX = e.getBrowserEvent().touches[0].clientX;
-  var endTouchY = e.getBrowserEvent().touches[0].clientY;
+  var endTouchX = e.getBrowserEvent().changedTouches[0].clientX;
+  var endTouchY = e.getBrowserEvent().changedTouches[0].clientY;
 
   return Math.abs(this.startTouchX_ - endTouchX) >
       goog.ui.Control.DRAG_THRESHOLD || Math.abs(this.startTouchY_ -
