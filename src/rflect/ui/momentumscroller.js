@@ -382,6 +382,9 @@ rflect.ui.MomentumScroller.prototype.onTouchEnd = function(aEvent) {
     } else {
       this.snapToBounds();
     }
+
+    //Prevent accidental selection of chips.
+    aEvent.preventDefault();
   }
 
   this.previousPoint_ = this.previousMoment_ = this.currentPoint_ =
