@@ -128,7 +128,7 @@ goog.inherits(rflect.cal.ui.MainBody, rflect.ui.Component);
  * @private
  */
 rflect.cal.ui.MainBody.HTML_PARTS_ = [
-  '<div id="cal-container" class="cal-container">',
+  '<div id="main-body" class="main-body">',
   '<div id="top-pane" class="control-pane">',
   '</div>',
   '<div id="main-body">',
@@ -285,8 +285,8 @@ rflect.cal.ui.MainBody.prototype.decorateInternal = function(aElement,
       opt_doNotBuildBody);
 
   if (!opt_doNotBuildBody) {
-    this.getElement().id = 'cal-container';
-    this.getElement().className = goog.getCssName('cal-container');
+    this.getElement().id = 'main-body';
+    this.getElement().className = goog.getCssName('main-body');
   }
 };
 
@@ -432,7 +432,7 @@ rflect.cal.ui.MainBody.prototype.rebuildLeftPaneWithSizes = function() {
  */
 rflect.cal.ui.MainBody.prototype.measureStaticSizes = function() {
   var dom = this.getDomHelper();
-  var totalSize = goog.style.getSize(dom.getElement('cal-container'));
+  var totalSize = goog.style.getSize(dom.getElement('main-body'));
 
   if (this.viewManager_.isInWeekMode()) {
 
@@ -478,11 +478,11 @@ rflect.cal.ui.MainBody.prototype.measureLeftPaneStaticSizes = function() {
   var dom = this.getDomHelper();
 
   var calContainerMB =
-      goog.style.getMarginBox(dom.getElement('cal-container'));
+      goog.style.getMarginBox(dom.getElement('main-body'));
   var calContainerBB =
-      goog.style.getBorderBox(dom.getElement('cal-container'));
+      goog.style.getBorderBox(dom.getElement('main-body'));
   var calContainerPB =
-      goog.style.getPaddingBox(dom.getElement('cal-container'));
+      goog.style.getPaddingBox(dom.getElement('main-body'));
 
   var topPaneSize = goog.style.getSize(dom.getElement('top-pane'));
   var minicalSize = goog.style.getSize(dom.getElement('month-selector'));
@@ -730,7 +730,7 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
  * @private
  */
 rflect.cal.ui.MainBody.prototype.showCalendar_ = function(aShow) {
-  goog.style.showElement(this.getDomHelper().getElement('cal-container'),
+  goog.style.showElement(this.getDomHelper().getElement('main-body'),
       aShow);
 }
 
