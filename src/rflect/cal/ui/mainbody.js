@@ -22,6 +22,9 @@ goog.require('rflect.cal.ui.EventPane');
 goog.require('rflect.cal.ui.EventPane.EventTypes');
 goog.require('rflect.cal.ui.MainPane');
 goog.require('rflect.cal.ui.MiniCal');
+goog.require('rflect.cal.ui.Pager');
+goog.require('rflect.cal.ui.PageRequestEvent');
+goog.require('rflect.cal.ui.Pager.EventTypes');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.cal.ui.PaneShowBehavior.SlideEvent');
 goog.require('rflect.cal.ui.SettingsPane');
@@ -95,6 +98,14 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
    * @private
    */
   this.navigator_ = aNavigator;
+
+  /**
+   * Pager.
+   * @type {rflect.cal.ui.Pager}
+   * @private
+   */
+  this.pager_ = new rflect.cal.ui.Pager(this);
+  this.pager_.setSlidingIsEnabled(rflect.TOUCH_INTERFACE_ENABLED);
 
   // Add child components in order for them to be included in propagation of
   // string building and updating.
@@ -381,11 +392,15 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
       this.onSlideBreak_, false, this)
       .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
-      this.onSidePaneAction_, false, this);
+      this.onSidePaneAction_, false, this)
+      .listen(this.pager_, rflect.cal.ui.Pager.EventTypes.PAGE_CHANGE,
+      this.onPageChange_, false, this);
 
   this.getHandler().listen(this.transport_,
       rflect.cal.Transport.EventTypes.LOAD_EVENT, this.onLoadEvents_, false,
       this);
+
+  this.pager_.assignEvents();
 
   this.rebuildMainPaneWithSizes();
 
@@ -537,6 +552,19 @@ rflect.cal.ui.MainBody.prototype.onControlPaneAction_ = function(aEvent) {
     };break;
     default:break;
   }
+}
+
+
+/**
+ * Page slide end handler.
+ * @param {rflect.cal.ui.Pager.PageChangeEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.MainBody.prototype.onPageChange_ = function(aEvent) {
+  if (aEvent.pageNumber < 0)
+    this.showCalendar_(false);
+  else
+    this.showCalendar_(true);
 }
 
 
@@ -730,7 +758,7 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
  * @private
  */
 rflect.cal.ui.MainBody.prototype.showCalendar_ = function(aShow) {
-  goog.style.showElement(this.getDomHelper().getElement('main-body'),
+  goog.style.showElement(this.getDomHelper().getElement('cal-container'),
       aShow);
 }
 
@@ -829,6 +857,8 @@ rflect.cal.ui.MainBody.prototype.updateMainPane_ = function() {
  */
 rflect.cal.ui.MainBody.prototype.disposeInternal = function() {
   rflect.cal.ui.MainBody.superClass_.disposeInternal.call(this);
+
+  this.pager_.dispose();
 
   this.topPane_ = null;
   this.bottomPane_ = null;

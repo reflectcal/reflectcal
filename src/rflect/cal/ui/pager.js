@@ -8,12 +8,11 @@
 
 goog.provide('rflect.cal.ui.Pager');
 goog.provide('rflect.cal.ui.Pager.EventTypes');
-goog.provide('rflect.cal.ui.Pager.SlideEvent');
+goog.provide('rflect.cal.ui.Pager.PageChangeEvent');
 
 
 goog.require('goog.array');
 goog.require('goog.events.EventTarget');
-goog.require('goog.dom.classes');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
@@ -25,23 +24,18 @@ goog.require('rflect.browser.transitionend');
 
 /**
  * Pane show/hide behaviour main class.
- * @param {goog.ui.Component} aComponent Component which has multiple pages.
- * @param {Element} aParentElement Element which will be moved back and forth.
+ * @param {goog.ui.Component} aComponent Host component which has multiple
+ * pages.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-rflect.cal.ui.Pager = function(aComponent, aParentElement) {
+rflect.cal.ui.Pager = function(aComponent) {
   goog.events.EventTarget.call(this);
 
   /**
    * @type {goog.ui.Component}
    */
   this.component = aComponent;
-
-  /**
-   * @type {Element}
-   */
-  this.parentEl_ = aParentElement;
 
   /**
    * Stack of pages. Empty stack means that default page is shown.
@@ -56,7 +50,7 @@ goog.inherits(rflect.cal.ui.Pager, goog.events.EventTarget);
  * @enum {string}
  */
 rflect.cal.ui.Pager.EventTypes = {
-  PAGE_SLIDE: 'pageChange'
+  PAGE_CHANGE: 'pageChange'
 };
 
 
@@ -75,8 +69,7 @@ rflect.cal.ui.Pager.PageChangeEvent = function(aPageNumber) {
    */
   this.pageNumber = aPageNumber;
 }
-goog.inherits(rflect.cal.ui.Pager.SlideEvent,
-    goog.events.Event);
+goog.inherits(rflect.cal.ui.Pager.PageChangeEvent, goog.events.Event);
 
 
 /**
@@ -194,7 +187,7 @@ rflect.cal.ui.Pager.prototype.assignPosition = function(aComponent, aPosition){
  * @param {number} aPosition Page number to shift to.
  */
 rflect.cal.ui.Pager.prototype.slideToPosition = function(aPosition){
-  var element = this.parentEl_;
+  var element = this.component.getElement();
   //Container moves to the left.
   var style = goog.string.subs(rflect.cal.ui.Pager.TRANSLATE_TEMPLATE,
       -100 * aPosition);
@@ -233,7 +226,7 @@ rflect.cal.ui.Pager.prototype.assignEvents =
  * @private
  */
 rflect.cal.ui.Pager.prototype.onSlideEnd_ = function(aEvent) {
-  if (aEvent.target != this.parentEl_)
+  if (aEvent.target != this.component.getElement())
     return;
 
   if (this.componentToHide_){
@@ -242,8 +235,7 @@ rflect.cal.ui.Pager.prototype.onSlideEnd_ = function(aEvent) {
   }
 
   this.dispatchEvent(new rflect.cal.ui.Pager.PageChangeEvent(
-      //We report page index as stack length, because main body has 0 index.
-      this.pageStack_.length));
+      this.pageStack_.length - 1));
 }
 
 
