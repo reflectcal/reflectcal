@@ -16,13 +16,11 @@ goog.require('goog.events.Event');
  * @type {string}
  * @const
  */
-rflect.cal.ui.PAGE_REQUEST_EVENT_TYPE = {
-  SLIDE_BREAK: 'pageRequest'
-};
+rflect.cal.ui.PAGE_REQUEST_EVENT = 'pageRequest';
 
 
 /**
- * Event that is fired to let know {@link rflect.cal.ui.Pager} know that page
+ * Event that is fired to let know {@link rflect.cal.ui.ScreenManager} know that page
  * should be turned visible/invisible.
  * @param {goog.ui.Component} aComponent Component to show.
  * @param {boolean} aShow Whether to show component.
@@ -30,8 +28,7 @@ rflect.cal.ui.PAGE_REQUEST_EVENT_TYPE = {
  * @constructor
  */
 rflect.cal.ui.PageRequestEvent = function(aComponent, aShow) {
-  goog.events.Event.call(this,
-      rflect.cal.ui.PAGE_REQUEST_EVENT_TYPE);
+  goog.events.Event.call(this, rflect.cal.ui.PAGE_REQUEST_EVENT);
 
   /**
    * Component associated with page.
@@ -43,7 +40,7 @@ rflect.cal.ui.PageRequestEvent = function(aComponent, aShow) {
    * Whether show this page.
    * @type {boolean}
    */
-  this.show = aStart;
+  this.show = aShow;
 }
 goog.inherits(rflect.cal.ui.PageRequestEvent,
     goog.events.Event);

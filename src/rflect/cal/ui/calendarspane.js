@@ -25,6 +25,7 @@ goog.require('rflect.cal.Transport.EventTypes');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.ExternalPane');
+goog.require('rflect.cal.ui.PageRequestEvent');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.dom');
@@ -408,11 +409,8 @@ rflect.cal.ui.CalendarsPane.prototype.onKeyDown_ = function(aEvent) {
  * Default action is to hide pane.
  */
 rflect.cal.ui.CalendarsPane.prototype.onCancel_ = function() {
-  if (this.dispatchEvent(new goog.events.Event(
-      rflect.cal.ui.CalendarsPane.EventTypes.CANCEL)))
-    this.showBehavior.setVisible(false);
-
   this.setCurrentCalendar(null);
+  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
 }
 
 
@@ -428,14 +426,10 @@ rflect.cal.ui.CalendarsPane.prototype.onSaveCalendar_ = function() {
     this.transport.saveCalendarAsync(
         this.currentCalendar_);
     // this.currentCalendar_ must be still actual here.
-    this.dispatchEvent(new goog.events.Event(
-        rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE));
+    this.dispatchEvent(rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE);
 
     this.setCurrentCalendar(null);
-
-    if (this.dispatchEvent(new goog.events.Event(
-        rflect.cal.ui.CalendarsPane.EventTypes.CANCEL)))
-      this.showBehavior.setVisible(false);
+    this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
   }
 };
 
@@ -447,15 +441,14 @@ rflect.cal.ui.CalendarsPane.prototype.onSaveCalendar_ = function() {
  */
 rflect.cal.ui.CalendarsPane.prototype.onSaveCalendarResponse_ =
     function(aEvent) {
-      var calendar = aEvent.calendar;
+  var calendar = aEvent.calendar;
 
-      // New calendars that we store in list do not have an id, so we only could
-      // identify them by direct equality.
-      goog.array.remove(this.newCalendars_, calendar);
+  // New calendars that we store in list do not have an id, so we only could
+  // identify them by direct equality.
+  goog.array.remove(this.newCalendars_, calendar);
 
-      this.dispatchEvent(new goog.events.Event(
-          rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE));
-    }
+  this.dispatchEvent(rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE);
+}
 
 
 /**
@@ -470,15 +463,10 @@ rflect.cal.ui.CalendarsPane.prototype.onDeleteCalendarAction_ =
   this.transport.deleteCalendarAsync(
       this.currentCalendar_);
 
-  this.dispatchEvent(new goog.events.Event(
-      rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE));
+  this.dispatchEvent(rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE);
 
   this.setCurrentCalendar(null);
-
-  if (this.dispatchEvent(new goog.events.Event(
-        rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_DELETE)))
-    this.showBehavior.setVisible(false);
-
+  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
 }
 
 
@@ -491,8 +479,7 @@ rflect.cal.ui.CalendarsPane.prototype.onDeleteCalendarAction_ =
  */
 rflect.cal.ui.CalendarsPane.prototype.onDeleteCalendarResponse_ =
     function(aEvent) {
-  this.dispatchEvent(new goog.events.Event(
-      rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE));
+  this.dispatchEvent(rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE);
 }
 
 

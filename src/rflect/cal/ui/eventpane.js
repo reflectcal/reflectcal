@@ -29,12 +29,14 @@ goog.require('rflect.cal.ui.CalendarsSelect');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.ExternalPane');
 goog.require('rflect.cal.ui.InputDatePicker');
+goog.require('rflect.cal.ui.PageRequestEvent');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.date.util');
 goog.require('rflect.dom');
 goog.require('rflect.ui.Checkbox');
 goog.require('rflect.cal.i18n.Symbols');
+
 
 
 /**
@@ -467,10 +469,7 @@ rflect.cal.ui.EventPane.prototype.updateAC_ = function(aAC) {
  * Default action is to hide pane.
  */
 rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
-  if (this.dispatchEvent(new goog.events.Event(
-      rflect.cal.ui.EventPane.EventTypes.CANCEL))) {
-    this.showBehavior.setVisible(false);
-  }
+  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
 }
 
 
@@ -482,10 +481,8 @@ rflect.cal.ui.EventPane.prototype.onSave_ = function() {
     this.eventManager.eventHolder.endWithEdit();
     this.transport.saveEventAsync(
         this.eventManager.eventHolder.getCurrentEvent());
-    if (this.dispatchEvent(new goog.events.Event(
-        rflect.cal.ui.EventPane.EventTypes.SAVE))) {
-      this.showBehavior.setVisible(false);
-    }
+    this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.SAVE);
+    this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
   }
 }
 
@@ -500,10 +497,8 @@ rflect.cal.ui.EventPane.prototype.onDelete_ = function(aEvent) {
   this.transport.deleteEventAsync(
       this.eventManager.eventHolder.getBackUpEvent());
 
-  if (this.dispatchEvent(new goog.events.Event(
-      rflect.cal.ui.EventPane.EventTypes.DELETE))) {
-    this.showBehavior.setVisible(false);
-  }
+  this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.DELETE);
+  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
 }
 
 

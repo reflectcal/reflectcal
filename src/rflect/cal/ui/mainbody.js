@@ -22,9 +22,7 @@ goog.require('rflect.cal.ui.EventPane');
 goog.require('rflect.cal.ui.EventPane.EventTypes');
 goog.require('rflect.cal.ui.MainPane');
 goog.require('rflect.cal.ui.MiniCal');
-goog.require('rflect.cal.ui.Pager');
 goog.require('rflect.cal.ui.PageRequestEvent');
-goog.require('rflect.cal.ui.Pager.EventTypes');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.cal.ui.PaneShowBehavior.SlideEvent');
 goog.require('rflect.cal.ui.SettingsPane');
@@ -98,14 +96,6 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
    * @private
    */
   this.navigator_ = aNavigator;
-
-  /**
-   * Pager.
-   * @type {rflect.cal.ui.Pager}
-   * @private
-   */
-  this.pager_ = new rflect.cal.ui.Pager(this);
-  this.pager_.setSlidingIsEnabled(rflect.TOUCH_INTERFACE_ENABLED);
 
   // Add child components in order for them to be included in propagation of
   // string building and updating.
@@ -392,15 +382,11 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
       this.onSlideBreak_, false, this)
       .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
-      this.onSidePaneAction_, false, this)
-      .listen(this.pager_, rflect.cal.ui.Pager.EventTypes.PAGE_CHANGE,
-      this.onPageChange_, false, this);
+      this.onSidePaneAction_, false, this);
 
   this.getHandler().listen(this.transport_,
       rflect.cal.Transport.EventTypes.LOAD_EVENT, this.onLoadEvents_, false,
       this);
-
-  this.pager_.assignEvents();
 
   this.rebuildMainPaneWithSizes();
 
@@ -556,19 +542,6 @@ rflect.cal.ui.MainBody.prototype.onControlPaneAction_ = function(aEvent) {
 
 
 /**
- * Page slide end handler.
- * @param {rflect.cal.ui.Pager.PageChangeEvent} aEvent Event object.
- * @private
- */
-rflect.cal.ui.MainBody.prototype.onPageChange_ = function(aEvent) {
-  if (aEvent.pageNumber < 0)
-    this.showCalendar_(false);
-  else
-    this.showCalendar_(true);
-}
-
-
-/**
  * Side pane action handler.
  * @param {goog.events.Event} aEvent Event object.
  * @private
@@ -698,23 +671,16 @@ rflect.cal.ui.MainBody.prototype.showEventPane = function(aShow,
     this.addChild(this.eventPane_);
 
     this.getHandler().listen(this.eventPane_,
-        rflect.cal.ui.EventPane.EventTypes.CANCEL, this.onEventPaneCancel_,
-        false, this).listen(this.eventPane_,
         rflect.cal.ui.EventPane.EventTypes.SAVE, this.onEventPaneSave_,
         false, this).listen(this.eventPane_,
         rflect.cal.ui.EventPane.EventTypes.DELETE, this.onEventPaneDelete_,
         false, this);
-
-    if (rflect.MOBILE)
-      this.getHandler().listen(this.eventPane_.getShowBehavior(),
-          rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
-          this.onSlideBreak_, false, this);
   }
 
   this.eventPane_.setNewEventMode(opt_creatingNewEvent);
-  this.eventPane_.getShowBehavior().setVisible(aShow);
-  //NOTE(alexk): do we need smarter logic here than just hide calendar?
-  if (!rflect.MOBILE) this.showCalendar_(!aShow);
+
+  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this.eventPane_,
+      aShow));
 }
 
 
@@ -732,24 +698,16 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
 
     // Save settings handler is in view manager.
     this.getHandler().listen(this.settingsPane_,
-        rflect.cal.ui.SettingsPane.EventTypes.CANCEL,
-        this.onSettingsPaneCancel_, false, this).listen(this.settingsPane_,
         rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
         this.onSettingsPaneCalendarUpdate_, false, this);
-
-    if (rflect.MOBILE)
-      this.getHandler().listen(this.settingsPane_.getShowBehavior(),
-          rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
-          this.onSlideBreak_, false, this);
 
     if (goog.DEBUG) {
       _inspect('settingsPane_', this.settingsPane_);
     }
   }
 
-  this.settingsPane_.getShowBehavior().setVisible(aShow);
-  //NOTE(alexk): do we need smarter logic here than just hide calendar?
-  if (!rflect.MOBILE) this.showCalendar_(!aShow);
+  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this.settingsPane_,
+      aShow));
 }
 
 
@@ -769,8 +727,6 @@ rflect.cal.ui.MainBody.prototype.showCalendar_ = function(aShow) {
  */
 rflect.cal.ui.MainBody.prototype.onSlideBreak_ = function(aEvent) {
   switch (aEvent.target.component) {
-    case this.settingsPane_: ;
-    case this.eventPane_: this.onExternalPaneSlide_(aEvent);break;
     case this.sidePane_: this.onSidePaneSlide_(aEvent);break;
     default:break;
   }
@@ -778,36 +734,20 @@ rflect.cal.ui.MainBody.prototype.onSlideBreak_ = function(aEvent) {
 
 
 /**
- * Event pane cancel listener.
- */
-rflect.cal.ui.MainBody.prototype.onEventPaneCancel_ = function() {
-  this.showEventPane(false);
-}
-
-
-/**
  * Event pane save listener.
- * @param {Event} aEvent Event object.
+ * @param {goog.events.Event} aEvent Event object.
  */
 rflect.cal.ui.MainBody.prototype.onEventPaneSave_ = function(aEvent) {
-  aEvent.preventDefault();
-
   this.updateMainPane_();
-
-  this.showEventPane(false);
 }
 
 
 /**
  * Event pane delete listener.
- * @param {Event} aEvent Event object.
+ * @param {goog.events.Event} aEvent Event object.
  */
 rflect.cal.ui.MainBody.prototype.onEventPaneDelete_ = function(aEvent) {
-  aEvent.preventDefault();
-
   this.updateMainPane_();
-
-  this.showEventPane(false);
 }
 
 
@@ -821,7 +761,7 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCancel_ = function() {
 
 /**
  * Settings pane calendar update listener.
- * @param {Event} aEvent Event object.
+ * @param {goog.events.Event} aEvent Event object.
  */
 rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
     function(aEvent) {
@@ -857,8 +797,6 @@ rflect.cal.ui.MainBody.prototype.updateMainPane_ = function() {
  */
 rflect.cal.ui.MainBody.prototype.disposeInternal = function() {
   rflect.cal.ui.MainBody.superClass_.disposeInternal.call(this);
-
-  this.pager_.dispose();
 
   this.topPane_ = null;
   this.bottomPane_ = null;

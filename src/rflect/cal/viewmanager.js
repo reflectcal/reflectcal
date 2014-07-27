@@ -22,6 +22,8 @@ goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
 goog.require('rflect.cal.Transport');
 goog.require('rflect.cal.ui.MainBody');
+goog.require('rflect.cal.ui.ScreenManager');
+goog.require('rflect.cal.ui.ScreenManager.EventTypes');
 goog.require('rflect.cal.ViewType');
 
 
@@ -100,6 +102,14 @@ rflect.cal.ViewManager = function(aMainInstance) {
       this.eventManager_, this.containerSizeMonitor_, this.blockManager_,
       this.transport_, this.navigator_);
 
+  /**
+   * Pager.
+   * @type {rflect.cal.ui.ScreenManager}
+   * @private
+   */
+  this.screenManager_ = new rflect.cal.ui.ScreenManager(this);
+  this.screenManager_.setSlidingIsEnabled(rflect.TOUCH_INTERFACE_ENABLED);
+
   if (goog.DEBUG)
     _inspect('mainBody_', this.mainBody_);
   if (goog.DEBUG)
@@ -170,6 +180,13 @@ rflect.cal.ViewManager.prototype.assignEvents_ = function() {
   //Listen specific case when save settings need a reload.
   this.listen(this.transport_, rflect.cal.Transport.EventTypes.SAVE_SETTINGS,
       this.onSaveSettingsResponse_, false, this);
+  this.listen(this.screenManager_,
+      rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE, this.onPageChange_,
+      false, this);
+  this.listen(this.mainBody_, rflect.cal.ui.PAGE_REQUEST_EVENT,
+      this.onPageRequest_, false, this);
+
+  this.screenManager_.assignEvents();
 
 };
 
@@ -255,6 +272,25 @@ rflect.cal.ViewManager.prototype.onMainBodyAction_ = function(aEvent){
         this.onMenuCommandOptions_();break;
     default: break;
   }
+}
+
+
+/**
+ * Page slide end handler.
+ * @param {rflect.cal.ui.ScreenManager.PageChangeEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ViewManager.prototype.onPageChange_ = function(aEvent) {
+}
+
+
+/**
+ * Page request handler.
+ * @param {rflect.cal.ui.PageRequestEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ViewManager.prototype.onPageRequest_ = function(aEvent) {
+  this.screenManager_.showScreen(aEvent.component, aEvent.show);
 }
 
 
@@ -378,14 +414,10 @@ rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
  * @private
  */
 rflect.cal.ViewManager.prototype.onSaveSettingsImmediate_ = function(aEvent) {
-  aEvent.preventDefault();
-
   if (aEvent.settingsChanged) {
     this.eventManager_.run();
     this.mainBody_.update();
   }
-
-  this.mainBody_.showSettingsPane(false);
 }
 
 
@@ -444,8 +476,9 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
       this.transport_.loadCalendars();
 
       this.mainBody_.updateBeforeRedraw(true, true);
-      // Render main body and places it in document.body.
-      this.mainBody_.render();
+      this.screenManager_.render();
+      // Render main body and places it in screen manager element.
+      this.screenManager_.showScreen(this.mainBody_, true);
       this.assignEvents_();
       this.isOnStartup_ = false;
 
@@ -541,6 +574,8 @@ rflect.cal.ViewManager.prototype.disposeInternal = function() {
   this.containerSizeMonitor_.dispose();
   this.mainBody_.dispose();
   this.transport_.dispose();
+  this.screenManager_.dispose();
+
 
   this.containerSizeMonitor_ = null;
   this.mainBody_ = null;

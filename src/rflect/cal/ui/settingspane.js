@@ -34,6 +34,7 @@ goog.require('rflect.cal.ui.CalendarsPane.EventTypes');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.ExternalPane');
+goog.require('rflect.cal.ui.PageRequestEvent');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.dom');
@@ -511,12 +512,7 @@ rflect.cal.ui.SettingsPane.prototype.showCalendarsPane = function(aShow,
     this.addChild(this.calendarsPane_);
 
     // Save settings handler is in view manager.
-    this.getHandler().listen(this.calendarsPane_,
-        rflect.cal.ui.CalendarsPane.EventTypes.CANCEL,
-        this.onCalendarsPaneCancel_, false, this)
-        .listen(this.calendarsPane_,
-        rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_DELETE,
-        this.onCalendarsPaneDelete_, false, this)
+    this.getHandler()
         .listen(this.calendarsPane_,
         rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
         this.onCalendarUpdate_, false, this);
@@ -526,24 +522,7 @@ rflect.cal.ui.SettingsPane.prototype.showCalendarsPane = function(aShow,
     this.calendarsPane_.setCurrentCalendar(opt_calendar);
     this.calendarsPane_.setNewCalendarMode(opt_newCalendarMode);
   }
-  this.calendarsPane_.getShowBehavior().setVisible(aShow);
-  this.getShowBehavior().setVisible(!aShow);
-}
-
-
-/**
- * Calendars pane cancel listener.
- */
-rflect.cal.ui.SettingsPane.prototype.onCalendarsPaneCancel_ = function() {
-  this.showCalendarsPane(false);
-}
-
-
-/**
- * Calendars pane delete listener.
- */
-rflect.cal.ui.SettingsPane.prototype.onCalendarsPaneDelete_ = function() {
-  this.showCalendarsPane(false);
+  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, aShow));
 }
 
 
@@ -666,10 +645,7 @@ rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
   if (this.calendarEditMode_)
       this.switchContent_(rflect.cal.ui.SettingsPane.PageIndexes.CALENDARS);
     else
-      if (this.dispatchEvent(new goog.events.Event(
-          rflect.cal.ui.SettingsPane.EventTypes.CANCEL)))
-        this.showBehavior.setVisible(false);
-
+      this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
 }
 
 
@@ -679,16 +655,14 @@ rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
 rflect.cal.ui.SettingsPane.prototype.onSaveSettings_ = function() {
 
   if (this.scanValues()) {
-
     this.transport.saveSettingsAsync(this.settings, this.reloadIsNeeded_);
 
     if (this.dispatchEvent(new rflect.cal.ui.SettingsPane.SaveSettingsEvent(
         this.settings, false))) {
       this.showBehavior.setVisible(false);
     }
-
+    this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
   }
-
 }
 
 
