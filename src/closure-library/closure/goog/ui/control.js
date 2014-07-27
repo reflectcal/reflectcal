@@ -139,6 +139,22 @@ goog.ui.Control.DRAG_THRESHOLD = 25;
 
 
 /**
+ * X coordinate of point of touchstart event.
+ * @type {number}
+ * @private
+ */
+goog.ui.Control.prototype.startTouchX_ = 0;
+
+
+/**
+ * Y coordinate of point of touchstart event.
+ * @type {number}
+ * @private
+ */
+goog.ui.Control.prototype.startTouchY_ = 0;
+
+
+/**
  * Renderer associated with the component.
  * @type {goog.ui.ControlRenderer|undefined}
  * @private
