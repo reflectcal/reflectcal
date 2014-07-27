@@ -21,7 +21,7 @@ goog.require('rflect.browser.cssmatrix');
 
 
 /**
- * Mouse miss behaviour main class.
+ * Momentum scroller main class.
  * @constructor
  * @extends {goog.events.EventHandler}
  */
