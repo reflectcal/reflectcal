@@ -366,13 +366,15 @@ rflect.cal.ui.EventPane.prototype.onPaneReady_ = function(aEvent) {
       aEvent.type && !(!aEvent.start && aEvent.showing))
     return;
 
-  /** @preserveTry */
-  try {
-    this.inputName_.focus();
-    this.inputName_.select();
-  } catch(e) {
-    // IE8- shows error that it couldn't set focus but nevertheless, sets
-    // it.
+  if (!rflect.TOUCH_INTERFACE_ENABLED){
+    /** @preserveTry */
+    try {
+      this.inputName_.focus();
+      this.inputName_.select();
+    } catch(e) {
+      // IE8- shows error that it couldn't set focus but nevertheless, sets
+      // it.
+    }
   }
 }
 
