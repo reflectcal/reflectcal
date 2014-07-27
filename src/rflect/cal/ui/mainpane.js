@@ -207,6 +207,30 @@ goog.inherits(rflect.cal.ui.MainPane, rflect.ui.Component);
 
 
 /**
+ * Distance that is allowed to be event chip and trigger click on it, which 
+ * shows event pane.
+ * @type {number}
+ */
+rflect.cal.ui.MainPane.DRAG_THRESHOLD = 5;
+
+
+/**
+ * X coordinate of point of touchstart event.
+ * @type {number}
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.startTouchX_ = 0;
+
+
+/**
+ * Y coordinate of point of touchstart event.
+ * @type {number}
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.startTouchY_ = 0;
+
+
+/**
  * Regexp for detection of week grid.
  * @type {RegExp}
  * @private
@@ -806,7 +830,9 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
 
   rflect.cal.ui.MainPane.superClass_.enterDocument.call(this);
 
-  this.getHandler().listen(this.getElement(), goog.events.EventType.TOUCHEND,
+  this.getHandler().listen(this.getElement(), goog.events.EventType.TOUCHSTART,
+      this.saveStartTouch, false, this)
+      .listen(this.getElement(), goog.events.EventType.TOUCHEND,
       this.onTouchEnd_, false, this)
       .listen(this.saveDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
       this.onEventEdit_, false, this)
@@ -841,6 +867,35 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
 
   this.timeMarker_.start();
 };
+
+
+
+/**
+ * Saves touch start coordinates to be later tested whether touch was moved.
+ * @param {goog.events.Event} e Touch event.
+ * @protected
+ */
+rflect.cal.ui.MainPane.prototype.saveStartTouch = function(e) {
+  this.startTouchX_ = e.getBrowserEvent().touches[0].clientX;
+  this.startTouchY_ = e.getBrowserEvent().touches[0].clientY;
+}
+
+
+/**
+ * @return {boolean} Whether touch end was moved from touch start more than
+ * threshold.
+ * @param {goog.events.Event} e Touch event.
+ * @protected
+ */
+rflect.cal.ui.MainPane.prototype.touchWasMoved = function(e) {
+
+  var endTouchX = e.getBrowserEvent().changedTouches[0].clientX;
+  var endTouchY = e.getBrowserEvent().changedTouches[0].clientY;
+
+  return Math.abs(this.startTouchX_ - endTouchX) >
+      rflect.cal.ui.MainPane.DRAG_THRESHOLD || Math.abs(this.startTouchY_ -
+      endTouchY) > rflect.cal.ui.MainPane.DRAG_THRESHOLD;
+}
 
 
 /**
@@ -917,7 +972,7 @@ rflect.cal.ui.MainPane.prototype.onTouchEnd_ = function(aEvent) {
   var className = target.className;
 
   if ((this.isChipOrChild_(className) || this.isGrip_(className)) &&
-      !this.selectionMask_.wasDragged()) {
+      !this.selectionMask_.wasDragged() && !this.touchWasMoved(aEvent)) {
 
     this.getParent().showEventPane(true, false);
 
