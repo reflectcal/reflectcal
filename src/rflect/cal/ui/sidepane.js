@@ -460,7 +460,8 @@ rflect.cal.ui.SidePane.prototype.getGlassElement_ = function() {
 rflect.cal.ui.SidePane.prototype.onSlideBreak_ = function(aEvent) {
   if (this.glassPaneIsEnabled_){
     if (aEvent.showing && aEvent.start){
-      document.body.appendChild(this.getGlassElement_());
+      this.getDomHelper().getElement('screen-manager')
+          .appendChild(this.getGlassElement_());
       setTimeout(goog.bind(function(){
         goog.dom.classes.add(this.getGlassElement_(), 'glass-pane-opaque');
       }, this), 0);
