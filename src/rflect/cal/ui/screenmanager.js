@@ -107,17 +107,6 @@ rflect.cal.ui.ScreenManager.TRANSLATE_TEMPLATE =
     'translate3d(%s%,0,0)';
 
 
-
-/**
- * Template for translate style both for page element and container element,
- * webkit version.
- * @type {string}
- * @const
- */
-rflect.cal.ui.ScreenManager.TRANSLATE_TEMPLATE_WEBKIT =
-    '-webkit-translate3d(%s%,0,0)';
-
-
 /**
  * Translates container element to show actual page.
  * @param {Element} aElement Element which style to modify.
@@ -125,10 +114,14 @@ rflect.cal.ui.ScreenManager.TRANSLATE_TEMPLATE_WEBKIT =
  */
 rflect.cal.ui.ScreenManager.translateElement = function(aElement,
     aValue){
-  aElement.style.transform = goog.string.subs(
-      rflect.cal.ui.ScreenManager.TRANSLATE_TEMPLATE, aValue);
-  aElement.style.webkitTransform = goog.string.subs(
-      rflect.cal.ui.ScreenManager.TRANSLATE_TEMPLATE_WEBKIT, aValue);
+  var style = aElement.style;
+  if ('transform' in style){
+    style.transform = goog.string.subs(
+        rflect.cal.ui.ScreenManager.TRANSLATE_TEMPLATE, aValue);
+  } else if ('webkitTransform' in style) {
+    style.webkitTransform = goog.string.subs(
+        rflect.cal.ui.ScreenManager.TRANSLATE_TEMPLATE, aValue);
+  }
 }
 
 
@@ -249,7 +242,10 @@ rflect.cal.ui.ScreenManager.prototype.showScreen = function(aComponent, aShow,
     this.assignPosition(aComponent, position);
   } else {
     this.componentToHide_ = this.popFromStack();
-    position = this.pageStack_.length;
+    position = this.pageStack_.length - 1;
+
+    goog.style.showElement(/**@type {goog.ui.Component}*/
+        (goog.array.peek(this.pageStack_)).getElement(), true);
   }
 
   this.slideToPosition(position);
@@ -277,10 +273,8 @@ rflect.cal.ui.ScreenManager.prototype.assignPosition = function(aComponent,
  */
 rflect.cal.ui.ScreenManager.prototype.slideToPosition = function(aPosition){
   //Container moves to the left.
-  if (aPosition > 0){
-    rflect.cal.ui.ScreenManager.translateElement(this.element_,
-        -100 * aPosition);
-  }
+  rflect.cal.ui.ScreenManager.translateElement(this.element_,
+      -100 * aPosition);
 }
 
 
