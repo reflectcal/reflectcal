@@ -563,6 +563,11 @@ rflect.cal.ui.MainBody.prototype.onSidePaneAction_ = function(aEvent) {
  */
 rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
   var isSmallScreen = this.navigator_.isSmallScreen();
+  if (goog.DEBUG) {
+    console.log('aEvent.start: ', aEvent.start);
+    console.log('aEvent.showing: ', aEvent.showing);
+  }
+
 
   if (aEvent.start && !aEvent.showing) {
     if (rflect.TOUCH_INTERFACE_ENABLED){
@@ -578,12 +583,19 @@ rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
     if (rflect.SIDE_PANE_MOVABLE)
       this.measureStaticSizes();
   }
-  if (rflect.SIDE_PANE_MOVABLE && aEvent.start && aEvent.showing) {
-    this.mainPane_.expandElement(false);
+  if (aEvent.start && aEvent.showing) {
+    if (rflect.SIDE_PANE_MOVABLE)
+      this.mainPane_.expandElement(false);
   }
   if (!aEvent.start && aEvent.showing) {
+    if (goog.DEBUG){
+      console.log('rflect.ui.MomentumScroller.instancesCount_ ', rflect.ui.MomentumScroller.instancesCount_)
+    }
     if (rflect.TOUCH_INTERFACE_ENABLED)
       this.mainPane_.removeMomentumScroller();
+    if (goog.DEBUG){
+      console.log('rflect.ui.MomentumScroller.instancesCount_ ', rflect.ui.MomentumScroller.instancesCount_)
+    }
     if (rflect.SIDE_PANE_MOVABLE)
       this.measureStaticSizes();
   }

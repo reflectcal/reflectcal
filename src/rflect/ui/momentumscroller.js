@@ -122,6 +122,7 @@ rflect.ui.MomentumScroller.prototype.contentStartOffsetY = 0;
  * x0 point to calculate speed.
  * @see {getEndVelocity}
  * @type {number}
+ * @private
  */
 rflect.ui.MomentumScroller.prototype.previousPoint_ = 0;
 
@@ -129,6 +130,7 @@ rflect.ui.MomentumScroller.prototype.previousPoint_ = 0;
 /**
  * t0 time to calculate speed.
  * @type {number}
+ * @private
  */
 rflect.ui.MomentumScroller.prototype.previousMoment_ = 0;
 
@@ -136,6 +138,7 @@ rflect.ui.MomentumScroller.prototype.previousMoment_ = 0;
 /**
  * x1 point to calculate speed.
  * @type {number}
+ * @private
  */
 rflect.ui.MomentumScroller.prototype.currentPoint_ = 0;
 
@@ -143,18 +146,21 @@ rflect.ui.MomentumScroller.prototype.currentPoint_ = 0;
 /**
  * t1 time to calculate speed.
  * @type {number}
+ * @private
  */
 rflect.ui.MomentumScroller.prototype.currentMoment_ = 0;
 
 
 /**
  * @type {boolean}
+ * @private
  */
 rflect.ui.MomentumScroller.prototype.isDragging_ = false;
 
 
 /**
  * @type {boolean}
+ * @private
  */
 rflect.ui.MomentumScroller.prototype.isOutOfBounds_ = false;
 
@@ -162,8 +168,17 @@ rflect.ui.MomentumScroller.prototype.isOutOfBounds_ = false;
 /**
  * Whether momentum scrolling is in progress.
  * @type {boolean}
+ * @private
  */
 rflect.ui.MomentumScroller.prototype.isDecelerating_ = false;
+
+
+/**
+ * Whether stop propagation is needed on touch end.
+ * @type {boolean}
+ * @private
+ */
+rflect.ui.MomentumScroller.prototype.stopPropagationOnTouchEnd_ = false;
 
 
 /**
@@ -383,8 +398,6 @@ rflect.ui.MomentumScroller.prototype.onTouchEnd = function(aEvent) {
       this.snapToBounds();
     }
 
-    //Prevent accidental selection of chips.
-    aEvent.preventDefault();
   }
 
   this.previousPoint_ = this.previousMoment_ = this.currentPoint_ =
@@ -392,6 +405,12 @@ rflect.ui.MomentumScroller.prototype.onTouchEnd = function(aEvent) {
   this.startTouchY = 0;
   this.isDragging_ = false;
 
+  if (this.stopPropagationOnTouchEnd_) {
+    //Prevent accidental selection of chips on main pane.
+    aEvent.stopPropagation();
+
+    this.stopPropagationOnTouchEnd_ = false;
+  }
 }
 
 
@@ -544,29 +563,31 @@ rflect.ui.MomentumScroller.prototype.doMomentum = function() {
   var velocity = this.getEndVelocity();
   if (goog.DEBUG)
     _log('velocity',velocity);
-  var acceleration = this.getAcceleration(velocity);
-  var displacement = - (velocity * velocity) / (2 * acceleration);
-  var time = - velocity / acceleration;
+  if (velocity != 0) {
+    var acceleration = this.getAcceleration(velocity);
+    var displacement = - (velocity * velocity) / (2 * acceleration);
+    var time = - velocity / acceleration;
 
-  var newY = this.contentOffsetY + displacement;
+    var newY = this.contentOffsetY + displacement;
 
-  if (this.positionIsOutOfBounds(newY)) {
+    if (this.positionIsOutOfBounds(newY)) {
 
-    this.setUpTransitionStage1();
+      this.setUpTransitionStage1();
 
-  } else {
+    } else {
 
-    // Set up the transition and execute the transform. Once you implement this
-    // you will need to figure out an appropriate time to clear the transition
-    // so that it doesn’t apply to subsequent scrolling.
-    this.element.style.webkitTransition = '-webkit-transform ' + time +
-        'ms cubic-bezier(0.33, 0.66, 0.66, 1)';
-    this.contentOffsetY = newY;
-    this.element.style.webkitTransform = 'translate3d(0, ' + newY + 'px, 0)';
+      // Set up the transition and execute the transform. Once you implement this
+      // you will need to figure out an appropriate time to clear the transition
+      // so that it doesn’t apply to subsequent scrolling.
+      this.element.style.webkitTransition = '-webkit-transform ' + time +
+          'ms cubic-bezier(0.33, 0.66, 0.66, 1)';
+      this.contentOffsetY = newY;
+      this.element.style.webkitTransform = 'translate3d(0, ' + newY + 'px, 0)';
 
+    }
+
+    this.isDecelerating_ = true;
   }
-
-  this.isDecelerating_ = true;
 }
 
 
@@ -653,6 +674,10 @@ rflect.ui.MomentumScroller.prototype.stopMomentum = function() {
     this.element.style.webkitTransition = '';
     // Set the element transform to where it is right now.
     this.animateTo(transform.m42);
+
+    this.stopPropagationOnTouchEnd_ = true;
+  } else {
+    this.stopPropagationOnTouchEnd_ = false;
   }
   this.isDecelerating_ = false;
 }
