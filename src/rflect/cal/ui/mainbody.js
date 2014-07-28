@@ -620,7 +620,9 @@ rflect.cal.ui.MainBody.prototype.onCalendarSwitch_ = function(aEvent) {
 
   this.eventManager_.setVisibleCalendar(calendarId, visible);
   this.eventManager_.run();
-  this.mainPane_.update();
+  this.mainPane_.updateBeforeRedraw();
+  this.mainPane_.updateByRedraw(false, rflect.TOUCH_INTERFACE_ENABLED &&
+      this.sidePane_.showBehavior.isVisible());
 }
 
 

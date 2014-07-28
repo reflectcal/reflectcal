@@ -246,6 +246,9 @@ rflect.ui.MomentumScroller.prototype.enable = function(aEnabled) {
     this.animateTo(0);
   } else {
     rflect.ui.MomentumScroller.instancesCount_--;
+    if (rflect.ui.MomentumScroller.instancesCount_ < 0)
+      rflect.ui.MomentumScroller.instancesCount_ = 0;
+
     this.exitDocument();
     this.element = null;
     this.frameElement = null;
