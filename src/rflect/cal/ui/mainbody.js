@@ -623,8 +623,7 @@ rflect.cal.ui.MainBody.prototype.onExternalPaneSlide_ = function(aEvent) {
 
 /**
  * Cal selector action handler.
- * @param {{type: string, visible: boolean, calendarId: string}} aEvent
- * Event object.
+ * @param {rflect.cal.ui.CalSelector.CalendarSwitchEvent} aEvent Event object.
  * @private
  */
 rflect.cal.ui.MainBody.prototype.onCalendarSwitch_ = function(aEvent) {
@@ -633,7 +632,9 @@ rflect.cal.ui.MainBody.prototype.onCalendarSwitch_ = function(aEvent) {
 
   this.eventManager_.setVisibleCalendar(calendarId, visible);
   this.eventManager_.run();
-  this.mainPane_.update();
+  this.mainPane_.updateBeforeRedraw();
+  this.mainPane_.updateByRedraw(false, rflect.TOUCH_INTERFACE_ENABLED &&
+      this.sidePane_.showBehavior.isVisible());
 }
 
 

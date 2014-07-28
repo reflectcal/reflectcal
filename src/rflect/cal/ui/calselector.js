@@ -147,6 +147,32 @@ rflect.cal.ui.CalSelector.EventType = {
 
 
 /**
+ * Event that is fired on calendar switch.
+ * @param {boolean} aVisible Whether to show calendar.
+ * @param {string} aCalendarId Calendar id.
+ * @constructor
+ * @extends {goog.events.Event}
+ */
+rflect.cal.ui.CalSelector.CalendarSwitchEvent = function(aVisible, aCalendarId) {
+  goog.events.Event.call(this,
+      rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH);
+
+  /**
+   * Whether to show calendar.
+   * @type {boolean}
+   */
+  this.visible = aVisible;
+
+  /**
+   * Calendar id.
+   * @type {string}
+   */
+  this.calendarId = aCalendarId;
+}
+goog.inherits(rflect.cal.ui.CalSelector.CalendarSwitchEvent, goog.events.Event);
+
+
+/**
  * Header element.
  * @type {Element}
  * @private
@@ -522,17 +548,12 @@ rflect.cal.ui.CalSelector.prototype.onMouseOver_ = function(aEvent) {
  * @param {goog.events.Event} aEvent Event object.
  */
 rflect.cal.ui.CalSelector.prototype.onCheck_ = function(aEvent) {
-
   var cb = /**@type {rflect.ui.Checkbox}*/ (aEvent.target);
   var id = rflect.string.getIdWithoutPrefix(cb.getElement().id,
       rflect.cal.predefined.CALENDAR_COLOR_CHECKBOX_PREFIX);
 
-  this.dispatchEvent({
-    type: rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
-    visible: cb.isChecked(),
-    calendarId: id
-  })
-
+  this.dispatchEvent(new rflect.cal.ui.CalSelector.CalendarSwitchEvent(
+      cb.isChecked(), id));
 }
 
 

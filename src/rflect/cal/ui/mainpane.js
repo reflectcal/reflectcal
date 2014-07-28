@@ -645,8 +645,12 @@ rflect.cal.ui.MainPane.prototype.updateBlockManager = function() {
 
 /**
  * Redraws main pane with new data.
+ * @param {boolean=} opt_deep Whether to update children.
+ * @param {boolean=} opt_doNotAddMomentumScroller Whether to omit adding of
+ * momentum scroller.
  */
-rflect.cal.ui.MainPane.prototype.updateByRedraw = function() {
+rflect.cal.ui.MainPane.prototype.updateByRedraw = function(opt_deep,
+    opt_doNotAddMomentumScroller) {
   this.getElement().innerHTML = this.build();
 
   if (this.getParent().firstBuildWk && this.viewManager_.isInWeekMode()) {
@@ -661,8 +665,9 @@ rflect.cal.ui.MainPane.prototype.updateByRedraw = function() {
   // We add scroll listeners on freshly built content.
   this.addScrollListeners_();
 
-
-  this.addMomentumScroller();
+  if (!opt_doNotAddMomentumScroller){
+    this.addMomentumScroller();
+  }
 
   // Return to previous scrollTop, scrollLeft values, if any.
   if (this.viewManager_.isInWeekMode()) {
