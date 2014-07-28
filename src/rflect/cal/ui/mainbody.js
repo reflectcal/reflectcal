@@ -611,8 +611,7 @@ rflect.cal.ui.MainBody.prototype.onExternalPaneSlide_ = function(aEvent) {
 
 /**
  * Cal selector action handler.
- * @param {{type: string, visible: boolean, calendarId: string}} aEvent
- * Event object.
+ * @param {rflect.cal.ui.CalSelector.CalendarSwitchEvent} aEvent Event object.
  * @private
  */
 rflect.cal.ui.MainBody.prototype.onCalendarSwitch_ = function(aEvent) {
