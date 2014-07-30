@@ -154,6 +154,14 @@ rflect.cal.ViewManager.prototype.containerSizeMonitor_ = null;
 
 
 /**
+ * @return {rflect.cal.ui.ScreenManager}
+ */
+rflect.cal.ViewManager.prototype.getScreenManager = function(){
+  return this.screenManager_;
+};
+
+
+/**
  * Attaches event handlers.
  * @private
  */

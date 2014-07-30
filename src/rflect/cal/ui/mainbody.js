@@ -25,6 +25,7 @@ goog.require('rflect.cal.ui.MiniCal');
 goog.require('rflect.cal.ui.PageRequestEvent');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.cal.ui.PaneShowBehavior.SlideEvent');
+goog.require('rflect.cal.ui.ScreenManager.EventTypes');
 goog.require('rflect.cal.ui.SettingsPane');
 goog.require('rflect.cal.ui.SettingsPane.EventTypes');
 goog.require('rflect.cal.ui.SidePane');
@@ -380,9 +381,12 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
       this.onCalendarSwitch_, false, this)
       .listen(this.sidePane_.showBehavior,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
-      this.onSlideBreak_, false, this)
+      this.onSidePaneSlide_, false, this)
       .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
-      this.onSidePaneAction_, false, this);
+      this.onSidePaneAction_, false, this)
+      .listen(this.viewManager_.getScreenManager(),
+      rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE,
+      this.onPageChange_, false, this);
 
   this.getHandler().listen(this.transport_,
       rflect.cal.Transport.EventTypes.LOAD_EVENT, this.onLoadEvents_, false,
@@ -592,19 +596,17 @@ rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
 
 
 /**
- * External pane slide handler.
- * @param {rflect.cal.ui.PaneShowBehavior.SlideEvent} aEvent Event object.
+ * Page slide end handler.
+ * @param {rflect.cal.ui.ScreenManager.PageChangeEvent} aEvent Event object.
  * @private
  */
-rflect.cal.ui.MainBody.prototype.onExternalPaneSlide_ = function(aEvent) {
-  // If closing pane, show calendar on start.
-  if (aEvent.start && !aEvent.showing) {
-    this.showCalendar_(true);
+rflect.cal.ui.MainBody.prototype.onPageChange_ = function(aEvent) {
+  // If switching to main body, add momentum scroller...
+  if (aEvent.currentScreen == this) {
     if (rflect.TOUCH_INTERFACE_ENABLED) this.mainPane_.addMomentumScroller();
   }
-  // If opening pane, hide calendar on end.
-  if (!aEvent.start && aEvent.showing) {
-    this.showCalendar_(false);
+  //... and remove otherwise.
+  else {
     if (rflect.TOUCH_INTERFACE_ENABLED) this.mainPane_.removeMomentumScroller();
   }
 }
@@ -720,18 +722,6 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
 rflect.cal.ui.MainBody.prototype.showCalendar_ = function(aShow) {
   goog.style.showElement(this.getDomHelper().getElement('cal-container'),
       aShow);
-}
-
-
-/**
- * @param {rflect.cal.ui.PaneShowBehavior.SlideEvent} aEvent Event
- * object.
- */
-rflect.cal.ui.MainBody.prototype.onSlideBreak_ = function(aEvent) {
-  switch (aEvent.target.component) {
-    case this.sidePane_: this.onSidePaneSlide_(aEvent);break;
-    default:break;
-  }
 }
 
 
