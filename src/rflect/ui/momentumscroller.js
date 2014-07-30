@@ -296,8 +296,6 @@ rflect.ui.MomentumScroller.prototype.isEnabled = function() {
  * Attaches all listeners to implement mouse miss behavior.
  */
 rflect.ui.MomentumScroller.prototype.enterDocument = function() {
-  this.attachDocumentListener_();
-
   this.listen(this.element, goog.events.EventType.TOUCHSTART,
       this.onTouchStart);
   this.listen(this.element, goog.events.EventType.TOUCHMOVE, this.onTouchMove);
@@ -312,7 +310,6 @@ rflect.ui.MomentumScroller.prototype.enterDocument = function() {
  * Attaches listeners to implement mouse miss behavior.
  */
 rflect.ui.MomentumScroller.prototype.exitDocument = function() {
-  this.detachDocumentListener_();
   this.removeAll();
 }
 
