@@ -25,7 +25,6 @@ goog.require('rflect.cal.ui.TimeMarker');
 goog.require('rflect.cal.ui.EditDialog');
 goog.require('rflect.cal.ui.SaveDialog');
 goog.require('rflect.string');
-goog.require('rflect.ui.clickBuster');
 goog.require('rflect.ui.Component');
 goog.require('rflect.ui.MomentumScroller');
 goog.require('rflect.ui.MouseOverRegistry');
@@ -837,7 +836,7 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
   rflect.cal.ui.MainPane.superClass_.enterDocument.call(this);
 
   this.getHandler().listen(this.getElement(), goog.events.EventType.TOUCHSTART,
-      this.saveStartTouch, false, this)
+      this.onTouchStart_, false, this)
       .listen(this.getElement(), goog.events.EventType.TOUCHEND,
       this.onTouchEnd_, false, this)
       .listen(this.saveDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
@@ -968,6 +967,17 @@ rflect.cal.ui.MainPane.prototype.onClick_ = function(aEvent) {
 
 
 /**
+ * Main pane touch start handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.onTouchStart_ = function(aEvent) {
+  aEvent.preventDefault();
+  this.saveStartTouch(aEvent);
+};
+
+
+/**
  * Main pane touch end handler.
  * @param {goog.events.Event} aEvent Event object.
  * @private
@@ -977,7 +987,7 @@ rflect.cal.ui.MainPane.prototype.onTouchEnd_ = function(aEvent) {
   var id = target.id;
   var className = target.className;
 
-  rflect.ui.clickBuster.preventGhostClick(aEvent);
+//  rflect.ui.clickBuster.preventGhostClick(aEvent);
 
   if ((this.isChipOrChild_(className) || this.isGrip_(className)) &&
       !this.selectionMask_.wasDragged() && !this.touchWasMoved(aEvent)) {

@@ -36,16 +36,11 @@ rflect.ui.clickBuster.pop = function() {
  * @param {Event} aEvent Click event object.
  */
 rflect.ui.clickBuster.onClick = function(aEvent) {
-  if (goog.DEBUG)
-    window.console.log('click time: ', goog.now());
-  if (goog.DEBUG)
-    window.console.log('aEvent.clientX: ', aEvent.clientX);
-  if (goog.DEBUG)
-    window.console.log('aEvent.clientY: ', aEvent.clientY);
   for (var i = 0; i < rflect.ui.clickBuster.coordinates.length; i += 2) {
     var x = rflect.ui.clickBuster.coordinates[i];
     var y = rflect.ui.clickBuster.coordinates[i + 1];
-    if (aEvent.clientX == x && aEvent.clientY == y) {
+    if (Math.abs(aEvent.clientX - x) < 25 && Math.abs(aEvent.clientY - y) <
+        25) {
       aEvent.stopPropagation();
       aEvent.preventDefault();
     }

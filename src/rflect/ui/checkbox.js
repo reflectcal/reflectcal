@@ -38,7 +38,6 @@ goog.require('goog.ui.Component.State');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.registry');
 goog.require('rflect.ui.CheckboxRenderer');
-goog.require('rflect.ui.clickBuster');
 
 
 
@@ -258,9 +257,6 @@ rflect.ui.Checkbox.prototype.handleClickOrSpace_ = function(e) {
       goog.ui.Component.EventType.CHECK;
 
   if (this.isEnabled()) {
-    if (goog.events.EventType.TOUCHEND == e.type){
-      rflect.ui.clickBuster.preventGhostClick(e);
-    }
 
     if ((e.type != goog.events.EventType.TOUCHEND || !this.touchWasMoved(e)) &&
         this.dispatchEvent(eventType)) {
