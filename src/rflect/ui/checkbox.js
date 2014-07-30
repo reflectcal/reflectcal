@@ -257,6 +257,9 @@ rflect.ui.Checkbox.prototype.handleClickOrSpace_ = function(e) {
       goog.ui.Component.EventType.CHECK;
 
   if (this.isEnabled()) {
+    if (goog.events.EventType.TOUCHEND == e.type){
+      rflect.ui.clickBuster.preventGhostClick(e);
+    }
 
     if ((e.type != goog.events.EventType.TOUCHEND || !this.touchWasMoved(e)) &&
         this.dispatchEvent(eventType)) {
