@@ -24,10 +24,11 @@ goog.require('rflect.cal.Transport.EventTypes');
 goog.require('rflect.cal.ui.TimeMarker');
 goog.require('rflect.cal.ui.EditDialog');
 goog.require('rflect.cal.ui.SaveDialog');
+goog.require('rflect.string');
+goog.require('rflect.ui.clickBuster');
 goog.require('rflect.ui.Component');
 goog.require('rflect.ui.MomentumScroller');
 goog.require('rflect.ui.MouseOverRegistry');
-goog.require('rflect.string');
 
 
 
@@ -975,6 +976,8 @@ rflect.cal.ui.MainPane.prototype.onTouchEnd_ = function(aEvent) {
   var target = /** @type {Element}*/ (aEvent.target);
   var id = target.id;
   var className = target.className;
+
+  rflect.ui.clickBuster.preventGhostClick(aEvent);
 
   if ((this.isChipOrChild_(className) || this.isGrip_(className)) &&
       !this.selectionMask_.wasDragged() && !this.touchWasMoved(aEvent)) {

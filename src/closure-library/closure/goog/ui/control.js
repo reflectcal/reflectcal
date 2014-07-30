@@ -43,6 +43,7 @@ goog.require('goog.ui.ControlRenderer');
 goog.require('goog.ui.decorate');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
+goog.require('rflect.ui.clickBuster');
 
 
 
@@ -667,6 +668,8 @@ goog.ui.Control.prototype.enableTouchEventHandling_ = function(enable) {
     handler.
         listen(element, goog.events.EventType.TOUCHSTART,
             this.handleTouchStart).
+        listen(element, goog.events.EventType.CLICK,
+            function(e){if (goog.DEBUG) window.console.log('click on element')}).
         listen(element, goog.events.EventType.TOUCHEND, this.handleTouchEnd);
 
   } else {
@@ -717,6 +720,9 @@ goog.ui.Control.prototype.handleTouchStart = function(e) {
  */
 goog.ui.Control.prototype.handleTouchEnd = function(e) {
   if (this.isEnabled()) {
+    if (goog.DEBUG)
+      window.console.log('touchend time: ', goog.now());
+    rflect.ui.clickBuster.preventGhostClick(e);
 
     if (this.isActive()){
       if (!this.touchWasMoved(e)) {
@@ -753,6 +759,15 @@ goog.ui.Control.prototype.touchWasMoved = function(e) {
 
   var endTouchX = e.getBrowserEvent().changedTouches[0].clientX;
   var endTouchY = e.getBrowserEvent().changedTouches[0].clientY;
+
+  if (goog.DEBUG)
+    window.console.log('this.startTouchX_: ', this.startTouchX_);
+  if (goog.DEBUG)
+    window.console.log('this.startTouchY_: ', this.startTouchY_);
+  if (goog.DEBUG)
+    window.console.log('endTouchX: ', endTouchX);
+  if (goog.DEBUG)
+    window.console.log('endTouchY: ', endTouchY);
 
   return Math.abs(this.startTouchX_ - endTouchX) >
       goog.ui.Control.DRAG_THRESHOLD || Math.abs(this.startTouchY_ -
