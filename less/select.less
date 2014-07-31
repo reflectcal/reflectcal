@@ -1,0 +1,94 @@
+/*
+ * Copyright (c) 2014. Reflect, Alex K.
+ */
+
+/* Author:https://twitter.com/toddmparker (Todd Parker) */
+
+/* Styles for native select, cross-browser. */
+
+label {
+  display:block;
+  margin-top:2em;
+  font-size: 0.9em;
+  color:#777;
+}
+
+.dropdown {
+  position: relative;
+  display:block;
+  margin-top:0.5em;
+  overflow:hidden;
+  width:100%;
+  max-width:100%;
+}
+
+select {
+  /* Make sure the select is wider than the container so we can clip the arrow */
+  width:110%;
+  max-width:110%;
+  min-width:110%;
+  /* Remove select styling */
+  appearance: none;
+  -webkit-appearance: none;
+  /* Ugly Firefox way of doing it */
+  -moz-appearance: window;
+  text-indent: 0.01px;
+  text-overflow: "";
+  /* Magic font size number to prevent iOS text zoom */
+  font-size:16px;
+  font-weight: bold;
+  background:none;
+  border: none;
+  color: #444;
+  outline: none;
+  /* Padding works surpringly well */
+  padding: .4em 19% .4em .8em;
+  font-family: helvetica, sans-serif;
+  line-height:1.2;
+  margin:.2em;
+}
+
+/* This hides native dropdown button arrow in IE */
+select::-ms-expand {
+  display: none;
+}
+
+/* Custom arrow - could be an image, SVG, icon font, etc. */
+.dropdown:after {
+  background: none;
+  color: #000;
+  content: "\25BC";
+  font-size: .7em;
+  padding:0;
+  position: absolute;
+  right: 1em;
+  top: 1.2em;
+  bottom: .3em;
+  z-index: 1;
+  /* This hack makes the select behind the arrow clickable in some browsers */
+  pointer-events:none;
+}
+
+/* Hover style - tricky because we're clipping the overflow */
+.dropdown:hover {
+  border:1px solid #888;
+}
+
+/* Focus style */
+select:focus {
+  outline: none;
+  box-shadow: 0 0 3px 3px rgba(180,222,250, .85);
+}
+
+/* This hides focus around selected option in FF */
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #000;
+}
+
+/* These are just demo button-y styles, style as you like */
+.button {
+  border: 1px solid #fff;
+  border-radius: 0;
+  background: #fff;
+}
