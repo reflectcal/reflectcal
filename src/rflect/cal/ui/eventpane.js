@@ -182,18 +182,18 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
     'type': 'text',
     id: 'ep-event-name-input',
     className: goog.getCssName('ep-event-name-input'),
-    placeholder: rflect.cal.i18n.Symbols.NO_NAME_EVENT
+    placeholder: 'Event name'
   });
   var nameCont = aDom.createDom('div',
     [goog.getCssName('event-name-input-cont'),
       goog.getCssName('event-edit-pane-cont-first'),
       goog.getCssName('event-edit-pane-cont')],
-    labelName, rflect.dom.wrapControl(this.inputName_));
+    this.inputName_);
 
-  var labelDate = aDom.createDom('label', {
+  var labelStart = aDom.createDom('label', {
     'for': 'event-start-date',
     className: labelClassName
-  }, 'Date');
+  }, 'Start');
   this.inputStartDate_ = aDom.createDom('input', {
     'type': 'text',
     id: 'event-start-date',
@@ -205,6 +205,10 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
     className: goog.getCssName('event-time-input')
   });
 
+  var labelEnd = aDom.createDom('label', {
+      'for': 'event-start-date',
+      className: labelClassName
+    }, 'End');
   this.inputEndDate_ = aDom.createDom('input', {
     'type': 'text',
     id: 'event-end-date',
@@ -216,23 +220,14 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
     className: goog.getCssName('event-time-input')
   });
 
-  var startDateSubCont = aDom.createDom('div', ['date-sub-cont',
-      'goog-inline-block'], this.inputStartDate_, this.inputStartTime_);
-  var endDateSubCont = aDom.createDom('div', ['date-sub-cont',
-      'goog-inline-block'], this.inputEndDate_, this.inputEndTime_);
-
-  /*var dateInputCont = aDom.createDom('div',
-      [goog.getCssName('start-input-cont'),
-        goog.getCssName('event-edit-pane-cont-inner')],
-      labelDate, controlWrapperMultiple);*/
-      
-  var controlWrapperMultiple = aDom.createDom('div', 'control-wrapper-multiple', 
-      startDateSubCont, ' - ', endDateSubCont);
-
-  var dateCont = aDom.createDom('div',
+  var startCont = aDom.createDom('div',
     [goog.getCssName('date-input-cont'),
       goog.getCssName('event-edit-pane-cont')],
-    labelDate, controlWrapperMultiple);
+    labelStart, this.inputStartDate_, this.inputStartTime_);
+  var endCont = aDom.createDom('div',
+    [goog.getCssName('date-input-cont'),
+      goog.getCssName('event-edit-pane-cont')],
+    labelEnd, this.inputEndDate_, this.inputEndTime_);
 
   var labelAllDay = aDom.createDom('label', {
     'for': 'event-all-day',
@@ -261,7 +256,7 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
       this.eventManager);
   var calendarsCont = aDom.createDom('div',
       goog.getCssName('event-edit-pane-cont'), labelCalendars,
-      rflect.dom.wrapControl(selectCalendarsEl));
+      rflect.dom.wrapSelect(selectCalendarsEl));
 
   var labelDesc = aDom.createDom('label', {
     'for': 'event-description',
@@ -270,13 +265,13 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
   }, 'Description');
   this.textAreaDesc_ = aDom.createDom('textarea', {
     id: 'event-description',
-      className: goog.getCssName('event-description')
+    placeholder: 'Description',
+    className: goog.getCssName('event-description')
   });
   var descCont = aDom.createDom('div', [
     goog.getCssName('description-cont'),
       goog.getCssName('event-edit-pane-cont')],
-    labelDesc, rflect.dom.wrapControl(this.textAreaDesc_));
-
+    this.textAreaDesc_);
 
   var timeLabels = rflect.date.util.getTimeLabels();
   this.startTimeAC_ = rflect.cal.ui.ac.createTimeAutoComplete(
@@ -292,7 +287,7 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
       goog.getCssName('ac-renderer-time');
 
   return body = aDom.createDom('div', goog.getCssName('settings-body'),
-      nameCont, allDayCont, dateCont, calendarsCont, descCont);
+      nameCont, allDayCont, startCont, endCont, calendarsCont, descCont);
 }
 
 

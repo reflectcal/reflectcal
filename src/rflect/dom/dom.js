@@ -26,3 +26,14 @@ rflect.dom.wrapControl = function(aControl, var_args) {
   return goog.dom.createDom.apply(null, ['div', 'control-wrapper']
       .concat(elems));
 }
+
+
+/**
+ * Wraps select in container to make it look consistent across browsers.
+ * @link {http://jsbin.com/juvixufu/347/edit}
+ * @param {Element} aSelect Select to wrap.
+ * @return {Element} Select wrapped.
+ */
+rflect.dom.wrapSelect = function(aSelect) {
+  return goog.dom.createDom('div', ['button', 'dropdown'], aSelect);
+}

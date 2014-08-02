@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) 2014. Reflect, Alex K.
+ */
+
+/*
+ * Form styles.
+ *
+ * @author alexeykofficial@gmail.com (Alex K)
+ */
+
+@import 'select.less';
+
+label {
+  font-family: 'Roboto', arial, sans-serif;
+  font-size: 14px;
+  color: black;
+}
+
+input {
+  @paddingTop: 6px;
+  @contentHeight: 14px;
+
+  .box-sizing();
+  font-family: 'Roboto', arial, sans-serif;
+  font-size: 14px;
+
+  line-height: @contentHeight/*to enclose 13px font, override this if needed*/;
+  height: @contentHeight + 2 * @paddingTop/*to enclose 13px font, override this if needed*/;
+  /*Padding is needed to avoid giant cursor in webkit, which we get if
+  height = line-height = 22px.*/
+  padding: @paddingTop 0;
+
+  background: none;
+  border: none;
+  display: inline-block;
+  margin: 0;
+}
+
+.input-invalid {
+  color: #dc6868 !important;
+}
+
+textarea {
+  @padding: 0;
+  @contentHeight: 29px;
+
+  .box-sizing();
+  font-family: 'Roboto', arial, sans-serif;
+  font-size: 14px;
+  background: none;
+  border: none;
+  display: inline-block;
+  height: @contentHeight + 2 * @padding + @borderWidthDouble;
+  margin: 0;
+  padding: @padding;
+}
+
+/*Default control wrapper is inline.*/
+.control-wrapper {
+  display:inline-block;
+  width: 400px
+}
+
+/*Class to place multiple controls in one line.*/
+.control-wrapper-multiple {
+  display:inline-block;
+  white-space: nowrap;
+}
+
+.label-fluid {
+  display:inline-block;
+}
+
+.control-wrapper input, .control-wrapper textarea, .control-wrapper select {
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .control-wrapper {
+    display:block;
+    width: auto;
+  }
+}
+
