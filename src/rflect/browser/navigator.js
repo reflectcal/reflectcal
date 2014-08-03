@@ -10,6 +10,7 @@
 goog.provide('rflect.cal.Navigator');
 
 goog.require('goog.events.EventTarget');
+goog.require('goog.dom');
 
 
 
@@ -31,6 +32,8 @@ rflect.cal.Navigator = function(opt_window) {
    */
   this.window = opt_window || window;
 
+  this.supportedInputTypes_ = {};
+
 };
 goog.inherits(rflect.cal.Navigator, goog.events.EventTarget);
 
@@ -43,16 +46,65 @@ rflect.cal.Navigator.SMALL_SCREEN_QUERY = '(max-width: 480px)';
 
 
 /**
+ * String to test date and time support.
+ * @type {string}
+ */
+rflect.cal.Navigator.INPUT_VALUE_TEST_STRING = 'test-text';
+
+
+/**
+ * Set of supported input types.
+ * @type {Object.<string, boolean>}
+ */
+rflect.cal.Navigator.prototype.supportedInputTypes_;
+
+
+/**
  * @return {boolean} Whether screen is small according to media query.
  */
 rflect.cal.Navigator.prototype.isSmallScreen = function() {
-  /*if (this.window.matchMedia &&
+  if (this.window.matchMedia &&
       this.window.matchMedia(rflect.cal.Navigator.SMALL_SCREEN_QUERY).matches) {
     return true;
   } else {
     return false;
-  }*/
-  return true;
+  }
+}
+
+
+/**
+ * @return {boolean} Whether input date is supported.
+ */
+rflect.cal.Navigator.prototype.isInputDateSupported = function(aType) {
+  return this.isInputTypeSupported_('date');
+}
+
+
+/**
+ * @return {boolean} Whether input datetime-local is supported.
+ */
+rflect.cal.Navigator.prototype.isInputDateTimeLocalSupported = function(aType) {
+  return this.isInputTypeSupported_('datetime-local');
+}
+
+
+/**
+ * @return {boolean} Whether input date is supported.
+ * @private
+ */
+rflect.cal.Navigator.prototype.isInputTypeSupported_ = function(aType) {
+  if (aType in this.supportedInputTypes_)
+    return this.supportedInputTypes_[aType];
+
+  var input = goog.dom.createDom('input', {
+    'type': aType
+  });
+  input.value = rflect.cal.Navigator.INPUT_VALUE_TEST_STRING;
+
+  this.supportedInputTypes_[aType] =
+      rflect.cal.Navigator.INPUT_VALUE_TEST_STRING != input.value;
+
+  return this.supportedInputTypes_[aType];
 }
 
 

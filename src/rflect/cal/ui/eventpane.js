@@ -47,11 +47,12 @@ goog.require('rflect.cal.i18n.Symbols');
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @param {Element} aParentElement Element in which pane will be rendered.
  * @param {rflect.cal.Transport} aTransport Link to transport.
+ * @param {rflect.cal.Navigator} aNavigator Link to navigator.
  * @constructor
  * @extends {rflect.cal.ui.ExternalPane}
  */
 rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
-    aParentElement, aTransport) {
+    aParentElement, aTransport, aNavigator) {
   rflect.cal.ui.ExternalPane.call(this, aViewManager, aTimeManager,
       aEventManager, aParentElement, aTransport);
 
@@ -60,12 +61,23 @@ rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.checkboxAllDay_ = new rflect.ui.Checkbox());
 
+
+  /**
+   * Link to navigator.
+   * @type {rflect.cal.Navigator}
+   * @private
+   */
+  this.navigator_ = aNavigator;
+
   /**
    * @type {rflect.cal.ui.InputDatePicker}
    * @private
    */
   this.inputDatePicker_ = new rflect.cal.ui.InputDatePicker(this.viewManager,
       rflect.cal.ui.EventPane.getDateFormatString());
+
+  this.nativeInputs_ = this.navigator_.isInputDateSupported() &&
+      this.navigator_.isInputDateTimeLocalSupported();
 
 };
 goog.inherits(rflect.cal.ui.EventPane, rflect.cal.ui.ExternalPane);

@@ -13,7 +13,7 @@ goog.require('goog.array');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('rflect.ui.Component');
-goog.require('rflect.cal.ui.MiniCalBuilder');
+goog.require('rflect.cal.ui.DatePickerBuilder');
 goog.require('rflect.ui.MouseOverRegistry');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
@@ -49,10 +49,10 @@ rflect.cal.ui.DatePicker = function(aViewManager) {
 
   /**
    * Date picker builder.
-   * @type {rflect.cal.ui.MiniCalBuilder}
+   * @type {rflect.cal.ui.DatePickerBuilder}
    * @private
    */
-  this.miniCalBuilder_ = new rflect.cal.ui.MiniCalBuilder(this,
+  this.miniCalBuilder_ = new rflect.cal.ui.DatePickerBuilder(this,
       this.timeManager);
 
   /**
