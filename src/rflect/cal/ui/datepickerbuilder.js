@@ -94,8 +94,51 @@ rflect.cal.ui.DatePickerBuilder.HTML_PARTS_ = [
   '</td>',
   // End of individual monthgrid row.
   '</tr>',
-  '</tbody></table></div>',
+  '</tbody></table>',
+  // End of datepicker table, place for time selects.
+  '</div>',
   '</div>'
+];
+
+
+/**
+ * String parts for time select.
+ * @type {Array.<string>}
+ * @private
+ * @const
+ */
+rflect.cal.ui.DatePickerBuilder.TIME_SELECT_HTML_PARTS_ = [
+  '<div id="',
+  '" class="goog-select">',
+  //'Label is here...'
+  '<ul class="goog-menu">',
+  '<li class="goog-menuitem">',
+  //'Option content is here...'
+  '</li>',
+  '</ul>',
+  '</div>',
+  '<select id="',
+  '">',
+  '<option value="AM">',
+  'AM',
+  '</option>',
+  '<option value="PM">',
+  'PM',
+  '</option>',
+  '</select>'
+];
+
+
+/**
+ * Id parts for time selects. Full ids are composed from these + datepicker
+ * component uid.
+ * @type {Array.<string>}
+ * @const
+ */
+rflect.cal.ui.DatePickerBuilder.TIME_SELECT_UIDS = [
+  'time-select-hours-',
+  'time-select-mins-',
+  'time-select-am-'
 ];
 
 
@@ -128,6 +171,9 @@ rflect.cal.ui.DatePickerBuilder.prototype.buildInternal = function(aSb) {
         this.buildMonthGridRows_(aSb, offset);
         offset += 5;
       };break;
+      case 17: {
+        this.buildTimeSelects_(aSb);
+      };break;
       default: break;
     }
   }
@@ -140,9 +186,9 @@ rflect.cal.ui.DatePickerBuilder.prototype.buildInternal = function(aSb) {
  * @private
  *
  * '<div class="' + goog.getCssName('goog-date-picker'),
- *  
+ *
  *  * Date picker classname ().
- *  
+ *
  */
 rflect.cal.ui.DatePickerBuilder.prototype.buildMainClassName_ = function(aSb) {
   if (this.miniCal_.hovered)
@@ -193,14 +239,14 @@ rflect.cal.ui.DatePickerBuilder.prototype.buildMonthName_ = function(aSb) {
  * // Individual dayname.
  * '<th role="columnheader" class="' +
  * goog.getCssName('goog-date-picker-wday') + '">',
- *  Dayname (S). 
+ *  Dayname (S).
  * // End of individual dayname.
  * '</th>',
  */
 rflect.cal.ui.DatePickerBuilder.prototype.buildDayNames_ = function(aSb, aOffset) {
   var dayNamesFirstNumber = goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK;
   var dayNameNumber = 0;
-  
+
   for (var counter = 0; counter < 7; counter++) {
     if (counter > 0)
       aSb.append(rflect.cal.ui.DatePickerBuilder.HTML_PARTS_[aOffset]);
@@ -223,12 +269,12 @@ rflect.cal.ui.DatePickerBuilder.prototype.buildDayNames_ = function(aSb, aOffset
  *  '<tr>',
  *  // Individual grid cell.
  *  '<td id="goog-dp-',
- *   Grid cell id (42). 
+ *   Grid cell id (42).
  *  '" role="gridcell" class="' +
  *      goog.getCssName('goog-date-picker-date') + ' ',
- *   Day cell class (). 
+ *   Day cell class ().
  *  '">',
- *   Day number (1). 
+ *   Day number (1).
  *  // End of individual grid cell.
  *  '</td>',
  *  // End of individual monthgrid row.
@@ -249,7 +295,7 @@ rflect.cal.ui.DatePickerBuilder.prototype.buildMonthGridRows_ =
 
 
 /**
- * Builds month grid rows.
+ * Builds day cells.
  * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @param {number} aOffset Passed offset.
  * @param {number} aRowCounter Row number.
@@ -289,4 +335,53 @@ rflect.cal.ui.DatePickerBuilder.prototype.buildDayCells_ = function(aSb, aOffset
     aSb.append(day.getDate());
     aSb.append(rflect.cal.ui.DatePickerBuilder.HTML_PARTS_[aOffset + 3]);
   }
+};
+
+
+/**
+ * Builds time selects.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @private
+ */
+rflect.cal.ui.DatePickerBuilder.prototype.buildTimeSelects_ =
+    function(aSb) {
+  this.buildTimeSelect_(aSb, 24,
+      rflect.cal.ui.DatePickerBuilder.TIME_SELECT_UIDS[0] +
+      this.miniCal_.getId());
+  this.buildTimeSelect_(aSb, 60,
+      rflect.cal.ui.DatePickerBuilder.TIME_SELECT_UIDS[1] +
+      this.miniCal_.getId());
+  aSb.append(rflect.cal.ui.DatePickerBuilder.TIME_SELECT_HTML_PARTS_[7]);
+  aSb.append(rflect.cal.ui.DatePickerBuilder.TIME_SELECT_UIDS[2] +
+      this.miniCal_.getId());
+  for (var counter = 8; counter <
+      rflect.cal.ui.DatePickerBuilder.TIME_SELECT_HTML_PARTS_.length;
+      counter++) {
+    aSb.append(rflect.cal.ui.DatePickerBuilder.TIME_SELECT_HTML_PARTS_[
+        counter]);
+  }
+};
+
+
+/**
+ * Builds one time select.
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ * @param {number} aNumber How much entries are in time select.
+ * @param {string} aId Id of time select.
+ * @private
+ */
+rflect.cal.ui.DatePickerBuilder.prototype.buildTimeSelect_ =
+    function(aSb, aNumber, aId) {
+  aSb.append(rflect.cal.ui.DatePickerBuilder.TIME_SELECT_HTML_PARTS_[0]);
+  aSb.append(aId);
+  aSb.append(rflect.cal.ui.DatePickerBuilder.TIME_SELECT_HTML_PARTS_[1]);
+  aSb.append(rflect.cal.ui.DatePickerBuilder.TIME_SELECT_HTML_PARTS_[2]);
+  for (var counter = 0; counter < aNumber; counter++) {
+    aSb.append(rflect.cal.ui.DatePickerBuilder.TIME_SELECT_HTML_PARTS_[3]);
+    if (counter < 10) aSb.append('0');
+    aSb.append(counter);
+    aSb.append(rflect.cal.ui.DatePickerBuilder.TIME_SELECT_HTML_PARTS_[4]);
+  }  
+  aSb.append(rflect.cal.ui.DatePickerBuilder.TIME_SELECT_HTML_PARTS_[5]);
+  aSb.append(rflect.cal.ui.DatePickerBuilder.TIME_SELECT_HTML_PARTS_[6]);
 };
