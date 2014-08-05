@@ -12,7 +12,6 @@ goog.provide('rflect.cal.ui.DatePicker');
 goog.require('goog.array');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
-goog.require('goog.ui.Select');
 goog.require('rflect.ui.Component');
 goog.require('rflect.cal.ui.DatePickerBuilder');
 goog.require('rflect.ui.MouseOverRegistry');
@@ -63,19 +62,6 @@ rflect.cal.ui.DatePicker = function(aViewManager) {
    */
   this.moRegistry_ = new rflect.ui.MouseOverRegistry();
 
-  /**
-   * Select for hours.
-   * @type {goog.ui.Select}
-   * @private
-   */
-  this.timeSelectHours_ = new goog.ui.Select(null);
-
-  /**
-   * Select for minutes.
-   * @type {goog.ui.Select}
-   * @private
-   */
-  this.timeSelectMinutes_ = new goog.ui.Select(null);
 };
 goog.inherits(rflect.cal.ui.DatePicker, rflect.ui.Component);
 
@@ -96,46 +82,6 @@ rflect.cal.ui.DatePicker.EVENT_DATE_CHANGE = 'datechange';
 rflect.cal.ui.DatePicker.dateFinder_ = function(aBasis, aEl) {
   return aBasis.equalsByDate(aEl);
 }
-
-
-/**
- * Select for hours.
- * @type {goog.ui.Select}
- * @private
- */
-rflect.cal.ui.DatePicker.prototype.timeSelectHours_;
-
-
-/**
- * Select for minutes.
- * @type {goog.ui.Select}
- * @private
- */
-rflect.cal.ui.DatePicker.prototype.timeSelectMinutes_;
-
-
-/**
- * Select for hours. In case we do not need full component, just element.
- * @type {Element}
- * @private
- */
-rflect.cal.ui.DatePicker.prototype.timeSelectHoursElement_;
-
-
-/**
- * Select for minutes. In case we do not need full component, just element.
- * @type {Element}
- * @private
- */
-rflect.cal.ui.DatePicker.prototype.timeSelectMinutesElement_;
-
-
-/**
- * Select for AM/PM.
- * @type {Element}
- * @private
- */
-rflect.cal.ui.DatePicker.prototype.timeSelectAMElement_;
 
 
 /**
@@ -259,11 +205,6 @@ rflect.cal.ui.DatePicker.prototype.decorateInternal = function(aElement,
  * @inheritDoc
  */
 rflect.cal.ui.DatePicker.prototype.enterDocument = function() {
-  this.timeSelectHours_.decorate(this.getDomHelper().getElement(
-      rflect.cal.ui.DatePickerBuilder.TIME_SELECT_UIDS[0] + this.getId()));
-  this.timeSelectMinutes_.decorate(this.getDomHelper().getElement(
-      rflect.cal.ui.DatePickerBuilder.TIME_SELECT_UIDS[1] + this.getId()));
-
   rflect.cal.ui.DatePicker.superClass_.enterDocument.call(this);
 
   this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,

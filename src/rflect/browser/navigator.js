@@ -75,15 +75,32 @@ rflect.cal.Navigator.prototype.isSmallScreen = function() {
 /**
  * @return {boolean} Whether input date is supported.
  */
-rflect.cal.Navigator.prototype.isInputDateSupported = function(aType) {
+rflect.cal.Navigator.prototype.isInputDateSupported = function() {
   return this.isInputTypeSupported_('date');
+}
+
+
+/**
+ * @return {boolean} Whether input time is supported.
+ */
+rflect.cal.Navigator.prototype.isInputTimeSupported = function() {
+  return this.isInputTypeSupported_('time');
+}
+
+
+/**
+ * @return {boolean} Whether all time inputs are supported.
+ */
+rflect.cal.Navigator.prototype.isNativeTimeInput = function() {
+  return this.isInputTimeSupported() && this.isInputDateSupported() &&
+      this.isInputDateTimeLocalSupported();
 }
 
 
 /**
  * @return {boolean} Whether input datetime-local is supported.
  */
-rflect.cal.Navigator.prototype.isInputDateTimeLocalSupported = function(aType) {
+rflect.cal.Navigator.prototype.isInputDateTimeLocalSupported = function() {
   return this.isInputTypeSupported_('datetime-local');
 }
 

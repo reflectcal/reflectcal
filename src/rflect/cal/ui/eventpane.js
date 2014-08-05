@@ -12,30 +12,25 @@ goog.provide('rflect.cal.ui.EventPane');
 goog.provide('rflect.cal.ui.EventPane.EventTypes');
 
 goog.require('goog.dom.classes');
-goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.i18n.DateTimeParse');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.style');
-goog.require('goog.ui.ac');
 goog.require('goog.ui.Button');
-goog.require('rflect.ui.Checkbox');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('rflect.cal.i18n.Symbols');
-goog.require('rflect.cal.ui.ac');
 goog.require('rflect.cal.ui.CalendarsSelect');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.ExternalPane');
 goog.require('rflect.cal.ui.InputDatePicker');
+goog.require('rflect.cal.ui.InputTimePicker');
 goog.require('rflect.cal.ui.PageRequestEvent');
-goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
-goog.require('rflect.date.util');
+goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.dom');
 goog.require('rflect.ui.Checkbox');
-goog.require('rflect.cal.i18n.Symbols');
 
 
 
@@ -69,16 +64,16 @@ rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
    */
   this.navigator_ = aNavigator;
 
-  /**
-   * @type {rflect.cal.ui.InputDatePicker}
-   * @private
-   */
-  this.inputDatePicker_ = new rflect.cal.ui.InputDatePicker(this.viewManager,
-      rflect.cal.ui.EventPane.getDateFormatString());
 
-  this.nativeInputs_ = this.navigator_.isInputDateSupported() &&
-      this.navigator_.isInputDateTimeLocalSupported();
+  if (!this.navigator_.isNativeTimeInput()){
 
+    this.inputDatePicker_ = new rflect.cal.ui.InputDatePicker(this.viewManager,
+        rflect.cal.ui.EventPane.getDateFormatString());
+
+    this.inputTimePickerStart_ = new rflect.cal.ui.InputTimePicker();
+
+    this.inputTimePickerEnd_ = new rflect.cal.ui.InputTimePicker();
+  }
 };
 goog.inherits(rflect.cal.ui.EventPane, rflect.cal.ui.ExternalPane);
 
@@ -116,6 +111,27 @@ rflect.cal.ui.EventPane.markInput = function(aValid, aInputEl) {
 
 
 /**
+ * @type {rflect.cal.ui.InputDatePicker}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.inputDatePicker_;
+
+
+/**
+ * @type {rflect.cal.ui.InputTimePicker}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.inputTimePickerStart_;
+
+
+/**
+ * @type {rflect.cal.ui.InputTimePicker}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.inputTimePickerEnd_;
+
+
+/**
  * Whether the component is visible.
  * @type {boolean}
  * @private
@@ -141,18 +157,18 @@ rflect.cal.ui.EventPane.prototype.parentEl;
 
 /**
  * Start time ac.
- * @type {rflect.cal.ui.ac.TimeAutoComplete}
+ * @type {rflect.cal.ui.InputTimePicker}
  * @private
  */
-rflect.cal.ui.EventPane.prototype.startTimeAC_;
+rflect.cal.ui.EventPane.prototype.inputTimePickerStart_;
 
 
 /**
  * End time ac.
- * @type {rflect.cal.ui.ac.TimeAutoComplete}
+ * @type {rflect.cal.ui.InputTimePicker}
  * @private
  */
-rflect.cal.ui.EventPane.prototype.endTimeAC_;
+rflect.cal.ui.EventPane.prototype.inputTimePickerEnd_;
 
 
 /**
@@ -161,6 +177,20 @@ rflect.cal.ui.EventPane.prototype.endTimeAC_;
  * @private
  */
 rflect.cal.ui.EventPane.prototype.selectCalendars_;
+
+
+/**
+ * Container for start time inputs.
+ * @type {Element}
+ */
+rflect.cal.ui.EventPane.prototype.startCont;
+
+
+/**
+ * Container for end time inputs.
+ * @type {Element}
+ */
+rflect.cal.ui.EventPane.prototype.endCont;
 
 
 /**
@@ -176,6 +206,7 @@ rflect.cal.ui.EventPane.prototype.isVisible = function() {
  */
 rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
   var body;
+  var isNativeTimeInput = this.navigator_.isNativeTimeInput();
 
   /**@const*/
   var labelClassName = goog.getCssName('label-fluid') + ' ' +
@@ -206,40 +237,68 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
     'for': 'event-start-date',
     className: labelClassName
   }, 'Start');
-  this.inputStartDate_ = aDom.createDom('input', {
-    'type': 'text',
-    id: 'event-start-date',
-    className: goog.getCssName('event-date-input')
-  });
-  this.inputStartTime_ = aDom.createDom('input', {
-    'type': 'text',
-    id: 'event-start-time',
-    className: goog.getCssName('event-time-input')
-  });
-
   var labelEnd = aDom.createDom('label', {
-      'for': 'event-start-date',
-      className: labelClassName
-    }, 'End');
-  this.inputEndDate_ = aDom.createDom('input', {
-    'type': 'text',
-    id: 'event-end-date',
-    className: goog.getCssName('event-date-input')
-  });
-  this.inputEndTime_ = aDom.createDom('input', {
-    'type': 'text',
-    id: 'event-end-time',
-    className: goog.getCssName('event-time-input')
-  });
+    'for': 'event-start-date',
+    className: labelClassName
+  }, 'End');
 
-  var startCont = aDom.createDom('div',
-    [goog.getCssName('date-input-cont'),
-      goog.getCssName('event-edit-pane-cont')],
-    labelStart, this.inputStartDate_, this.inputStartTime_);
-  var endCont = aDom.createDom('div',
-    [goog.getCssName('date-input-cont'),
-      goog.getCssName('event-edit-pane-cont')],
-    labelEnd, this.inputEndDate_, this.inputEndTime_);
+  if (isNativeTimeInput) {
+
+    this.inputStartDate_ = aDom.createDom('input', {
+      'type': 'date',
+      id: 'event-start-date',
+      className: goog.getCssName('event-date-input')
+    });
+    this.inputStartDateTime_ = aDom.createDom('input', {
+      'type': 'datetime-local',
+      id: 'event-start-time',
+      className: goog.getCssName('event-date-input')
+    });
+    this.inputEndDate_ = aDom.createDom('input', {
+      'type': 'date',
+      id: 'event-end-date',
+      className: goog.getCssName('event-date-input')
+    });
+    this.inputEndDateTime_ = aDom.createDom('input', {
+      'type': 'datetime-local',
+      id: 'event-end-time',
+      className: goog.getCssName('event-date-input')
+    });
+
+    this.startCont = aDom.createDom('div',
+      [goog.getCssName('date-input-cont'),
+        goog.getCssName('event-edit-pane-cont')],
+      labelStart, this.inputStartDate_, this.inputStartDateTime_);
+    this.endCont = aDom.createDom('div',
+      [goog.getCssName('date-input-cont'),
+        goog.getCssName('event-edit-pane-cont')],
+      labelEnd, this.inputEndDate_, this.inputEndDateTime_);
+
+  } else {
+
+    //We create only date inputs in markup, 'cause time ones will be rendered by
+    // their components.
+    this.inputStartDate_ = aDom.createDom('input', {
+      'type': 'text',
+      id: 'event-start-date',
+      className: goog.getCssName('event-date-input')
+    });
+    this.inputStartDateTime_ = aDom.createDom('input', {
+      'type': 'text',
+      id: 'event-start-time',
+      className: goog.getCssName('event-date-input')
+    });
+
+    this.startCont = aDom.createDom('div',
+      [goog.getCssName('date-input-cont'),
+        goog.getCssName('event-edit-pane-cont')],
+      labelStart, this.inputStartDate_);
+    this.endCont = aDom.createDom('div',
+      [goog.getCssName('date-input-cont'),
+        goog.getCssName('event-edit-pane-cont')],
+      labelEnd, this.inputEndDate_);
+
+  }
 
   var labelAllDay = aDom.createDom('label', {
     'for': 'event-all-day',
@@ -285,21 +344,9 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
       goog.getCssName('event-edit-pane-cont')],
     this.textAreaDesc_);
 
-  var timeLabels = rflect.date.util.getTimeLabels();
-  this.startTimeAC_ = rflect.cal.ui.ac.createTimeAutoComplete(
-      timeLabels, this.inputStartTime_, false);
-
-  this.endTimeAC_ = rflect.cal.ui.ac.createTimeAutoComplete(
-      timeLabels, this.inputEndTime_, false);
-
-  //Adding custom class name to renderer.
-  this.startTimeAC_.getRenderer().className += ' ' +
-      goog.getCssName('ac-renderer-time');
-  this.endTimeAC_.getRenderer().className += ' ' +
-      goog.getCssName('ac-renderer-time');
-
   return body = aDom.createDom('div', goog.getCssName('settings-body'),
-      nameCont, allDayCont, startCont, endCont, calendarsCont, descCont);
+      nameCont, allDayCont, this.startCont, this.endCont, calendarsCont,
+      descCont);
 }
 
 
@@ -307,6 +354,13 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
  * @override
  */
 rflect.cal.ui.EventPane.prototype.enterDocument = function() {
+  var isNativeTimeInput = this.navigator_.isNativeTimeInput();
+
+  if (!isNativeTimeInput){
+    this.inputTimePickerStart_.render(this.startCont);
+    this.inputTimePickerEnd_.render(this.endCont);
+  }
+
   rflect.cal.ui.EventPane.superClass_.enterDocument.call(this);
 
   // Menu commands.
@@ -325,23 +379,20 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
 
       .listen(this.inputStartDate_,
       goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
-      .listen(this.inputStartTime_,
+      .listen(this.inputStartDateTime_,
       goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
       .listen(this.inputEndDate_,
       goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
-      .listen(this.inputEndTime_,
+      .listen(this.inputEndDateTime_,
       goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
-
-      .listen(this.inputStartTime_, goog.events.EventType.MOUSEDOWN,
-          this.onTimeInputMouseDown_, false, this)
-      .listen(this.inputEndTime_, goog.events.EventType.MOUSEDOWN,
-          this.onTimeInputMouseDown_, false, this)
 
       .listen(document,
       goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this);
 
-  this.inputDatePicker_.addInput(this.inputStartDate_);
-  this.inputDatePicker_.addInput(this.inputEndDate_);
+  if (!isNativeTimeInput){
+    this.inputDatePicker_.addInput(this.inputStartDate_);
+    this.inputDatePicker_.addInput(this.inputEndDate_);
+  }
 
   //Show/hide actions.
   this.getHandler().listen(this.showBehavior,
@@ -403,8 +454,9 @@ rflect.cal.ui.EventPane.prototype.setNewEventMode = function(
 rflect.cal.ui.EventPane.prototype.onKeyDown_ = function(aEvent) {
 
   if (this.showBehavior.isVisible() &&
-      !this.startTimeAC_.getRenderer().isVisible() &&
-      !this.endTimeAC_.getRenderer().isVisible()) {
+      !(this.inputTimePickerStart_ && this.inputTimePickerStart_
+      .isPopupVisible()) && !(this.inputTimePickerEnd_ &&
+      this.inputTimePickerEnd_.isPopupVisible())) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 
@@ -430,45 +482,6 @@ rflect.cal.ui.EventPane.prototype.onKeyDown_ = function(aEvent) {
 rflect.cal.ui.EventPane.prototype.onInputFocus_ = function(aEvent) {
   goog.dom.classes.remove(/**@type {Element}*/(aEvent.target),
       goog.getCssName('input-invalid'));
-
-  var target = /**@type{Element}*/(aEvent.target);
-  if (target == this.inputStartTime_) {
-    this.updateAC_(this.startTimeAC_);
-  } else if (target == this.inputEndTime_) {
-    this.updateAC_(this.endTimeAC_);
-  }  else {
-    this.startTimeAC_.dismiss();
-    this.endTimeAC_.dismiss();
-  }
-}
-
-
-/**
- * Time input mousedown listener.
- * @param {goog.events.Event} aEvent Event object.
- * @private
- */
-rflect.cal.ui.EventPane.prototype.onTimeInputMouseDown_ = function(aEvent) {
-  var target = /**@type{Element}*/(aEvent.target);
-  if (target == this.inputStartTime_) {
-    this.updateAC_(this.startTimeAC_);
-  } else if (target == this.inputEndTime_) {
-    this.updateAC_(this.endTimeAC_);
-  }
-}
-
-
-/**
- * Updates ac for given input.
- * @param {rflect.cal.ui.ac.TimeAutoComplete} aAC Autocomplete.
- */
-rflect.cal.ui.EventPane.prototype.updateAC_ = function(aAC) {
-  if (goog.userAgent.IE &&
-      goog.string.compareVersions(goog.userAgent.VERSION, '8') <= 0){
-    setTimeout(goog.bind(function(){aAC.update(true)}, this), 0);
-  } else {
-    aAC.update(true);
-  }
 }
 
 
@@ -532,8 +545,8 @@ rflect.cal.ui.EventPane.prototype.onCheck_ = function(aEvent) {
  * @private
  */
 rflect.cal.ui.EventPane.prototype.showTimeInputs_ = function(aShow) {
-  goog.style.showElement(this.inputStartTime_, aShow);
-  goog.style.showElement(this.inputEndTime_, aShow);
+  goog.style.showElement(this.inputStartDateTime_, aShow);
+  goog.style.showElement(this.inputEndDateTime_, aShow);
 }
 
 
@@ -589,14 +602,14 @@ rflect.cal.ui.EventPane.prototype.displayDates_ = function() {
   var endTimeFormatted = formatTime.format(uiEndDate);
 
   this.inputStartDate_.value = startDateFormatted;
-  this.inputStartTime_.value = startTimeFormatted;
+  this.inputStartDateTime_.value = startTimeFormatted;
   this.inputEndDate_.value = endDateFormatted;
-  this.inputEndTime_.value = endTimeFormatted;
+  this.inputEndDateTime_.value = endTimeFormatted;
 
   rflect.cal.ui.EventPane.markInput(true, this.inputStartDate_);
   rflect.cal.ui.EventPane.markInput(true, this.inputEndDate_);
-  rflect.cal.ui.EventPane.markInput(true, this.inputStartTime_);
-  rflect.cal.ui.EventPane.markInput(true, this.inputEndTime_);
+  rflect.cal.ui.EventPane.markInput(true, this.inputStartDateTime_);
+  rflect.cal.ui.EventPane.markInput(true, this.inputEndDateTime_);
 }
 
 
@@ -628,9 +641,9 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
   var validStartDate = parserDate.parse(this.inputStartDate_.value, startDate)
       != 0;
   var validEndDate = parserDate.parse(this.inputEndDate_.value, endDate) != 0;
-  var validStartTime = parserTime.parse(this.inputStartTime_.value, startTime)
+  var validStartTime = parserTime.parse(this.inputStartDateTime_.value, startTime)
       != 0;
-  var validEndTime = parserTime.parse(this.inputEndTime_.value, endTime) != 0;
+  var validEndTime = parserTime.parse(this.inputEndDateTime_.value, endTime) != 0;
 
   if (valid = (validStartDate && validEndDate && validStartTime &&
       validEndTime)) {
@@ -645,8 +658,8 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
 
   rflect.cal.ui.EventPane.markInput(validStartDate, this.inputStartDate_);
   rflect.cal.ui.EventPane.markInput(validEndDate, this.inputEndDate_);
-  rflect.cal.ui.EventPane.markInput(validStartTime, this.inputStartTime_);
-  rflect.cal.ui.EventPane.markInput(validEndTime, this.inputEndTime_);
+  rflect.cal.ui.EventPane.markInput(validStartTime, this.inputStartDateTime_);
+  rflect.cal.ui.EventPane.markInput(validEndTime, this.inputEndDateTime_);
 
   if (valid) {
     var startDateShim = rflect.date.createDateShim(startDate.getYear(),
@@ -685,8 +698,8 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
  */
 rflect.cal.ui.EventPane.prototype.disposeInternal = function() {
   this.inputDatePicker_.dispose();
-  this.startTimeAC_.dispose();
-  this.endTimeAC_.dispose();
+  this.inputTimePickerStart_.dispose();
+  this.inputTimePickerEnd_.dispose();
   this.selectCalendars_.dispose();
 
   rflect.cal.ui.EventPane.superClass_.disposeInternal.call(this);
