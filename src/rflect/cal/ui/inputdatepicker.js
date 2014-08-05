@@ -91,7 +91,7 @@ rflect.cal.ui.InputDatePicker.prototype.enterDocument = function () {
  * @private
  */
 rflect.cal.ui.InputDatePicker.prototype.onMouseDown_ = function (aEvent) {
-  // Very important! Does not allow input to loose focus, and, therefore, close
+  // Very important! Does not allow input to lose focus, and, therefore, close
   // picker.
   aEvent.preventDefault();
   // But IE8- lets input loose focus even in this case, so we apply hack.
