@@ -95,9 +95,9 @@ rflect.cal.ui.InputTimePicker.prototype.createDom =
 rflect.cal.ui.InputTimePicker.prototype.fillTimeSelect_ =
     function(aSelect, aNumber) {
   for (var counter = 0; counter < aNumber; counter++) {
-    var value = counter < 10 ? '0' + aNumber : String(aNumber);
+    var value = counter < 10 ? '0' + counter : String(counter);
     aSelect.addItem(new goog.ui.Option(value));
-  }  
+  }
 };
 
 
