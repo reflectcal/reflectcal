@@ -9,6 +9,7 @@
 goog.provide('rflect.cal.ui.ScreenManager');
 goog.provide('rflect.cal.ui.ScreenManager.EventTypes');
 goog.provide('rflect.cal.ui.ScreenManager.PageChangeEvent');
+goog.provide('rflect.cal.ui.ScreenManager.BeforePageChangeEvent');
 
 
 goog.require('goog.array');
@@ -52,7 +53,8 @@ goog.inherits(rflect.cal.ui.ScreenManager, goog.events.EventTarget);
  * @enum {string}
  */
 rflect.cal.ui.ScreenManager.EventTypes = {
-  PAGE_CHANGE: 'pageChange'
+  PAGE_CHANGE: 'pageChange',
+  BEFORE_PAGE_CHANGE: 'beforePageChange'
 };
 
 
@@ -96,6 +98,41 @@ rflect.cal.ui.ScreenManager.PageChangeEvent = function(aPageNumber,
 
 }
 goog.inherits(rflect.cal.ui.ScreenManager.PageChangeEvent, goog.events.Event);
+
+
+/**
+ * Event that is fired at the start of page change.
+ * @param {number} aPageNumber Number of current page.
+ * @param {goog.ui.Component} aCurrentScreen Current screen component.
+ * @param {goog.ui.Component} aPreviousScreen Previous screen component.
+ * @constructor
+ * @extends {goog.events.Event}
+ */
+rflect.cal.ui.ScreenManager.BeforePageChangeEvent = function(aPageNumber,
+    aCurrentScreen, aPreviousScreen) {
+  goog.events.Event.call(this,
+      rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE);
+
+  /**
+   * Whether this is start of transition.
+   * @type {number}
+   */
+  this.pageNumber = aPageNumber;
+
+  /**
+   * Current screen component.
+   * @type {goog.ui.Component}
+   */
+  this.currentScreen = aCurrentScreen;
+
+  /**
+   * Previous screen component.
+   * @type {goog.ui.Component}
+   */
+  this.previousScreen = aPreviousScreen;
+}
+goog.inherits(rflect.cal.ui.ScreenManager.BeforePageChangeEvent,
+    goog.events.Event);
 
 
 /**
@@ -272,6 +309,10 @@ rflect.cal.ui.ScreenManager.prototype.assignPosition = function(aComponent,
  * @param {number} aPosition Page number to shift to.
  */
 rflect.cal.ui.ScreenManager.prototype.slideToPosition = function(aPosition){
+  this.dispatchEvent(new rflect.cal.ui.ScreenManager.BeforePageChangeEvent(
+      this.pageStack_.length - 1,
+      /**@type {goog.ui.Component}*/ (goog.array.peek(this.pageStack_)),
+      this.componentToHide_));
   //Container moves to the left.
   rflect.cal.ui.ScreenManager.translateElement(this.element_,
       -100 * aPosition);
