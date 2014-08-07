@@ -12,13 +12,11 @@ goog.provide('rflect.cal.ui.EventPane');
 goog.provide('rflect.cal.ui.EventPane.EventTypes');
 
 goog.require('goog.dom.classes');
-goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.i18n.DateTimeParse');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.style');
-goog.require('goog.ui.ac');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.FlatButtonRenderer');
@@ -29,8 +27,6 @@ goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.ExternalPane');
 goog.require('rflect.cal.ui.InputDatePicker');
 goog.require('rflect.cal.ui.PageRequestEvent');
-goog.require('rflect.cal.ui.PaneShowBehavior');
-goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.cal.ui.ScreenManager.EventTypes');
 goog.require('rflect.date.util');
 goog.require('rflect.dom');
@@ -95,12 +91,28 @@ rflect.cal.ui.EventPane.NATIVE_TIME_INPUT_FORMAT = 'hh:mm:ss';
 
 
 /**
+ * Date format for native inputs.
+ * @type {string}
+ * @const
+ */
+rflect.cal.ui.EventPane.NATIVE_DATE_INPUT_FORMAT = 'yyyy-MM-dd';
+
+
+/**
  * Datetime format for native inputs.
  * @type {string}
  * @const
  */
-rflect.cal.ui.EventPane.NATIVE_DATETIME_INPUT_FORMAT = 'yyyy-MM-ddT' +
+rflect.cal.ui.EventPane.NATIVE_DATETIME_INPUT_FORMAT =
+    rflect.cal.ui.EventPane.NATIVE_DATE_INPUT_FORMAT + 'T' +
     rflect.cal.ui.EventPane.NATIVE_TIME_INPUT_FORMAT;
+    
+    
+/**
+ * @type {string}
+ * @const
+ */
+rflect.cal.ui.EventPane.LABEL_CLASS_NAME = 'label-fluid event-edit-pane-label';
 
 
 /**
@@ -243,10 +255,6 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
   var body;
   var isNativeTimeInput = this.navigator_.isNativeTimeInput();
 
-  /**@const*/
-  var labelClassName = goog.getCssName('label-fluid') + ' ' +
-      goog.getCssName('event-edit-pane-label');
-
   rflect.cal.ui.common.setDeleteButtonContent(this.buttonDelete_);
   this.getPaneUpperCenter().appendChild(this.buttonDelete_.getElement());
   goog.dom.classes.add(this.buttonDelete_.getElement(),
@@ -254,7 +262,7 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
 
   var labelName = aDom.createDom('label', {
     'for': 'ep-event-name-input',
-    className: labelClassName
+    className: rflect.cal.ui.EventPane.LABEL_CLASS_NAME
   }, 'Name');
   this.inputName_ = aDom.createDom('input', {
     'type': 'text',
@@ -268,67 +276,11 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
       goog.getCssName('event-edit-pane-cont')],
     this.inputName_);
 
-  var labelStart = aDom.createDom('label', {
-    'for': 'event-start-date',
-    className: labelClassName
-  }, 'Start');
-  var labelEnd = aDom.createDom('label', {
-    'for': 'event-start-date',
-    className: labelClassName
-  }, 'End');
-
   if (isNativeTimeInput) {
-    this.inputStartDate_ = aDom.createDom('input', {
-      'type': 'date',
-      id: 'event-start-date',
-      className: goog.getCssName('event-date-input')
-    });
-    this.inputStartDateTime_ = aDom.createDom('input', {
-      'type': 'datetime-local',
-      id: 'event-start-datetime',
-      className: goog.getCssName('event-date-input')
-    });
-    this.inputEndDate_ = aDom.createDom('input', {
-      'type': 'date',
-      id: 'event-end-date',
-      className: goog.getCssName('event-date-input')
-    });
-    this.inputEndDateTime_ = aDom.createDom('input', {
-      'type': 'datetime-local',
-      id: 'event-end-datetime',
-      className: goog.getCssName('event-date-input')
-    });
+    var timeInputConts = this.createTimeInputsNative_(aDom);
   } else {
-    this.inputStartDate_ = aDom.createDom('input', {
-      'type': 'text',
-      id: 'event-start-date',
-      className: goog.getCssName('event-date-input')
-    });
-    this.inputStartTime_ = aDom.createDom('input', {
-      'type': 'text',
-      id: 'event-start-time',
-      className: goog.getCssName('event-date-input')
-    });
-    this.inputEndDate_ = aDom.createDom('input', {
-      'type': 'text',
-      id: 'event-end-date',
-      className: goog.getCssName('event-date-input')
-    });
-    this.inputEndTime_ = aDom.createDom('input', {
-      'type': 'text',
-      id: 'event-end-time',
-      className: goog.getCssName('event-date-input')
-    });
+    var timeInputConts = this.createTimeInputsCustom_(aDom);
   }
-
-  var startCont = aDom.createDom('div',
-    [goog.getCssName('date-input-cont'),
-      goog.getCssName('event-edit-pane-cont')],
-    labelStart, this.inputStartDate_, this.inputStartDateTime_);
-  var endCont = aDom.createDom('div',
-    [goog.getCssName('date-input-cont'),
-      goog.getCssName('event-edit-pane-cont')],
-    labelEnd, this.inputEndDate_, this.inputEndDateTime_);
 
   var labelAllDay = aDom.createDom('label', {
     'for': 'event-all-day',
@@ -346,7 +298,7 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
   // Calendars select.
   var labelCalendars = aDom.createDom('label', {
     'for': 'event-calendars',
-    className: labelClassName
+    className: rflect.cal.ui.EventPane.LABEL_CLASS_NAME
   }, 'Calendar');
   var selectCalendarsEl = aDom.createDom('select', {
       id: 'event-calendars',
@@ -361,7 +313,7 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
 
   var labelDesc = aDom.createDom('label', {
     'for': 'event-description',
-    className: labelClassName + ' ' +
+    className: rflect.cal.ui.EventPane.LABEL_CLASS_NAME + ' ' +
       goog.getCssName('event-description-label')
   }, 'Description');
   this.textAreaDesc_ = aDom.createDom('textarea', {
@@ -374,24 +326,133 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
       goog.getCssName('event-edit-pane-cont')],
     this.textAreaDesc_);
 
-  if (!isNativeTimeInput){
-    var timeLabels = rflect.date.util.getTimeLabels();
-    this.startTimeAC_ = rflect.cal.ui.ac.createTimeAutoComplete(
-        timeLabels, this.inputStartTime_, false);
-
-    this.endTimeAC_ = rflect.cal.ui.ac.createTimeAutoComplete(
-        timeLabels, this.inputEndTime_, false);
-
-    //Adding custom class name to renderer.
-    this.startTimeAC_.getRenderer().className += ' ' +
-        goog.getCssName('ac-renderer-time');
-    this.endTimeAC_.getRenderer().className += ' ' +
-        goog.getCssName('ac-renderer-time');
-  }
-
   return body = aDom.createDom('div', goog.getCssName('settings-body'),
-      nameCont, allDayCont, startCont, endCont, calendarsCont,
-      descCont);
+      nameCont, allDayCont, timeInputConts, calendarsCont, descCont);
+}
+
+
+/**
+ * @param {goog.dom.DomHelper} aDom Dom helper.
+ * @return {DocumentFragment} Document fragment with two containers.
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.createTimeInputsNative_ = function(aDom) {
+  this.inputStartDate_ = aDom.createDom('input', {
+    'type': 'date',
+    id: 'event-start-date',
+    className: goog.getCssName('event-date-input')
+  });
+  this.inputStartDateTime_ = aDom.createDom('input', {
+    'type': 'datetime-local',
+    id: 'event-start-datetime',
+    className: goog.getCssName('event-datetime-input')
+  });
+  this.inputEndDate_ = aDom.createDom('input', {
+    'type': 'date',
+    id: 'event-end-date',
+    className: goog.getCssName('event-date-input')
+  });
+  this.inputEndDateTime_ = aDom.createDom('input', {
+    'type': 'datetime-local',
+    id: 'event-end-datetime',
+    className: goog.getCssName('event-datetime-input')
+  });
+
+  var startCont = this.createTimeInputCont_(aDom, true, this.inputStartDate_,
+      this.inputStartDateTime_);
+  var endCont = this.createTimeInputCont_(aDom, false, this.inputEndDate_,
+      this.inputEndDateTime_);
+  var documentFragment = aDom.getDocument().createDocumentFragment();
+  documentFragment.appendChild(startCont);
+  documentFragment.appendChild(endCont);
+
+  return documentFragment;
+}
+
+
+/**
+ * @param {goog.dom.DomHelper} aDom Dom helper.
+ * @return {DocumentFragment} Document fragment with two containers.
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.createTimeInputsCustom_ = function(aDom) {
+  this.inputStartDate_ = aDom.createDom('input', {
+    'type': 'text',
+    id: 'event-start-date',
+    className: goog.getCssName('event-date-input')
+  });
+  this.inputStartTime_ = aDom.createDom('input', {
+    'type': 'text',
+    id: 'event-start-time',
+    className: goog.getCssName('event-date-input')
+  });
+  this.inputEndDate_ = aDom.createDom('input', {
+    'type': 'text',
+    id: 'event-end-date',
+    className: goog.getCssName('event-date-input')
+  });
+  this.inputEndTime_ = aDom.createDom('input', {
+    'type': 'text',
+    id: 'event-end-time',
+    className: goog.getCssName('event-date-input')
+  });
+
+  var timeLabels = rflect.date.util.getTimeLabels();
+  this.startTimeAC_ = rflect.cal.ui.ac.createTimeAutoComplete(
+      timeLabels, this.inputStartTime_, false);
+
+  this.endTimeAC_ = rflect.cal.ui.ac.createTimeAutoComplete(
+      timeLabels, this.inputEndTime_, false);
+
+  //Adding custom class name to renderer.
+  this.startTimeAC_.getRenderer().className += ' ' +
+      goog.getCssName('ac-renderer-time');
+  this.endTimeAC_.getRenderer().className += ' ' +
+      goog.getCssName('ac-renderer-time');
+
+  this.inputDatePicker_.addInput(this.inputStartDate_);
+  this.inputDatePicker_.addInput(this.inputEndDate_);
+
+  var startCont = this.createTimeInputCont_(aDom, true, this.inputStartDate_,
+      this.inputStartTime_);
+  var endCont = this.createTimeInputCont_(aDom, false, this.inputEndDate_,
+      this.inputEndTime_);
+  var documentFragment = aDom.getDocument().createDocumentFragment();
+  documentFragment.appendChild(startCont);
+  documentFragment.appendChild(endCont);
+
+  return documentFragment;
+}
+
+
+/**
+ * @param {goog.dom.DomHelper} aDom Dom helper.
+ * @param {boolean} aStart Whether it's a start cont.
+ * @param {Element} aInput1 First input.
+ * @param {Element} aInput2 Second input.
+ * @return {Element} Container with inputs.
+ */
+rflect.cal.ui.EventPane.prototype.createTimeInputCont_ = function(aDom,
+    aStart, aInput1, aInput2) {
+  var label = aDom.createDom('label', {
+    'for': aStart ? 'event-start-date' : 'event-end-date',
+    className: rflect.cal.ui.EventPane.LABEL_CLASS_NAME
+  }, aStart ? 'Start' : 'End');
+
+  var paneLeft = aDom.createDom('div', ['pane-left', 'goog-inline-block']);
+  var paneRight = aDom.createDom('div', ['pane-right', 'goog-inline-block']);
+  var paneCenter = aDom.createDom('div', ['pane-center', 'goog-inline-block']);
+  
+  var spacer = aDom.createDom('div', 'pane-spacer');
+
+  paneLeft.appendChild(label);
+  paneRight.appendChild(aInput1);
+  paneRight.appendChild(aInput2);
+  paneCenter.appendChild(spacer);
+
+  return aDom.createDom('div', [goog.getCssName('date-input-cont'),
+      goog.getCssName('event-edit-pane-cont')], paneLeft, paneRight,
+      paneCenter);
 }
 
 
@@ -419,29 +480,34 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
 
       .listen(this.inputStartDate_,
       goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
-      .listen(this.inputStartDateTime_,
-      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
       .listen(this.inputEndDate_,
       goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
-      .listen(this.inputEndDateTime_,
-      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
-
-      .listen(this.inputStartTime_, goog.events.EventType.MOUSEDOWN,
-      this.onTimeInputMouseDown_, false, this)
-      .listen(this.inputEndTime_, goog.events.EventType.MOUSEDOWN,
-      this.onTimeInputMouseDown_, false, this)
 
       .listen(document,
       goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this);
 
-  if (!isNativeTimeInput){
-    this.inputDatePicker_.addInput(this.inputStartDate_);
-    this.inputDatePicker_.addInput(this.inputEndDate_);
+  if (isNativeTimeInput) {
+    this.getHandler()
+        .listen(this.inputStartDateTime_, goog.events.EventType.FOCUS,
+        this.onInputFocus_, false, this)
+        .listen(this.inputEndDateTime_, goog.events.EventType.FOCUS,
+        this.onInputFocus_, false, this)
+
+  } else {
+    this.getHandler()
+        .listen(this.inputStartTime_, goog.events.EventType.MOUSEDOWN,
+        this.onTimeInputMouseDown_, false, this)
+        .listen(this.inputEndTime_, goog.events.EventType.MOUSEDOWN,
+        this.onTimeInputMouseDown_, false, this)
+        .listen(this.inputStartTime_, goog.events.EventType.FOCUS,
+        this.onInputFocus_, false, this)
+        .listen(this.inputEndTime_, goog.events.EventType.FOCUS,
+        this.onInputFocus_, false, this)
   }
 
   //Show/hide actions.
   this.getHandler().listen(this.viewManager.getScreenManager(),
-      rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE, 
+      rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this)
       .listen(this.viewManager.getScreenManager(),
       rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE, this.onPageChange_,
@@ -514,14 +580,16 @@ rflect.cal.ui.EventPane.prototype.onInputFocus_ = function(aEvent) {
   goog.dom.classes.remove(/**@type {Element}*/(aEvent.target),
       goog.getCssName('input-invalid'));
 
-  var target = /**@type{Element}*/(aEvent.target);
-  if (target == this.inputStartTime_) {
-    this.updateAC_(this.startTimeAC_);
-  } else if (target == this.inputEndTime_) {
-    this.updateAC_(this.endTimeAC_);
-  }  else {
-    this.startTimeAC_.dismiss();
-    this.endTimeAC_.dismiss();
+  if (!this.navigator_.isNativeTimeInput()){
+    var target = /**@type{Element}*/(aEvent.target);
+    if (target == this.inputStartTime_) {
+      this.updateAC_(this.startTimeAC_);
+    } else if (target == this.inputEndTime_) {
+      this.updateAC_(this.endTimeAC_);
+    } else {
+      this.startTimeAC_.dismiss();
+      this.endTimeAC_.dismiss();
+    }
   }
 }
 
@@ -615,8 +683,15 @@ rflect.cal.ui.EventPane.prototype.onCheck_ = function(aEvent) {
  * @private
  */
 rflect.cal.ui.EventPane.prototype.showTimeInputs_ = function(aShow) {
-  goog.style.showElement(this.inputStartDateTime_, aShow);
-  goog.style.showElement(this.inputEndDateTime_, aShow);
+  if (this.navigator_.isNativeTimeInput()){
+    goog.style.showElement(this.inputStartDateTime_, aShow);
+    goog.style.showElement(this.inputEndDateTime_, aShow);
+    goog.style.showElement(this.inputStartDate_, !aShow);
+    goog.style.showElement(this.inputEndDate_, !aShow);
+  } else {
+    goog.style.showElement(this.inputStartTime_, aShow);
+    goog.style.showElement(this.inputEndTime_, aShow);
+  }
 }
 
 
@@ -673,24 +748,73 @@ rflect.cal.ui.EventPane.prototype.displayDates_ = function() {
       uiEndDate.getMinutes() == 0)
     uiEndDate.add(new goog.date.Interval(goog.date.Interval.DAYS, -1));
 
+  if (this.navigator_.isNativeTimeInput()){
+    this.displayDatesNative_(startDate, uiEndDate);
+  } else {
+    this.displayDatesCustom_(startDate, uiEndDate);
+  }
+}
+
+
+/**
+ * Displays dates in form for native widgets.
+ * @param {goog.date.Date} aStartDate Start date to display.
+ * @param {goog.date.Date} aUIEndDate End date to display, differs from real end
+ * date in that it is inclusive end of event interval, as opposed to real date,
+ * which is exclusive.
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.displayDatesNative_ = function(aStartDate,
+    aUIEndDate) {
+  var formatStringDate = rflect.cal.ui.EventPane.NATIVE_DATE_INPUT_FORMAT;
+  var formatStringDateTime = 
+      rflect.cal.ui.EventPane.NATIVE_DATETIME_INPUT_FORMAT;
+  var formatDate = new goog.i18n.DateTimeFormat(formatStringDate);
+  var formatDateTime = new goog.i18n.DateTimeFormat(formatStringDateTime);
+  var startDateFormatted = formatDate.format(aStartDate);
+  var startDateTimeFormatted = formatDateTime.format(aStartDate);
+  var endDateFormatted = formatDate.format(aUIEndDate);
+  var endDateTimeFormatted = formatDateTime.format(aUIEndDate);
+
+  this.inputStartDate_.value = startDateFormatted;
+  this.inputStartDateTime_.value = startDateTimeFormatted;
+  this.inputEndDate_.value = endDateFormatted;
+  this.inputEndDateTime_.value = endDateTimeFormatted;
+
+  rflect.cal.ui.EventPane.markInput(true, this.inputStartDate_);
+  rflect.cal.ui.EventPane.markInput(true, this.inputStartDateTime_);
+  rflect.cal.ui.EventPane.markInput(true, this.inputEndDate_);
+  rflect.cal.ui.EventPane.markInput(true, this.inputEndDateTime_);
+}
+
+
+/**
+ * Displays dates in form for custom widgets.
+ * @param {goog.date.Date} aStartDate Start date to display.
+ * @param {goog.date.Date} aUIEndDate End date to display. 
+ * @see {rflect.cal.ui.EventPane.prototype.displayDatesNative_}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.displayDatesCustom_ = function(aStartDate,
+    aUIEndDate) {
   var formatStringDate = rflect.cal.ui.EventPane.getDateFormatString();
   var formatStringTime = goog.i18n.DateTimeSymbols.TIMEFORMATS[3];
   var formatDate = new goog.i18n.DateTimeFormat(formatStringDate);
   var formatTime = new goog.i18n.DateTimeFormat(formatStringTime);
-  var startDateFormatted = formatDate.format(startDate);
-  var startTimeFormatted = formatTime.format(startDate);
-  var endDateFormatted = formatDate.format(uiEndDate);
-  var endTimeFormatted = formatTime.format(uiEndDate);
+  var startDateFormatted = formatDate.format(aStartDate);
+  var startTimeFormatted = formatTime.format(aStartDate);
+  var endDateFormatted = formatDate.format(aUIEndDate);
+  var endTimeFormatted = formatTime.format(aUIEndDate);
 
   this.inputStartDate_.value = startDateFormatted;
-  this.inputStartDateTime_.value = startTimeFormatted;
+  this.inputStartTime_.value = startTimeFormatted;
   this.inputEndDate_.value = endDateFormatted;
-  this.inputEndDateTime_.value = endTimeFormatted;
+  this.inputEndTime_.value = endTimeFormatted;
 
   rflect.cal.ui.EventPane.markInput(true, this.inputStartDate_);
+  rflect.cal.ui.EventPane.markInput(true, this.inputStartTime_);
   rflect.cal.ui.EventPane.markInput(true, this.inputEndDate_);
-  rflect.cal.ui.EventPane.markInput(true, this.inputStartDateTime_);
-  rflect.cal.ui.EventPane.markInput(true, this.inputEndDateTime_);
+  rflect.cal.ui.EventPane.markInput(true, this.inputEndTime_);
 }
 
 
@@ -709,38 +833,14 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
 
   eh.setCalendarId(this.selectCalendars_.getCalendarId());
 
-  var startDate = new goog.date.DateTime();
-  var startTime = new goog.date.DateTime();
-  var endDate = new goog.date.DateTime();
-  var endTime = new goog.date.DateTime();
-
-  var parserDate = new goog.i18n.DateTimeParse(
-      rflect.cal.ui.EventPane.getDateFormatString());
-  var parserTime = new goog.i18n.DateTimeParse(
-      goog.i18n.DateTimeSymbols.TIMEFORMATS[3]);
-
-  var validStartDate = parserDate.parse(this.inputStartDate_.value, startDate)
-      != 0;
-  var validEndDate = parserDate.parse(this.inputEndDate_.value, endDate) != 0;
-  var validStartTime = parserTime.parse(this.inputStartDateTime_.value, startTime)
-      != 0;
-  var validEndTime = parserTime.parse(this.inputEndDateTime_.value, endTime) != 0;
-
-  if (valid = (validStartDate && validEndDate && validStartTime &&
-      validEndTime)) {
-    startDate.setHours(startTime.getHours());
-    startDate.setMinutes(startTime.getMinutes());
-    endDate.setHours(endTime.getHours());
-    endDate.setMinutes(endTime.getMinutes());
+  if (this.navigator_.isNativeTimeInput()){
+    var dateScanResult = this.scanDatesNative_();
+  } else {
+    dateScanResult = this.scanDatesCustom_();
   }
-  
-  if (valid && startDate.getTime() > endDate.getTime())
-    valid = validEndDate = validEndTime = false;
-
-  rflect.cal.ui.EventPane.markInput(validStartDate, this.inputStartDate_);
-  rflect.cal.ui.EventPane.markInput(validEndDate, this.inputEndDate_);
-  rflect.cal.ui.EventPane.markInput(validStartTime, this.inputStartDateTime_);
-  rflect.cal.ui.EventPane.markInput(validEndTime, this.inputEndDateTime_);
+  valid = dateScanResult.valid;
+  var startDate = dateScanResult.startDate;
+  var endDate = dateScanResult.endDate;
 
   if (valid) {
     var startDateShim = rflect.date.createDateShim(startDate.getYear(),
@@ -773,11 +873,108 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
 
 
 /**
+ * Scans custom time inputs and outputs dates.
+ * @return {{valid: boolean, startDate: goog.date.DateTime, endDate:
+ * goog.date.DateTime}}
+ */
+rflect.cal.ui.EventPane.prototype.scanDatesCustom_ = function() {
+  var valid = false;
+  var startDate = new goog.date.DateTime();
+  var startTime = new goog.date.DateTime();
+  var endDate = new goog.date.DateTime();
+  var endTime = new goog.date.DateTime();
+
+  var parserDate = new goog.i18n.DateTimeParse(
+      rflect.cal.ui.EventPane.getDateFormatString());
+  var parserTime = new goog.i18n.DateTimeParse(
+      goog.i18n.DateTimeSymbols.TIMEFORMATS[3]);
+
+  var validStartDate = parserDate.parse(this.inputStartDate_.value, startDate)
+      != 0;
+  var validEndDate = parserDate.parse(this.inputEndDate_.value, endDate) != 0;
+  var validStartTime = parserTime.parse(this.inputStartTime_.value, startTime)
+      != 0;
+  var validEndTime = parserTime.parse(this.inputEndTime_.value, endTime) != 0;
+
+  if (valid = (validStartDate && validEndDate && validStartTime &&
+      validEndTime)) {
+    startDate.setHours(startTime.getHours());
+    startDate.setMinutes(startTime.getMinutes());
+    endDate.setHours(endTime.getHours());
+    endDate.setMinutes(endTime.getMinutes());
+  }
+
+  if (valid && startDate.getTime() > endDate.getTime())
+    valid = validEndDate = validEndTime = false;
+
+  rflect.cal.ui.EventPane.markInput(validStartDate, this.inputStartDate_);
+  rflect.cal.ui.EventPane.markInput(validEndDate, this.inputEndDate_);
+  rflect.cal.ui.EventPane.markInput(validStartTime, this.inputStartTime_);
+  rflect.cal.ui.EventPane.markInput(validEndTime, this.inputEndTime_);
+
+  return {valid: valid, startDate: startDate, endDate: endDate};
+}
+
+
+/**
+ * Scans native time inputs and outputs dates.
+ * @return {{valid: boolean, startDate: goog.date.DateTime, endDate:
+ * goog.date.DateTime}}
+ */
+rflect.cal.ui.EventPane.prototype.scanDatesNative_ = function() {
+  var valid = false;
+  var startDate = new goog.date.DateTime();
+  var startDateTime = new goog.date.DateTime();
+  var endDate = new goog.date.DateTime();
+  var endDateTime = new goog.date.DateTime();
+
+  var parserDate = new goog.i18n.DateTimeParse(
+      rflect.cal.ui.EventPane.NATIVE_TIME_INPUT_FORMAT);
+  var parserDateTime = new goog.i18n.DateTimeParse(
+      rflect.cal.ui.EventPane.NATIVE_DATETIME_INPUT_FORMAT);
+
+  var validStartDate = parserDate.parse(this.inputStartDate_.value, startDate)
+      != 0;
+  var validEndDate = parserDate.parse(this.inputEndDate_.value, endDate) != 0;
+  var validStartDateTime = parserDateTime.parse(this.inputStartDateTime_.value,
+      startDateTime) != 0;
+  var validEndDateTime = parserDateTime.parse(this.inputEndDateTime_.value,
+      endDateTime) != 0;
+
+  if (valid = (validStartDate && validEndDate && validStartDateTime &&
+      validEndDateTime)) {
+    startDate.setHours(startDateTime.getHours());
+    startDate.setMinutes(startDateTime.getMinutes());
+    endDate.setHours(endDateTime.getHours());
+    endDate.setMinutes(endDateTime.getMinutes());
+  }
+
+  if (valid && startDate.getTime() > endDate.getTime())
+    valid = validEndDate = validEndDateTime = false;
+
+  rflect.cal.ui.EventPane.markInput(validStartDate, this.inputStartDate_);
+  rflect.cal.ui.EventPane.markInput(validEndDate, this.inputEndDate_);
+  rflect.cal.ui.EventPane.markInput(validStartDateTime,
+      this.inputStartDateTime_);
+  rflect.cal.ui.EventPane.markInput(validEndDateTime, this.inputEndDateTime_);
+
+  return {valid: valid, startDate: startDate, endDate: endDate};
+}
+
+
+/**
  * Disposes of the event pane.
  * @override
  * @protected
  */
 rflect.cal.ui.EventPane.prototype.disposeInternal = function() {
+  this.inputStartDate_ = null;
+  this.inputEndDate_ = null;
+  this.inputStartTime_ = null;
+  this.inputEndTime_ = null;
+  this.inputStartDateTime_ = null;
+  this.inputEndDateTime_ = null;
+
   if (!this.navigator_.isNativeTimeInput()){
     this.inputDatePicker_.dispose();
     this.startTimeAC_.dispose();
