@@ -172,12 +172,14 @@ rflect.cal.ui.ExternalPane.prototype.createDom = function() {
 
   this.createSettingsPaneButtonsUpper_(dom);
   this.createSettingsPaneButtonsLower_(dom);
+  var settingsBodyOuter = dom.createDom('div', 'settings-body-outer');
   this.settingsBody = this.createBody(dom);
+  settingsBodyOuter.appendChild(this.settingsBody);
 
   var root = dom.createDom('div', {
     className: goog.getCssName('settings-pane') + (rflect.MOBILE ?
         ' slide-pane-left' : '')
-  }, this.getControlPane_(true), this.settingsBody, this.getControlPane_(false));
+  }, this.getControlPane_(true), settingsBodyOuter, this.getControlPane_(false));
 
   this.setElementInternal(root);
 }
@@ -192,7 +194,7 @@ rflect.cal.ui.ExternalPane.prototype.getControlPane_ = function(aUpper) {
   var index = String(aUpper);
   if (!this.subPanes_[index]) {
     this.subPanes_[index] = this.getDomHelper().createDom('div',
-        'control-pane');
+        'control-pane-external');
   }
 
   return this.subPanes_[index];
@@ -316,13 +318,9 @@ rflect.cal.ui.ExternalPane.prototype.getPaneLowerRight = function() {
  */
 rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsUpper_ =
     function(aDom) {
-
   rflect.cal.ui.common.setBackButtonContent(this.buttonBack1);
-  goog.dom.classes.add(this.buttonBack1.getElement(),
-      'cal-menu-leftmost-button');
-
   this.getPaneUpperLeft().appendChild(this.buttonBack1.getElement());
-  this.getPaneUpperLeft().appendChild(this.buttonSave1.getElement());
+  this.getPaneUpperRight().appendChild(this.buttonSave1.getElement());
 }
 
 
@@ -333,11 +331,8 @@ rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsUpper_ =
 rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsLower_ =
     function(aDom) {
   rflect.cal.ui.common.setBackButtonContent(this.buttonBack2);
-  goog.dom.classes.add(this.buttonBack2.getElement(),
-      'cal-menu-leftmost-button');
-
   this.getPaneLowerLeft().appendChild(this.buttonBack2.getElement());
-  this.getPaneLowerLeft().appendChild(this.buttonSave2.getElement());
+  this.getPaneLowerRight().appendChild(this.buttonSave2.getElement());
 }
 
 

@@ -126,7 +126,7 @@ goog.inherits(rflect.cal.ui.SettingsPane.SaveSettingsEvent, goog.events.Event);
  */
 rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME =
     goog.getCssName('goog-inline-block') + ' ' +
-    goog.getCssName('event-edit-pane-label') + ' ' +
+    goog.getCssName('event-pane-label') + ' ' +
     'label-fluid';
 
 
@@ -221,7 +221,7 @@ rflect.cal.ui.SettingsPane.prototype.createTabContents1_ =
   this.selectLanguages_ = aDom.createDom('select', {
     id: 'settings-languages',
     className: goog.getCssName('event-cal-select') + ' ' +
-      goog.getCssName('event-edit-pane-cal-select')
+      goog.getCssName('event-pane-cal-select')
     });
 
   goog.array.forEach(LANGUAGE_NAMES, function(aLocaleLangPair) {
@@ -233,7 +233,7 @@ rflect.cal.ui.SettingsPane.prototype.createTabContents1_ =
   }, this);
 
   var languagesCont = aDom.createDom('div', {
-    className: goog.getCssName('event-edit-pane-cont')
+    className: goog.getCssName('event-pane-cont')
     }, labelLanguages, rflect.dom.wrapControl(this.selectLanguages_));
 
   return aDom.createDom('div', [goog.getCssName('tabs-content'), goog.getCssName('settings-tab-content')],
@@ -328,7 +328,7 @@ rflect.cal.ui.SettingsPane.prototype.updateCalendarTables_ = function(aDom,
     var myCalendarsSubCont = aDom.createDom('div',
         goog.getCssName('calendars-cont'),  myCalendarsTable);
     var myCalendarsCont = aDom.createDom('div',
-        [goog.getCssName('event-edit-pane-cont'),
+        [goog.getCssName('event-pane-cont'),
         goog.getCssName('calendars-outer-cont')],
         'My calendars', myCalendarsSubCont);
     aParent.appendChild(myCalendarsCont);
@@ -339,7 +339,7 @@ rflect.cal.ui.SettingsPane.prototype.updateCalendarTables_ = function(aDom,
     var otherCalendarsSubCont = aDom.createDom('div',
         goog.getCssName('calendars-cont'), otherCalendarsTable);
     var otherCalendarsCont = aDom.createDom('div',
-        [goog.getCssName('event-edit-pane-cont'),
+        [goog.getCssName('event-pane-cont'),
         goog.getCssName('calendars-outer-cont')],
         'Other calendars', otherCalendarsSubCont);
     aParent.appendChild(otherCalendarsCont);
@@ -443,7 +443,7 @@ rflect.cal.ui.SettingsPane.createCalendarsTd_ =
 rflect.cal.ui.SettingsPane.prototype.createTabContents3_ = function(aDom) {
   var labelDebug = aDom.createDom('label', {
     'for': 'settings-debug-mode',
-    className: 'goog-inline-block event-edit-pane-label'
+    className: 'goog-inline-block event-pane-label'
   }, 'Debug mode');
   var debugSubCont = aDom.createDom('span', null, labelDebug,
       this.checkboxDebug_.getElement());
@@ -451,7 +451,7 @@ rflect.cal.ui.SettingsPane.prototype.createTabContents3_ = function(aDom) {
   var debugCont = aDom.createDom('div', {
     id: 'all-day-label',
     className: goog.getCssName('description-cont') + ' ' +
-        goog.getCssName('event-edit-pane-cont')
+        goog.getCssName('event-pane-cont')
   }, debugSubCont);
 
   return aDom.createDom('div', [goog.getCssName('tabs-content'),

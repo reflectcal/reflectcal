@@ -23,16 +23,16 @@
   margin-left: 20px;
 }
 
-.event-edit-pane-cont {
+.event-pane-cont {
   margin: 0 15px;
-  padding-bottom: 15px;
+  padding-bottom: 2em;
 }
 
-.event-edit-pane-cont-first {
+.event-pane-cont-first {
   margin-top: 0;
 }
 
-.event-edit-pane-cont-inner {
+.event-pane-cont-inner {
   margin-top: 15px;
   margin-bottom: 15px;
 }
@@ -67,6 +67,16 @@
   width: 200px;
 }
 
+@media (max-width: 480px) {
+  .event-date-input {
+    width: 80px;
+  }
+
+  .event-datetime-input {
+    width: 100px;
+  }
+}
+
 .event-time-input {
   width: 90px;
   margin-left: 6px !important;
@@ -85,12 +95,16 @@
 }
 
 .event-description {
+  .box-sizing();
   height: 100px;
+  width: 100%;
+  padding: 14px 0;
 }
 
-.event-edit-pane-label {
+.event-pane-label {
   width: 100px;
-  padding-bottom: 5px;
+  padding: 6px 0;
+  line-height: 14px;
 }
 
 .all-day-label() {
@@ -107,6 +121,17 @@
   line-height: 30px;
 }
 
+.all-day-checkbox{
+  float: right;
+  margin-right: 80px !important;
+}
+
+@media (max-width: 480px) {
+  .all-day-checkbox{
+    margin-right: 20px !important;
+  }
+}
+
 .event-edit-pane-button {
   padding-left: 20px;
   padding-right: 20px;
@@ -118,8 +143,14 @@
   margin-left: 100px;
 }
 
-.event-edit-pane-cal-select {
-  display: inline;
+.event-pane-calendars-label {
+  line-height: 30px;
+}
+
+.event-pane-cal-select {
+  display: inline-block;
+  float: right;
+  max-width: 180px;
 }
 
 .event-cal-select {

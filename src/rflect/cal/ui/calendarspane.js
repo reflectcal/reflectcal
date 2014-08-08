@@ -84,7 +84,7 @@ rflect.cal.ui.CalendarsPane.EventTypes = {
  */
 rflect.cal.ui.CalendarsPane.LABEL_CLASS_NAME =
     goog.getCssName('goog-inline-block') + ' ' +
-    goog.getCssName('event-edit-pane-label') + ' ' +
+    goog.getCssName('event-pane-label') + ' ' +
     'label-fluid';
 
 
@@ -214,7 +214,7 @@ rflect.cal.ui.CalendarsPane.prototype.createBody =
   });
   var nameCont = aDom.createDom('div',
       [goog.getCssName('event-name-input-cont'),
-        goog.getCssName('event-edit-pane-cont')],
+        goog.getCssName('event-pane-cont')],
       labelName, rflect.dom.wrapControl(this.inputCalendarName_));
 
   var labelColor = aDom.createDom('label', {
@@ -225,7 +225,7 @@ rflect.cal.ui.CalendarsPane.prototype.createBody =
   var colorPaletteTable = this.createColorsTable_(aDom);
   var colorsCont = aDom.createDom('div',
       [goog.getCssName('event-name-input-cont'),
-        goog.getCssName('event-edit-pane-cont')],
+        goog.getCssName('event-pane-cont')],
       labelColor, colorPaletteTable);
 
   return aDom.createDom('div', goog.getCssName('settings-body'), nameCont,

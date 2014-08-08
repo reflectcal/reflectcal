@@ -6,13 +6,6 @@
 
 /* Styles for native select, cross-browser. */
 
-label {
-  display:block;
-  margin-top:2em;
-  font-size: 0.9em;
-  color:#777;
-}
-
 .dropdown {
   position: relative;
   display:block;
@@ -36,14 +29,11 @@ select {
   text-overflow: "";
   /* Magic font size number to prevent iOS text zoom */
   font-size:16px;
-  font-weight: bold;
   background:none;
   border: none;
-  color: #444;
+  color: #000;
   outline: none;
-  /* Padding works surpringly well */
-  padding: .4em 19% .4em .8em;
-  font-family: helvetica, sans-serif;
+  font-family: 'Roboto', arial, sans-serif;
   line-height:1.2;
   margin:.2em;
 }
@@ -79,7 +69,7 @@ select::-ms-expand {
 
 /* Focus style */
 select:focus {
-  outline: none;
+  outline: 1px #6699ee;
 }
 
 /* This hides focus around selected option in FF */

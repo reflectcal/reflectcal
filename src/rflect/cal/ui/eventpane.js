@@ -112,7 +112,7 @@ rflect.cal.ui.EventPane.NATIVE_DATETIME_INPUT_FORMAT =
  * @type {string}
  * @const
  */
-rflect.cal.ui.EventPane.LABEL_CLASS_NAME = 'label-fluid event-edit-pane-label';
+rflect.cal.ui.EventPane.LABEL_CLASS_NAME = 'label-fluid event-pane-label';
 
 
 /**
@@ -272,8 +272,8 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
   });
   var nameCont = aDom.createDom('div',
     [goog.getCssName('event-name-input-cont'),
-      goog.getCssName('event-edit-pane-cont-first'),
-      goog.getCssName('event-edit-pane-cont')],
+      goog.getCssName('event-pane-cont-first'),
+      goog.getCssName('event-pane-cont')],
     this.inputName_);
 
   if (isNativeTimeInput) {
@@ -284,32 +284,33 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
 
   var labelAllDay = aDom.createDom('label', {
     'for': 'event-all-day',
-    className: 'goog-inline-block event-edit-pane-label all-day-label'
+    className: 'goog-inline-block event-pane-label all-day-label'
   }, 'All-day event');
   var allDaySubCont = aDom.createDom('span', null, labelAllDay,
       this.checkboxAllDay_.getElement());
   this.checkboxAllDay_.setLabel(allDaySubCont);
+  this.checkboxAllDay_.getElement().className += ' all-day-checkbox';
   var allDayCont = aDom.createDom('div', {
     id: 'all-day-label',
     className: goog.getCssName('description-cont') + ' ' +
-      goog.getCssName('event-edit-pane-cont')
+      goog.getCssName('event-pane-cont')
     }, allDaySubCont);
 
   // Calendars select.
   var labelCalendars = aDom.createDom('label', {
     'for': 'event-calendars',
-    className: rflect.cal.ui.EventPane.LABEL_CLASS_NAME
+    className: rflect.cal.ui.EventPane.LABEL_CLASS_NAME +
+        ' event-pane-calendars-label';
   }, 'Calendar');
   var selectCalendarsEl = aDom.createDom('select', {
-      id: 'event-calendars',
-      className: goog.getCssName('event-cal-select') + ' ' +
-          goog.getCssName('event-edit-pane-cal-select')
+      id: 'event-calendars'
     });
   this.selectCalendars_ = new rflect.cal.ui.CalendarsSelect(selectCalendarsEl,
       this.eventManager);
   var calendarsCont = aDom.createDom('div',
-      goog.getCssName('event-edit-pane-cont'), labelCalendars,
+      goog.getCssName('event-pane-cont'), labelCalendars,
       rflect.dom.wrapSelect(selectCalendarsEl));
+  selectCalendarsEl.parentNode.className += ' event-pane-cal-select';
 
   var labelDesc = aDom.createDom('label', {
     'for': 'event-description',
@@ -318,13 +319,13 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
   }, 'Description');
   this.textAreaDesc_ = aDom.createDom('textarea', {
     id: 'event-description',
-    placeholder: 'Description',
+    placeholder: 'Enter description',
     className: goog.getCssName('event-description')
   });
   var descCont = aDom.createDom('div', [
-    goog.getCssName('description-cont'),
-      goog.getCssName('event-edit-pane-cont')],
-    this.textAreaDesc_);
+      goog.getCssName('description-cont'),
+      goog.getCssName('event-pane-cont')],
+      labelDesc, this.textAreaDesc_);
 
   return body = aDom.createDom('div', goog.getCssName('settings-body'),
       nameCont, allDayCont, timeInputConts, calendarsCont, descCont);
@@ -451,7 +452,7 @@ rflect.cal.ui.EventPane.prototype.createTimeInputCont_ = function(aDom,
   paneCenter.appendChild(spacer);
 
   return aDom.createDom('div', [goog.getCssName('date-input-cont'),
-      goog.getCssName('event-edit-pane-cont')], paneLeft, paneRight,
+      goog.getCssName('event-pane-cont')], paneLeft, paneRight,
       paneCenter);
 }
 
