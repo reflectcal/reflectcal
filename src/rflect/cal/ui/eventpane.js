@@ -87,7 +87,7 @@ rflect.cal.ui.EventPane.EventTypes = {
  * @type {string}
  * @const
  */
-rflect.cal.ui.EventPane.NATIVE_TIME_INPUT_FORMAT = 'HH:mm:ss';
+rflect.cal.ui.EventPane.NATIVE_TIME_INPUT_FORMAT = 'HH:mm';
 
 
 /**
@@ -968,7 +968,7 @@ rflect.cal.ui.EventPane.prototype.scanDatesNative_ = function() {
   var endDateTime = new goog.date.DateTime();
 
   var parserDate = new goog.i18n.DateTimeParse(
-      rflect.cal.ui.EventPane.NATIVE_TIME_INPUT_FORMAT);
+      rflect.cal.ui.EventPane.NATIVE_DATE_INPUT_FORMAT);
   var parserDateTime = new goog.i18n.DateTimeParse(
       rflect.cal.ui.EventPane.NATIVE_DATETIME_INPUT_FORMAT);
 
