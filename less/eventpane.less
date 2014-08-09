@@ -25,11 +25,16 @@
 
 .event-pane-cont {
   margin: 0 15px;
-  padding-bottom: 2em;
+  padding: 2em 0;
+  border-bottom: 1px solid #d5d5d5;
 }
 
 .event-pane-cont-first {
   margin-top: 0;
+}
+
+.event-pane-cont-last {
+  border-bottom: none;
 }
 
 .event-pane-cont-inner {
@@ -42,10 +47,9 @@
 }
 
 .ep-event-name-input {
-  @paddingTop: 8px;
+  @paddingTop: 6px;
   @contentHeight: 19px;
 
-  height: @contentHeight + 2 * @paddingTop + @borderWidthDouble !important;
   line-height: @contentHeight !important;
   padding-top: @paddingTop;
   padding-bottom: @paddingTop;
@@ -59,27 +63,41 @@
   white-space: nowrap;
 }
 
+/*Date-time inputs.*/
 .event-date-input {
   width: 140px;
 }
 
-.event-datetime-input {
+.event-time-input {
+  width: 70px;
+  margin-left: 6px !important;
+}
+
+.event-date-input-native {
+  width: 150px;
+}
+
+.event-datetime-input-native {
   width: 200px;
 }
 
 @media (max-width: 480px) {
   .event-date-input {
-    width: 80px;
+    width: 140px;
   }
 
-  .event-datetime-input {
-    width: 100px;
+  .event-time-input {
+    width: 70px;
+    margin-left: 6px !important;
   }
-}
 
-.event-time-input {
-  width: 90px;
-  margin-left: 6px !important;
+  .event-date-input-native {
+    width: 70px;
+  }
+
+  .event-datetime-input-native {
+    width: 120px;
+  }
 }
 
 .all-day-input-cont {
@@ -139,18 +157,22 @@
   margin-right: 5px;
 }
 
-.event-edit-pane-button-delete {
-  margin-left: 100px;
+.event-pane-button-delete {
 }
 
 .event-pane-calendars-label {
-  line-height: 30px;
+  line-height: 32px;
 }
 
 .event-pane-cal-select {
   display: inline-block;
   float: right;
   max-width: 180px;
+}
+
+.event-pane-cal-select select {
+  text-align: right;
+  padding-right: 60px;
 }
 
 .event-cal-select {
@@ -165,4 +187,11 @@
 .event-pane-buttons-lower {
   padding-left: 130px;
   padding-top: 18px;
+}
+
+.spacer {
+  font-size: 16px;
+  color: transparent;
+  padding: 6px 0px;
+  line-height: 14px;
 }

@@ -95,7 +95,7 @@
   .border-radius(0);
 }
 
-/*Button with more important-meaning*/
+/*Button with more important-meaning.*/
 .emphasis-button.goog-flat-button {
   .gradient(#468ffe, #4080fe);
   border-color: #3399ff;
@@ -118,6 +118,33 @@
 
 /* State: focused. */
 .emphasis-button.goog-flat-button-focused {
+  .box-shadow(0 0 5px 0 #3879fe);
+  z-index: 1;
+}
+
+/*Button with danger meaning.*/
+.danger-button.goog-flat-button {
+  .gradient(#468ffe, #4080fe);
+  border-color: #3399ff;
+  color: white;
+}
+
+.danger-button.goog-flat-button-hover {
+  border-color: #1f5d9d;
+  .box-shadow(none);
+}
+
+.danger-button.goog-flat-button-active,
+.danger-button.goog-flat-button-selected,
+.danger-button.goog-flat-button-checked {
+  color: white;
+  border-color: #1f5d9d !important;
+  .gradient(#3c79fe, #366afe);
+  .box-shadow(inset 0 2px 5px 1px #2e61fe) !important;
+}
+
+/* State: focused. */
+.danger-button.goog-flat-button-focused {
   .box-shadow(0 0 5px 0 #3879fe);
   z-index: 1;
 }

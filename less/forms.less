@@ -12,17 +12,17 @@
 
 label {
   font-family: 'Roboto', arial, sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   color: black;
 }
 
 input {
   @paddingTop: 6px;
-  @contentHeight: 14px;
+  @contentHeight: 16px;
 
   .box-sizing();
   font-family: 'Roboto', arial, sans-serif;
-  font-size: 14px;
+  font-size: 16px;
 
   line-height: @contentHeight/*to enclose 13px font, override this if needed*/;
   height: @contentHeight + 2 * @paddingTop/*to enclose 13px font, override this if needed*/;
@@ -35,6 +35,12 @@ input {
   outline: none;
   display: inline-block;
   margin: 0;
+  color: #757575;
+  transition: color .2s;
+}
+
+input:focus {
+  color: #007aff;
 }
 
 .input-invalid {
@@ -47,13 +53,19 @@ textarea {
 
   .box-sizing();
   font-family: 'Roboto', arial, sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   background: none;
   border: none;
+  outline: none;
   display: inline-block;
   height: @contentHeight + 2 * @padding + @borderWidthDouble;
   margin: 0;
   padding: @padding;
+  color: #757575;
+}
+
+textarea:focus {
+  color: #007aff;
 }
 
 /*Default control wrapper is inline.*/

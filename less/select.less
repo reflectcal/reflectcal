@@ -31,15 +31,18 @@ select {
   font-size:16px;
   background:none;
   border: none;
-  color: #000;
+  color: #757575;
   outline: none;
   font-family: 'Roboto', arial, sans-serif;
   line-height:1.2;
   margin:.2em;
+  transition: color .2s;
+  cursor: pointer;
 }
 
 select:focus {
   outline: none;
+  color: #007aff;
 }
 
 /* This hides native dropdown button arrow in IE */
@@ -51,16 +54,31 @@ select::-ms-expand {
 .dropdown:after {
   background: none;
   color: #000;
-  content: "\25BC";
   font-size: .7em;
   padding:0;
   position: absolute;
-  right: 1em;
-  top: 1.2em;
   bottom: .3em;
   z-index: 1;
   /* This hack makes the select behind the arrow clickable in some browsers */
   pointer-events:none;
+  right: 1em;
+  top: 12px;
+  content: "\25BC";
+}
+
+.dropdown:before {
+  background: none;
+  color: #000;
+  font-size: .7em;
+  padding:0;
+  position: absolute;
+  bottom: .3em;
+  z-index: 1;
+  /* This hack makes the select behind the arrow clickable in some browsers */
+  pointer-events:none;
+  right: 1em;
+  top: 2px;
+  content: "\25B2";
 }
 
 /* Hover style - tricky because we're clipping the overflow */
@@ -74,7 +92,6 @@ select:focus {
 
 /* This hides focus around selected option in FF */
 select:-moz-focusring {
-  color: transparent;
   text-shadow: 0 0 0 #000;
 }
 

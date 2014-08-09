@@ -195,7 +195,7 @@ rflect.cal.ui.CalendarsPane.prototype.createBody =
     function(aDom) {
   goog.dom.classes.add(this.buttonDeleteCalendar_.getElement(),
       rflect.cal.ui.CalendarsPane.BUTTON_CLASS_NAME,
-      goog.getCssName('event-edit-pane-button-delete'));
+      goog.getCssName('event-pane-button-delete'));
   rflect.cal.ui.common.setDeleteButtonContent(this.buttonDeleteCalendar_);
 
   this.getPaneLowerCenter().appendChild(

@@ -233,6 +233,22 @@ rflect.cal.ui.EventPane.prototype.inputEndDateTime_;
 
 
 /**
+ * Label for start.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.labelStart_;
+
+
+/**
+ * Label for end.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.labelEnd_;
+
+
+/**
  * Calendars select.
  * @type {rflect.cal.ui.CalendarsSelect}
  * @private
@@ -256,9 +272,9 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
   var isNativeTimeInput = this.navigator_.isNativeTimeInput();
 
   rflect.cal.ui.common.setDeleteButtonContent(this.buttonDelete_);
-  this.getPaneUpperCenter().appendChild(this.buttonDelete_.getElement());
+  this.getPaneLowerCenter().appendChild(this.buttonDelete_.getElement());
   goog.dom.classes.add(this.buttonDelete_.getElement(),
-      goog.getCssName('event-edit-pane-button-delete'));
+      goog.getCssName('event-pane-button-delete'));
 
   var labelName = aDom.createDom('label', {
     'for': 'ep-event-name-input',
@@ -300,7 +316,7 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
   var labelCalendars = aDom.createDom('label', {
     'for': 'event-calendars',
     className: rflect.cal.ui.EventPane.LABEL_CLASS_NAME +
-        ' event-pane-calendars-label';
+        ' event-pane-calendars-label'
   }, 'Calendar');
   var selectCalendarsEl = aDom.createDom('select', {
       id: 'event-calendars'
@@ -323,8 +339,7 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
     className: goog.getCssName('event-description')
   });
   var descCont = aDom.createDom('div', [
-      goog.getCssName('description-cont'),
-      goog.getCssName('event-pane-cont')],
+      'description-cont', 'event-pane-cont', 'event-pane-cont-last'],
       labelDesc, this.textAreaDesc_);
 
   return body = aDom.createDom('div', goog.getCssName('settings-body'),
@@ -341,22 +356,22 @@ rflect.cal.ui.EventPane.prototype.createTimeInputsNative_ = function(aDom) {
   this.inputStartDate_ = aDom.createDom('input', {
     'type': 'date',
     id: 'event-start-date',
-    className: goog.getCssName('event-date-input')
+    className: goog.getCssName('event-date-input-native')
   });
   this.inputStartDateTime_ = aDom.createDom('input', {
     'type': 'datetime-local',
     id: 'event-start-datetime',
-    className: goog.getCssName('event-datetime-input')
+    className: goog.getCssName('event-datetime-input-native')
   });
   this.inputEndDate_ = aDom.createDom('input', {
     'type': 'date',
     id: 'event-end-date',
-    className: goog.getCssName('event-date-input')
+    className: goog.getCssName('event-date-input-native')
   });
   this.inputEndDateTime_ = aDom.createDom('input', {
     'type': 'datetime-local',
     id: 'event-end-datetime',
-    className: goog.getCssName('event-datetime-input')
+    className: goog.getCssName('event-datetime-input-native')
   });
 
   var startCont = this.createTimeInputCont_(aDom, true, this.inputStartDate_,
@@ -385,7 +400,7 @@ rflect.cal.ui.EventPane.prototype.createTimeInputsCustom_ = function(aDom) {
   this.inputStartTime_ = aDom.createDom('input', {
     'type': 'text',
     id: 'event-start-time',
-    className: goog.getCssName('event-date-input')
+    className: goog.getCssName('event-time-input')
   });
   this.inputEndDate_ = aDom.createDom('input', {
     'type': 'text',
@@ -395,7 +410,7 @@ rflect.cal.ui.EventPane.prototype.createTimeInputsCustom_ = function(aDom) {
   this.inputEndTime_ = aDom.createDom('input', {
     'type': 'text',
     id: 'event-end-time',
-    className: goog.getCssName('event-date-input')
+    className: goog.getCssName('event-time-input')
   });
 
   var timeLabels = rflect.date.util.getTimeLabels();
@@ -435,16 +450,21 @@ rflect.cal.ui.EventPane.prototype.createTimeInputsCustom_ = function(aDom) {
  */
 rflect.cal.ui.EventPane.prototype.createTimeInputCont_ = function(aDom,
     aStart, aInput1, aInput2) {
-  var label = aDom.createDom('label', {
-    'for': aStart ? 'event-start-date' : 'event-end-date',
-    className: rflect.cal.ui.EventPane.LABEL_CLASS_NAME
-  }, aStart ? 'Start' : 'End');
+
+  var label = aDom.createDom('label', rflect.cal.ui.EventPane.LABEL_CLASS_NAME,
+    aStart ? 'Start' : 'End');
+
+  if (aStart)
+    this.labelStart_ = label;
+  else
+    this.labelEnd_ = label;
 
   var paneLeft = aDom.createDom('div', ['pane-left', 'goog-inline-block']);
   var paneRight = aDom.createDom('div', ['pane-right', 'goog-inline-block']);
   var paneCenter = aDom.createDom('div', ['pane-center', 'goog-inline-block']);
-  
-  var spacer = aDom.createDom('div', 'pane-spacer');
+
+  var spacer = aDom.createDom('div', 'spacer');
+  spacer.innerHTML = 's';
 
   paneLeft.appendChild(label);
   paneRight.appendChild(aInput1);
@@ -454,6 +474,22 @@ rflect.cal.ui.EventPane.prototype.createTimeInputCont_ = function(aDom,
   return aDom.createDom('div', [goog.getCssName('date-input-cont'),
       goog.getCssName('event-pane-cont')], paneLeft, paneRight,
       paneCenter);
+}
+
+
+/**
+ * @param {boolean} aAllDay Whether all-day event is shown.
+ */
+rflect.cal.ui.EventPane.prototype.updateLabels_ = function(aAllDay){
+  if (this.navigator_.isNativeTimeInput()) {
+    this.labelStart_.htmlFor = aAllDay ? 'event-start-date' :
+        'event-start-datetime';
+    this.labelEnd_.htmlFor = aAllDay ? 'event-end-date' :
+        'event-end-datetime';
+  } else {
+    this.labelStart_.htmlFor = 'event-start-date';
+    this.labelEnd_.htmlFor = 'event-end-date';
+  }
 }
 
 
@@ -675,6 +711,7 @@ rflect.cal.ui.EventPane.prototype.onCheck_ = function(aEvent) {
     eh.setAllDay(checked);
 
     this.displayDates_();
+    this.updateLabels_(checked);
   }
 }
 
@@ -727,7 +764,7 @@ rflect.cal.ui.EventPane.prototype.displayValues = function() {
   this.selectCalendars_.setCalendarId(eh.getCalendarId());
 
   this.showTimeInputs_(!eh.getAllDay());
-
+  this.updateLabels_(eh.getAllDay());
 };
 
 
@@ -754,6 +791,7 @@ rflect.cal.ui.EventPane.prototype.displayDates_ = function() {
   } else {
     this.displayDatesCustom_(startDate, uiEndDate);
   }
+
 }
 
 
@@ -975,6 +1013,9 @@ rflect.cal.ui.EventPane.prototype.disposeInternal = function() {
   this.inputEndTime_ = null;
   this.inputStartDateTime_ = null;
   this.inputEndDateTime_ = null;
+
+  this.labelStart_ = null;
+  this.labelEnd_ = null;
 
   if (!this.navigator_.isNativeTimeInput()){
     this.inputDatePicker_.dispose();
