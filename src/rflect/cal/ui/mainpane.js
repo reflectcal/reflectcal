@@ -992,7 +992,7 @@ rflect.cal.ui.MainPane.prototype.onTouchEnd_ = function(aEvent) {
   if ((this.isChipOrChild_(className) || this.isGrip_(className)) &&
       !this.selectionMask_.wasDragged() && !this.touchWasMoved(aEvent)) {
 
-    this.getParent().showEventPane(true, false);
+    this.showEventEditComponent_(target, className, true);
 
   }
 };

@@ -87,7 +87,7 @@ rflect.cal.ui.EventPane.EventTypes = {
  * @type {string}
  * @const
  */
-rflect.cal.ui.EventPane.NATIVE_TIME_INPUT_FORMAT = 'hh:mm:ss';
+rflect.cal.ui.EventPane.NATIVE_TIME_INPUT_FORMAT = 'HH:mm:ss';
 
 
 /**
