@@ -305,7 +305,7 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
   var allDaySubCont = aDom.createDom('span', null, labelAllDay,
       this.checkboxAllDay_.getElement());
   this.checkboxAllDay_.setLabel(allDaySubCont);
-  this.checkboxAllDay_.getElement().className += ' all-day-checkbox';
+  this.checkboxAllDay_.getElement().className += ' aligned-checkbox';
   var allDayCont = aDom.createDom('div', {
     id: 'all-day-label',
     className: goog.getCssName('description-cont') + ' ' +
@@ -326,7 +326,7 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
   var calendarsCont = aDom.createDom('div',
       goog.getCssName('event-pane-cont'), labelCalendars,
       rflect.dom.wrapSelect(selectCalendarsEl));
-  selectCalendarsEl.parentNode.className += ' event-pane-cal-select';
+  selectCalendarsEl.parentNode.className += ' settings-pane-select';
 
   var labelDesc = aDom.createDom('label', {
     'for': 'event-description',

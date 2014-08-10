@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014. Rflect, Alex K.
+ * Copyright (c) 2013. Rflect, Alex K.
  */
 
 /**
@@ -15,13 +15,21 @@ goog.require('goog.dom.classes');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.i18n.DateTimeParse');
+goog.require('goog.i18n.DateTimeSymbols');
+goog.require('goog.object');
+goog.require('goog.style');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.FlatButtonRenderer');
+goog.require('goog.ui.Tab');
+goog.require('goog.ui.TabBar');
 goog.require('rflect.cal.i18n.PREDEFINED_COLOR_CODES');
+goog.require('rflect.cal.i18n.SettingsSymbols');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.Transport');
 goog.require('rflect.cal.Transport.EventTypes');
+goog.require('rflect.cal.ui.CalendarEditPane');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.ExternalPane');
@@ -36,7 +44,7 @@ goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
 
 
 /**
- * Calendars pane main class.
+ * Settings pane main class.
  * TODO(alexk): Currently only creation through render is supported. Add decorate.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
@@ -48,20 +56,38 @@ goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
  */
 rflect.cal.ui.CalendarsPane = function(aViewManager, aTimeManager, aEventManager,
     aParentElement, aTransport) {
-  rflect.cal.ui.ExternalPane.call(this, aViewManager, aTimeManager, 
+  rflect.cal.ui.ExternalPane.call(this, aViewManager, aTimeManager,
       aEventManager, aParentElement, aTransport);
 
   /**
-   * List of user's newly created calendars, without id.
-   * @see {rflect.cal.ui.CalendarsPane#onSaveCalendar_}
-   *
-   * @type {Array.<rflect.cal.events.Calendar>}
+   * Settings object.
+   * @type {Object}
+   */
+  this.settings = goog.object.clone(SETTINGS);
+
+  // Building hierarchy of elements.
+  this.addChild(this.tabBar_ = new
+      goog.ui.TabBar(goog.ui.TabBar.Location.START));
+
+  this.tab1_ = new goog.ui.Tab('Main');
+  this.tab2_ = new goog.ui.Tab('Calendars');
+  this.tab3_ = new goog.ui.Tab('Advanced');
+
+  this.tabBar_.addChild(this.tab1_);
+  this.tabBar_.addChild(this.tab2_);
+  this.tabBar_.addChild(this.tab3_);
+
+  /**
+   * Views elements, pages.
+   * @type {Array.<Element>}
    * @private
    */
-  this.newCalendars_ = [];
+  this.viewsElements_ = [];
 
-  this.addChild(this.buttonDeleteCalendar_ = new goog.ui.Button(null,
+  this.addChild(this.buttonNewCalendar_ = new goog.ui.Button(
+      'Calendars',
       goog.ui.FlatButtonRenderer.getInstance()));
+  this.addChild(this.checkboxDebug_ = new rflect.ui.Checkbox());
 
 };
 goog.inherits(rflect.cal.ui.CalendarsPane, rflect.cal.ui.ExternalPane);
@@ -71,11 +97,26 @@ goog.inherits(rflect.cal.ui.CalendarsPane, rflect.cal.ui.ExternalPane);
  * @enum {string}
  */
 rflect.cal.ui.CalendarsPane.EventTypes = {
-  CANCEL: 'calendarsPaneCancel',
+  CANCEL: 'settingsCancel',
   SAVE: 'save',
-  CALENDAR_UPDATE: 'calendarUpdate',
-  CALENDAR_DELETE: 'calendarDelete'
+  CALENDAR_UPDATE: 'calendarUpdate'
 };
+
+
+/**
+ * Event that is fired after saving of settings.
+ * @param {Object} aSettings Settings object.
+ * @param {boolean} aChanged Whether settings were changed.
+ * @extends {goog.events.Event}
+ * @constructor
+ */
+rflect.cal.ui.CalendarsPane.SaveSettingsEvent = function(aSettings, aChanged) {
+  goog.events.Event.call(this, rflect.cal.ui.CalendarsPane.EventTypes.SAVE);
+
+  this.settings = aSettings;
+  this.settingsChanged = aChanged;
+}
+goog.inherits(rflect.cal.ui.CalendarsPane.SaveSettingsEvent, goog.events.Event);
 
 
 /**
@@ -97,44 +138,13 @@ rflect.cal.ui.CalendarsPane.BUTTON_CLASS_NAME =
 
 
 /**
- * @type {number}
- * @const
- */
-rflect.cal.ui.CalendarsPane.PALETTE_ROWS_NUMBER = 1;
-
-
-/**
- * @type {number}
- * @const
- */
-rflect.cal.ui.CalendarsPane.PALETTE_COLS_NUMBER = 3;
-
-
-/**
  * @enum {number}
  */
 rflect.cal.ui.CalendarsPane.PageIndexes = {
   MAIN: 0,
   CALENDARS: 1,
-  ADVANCED: 2,
-  CALENDAR_EDIT: 3
+  ADVANCED: 2
 };
-
-
-/**
- * Whether we're creating new calendar.
- * @type {boolean}
- * @private
- */
-rflect.cal.ui.CalendarsPane.prototype.newCalendarMode_ = false;
-
-
-/**
- * Calendar that is being edited at the moment.
- * @type {rflect.cal.events.Calendar}
- * @private
- */
-rflect.cal.ui.CalendarsPane.prototype.currentCalendar_;
 
 
 /**
@@ -146,6 +156,15 @@ rflect.cal.ui.CalendarsPane.prototype.parentEl;
 
 
 /**
+ * Contents of 'calendars' tab. We need it because calendars tables are updated
+ * on calendars actions.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.CalendarsPane.prototype.tabContents2_;
+
+
+/**
  * Current page element index.
  * @type {number}
  * @private
@@ -154,38 +173,9 @@ rflect.cal.ui.CalendarsPane.prototype.viewIndex_;
 
 
 /**
- *  @return {rflect.cal.events.Calendar} Current calendar.
+ * @type {boolean} Whether reload is needed to apply changed settings.
  */
-rflect.cal.ui.CalendarsPane.prototype.getCurrentCalendar = function() {
-  return this.currentCalendar_;
-};
-
-
-/**
- *  @param {rflect.cal.events.Calendar} aCurrentCalendar Current calendar.
- */
-rflect.cal.ui.CalendarsPane.prototype.setCurrentCalendar =
-    function(aCurrentCalendar) {
-  this.currentCalendar_ = aCurrentCalendar;
-};
-
-
-/**
- *  @param {boolean} aNewCalendarMode Whether new calendar
- *  mode is set.
- */
-rflect.cal.ui.CalendarsPane.prototype.setNewCalendarMode =
-    function(aNewCalendarMode) {
-  this.newCalendarMode_ = aNewCalendarMode;
-};
-
-
-/**
- *  @return {Array.<rflect.cal.events.Calendar>} New calendars list.
- */
-rflect.cal.ui.CalendarsPane.prototype.getNewCalendars = function() {
-  return this.newCalendars_;
-};
+rflect.cal.ui.CalendarsPane.prototype.reloadIsNeeded_ = false;
 
 
 /**
@@ -193,43 +183,14 @@ rflect.cal.ui.CalendarsPane.prototype.getNewCalendars = function() {
  */
 rflect.cal.ui.CalendarsPane.prototype.createBody =
     function(aDom) {
-  goog.dom.classes.add(this.buttonDeleteCalendar_.getElement(),
-      rflect.cal.ui.CalendarsPane.BUTTON_CLASS_NAME,
-      goog.getCssName('event-pane-button-delete'));
-  rflect.cal.ui.common.setDeleteButtonContent(this.buttonDeleteCalendar_);
 
-  this.getPaneLowerCenter().appendChild(
-      this.buttonDeleteCalendar_.getElement());
+  var body = aDom.createDom('div', goog.getCssName('settings-body'));
 
-  var labelName = aDom.createDom('label', {
-    'for': 'sp-calendar-name-input',
-    className: rflect.cal.ui.CalendarsPane.LABEL_CLASS_NAME
-  }, 'Name');
-  this.inputCalendarName_ = aDom.createDom('input', {
-    'type': 'text',
-    id: 'sp-calendar-name-input',
-    className: goog.getCssName('ep-event-name-input'),
-    autofocus: 'autofocus',
-    placeholder: rflect.cal.i18n.Symbols.NO_NAME_EVENT
-  });
-  var nameCont = aDom.createDom('div',
-      [goog.getCssName('event-name-input-cont'),
-        goog.getCssName('event-pane-cont')],
-      labelName, rflect.dom.wrapControl(this.inputCalendarName_));
+  var buttonCont = this.createButtonCont_(aDom);
+  body.appendChild(buttonCont);
+  this.updateCalendarTables_(aDom, body);
 
-  var labelColor = aDom.createDom('label', {
-    'for': 'calendar-colors',
-    className: rflect.cal.ui.CalendarsPane.LABEL_CLASS_NAME + ' ' +
-        goog.getCssName('calendar-colors-label')
-  }, 'Colors');
-  var colorPaletteTable = this.createColorsTable_(aDom);
-  var colorsCont = aDom.createDom('div',
-      [goog.getCssName('event-name-input-cont'),
-        goog.getCssName('event-pane-cont')],
-      labelColor, colorPaletteTable);
-
-  return aDom.createDom('div', goog.getCssName('settings-body'), nameCont,
-      colorsCont);
+  return body;
 }
 
 
@@ -278,22 +239,103 @@ rflect.cal.ui.CalendarsPane.prototype.createTable_ = function(aDom, aTableId,
 
 
 /**
- * @param {goog.dom.DomHelper} aDom Dom helper.
- * @return {Element} Calendars list table
- * @private
+ * @param {!goog.dom.DomHelper} aDom Dom helper.
+ * @return {Element} "New calendar" button container.
  */
-rflect.cal.ui.CalendarsPane.prototype.createColorsTable_ =
+rflect.cal.ui.CalendarsPane.prototype.createButtonCont_ =
     function(aDom) {
-  return this.createTable_(aDom, 'calendar-colors',
-      goog.getCssName('calendar-colors-table') + ' ' +
-          goog.getCssName('goog-inline-block'),
-      rflect.cal.ui.CalendarsPane.PALETTE_ROWS_NUMBER,
-      rflect.cal.ui.CalendarsPane.PALETTE_COLS_NUMBER,
-      null, rflect.cal.ui.CalendarsPane.createColorsTd_);
- }
+  var buttonCont = aDom.createDom('div', 'event-pane-cont');
+
+  buttonCont.appendChild(this.buttonNewCalendar_.getElement());
+  goog.dom.classes.add(this.buttonNewCalendar_.getElement(), 'button-next-pane',
+      'button-minimal');
+  this.buttonNewCalendar_.getElement().appendChild(aDom.createDom('i',
+      ['icon', 'icon-chevron-right', 'icon-next-pane']));
+
+  return buttonCont;
+}
 
 
 /**
+ * Creates pair of calendars tables - 'my' and 'other' and attaches them to
+ * given container.
+ * @param {goog.dom.DomHelper} aDom Dom helper.
+ * @param {Element} aParent Container to attach tables to.
+ * @private
+ */
+rflect.cal.ui.CalendarsPane.prototype.updateCalendarTables_ = function(aDom,
+    aParent){
+  // We need to remove all previous table containers, by class selector, because
+  // maybe in future there will be more than 2 classifications.
+  goog.array.forEach(aParent.querySelectorAll('.calendars-outer-cont'),
+      function(el) {
+    goog.dom.removeNode(el);
+  });
+
+  var myCalendarsTable = this.createCalendarsTable_(aDom, true);
+  if (myCalendarsTable) {
+    var myCalendarsSubCont = aDom.createDom('div',
+        goog.getCssName('calendars-cont'),  myCalendarsTable);
+    var myCalendarsCont = aDom.createDom('div',
+        [goog.getCssName('event-pane-cont'),
+        goog.getCssName('calendars-outer-cont')],
+        'My calendars', myCalendarsSubCont);
+    aParent.appendChild(myCalendarsCont);
+  }
+
+  var otherCalendarsTable = this.createCalendarsTable_(aDom, false);
+  if (otherCalendarsTable) {
+    var otherCalendarsSubCont = aDom.createDom('div',
+        goog.getCssName('calendars-cont'), otherCalendarsTable);
+    var otherCalendarsCont = aDom.createDom('div',
+        [goog.getCssName('event-pane-cont'),
+        goog.getCssName('calendars-outer-cont')],
+        'Other calendars', otherCalendarsSubCont);
+    aParent.appendChild(otherCalendarsCont);
+  }
+
+}
+
+
+/**
+ * @param {goog.dom.DomHelper} aDom Dom helper.
+ * @param {boolean} aMy Whether "my" calendar list is built.
+ * @return {Element} Calendars list table
+ * @private
+ */
+rflect.cal.ui.CalendarsPane.prototype.createCalendarsTable_ =
+    function(aDom, aMy) {
+  var calendars = [];
+  //Calendars pane may not yet exist.
+  var currentCalendar = this.calendarEditPane_ &&
+      this.calendarEditPane_.getCurrentCalendar();
+
+  this.eventManager.forEachCalendar(function(calendar){
+    if (calendar.own && aMy || !calendar.own && !aMy)
+      //Use updated version of calendar if we were editing it.
+      if (currentCalendar && currentCalendar.id == calendar.id)
+        calendars.push(currentCalendar);
+      else
+        calendars.push(calendar);
+  });
+
+  if (aMy && this.calendarEditPane_)
+    Array.prototype.push.apply(calendars,
+        this.calendarEditPane_.getNewCalendars());
+
+  return calendars.length ?
+      this.createTable_(aDom, null, goog.getCssName('calendars-table'),
+      calendars.length, 2, goog.getCssName('calendar-row'),
+      goog.partial(rflect.cal.ui.CalendarsPane.createCalendarsTd_,
+      this.eventManager, calendars)) :
+      null;
+}
+
+
+/**
+ * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
+ * @param {Array.<rflect.cal.events.Calendar>} aCalendars Corresponding
+ * calendars list.
  * @param {goog.dom.DomHelper} aDom Dom helper.
  * @param {Element} aTd Td to decorate.
  * @param {number} aRowIndex Td row index.
@@ -301,19 +343,42 @@ rflect.cal.ui.CalendarsPane.prototype.createColorsTable_ =
  * @return {Element} Decorated calendars table td.
  * @private
  */
-rflect.cal.ui.CalendarsPane.createColorsTd_ = function(aDom, aTd, aRowIndex,
-                                                      aColIndex) {
-  var colorCodeIndex = aRowIndex *
-      rflect.cal.ui.CalendarsPane.PALETTE_COLS_NUMBER + aColIndex;
+rflect.cal.ui.CalendarsPane.createCalendarsTd_ =
+    function(aEventManager, aCalendars, aDom, aTd, aRowIndex, aColIndex) {
+  var calendar = aCalendars[aRowIndex];
 
-  var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[colorCodeIndex];
+  var inProgress = !calendar.id ||
+      aEventManager.calendarIsInProgress(calendar.id);
 
-  var colorLink = aDom.createDom('button', {
-    id: 'calendar-color' + colorCodeIndex,
-    className: goog.getCssName('calitem-color-cont') + ' ' +
-        goog.getCssName('calendar-color') + ' ' + colorCode.eventClass
-  });
-  aTd.appendChild(colorLink);
+  switch (aColIndex) {
+    case 0: {
+      aTd.className = goog.getCssName('listitem-cont') + ' ' +
+          goog.getCssName('name-cell');
+
+      var linkParameters = {
+        className: goog.getCssName('settings-link') + ' ' +
+            goog.getCssName('cal-link')
+      };
+      if (inProgress)
+        linkParameters.className +=
+            ' ' + goog.getCssName('cal-link-in-progress');
+      if (calendar.id) linkParameters.id =
+          rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX + calendar.id;
+
+      var link = aDom.createDom('button', linkParameters, calendar.getUIName());
+      aTd.appendChild(link);
+    };break;
+    case 1: {
+      aTd.className = goog.getCssName('color-cell');
+      var colorItem = aDom.createDom('div', [
+        goog.getCssName('calitem-color-cont'),
+        goog.getCssName('calendar-color'),
+        calendar.colorCode.eventClass
+      ]);
+      aTd.appendChild(colorItem);
+    };break;
+    default: break;
+  }
 
   return aTd;
 }
@@ -331,52 +396,119 @@ rflect.cal.ui.CalendarsPane.prototype.enterDocument = function() {
       .listen(this.buttonBack2, goog.ui.Component.EventType.ACTION,
       this.onCancel_, false, this)
       .listen(this.buttonSave1, goog.ui.Component.EventType.ACTION,
-      this.onSaveCalendar_, false, this)
+      this.onSaveSettings_, false, this)
       .listen(this.buttonSave2, goog.ui.Component.EventType.ACTION,
-      this.onSaveCalendar_, false, this)
-      .listen(this.buttonDeleteCalendar_,
-      goog.ui.Component.EventType.ACTION, this.onDeleteCalendarAction_, false,
+      this.onSaveSettings_, false, this)
+      .listen(this.buttonNewCalendar_,
+      goog.ui.Component.EventType.ACTION, this.onNewCalendarAction_, false,
       this)
 
-      .listen(this.getElement(),
-      goog.events.EventType.CLICK, this.onCalendarsColorLinkClick_, false, this)
+      .listen(this.tabBar_,
+      goog.ui.Component.EventType.SELECT, this.onTabSelect_, false, this)
 
-      .listen(this.transport, rflect.cal.Transport.EventTypes.SAVE_CALENDAR,
-          this.onSaveCalendarResponse_, false, this)
-      .listen(this.transport, rflect.cal.Transport.EventTypes.DELETE_CALENDAR,
-          this.onDeleteCalendarResponse_, false, this)
+      .listen(this.getElement(),
+      goog.events.EventType.CLICK, this.onCalendarLinkClick_, false, this)
 
       .listen(document,
-          goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
+      goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
 
       .listen(this.showBehavior,
-          rflect.cal.ui.PaneShowBehavior.EventTypes.BEFORE_SHOW, function(){
+      rflect.cal.ui.PaneShowBehavior.EventTypes.BEFORE_SHOW, function(){
         this.displayValues();
       }, false, this);
 };
 
 
 /**
+ * Shows calendars pane and lazily instantiates it at the first
+ * time.
+ * @param {boolean} aShow Whether to show settings pane.
+ * @param {rflect.cal.events.Calendar=} opt_calendar Calendar with which to
+ * initialize calendars pane.
+ * @param {boolean=} opt_newCalendarMode Whether to delete button in calendars
+ * pane, i.e. whether calendar is existing or new.
+ */
+rflect.cal.ui.CalendarsPane.prototype.showCalendarEditPane = function(aShow,
+    opt_calendar, opt_newCalendarMode) {
+  if (!this.calendarEditPane_) {
+    this.calendarEditPane_ = new rflect.cal.ui.CalendarEditPane(
+        this.viewManager, this.timeManager, this.eventManager,
+        this.getDomHelper().getElement('main-container'), this.transport);
+    this.addChild(this.calendarEditPane_);
+
+    // Save settings handler is in view manager.
+    this.getHandler()
+        .listen(this.calendarEditPane_,
+        rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
+        this.onCalendarUpdate_, false, this);
+  }
+
+  if (aShow) {
+    this.calendarEditPane_.setCurrentCalendar(opt_calendar);
+    this.calendarEditPane_.setNewCalendarMode(opt_newCalendarMode);
+  }
+  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, aShow));
+}
+
+
+/**
+ * Settings pane link calendar update listener.
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
-rflect.cal.ui.CalendarsPane.prototype.onCalendarsColorLinkClick_ =
+rflect.cal.ui.CalendarsPane.prototype.onCalendarUpdate_ =
     function(aEvent) {
+  this.updateCalendarTables_(this.getDomHelper(), this.tabContents2_);
+}
+
+
+/**
+ * Settings pane link click listener.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.CalendarsPane.prototype.onCalendarLinkClick_ = function(aEvent) {
   var target = /**@type {Element}*/ (aEvent.target);
 
   if (!target.tagName || target.tagName.toLowerCase() != 'button')
     return;
 
-  if (goog.dom.classes.has(target, 'calitem-color-cont')) {
+  if (goog.dom.classes.has(target, goog.getCssName('cal-link'))) {
     var id = target.id;
     aEvent.preventDefault();
 
-    var index = +/\d/.exec(id);
+    if (!id)
+      return;
 
-    this.currentCalendar_.colorCode =
-        rflect.cal.i18n.PREDEFINED_COLOR_CODES[index];
-    this.displayCalendarColor_(index);
+    var calendarId = rflect.string.getIdWithoutPrefix(id,
+        rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX);
+
+    if (!(calendarId in this.eventManager.calendars) ||
+        this.eventManager.calendarIsInProgress(calendarId))
+      return;
+
+    this.showCalendarEditPane(true,
+        this.eventManager.calendars[calendarId].clone(), false);
+
   }
+}
+
+
+/**
+ * 'New calendar' button listener.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.CalendarsPane.prototype.onNewCalendarAction_ =
+    function(aEvent) {
+  var randomColorCodeIndex = Math.round(
+      Math.random() * (rflect.cal.i18n.PREDEFINED_COLOR_CODES.length - 1));
+
+  this.showCalendarEditPane(true, new rflect.cal.events.Calendar('', '',
+      rflect.cal.i18n.PREDEFINED_COLOR_CODES[randomColorCodeIndex]), true);
+
+  aEvent.target.setFocused(false);
+
 }
 
 
@@ -397,10 +529,36 @@ rflect.cal.ui.CalendarsPane.prototype.onKeyDown_ = function(aEvent) {
     } else if (aEvent.keyCode == goog.events.KeyCodes.ENTER &&
         aEvent.platformModifierKey) {
 
-      this.onSaveCalendar_();
+      this.onSaveSettings_();
 
     }
   }
+}
+
+
+/**
+ * Tab select listener.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.ui.CalendarsPane.prototype.onTabSelect_ = function(aEvent) {
+  var selectedTabIndex = aEvent.currentTarget.getSelectedTabIndex();
+
+  this.switchContent_(selectedTabIndex);
+}
+
+
+/**
+ * @param {number} aIndex Index of view element to switch to.
+ */
+rflect.cal.ui.CalendarsPane.prototype.switchContent_ = function(aIndex) {
+  var tabContent =
+      this.getDomHelper().getNextElementSibling(this.tabBar_.getElement());
+
+  this.getDomHelper().removeNode(tabContent);
+
+  this.getDomHelper().insertSiblingAfter(this.viewsElements_[aIndex],
+      this.tabBar_.getElement());
+  this.viewIndex_ = aIndex;
 }
 
 
@@ -409,141 +567,44 @@ rflect.cal.ui.CalendarsPane.prototype.onKeyDown_ = function(aEvent) {
  * Default action is to hide pane.
  */
 rflect.cal.ui.CalendarsPane.prototype.onCancel_ = function() {
-  this.setCurrentCalendar(null);
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+  if (this.calendarEditMode_)
+      this.switchContent_(rflect.cal.ui.CalendarsPane.PageIndexes.CALENDARS);
+    else
+      this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
 }
 
 
 /**
- * Save calendar action listener.
+ * Save settings action listener.
  */
-rflect.cal.ui.CalendarsPane.prototype.onSaveCalendar_ = function() {
+rflect.cal.ui.CalendarsPane.prototype.onSaveSettings_ = function() {
+
   if (this.scanValues()) {
+    this.transport.saveSettingsAsync(this.settings, this.reloadIsNeeded_);
 
-    if (this.newCalendarMode_)
-      this.newCalendars_.push(this.currentCalendar_);
-
-    this.transport.saveCalendarAsync(
-        this.currentCalendar_);
-    // this.currentCalendar_ must be still actual here.
-    this.dispatchEvent(rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE);
-
-    this.setCurrentCalendar(null);
+    if (this.dispatchEvent(new rflect.cal.ui.CalendarsPane.SaveSettingsEvent(
+        this.settings, false))) {
+      this.showBehavior.setVisible(false);
+    }
     this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
   }
-};
-
-
-/**
- * Save calendar event listener.
- * @param {rflect.cal.Transport.SaveCalendarEvent} aEvent Event object.
- * @private
- */
-rflect.cal.ui.CalendarsPane.prototype.onSaveCalendarResponse_ =
-    function(aEvent) {
-  var calendar = aEvent.calendar;
-
-  // New calendars that we store in list do not have an id, so we only could
-  // identify them by direct equality.
-  goog.array.remove(this.newCalendars_, calendar);
-
-  this.dispatchEvent(rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE);
 }
 
 
 /**
- * Delete calendar button event listener.
- * @param {rflect.cal.Transport.DeleteCalendarEvent} aEvent Event object.
- * @private
- */
-rflect.cal.ui.CalendarsPane.prototype.onDeleteCalendarAction_ =
-    function(aEvent) {
-  this.eventManager.deleteCalendar(this.currentCalendar_);
-
-  this.transport.deleteCalendarAsync(
-      this.currentCalendar_);
-
-  this.dispatchEvent(rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE);
-
-  this.setCurrentCalendar(null);
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
-}
-
-
-/**
- * Delete calendar remote operation listener.
- * @param {rflect.cal.Transport.DeleteCalendarEvent} aEvent Event object.
- * TODO(alexk): undo action will be possible there, so differentiate this event
- * from one that comes right after button click.
- * @private
- */
-rflect.cal.ui.CalendarsPane.prototype.onDeleteCalendarResponse_ =
-    function(aEvent) {
-  this.dispatchEvent(rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE);
-}
-
-
-/**
- * Displays calendar properties in form.
+ * Displays settings in form.
  */
 rflect.cal.ui.CalendarsPane.prototype.displayValues = function() {
-  //this.buttonDeleteCalendar_.setVisible(!this.newCalendarMode_);
-
-  this.inputCalendarName_.value = this.currentCalendar_.name;
-  this.inputCalendarName_.placeholder = this.currentCalendar_.colorCode
-      .getFullName();
-
-  /** @preserveTry */
-  try {
-    this.inputCalendarName_.focus();
-    this.inputCalendarName_.select();
-  } catch(e) {
-    // IE8- shows error that it couldn't set focus but nevertheless, sets it.
-  }
-
-  this.buttonDeleteCalendar_.setVisible(!this.newCalendarMode_);
-  this.displayCalendarColor_(this.currentCalendar_.colorCode.id);
 };
 
 
 /**
- * Scans calendar values from form.
- * Color code is updated separately:
- * @see {rflect.cal.ui.CalendarsPane#onCalendarsListLinkClick_}
- *
+ * Scans settings from form.
  * @return {boolean} Whether input is valid.
- *
- * Color code is set in
- * @see {rflect.cal.ui.CalendarsPane#onCalendarsColorLinkClick_}
  */
 rflect.cal.ui.CalendarsPane.prototype.scanValues = function() {
-  var valid = true;
-  if (valid) {
-    this.currentCalendar_.name = this.inputCalendarName_.value;
-  }
-
-  return valid;
+  return true;
 };
-
-
-/**
- * Sets color code for calendar.
- * @param {number} aIndex Index of color code in both ui table and predefined
- * set.
- */
-rflect.cal.ui.CalendarsPane.prototype.displayCalendarColor_ = function(aIndex) {
-  goog.array.forEach(this.getElement()
-      .getElementsByClassName(goog.getCssName('calendar-color')),
-      function(el, elIndex){
-    if (elIndex == aIndex)
-      goog.dom.classes.add(el, goog.getCssName('calendar-color-selected'));
-    else
-      goog.dom.classes.remove(el, goog.getCssName('calendar-color-selected'));
-  });
-
-  this.inputCalendarName_.placeholder =
-      rflect.cal.i18n.PREDEFINED_COLOR_CODES[aIndex].getFullName();
-}
 
 
 /**

@@ -287,25 +287,25 @@ rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
   var parts = [
     '<li class="side-pane-menu-item">',
     // Back button.
-    '<div id="' + rflect.cal.predefined.BUTTON_TO_CALENDAR_ID + '" class="side-pane-button">',
+    '<div id="' + rflect.cal.predefined.BUTTON_TO_CALENDAR_ID + '" class="button-minimal">',
     rflect.cal.i18n.Symbols.TO_CALENDAR,
     '</div>',
     '</li>',
     '<li class="side-pane-menu-item">',
     // Day button.
-    '<div id="' + rflect.cal.predefined.BUTTON_DAY_ID + '" class="side-pane-button">',
+    '<div id="' + rflect.cal.predefined.BUTTON_DAY_ID + '" class="button-minimal">',
     rflect.cal.i18n.Symbols.DAY,
     '</div>',
     '</li>',
     '<li class="side-pane-menu-item">',
     // Month button.
-    '<div id="' + rflect.cal.predefined.BUTTON_MONTH_ID + '" class="side-pane-button">',
+    '<div id="' + rflect.cal.predefined.BUTTON_MONTH_ID + '" class="button-minimal">',
     rflect.cal.i18n.Symbols.MONTH,
     '</div>',
     '</li>',
     '<li class="side-pane-menu-item">',
     // Options button.
-    '<div id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '" class="side-pane-button">',
+    '<div id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '" class="button-minimal">',
     '<div class="icon icon-cog icon-settings icon-in-button"></div>',
     '&nbsp;',
     rflect.cal.i18n.Symbols.SETTINGS,

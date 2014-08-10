@@ -155,3 +155,31 @@
   cursor: default;
 }
 
+.button-next-pane {
+  text-align: left;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 0;
+  transition: color .2s, padding-left .2s;
+}
+
+.goog-flat-button-hover.button-next-pane,
+.goog-flat-button-focused.button-next-pane {
+  color: #007aff;
+}
+
+.goog-flat-button-focused.button-next-pane {
+  padding-left: 10px;
+}
+
+.icon-next-pane {
+  position: absolute;
+  right: 0;
+  top: 16px;
+  transition: right .2s;
+}
+
+.goog-flat-button-focused.button-next-pane > .icon-next-pane {
+  right: 10px;
+}
