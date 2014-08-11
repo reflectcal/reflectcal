@@ -110,7 +110,7 @@
 
 .calendar-color {
   border-radius: 0;
-  transition: opacity .2s;
+  transition: opacity @transition_time;
   border-width: 1px;
   border-style: solid;
 }
@@ -161,7 +161,7 @@
   width: 100%;
   box-sizing: border-box;
   padding: 6px 0;
-  transition: color .2s, padding-left .2s;
+  transition: color @transition_time, padding-left @transition_time;
 }
 
 .goog-flat-button-hover.button-next-pane,
@@ -177,7 +177,7 @@
   position: absolute;
   right: 0;
   top: 16px;
-  transition: right .2s;
+  transition: right @transition_time;
 }
 
 .goog-flat-button-focused.button-next-pane > .icon-next-pane {
