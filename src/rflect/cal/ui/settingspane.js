@@ -426,7 +426,7 @@ rflect.cal.ui.SettingsPane.prototype.createDebugCont_ = function(aDom) {
   this.checkboxDebug_.getElement().className += ' aligned-checkbox';
   var debugCont = aDom.createDom('div', {
     id: 'settings-debug-mode',
-    className: 'description-cont event-pane-cont'
+    className: 'event-pane-cont event-pane-cont-last'
   }, debugSubCont);
 
 

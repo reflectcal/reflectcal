@@ -224,8 +224,7 @@ rflect.cal.ui.CalendarEditPane.prototype.createBody =
   }, 'Colors');
   var colorPaletteTable = this.createColorsTable_(aDom);
   var colorsCont = aDom.createDom('div',
-      [goog.getCssName('event-name-input-cont'),
-        goog.getCssName('event-pane-cont')],
+      ['event-name-input-cont', 'event-pane-cont', 'event-pane-cont-last'],
       labelColor, colorPaletteTable);
 
   return aDom.createDom('div', goog.getCssName('settings-body'), nameCont,

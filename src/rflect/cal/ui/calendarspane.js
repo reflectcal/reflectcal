@@ -34,8 +34,6 @@ goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.ExternalPane');
 goog.require('rflect.cal.ui.PageRequestEvent');
-goog.require('rflect.cal.ui.PaneShowBehavior');
-goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.dom');
 goog.require('rflect.string');
 goog.require('rflect.ui.Checkbox');
@@ -59,36 +57,10 @@ rflect.cal.ui.CalendarsPane = function(aViewManager, aTimeManager, aEventManager
   rflect.cal.ui.ExternalPane.call(this, aViewManager, aTimeManager,
       aEventManager, aParentElement, aTransport);
 
-  /**
-   * Settings object.
-   * @type {Object}
-   */
-  this.settings = goog.object.clone(SETTINGS);
-
-  // Building hierarchy of elements.
-  this.addChild(this.tabBar_ = new
-      goog.ui.TabBar(goog.ui.TabBar.Location.START));
-
-  this.tab1_ = new goog.ui.Tab('Main');
-  this.tab2_ = new goog.ui.Tab('Calendars');
-  this.tab3_ = new goog.ui.Tab('Advanced');
-
-  this.tabBar_.addChild(this.tab1_);
-  this.tabBar_.addChild(this.tab2_);
-  this.tabBar_.addChild(this.tab3_);
-
-  /**
-   * Views elements, pages.
-   * @type {Array.<Element>}
-   * @private
-   */
-  this.viewsElements_ = [];
-
-  this.addChild(this.buttonNewCalendar_ = new goog.ui.Button(
-      'Calendars',
+  this.addChild(this.buttonNewCalendar1 = new goog.ui.Button('New',
       goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.checkboxDebug_ = new rflect.ui.Checkbox());
-
+  this.addChild(this.buttonNewCalendar2 = new goog.ui.Button('New',
+      goog.ui.FlatButtonRenderer.getInstance()));
 };
 goog.inherits(rflect.cal.ui.CalendarsPane, rflect.cal.ui.ExternalPane);
 
@@ -181,13 +153,39 @@ rflect.cal.ui.CalendarsPane.prototype.reloadIsNeeded_ = false;
 /**
  * @override
  */
+rflect.cal.ui.CalendarsPane.prototype.createSettingsPaneButtonsUpper =
+    function(aDom) {
+  rflect.cal.ui.common.setBackButtonContent(this.buttonBack1);
+  this.getPaneUpperLeft().appendChild(this.buttonBack1.getElement());
+  this.getPaneUpperRight().appendChild(this.buttonNewCalendar1.getElement());
+  /*this.buttonNewCalendar1.getElement().appendChild(aDom.createDom('i', ['icon',
+      'icon-plus']));*/
+  goog.dom.classes.add(this.buttonNewCalendar1.getElement(), 'emphasis-button');
+}
+
+
+/**
+ * @override
+ */
+rflect.cal.ui.CalendarsPane.prototype.createSettingsPaneButtonsLower =
+    function(aDom) {
+  rflect.cal.ui.common.setBackButtonContent(this.buttonBack2);
+  this.getPaneLowerLeft().appendChild(this.buttonBack2.getElement());
+  this.getPaneLowerRight().appendChild(this.buttonNewCalendar2.getElement());
+  /*this.buttonNewCalendar2.getElement().appendChild(aDom.createDom('i', ['icon',
+      'icon-plus']));*/
+  goog.dom.classes.add(this.buttonNewCalendar2.getElement(), 'emphasis-button');
+}
+
+
+/**
+ * @override
+ */
 rflect.cal.ui.CalendarsPane.prototype.createBody =
     function(aDom) {
 
   var body = aDom.createDom('div', goog.getCssName('settings-body'));
 
-  var buttonCont = this.createButtonCont_(aDom);
-  body.appendChild(buttonCont);
   this.updateCalendarTables_(aDom, body);
 
   return body;
@@ -235,24 +233,6 @@ rflect.cal.ui.CalendarsPane.prototype.createTable_ = function(aDom, aTableId,
   }
 
   return table;
-}
-
-
-/**
- * @param {!goog.dom.DomHelper} aDom Dom helper.
- * @return {Element} "New calendar" button container.
- */
-rflect.cal.ui.CalendarsPane.prototype.createButtonCont_ =
-    function(aDom) {
-  var buttonCont = aDom.createDom('div', 'event-pane-cont');
-
-  buttonCont.appendChild(this.buttonNewCalendar_.getElement());
-  goog.dom.classes.add(this.buttonNewCalendar_.getElement(), 'button-next-pane',
-      'button-minimal');
-  this.buttonNewCalendar_.getElement().appendChild(aDom.createDom('i',
-      ['icon', 'icon-chevron-right', 'icon-next-pane']));
-
-  return buttonCont;
 }
 
 
@@ -395,27 +375,14 @@ rflect.cal.ui.CalendarsPane.prototype.enterDocument = function() {
       goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
       .listen(this.buttonBack2, goog.ui.Component.EventType.ACTION,
       this.onCancel_, false, this)
-      .listen(this.buttonSave1, goog.ui.Component.EventType.ACTION,
-      this.onSaveSettings_, false, this)
-      .listen(this.buttonSave2, goog.ui.Component.EventType.ACTION,
-      this.onSaveSettings_, false, this)
-      .listen(this.buttonNewCalendar_,
+      .listen(this.buttonNewCalendar1,
       goog.ui.Component.EventType.ACTION, this.onNewCalendarAction_, false,
       this)
-
-      .listen(this.tabBar_,
-      goog.ui.Component.EventType.SELECT, this.onTabSelect_, false, this)
-
-      .listen(this.getElement(),
-      goog.events.EventType.CLICK, this.onCalendarLinkClick_, false, this)
-
+      .listen(this.buttonNewCalendar2,
+      goog.ui.Component.EventType.ACTION, this.onNewCalendarAction_, false,
+      this)
       .listen(document,
-      goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
-
-      .listen(this.showBehavior,
-      rflect.cal.ui.PaneShowBehavior.EventTypes.BEFORE_SHOW, function(){
-        this.displayValues();
-      }, false, this);
+      goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this);
 };
 
 
@@ -447,7 +414,8 @@ rflect.cal.ui.CalendarsPane.prototype.showCalendarEditPane = function(aShow,
     this.calendarEditPane_.setCurrentCalendar(opt_calendar);
     this.calendarEditPane_.setNewCalendarMode(opt_newCalendarMode);
   }
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, aShow));
+  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this.calendarEditPane_,
+      aShow));
 }
 
 
@@ -529,36 +497,10 @@ rflect.cal.ui.CalendarsPane.prototype.onKeyDown_ = function(aEvent) {
     } else if (aEvent.keyCode == goog.events.KeyCodes.ENTER &&
         aEvent.platformModifierKey) {
 
-      this.onSaveSettings_();
+      this.onCancel_();
 
     }
   }
-}
-
-
-/**
- * Tab select listener.
- * @param {goog.events.Event} aEvent Event object.
- */
-rflect.cal.ui.CalendarsPane.prototype.onTabSelect_ = function(aEvent) {
-  var selectedTabIndex = aEvent.currentTarget.getSelectedTabIndex();
-
-  this.switchContent_(selectedTabIndex);
-}
-
-
-/**
- * @param {number} aIndex Index of view element to switch to.
- */
-rflect.cal.ui.CalendarsPane.prototype.switchContent_ = function(aIndex) {
-  var tabContent =
-      this.getDomHelper().getNextElementSibling(this.tabBar_.getElement());
-
-  this.getDomHelper().removeNode(tabContent);
-
-  this.getDomHelper().insertSiblingAfter(this.viewsElements_[aIndex],
-      this.tabBar_.getElement());
-  this.viewIndex_ = aIndex;
 }
 
 
@@ -567,54 +509,15 @@ rflect.cal.ui.CalendarsPane.prototype.switchContent_ = function(aIndex) {
  * Default action is to hide pane.
  */
 rflect.cal.ui.CalendarsPane.prototype.onCancel_ = function() {
-  if (this.calendarEditMode_)
-      this.switchContent_(rflect.cal.ui.CalendarsPane.PageIndexes.CALENDARS);
-    else
-      this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
 }
 
 
 /**
- * Save settings action listener.
- */
-rflect.cal.ui.CalendarsPane.prototype.onSaveSettings_ = function() {
-
-  if (this.scanValues()) {
-    this.transport.saveSettingsAsync(this.settings, this.reloadIsNeeded_);
-
-    if (this.dispatchEvent(new rflect.cal.ui.CalendarsPane.SaveSettingsEvent(
-        this.settings, false))) {
-      this.showBehavior.setVisible(false);
-    }
-    this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
-  }
-}
-
-
-/**
- * Displays settings in form.
- */
-rflect.cal.ui.CalendarsPane.prototype.displayValues = function() {
-};
-
-
-/**
- * Scans settings from form.
- * @return {boolean} Whether input is valid.
- */
-rflect.cal.ui.CalendarsPane.prototype.scanValues = function() {
-  return true;
-};
-
-
-/**
- * Disposes of the event pane.
  * @override
  * @protected
  */
 rflect.cal.ui.CalendarsPane.prototype.disposeInternal = function() {
-  this.tabContents2_ = null;
-
   rflect.cal.ui.CalendarsPane.superClass_.disposeInternal.call(this);
 };
 

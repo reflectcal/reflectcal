@@ -170,8 +170,8 @@ rflect.cal.ui.ExternalPane.prototype.createDom = function() {
         goog.getCssName('emphasis-button'));
   });
 
-  this.createSettingsPaneButtonsUpper_(dom);
-  this.createSettingsPaneButtonsLower_(dom);
+  this.createSettingsPaneButtonsUpper(dom);
+  this.createSettingsPaneButtonsLower(dom);
   var settingsBodyOuter = dom.createDom('div', 'settings-body-outer');
   this.settingsBody = this.createBody(dom);
   settingsBodyOuter.appendChild(this.settingsBody);
@@ -314,9 +314,9 @@ rflect.cal.ui.ExternalPane.prototype.getPaneLowerRight = function() {
 
 /**
  * @param {!goog.dom.DomHelper} aDom Dom helper.
- * @private
+ * @protected
  */
-rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsUpper_ =
+rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsUpper =
     function(aDom) {
   rflect.cal.ui.common.setBackButtonContent(this.buttonBack1);
   this.getPaneUpperLeft().appendChild(this.buttonBack1.getElement());
@@ -326,9 +326,9 @@ rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsUpper_ =
 
 /**
  * @param {!goog.dom.DomHelper} aDom Dom helper.
- * @private
+ * @protected
  */
-rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsLower_ =
+rflect.cal.ui.ExternalPane.prototype.createSettingsPaneButtonsLower =
     function(aDom) {
   rflect.cal.ui.common.setBackButtonContent(this.buttonBack2);
   this.getPaneLowerLeft().appendChild(this.buttonBack2.getElement());
