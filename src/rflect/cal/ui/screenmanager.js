@@ -276,7 +276,8 @@ rflect.cal.ui.ScreenManager.prototype.showScreen = function(aComponent, aShow,
     } else {
       goog.style.showElement(aComponent.getElement(), true);
     }
-    this.assignPosition(aComponent, position);
+    if (rflect.TOUCH_INTERFACE_ENABLED)
+      this.assignPosition(aComponent, position);
   } else {
     this.componentToHide_ = this.popFromStack();
     position = this.pageStack_.length - 1;
@@ -285,7 +286,10 @@ rflect.cal.ui.ScreenManager.prototype.showScreen = function(aComponent, aShow,
         (goog.array.peek(this.pageStack_)).getElement(), true);
   }
 
-  this.slideToPosition(position);
+  if (rflect.TOUCH_INTERFACE_ENABLED)
+    this.slideToPosition(position);
+  else
+    this.changeScreen();
 };
 
 
@@ -305,14 +309,33 @@ rflect.cal.ui.ScreenManager.prototype.assignPosition = function(aComponent,
 
 
 /**
- * Translates container element to show actual page.
- * @param {number} aPosition Page number to shift to.
+ * Change screen without sliding.
  */
-rflect.cal.ui.ScreenManager.prototype.slideToPosition = function(aPosition){
+rflect.cal.ui.ScreenManager.prototype.changeScreen = function() {
+  this.dispatchBeforePageChangeEvent_();
+  this.finishScreenChange_();
+}
+
+
+/**
+ * Dispatches before page change event.
+ * @private
+ */
+rflect.cal.ui.ScreenManager.prototype.dispatchBeforePageChangeEvent_ =
+    function(){
   this.dispatchEvent(new rflect.cal.ui.ScreenManager.BeforePageChangeEvent(
       this.pageStack_.length - 1,
       /**@type {goog.ui.Component}*/ (goog.array.peek(this.pageStack_)),
       this.componentToHide_));
+}
+
+
+/**
+ * Translates container element to show actual page.
+ * @param {number} aPosition Page number to shift to.
+ */
+rflect.cal.ui.ScreenManager.prototype.slideToPosition = function(aPosition){
+  this.dispatchBeforePageChangeEvent_();
   //Container moves to the left.
   rflect.cal.ui.ScreenManager.translateElement(this.element_,
       -100 * aPosition);
@@ -351,6 +374,15 @@ rflect.cal.ui.ScreenManager.prototype.onSlideEnd_ = function(aEvent) {
   if (aEvent.target != this.element_)
     return;
 
+  this.finishScreenChange_();
+}
+
+
+/**
+ * Hides old screen. Final phase.
+ * @private
+ */
+rflect.cal.ui.ScreenManager.prototype.finishScreenChange_ = function() {
   if (this.componentToHide_){
     goog.style.showElement(this.componentToHide_.getElement(), false);
   }
