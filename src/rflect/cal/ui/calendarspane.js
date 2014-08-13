@@ -30,6 +30,7 @@ goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.Transport');
 goog.require('rflect.cal.Transport.EventTypes');
 goog.require('rflect.cal.ui.CalendarEditPane');
+goog.require('rflect.cal.ui.CalendarEditPane.EventTypes');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.ExternalPane');
@@ -382,7 +383,9 @@ rflect.cal.ui.CalendarsPane.prototype.enterDocument = function() {
       goog.ui.Component.EventType.ACTION, this.onNewCalendarAction_, false,
       this)
       .listen(document,
-      goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this);
+      goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
+      .listen(this.getElement(),
+      goog.events.EventType.CLICK, this.onCalendarLinkClick_, false, this);
 };
 
 
