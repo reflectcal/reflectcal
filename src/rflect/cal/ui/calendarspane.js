@@ -258,9 +258,8 @@ rflect.cal.ui.CalendarsPane.prototype.updateCalendarTables_ = function(aDom,
     var myCalendarsSubCont = aDom.createDom('div',
         goog.getCssName('calendars-cont'),  myCalendarsTable);
     var myCalendarsCont = aDom.createDom('div',
-        [goog.getCssName('event-pane-cont'),
-        goog.getCssName('calendars-outer-cont')],
-        'My calendars', myCalendarsSubCont);
+        ['event-pane-cont', 'calendars-outer-cont'],
+        aDom.createDom('label', null, 'My calendars'), myCalendarsSubCont);
     aParent.appendChild(myCalendarsCont);
   }
 
@@ -269,9 +268,8 @@ rflect.cal.ui.CalendarsPane.prototype.updateCalendarTables_ = function(aDom,
     var otherCalendarsSubCont = aDom.createDom('div',
         goog.getCssName('calendars-cont'), otherCalendarsTable);
     var otherCalendarsCont = aDom.createDom('div',
-        [goog.getCssName('event-pane-cont'),
-        goog.getCssName('calendars-outer-cont')],
-        'Other calendars', otherCalendarsSubCont);
+        ['event-pane-cont', 'calendars-outer-cont'],
+        aDom.createDom('label', null, 'Other calendars'), otherCalendarsSubCont);
     aParent.appendChild(otherCalendarsCont);
   }
 
@@ -429,7 +427,20 @@ rflect.cal.ui.CalendarsPane.prototype.showCalendarEditPane = function(aShow,
  */
 rflect.cal.ui.CalendarsPane.prototype.onCalendarUpdate_ =
     function(aEvent) {
-  this.updateCalendarTables_(this.getDomHelper(), this.tabContents2_);
+  this.updateCalendarTables_(this.getDomHelper(),
+     this.getElement().querySelector('.settings-body'));
+}
+
+
+/**
+ * Searches for closest target ancestor that is calendar tr.
+ * @param {Element} aTarget Target to start search for row.
+ * @return {Element} Tr element or null.
+ */
+rflect.cal.ui.CalendarsPane.getCalendarRow = function(aTarget) {
+  return /**@type {Element}*/ (goog.dom.getAncestor(aTarget, function(aNode) {
+    return aNode.className == 'calendar-row';
+  }, true, 2));
 }
 
 
@@ -440,27 +451,25 @@ rflect.cal.ui.CalendarsPane.prototype.onCalendarUpdate_ =
  */
 rflect.cal.ui.CalendarsPane.prototype.onCalendarLinkClick_ = function(aEvent) {
   var target = /**@type {Element}*/ (aEvent.target);
+  var tr = rflect.cal.ui.CalendarsPane.getCalendarRow(target);
 
-  if (!target.tagName || target.tagName.toLowerCase() != 'button')
-    return;
+  if (tr) {
+    var link = tr.firstChild.firstChild;
+    var id = link.id;
 
-  if (goog.dom.classes.has(target, goog.getCssName('cal-link'))) {
-    var id = target.id;
     aEvent.preventDefault();
 
-    if (!id)
-      return;
+    if (id) {
+      var calendarId = rflect.string.getIdWithoutPrefix(id,
+          rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX);
 
-    var calendarId = rflect.string.getIdWithoutPrefix(id,
-        rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX);
+      if (!(calendarId in this.eventManager.calendars) ||
+          this.eventManager.calendarIsInProgress(calendarId))
+        return;
 
-    if (!(calendarId in this.eventManager.calendars) ||
-        this.eventManager.calendarIsInProgress(calendarId))
-      return;
-
-    this.showCalendarEditPane(true,
-        this.eventManager.calendars[calendarId].clone(), false);
-
+      this.showCalendarEditPane(true,
+          this.eventManager.calendars[calendarId].clone(), false);
+    }
   }
 }
 
