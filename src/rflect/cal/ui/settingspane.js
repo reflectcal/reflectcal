@@ -456,7 +456,7 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
       .listen(document,
       goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
 
-      .listen(this.showBehavior,
+      .listen(this.viewManager.getScreenManager(),
       rflect.cal.ui.PaneShowBehavior.EventTypes.BEFORE_SHOW, function(){
         this.displayValues();
       }, false, this);
@@ -513,7 +513,7 @@ rflect.cal.ui.SettingsPane.prototype.onShowCalendarsAction_ =
  * @private
  */
 rflect.cal.ui.SettingsPane.prototype.onKeyDown_ = function(aEvent) {
-  if (this.showBehavior.isVisible()) {
+  if (this.viewManager.getScreenManager().isVisible(this)) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 
@@ -547,11 +547,8 @@ rflect.cal.ui.SettingsPane.prototype.onSaveSettings_ = function() {
 
   if (this.scanValues()) {
     this.transport.saveSettingsAsync(this.settings, this.reloadIsNeeded_);
-
-    if (this.dispatchEvent(new rflect.cal.ui.SettingsPane.SaveSettingsEvent(
-        this.settings, false))) {
-      this.showBehavior.setVisible(false);
-    }
+    this.dispatchEvent(new rflect.cal.ui.SettingsPane.SaveSettingsEvent(
+        this.settings, false));
     this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
   }
 }

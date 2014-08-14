@@ -203,14 +203,23 @@ rflect.cal.ui.ScreenManager.prototype.actionIsIrreversible_ = false;
 
 
 /**
- * Whether the page component is visible.
+ * Whether the page is in stack.
  * @return {boolean}
- * @private
  */
 rflect.cal.ui.ScreenManager.prototype.pageIsInStack = function(aComponent){
   return goog.array.findIndex(this.pageStack_, function(element){
     return element == aComponent;
   }) > 0;
+}
+
+
+/**
+ * Whether the page is visible.
+ * @return {boolean}
+ */
+rflect.cal.ui.ScreenManager.prototype.isVisible = function(aComponent){
+  return /**@type {goog.ui.Component}*/ (goog.array.peek(this.pageStack_)) ==
+      aComponent;
 }
 
 

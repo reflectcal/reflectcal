@@ -420,7 +420,7 @@ rflect.cal.ui.CalendarEditPane.prototype.onCalendarsColorLinkClick_ =
  * @private
  */
 rflect.cal.ui.CalendarEditPane.prototype.onKeyDown_ = function(aEvent) {
-  if (this.showBehavior.isVisible()) {
+  if (this.viewManager.getScreenManager().isVisible(this)) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 

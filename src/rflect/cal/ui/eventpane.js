@@ -588,7 +588,7 @@ rflect.cal.ui.EventPane.prototype.setNewEventMode = function(
  */
 rflect.cal.ui.EventPane.prototype.onKeyDown_ = function(aEvent) {
 
-  if (this.showBehavior.isVisible() &&
+  if (this.viewManager.getScreenManager().isVisible(this) &&
       !this.startTimeAC_.getRenderer().isVisible() &&
       !this.endTimeAC_.getRenderer().isVisible()) {
     // ESC key.

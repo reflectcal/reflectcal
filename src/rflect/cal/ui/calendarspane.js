@@ -498,7 +498,7 @@ rflect.cal.ui.CalendarsPane.prototype.onNewCalendarAction_ =
  * @private
  */
 rflect.cal.ui.CalendarsPane.prototype.onKeyDown_ = function(aEvent) {
-  if (this.showBehavior.isVisible()) {
+  if (this.viewManager.getScreenManager().isVisible(this)) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 
