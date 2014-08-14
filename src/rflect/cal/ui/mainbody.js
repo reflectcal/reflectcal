@@ -9,6 +9,7 @@
 
 goog.provide('rflect.cal.ui.MainBody');
 
+goog.require('goog.dom.classes');
 goog.require('goog.math.Size');
 goog.require('goog.style');
 goog.require('rflect.ui.Component');
@@ -603,11 +604,17 @@ rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
 rflect.cal.ui.MainBody.prototype.onPageChange_ = function(aEvent) {
   // If switching to main body, add momentum scroller...
   if (aEvent.currentScreen == this) {
+    var htmlElement = this.getDomHelper().getDocument().documentElement;
     if (rflect.TOUCH_INTERFACE_ENABLED) this.mainPane_.addMomentumScroller();
+    goog.dom.classes.add(htmlElement, 'overflow-vertical-protected');
+    //To prevent offset after scrolling external panes.
+    htmlElement.scrollTop = 0;
   }
   //... and remove otherwise.
   else {
     if (rflect.TOUCH_INTERFACE_ENABLED) this.mainPane_.removeMomentumScroller();
+    goog.dom.classes.remove(this.getDomHelper().getDocument().documentElement,
+        'overflow-vertical-protected');
   }
 }
 
