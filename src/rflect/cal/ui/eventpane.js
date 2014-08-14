@@ -756,7 +756,7 @@ rflect.cal.ui.EventPane.prototype.displayValues = function() {
 
   this.inputName_.value = eh.getSummary();
 
-  this.textAreaDesc_.innerHTML = eh.getDescription();
+  this.textAreaDesc_.value = eh.getDescription();
 
   this.checkboxAllDay_.setChecked(eh.getAllDay());
 
@@ -868,7 +868,7 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
 
   eh.setSummary(this.inputName_.value);
 
-  eh.setDescription(this.textAreaDesc_.innerHTML);
+  eh.setDescription(this.textAreaDesc_.value);
 
   eh.setCalendarId(this.selectCalendars_.getCalendarId());
 
