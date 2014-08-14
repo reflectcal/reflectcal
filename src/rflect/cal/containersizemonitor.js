@@ -12,7 +12,6 @@ goog.provide('rflect.cal.ContainerSizeMonitor');
 
 goog.require('goog.dom');
 goog.require('rflect.dom.ViewportSizeMonitor');
-goog.require('goog.style');
 goog.require('rflect.cal.predefined');
 
 
@@ -49,18 +48,8 @@ rflect.cal.ContainerSizeMonitor = function(aViewManager, aContainer,
    * @private
    */
   this.containerSize_ = this.getContainerSize_();
-
-  this.scrollbarWidth = rflect.MOBILE ? 0 : goog.style.getScrollbarWidth();
-
 };
 goog.inherits(rflect.cal.ContainerSizeMonitor, rflect.dom.ViewportSizeMonitor);
-
-
-/**
- * Width of scrollbar.
- * @type {number}
- */
-rflect.cal.ContainerSizeMonitor.prototype.scrollbarWidth = 0;
 
 
 /**

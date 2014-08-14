@@ -863,7 +863,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekColZippy_ = function(aSb,
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildMainPaneHeaderMonth_ = function(aSb) {
   if (this.blockPoolMonth_.expanded)
-    aSb.append(this.containerSizeMonitor_.scrollbarWidth +
+    aSb.append(this.navigator_.getScrollbarWidth() +
         rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2);
   else
     aSb.append(rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2);
@@ -930,7 +930,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildScrollableAllday_ =
   if (this.blockPoolAllDay_.expanded)
     aSb.append(0);
   else
-    aSb.append(this.containerSizeMonitor_.scrollbarWidth - 1);
+    aSb.append(this.navigator_.getScrollbarWidth() - 1);
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
 };
 

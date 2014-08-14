@@ -331,7 +331,7 @@ rflect.cal.ui.MainPane.prototype.momentumScroller_;
  */
 rflect.cal.ui.MainPane.prototype.getScrollbarWidthBelowAllday = function() {
   return this.isAlldayScrollableExpandedHor() ?
-      this.containerSizeMonitor_.scrollbarWidth : 0;
+      this.navigator_.getScrollbarWidth() : 0;
 };
 
 
@@ -340,7 +340,7 @@ rflect.cal.ui.MainPane.prototype.getScrollbarWidthBelowAllday = function() {
  */
 rflect.cal.ui.MainPane.prototype.getScrollbarWidthBelowMain = function() {
   return this.isScrollableExpandedHor() ?
-      this.containerSizeMonitor_.scrollbarWidth : 0;
+      this.navigator_.getScrollbarWidth() : 0;
 };
 
 
@@ -349,7 +349,7 @@ rflect.cal.ui.MainPane.prototype.getScrollbarWidthBelowMain = function() {
  */
 rflect.cal.ui.MainPane.prototype.getScrollbarWidthNextToAllday = function() {
   return this.isAlldayScrollableExpandedVer() ?
-      this.containerSizeMonitor_.scrollbarWidth : 0;
+      this.navigator_.getScrollbarWidth() : 0;
 };
 
 
@@ -358,7 +358,7 @@ rflect.cal.ui.MainPane.prototype.getScrollbarWidthNextToAllday = function() {
  */
 rflect.cal.ui.MainPane.prototype.getScrollbarWidthNextToMain = function() {
   return this.isScrollableExpandedVer() ?
-      this.containerSizeMonitor_.scrollbarWidth : 0;
+      this.navigator_.getScrollbarWidth() : 0;
 };
 
 
@@ -452,7 +452,8 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
     this.scrollablesCombinedWkSize_ = containerSize.clone();
     // We calculate combined height of two scrollables.
     this.scrollablesCombinedWkSize_.height -= staticSizes.height;
-    this.scrollablesCombinedWkSize_.width -= staticSizes.width;
+    this.scrollablesCombinedWkSize_.width -= staticSizes.width +
+        this.navigator_.getScrollbarWidth();
 
     this.alldayGridContainerSize = this.scrollablesCombinedWkSize_.clone();
     this.gridContainerSize = this.scrollablesCombinedWkSize_.clone();
@@ -461,8 +462,6 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
     this.gridSize = this.gridContainerSize.clone();
     this.gridSize.height =
         rflect.cal.predefined.WEEK_SCROLLABLE_DEFAULT_SIZE.height;
-    // No need to subtract scrollbar width here because layout already takes
-    // it into account.
 
     this.alldayGridContainerSize.height = this.navigator_.isSmallScreen() ?
         0 : rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE.height;

@@ -2,7 +2,7 @@
 // Please do not edit.
 goog.addDependency('../../../rflect/array/array.js', ['rflect.array'], ['goog.array']);
 goog.addDependency('../../../rflect/browser/cssmatrix.js', ['rflect.browser.cssmatrix'], []);
-goog.addDependency('../../../rflect/browser/navigator.js', ['rflect.cal.Navigator'], ['goog.dom', 'goog.events.EventTarget']);
+goog.addDependency('../../../rflect/browser/navigator.js', ['rflect.cal.Navigator'], ['goog.dom', 'goog.events.EventTarget', 'goog.style']);
 goog.addDependency('../../../rflect/browser/pagevisibility.js', ['rflect.browser.pagevisibility'], []);
 goog.addDependency('../../../rflect/browser/transitionend.js', ['rflect.browser.transitionend'], []);
 goog.addDependency('../../../rflect/cal/blocks/block.js', ['rflect.cal.blocks', 'rflect.cal.blocks.Block'], ['rflect.cal.predefined']);

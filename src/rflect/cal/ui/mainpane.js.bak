@@ -287,7 +287,7 @@ rflect.cal.ui.MainPane.prototype.rightContMn_;
  */
 rflect.cal.ui.MainPane.prototype.getScrollbarWidthBelowAllday = function() {
   return this.isAlldayScrollableExpandedHor() ?
-      this.containerSizeMonitor_.scrollbarWidth : 0;
+      this.navigator_.getScrollbarWidth() : 0;
 };
 
 
@@ -296,7 +296,7 @@ rflect.cal.ui.MainPane.prototype.getScrollbarWidthBelowAllday = function() {
  */
 rflect.cal.ui.MainPane.prototype.getScrollbarWidthBelowMain = function() {
   return this.isScrollableExpandedHor() ?
-      this.containerSizeMonitor_.scrollbarWidth : 0;
+      this.navigator_.getScrollbarWidth() : 0;
 };
 
 
@@ -305,7 +305,7 @@ rflect.cal.ui.MainPane.prototype.getScrollbarWidthBelowMain = function() {
  */
 rflect.cal.ui.MainPane.prototype.getScrollbarWidthNextToAllday = function() {
   return this.isAlldayScrollableExpandedVer() ?
-      this.containerSizeMonitor_.scrollbarWidth : 0;
+      this.navigator_.getScrollbarWidth() : 0;
 };
 
 
@@ -314,7 +314,7 @@ rflect.cal.ui.MainPane.prototype.getScrollbarWidthNextToAllday = function() {
  */
 rflect.cal.ui.MainPane.prototype.getScrollbarWidthNextToMain = function() {
   return this.isScrollableExpandedVer() ?
-      this.containerSizeMonitor_.scrollbarWidth : 0;
+      this.navigator_.getScrollbarWidth() : 0;
 };
 
 

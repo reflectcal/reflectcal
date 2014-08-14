@@ -11,6 +11,7 @@ goog.provide('rflect.cal.Navigator');
 
 goog.require('goog.events.EventTarget');
 goog.require('goog.dom');
+goog.require('goog.style');
 
 
 
@@ -57,6 +58,13 @@ rflect.cal.Navigator.INPUT_VALUE_TEST_STRING = 'test-text';
  * @type {Object.<string, boolean>}
  */
 rflect.cal.Navigator.prototype.supportedInputTypes_;
+
+
+/**
+ * Platform-dependent scrollbar width.
+ * @type {number}
+ */
+rflect.cal.Navigator.prototype.scrollbarWidth_ = -1;
 
 
 /**
@@ -122,6 +130,15 @@ rflect.cal.Navigator.prototype.isInputTypeSupported_ = function(aType) {
       rflect.cal.Navigator.INPUT_VALUE_TEST_STRING != input.value;
 
   return this.supportedInputTypes_[aType];
+}
+
+
+/**
+ * @return {number} Platform-dependent scrollbar width.
+ */
+rflect.cal.Navigator.prototype.getScrollbarWidth = function() {
+  return this.scrollbarWidth_ < 0 ? this.scrollbarWidth_ =
+      goog.style.getScrollbarWidth() : this.scrollbarWidth_;
 }
 
 
