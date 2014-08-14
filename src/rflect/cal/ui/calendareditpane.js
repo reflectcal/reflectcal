@@ -26,8 +26,7 @@ goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.ExternalPane');
 goog.require('rflect.cal.ui.PageRequestEvent');
-goog.require('rflect.cal.ui.PaneShowBehavior');
-goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
+goog.require('rflect.cal.ui.ScreenManager.EventTypes');
 goog.require('rflect.dom');
 goog.require('rflect.string');
 goog.require('rflect.ui.Checkbox');
@@ -209,7 +208,6 @@ rflect.cal.ui.CalendarEditPane.prototype.createBody =
     'type': 'text',
     id: 'sp-calendar-name-input',
     className: goog.getCssName('ep-event-name-input'),
-    autofocus: 'autofocus',
     placeholder: rflect.cal.i18n.Symbols.NO_NAME_EVENT
   });
   var nameCont = aDom.createDom('div',
@@ -325,7 +323,8 @@ rflect.cal.ui.CalendarEditPane.prototype.enterDocument = function() {
   rflect.cal.ui.CalendarEditPane.superClass_.enterDocument.call(this);
 
   // Menu commands.
-  this.getHandler().listen(this.buttonBack1,
+  this.getHandler()
+      .listen(this.buttonBack1,
       goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
       .listen(this.buttonBack2, goog.ui.Component.EventType.ACTION,
       this.onCancel_, false, this)
@@ -341,18 +340,54 @@ rflect.cal.ui.CalendarEditPane.prototype.enterDocument = function() {
       goog.events.EventType.CLICK, this.onCalendarsColorLinkClick_, false, this)
 
       .listen(this.transport, rflect.cal.Transport.EventTypes.SAVE_CALENDAR,
-          this.onSaveCalendarResponse_, false, this)
+      this.onSaveCalendarResponse_, false, this)
       .listen(this.transport, rflect.cal.Transport.EventTypes.DELETE_CALENDAR,
-          this.onDeleteCalendarResponse_, false, this)
+      this.onDeleteCalendarResponse_, false, this)
 
       .listen(document,
-          goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
+      goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
 
-      .listen(this.showBehavior,
-          rflect.cal.ui.PaneShowBehavior.EventTypes.BEFORE_SHOW, function(){
-        this.displayValues();
-      }, false, this);
+      //Show/hide actions.
+      .listen(this.viewManager.getScreenManager(),
+      rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
+      this.onBeforePageChange_, false, this)
+      .listen(this.viewManager.getScreenManager(),
+      rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE, this.onPageChange_,
+      false, this);
 };
+
+
+/**
+ * Page change handler.
+ * @param {rflect.cal.ui.ScreenManager.BeforePageChangeEvent} aEvent Event
+ * object.
+ * @private
+ */
+rflect.cal.ui.CalendarEditPane.prototype.onBeforePageChange_ =
+    function(aEvent) {
+  if (aEvent.currentScreen == this){
+    this.displayValues();
+  }
+}
+
+
+/**
+ * Page change handler.
+ * @param {rflect.cal.ui.ScreenManager.PageChangeEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.CalendarEditPane.prototype.onPageChange_ = function(aEvent) {
+  if (!rflect.TOUCH_INTERFACE_ENABLED){
+    /** @preserveTry */
+    try {
+      this.inputCalendarName_.focus();
+      this.inputCalendarName_.select();
+    } catch(e) {
+      // IE8- shows error that it couldn't set focus but nevertheless, sets
+      // it.
+    }
+  }
+}
 
 
 /**
@@ -492,14 +527,6 @@ rflect.cal.ui.CalendarEditPane.prototype.displayValues = function() {
   this.inputCalendarName_.placeholder = this.currentCalendar_.colorCode
       .getFullName();
 
-  /** @preserveTry */
-  try {
-    this.inputCalendarName_.focus();
-    this.inputCalendarName_.select();
-  } catch(e) {
-    // IE8- shows error that it couldn't set focus but nevertheless, sets it.
-  }
-
   this.buttonDeleteCalendar_.setVisible(!this.newCalendarMode_);
   this.displayCalendarColor_(this.currentCalendar_.colorCode.id);
 };
@@ -530,7 +557,8 @@ rflect.cal.ui.CalendarEditPane.prototype.scanValues = function() {
  * @param {number} aIndex Index of color code in both ui table and predefined
  * set.
  */
-rflect.cal.ui.CalendarEditPane.prototype.displayCalendarColor_ = function(aIndex) {
+rflect.cal.ui.CalendarEditPane.prototype.displayCalendarColor_ =
+    function(aIndex) {
   goog.array.forEach(this.getElement()
       .getElementsByClassName(goog.getCssName('calendar-color')),
       function(el, elIndex){
@@ -546,12 +574,10 @@ rflect.cal.ui.CalendarEditPane.prototype.displayCalendarColor_ = function(aIndex
 
 
 /**
- * Disposes of the event pane.
  * @override
- * @protected
  */
 rflect.cal.ui.CalendarEditPane.prototype.disposeInternal = function() {
-  this.tabContents2_ = null;
+  this.currentCalendar_ = null;
 
   rflect.cal.ui.CalendarEditPane.superClass_.disposeInternal.call(this);
 };

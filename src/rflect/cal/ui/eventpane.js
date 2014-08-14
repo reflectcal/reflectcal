@@ -740,7 +740,9 @@ rflect.cal.ui.EventPane.prototype.showTimeInputs_ = function(aShow) {
  * @private
  */
 rflect.cal.ui.EventPane.prototype.onBeforePageChange_ = function(aEvent) {
-  this.displayValues();
+  if (aEvent.currentScreen == this){
+    this.displayValues();
+  }
 }
 
 
