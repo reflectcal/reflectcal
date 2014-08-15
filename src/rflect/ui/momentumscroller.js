@@ -44,7 +44,7 @@ rflect.ui.MomentumScroller.DRAG_THRESHOLD = 5;
  * frame.
  * @type {number}
  */
-rflect.ui.MomentumScroller.OUT_OF_BOUNDS_MAXIMUM = 240;
+rflect.ui.MomentumScroller.OUT_OF_BOUNDS_MAXIMUM = 100;
 
 
 /**
@@ -58,7 +58,7 @@ rflect.ui.MomentumScroller.ACCELERATION_SLIDING = 0.0005;
  * Acceleration for bounce back.
  * @type {number}
  */
-rflect.ui.MomentumScroller.ACCELERATION_BOUNCE_BACK_COEFF = 100;
+rflect.ui.MomentumScroller.ACCELERATION_BOUNCE_BACK_COEFF = 10;
 
 
 /**
@@ -643,10 +643,15 @@ rflect.ui.MomentumScroller.prototype.setUpTransitionStage2 = function() {
   var acceleration = this.getAcceleration(velocity) *
       rflect.ui.MomentumScroller.ACCELERATION_BOUNCE_BACK_COEFF;
   var displacement = - (velocity * velocity) / (2 * acceleration);
-  var time = - velocity / acceleration;
+  var time = 100;
 
   if (goog.DEBUG)
     _log('velocity',velocity);
+
+  if (displacement > rflect.ui.MomentumScroller.OUT_OF_BOUNDS_MAXIMUM)
+    displacement = rflect.ui.MomentumScroller.OUT_OF_BOUNDS_MAXIMUM;
+  if (displacement < -rflect.ui.MomentumScroller.OUT_OF_BOUNDS_MAXIMUM)
+    displacement = -rflect.ui.MomentumScroller.OUT_OF_BOUNDS_MAXIMUM;
 
   if (velocity > 0) {
     var newY = displacement;
