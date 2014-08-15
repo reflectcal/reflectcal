@@ -616,8 +616,18 @@ rflect.ui.MomentumScroller.prototype.setUpTransitionStage1 = function() {
     _log('this.endMomentumVelocity_', this.endMomentumVelocity_);
   var time = Math.abs((velocity - this.endMomentumVelocity_) / acceleration);
 
+  //This is an y delta to flatten bezier function towards linear one if end
+  // velocity is non-zero. In corner case, when velocity didn't slow at all,
+  // bezier curve becomes linear.
+  var valueToLowerCubicBezierWith = Math.abs(this.endMomentumVelocity_ /
+    velocity) * .33;
+
   this.element.style.webkitTransition = '-webkit-transform ' + time +
-      'ms cubic-bezier(.43,.54,.56,.67)';
+      'ms cubic-bezier(.33,' +
+      (.66 - valueToLowerCubicBezierWith) +
+      ',.66,' +
+      (1 - valueToLowerCubicBezierWith) +
+      ')';
   this.element.style.webkitTransform = 'translate3d(0, ' +
       this.contentOffsetY + 'px, 0)';
 
