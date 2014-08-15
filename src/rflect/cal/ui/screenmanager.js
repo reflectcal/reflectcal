@@ -162,6 +162,8 @@ rflect.cal.ui.ScreenManager.translateElement = function(aElement,
 }
 
 
+
+
 /**
  * Main element of screen manager.
  * @type {Element}
@@ -340,12 +342,25 @@ rflect.cal.ui.ScreenManager.prototype.dispatchBeforePageChangeEvent_ =
 
 
 /**
+ * Applies transition to screen manager element.
+ * @param {boolean} aEnable Whether to enable transition.
+ */
+rflect.cal.ui.ScreenManager.prototype.applyTransition = function(aEnable) {
+  if (aEnable)
+    goog.dom.classes.add(this.element_, 'screen-manager');
+  else
+    goog.dom.classes.remove(this.element_, 'screen-manager');
+}
+
+
+/**
  * Translates container element to show actual page.
  * @param {number} aPosition Page number to shift to.
  */
 rflect.cal.ui.ScreenManager.prototype.slideToPosition = function(aPosition){
   this.dispatchBeforePageChangeEvent_();
   //Container moves to the left.
+  this.applyTransition(true);
   rflect.cal.ui.ScreenManager.translateElement(this.element_,
       -100 * aPosition);
 }
@@ -383,6 +398,7 @@ rflect.cal.ui.ScreenManager.prototype.onSlideEnd_ = function(aEvent) {
   if (aEvent.target != this.element_)
     return;
 
+  this.applyTransition(false);
   this.finishScreenChange_();
 }
 

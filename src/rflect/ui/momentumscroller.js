@@ -433,6 +433,8 @@ rflect.ui.MomentumScroller.prototype.onTransitionEnd = function(aEvent) {
     case rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.BOUNCED_BACK:{
       this.queuedTransitionStage_ =
           rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.NONE;
+      this.element.style.webkitTransition = '';
+      this.element.style.transition = '';
       this.isDecelerating_ = false;
     };break;
     default:break;
@@ -672,8 +674,11 @@ rflect.ui.MomentumScroller.prototype.stopMomentum = function() {
 
     // Clear the active transition so it doesn’t apply to our next transform.
     this.element.style.webkitTransition = '';
+    this.element.style.transition = '';
     // Set the element transform to where it is right now.
     this.animateTo(transform.m42);
+    this.queuedTransitionStage_ =
+        rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.NONE;
 
     this.stopPropagationOnTouchEnd_ = true;
   } else {
