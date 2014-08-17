@@ -327,6 +327,14 @@ rflect.cal.ui.MainPane.prototype.momentumScroller_;
 
 
 /**
+ * Whether update by navigation is pending.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.updateByNavigation_;
+
+
+/**
  * @return {number} Width of scrollbar below allday scrollable.
  */
 rflect.cal.ui.MainPane.prototype.getScrollbarWidthBelowAllday = function() {
@@ -528,16 +536,18 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
   this.removeMomentumScroller();
 
   if (opt_updateByNavigation && !rflect.TOUCH_INTERFACE_ENABLED)
-    this.setHandyScrollPosition_();
+    this.getHandyScrollTopPosition_();
 
+  this.updateByNavigation_ = !!opt_updateByNavigation;
 };
 
 
 /**
- * Sets scroll position that focuses on either event or today's time.
+ * @return {number} Scroll position that focuses on either event or today's
+ * time.
  * @private
  */
-rflect.cal.ui.MainPane.prototype.setHandyScrollPosition_ = function() {
+rflect.cal.ui.MainPane.prototype.getHandyScrollTopPosition_ = function() {
   var scrollTop = 0;
   var earliestChipStart =
       this.blockManager_.blockPoolWeek.getEarliestChipStart();
@@ -547,8 +557,7 @@ rflect.cal.ui.MainPane.prototype.setHandyScrollPosition_ = function() {
   else if (this.timeManager_.isInNowPoint)
     scrollTop = this.timeMarker_.getPosition(true);
 
-  this.blockManager_.blockPoolWeek.scrollTop =
-        scrollTop;
+  return scrollTop;
 }
 
 
@@ -664,33 +673,46 @@ rflect.cal.ui.MainPane.prototype.updateByRedraw = function(opt_deep,
   // We add scroll listeners on freshly built content.
   this.addScrollListeners_();
 
-  if (!opt_doNotAddMomentumScroller){
-    this.addMomentumScroller();
+  var scrollTop = 0;
+  if (this.updateByNavigation_){
+    scrollTop = this.getHandyScrollTopPosition_();
   }
 
-  // Return to previous scrollTop, scrollLeft values, if any.
-  if (this.viewManager_.isInWeekMode()) {
-    var headerScrollable =
-        this.getDomHelper().getElement('main-pane-header-scrollable');
-    var mainScrollable =
-        this.getDomHelper().getElement('main-pane-body-scrollable-wk');
 
-    if (this.blockManager_.blockPoolWeek.expanded)
-      mainScrollable.scrollLeft =
-          headerScrollable.scrollLeft =
-          this.blockManager_.blockPoolWeek.scrollLeft;
-    if (!this.navigator_.isSmallScreen() &&
-        this.blockManager_.blockPoolAllDay.expanded)
-      headerScrollable.scrollTop =
-          this.blockManager_.blockPoolAllDay.scrollTop;
+  if (rflect.TOUCH_INTERFACE_ENABLED){
+    if (!opt_doNotAddMomentumScroller){
+      this.addMomentumScroller();
+      if (this.viewManager_.isInWeekMode())
+        this.momentumScroller_.animateTo(-scrollTop);
+    }
+  } else {
+    this.blockManager_.blockPoolWeek.scrollTop =
+        scrollTop;
 
-    mainScrollable.scrollTop =
-        this.blockManager_.blockPoolWeek.scrollTop;
+    // Return to previous scrollTop, scrollLeft values, if any.
+    if (this.viewManager_.isInWeekMode()) {
+      var headerScrollable =
+          this.getDomHelper().getElement('main-pane-header-scrollable');
+      var mainScrollable =
+          this.getDomHelper().getElement('main-pane-body-scrollable-wk');
 
-  } else if (this.viewManager_.isInMonthMode()) {
-    if (this.blockManager_.blockPoolMonth.expanded)
-      this.getDomHelper().getElement('main-pane-body-scrollable-mn').scrollTop =
-          this.blockManager_.blockPoolMonth.scrollTop;
+      if (this.blockManager_.blockPoolWeek.expanded)
+        mainScrollable.scrollLeft =
+            headerScrollable.scrollLeft =
+            this.blockManager_.blockPoolWeek.scrollLeft;
+      if (!this.navigator_.isSmallScreen() &&
+          this.blockManager_.blockPoolAllDay.expanded)
+        headerScrollable.scrollTop =
+            this.blockManager_.blockPoolAllDay.scrollTop;
+
+      mainScrollable.scrollTop =
+          this.blockManager_.blockPoolWeek.scrollTop;
+
+    } else if (this.viewManager_.isInMonthMode()) {
+      if (this.blockManager_.blockPoolMonth.expanded)
+        this.getDomHelper().getElement('main-pane-body-scrollable-mn')
+            .scrollTop = this.blockManager_.blockPoolMonth.scrollTop;
+    }
   }
 };
 
