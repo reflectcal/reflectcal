@@ -570,14 +570,10 @@ rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
   var isSmallScreen = this.navigator_.isSmallScreen();
 
   if (aEvent.start && !aEvent.showing) {
-    if (rflect.TOUCH_INTERFACE_ENABLED){
-      this.mainPane_.addMomentumScroller();
-    } else {
-      //NOTE(alexk): we can use rflect.cal.ui.MainBody.prototype.toggleSidePane
-      // instead which fires directly on button press.
-      if (rflect.SIDE_PANE_MOVABLE)
-        this.mainPane_.expandElement(true);
-    }
+    //NOTE(alexk): we can use rflect.cal.ui.MainBody.prototype.toggleSidePane
+    // instead which fires directly on button press.
+    if (rflect.SIDE_PANE_MOVABLE)
+      this.mainPane_.expandElement(true);
   }
   if (!aEvent.start && !aEvent.showing) {
     if (rflect.SIDE_PANE_MOVABLE)
@@ -588,8 +584,6 @@ rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
       this.mainPane_.expandElement(false);
   }
   if (!aEvent.start && aEvent.showing) {
-    if (rflect.TOUCH_INTERFACE_ENABLED)
-      this.mainPane_.removeMomentumScroller();
     if (rflect.SIDE_PANE_MOVABLE)
       this.measureStaticSizes();
   }
@@ -631,8 +625,7 @@ rflect.cal.ui.MainBody.prototype.onCalendarSwitch_ = function(aEvent) {
   this.eventManager_.setVisibleCalendar(calendarId, visible);
   this.eventManager_.run();
   this.mainPane_.updateBeforeRedraw();
-  this.mainPane_.updateByRedraw(false, rflect.TOUCH_INTERFACE_ENABLED &&
-      this.sidePane_.showBehavior.isVisible());
+  this.mainPane_.updateByRedraw();
 }
 
 
@@ -773,7 +766,11 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
   this.sidePane_.update();
   this.sidePane_.getCalSelector().update();
   this.sidePane_.getTaskSelector().update();
-  this.mainPane_.update();
+
+
+  this.getMainPane().updateBeforeRedraw();
+  //Do not attach momentum scroller, we will do it on page change.
+  this.getMainPane().updateByRedraw(false, true);
 
 }
 
@@ -785,7 +782,8 @@ rflect.cal.ui.MainBody.prototype.updateMainPane_ = function() {
   this.eventManager_.run();
 
   this.getMainPane().updateBeforeRedraw();
-  this.getMainPane().updateByRedraw();
+  //Do not attach momentum scroller, we will do it on page change.
+  this.getMainPane().updateByRedraw(false, true);
 }
 
 
