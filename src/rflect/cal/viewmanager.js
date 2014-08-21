@@ -203,9 +203,7 @@ rflect.cal.ViewManager.prototype.assignEvents_ = function() {
  * @return {boolean} Whether we're in week mode.
  */
 rflect.cal.ViewManager.prototype.isInWeekMode = function() {
-  return this.currentView == rflect.cal.ViewType.DAY ||
-      this.currentView == rflect.cal.ViewType.MULTI_DAY ||
-      this.currentView == rflect.cal.ViewType.WEEK;
+  return this.typeIsWeek(this.currentView);
 };
 
 
@@ -213,8 +211,28 @@ rflect.cal.ViewManager.prototype.isInWeekMode = function() {
  * @return {boolean} Whether we're in month mode.
  */
 rflect.cal.ViewManager.prototype.isInMonthMode = function() {
-  return this.currentView == rflect.cal.ViewType.MULTI_WEEK ||
-      this.currentView == rflect.cal.ViewType.MONTH;
+  return this.typeIsMonth(this.currentView);
+};
+
+
+/**
+ * @param {rflect.cal.ViewType} aType View type to test.
+ * @return {boolean} Whether type is week.
+ */
+rflect.cal.ViewManager.prototype.typeIsWeek = function(aType) {
+  return aType == rflect.cal.ViewType.DAY ||
+      aType == rflect.cal.ViewType.MULTI_DAY ||
+      aType == rflect.cal.ViewType.WEEK;
+};
+
+
+/**
+ * @param {rflect.cal.ViewType} aType View type to test.
+ * @return {boolean} Whether type is month.
+ */
+rflect.cal.ViewManager.prototype.typeIsMonth = function(aType) {
+  return aType == rflect.cal.ViewType.MULTI_WEEK ||
+      aType == rflect.cal.ViewType.MONTH;
 };
 
 
@@ -455,6 +473,17 @@ rflect.cal.ViewManager.prototype.onDateDrag_ = function(aEvent) {
     this.timeManager.setBasis(aEvent.startDate);
   this.timeManager.daysNumber = aEvent.duration;
   this.showView(aEvent.selectionConfiguration, aEvent.target);
+}
+
+
+/**
+ * @param {rflect.cal.ViewType} aType Type of view to show.
+ * @return {boolean} Whether view mode has changed (like from any week mode to 
+ * month).
+ */
+rflect.cal.ViewManager.prototype.viewModeHasChanged = function(aType) {
+  return this.typeIsWeek(this.currentView) && this.typeIsMonth(aType) ||
+      this.typeIsWeek(aType) && this.typeIsMonth(this.currentView);
 }
 
 
