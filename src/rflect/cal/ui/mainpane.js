@@ -566,6 +566,9 @@ rflect.cal.ui.MainPane.prototype.getHandyScrollTopPosition_ = function() {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.addScrollListeners_ = function() {
+  if (rflect.TOUCH_INTERFACE_ENABLED) {
+    return;
+
   if (this.viewManager_.isInWeekMode()) {
 
     this.scrollListenersKeys_.push(goog.events.listen(
@@ -587,6 +590,7 @@ rflect.cal.ui.MainPane.prototype.addScrollListeners_ = function() {
           this));
 
   }
+
 };
 
 
@@ -677,7 +681,6 @@ rflect.cal.ui.MainPane.prototype.updateByRedraw = function(opt_deep,
   if (this.updateByNavigation_){
     scrollTop = this.getHandyScrollTopPosition_();
   }
-
 
   if (rflect.TOUCH_INTERFACE_ENABLED){
     if (!opt_doNotAddMomentumScroller){
