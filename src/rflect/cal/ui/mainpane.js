@@ -566,7 +566,7 @@ rflect.cal.ui.MainPane.prototype.getHandyScrollTopPosition_ = function() {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.addScrollListeners_ = function() {
-  if (rflect.TOUCH_INTERFACE_ENABLED) {
+  if (rflect.TOUCH_INTERFACE_ENABLED)
     return;
 
   if (this.viewManager_.isInWeekMode()) {

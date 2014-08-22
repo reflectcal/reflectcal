@@ -9,11 +9,13 @@
  */
 
 goog.provide('rflect.ui.MomentumScroller');
+goog.provide('rflect.ui.MomentumScroller.EventTypes');
 
 
 goog.require('goog.events');
-goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventType');
+goog.require('goog.events.EventTarget');
 goog.require('goog.style');
 goog.require('rflect.browser.transitionend');
 goog.require('rflect.browser.cssmatrix');
@@ -23,14 +25,48 @@ goog.require('rflect.browser.cssmatrix');
 /**
  * Momentum scroller main class.
  * @constructor
- * @extends {goog.events.EventHandler}
+ * @extends {goog.events.EventTarget}
  */
 rflect.ui.MomentumScroller = function() {
 
-  goog.events.EventHandler.call(this);
+  goog.events.EventTarget.call(this);
 
+  /**
+   * Event handler for momentum scroller.
+   * @type {goog.events.EventHandler}
+   */
+  this.handler = new goog.events.EventHandler(this);
 }
-goog.inherits(rflect.ui.MomentumScroller, goog.events.EventHandler);
+goog.inherits(rflect.ui.MomentumScroller, goog.events.EventTarget);
+
+
+/**
+ * @enum {string}
+ */
+rflect.ui.MomentumScroller.EventTypes = {
+  UPDATE_POSITION: 'updatePosition'
+};
+
+
+
+/**
+ * Event that is fired when scroller content is updated.
+ * @param {number} aContentOffset Offset of content.
+ * @constructor
+ * @extends {goog.events.Event}
+ */
+rflect.ui.MomentumScroller.UpdatePositionEvent = function(aContentOffset) {
+  goog.events.Event.call(this,
+      rflect.ui.MomentumScroller.EventTypes.UPDATE_POSITION);
+
+  /**
+   * Offset of content.
+   * @type {number}
+   */
+  this.contentOffset = aContentOffset;
+}
+goog.inherits(rflect.ui.MomentumScroller.UpdatePositionEvent,
+    goog.events.Event);
 
 
 /**
@@ -296,11 +332,13 @@ rflect.ui.MomentumScroller.prototype.isEnabled = function() {
  * Attaches all listeners to implement mouse miss behavior.
  */
 rflect.ui.MomentumScroller.prototype.enterDocument = function() {
-  this.listen(this.element, goog.events.EventType.TOUCHSTART,
+  this.handler.listen(this.element, goog.events.EventType.TOUCHSTART,
       this.onTouchStart);
-  this.listen(this.element, goog.events.EventType.TOUCHMOVE, this.onTouchMove);
-  this.listen(this.element, goog.events.EventType.TOUCHEND, this.onTouchEnd);
-  this.listen(this.element,
+  this.handler.listen(this.element, goog.events.EventType.TOUCHMOVE,
+      this.onTouchMove);
+  this.handler.listen(this.element, goog.events.EventType.TOUCHEND,
+      this.onTouchEnd);
+  this.handler.listen(this.element,
       rflect.browser.transitionend.VENDOR_TRANSITION_END_NAMES,
       this.onTransitionEnd);
 }
@@ -310,7 +348,7 @@ rflect.ui.MomentumScroller.prototype.enterDocument = function() {
  * Attaches listeners to implement mouse miss behavior.
  */
 rflect.ui.MomentumScroller.prototype.exitDocument = function() {
-  this.removeAll();
+  this.handler.removeAll();
 }
 
 
@@ -439,6 +477,8 @@ rflect.ui.MomentumScroller.prototype.onTransitionEnd = function(aEvent) {
     };break;
     default:break;
   }
+
+  this.dispatchUpdatePositionEvent();
 }
 
 
@@ -663,8 +703,7 @@ rflect.ui.MomentumScroller.prototype.setUpTransitionStage2 = function() {
 
   this.element.style.webkitTransition = '-webkit-transform ' + time +
       'ms cubic-bezier(0.33, 0.66, 0.66, 1)';
-  this.element.style.webkitTransform = 'translate3d(0, ' +
-      newY + 'px, 0)';
+  this.element.style.webkitTransform = 'translate3d(0, ' + newY + 'px, 0)';
 
   this.queuedTransitionStage_ =
       rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.BOUNCED_OUT;
@@ -696,6 +735,8 @@ rflect.ui.MomentumScroller.prototype.stopMomentum = function() {
         rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.NONE;
 
     this.stopPropagationOnTouchEnd_ = true;
+
+    this.dispatchUpdatePositionEvent();
   } else {
     this.stopPropagationOnTouchEnd_ = false;
   }
@@ -723,11 +764,21 @@ rflect.ui.MomentumScroller.prototype.isDecelerating = function() {
 
 
 /**
+ * To implement.
+ */
+rflect.ui.MomentumScroller.prototype.dispatchUpdatePositionEvent = function() {
+  return this.dispatchEvent(new rflect.ui.MomentumScroller.UpdatePositionEvent(
+      this.contentOffsetY));
+}
+
+
+/**
  * Alias to setMouseMissToCancel with false argument.
  */
 rflect.ui.MomentumScroller.prototype.disposeInternal = function() {
   //Dispose logic specific for MomentumScroller.
   this.enable(false);
+  this.handler.dispose();
 
   rflect.ui.MomentumScroller.superClass_.disposeInternal.call(this);
 };
