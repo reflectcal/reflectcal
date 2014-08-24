@@ -545,8 +545,11 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
   if (rflect.TOUCH_INTERFACE_ENABLED)
     this.removeMomentumScroller();
 
-  if (opt_updateByNavigation && !rflect.TOUCH_INTERFACE_ENABLED)
-    this.getHandyScrollTopPosition_();
+  if (opt_updateByNavigation && !rflect.TOUCH_INTERFACE_ENABLED){
+    var scrollTop = this.getHandyScrollTopPosition_();
+    this.blockManager_.blockPoolWeek.scrollTop =
+        scrollTop;
+  }
 
   this.updateByNavigation_ = !!opt_updateByNavigation;
 };
@@ -562,10 +565,10 @@ rflect.cal.ui.MainPane.prototype.getHandyScrollTopPosition_ = function() {
   var earliestChipStart = this.blockManager_.blockPoolWeek
       .getEarliestChipStart();
 
-  if (earliestChipStart != 0)
-    scrollTop = earliestChipStart * 1152 / 1440;
-  else if (this.timeManager_.isInNowPoint)
+  if (this.timeManager_.isInNowPoint)
     scrollTop = this.timeMarker_.getPosition(true);
+  else
+    scrollTop = earliestChipStart * 1152 / 1440;
 
   return scrollTop;
 }
@@ -651,8 +654,6 @@ rflect.cal.ui.MainPane.prototype.calculateScrollerContentPosition_ =
     matches = styleAttribute.match(/-(\d+)/);
   if (matches && matches[0])
     offset = +matches[0];
-  if (goog.DEBUG)
-      window.console.log('offset: ', offset);
   return offset;
 }
 
@@ -734,15 +735,10 @@ rflect.cal.ui.MainPane.prototype.updateByRedraw = function(opt_deep,
 
 /**
  * Restores previously saved offsets of scrollable elements.
- * @param {boolean=} opt_doNotAddMomentumScroller Whether to omit adding of
- * momentum scroller.
  * @private
  */
 rflect.cal.ui.MainPane.prototype.restoreOffsetsOfScrollables_ =
-    function(opt_doNotAddMomentumScroller) {
-  var scrollTop = this.getHandyScrollTopPosition_();
-  this.blockManager_.blockPoolWeek.scrollTop =
-      scrollTop;
+    function() {
 
   // Return to previous scrollTop, scrollLeft values, if any.
   if (this.viewManager_.isInWeekMode()) {

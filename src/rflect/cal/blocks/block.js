@@ -200,7 +200,7 @@ rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips,
   // The end time of the last ending event in the entire blob
   var latestItemEnd;
   // The start time of the first starting event in the entire blob
-  var earliestItemStart;
+  var earliestItemStart = -1;
 
   // This array keeps track of the last (latest ending) chip in each of
   // the columns of the current blob. We could reconstruct this data at
@@ -239,7 +239,7 @@ rflect.cal.blocks.Block.prototype.computeEventMap = function(aChips,
     if (!latestItemEnd) {
       latestItemEnd = itemEnd;
     }
-    if (!earliestItemStart || itemStart < earliestItemStart) {
+    if (earliestItemStart < 0 || itemStart < earliestItemStart) {
       earliestItemStart = itemStart;
     }
     if (currentBlob.length && latestItemEnd &&
