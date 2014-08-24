@@ -542,7 +542,8 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
   if (!opt_doNotRemoveScrollListeners)
     this.removeScrollListeners_();
 
-  this.removeMomentumScroller();
+  if (rflect.TOUCH_INTERFACE_ENABLED)
+    this.removeMomentumScroller();
 
   if (opt_updateByNavigation && !rflect.TOUCH_INTERFACE_ENABLED)
     this.getHandyScrollTopPosition_();
