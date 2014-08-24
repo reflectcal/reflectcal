@@ -16,6 +16,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('goog.string');
 goog.require('goog.userAgent');
+goog.require('rflect.browser.cssmatrix');
 goog.require('rflect.cal.ui.MainPaneBuilder');
 goog.require('rflect.cal.ui.MainPaneSelectionMask');
 goog.require('rflect.cal.predefined');
@@ -327,6 +328,14 @@ rflect.cal.ui.MainPane.prototype.momentumScroller_;
 
 
 /**
+ * Position of momentum scroller content saved between remove and add.
+ * @type {number}
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.scrollerContentPosition_;
+
+
+/**
  * Whether update by navigation is pending.
  * @type {boolean}
  * @private
@@ -549,8 +558,8 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
  */
 rflect.cal.ui.MainPane.prototype.getHandyScrollTopPosition_ = function() {
   var scrollTop = 0;
-  var earliestChipStart =
-      this.blockManager_.blockPoolWeek.getEarliestChipStart();
+  var earliestChipStart = this.blockManager_.blockPoolWeek
+      .getEarliestChipStart();
 
   if (earliestChipStart != 0)
     scrollTop = earliestChipStart * 1152 / 1440;
@@ -566,9 +575,6 @@ rflect.cal.ui.MainPane.prototype.getHandyScrollTopPosition_ = function() {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.addScrollListeners_ = function() {
-  if (rflect.TOUCH_INTERFACE_ENABLED)
-    return;
-
   if (this.viewManager_.isInWeekMode()) {
 
     this.scrollListenersKeys_.push(goog.events.listen(
@@ -610,22 +616,54 @@ rflect.cal.ui.MainPane.prototype.removeScrollListeners_ = function() {
  * Removes scroll listeners on each update.
  */
 rflect.cal.ui.MainPane.prototype.removeMomentumScroller = function() {
-  if (!rflect.TOUCH_INTERFACE_ENABLED)
-    return;
+  var elementWk = this.getDomHelper().getElement('grid-table-cont');
+  var elementMn = this.getDomHelper().getElement('grid-table-wrapper-outer');
+
+  if (this.viewManager_.isInWeekMode() && elementWk){
+    this.scrollerContentPosition_ = this.calculateScrollerContentPosition_(
+        elementWk);
+  } else if (this.viewManager_.isInMonthMode() && elementMn){
+    this.scrollerContentPosition_ = this.calculateScrollerContentPosition_(
+        elementMn);
+  } else this.scrollerContentPosition_ = 0;
 
   this.momentumScroller_.enable(false);
 };
+
+
+ /**
+  * @param {Element} aElement Scroller content element.
+  * @return {number} Position of scroller content.
+  */
+rflect.cal.ui.MainPane.prototype.calculateScrollerContentPosition_ =
+    function(aElement) {
+  var offset = 0;
+  var styleAttribute = aElement.getAttribute('style');
+
+  if (!styleAttribute)
+    return offset;
+
+  var matches = styleAttribute.match(/-(\d+\.\d+)/);
+  if (matches && matches[0])
+    offset = +matches[0];
+  else
+    matches = styleAttribute.match(/-(\d+)/);
+  if (matches && matches[0])
+    offset = +matches[0];
+  if (goog.DEBUG)
+      window.console.log('offset: ', offset);
+  return offset;
+}
 
 
 /**
  * Removes scroll listeners on each update.
  */
 rflect.cal.ui.MainPane.prototype.addMomentumScroller = function() {
-  if (!rflect.TOUCH_INTERFACE_ENABLED)
-    return;
-
   var element;
   var frameElement;
+
+  var scrollTop = this.getHandyScrollTopPosition_();
 
   if (this.viewManager_.isInWeekMode()) {
     element = this.getDomHelper().getElement('grid-table-cont');
@@ -640,6 +678,15 @@ rflect.cal.ui.MainPane.prototype.addMomentumScroller = function() {
   if (element && frameElement) {
     this.momentumScroller_.setElements(element, frameElement);
     this.momentumScroller_.enable(true);
+  }
+
+  if (this.updateByNavigation_) {
+    if (this.viewManager_.isInWeekMode()) {
+      this.momentumScroller_.animateWithinBounds(-scrollTop);
+    }
+    this.updateByNavigation_ = false;
+  } else if (this.scrollerContentPosition_) {
+    this.momentumScroller_.animateTo(this.scrollerContentPosition_);
   }
 };
 
@@ -675,49 +722,52 @@ rflect.cal.ui.MainPane.prototype.updateByRedraw = function(opt_deep,
   }
 
   // We add scroll listeners on freshly built content.
-  this.addScrollListeners_();
-
-  var scrollTop = 0;
-  if (this.updateByNavigation_){
-    scrollTop = this.getHandyScrollTopPosition_();
+  if (!rflect.TOUCH_INTERFACE_ENABLED) {
+    this.addScrollListeners_();
+    this.restoreOffsetsOfScrollables_();
   }
-
-  if (rflect.TOUCH_INTERFACE_ENABLED){
-    if (!opt_doNotAddMomentumScroller){
-      this.addMomentumScroller();
-      if (this.viewManager_.isInWeekMode())
-        this.momentumScroller_.animateTo(-scrollTop);
-    }
-  } else {
-    this.blockManager_.blockPoolWeek.scrollTop =
-        scrollTop;
-
-    // Return to previous scrollTop, scrollLeft values, if any.
-    if (this.viewManager_.isInWeekMode()) {
-      var headerScrollable =
-          this.getDomHelper().getElement('main-pane-header-scrollable');
-      var mainScrollable =
-          this.getDomHelper().getElement('main-pane-body-scrollable-wk');
-
-      if (this.blockManager_.blockPoolWeek.expanded)
-        mainScrollable.scrollLeft =
-            headerScrollable.scrollLeft =
-            this.blockManager_.blockPoolWeek.scrollLeft;
-      if (!this.navigator_.isSmallScreen() &&
-          this.blockManager_.blockPoolAllDay.expanded)
-        headerScrollable.scrollTop =
-            this.blockManager_.blockPoolAllDay.scrollTop;
-
-      mainScrollable.scrollTop =
-          this.blockManager_.blockPoolWeek.scrollTop;
-
-    } else if (this.viewManager_.isInMonthMode()) {
-      if (this.blockManager_.blockPoolMonth.expanded)
-        this.getDomHelper().getElement('main-pane-body-scrollable-mn')
-            .scrollTop = this.blockManager_.blockPoolMonth.scrollTop;
-    }
-  }
+  if (rflect.TOUCH_INTERFACE_ENABLED && !opt_doNotAddMomentumScroller)
+    this.addMomentumScroller();
 };
+
+
+/**
+ * Restores previously saved offsets of scrollable elements.
+ * @param {boolean=} opt_doNotAddMomentumScroller Whether to omit adding of
+ * momentum scroller.
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.restoreOffsetsOfScrollables_ =
+    function(opt_doNotAddMomentumScroller) {
+  var scrollTop = this.getHandyScrollTopPosition_();
+  this.blockManager_.blockPoolWeek.scrollTop =
+      scrollTop;
+
+  // Return to previous scrollTop, scrollLeft values, if any.
+  if (this.viewManager_.isInWeekMode()) {
+    var headerScrollable =
+        this.getDomHelper().getElement('main-pane-header-scrollable');
+    var mainScrollable =
+        this.getDomHelper().getElement('main-pane-body-scrollable-wk');
+
+    if (this.blockManager_.blockPoolWeek.expanded)
+      mainScrollable.scrollLeft =
+          headerScrollable.scrollLeft =
+          this.blockManager_.blockPoolWeek.scrollLeft;
+    if (!this.navigator_.isSmallScreen() &&
+        this.blockManager_.blockPoolAllDay.expanded)
+      headerScrollable.scrollTop =
+          this.blockManager_.blockPoolAllDay.scrollTop;
+
+    mainScrollable.scrollTop =
+        this.blockManager_.blockPoolWeek.scrollTop;
+
+  } else if (this.viewManager_.isInMonthMode()) {
+    if (this.blockManager_.blockPoolMonth.expanded)
+      this.getDomHelper().getElement('main-pane-body-scrollable-mn')
+          .scrollTop = this.blockManager_.blockPoolMonth.scrollTop;
+  }
+}
 
 
 /**
@@ -1907,7 +1957,8 @@ rflect.cal.ui.MainPane.prototype.onSaveEvent_ = function(aEvent) {
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
-rflect.cal.ui.MainPane.prototype.onMainPaneScrollableScroll_ = function(aEvent) {
+rflect.cal.ui.MainPane.prototype.onMainPaneScrollableScroll_ =
+    function(aEvent) {
   var scrollable = aEvent.target;
   var scrollLeft = 0;
   var scrollTop = 0;

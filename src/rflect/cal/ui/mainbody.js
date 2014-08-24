@@ -386,8 +386,8 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
       .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
       this.onSidePaneAction_, false, this)
       .listen(this.viewManager_.getScreenManager(),
-      rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE,
-      this.onPageChange_, false, this);
+      rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
+      this.onBeforePageChange_, false, this);
 
   this.getHandler().listen(this.transport_,
       rflect.cal.Transport.EventTypes.LOAD_EVENT, this.onLoadEvents_, false,
@@ -592,10 +592,11 @@ rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
 
 /**
  * Page slide end handler.
- * @param {rflect.cal.ui.ScreenManager.PageChangeEvent} aEvent Event object.
+ * @param {rflect.cal.ui.ScreenManager.BeforePageChangeEvent} aEvent Event
+ * object.
  * @private
  */
-rflect.cal.ui.MainBody.prototype.onPageChange_ = function(aEvent) {
+rflect.cal.ui.MainBody.prototype.onBeforePageChange_ = function(aEvent) {
   // If switching to main body, add momentum scroller...
   if (aEvent.currentScreen == this) {
     var htmlElement = this.getDomHelper().getDocument().documentElement;
