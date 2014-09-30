@@ -529,6 +529,12 @@ module.exports = function(grunt) {
     'closureBuilder'
   ]);
 
+  grunt.registerTask('compile-all', [
+    'clean:all',
+    'less:development',
+    'closureBuilder'
+  ]);
+
   grunt.registerTask('gjslinter', [
     'exec:' + gJsLintTaskName
   ]);
