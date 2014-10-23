@@ -673,6 +673,7 @@ rflect.cal.ui.MainBody.prototype.toggleSidePane = function() {
     var movable = this.getElement().querySelector('#main-pane-cont');
     if (this.mainPaneExpanded_) {
       this.getSidePane().getElement().style.display = '';
+      this.getMainPane().getElement().style.width = 'auto'
       goog.dom.classes.remove(movable, 'main-pane-cont-expanded');
     } else {
       this.getMainPane().getElement().style.width = '100%'
@@ -695,7 +696,6 @@ rflect.cal.ui.MainBody.prototype.onMainBodyTransitionEnd = function(aEvent) {
   if (!this.mainPaneExpanded_) {
     this.getSidePane().getElement().style.display = 'none'
   } else {
-    this.getMainPane().getElement().style.width = 'auto'
   }
 
   this.mainPaneExpanded_ = !this.mainPaneExpanded_;
