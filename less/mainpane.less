@@ -6,13 +6,22 @@
 
 /* Styles for main pane. */
 
+@mainPaneSideMargin: 230px;
 
 .main-pane {
   float: none;
   width: auto;
   cursor: default; /*IE7 shows text cursor.*/
   transition: margin .2s;
-  margin-left: 230px;
+  margin-left: @mainPaneSideMargin;
+}
+
+.main-pane-cont {
+  transition: transform .3s;
+}
+
+.main-pane-cont-expanded {
+  transform: translate3d(-@mainPaneSideMargin, 0px, 0px);
 }
 
 @media (max-width: 480px) {

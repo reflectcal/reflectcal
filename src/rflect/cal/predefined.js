@@ -35,7 +35,7 @@ rflect.MOBILE = rflect.UI_TYPE == 'MOBILE';
  * Feature flag - whether side pane can be hidden for big screen.
  * @define {boolean}
  */
-rflect.SIDE_PANE_MOVABLE = false;
+rflect.SIDE_PANE_MOVABLE = true;
 
 
 /**
@@ -56,7 +56,7 @@ rflect.VERTICAL_EXPAND_ENABLED = false;
  * Feature flag - whether larger targets enabled, for touch.
  * @define {boolean}
  */
-rflect.TOUCH_INTERFACE_ENABLED = true;
+rflect.TOUCH_INTERFACE_ENABLED = false;
 
 
 /**

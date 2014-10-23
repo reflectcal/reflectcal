@@ -12,7 +12,7 @@ goog.provide('rflect.cal.ui.MainBody');
 goog.require('goog.dom.classes');
 goog.require('goog.math.Size');
 goog.require('goog.style');
-goog.require('rflect.ui.Component');
+goog.require('rflect.browser.transitionend');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.Transport');
 goog.require('rflect.cal.ui.CalendarsPane.EventTypes');
@@ -30,6 +30,7 @@ goog.require('rflect.cal.ui.ScreenManager.EventTypes');
 goog.require('rflect.cal.ui.SettingsPane');
 goog.require('rflect.cal.ui.SettingsPane.EventTypes');
 goog.require('rflect.cal.ui.SidePane');
+goog.require('rflect.ui.Component');
 
 
 
@@ -134,7 +135,7 @@ rflect.cal.ui.MainBody.HTML_PARTS_ = [
   '<div id="main-body" class="main-body">',
   '<div id="top-pane" class="control-pane">',
   '</div>',
-  '<div id="main-body">',
+  '<div id="main-pane-cont" class="main-pane-cont">',
   '<div id="side-pane" class="side-pane slide-pane-left ',
   '">',
   '</div>',
@@ -211,6 +212,14 @@ rflect.cal.ui.MainBody.prototype.settingsPane_;
  * @private
  */
 rflect.cal.ui.MainBody.prototype.sidePane_;
+
+
+/**
+ * Whether main pane is expanded.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.ui.MainBody.prototype.mainPaneExpanded_;
 
 
 /**
@@ -387,7 +396,10 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
       this.onSidePaneAction_, false, this)
       .listen(this.viewManager_.getScreenManager(),
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
-      this.onBeforePageChange_, false, this);
+      this.onBeforePageChange_, false, this)
+      .listen(this.getElement(),
+      rflect.browser.transitionend.VENDOR_TRANSITION_END_NAMES,
+      this.onMainBodyTransitionEnd, false, this);
 
   this.getHandler().listen(this.transport_,
       rflect.cal.Transport.EventTypes.LOAD_EVENT, this.onLoadEvents_, false,
@@ -654,12 +666,42 @@ rflect.cal.ui.MainBody.prototype.showSidePane = function(aShow) {
  * Toggles side pane.
  */
 rflect.cal.ui.MainBody.prototype.toggleSidePane = function() {
-  this.sidePane_.showBehavior.setVisible(
-      !this.sidePane_.showBehavior.isVisible());
-  //NOTE(alexk): we can use main pane expand here instead if transition end
-  //event in rflect.cal.ui.MainBody.prototype.onSidePaneSlide_.
-  //this.mainPane_.expandElement(!this.sidePane_.showBehavior.isVisible());
+  if (this.navigator_.isSmallScreen()) {
+    this.sidePane_.showBehavior.setVisible(
+        !this.sidePane_.showBehavior.isVisible());
+  } else {
+    var movable = this.getElement().querySelector('#main-pane-cont');
+    if (this.mainPaneExpanded_) {
+      this.getSidePane().getElement().style.display = '';
+      goog.dom.classes.remove(movable, 'main-pane-cont-expanded');
+    } else {
+      this.getMainPane().getElement().style.width = '100%'
+      goog.dom.classes.add(movable, 'main-pane-cont-expanded');
+    }
+  }
 }
+
+
+/**
+ * Main body transition end listener.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.ui.MainBody.prototype.onMainBodyTransitionEnd = function(aEvent) {
+  var movable = this.getElement().querySelector('#main-pane-cont');
+
+  if (aEvent.target != movable)
+    return;
+
+  if (!this.mainPaneExpanded_) {
+    this.getSidePane().getElement().style.display = 'none'
+  } else {
+    this.getMainPane().getElement().style.width = 'auto'
+  }
+
+  this.mainPaneExpanded_ = !this.mainPaneExpanded_;
+}
+
+
 
 
 /**
