@@ -8,7 +8,7 @@
 //
 
 // This variable is overriden at compile time with UI type.
-@UI_TYPE: '';
+@UI_TYPE: 'TOUCH';
 
 @transitionTime: .2s;
 
@@ -67,9 +67,9 @@
   box-sizing: @box-sizing;
 }
 
-.transition(@property, @transition-time: .2s) {
-  -webkit-transition: @property @transition-time;
-  transition: @property @transition-time;
+.transition(@property, @transitionTime: .2s) {
+  -webkit-transition: @property @transitionTime;
+  transition: @property @transitionTime;
 }
 
 .no-tap-delay() {
