@@ -35,16 +35,19 @@
   overflow-y: scroll;
 }
 
-.listitem-cont {
+.listitem-cont() {
   border-left: 2px solid transparent;
   padding: 5px 2px 5px 6px;
+}
+
+.listitem-cont when (@UI_TYPE = '') {
+  .listitem-cont();
   height: 16px;
 }
 
-@media (max-width: 480px) {
-  .listitem-cont {
-    height: 30px;
-  }
+.listitem-cont when (@UI_TYPE = 'TOUCH') {
+  .listitem-cont();
+  height: 30px;
 }
 
 .listitem-cont-focused {
@@ -98,7 +101,7 @@
   box-shadow: none;
 }
 
-.listitem-label {
+.listitem-label() {
   position: relative;
   margin-left: 16px;
   float: none;
@@ -107,13 +110,16 @@
   font-size: 12px;
   white-space: nowrap;
   color: #2c2c2c;
-  line-height: 18px;
 }
 
-@media (max-width: 480px) {
-  .listitem-label {
-    line-height: 30px;
-  }
+.listitem-label when (@UI_TYPE = 'TOUCH') {
+  .listitem-label();
+  line-height: 30px;
+}
+
+.listitem-label when (@UI_TYPE = '') {
+  .listitem-label();
+  line-height: 18px;
 }
 
 .calitem-label-active {
