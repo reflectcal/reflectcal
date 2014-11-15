@@ -75,3 +75,8 @@
 .no-tap-delay() {
   -ms-touch-action: none !important;
 }
+
+.overflow-scrolling(@scrolling: touch) {
+  -webkit-overflow-scrolling: @scrolling;
+  overflow-scrolling: @scrolling;
+}
