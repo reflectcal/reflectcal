@@ -97,6 +97,8 @@ module.exports = function(grunt) {
       'mkdir:css',
       'copy:compiledJsToBuild',
       'copy:compiledCssToBuild',
+      'clean:js',
+      'clean:css',
       'filerev',
       'wrap:renameCss',
       'wrap:renameJs',
@@ -147,7 +149,7 @@ module.exports = function(grunt) {
 
   function getCompileJsTask() {
     return [
-      'clean:staticJs'
+      'clean:js'
     ].concat([
       'closureBuilder'
     ]);
@@ -155,7 +157,7 @@ module.exports = function(grunt) {
 
   function getCompileLessTask() {
     return [
-      'clean:staticCss'
+      'clean:css'
     ].concat(
       //Less tasks will be inserted here, since they share common exec task, we
       // must place them all explicitly by name, to not interfere with other exec
@@ -460,8 +462,8 @@ module.exports = function(grunt) {
       temp: ['build/**/_temp*', 'js/**/*compiled*', 'css/**/*compiled*'],
       allExceptPack: ['build/*', '!build/*.tgz'],
       allExceptCompiled: ['build/*', '!build/js', '!build/css', '!build/font'],
-      staticCss: ['css/*compiled*'],
-      staticJs: ['js/*compiled*'],
+      css: ['css/*compiled*'],
+      js: ['js/*compiled*'],
       static: ['static/*']
     },
     closureBuilder: closureBuilderTask,
