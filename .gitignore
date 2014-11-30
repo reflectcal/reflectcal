@@ -20,3 +20,5 @@ node_modules
 
 # Project
 build
+css/*compiled*.*
+js/*compiled*.*
