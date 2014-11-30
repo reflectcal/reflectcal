@@ -9,6 +9,37 @@
 
 
 /**
+ * Whether application is compiled. This affects whether compiled sources from
+ * /js folder or uncompiled ones from /src will be used.
+ * @type {boolean}
+ */
+exports.COMPILED = true;
+
+
+/**
+ * Whether application is built. This means that assets like js and css have
+ * unique md5 names and targets are linked to that assets.
+ * Overridden to true by build process.
+ * @type {boolean}
+ */
+exports.BUILT = false;
+
+
+/**
+ * Name of db.
+ * @type {string}
+ */
+exports.DB_NAME = 'rflectevents';
+
+
+/**
+ * App HTTP port.
+ * @type {number}
+ */
+exports.APP_PORT = 3001;
+
+
+/**
  * List of locales.
  * @type {Array.<string>}
  */

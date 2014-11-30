@@ -18,6 +18,26 @@ var ua = require('../util/useragent');
  * Renders main page for compiled view.
  */
 exports.view = function(req, res){
+ if (req.user){
+    var jsFileNames = appConfig.BUILT ? targets[0].jsFileNames :
+        appConfig.COMPILED ? getCompiledJsNamesFromFs() : [];
+    var cssFileNames = appConfig.BUILT ? targets[0].cssFileNames :
+        appConfig.COMPILED ? getCompiledCssNamesFromFs() : [];
+
+    var username = req.user[0].username;
+    res.render('main', {
+      compiled: appConfig.COMPILED,
+      built: appConfig.BUILT,
+      username: username,
+      websocketsPort: appConfig.WEBSOCKETS_PORT,
+      appPort: appConfig.APP_PORT,
+      jsFileNames: jsFileNames,
+      cssFileNames: cssFileNames
+    });
+  } else {
+    res.redirect('/login');
+  }
+
   var onCalendarsLoad = function(aCalendars) {
     viewAdapter.getCompiledTargetAsync(req, function(aTarget, aSettings){
 

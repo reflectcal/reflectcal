@@ -16,47 +16,152 @@ module.exports = function(grunt) {
   require('time-grunt')(grunt);
 
   /**
-   * Production flag.
-   * If it's true, it means that app is built for external world - sources,
+   * Development build flag.
+   * If it's false, it means that app is built for external world - sources,
    * source maps, source maps links won't be present in compiled code.
-   * If it's false, app includes it all and could be tested on server in close
+   * If it's true, app includes it all and could be tested on server in close
    * to production form.
    */
-  var PRODUCTION = grunt.option('prod') || false;
+  global.DEV_BUILD = grunt.option('dev') || false;
 
-  // These are compilation target axises. So, total number of compilation
-  // targets is product of array lengths.
-  var LOCALES = PRODUCTION ? appConfig.LOCALES : ['en'];
-  var DEBUG = PRODUCTION ? [true, false] : [true];
-  var UI_TYPE = PRODUCTION ? ['', 'MOBILE'] : [''];
-  // Empty string means that user agent is not specified.
-  var USER_AGENT = PRODUCTION ?
-      ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'] : [''];
+  /**
+   * Whether to pack this build.
+   */
+  global.PACK_BUILD = grunt.option('zip') || false;
+
+  /**
+   * Development compile flag. Instead of building app, we can only recompile
+   * code, in that case this flag is true.
+   */
+  global.DEV_COMPILATION = false;
+
+  /**
+   * Less task names, like lessForTarget-* .
+   */
+  global.lessTaskNames = [];
+
+  /**
+   * Map of css compilation key to array of associated target indexes.
+   * @type {Object.<string,number>}
+   */
+  global.cssKeysToTargetIndexes = {};
 
   // Inputs for less compiler.
-  var lessFileNames = [
+  var LESS_FILE_NAMES = [
     'less/combined.less'
   ];
 
-  function makeListOfCompileTargets() {
-    var targets = [];
+  /**
+   * @typedef {{locale:String, debug:boolean, uiType:string, userAgent:string,
+   *    jsCompDefines:Array.<string>, lessDefines:Array.<string>,
+   *    jsFilename:string, cssFilename:string}}
+   */
+  var Target;
 
-    LOCALES.forEach(function(locale) {
-      DEBUG.forEach(function(debug) {
-        UI_TYPE.forEach(function(uiType) {
-          USER_AGENT.forEach(function(userAgent) {
-            targets.push({
-              locale: locale,
-              debug: debug,
-              uiType: uiType,
-              userAgent: userAgent
-            });
-          });
-        });
-      });
-    });
+  /**
+   * Prepares globals before compilation.
+   * @param {boolean=} opt_compilationOnly Whether prepare globals only for
+   * compilation, this means shorter list of goals.
+   */
+  function setGlobals(opt_compilationOnly) {
+    global.DEV_COMPILATION = !!opt_compilationOnly;
 
-    return targets;
+    // These are compilation target axises. So, total number of compilation
+    // targets is product of array lengths.
+    var LOCALES = !global.DEV_COMPILATION ? appConfig.LOCALES : ['en'];
+    var DEBUG = !global.DEV_COMPILATION ? [true, false] : [true];
+    var UI_TYPE = !global.DEV_COMPILATION ? ['', 'MOBILE'] : [''];
+    // Empty string means that user agent is not specified.
+    var USER_AGENT = !global.DEV_COMPILATION ?
+        ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'] : [''];
+
+
+    /**
+     * @type {Array.<Target>}
+     */
+    global.TARGETS = fillCompileTargetsWithDefines(makeListOfCompileTargets(
+        LOCALES, DEBUG, UI_TYPE, USER_AGENT));
+
+    global.TARGETS.forEach(targetToJsFileMapper);
+
+    global.TARGETS.forEach(targetToCssFileMapper);
+  }
+
+  function buildTask() {
+    setGlobals();
+
+    var task = [
+      'clean:build'
+    ].concat(getCompileLessTask()).concat(getCompileJsTask()).concat([
+      'mkdir:js',
+      'mkdir:css',
+      'copy:compiledJsToBuild',
+      'copy:compiledCssToBuild',
+      'filerev',
+      'wrap:renameCss',
+      'wrap:renameJs',
+      'copy:externalJsToStatic',
+      'copy:sourceMaps'
+    ]).concat(global.DEV_BUILD ? [
+      'copy:sources'
+    ] : []).concat([
+      'copy:app',
+      'copy:fonts',
+      'mkdir:logs',
+      'overrideConfigDirectives',
+      'exportTargets',
+      'clean:temp'
+    ]).concat(global.PACK_BUILD ? [
+      'compress:tarFile',
+      'compress:tarGzip',
+      'filerev:build',
+      'clean:allExceptPack'
+    ] : []);
+
+    grunt.task.run(task);
+  }
+
+  function compileTask() {
+    setGlobals(true);
+
+    var task = getCompileLessTask().concat(getCompileJsTask());
+
+    grunt.task.run(task);
+  }
+
+  function compileJsTask() {
+    setGlobals(true);
+
+    var task = getCompileJsTask();
+
+    grunt.task.run(task);
+  }
+
+  function compileLessTask() {
+    setGlobals(true);
+
+    var task = getCompileLessTask();
+
+    grunt.task.run(task);
+  }
+
+  function getCompileJsTask() {
+    return [
+      'clean:staticJs'
+    ].concat([
+      'closureBuilder'
+    ]);
+  }
+
+  function getCompileLessTask() {
+    return [
+      'clean:staticCss'
+    ].concat(
+      //Less tasks will be inserted here, since they share common exec task, we
+      // must place them all explicitly by name, to not interfere with other exec
+      // tasks.
+      /*exec:lessForTarget-1*/
+      global.lessTaskNames);
   }
 
   function fillCompileTargetsWithDefines(aTargets) {
@@ -83,23 +188,27 @@ module.exports = function(grunt) {
     return aTargets;
   }
 
-  /**
-   * @typedef {{locale:String, debug:boolean, uiType:string, userAgent:string,
-   *    jsCompDefines:Array.<string>, lessDefines:Array.<string>,
-   *    jsFilename:string, cssFilename:string}}
-   */
-  var Target;
+  function makeListOfCompileTargets(aLocales, aDebug, aUiType, aUserAgent) {
+    var targets = [];
 
-  /**
-   * @type {Array.<Target>}
-   */
-  var TARGETS = fillCompileTargetsWithDefines(makeListOfCompileTargets());
+    aLocales.forEach(function(locale) {
+      aDebug.forEach(function(debug) {
+        aUiType.forEach(function(uiType) {
+          aUserAgent.forEach(function(userAgent) {
+            targets.push({
+              locale: locale,
+              debug: debug,
+              uiType: uiType,
+              userAgent: userAgent
+            });
+          });
+        });
+      });
+    });
 
-  /**
-   * Map of css compilation key to array of associated target indexes.
-   * @type {Object.<string,number>}
-   */
-  var cssKeysToTargetIndexes = {};
+    return targets;
+  }
+
 
   // Closure builder task without targets.
   var closureBuilderTask = {
@@ -156,6 +265,8 @@ module.exports = function(grunt) {
         create_source_map: 'build/outputcompiled.js.map',
         formatting: ['PRETTY_PRINT', 'PRINT_INPUT_DELIMITER'],
         closure_entry_point: 'rflect.cal.Loader',
+        language_in: 'ECMASCRIPT6',
+        language_out: 'ECMASCRIPT5',
 
         externs: ['src/externs.js'],
       },
@@ -186,6 +297,8 @@ module.exports = function(grunt) {
         debug: false,
         source_map_format: 'V3',
         closure_entry_point: 'rflect.cal.Loader',
+        language_in: 'ECMASCRIPT6',
+        language_out: 'ECMASCRIPT5',
 
         externs: ['src/externs.js']
       }
@@ -202,16 +315,23 @@ module.exports = function(grunt) {
   function targetToJsFileMapper(aTarget, aIndex){
     var targetOptions = deepClone(compilationTargetTemplate);
 
-    if (!PRODUCTION) {
-      var sourceMapName = 'build/outputcompiled-' + aTarget.locale + '.js.' +
-          aIndex + '.map'
+    if (global.DEV_BUILD || global.DEV_COMPILATION) {
+      var sourceMapName = 'js/outputcompiled-' + aTarget.locale + '.js.' +
+          aIndex + '.map';
       targetOptions.options.compilerOpts.create_source_map =
           sourceMapName;
     }
 
     targetOptions.options.compilerOpts.define = aTarget.jsCompDefines;
 
-    targetOptions.dest = 'build/' + '_temp' + aIndex + '.outputcompiled-' +
+    if (global.DEV_COMPILATION) {
+      targetOptions.options.compilerOpts.define.push("'goog.DEBUG=true'");
+      targetOptions.options.compilerOpts.formatting = ['PRETTY_PRINT',
+          'PRINT_INPUT_DELIMITER'];
+      targetOptions.options.compilerOpts.debug = true;
+    }
+
+    targetOptions.dest = 'js/' + '_temp' + aIndex + '.outputcompiled-' +
         aTarget.locale +
         (aTarget.userAgent ? '-' + aTarget.userAgent : '')  +
         (aTarget.uiType ? '-' + aTarget.uiType : '')  +
@@ -251,18 +371,17 @@ module.exports = function(grunt) {
     execTask[fixJsStyleTaskName] = targetOptions;
   })();
 
-  /**
-   * Less task names, like lessForTarget-* .
-   */
-  var lessTaskNames = [];
 
-  function makeLessCompCommand(aKey, aTarget) {
-    var outputFileName = 'build/' + '_temp.' + aKey + '.outputcompiled' +
+  function makeLessCompCommand(aKey, aTarget, aSourceMapName) {
+    var outputFileName = 'css/' + '_temp.' + aKey + '.outputcompiled' +
         (aTarget.uiType ? '-' + aTarget.uiType : '')  +
         '.css'
 
-    return ['lessc', '--verbose', '--compress']
-        .concat(lessFileNames).concat(['>', outputFileName])
+    return ['lessc', '--verbose']
+        /*.concat(global.DEV_BUILD || global.DEV_COMPILATION ?
+        ['--source-map=' + aSourceMapName] : [])*/
+        .concat(global.DEV_COMPILATION ? [] : ['--compress'])
+        .concat(LESS_FILE_NAMES).concat(['>', outputFileName])
         .concat(aTarget.lessDefines.map(function(aDefine){
       return '--modify-var=' + aDefine;
     })).join(' ');
@@ -270,32 +389,28 @@ module.exports = function(grunt) {
 
   function targetToCssFileMapper(aTarget, aIndex){
     var targetOptions = deepClone(execTaskTemplate);
+    var sourceMapName;
 
     //TODO(alexk): for now, css are only defined by ui type.
     var key = aTarget.uiType;
 
-    if (!cssKeysToTargetIndexes[key]) {
-      cssKeysToTargetIndexes[key] = [];
+    if (!global.cssKeysToTargetIndexes[key]) {
+      global.cssKeysToTargetIndexes[key] = [];
 
-      if (!PRODUCTION) {
-        /*var sourceMapName = 'build/outputcompiled-' + aTarget.locale + '.js.' +
+      if (global.DEV_BUILD || global.DEV_COMPILATION) {
+        sourceMapName = 'css/outputcompiled-' + aTarget.locale + '.css.' +
             aIndex + '.map'
-        targetOptions.options.compilerOpts.create_source_map =
-            sourceMapName;*/
       }
 
-      targetOptions.command = makeLessCompCommand(key, aTarget);
+      targetOptions.command = makeLessCompCommand(key, aTarget, sourceMapName);
       var lessTaskName = 'lessForTarget-' + key;
       execTask[lessTaskName] = targetOptions;
-      lessTaskNames.push('exec:' + lessTaskName);
+      global.lessTaskNames.push('exec:' + lessTaskName);
     }
 
-    cssKeysToTargetIndexes[key].push(aIndex);
+    global.cssKeysToTargetIndexes[key].push(aIndex);
   }
 
-  TARGETS.forEach(targetToJsFileMapper);
-
-  TARGETS.forEach(targetToCssFileMapper);
 
   function jsFileToTargetMapper(dest, src){
     var fileName = src.substring(src.indexOf('/'));
@@ -304,9 +419,9 @@ module.exports = function(grunt) {
     var fileIndex = /\d+/.exec(fileIndexStr);
     var newFileName = fileNameParts.join('.');
 
-    if (!TARGETS[fileIndex].jsFileNames)
-      TARGETS[fileIndex].jsFileNames = [];
-    TARGETS[fileIndex].jsFileNames.push(newFileName);
+    if (!global.TARGETS[fileIndex].jsFileNames)
+      global.TARGETS[fileIndex].jsFileNames = [];
+    global.TARGETS[fileIndex].jsFileNames.push(newFileName);
 
     grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +
         newFileName, '.');
@@ -321,13 +436,13 @@ module.exports = function(grunt) {
     var newFileName = fileNameParts.join('.');
 
     grunt.log.writeln('fileKey ', fileKey);
-    grunt.log.writeln('cssKeysToTargetIndexes ', cssKeysToTargetIndexes);
+    grunt.log.writeln('global.cssKeysToTargetIndexes ', global.cssKeysToTargetIndexes);
 
-    TARGETS.forEach(function(aTarget, aIndex){
+    global.TARGETS.forEach(function(aTarget, aIndex){
       if (!aTarget.cssFileNames)
         aTarget.cssFileNames = [];
-      if (cssKeysToTargetIndexes[fileKey] &&
-          cssKeysToTargetIndexes[fileKey].indexOf(aIndex) > -1)
+      if (global.cssKeysToTargetIndexes[fileKey] &&
+          global.cssKeysToTargetIndexes[fileKey].indexOf(aIndex) > -1)
         aTarget.cssFileNames.push(newFileName);
     });
 
@@ -341,9 +456,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     clean: {
-      all: ['build/*'],
-      temp: ['build/_temp*', 'build/*.map'],
-      css: ['css/*.css']
+      build: ['build/*'],
+      temp: ['build/**/_temp*', 'js/**/*compiled*', 'css/**/*compiled*'],
+      allExceptPack: ['build/*', '!build/*.tgz'],
+      allExceptCompiled: ['build/*', '!build/js', '!build/css', '!build/font'],
+      staticCss: ['css/*compiled*'],
+      staticJs: ['js/*compiled*'],
+      static: ['static/*']
     },
     closureBuilder: closureBuilderTask,
     closureDepsWriter: {
@@ -393,10 +512,46 @@ module.exports = function(grunt) {
         src: ['app/**', 'app.js', 'package.json'],
         dest: 'build/'
       },
+      fonts: {
+        expand: true,
+        flatten: false,
+        src: ['fonts/**'],
+        dest: 'build/static'
+      },
       sourceMaps: {
         expand: true,
         flatten: true,
-        src: 'build/*.map',
+        src: 'js/*.map',
+        dest: 'build/static/js/'
+      },
+      sources: {
+        expand: true,
+        flatten: false,
+        src: 'src/**',
+        dest: 'build/'
+      },
+      compiledJsToBuild: {
+        expand: true,
+        flatten: true,
+        src: ['js/*'],
+        dest: 'build/static/js/'
+      },
+      compiledCssToBuild: {
+        expand: true,
+        flatten: true,
+        src: ['css/*'],
+        dest: 'build/static/css/'
+      },
+      externalJsToBuild: {
+        expand: true,
+        flatten: true,
+        src: 'src/d3/d3.min.js',
+        dest: 'build/js/'
+      },
+      externalJsToStatic: {
+        expand: true,
+        flatten: true,
+        src: 'src/d3/d3.min.js',
         dest: 'build/static/js/'
       }
     },
@@ -404,15 +559,20 @@ module.exports = function(grunt) {
       options: {
         encoding: 'utf8',
         algorithm: 'md5',
-        length: 32
+        length: 16
       },
       statics: {
         src: 'build/**/*.{css,js,woff}'
+      },
+      build: {
+        src: 'build/*.tgz'
       }
+    },
+    rename: {
     },
     wrap: {
       renameCss: {
-        src: ['build/*outputcompiled*.css'],
+        src: ['build/static/css/_temp*.css'],
         dest: 'build/static/css/',
         options: {
           separator: '',
@@ -420,7 +580,7 @@ module.exports = function(grunt) {
         }
       },
       renameJs: {
-        src: ['build/*outputcompiled*.js'],
+        src: ['build/static/js/_temp*.js'],
         dest: 'build/static/js/',
         options: {
           separator: '',
@@ -428,12 +588,12 @@ module.exports = function(grunt) {
           wrapper: function(src, options) {
             var fileName = src.substring(src.indexOf('/'));
 
-            if (!PRODUCTION) {
+            if (global.DEV_BUILD || global.DEV_COMPILATION) {
               var fileNameParts = fileName.split('.');
               var fileIndex = /\d+/.exec(fileNameParts[0]);
 
               var sourceMapName = 'outputcompiled-' +
-                  TARGETS[fileIndex].locale + '.js.' + fileIndex + '.map';
+                  global.TARGETS[fileIndex].locale + '.js.' + fileIndex + '.map';
 
               return ['', '//@ sourceMappingURL=' + sourceMapName];
             }
@@ -447,12 +607,73 @@ module.exports = function(grunt) {
     less: {
       development: {
         options: {
-          paths: ['less']
+          paths: ['less'],
+          compress: false
         },
         files: {
-          'css/rflectcalendar.css': 'less/combined.less'
+          'static/css/compiled.css': 'less/combined.less'
+        }
+      },
+      prod: {
+        options: {
+          paths: ['less'],
+          compress: true
+        },
+        files: {
+          'build/css/compiled.css': 'less/combined.less'
         }
       }
+    },
+    concat: {
+      jsDev: {
+        src: ['src/d3/d3.min.js', 'build/main.js'],
+        dest: 'js/compiled.js'
+      },
+      css: {
+        src: ['css/pure-release-0.5.0/pure-min.css', 'build/css/compiled.css'],
+        dest: 'build/css/compiled.css'
+      },
+      js: {
+        src: ['js/d3/d3.min.js', 'js/main.js'],
+        dest: 'build/js/compiled.js'
+      }
+    },
+    // Make a tarfile.
+    compress: {
+      tarFile: {
+        options: {
+          archive: 'build/build.tar',
+          mode: 'tar'
+        },
+        files: [
+          {expand: true, cwd: 'build/', src: ['**'], dest: ''}, // includes files in path and its subdirs
+        ]
+      },
+      tarGzip: {
+        options: {
+          mode: 'gzip'
+        },
+        files: [
+          {expand: true, src: ['build/build.tar'], dest: '', ext: '.tgz'}, // includes files in path and its subdirs
+        ]
+      }
+    },
+    mkdir: {
+      logs: {
+        options: {
+          create: ['build/logs']
+        }
+      },
+      js: {
+        options: {
+          create: ['build/static/js']
+        }
+      },
+      css: {
+        options: {
+          create: ['build/static/css']
+        }
+      },
     }
   });
 
@@ -460,24 +681,75 @@ module.exports = function(grunt) {
     var targetsTemplateFileName = 'app/config/targets.js';
     var targetsFileName = 'build/app/config/targets.js';
 
-    TARGETS.forEach(function(aTarget){
+    global.TARGETS.forEach(function(aTarget){
       // We do not need jsCompDefines and lessDefines for export.
       delete aTarget.jsCompDefines;
       delete aTarget.lessDefines;
     });
 
-    grunt.log.writeln('TARGETS that will be written: ', TARGETS);
+    grunt.log.writeln('global.TARGETS that will be written: ', global.TARGETS);
 
     var templateContents = fs.readFileSync(targetsTemplateFileName, {
       encoding: 'utf-8'
     });
 
     var contents = templateContents.replace('/*{TARGETS_JSON}*/[]',
-        JSON.stringify(TARGETS, null, '  ').replace(/\"/g,"'"));
+        JSON.stringify(global.TARGETS, null, '  ').replace(/\"/g,"'"));
 
     fs.writeFileSync(targetsFileName, contents);
 
   });
+
+  grunt.registerTask('concatExternalJs', function() {
+    var externalFiles = [
+      'src/d3/d3.min.js'
+    ];
+    var buildDir = 'build';
+    var closureCompiledFiles = fs.readdirSync(buildDir)
+        .filter(function(aName){return /\.js$/.test(aName)})
+        .map(function(aName){return (buildDir + '/' + aName)});
+    grunt.log.writeln('Following files will be prepended with externals: ' +
+        closureCompiledFiles + '.');
+
+    externalFiles.reverse();
+
+    closureCompiledFiles.forEach(function(aClosureName){
+      var accumulatedContent = fs.readFileSync(aClosureName,
+          {encoding: 'utf-8'});
+      externalFiles.forEach(function(aExtName){
+        var contents = fs.readFileSync(aExtName, {encoding: 'utf-8'});
+        accumulatedContent = contents + ';\n' + accumulatedContent;
+        grunt.log.writeln('Adding file ' + aExtName + ' to file ' +
+            aClosureName + '.');
+      });
+
+      grunt.log.writeln('Writing file ' + aClosureName +
+          ' with dependencies added.');
+      fs.writeFileSync(aClosureName, accumulatedContent);
+    });
+
+  });
+
+  grunt.registerTask('overrideConfigDirectives', function() {
+    var configFile = 'build/app/config/appconfig.js';
+    var contents = fs.readFileSync(configFile, {encoding: 'utf-8'});
+    contents = contents.
+        replace(/exports\.COMPILED\s+\=\s+\w+\;/,
+        'exports.COMPILED = true;').
+        replace(/exports\.BUILT\s+\=\s+\w+\;/,
+        'exports.BUILT = true;');
+    fs.writeFileSync(configFile, contents);
+  });
+
+  grunt.registerTask('moveJsAfterCompile', function() {
+    var files = fs.readdirSync('/build');
+    files.forEach(function(aFileName){
+      if (/.js$/.exec(aFileName) || /.js$/.exec(aFileName)) {
+
+      }
+    });
+  });
+
 
   // Load plugins.
   grunt.loadNpmTasks('grunt-contrib-clean');
@@ -485,49 +757,37 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-closure-tools');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-rename');
   grunt.loadNpmTasks('grunt-filerev');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-renaming-wrap');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-closure-linter');
+  grunt.loadNpmTasks('grunt-contrib-compress');
+  grunt.loadNpmTasks('grunt-mkdir');
 
   // Default task(s).
-  var buildTask = [
-    'clean:all',
-    //Less tasks will be inserted here, since they share common exec task, we
-    // must place them all explicitly by name, to not interfere with other exec
-    // tasks.
-    /*exec:lessForTarget-1*/,
-    'closureBuilder',
-    'filerev',
-    'wrap:renameCss',
-    'wrap:renameJs',
-    'copy:sourceMaps',
-    'copy:app',
-    'exportTargets',
-    'clean:temp'
-  ];
-  //Insert less exec tasks.
-  Array.prototype.splice.apply(buildTask, [1, 1].concat(lessTaskNames));
-
   grunt.registerTask('default', buildTask);
 
   grunt.registerTask('build', buildTask);
 
-  grunt.registerTask('compile-less', [
-    'clean:css',
-    'less:development'
-  ]);
-
-  grunt.registerTask('depswriter', [
+  grunt.registerTask('deps', [
     'closureDepsWriter'
   ]);
 
-  grunt.registerTask('compile', [
-    'clean:all',
-    'closureBuilder'
+  grunt.registerTask('clean', [
+    'clean:build',
+    'clean:temp'
   ]);
+
+  grunt.registerTask('compile', compileTask);
+
+  grunt.registerTask('compile-all', compileTask);
+
+  grunt.registerTask('compile-js', compileJsTask);
+
+  grunt.registerTask('compile-less', compileLessTask);
 
   grunt.registerTask('gjslinter', [
     'exec:' + gJsLintTaskName
