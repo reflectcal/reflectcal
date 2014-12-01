@@ -30,10 +30,11 @@ app.use(app.router);
 app.use('/static', express.static(path.join(__dirname, 'static')));
 // development only
 if ('development' == app.get('env')) {
-app.use('/css', express.static(path.join(__dirname, 'css')));
-app.use('/src', express.static(path.join(__dirname, 'src')));
-app.use('/templates', express.static(path.join(__dirname, 'templates')));
-app.use('/font', express.static(path.join(__dirname, 'font')));
+  app.use('/js', express.static(path.join(__dirname, 'js')));
+  app.use('/css', express.static(path.join(__dirname, 'css')));
+  app.use('/fonts', express.static(path.join(__dirname, 'fonts')));
+  app.use('/src', express.static(path.join(__dirname, 'src')));
+  app.use('/templates', express.static(path.join(__dirname, 'templates')));
 
   app.use(express.errorHandler());
   app.locals.pretty = true;

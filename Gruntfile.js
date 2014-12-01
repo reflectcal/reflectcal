@@ -22,12 +22,12 @@ module.exports = function(grunt) {
    * If it's true, app includes it all and could be tested on server in close
    * to production form.
    */
-  global.DEV_BUILD = grunt.option('dev') || false;
+  global.DEV_BUILD = !!grunt.option('dev');
 
   /**
    * Whether to pack this build.
    */
-  global.PACK_BUILD = grunt.option('zip') || false;
+  global.PACK_BUILD = !!grunt.option('zip');
 
   /**
    * Development compile flag. Instead of building app, we can only recompile
@@ -95,8 +95,8 @@ module.exports = function(grunt) {
     ].concat(getCompileLessTask()).concat(getCompileJsTask()).concat([
       'mkdir:js',
       'mkdir:css',
-      'copy:compiledJsToBuild',
-      'copy:compiledCssToBuild',
+      'copy:jsToBuild',
+      'copy:cssToBuild',
       'clean:js',
       'clean:css',
       'filerev',
@@ -532,13 +532,13 @@ module.exports = function(grunt) {
         src: 'src/**',
         dest: 'build/'
       },
-      compiledJsToBuild: {
+      jsToBuild: {
         expand: true,
         flatten: true,
         src: ['js/*'],
         dest: 'build/static/js/'
       },
-      compiledCssToBuild: {
+      cssToBuild: {
         expand: true,
         flatten: true,
         src: ['css/*'],
@@ -569,8 +569,6 @@ module.exports = function(grunt) {
       build: {
         src: 'build/*.tgz'
       }
-    },
-    rename: {
     },
     wrap: {
       renameCss: {
@@ -653,7 +651,8 @@ module.exports = function(grunt) {
       },
       tarGzip: {
         options: {
-          mode: 'gzip'
+          mode: 'gzip',
+          level: 9
         },
         files: [
           {expand: true, src: ['build/build.tar'], dest: '', ext: '.tgz'}, // includes files in path and its subdirs
@@ -759,7 +758,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-closure-tools');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-rename');
   grunt.loadNpmTasks('grunt-filerev');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-renaming-wrap');
@@ -778,7 +776,7 @@ module.exports = function(grunt) {
     'closureDepsWriter'
   ]);
 
-  grunt.registerTask('clean', [
+  grunt.registerTask('erase', [
     'clean:build',
     'clean:temp'
   ]);
