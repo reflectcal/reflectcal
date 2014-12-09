@@ -12,6 +12,8 @@ var entityDAO = require('./entity');
 var merge = require('merge');
 var DEFAULT_USER_SETTINGS =
     require('../config/defaultusersettings').DEFAULT_USER_SETTINGS;
+var appConfig = require('../config/appconfig');
+var log = appConfig.log;
 
 
 /**
@@ -21,7 +23,7 @@ var DEFAULT_USER_SETTINGS =
  * TODO(alexk): think about multiple settings object per user, aka profiles.
  */
 exports.getSettingsAsync = function(aOnSettingsLoad){
-  console.log('getSettingsAsync');
+  log.info('getSettingsAsync');
   entityDAO.getEntitiesAsync('settings', {}, aOnSettingsLoad,
       settingsToTransportJSON, DEFAULT_USER_SETTINGS);
 };

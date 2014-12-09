@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. Rflect, Alex K.
+ * Copyright (c) 2013. Reflect, Alex K.
  */
 
 /**
@@ -13,6 +13,8 @@ var fs = require('fs');
 var TARGETS = require('../config/targets').TARGETS;
 var accLangParser = require('acc-lang-parser');
 var settingsDAO = require('../db/settings');
+var appConfig = require('../config/appconfig');
+var log = appConfig.log;
 
 
 /**
@@ -23,7 +25,7 @@ exports.getCompiledTargetAsync = function(aRequest, aOnGetCompiledTarget){
 
   settingsDAO.getSettingsAsync(function(aSettings){
 
-    console.log('settings', aSettings);
+    log.info('settings', aSettings);
 
     //Set default target.
     var target;
@@ -32,7 +34,7 @@ exports.getCompiledTargetAsync = function(aRequest, aOnGetCompiledTarget){
     var userAgent = getUserAgentName(userAgentObject);
     var uiType = getUIType(userAgentObject);
 
-    console.log('languages', languages);
+    log.info('languages', languages);
 
     for (var counter = 0; counter < languages.length && !target;
         counter++) {
@@ -40,8 +42,8 @@ exports.getCompiledTargetAsync = function(aRequest, aOnGetCompiledTarget){
           uiType, userAgent);
     }
 
-    console.log('userAgent', userAgent);
-    console.log('target', target);
+    log.info('userAgent', userAgent);
+    log.info('target', target);
     if (!target)
       target = TARGETS[0];
 

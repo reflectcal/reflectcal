@@ -12,6 +12,8 @@ var entityDAO = require('./entity');
 var dbUtil = require('./util');
 var DEFAULT_CALENDAR = require('../config/defaultcalendar').DEFAULT_CALENDAR;
 var db = require('./connection').db;
+var appConfig = require('../config/appconfig');
+var log = appConfig.log;
 
 
 /**
@@ -85,7 +87,7 @@ function calendarToTransportJSON(aCalendar) {
  * @return {Object} DB representation of calendar.
  */
 function calendarFromTransportJSON(aCalendarJSON) {
-  console.log(aCalendarJSON);
+  log.info(aCalendarJSON);
   var cal = {};
 
   cal.own = aCalendarJSON.pop();

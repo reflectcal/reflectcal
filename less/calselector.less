@@ -83,13 +83,13 @@
   border-radius: 3px;
 }
 
-.calitem-color-cont when (@UI_TYPE='') {
+.calitem-color-cont when (@UI_TYPE = '') {
   .calitem-color-cont();
   width: 16px; /*considering that visible edge of element is the border of contained element*/
   height: 16px;
 }
 
-.calitem-color-cont when (@UI_TYPE='TOUCH') {
+.calitem-color-cont when (@UI_TYPE = 'TOUCH') {
   .calitem-color-cont();
   width: 30px;
   height: 30px;

@@ -10,6 +10,8 @@ var routesSettings = require('./app/routes/settings');
 var routesEvent = require('./app/routes/event');
 var http = require('http');
 var path = require('path');
+var appConfig = require('./app/config/appconfig');
+var log = appConfig.log;
 
 var app = express();
 
@@ -42,7 +44,6 @@ if ('development' == app.get('env')) {
 
 
 app.get('/view', routesView.view);
-app.get('/view-source', routesView.viewSource);
 
 app.post('/calendars/save', routesCalendar.calendarSave);
 app.post('/calendars/delete/:id', routesCalendar.calendarDelete);
@@ -55,4 +56,24 @@ app.post('/settings/save', routesSettings.settingsSave);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
+});
+
+// Execute commands in clean exit.
+process.on('exit', function () {
+  log.info('Exiting...');
+  if (null != db) {
+    db.close();
+  }
+});
+
+// Happens when you press Ctrl+C.
+process.on('SIGINT', function () {
+  log.info('\nGracefully shutting down from SIGINT.');
+  process.exit();
+});
+
+// Usually called with kill.
+process.on('SIGTERM', function () {
+  log.info('\nParent SIGTERM detected (kill).');
+  process.exit(0);
 });

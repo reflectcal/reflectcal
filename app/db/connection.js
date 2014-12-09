@@ -10,6 +10,7 @@
 
 var mongo = require('mongodb');
 var monk = require('monk');
+var appConfig = require('./../config/appconfig');
 
 
-exports.db = monk('localhost:27017/rflectevents');
+exports.db = monk('localhost:27017/' + appConfig.DB_NAME);

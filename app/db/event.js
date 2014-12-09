@@ -10,6 +10,10 @@
 
 var entityDAO = require('./entity');
 var dbUtil = require('./util');
+var db = require('./connection').db;
+var appConfig = require('../config/appconfig');
+var log = appConfig.log;
+var deepClone = require('clone');
 
 
 /**
@@ -85,7 +89,7 @@ function eventToTransportJSON(aEvent) {
  * @return {Object} DB representation of event.
  */
 function eventFromTransportJSON(aEventJSON) {
-  console.log(aEventJSON);
+  log.info(aEventJSON);
   var event = {};
 
   event.calendarId = aEventJSON.pop();

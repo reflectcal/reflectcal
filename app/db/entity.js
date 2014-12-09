@@ -11,6 +11,8 @@
 var db = require('./connection').db;
 var dbUtil = require('./util');
 var deepClone = require('clone');
+var appConfig = require('../config/appconfig');
+var log = appConfig.log;
 
 
 /**
@@ -27,7 +29,7 @@ var deepClone = require('clone');
  */
 exports.getEntitiesAsync = function(aCollectionName, aLookupObject,
     aOnEntitiesLoad, aEntityToTransportJSON, opt_defaultEntity){
-  console.log('getEntitiesAsync');
+  log.info('getEntitiesAsync');
   var entities = [];
   var collection = db.get(aCollectionName);
 
@@ -60,9 +62,9 @@ exports.getEntitiesAsync = function(aCollectionName, aLookupObject,
  */
 function ensureEntityExists(aCollection, aLookupObject,
     aOnEnsureEntityExist, aDefaultEntity){
-  console.log('ensureEntityExists');
+  log.info('ensureEntityExists');
   aCollection.count(aLookupObject, function(aError, aCount){
-    console.log('aCount', aCount );
+    log.info('aCount', aCount );
 
     if (aCount == 0) dbUtil.getUniqueIdAsync(aCollection, function(aId) {
       var defaultEntity = deepClone(aDefaultEntity);

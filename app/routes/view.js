@@ -12,53 +12,59 @@ var calendarDAO = require('../db/calendar');
 var settingsDAO = require('../db/settings');
 var viewAdapter = require('../util/viewadapter');
 var appConfig = require('../config/appconfig');
+var log = appConfig.log;
 var ua = require('../util/useragent');
+var getJsFileNames = require('../util/pagehelper').getJsFileNames;
+var getCssFileNames = require('../util/pagehelper').getCssFileNames;
+var STATIC_DIR = require('../util/pagehelper').STATIC_DIR;
+
 
 /**
  * Renders main page for compiled view.
  */
-exports.view = function(req, res){
- if (req.user){
-    var jsFileNames = appConfig.BUILT ? targets[0].jsFileNames :
-        appConfig.COMPILED ? getCompiledJsNamesFromFs() : [];
-    var cssFileNames = appConfig.BUILT ? targets[0].cssFileNames :
-        appConfig.COMPILED ? getCompiledCssNamesFromFs() : [];
+exports.view = function(req, res) {
+  if (/*req.user*/true) {
+    //var username = req.user[0].username;
 
-    var username = req.user[0].username;
-    res.render('main', {
-      compiled: appConfig.COMPILED,
-      built: appConfig.BUILT,
-      username: username,
-      websocketsPort: appConfig.WEBSOCKETS_PORT,
-      appPort: appConfig.APP_PORT,
-      jsFileNames: jsFileNames,
-      cssFileNames: cssFileNames
-    });
+    var onCalendarsLoad = function(aCalendars) {
+
+      if (appConfig.BUILT) {
+        viewAdapter.getCompiledTargetAsync(req, function(aTarget, aSettings){
+          renderMain(res, appConfig.COMPILED || appConfig.BUILT, STATIC_DIR,
+              aCalendars, aSettings, getJsFileNames(aTarget),
+              getCssFileNames(aTarget), appConfig.LANGUAGE_NAMES);
+        });
+      } else {
+        settingsDAO.getSettingsAsync(function(aSettings) {
+          log.info('aSettings ', aSettings);
+          renderMain(res, appConfig.COMPILED || appConfig.BUILT, STATIC_DIR,
+              aCalendars, aSettings, getJsFileNames(), getCssFileNames(),
+              appConfig.LANGUAGE_NAMES);
+        });
+      }
+    }
+    calendarDAO.getCalendarsAsync(onCalendarsLoad);
   } else {
     res.redirect('/login');
   }
+}
 
-  var onCalendarsLoad = function(aCalendars) {
-    viewAdapter.getCompiledTargetAsync(req, function(aTarget, aSettings){
 
-      var templateName = aTarget.uiType == 'MOBILE' ?
-          'rflectcalendar-mobile-compiled': 'rflectcalendar-compiled';
+function renderMain(res, aProcessed, aStaticDir, aCalendars, aSettings,
+    aJsFileNames, aCssFileNames, aLanguageNames) {
+  res.render('main', {
+    processed: aProcessed,
+    staticDir: aStaticDir,
 
-      res.render(templateName, {
-        calendars: JSON.stringify(aCalendars),
-        settings: JSON.stringify(aSettings[0], null, '  '),
-        jsFileNames: aTarget.jsFileNames,
-        cssFileNames: aTarget.cssFileNames,
-        // Late modules are all js files except first one.
-        modules: JSON.stringify(aTarget.jsFileNames.slice(1)),
-        languageNames: JSON.stringify(appConfig.LANGUAGE_NAMES)
-      });
-
-    });
-  }
-
-  calendarDAO.getCalendarsAsync(onCalendarsLoad);
-};
+    calendars: JSON.stringify(aCalendars),
+    settings: JSON.stringify(aSettings[0], null, '  '),
+    jsFileNames: aJsFileNames,
+    cssFileNames: aCssFileNames,
+    // Late modules are all js files except first one.
+    modules: JSON.stringify(aJsFileNames.slice(1)),
+    languageNames: JSON.stringify(aLanguageNames)
+  });
+}
 
 
 /**
@@ -80,6 +86,4 @@ exports.viewSource = function(req, res){
       });
     });
   }
-
-  calendarDAO.getCalendarsAsync(onCalendarsLoad);
 };

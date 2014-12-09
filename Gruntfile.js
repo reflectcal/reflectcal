@@ -70,7 +70,7 @@ module.exports = function(grunt) {
     // targets is product of array lengths.
     var LOCALES = !global.DEV_COMPILATION ? appConfig.LOCALES : ['en'];
     var DEBUG = !global.DEV_COMPILATION ? [true, false] : [true];
-    var UI_TYPE = !global.DEV_COMPILATION ? ['', 'MOBILE'] : [''];
+    var UI_TYPE = !global.DEV_COMPILATION ? ['', 'TOUCH'] : ['TOUCH'];
     // Empty string means that user agent is not specified.
     var USER_AGENT = !global.DEV_COMPILATION ?
         ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'] : [''];
@@ -379,14 +379,15 @@ module.exports = function(grunt) {
         (aTarget.uiType ? '-' + aTarget.uiType : '')  +
         '.css'
 
-    return ['lessc', '--verbose']
+    var command = ['lessc', '--verbose']
         /*.concat(global.DEV_BUILD || global.DEV_COMPILATION ?
         ['--source-map=' + aSourceMapName] : [])*/
         .concat(global.DEV_COMPILATION ? [] : ['--compress'])
         .concat(LESS_FILE_NAMES).concat(['>', outputFileName])
         .concat(aTarget.lessDefines.map(function(aDefine){
-      return '--modify-var=' + aDefine;
-    })).join(' ');
+      return '--modify-var="' + aDefine + '"';
+    })).join(' ')
+    return command;
   }
 
   function targetToCssFileMapper(aTarget, aIndex){

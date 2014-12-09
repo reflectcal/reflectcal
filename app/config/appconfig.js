@@ -8,6 +8,9 @@
  */
 
 
+var bunyan = require('bunyan');
+
+
 /**
  * Whether application is compiled. This affects whether compiled sources from
  * /js folder or uncompiled ones from /src will be used.
@@ -65,5 +68,33 @@ exports.LANGUAGE_NAMES = [
  */
 exports.JSON_XSS_PREPENDER = '])}>"';
 
+
+/**
+ * Logger.
+ */
+exports.log = bunyan.createLogger({
+  name: 'reflectevents',
+  streams: [
+    {
+      level: 'info',
+      type: 'stream',
+      stream: process.stdout
+    },
+    {
+      level: 'info',
+      type: 'rotating-file',
+      path: 'logs/info.log',
+      period: '1d',
+      count: 10
+    },
+    {
+      level: 'error',
+      type: 'rotating-file',
+      path: 'logs/error.log',
+      period: '1d',
+      count: 10
+    }
+  ]
+});
 
 
