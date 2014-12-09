@@ -1,0 +1,27 @@
+extends base
+
+block cssLinks
+  if processed
+    each cssFileName in cssFileNames
+      link(rel='stylesheet', href=staticDir + '/css/' + cssFileName)
+  
+block jsLinksHead
+  if !processed
+    script(src='/src/closure-library/closure/goog/base.js')
+    script(src='/src/deps.js')
+    script(src='/src/rflect/cal/loader.js')
+
+block content
+  script.
+    var CALENDARS = !{calendars};
+    var SETTINGS = !{settings};
+    var MODULES = !{modules};
+    var LANGUAGE_NAMES = !{languageNames};
+  script.
+    // Call main method.
+    // new rflect.cal.Loader().enterDocument();
+
+block jsLinksBody
+  if processed
+    each jsFileName in jsFileNames
+      script(src=staticDir + '/js/' + jsFileName)

@@ -1,0 +1,36 @@
+extends base
+
+block cssLinks
+  if processed
+    each cssFileName in cssFileNames
+      link(rel='stylesheet', href=staticDir + '/css/' + cssFileName)
+  else
+    link(rel='stylesheet', href='build/compiled.css')
+
+block content
+
+  h1(class='center-header').
+    Login
+
+  div(id='wrong-alert-cont', class='hide alert-cont')
+    div(class='alert alert-error')
+      strong
+        span(class='login-error')
+        i(class='fa fa-times icon-alert-close')
+
+  form(action='/login', method='POST', class='pure-form pure-form-aligned login-form')
+    fieldset
+      div(class='pure-control-group')
+        label(for='name', class='login-label').
+          User name
+        input(id='name', name='username', placeholder='Username', type='text', autofocus='autofocus')
+
+      div(class='pure-control-group')
+        label(for='password', class='login-label').
+          User password
+        input(id='password', name='password', placeholder='Password', type='password')
+
+      div(class='pure-control-group')
+        input(type='submit', class='pure-button pure-button-primary submit-button', value='Log in')
+
+  script.
