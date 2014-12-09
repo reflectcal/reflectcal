@@ -24,7 +24,8 @@ var STATIC_DIR = require('../util/pagehelper').STATIC_DIR;
  */
 exports.view = function(req, res) {
   if (/*req.user*/true) {
-    //var username = req.user[0].username;
+    var userId = /*req.user[0].id*/'5486d0f744389dce003560e7';
+    var userName = /*req.user[0].username*/'alexk';
 
     var onCalendarsLoad = function(aCalendars) {
 
@@ -32,18 +33,19 @@ exports.view = function(req, res) {
         viewAdapter.getCompiledTargetAsync(req, function(aTarget, aSettings){
           renderMain(res, appConfig.COMPILED || appConfig.BUILT, STATIC_DIR,
               aCalendars, aSettings, getJsFileNames(aTarget),
-              getCssFileNames(aTarget), appConfig.LANGUAGE_NAMES);
+              getCssFileNames(aTarget), appConfig.LANGUAGE_NAMES, userId,
+              userName);
         });
       } else {
         settingsDAO.getSettingsAsync(function(aSettings) {
           log.info('aSettings ', aSettings);
           renderMain(res, appConfig.COMPILED || appConfig.BUILT, STATIC_DIR,
               aCalendars, aSettings, getJsFileNames(), getCssFileNames(),
-              appConfig.LANGUAGE_NAMES);
+              appConfig.LANGUAGE_NAMES, userId, userName);
         });
       }
     }
-    calendarDAO.getCalendarsAsync(onCalendarsLoad);
+    calendarDAO.getCalendarsAsync(userId, onCalendarsLoad);
   } else {
     res.redirect('/login');
   }
@@ -51,7 +53,7 @@ exports.view = function(req, res) {
 
 
 function renderMain(res, aProcessed, aStaticDir, aCalendars, aSettings,
-    aJsFileNames, aCssFileNames, aLanguageNames) {
+    aJsFileNames, aCssFileNames, aLanguageNames, aUserId, aUserName) {
   res.render('main', {
     processed: aProcessed,
     staticDir: aStaticDir,
@@ -62,7 +64,9 @@ function renderMain(res, aProcessed, aStaticDir, aCalendars, aSettings,
     cssFileNames: aCssFileNames,
     // Late modules are all js files except first one.
     modules: JSON.stringify(aJsFileNames.slice(1)),
-    languageNames: JSON.stringify(aLanguageNames)
+    languageNames: JSON.stringify(aLanguageNames),
+    userId: aUserId,
+    userName: aUserName
   });
 }
 

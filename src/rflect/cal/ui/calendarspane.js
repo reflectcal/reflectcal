@@ -485,7 +485,8 @@ rflect.cal.ui.CalendarsPane.prototype.onNewCalendarAction_ =
       Math.random() * (rflect.cal.i18n.PREDEFINED_COLOR_CODES.length - 1));
 
   this.showCalendarEditPane(true, new rflect.cal.events.Calendar('', '',
-      rflect.cal.i18n.PREDEFINED_COLOR_CODES[randomColorCodeIndex]), true);
+      rflect.cal.i18n.PREDEFINED_COLOR_CODES[randomColorCodeIndex]), true,
+      null, null, USER_NAME);
 
   aEvent.target.setFocused(false);
 

@@ -18,11 +18,12 @@ var log = appConfig.log;
 
 /**
  * Loads calendars.
+ * @param {string} aUserId Id of calendar owner.
  * @param {function(Array)} aOnCalendarsLoad Callback that will be executed
  * when db request is ready.
  */
-exports.getCalendarsAsync = function(aOnCalendarsLoad){
-  entityDAO.getEntitiesAsync('calendars', {}, aOnCalendarsLoad,
+exports.getCalendarsAsync = function(aUserId, aOnCalendarsLoad){
+  entityDAO.getEntitiesAsync('calendars', { owner: aUserId }, aOnCalendarsLoad,
       calendarToTransportJSON, DEFAULT_CALENDAR);
 
 };
@@ -76,6 +77,7 @@ function calendarToTransportJSON(aCalendar) {
   cal.push(aCalendar.colorCodeId);
   cal.push(aCalendar.readOnly);
   cal.push(aCalendar.own);
+  cal.push(aCalendar.owner);
 
   return cal;
 };
@@ -90,6 +92,7 @@ function calendarFromTransportJSON(aCalendarJSON) {
   log.info(aCalendarJSON);
   var cal = {};
 
+  cal.owner = aCalendarJSON.pop();
   cal.own = aCalendarJSON.pop();
   cal.readOnly = aCalendarJSON.pop();
   cal.colorCodeId = aCalendarJSON.pop();

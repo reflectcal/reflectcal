@@ -18,16 +18,30 @@ var STATIC_DIR = require('../util/pagehelper').STATIC_DIR;
 /**
  * Renders login view.
  */
-exports.view = function(req, res){
-  if (req.user)
+exports.view = function(req, res) {
+  if (req.user) {
     res.redirect('/view');
-  else
+  } else {
+    var jsFileNames = [];
+    var cssFileNames = [];
+
+    if (appConfig.BUILT) {
+      viewAdapter.getCompiledTargetAsync(req, function(aTarget, aSettings) {
+        Array.prototype.push.apply(jsFileNames, getJsFileNames(aTarget));
+        Array.prototype.push.apply(cssFileNames, getCssFileNames(aTarget));
+      });
+    } else {
+      Array.prototype.push.apply(jsFileNames, getJsFileNames());
+      Array.prototype.push.apply(cssFileNames, getCssFileNames());
+    }
+
     res.render('login', {
       processed: appConfig.COMPILED || appConfig.BUILT,
       staticDir: STATIC_DIR,
-      jsFileNames: getJsFileNames(),
-      cssFileNames: getCssFileNames()
+      jsFileNames: jsFileNames,
+      cssFileNames: cssFileNames
     });
+  }
 };
 
 

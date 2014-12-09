@@ -12,25 +12,27 @@ block content
   h1(class='center-header').
     Login
 
-  div(id='wrong-alert-cont', class='hide alert-cont')
+  div(id='wrong-alert-cont', class='hide alert-cont', style='display:none')
     div(class='alert alert-error')
       strong
         span(class='login-error')
         i(class='fa fa-times icon-alert-close')
 
-  form(action='/login', method='POST', class='pure-form pure-form-aligned login-form')
-    fieldset
-      div(class='pure-control-group')
-        label(for='name', class='login-label').
+  form(action='/login', method='POST', class='settings-body')
+    div.event-pane-cont
+      div(class='pane-left goog-inline-block')
+        label(for='username', class='label-fluid event-pane-label').
           User name
-        input(id='name', name='username', placeholder='Username', type='text', autofocus='autofocus')
+      div(class='pane-right goog-inline-block')
+        input(class='event-date-input', placeholder='User name', id='username', type='text')
 
-      div(class='pure-control-group')
-        label(for='password', class='login-label').
-          User password
-        input(id='password', name='password', placeholder='Password', type='password')
+    div.event-pane-cont
+      div(class='pane-left goog-inline-block')
+        label(for='password', class='label-fluid event-pane-label').
+          Password
+      div(class='pane-right goog-inline-block')
+        input(class='event-date-input', placeholder='Password', id='password', type='password')
 
-      div(class='pure-control-group')
-        input(type='submit', class='pure-button pure-button-primary submit-button', value='Log in')
+    input(type='submit', class='goog-inline-block goog-flat-button cal-menu-button emphasis-button', value='Log in')
 
   script.

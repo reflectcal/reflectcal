@@ -17,6 +17,7 @@ var login = require('./app/util/login');
 var flash = require('connect-flash');
 var appConfig = require('./app/config/appconfig');
 var log = appConfig.log;
+var db = require('./app/db/connection').db;
 
 var app = express();
 
