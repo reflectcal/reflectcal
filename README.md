@@ -19,12 +19,13 @@ an instance.
   ```
 
 4. Globally install following node modules - [Express][express], [Grunt][grunt], 
-        [Less][less].
+        [Less][less], [Bunyan][bunyan].
 
   ```
   npm install express -g
   npm install less -g
   npm install grunt-cli -g
+  npm install bunyan -g
   ```
 
 5. Locally to project, install all needed node modules.
@@ -34,10 +35,10 @@ an instance.
   npm install
   ```
 
-6. Compile css from less.
+6. Compile from sources.
 
   ```
-  grunt compile-less
+  grunt compile-all
   ```
 
 7. Launch an application.
@@ -46,7 +47,7 @@ an instance.
   node app
   ```
 
-And go to [http://localhost:3000/view-source/](http://localhost:3000/view-source/)
+And go to [http://localhost:3000/view/](http://localhost:3000/view/)
 
 [jdk]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [python]: https://www.python.org/download/releases/2.7/
@@ -54,4 +55,5 @@ And go to [http://localhost:3000/view-source/](http://localhost:3000/view-source
 [mongodb]: http://www.mongodb.org/downloads
 [express]: https://github.com/visionmedia/express
 [grunt]: https://github.com/gruntjs/grunt
-[less]: https://github.com/less/less.js/
+[less]: https://github.com/less/less
+[bunyan]: https://github.com/trentm/node-bunyan
