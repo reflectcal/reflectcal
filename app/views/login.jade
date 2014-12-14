@@ -9,7 +9,7 @@ block cssLinks
 
 block content
 
-  h1(class='center-header').
+  h1(class='login-header').
     Login
 
   div(id='wrong-alert-cont', class='hide alert-cont', style='display:none')
@@ -19,20 +19,21 @@ block content
         i(class='fa fa-times icon-alert-close')
 
   form(action='/login', method='POST', class='settings-body')
-    div.event-pane-cont
+    div.login-cont
       div(class='pane-left goog-inline-block')
         label(for='username', class='label-fluid event-pane-label').
           User name
       div(class='pane-right goog-inline-block')
-        input(class='event-date-input', placeholder='User name', id='username', type='text')
+        input(class='event-date-input', placeholder='User name', id='username', name='username', type='text', autofocus='autofocus')
 
-    div.event-pane-cont
+    div.login-cont
       div(class='pane-left goog-inline-block')
         label(for='password', class='label-fluid event-pane-label').
           Password
       div(class='pane-right goog-inline-block')
-        input(class='event-date-input', placeholder='Password', id='password', type='password')
+        input(class='event-date-input', placeholder='Password', id='password', name='password', type='password')
 
-    input(type='submit', class='goog-inline-block goog-flat-button cal-menu-button emphasis-button', value='Log in')
+    div.login-cont.login-submit-cont
+      input(type='submit', class='goog-inline-block goog-flat-button cal-menu-button emphasis-button login-submit', value='Log in')
 
   script.

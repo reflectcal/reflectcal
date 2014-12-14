@@ -34,6 +34,9 @@ app.use(express.methodOverride());
 app.use(express.cookieParser(
     'rflectevents_sdfjwioy2379ugd8syg38wyio-asdfh728t9284fdsfjs'));
 app.use(express.session());
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(app.router);
 app.use('/static', express.static(path.join(__dirname, 'static')));
 passport.use(new LocalStrategy(login.localStrategy));

@@ -22,7 +22,7 @@ goog.require('rflect.cal.i18n.PREDEFINED_COLOR_CODES');
  * @param {boolean=} opt_visible Whether calendar is visible.
  * @param {boolean=} opt_readOnly Whether calendar is read-only.
  * @param {boolean=} opt_own Whether calendar is owned by user himself.
- * @param {string=} opt_own User name of calendar owner.
+ * @param {string=} opt_owner User name of calendar owner.
  * @constructor
  */
 rflect.cal.events.Calendar = function(aUid, aName, aColorCode, opt_visible,

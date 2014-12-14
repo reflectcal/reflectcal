@@ -45,6 +45,7 @@
 }
 
 /* State: hover. */
+.goog-flat-button:hover,
 .goog-flat-button-hover {
   border-color: #bbbbbb;
   color: #202020;
@@ -53,6 +54,7 @@
 }
 
 /* State: active, selected, checked. */
+.goog-flat-button:active,
 .goog-flat-button-active,
 .goog-flat-button-selected,
 .goog-flat-button-checked {
@@ -63,6 +65,7 @@
 }
 
 /* State: focused. */
+.goog-flat-button:focus,
 .goog-flat-button-focused {
   border-color: #6699ee;
 
@@ -102,11 +105,13 @@
   color: white;
 }
 
+.emphasis-button:goog-flat-button-hover,
 .emphasis-button.goog-flat-button-hover {
   border-color: #1f5d9d;
   .box-shadow(none);
 }
 
+.emphasis-button.goog-flat-button:active,
 .emphasis-button.goog-flat-button-active,
 .emphasis-button.goog-flat-button-selected,
 .emphasis-button.goog-flat-button-checked {
@@ -117,6 +122,7 @@
 }
 
 /* State: focused. */
+.emphasis-button.goog-flat-button:focus,
 .emphasis-button.goog-flat-button-focused {
   .box-shadow(0 0 5px 0 #3879fe);
   z-index: 1;
@@ -129,11 +135,13 @@
   color: white;
 }
 
+.danger-button.goog-flat-button:hover,
 .danger-button.goog-flat-button-hover {
   border-color: #1f5d9d;
   .box-shadow(none);
 }
 
+.danger-button.goog-flat-button:active,
 .danger-button.goog-flat-button-active,
 .danger-button.goog-flat-button-selected,
 .danger-button.goog-flat-button-checked {
@@ -144,6 +152,7 @@
 }
 
 /* State: focused. */
+.danger-button.goog-flat-button:focus,
 .danger-button.goog-flat-button-focused {
   .box-shadow(0 0 5px 0 #3879fe);
   z-index: 1;
