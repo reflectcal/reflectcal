@@ -18,13 +18,13 @@ var log = appConfig.log;
 
 /**
  * Loads calendars.
- * @param {string} aUserId Id of calendar owner.
+ * @param {string} aUserName Login name of calendar owner.
  * @param {function(Array)} aOnCalendarsLoad Callback that will be executed
  * when db request is ready.
  */
-exports.getCalendarsAsync = function(aUserId, aOnCalendarsLoad){
-  entityDAO.getEntitiesAsync('calendars', { owner: aUserId }, aOnCalendarsLoad,
-      calendarToTransportJSON, DEFAULT_CALENDAR);
+exports.getCalendarsAsync = function(aUserName, aOnCalendarsLoad){
+  entityDAO.getEntitiesAsync('calendars', { owner: aUserName },
+      aOnCalendarsLoad, calendarToTransportJSON, DEFAULT_CALENDAR);
 
 };
 

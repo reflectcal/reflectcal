@@ -23,12 +23,11 @@ var STATIC_DIR = require('../util/pagehelper').STATIC_DIR;
  * Renders main page for compiled view.
  */
 exports.view = function(req, res) {
-  if (/*req.user*/true) {
-    var userId = /*req.user[0].id*/'5486d0f744389dce003560e7';
-    var userName = /*req.user[0].username*/'alexk';
+  if (req.user) {
+    var userId = req.user[0].id;
+    var userName = req.user[0].username;
 
     var onCalendarsLoad = function(aCalendars) {
-
       if (appConfig.BUILT) {
         viewAdapter.getCompiledTargetAsync(req, function(aTarget, aSettings){
           renderMain(res, appConfig.COMPILED || appConfig.BUILT, STATIC_DIR,
@@ -45,7 +44,7 @@ exports.view = function(req, res) {
         });
       }
     }
-    calendarDAO.getCalendarsAsync(userId, onCalendarsLoad);
+    calendarDAO.getCalendarsAsync(userName, onCalendarsLoad);
   } else {
     res.redirect('/login');
   }
