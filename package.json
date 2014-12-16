@@ -15,7 +15,9 @@
     "web-calendar",
     "web-application"
   ],
-  "author": "alexeykofficial@gmail.com (Alex K)",
+  "author": [
+    "alexeykofficial@gmail.com (Alex K)"
+  ],
   "license": "commercial",
   "devDependencies": {
     "grunt": "~0.4.1",
