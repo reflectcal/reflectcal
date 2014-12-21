@@ -14,6 +14,7 @@ var DEFAULT_CALENDAR = require('../config/defaultcalendar').DEFAULT_CALENDAR;
 var db = require('./connection').db;
 var appConfig = require('../config/appconfig');
 var log = appConfig.log;
+var merge = require('merge');
 
 
 /**
@@ -24,7 +25,10 @@ var log = appConfig.log;
  */
 exports.getCalendarsAsync = function(aUserName, aOnCalendarsLoad){
   entityDAO.getEntitiesAsync('calendars', { owner: aUserName },
-      aOnCalendarsLoad, calendarToTransportJSON, DEFAULT_CALENDAR);
+      aOnCalendarsLoad, calendarToTransportJSON, 
+      //Default calendar is personalized for user.
+      merge(DEFAULT_CALENDAR, {
+        owner: aUserName }));
 
 };
 
