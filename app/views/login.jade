@@ -21,17 +21,17 @@ block content
   form(action='/login', method='POST', class='settings-body')
     div.login-cont
       div(class='pane-left goog-inline-block')
-        label(for='username', class='label-fluid event-pane-label').
+        label(for='username', class='label-fluid event-pane-label login-label').
           User name
       div(class='pane-right goog-inline-block')
-        input(class='event-date-input', placeholder='User name', id='username', name='username', type='text', autofocus='autofocus')
+        input(class='event-date-input login-input', placeholder='User name', id='username', name='username', type='text', autofocus='autofocus')
 
     div.login-cont
       div(class='pane-left goog-inline-block')
-        label(for='password', class='label-fluid event-pane-label').
+        label(for='password', class='label-fluid event-pane-label login-label').
           Password
       div(class='pane-right goog-inline-block')
-        input(class='event-date-input', placeholder='Password', id='password', name='password', type='password')
+        input(class='event-date-input login-input', placeholder='Password', id='password', name='password', type='password')
 
     div.login-cont.login-submit-cont
       input(type='submit', class='goog-inline-block goog-flat-button cal-menu-button emphasis-button login-submit', value='Log in')
