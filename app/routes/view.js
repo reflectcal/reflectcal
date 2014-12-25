@@ -23,27 +23,28 @@ var STATIC_DIR = require('../util/pagehelper').STATIC_DIR;
  * Renders main page for compiled view.
  */
 exports.view = function(req, res) {
-  if (/*req.user*/true) {
-    //var username = req.user[0].username;
+  if (req.user) {
+    var userId = req.user[0]._id;
+    var userName = req.user[0].username;
 
     var onCalendarsLoad = function(aCalendars) {
-
       if (appConfig.BUILT) {
         viewAdapter.getCompiledTargetAsync(req, function(aTarget, aSettings){
           renderMain(res, appConfig.COMPILED || appConfig.BUILT, STATIC_DIR,
               aCalendars, aSettings, getJsFileNames(aTarget),
-              getCssFileNames(aTarget), appConfig.LANGUAGE_NAMES);
+              getCssFileNames(aTarget), appConfig.LANGUAGE_NAMES, userId,
+              userName);
         });
       } else {
         settingsDAO.getSettingsAsync(function(aSettings) {
           log.info('aSettings ', aSettings);
           renderMain(res, appConfig.COMPILED || appConfig.BUILT, STATIC_DIR,
               aCalendars, aSettings, getJsFileNames(), getCssFileNames(),
-              appConfig.LANGUAGE_NAMES);
+              appConfig.LANGUAGE_NAMES, userId, userName);
         });
       }
     }
-    calendarDAO.getCalendarsAsync(onCalendarsLoad);
+    calendarDAO.getCalendarsAsync(userName, onCalendarsLoad);
   } else {
     res.redirect('/login');
   }
@@ -51,7 +52,7 @@ exports.view = function(req, res) {
 
 
 function renderMain(res, aProcessed, aStaticDir, aCalendars, aSettings,
-    aJsFileNames, aCssFileNames, aLanguageNames) {
+    aJsFileNames, aCssFileNames, aLanguageNames, aUserId, aUserName) {
   res.render('main', {
     processed: aProcessed,
     staticDir: aStaticDir,
@@ -62,7 +63,9 @@ function renderMain(res, aProcessed, aStaticDir, aCalendars, aSettings,
     cssFileNames: aCssFileNames,
     // Late modules are all js files except first one.
     modules: JSON.stringify(aJsFileNames.slice(1)),
-    languageNames: JSON.stringify(aLanguageNames)
+    languageNames: JSON.stringify(aLanguageNames),
+    userId: aUserId,
+    userName: aUserName
   });
 }
 

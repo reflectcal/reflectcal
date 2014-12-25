@@ -22,10 +22,11 @@ goog.require('rflect.cal.i18n.PREDEFINED_COLOR_CODES');
  * @param {boolean=} opt_visible Whether calendar is visible.
  * @param {boolean=} opt_readOnly Whether calendar is read-only.
  * @param {boolean=} opt_own Whether calendar is owned by user himself.
+ * @param {string=} opt_owner User name of calendar owner.
  * @constructor
  */
 rflect.cal.events.Calendar = function(aUid, aName, aColorCode, opt_visible,
-    opt_readOnly, opt_own) {
+    opt_readOnly, opt_own, opt_owner) {
   this.id = aUid;
   this.name = aName;
   this.colorCode = aColorCode;
@@ -33,6 +34,7 @@ rflect.cal.events.Calendar = function(aUid, aName, aColorCode, opt_visible,
   this.visible = opt_visible || true;
   this.readOnly = opt_readOnly || false;
   this.own = opt_own || true;
+  this.owner = opt_owner || '';
 };
 
 
@@ -85,6 +87,14 @@ rflect.cal.events.Calendar.FIELD_OWN = 5;
 
 
 /**
+ * Index of "owner" property in JSON array.
+ * @type {number}
+ * @const
+ */
+rflect.cal.events.Calendar.FIELD_OWNER = 6;
+
+
+/**
  * Id of calendar.
  * @type {string}
  */
@@ -134,6 +144,13 @@ rflect.cal.events.Calendar.prototype.own;
 
 
 /**
+ * User name of calendar owner.
+ * @type {string}
+ */
+rflect.cal.events.Calendar.prototype.owner;
+
+
+/**
  * @return {string} Name to show on UI, if original name is empty, ui name will
  * be derived from color code.
  */
@@ -147,7 +164,7 @@ rflect.cal.events.Calendar.prototype.getUIName = function() {
  */
 rflect.cal.events.Calendar.prototype.clone = function() {
   var clone = new rflect.cal.events.Calendar(this.id, this.name,
-      this.colorCode, this.visible, this.readOnly, this.own);
+      this.colorCode, this.visible, this.readOnly, this.own, this.owner);
 
   return clone;
 };
@@ -182,6 +199,7 @@ rflect.cal.events.Calendar.prototype['toJSON'] = function() {
   cal[rflect.cal.events.Calendar.FIELD_COLOR_CODE_INDEX] = this.colorCode.id;
   cal[rflect.cal.events.Calendar.FIELD_READ_ONLY] = this.readOnly;
   cal[rflect.cal.events.Calendar.FIELD_OWN] = this.own;
+  cal[rflect.cal.events.Calendar.FIELD_OWNER] = this.owner;
 
   return cal;
 };
@@ -201,6 +219,7 @@ rflect.cal.events.Calendar.fromJSON = function(aCalArray) {
       rflect.cal.events.Calendar.FIELD_COLOR_CODE_INDEX];
   var readOnly = aCalArray[rflect.cal.events.Calendar.FIELD_READ_ONLY];
   var own = aCalArray[rflect.cal.events.Calendar.FIELD_OWN];
+  var owner = aCalArray[rflect.cal.events.Calendar.FIELD_OWNER];
 
   // Choose a random array index in [0, i] (inclusive with i, where i =
   // codes.length - 1).
@@ -210,5 +229,5 @@ rflect.cal.events.Calendar.fromJSON = function(aCalArray) {
   var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[pickIndex];
 
   return new rflect.cal.events.Calendar(id, name, colorCode, visible, readOnly,
-      own);
+      own, owner);
 }

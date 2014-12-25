@@ -17,9 +17,12 @@ block content
     var SETTINGS = !{settings};
     var MODULES = !{modules};
     var LANGUAGE_NAMES = !{languageNames};
-  script.
-    // Call main method.
-    // new rflect.cal.Loader().enterDocument();
+    var USER_ID = '!{userId}';
+    var USER_NAME = '!{userName}';
+  if !processed
+    script.
+      // Call main method.
+      new rflect.cal.Loader().enterDocument();
 
 block jsLinksBody
   if processed

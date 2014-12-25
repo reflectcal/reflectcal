@@ -34,3 +34,17 @@ var MODULES;
  * @type {Array.<Array.<string>>}
  */
 var LANGUAGE_NAMES;
+
+
+/**
+ * User id.
+ * @type {string}
+ */
+var USER_ID;
+
+
+/**
+ * User name.
+ * @type {string}
+ */
+var USER_NAME;

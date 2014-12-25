@@ -14,16 +14,21 @@ var DEFAULT_CALENDAR = require('../config/defaultcalendar').DEFAULT_CALENDAR;
 var db = require('./connection').db;
 var appConfig = require('../config/appconfig');
 var log = appConfig.log;
+var merge = require('merge');
 
 
 /**
  * Loads calendars.
+ * @param {string} aUserName Login name of calendar owner.
  * @param {function(Array)} aOnCalendarsLoad Callback that will be executed
  * when db request is ready.
  */
-exports.getCalendarsAsync = function(aOnCalendarsLoad){
-  entityDAO.getEntitiesAsync('calendars', {}, aOnCalendarsLoad,
-      calendarToTransportJSON, DEFAULT_CALENDAR);
+exports.getCalendarsAsync = function(aUserName, aOnCalendarsLoad){
+  entityDAO.getEntitiesAsync('calendars', { owner: aUserName },
+      aOnCalendarsLoad, calendarToTransportJSON, 
+      //Default calendar is personalized for user.
+      merge(DEFAULT_CALENDAR, {
+        owner: aUserName }));
 
 };
 
@@ -76,6 +81,7 @@ function calendarToTransportJSON(aCalendar) {
   cal.push(aCalendar.colorCodeId);
   cal.push(aCalendar.readOnly);
   cal.push(aCalendar.own);
+  cal.push(aCalendar.owner);
 
   return cal;
 };
@@ -90,6 +96,7 @@ function calendarFromTransportJSON(aCalendarJSON) {
   log.info(aCalendarJSON);
   var cal = {};
 
+  cal.owner = aCalendarJSON.pop();
   cal.own = aCalendarJSON.pop();
   cal.readOnly = aCalendarJSON.pop();
   cal.colorCodeId = aCalendarJSON.pop();
