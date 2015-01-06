@@ -72,7 +72,7 @@ if ('development' == app.get('env')) {
   app.locals.pretty = true;
 }
 
-app.get('/view', routesView.render);
+app.get('/view', ensureAuthenticated, routesView.render);
 app.get('/login', routesLogin.render);
 app.get('/logout', routesLogin.logout);
 //Local strategy form post.
@@ -110,15 +110,25 @@ app.get('/auth/google/callback', passport.authenticate('google', {
 });
 app.get('/logout', function(req, res){
   req.logout();
-  res.redirect('/');
+  res.redirect('/login');
 });
 
-app.post('/calendars/save', routesCalendar.calendarSave);
-app.post('/calendars/delete/:id', routesCalendar.calendarDelete);
-app.post('/events/load', routesEvent.eventsLoad);
-app.post('/events/save', routesEvent.eventSave);
-app.post('/events/delete/:id', routesEvent.eventDelete);
-app.post('/settings/save', routesSettings.settingsSave);
+app.post('/calendars/save', ensureAuthenticated, routesCalendar.calendarSave);
+app.post('/calendars/delete/:id', ensureAuthenticated, routesCalendar.calendarDelete);
+app.post('/events/load', ensureAuthenticated, routesEvent.eventsLoad);
+app.post('/events/save', ensureAuthenticated, routesEvent.eventSave);
+app.post('/events/delete/:id', ensureAuthenticated, routesEvent.eventDelete);
+app.post('/settings/save', ensureAuthenticated, routesSettings.settingsSave);
+
+// Simple route middleware to ensure user is authenticated.
+// Use this route middleware on any resource that needs to be protected. If
+// the request is authenticated (typically via a persistent login session),
+// the request will proceed. Otherwise, the user will be redirected to the
+// login page.
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/login');
+}
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
