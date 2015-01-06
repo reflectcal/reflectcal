@@ -43,3 +43,36 @@ exports.getUserById = function(aId, aOnUserFind){
 
   db.get('users').find(lookupObject, {}, aOnUserFind);
 };
+
+
+/**
+ * Loads users.
+ * @param {{identifier: string, emails: Array.<{value: string}>}} aProfile
+ * Profile object of user.
+ * @param {function(Array)} aOnUsersLoad Callback that will be executed
+ * when db request is ready.
+ */
+exports.getUsersAsync = function(aProfile, aOnUsersLoad){
+  var email = aProfile.emails[0].value;
+  var openId = aProfile.identifier;
+
+  entityDAO.getEntitiesAsync('users', { openId: openId }, aOnUsersLoad,
+      userToTransportJSON,
+      //Default user.
+      {
+        username: email,
+        openId: openId
+      }
+  );
+};
+
+
+/**
+ * Turns db user object into transportable json. This is just as-is copy while
+ * we using user object internally only.
+ * @param {Object} aEvent DB representation of user.
+ * @return {Object} JSON representation of user.
+ */
+function userToTransportJSON(aUser) {
+  return aUser;
+};

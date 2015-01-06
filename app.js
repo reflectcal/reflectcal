@@ -13,6 +13,7 @@ var http = require('http');
 var path = require('path');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var GoogleStrategy = require('passport-google').Strategy
 var login = require('./app/util/login');
 var flash = require('connect-flash');
 var appConfig = require('./app/config/appconfig');
@@ -22,7 +23,7 @@ var db = require('./app/db/connection').db;
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || appConfig.APP_PORT);
 app.set('views', path.join(__dirname, 'app', 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -39,7 +40,18 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
 app.use('/static', express.static(path.join(__dirname, 'static')));
+
 passport.use(new LocalStrategy(login.localStrategy));
+// Use the GoogleStrategy within Passport.
+// Strategies in passport require a `validate` function, which accept
+// credentials (in this case, an OpenID identifier and profile), and invoke a
+// callback with a user object.
+passport.use(new GoogleStrategy({
+    returnURL: 'http://localhost:' + appConfig.APP_PORT + '/auth/google/return',
+    realm: 'http://localhost:' + appConfig.APP_PORT + '/'
+  }, login.googleStrategy
+));
+
 passport.serializeUser(login.serializeUser);
 passport.deserializeUser(login.deserializeUser);
 // development only
@@ -54,10 +66,10 @@ if ('development' == app.get('env')) {
   app.locals.pretty = true;
 }
 
-
-app.get('/view', routesView.view);
-app.get('/login', routesLogin.view);
+app.get('/view', routesView.render);
+app.get('/login', routesLogin.render);
 app.get('/logout', routesLogin.logout);
+//Local strategy form post.
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/view',
   failureRedirect: '/login',
@@ -68,14 +80,32 @@ app.post('/login', passport.authenticate('local', {
   log.info(req.user);
   res.redirect('/view');
 });
+// GET /auth/google
+// Use passport.authenticate() as route middleware to authenticate the
+// request. The first step in Google authentication will involve redirecting
+// the user to google.com. After authenticating, Google will redirect the
+// user back to this application at /auth/google/return
+app.get('/auth/google', passport.authenticate('google', {
+    failureRedirect: '/login'
+  }), function(req, res) {
+    res.redirect('/view');
+});
+// GET /auth/google/return
+// Use passport.authenticate() as route middleware to authenticate the
+// request. If authentication fails, the user will be redirected back to the
+// login page. Otherwise, the primary route function function will be called,
+// which, in this example, will redirect the user to the home page.
+app.get('/auth/google/return', passport.authenticate('google', {
+    failureRedirect: '/login'
+  }), function(req, res) {
+    res.redirect('/view');
+});
 
 app.post('/calendars/save', routesCalendar.calendarSave);
 app.post('/calendars/delete/:id', routesCalendar.calendarDelete);
-
 app.post('/events/load', routesEvent.eventsLoad);
 app.post('/events/save', routesEvent.eventSave);
 app.post('/events/delete/:id', routesEvent.eventDelete);
-
 app.post('/settings/save', routesSettings.settingsSave);
 
 http.createServer(app).listen(app.get('port'), function(){

@@ -18,7 +18,7 @@ var STATIC_DIR = require('../util/pagehelper').STATIC_DIR;
 /**
  * Renders login view.
  */
-exports.view = function(req, res) {
+exports.render = function(req, res) {
   if (req.user) {
     res.redirect('/view');
   } else {
@@ -35,7 +35,7 @@ exports.view = function(req, res) {
       Array.prototype.push.apply(cssFileNames, getCssFileNames());
     }
 
-    res.render('login', {
+    res.render('login-google', {
       processed: appConfig.COMPILED || appConfig.BUILT,
       staticDir: STATIC_DIR,
       jsFileNames: jsFileNames,

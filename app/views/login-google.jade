@@ -1,0 +1,24 @@
+extends base
+
+block cssLinks
+  if processed
+    each cssFileName in cssFileNames
+      link(rel='stylesheet', href=staticDir + '/css/' + cssFileName)
+  else
+    link(rel='stylesheet', href='build/compiled.css')
+
+block content
+
+  h1(class='login-header').
+    Login
+
+  div(id='wrong-alert-cont', class='hide alert-cont', style='display:none')
+    div(class='alert alert-error')
+      strong
+        span(class='login-error')
+        i(class='fa fa-times icon-alert-close')
+
+  div.login-cont.login-submit-cont
+    a(href='/auth/google', class='goog-inline-block goog-flat-button cal-menu-button emphasis-button login-submit').
+      Login with Google
+  script.

@@ -39,7 +39,7 @@ exports.DB_NAME = 'rflectevents';
  * App HTTP port.
  * @type {number}
  */
-exports.APP_PORT = 3001;
+exports.APP_PORT = 3000;
 
 
 /**

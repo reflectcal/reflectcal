@@ -39,6 +39,37 @@ exports.localStrategy = function(aUsername, aPassword, aDone) {
   });
 };
 
+
+/**
+ * Checks whether user passes authentication.
+ * @param {string} aIdentifier Google user id.
+ * @param {Object} aProfile Google user profile object.
+ * @param {Function} aDone Callback.
+ */
+exports.googleStrategy = function(aIdentifier, aProfile, aDone) {
+  // Asynchronous verification, for effect...
+  process.nextTick(function() {
+    aProfile.identifier = aIdentifier;
+    console.log('aIdentifier: ', aIdentifier);
+    console.log('aProfile: ', aProfile);
+    userDAO.getUsersAsync(aProfile, function(aUsers) {
+      log.info('User: ', JSON.stringify(aUsers));
+      //TODO(alexk): make all callbacks return error as first argument.
+      //if (aError) { return aDone(aError); }
+      if (!aUsers || !aUsers.length) {
+        return aDone(null, false, { message: 'No such user.' });
+      }
+      if (aUsers.length > 1) {
+        return aDone(null, false, {
+          message: 'Ambiguous case. Several users with id: ' +  aId + '.'
+        });
+      }
+      var user = aUsers[0];
+      return aDone(null, user);
+    });
+  });
+}
+
 exports.serializeUser = function(aUser, aDone) {
   aDone(null, aUser._id);
 };

@@ -22,7 +22,7 @@ var STATIC_DIR = require('../util/pagehelper').STATIC_DIR;
 /**
  * Renders main page for compiled view.
  */
-exports.view = function(req, res) {
+exports.render = function(req, res) {
   if (req.user) {
     var userId = req.user[0]._id;
     var userName = req.user[0].username;
