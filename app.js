@@ -13,7 +13,7 @@ var http = require('http');
 var path = require('path');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var GoogleStrategy = require('passport-google').Strategy
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
 var login = require('./app/util/login');
 var flash = require('connect-flash');
 var appConfig = require('./app/config/appconfig');
@@ -21,6 +21,10 @@ var log = appConfig.log;
 var db = require('./app/db/connection').db;
 
 var app = express();
+// API Access link for creating client ID and secret:
+// https://code.google.com/apis/console/
+var GOOGLE_CLIENT_ID = '673812577284-61av2890l3pflsc0sucvu2j3u2brafhn.apps.googleusercontent.com';
+var GOOGLE_CLIENT_SECRET = 'JSfSVeXctGaONEK18DchyY-L';
 
 // all environments
 app.set('port', process.env.PORT || appConfig.APP_PORT);
@@ -43,12 +47,14 @@ app.use('/static', express.static(path.join(__dirname, 'static')));
 
 passport.use(new LocalStrategy(login.localStrategy));
 // Use the GoogleStrategy within Passport.
-// Strategies in passport require a `validate` function, which accept
-// credentials (in this case, an OpenID identifier and profile), and invoke a
-// callback with a user object.
+// Strategies in Passport require a `verify` function, which accept
+// credentials (in this case, an accessToken, refreshToken, and Google
+// profile), and invoke a callback with a user object.
 passport.use(new GoogleStrategy({
-    returnURL: 'http://localhost:' + appConfig.APP_PORT + '/auth/google/return',
-    realm: 'http://localhost:' + appConfig.APP_PORT + '/'
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:' + appConfig.APP_PORT +
+    '/auth/google/callback',
   }, login.googleStrategy
 ));
 
@@ -82,23 +88,29 @@ app.post('/login', passport.authenticate('local', {
 });
 // GET /auth/google
 // Use passport.authenticate() as route middleware to authenticate the
-// request. The first step in Google authentication will involve redirecting
-// the user to google.com. After authenticating, Google will redirect the
-// user back to this application at /auth/google/return
+// request. The first step in Google authentication will involve
+// redirecting the user to google.com. After authorization, Google
+// will redirect the user back to this application at /auth/google/callback
 app.get('/auth/google', passport.authenticate('google', {
-    failureRedirect: '/login'
-  }), function(req, res) {
-    res.redirect('/view');
+  scope: ['https://www.googleapis.com/auth/userinfo.profile',
+          'https://www.googleapis.com/auth/userinfo.email']
+}), function(req, res){
+  // The request will be redirected to Google for authentication, so this
+  // function will not be called.
 });
-// GET /auth/google/return
+// GET /auth/google/callback
 // Use passport.authenticate() as route middleware to authenticate the
 // request. If authentication fails, the user will be redirected back to the
 // login page. Otherwise, the primary route function function will be called,
 // which, in this example, will redirect the user to the home page.
-app.get('/auth/google/return', passport.authenticate('google', {
-    failureRedirect: '/login'
-  }), function(req, res) {
-    res.redirect('/view');
+app.get('/auth/google/callback', passport.authenticate('google', {
+  failureRedirect: '/login'
+}), function(req, res) {
+  res.redirect('/view');
+});
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
 });
 
 app.post('/calendars/save', routesCalendar.calendarSave);

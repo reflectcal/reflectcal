@@ -54,7 +54,7 @@ exports.getUserById = function(aId, aOnUserFind){
  */
 exports.getUsersAsync = function(aProfile, aOnUsersLoad){
   var email = aProfile.emails[0].value;
-  var openId = aProfile.identifier;
+  var openId = aProfile.id;
 
   entityDAO.getEntitiesAsync('users', { openId: openId }, aOnUsersLoad,
       userToTransportJSON,

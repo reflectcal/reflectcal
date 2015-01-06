@@ -42,15 +42,16 @@ exports.localStrategy = function(aUsername, aPassword, aDone) {
 
 /**
  * Checks whether user passes authentication.
- * @param {string} aIdentifier Google user id.
+ * @param {string} accessToken Google user id.
+ * @param {string} refreshToken Google user id.
  * @param {Object} aProfile Google user profile object.
  * @param {Function} aDone Callback.
  */
-exports.googleStrategy = function(aIdentifier, aProfile, aDone) {
+exports.googleStrategy = function(accessToken, refreshToken, aProfile, aDone) {
   // Asynchronous verification, for effect...
   process.nextTick(function() {
-    aProfile.identifier = aIdentifier;
-    console.log('aIdentifier: ', aIdentifier);
+    console.log('accessToken: ', accessToken);
+    console.log('refreshToken: ', refreshToken);
     console.log('aProfile: ', aProfile);
     userDAO.getUsersAsync(aProfile, function(aUsers) {
       log.info('User: ', JSON.stringify(aUsers));
