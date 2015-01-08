@@ -573,7 +573,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
         offset += 65;
       };break;
       case 2: if (rflect.VERTICAL_EXPAND_ENABLED) {
-        //Skipping main pane header.
+        //Skipping all day zippy.
         offset += 2;
       };break;
       case 3: {
