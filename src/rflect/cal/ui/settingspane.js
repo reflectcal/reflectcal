@@ -300,7 +300,7 @@ rflect.cal.ui.SettingsPane.prototype.createLogoutCont_ =
     id: 'settings-logout',
     href: '/logout',
     className: 'goog-inline-block goog-flat-button cal-menu-button ' +
-        'emphasis-button settings-pane-control'
+        'settings-pane-control'
   }, 'Logout');
 
   var logoutCont = aDom.createDom('div', {
