@@ -14,6 +14,7 @@ goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.string.StringBuffer');
 goog.require('rflect.cal.i18n.Symbols');
+goog.require('rflect.cal.predefined');
 goog.require('rflect.date');
 goog.require('rflect.date.util');
 
@@ -570,6 +571,10 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
       case 1: if (isSmallScreen) {
         //Skipping main pane header.
         offset += 65;
+      };break;
+      case 2: if (rflect.VERTICAL_EXPAND_ENABLED) {
+        //Skipping main pane header.
+        offset += 2;
       };break;
       case 3: {
         this.buildDayNamesZippy_(aSb, offset);
