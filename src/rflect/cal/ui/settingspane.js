@@ -178,10 +178,12 @@ rflect.cal.ui.SettingsPane.prototype.createBody =
   var languagesCont = this.createLanguageCont_(aDom);
   var debugCont = this.createDebugCont_(aDom);
   var buttonCont = this.createButtonCont_(aDom);
+  var logoutCont = this.createLogoutCont_(aDom);
 
   body.appendChild(languagesCont);
   body.appendChild(buttonCont);
   body.appendChild(debugCont);
+  body.appendChild(logoutCont);
 
   return body;
 }
@@ -279,6 +281,33 @@ rflect.cal.ui.SettingsPane.prototype.createButtonCont_ =
       ['icon', 'icon-chevron-right', 'icon-next-pane']));
 
   return buttonCont;
+}
+
+
+/**
+ * @param {!goog.dom.DomHelper} aDom Dom helper.
+ * @return {Element} Logout button container.
+ */
+rflect.cal.ui.SettingsPane.prototype.createLogoutCont_ =
+    function(aDom) {
+  // Languages select.
+  var labelLogout = aDom.createDom('label', {
+    'for': 'settings-logout',
+    className: rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME +
+        ' event-pane-calendars-label'
+  }, 'Logged in as ', aDom.createDom('b', null, USER_NAME));
+  var buttonLogout = aDom.createDom('a', {
+    id: 'settings-logout',
+    href: '/logout',
+    className: 'goog-inline-block goog-flat-button cal-menu-button ' +
+        'emphasis-button settings-pane-control'
+  }, 'Logout');
+
+  var logoutCont = aDom.createDom('div', {
+    className: 'event-pane-cont event-pane-cont-last'
+    }, labelLogout, buttonLogout);
+
+  return logoutCont;
 }
 
 
@@ -426,7 +455,7 @@ rflect.cal.ui.SettingsPane.prototype.createDebugCont_ = function(aDom) {
   this.checkboxDebug_.getElement().className += ' aligned-checkbox';
   var debugCont = aDom.createDom('div', {
     id: 'settings-debug-mode',
-    className: 'event-pane-cont event-pane-cont-last'
+    className: 'event-pane-cont'
   }, debugSubCont);
 
 
