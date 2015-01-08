@@ -20,7 +20,7 @@ var STATIC_DIR = require('../util/pagehelper').STATIC_DIR;
  */
 exports.render = function(req, res) {
   if (req.user) {
-    res.redirect('/view');
+    res.redirect('/');
   } else {
     var jsFileNames = [];
     var cssFileNames = [];

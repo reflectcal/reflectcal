@@ -72,19 +72,19 @@ if ('development' == app.get('env')) {
   app.locals.pretty = true;
 }
 
-app.get('/view', ensureAuthenticated, routesView.render);
+app.get('/', ensureAuthenticated, routesView.render);
 app.get('/login', routesLogin.render);
 app.get('/logout', routesLogin.logout);
 //Local strategy form post.
 app.post('/login', passport.authenticate('local', {
-  successRedirect: '/view',
+  successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true
 }), function(req, res) {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
   log.info(req.user);
-  res.redirect('/view');
+  res.redirect('/');
 });
 // GET /auth/google
 // Use passport.authenticate() as route middleware to authenticate the
@@ -106,7 +106,7 @@ app.get('/auth/google', passport.authenticate('google', {
 app.get('/auth/google/callback', passport.authenticate('google', {
   failureRedirect: '/login'
 }), function(req, res) {
-  res.redirect('/view');
+  res.redirect('/');
 });
 app.get('/logout', function(req, res){
   req.logout();
