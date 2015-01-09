@@ -8,6 +8,7 @@ var routesView = require('./app/routes/view');
 var routesLogin = require('./app/routes/login');
 var routesCalendar = require('./app/routes/calendar');
 var routesSettings = require('./app/routes/settings');
+var routesUser = require('./app/routes/user');
 var routesEvent = require('./app/routes/event');
 var http = require('http');
 var path = require('path');
@@ -51,12 +52,11 @@ passport.use(new LocalStrategy(login.localStrategy));
 // credentials (in this case, an accessToken, refreshToken, and Google
 // profile), and invoke a callback with a user object.
 passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:' + appConfig.APP_PORT +
-    '/auth/google/callback',
-  }, login.googleStrategy
-));
+  clientID: GOOGLE_CLIENT_ID,
+  clientSecret: GOOGLE_CLIENT_SECRET,
+  callbackURL: 'http://localhost:' + appConfig.APP_PORT +
+      '/auth/google/callback',
+}, login.googleStrategy));
 
 passport.serializeUser(login.serializeUser);
 passport.deserializeUser(login.deserializeUser);
@@ -118,7 +118,7 @@ app.post('/calendars/delete/:id', ensureAuthenticated, routesCalendar.calendarDe
 app.post('/events/load', ensureAuthenticated, routesEvent.eventsLoad);
 app.post('/events/save', ensureAuthenticated, routesEvent.eventSave);
 app.post('/events/delete/:id', ensureAuthenticated, routesEvent.eventDelete);
-app.post('/settings/save', ensureAuthenticated, routesSettings.settingsSave);
+app.post('/user/save', ensureAuthenticated, routesUser.userSave);
 
 // Simple route middleware to ensure user is authenticated.
 // Use this route middleware on any resource that needs to be protected. If

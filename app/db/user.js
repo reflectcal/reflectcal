@@ -11,6 +11,8 @@
 var entityDAO = require('./entity');
 var dbUtil = require('./util');
 var db = require('./connection').db;
+var deepClone = require('clone');
+var DEFAULT_USER = require('../config/defaultuser').DEFAULT_USER;
 
 
 /**
@@ -46,9 +48,22 @@ exports.getUserById = function(aId, aOnUserFind){
 
 
 /**
+ * Saves user.
+ * @param {Object} aUserJSON JSON representing user.
+ * @param {function(string|number)} aOnUserSave Callback that will be
+ * called when db request is ready.
+ */
+exports.saveUserAsync = function(aUserJSON, aOnUserSave){
+  entityDAO.saveEntityAsync('users', aUserJSON,
+      aOnUserSave, userFromTransportJSON);
+};
+
+
+/**
  * Loads users.
  * @param {{identifier: string, emails: Array.<{value: string}>}} aProfile
  * Profile object of user.
+ * @link {http://passportjs.org/guide/profile/}
  * @param {function(Array)} aOnUsersLoad Callback that will be executed
  * when db request is ready.
  */
@@ -59,20 +74,35 @@ exports.getUsersAsync = function(aProfile, aOnUsersLoad){
   entityDAO.getEntitiesAsync('users', { openId: openId }, aOnUsersLoad,
       userToTransportJSON,
       //Default user.
-      {
+      merge(DEFAULT_USER, {
         username: email,
         openId: openId
-      }
+      });
   );
 };
 
 
 /**
- * Turns db user object into transportable json. This is just as-is copy while
- * we using user object internally only.
+ * Turns db user object into transportable json.
  * @param {Object} aEvent DB representation of user.
  * @return {Object} JSON representation of user.
  */
 function userToTransportJSON(aUser) {
-  return aUser;
+  //We could have some old user object in db, without some newly introduced
+  // properties. In that case, provide defaults.
+  var userExported = merge(DEFAULT_USER, aUser);
+ 
+  return userExported;
+};
+
+
+/**
+ * Turns user transportable json to db object.
+ * @param {Object} aUserJSON JSON representation of user.
+ * @return {Object} DB representation of user.
+ */
+function userFromTransportJSON(aUserJSON) {
+
+  //NOTE(alexk): some user fields may be restricted for db saving.
+  return aUserJSON;
 };

@@ -119,7 +119,8 @@ rflect.cal.Transport.OperationUrls = {
   DELETE_EVENT: '../events/delete/',
   SAVE_CALENDAR: '../calendars/save/',
   DELETE_CALENDAR: '../calendars/delete/',
-  SAVE_SETTINGS: '../settings/save/'
+  SAVE_SETTINGS: '../settings/save/',
+  SAVE_USER: '../user/save/'
 }
 
 
@@ -627,6 +628,43 @@ rflect.cal.Transport.prototype.onSaveSettings_ = function(aSettings, aReload,
   }*/
 
   this.dispatchEvent(new rflect.cal.Transport.SaveSettingsEvent(aSettings, aReload));
+
+};
+
+
+/**
+ * Saves user.
+ * @param {Object} aUser User object.
+ * @param {boolean} aReload Whether reload is needed after user is saved.
+ */
+rflect.cal.Transport.prototype.saveUserAsync = function(aUser,
+                                                            aReload) {
+
+  goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.SAVE_USER,
+      goog.bind(this.onSaveUser_, this, aUser, aReload),
+      'POST',
+      rflect.cal.Transport.serialize(aUser),
+      rflect.cal.Transport.DEFAULT_POST_HEADERS);
+
+};
+
+
+/**
+ * Save user callback.
+ *
+ * @param {Object} aUser User.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.Transport.prototype.onSaveUser_ = function(aUser, aReload,
+                                                          aEvent) {
+  var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
+
+  var response = rflect.cal.Transport.getResponseJSON(x);
+
+  /*if (response == 0) {
+  }*/
+
+  this.dispatchEvent(new rflect.cal.Transport.SaveUserEvent(aUser, aReload));
 
 };
 
