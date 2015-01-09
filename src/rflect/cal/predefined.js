@@ -75,7 +75,8 @@ rflect.HORIZONTAL_EXPAND_DEFAULT_STATE = false;
 
 
 /**
- * Whether vertical blocks are expanded by default.
+ * Whether vertical blocks are expanded by default. If zippy UI for vertical
+ * expand is disabled, make expand enabled.
  * @type {boolean}
  * @const
  */

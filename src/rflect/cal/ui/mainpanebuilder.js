@@ -572,7 +572,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
         //Skipping main pane header.
         offset += 65;
       };break;
-      case 2: if (rflect.VERTICAL_EXPAND_ENABLED) {
+      case 2: if (!rflect.VERTICAL_EXPAND_ENABLED) {
         //Skipping all day zippy.
         offset += 2;
       };break;
@@ -736,6 +736,11 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth = function(aSb,
         case 15: {
           this.buildScrollableWrapperMn_(aSb, offset);
         };break;
+        case 16: {
+          if (!rflect.VERTICAL_EXPAND_ENABLED) {
+            offset += 13;
+          }
+        };break;
         case 19: {
           this.buildMnRowZippies_(aSb, offset);
           offset += 7;
@@ -838,7 +843,9 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesWeek_ =
     aSb.append(this.weekDayNameFormatWeek_.format(daySeries[colCounter]));
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
 
-    this.buildWeekColZippy_(aSb, aOffset + 8, colCounter);
+    if (rflect.HORIZONTAL_EXPAND_ENABLED) {
+      this.buildWeekColZippy_(aSb, aOffset + 8, colCounter);
+    }
 
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 12]);
   }
