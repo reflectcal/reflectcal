@@ -14,7 +14,7 @@
  * @type {Object}
  */
 exports.DEFAULT_USER = {
-  // E-mail is used a username.
+  // E-mail is used as an username.
   username: '',
   openId: '',
   settings: {

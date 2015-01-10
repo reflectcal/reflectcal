@@ -22,3 +22,4 @@ node_modules
 build
 css/*compiled*.*
 js/*compiled*.*
+client_secret_*.json

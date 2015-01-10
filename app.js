@@ -10,6 +10,7 @@ var routesCalendar = require('./app/routes/calendar');
 var routesSettings = require('./app/routes/settings');
 var routesUser = require('./app/routes/user');
 var routesEvent = require('./app/routes/event');
+var settingsDAO = require('./app/db/settings');
 var http = require('http');
 var path = require('path');
 var passport = require('passport');
@@ -20,12 +21,14 @@ var flash = require('connect-flash');
 var appConfig = require('./app/config/appconfig');
 var log = appConfig.log;
 var db = require('./app/db/connection').db;
+var oauthHelper = require('./app/util/oauthhelper');
 
 var app = express();
 // API Access link for creating client ID and secret:
 // https://code.google.com/apis/console/
-var GOOGLE_CLIENT_ID = '673812577284-61av2890l3pflsc0sucvu2j3u2brafhn.apps.googleusercontent.com';
-var GOOGLE_CLIENT_SECRET = 'JSfSVeXctGaONEK18DchyY-L';
+var credentials = oauthHelper.getCredentialsObject();
+var GOOGLE_CLIENT_ID = credentials.web.client_id;
+var GOOGLE_CLIENT_SECRET = credentials.web.client_secret;
 
 // all environments
 app.set('port', process.env.PORT || appConfig.APP_PORT);
@@ -130,10 +133,6 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
-
 // Execute commands in clean exit.
 process.on('exit', function () {
   log.info('Exiting...');
@@ -152,4 +151,9 @@ process.on('SIGINT', function () {
 process.on('SIGTERM', function () {
   log.info('\nParent SIGTERM detected (kill).');
   process.exit(0);
+});
+
+//Start an application.
+http.createServer(app).listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
 });

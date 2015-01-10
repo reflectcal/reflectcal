@@ -26,7 +26,7 @@ exports.render = function(req, res) {
     var cssFileNames = [];
 
     if (appConfig.BUILT) {
-      viewAdapter.getCompiledTargetAsync(req, function(aTarget, aSettings) {
+      viewAdapter.getCompiledTargetAsync(req, function(aTarget) {
         Array.prototype.push.apply(jsFileNames, getJsFileNames(aTarget));
         Array.prototype.push.apply(cssFileNames, getCssFileNames(aTarget));
       });

@@ -37,14 +37,7 @@ var LANGUAGE_NAMES;
 
 
 /**
- * User id.
- * @type {string}
+ * User object.
+ * @type {object}
  */
-var USER_ID;
-
-
-/**
- * User name.
- * @type {string}
- */
-var USER_NAME;
+var USER;

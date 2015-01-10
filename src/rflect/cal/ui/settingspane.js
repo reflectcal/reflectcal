@@ -61,12 +61,6 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
       aEventManager, aParentElement, aTransport);
 
   /**
-   * Settings object.
-   * @type {Object}
-   */
-  this.settings = goog.object.clone(SETTINGS);
-
-  /**
    * Views elements, pages.
    * @type {Array.<Element>}
    * @private
@@ -93,19 +87,19 @@ rflect.cal.ui.SettingsPane.EventTypes = {
 
 
 /**
- * Event that is fired after saving of settings.
- * @param {Object} aSettings Settings object.
- * @param {boolean} aChanged Whether settings were changed.
+ * Event that is fired after saving of user.
+ * @param {Object} aUser User object.
+ * @param {boolean} aChanged Whether user was changed.
  * @extends {goog.events.Event}
  * @constructor
  */
-rflect.cal.ui.SettingsPane.SaveSettingsEvent = function(aSettings, aChanged) {
+rflect.cal.ui.SettingsPane.SaveUserEvent = function(aUser, aChanged) {
   goog.events.Event.call(this, rflect.cal.ui.SettingsPane.EventTypes.SAVE);
 
-  this.settings = aSettings;
-  this.settingsChanged = aChanged;
+  this.user = aUser;
+  this.userChanged = aChanged;
 }
-goog.inherits(rflect.cal.ui.SettingsPane.SaveSettingsEvent, goog.events.Event);
+goog.inherits(rflect.cal.ui.SettingsPane.SaveUserEvent, goog.events.Event);
 
 
 /**
@@ -165,6 +159,14 @@ rflect.cal.ui.SettingsPane.prototype.viewIndex_;
  * @type {boolean} Whether reload is needed to apply changed settings.
  */
 rflect.cal.ui.SettingsPane.prototype.reloadIsNeeded_ = false;
+
+
+/**
+ * @return {Object} Shortcut for user settings.
+ */
+rflect.cal.ui.SettingsPane.prototype.getUserSettings = function() {
+  return this.viewManager.user['settings'];
+}
 
 
 /**
@@ -290,12 +292,16 @@ rflect.cal.ui.SettingsPane.prototype.createButtonCont_ =
  */
 rflect.cal.ui.SettingsPane.prototype.createLogoutCont_ =
     function(aDom) {
+  if (goog.DEBUG)
+      console.log('this.viewManager.user: ', this.viewManager.user);
+      
   // Languages select.
   var labelLogout = aDom.createDom('label', {
     'for': 'settings-logout',
     className: rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME +
         ' event-pane-calendars-label'
-  }, 'Logged in as ', aDom.createDom('b', null, USER_NAME));
+  }, 'Logged in as ', aDom.createDom('b', null, 
+      this.viewManager.user['username']));
   var buttonLogout = aDom.createDom('a', {
     id: 'settings-logout',
     href: '/logout',
@@ -475,9 +481,9 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
       .listen(this.buttonBack2, goog.ui.Component.EventType.ACTION,
       this.onCancel_, false, this)
       .listen(this.buttonSave1, goog.ui.Component.EventType.ACTION, 
-      this.onSaveSettings_, false, this)
+      this.onSaveUser_, false, this)
       .listen(this.buttonSave2, goog.ui.Component.EventType.ACTION,
-      this.onSaveSettings_, false, this)
+      this.onSaveUser_, false, this)
       .listen(this.buttonCalendars_,
       goog.ui.Component.EventType.ACTION, this.onShowCalendarsAction_, false,
       this)
@@ -486,10 +492,22 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
       goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
 
       .listen(this.viewManager.getScreenManager(),
-      rflect.cal.ui.PaneShowBehavior.EventTypes.BEFORE_SHOW, function(){
-        this.displayValues();
-      }, false, this);
-};
+          rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
+          this.onBeforePageChange_, false, this)
+}
+
+
+/**
+ * Page change handler.
+ * @param {rflect.cal.ui.ScreenManager.BeforePageChangeEvent} aEvent Event
+ * object.
+ * @private
+ */
+rflect.cal.ui.SettingsPane.prototype.onBeforePageChange_ = function(aEvent) {
+  if (aEvent.currentScreen == this){
+    this.displayValues();
+  }
+}
 
 
 /**
@@ -553,7 +571,7 @@ rflect.cal.ui.SettingsPane.prototype.onKeyDown_ = function(aEvent) {
     } else if (aEvent.keyCode == goog.events.KeyCodes.ENTER &&
         aEvent.platformModifierKey) {
 
-      this.onSaveSettings_();
+      this.onSaveUser_();
 
     }
   }
@@ -572,12 +590,12 @@ rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
 /**
  * Save settings action listener.
  */
-rflect.cal.ui.SettingsPane.prototype.onSaveSettings_ = function() {
+rflect.cal.ui.SettingsPane.prototype.onSaveUser_ = function() {
 
   if (this.scanValues()) {
-    this.transport.saveSettingsAsync(this.settings, this.reloadIsNeeded_);
-    this.dispatchEvent(new rflect.cal.ui.SettingsPane.SaveSettingsEvent(
-        this.settings, false));
+    this.transport.saveUserAsync(this.viewManager.user, this.reloadIsNeeded_);
+    this.dispatchEvent(new rflect.cal.ui.SettingsPane.SaveUserEvent(
+        this.viewManager.user, false));
     this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
   }
 }
@@ -588,16 +606,13 @@ rflect.cal.ui.SettingsPane.prototype.onSaveSettings_ = function() {
  */
 rflect.cal.ui.SettingsPane.prototype.displayValues = function() {
 
-  var languageIndex = goog.array.findIndex(LANGUAGE_NAMES,
-      function(aLocaleLangPair){
-    //SETTINGS.language could be undefined, so rely on hardcoded locale.
-    return SETTINGS.language ? aLocaleLangPair[0] == SETTINGS.language :
-        aLocaleLangPair[0] == goog.LOCALE;
-  });
+  if (goog.DEBUG)
+    console.log('this.getUserSettings(): ', this.getUserSettings());
 
-  this.selectLanguages_.selectedIndex = languageIndex;
+  this.selectLanguages_.value = this.getUserSettings()['language'] ||
+      goog.LOCALE;
 
-  this.checkboxDebug_.setChecked(this.settings.debug);
+  this.checkboxDebug_.setChecked(this.getUserSettings()['debug']);
 };
 
 
@@ -608,11 +623,12 @@ rflect.cal.ui.SettingsPane.prototype.displayValues = function() {
 rflect.cal.ui.SettingsPane.prototype.scanValues = function() {
   var valid = true;
   if (valid) {
-    this.settings.language = this.selectLanguages_.value;
-    this.settings.debug = this.checkboxDebug_.isChecked();
+    this.getUserSettings()['language'] = this.selectLanguages_.value;
+    this.getUserSettings()['debug'] = this.checkboxDebug_.isChecked();
 
-    this.reloadIsNeeded_ = this.settings.language != SETTINGS.language ||
-        this.settings.debug != SETTINGS.debug;
+    this.reloadIsNeeded_ = this.getUserSettings()['language'] !=
+        USER['settings']['language'] || this.getUserSettings()['debug'] !=
+        USER['settings']['debug'];
   }
 
   return valid;

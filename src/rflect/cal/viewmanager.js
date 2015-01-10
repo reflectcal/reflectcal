@@ -110,6 +110,12 @@ rflect.cal.ViewManager = function(aMainInstance) {
   this.screenManager_ = new rflect.cal.ui.ScreenManager(this);
   this.screenManager_.setSlidingIsEnabled(rflect.TOUCH_INTERFACE_ENABLED);
 
+  /**
+   * Mutable user object.
+   * @type {Object}
+   */
+  this.user = goog.object.unsafeClone(USER);
+
   if (goog.DEBUG)
     _inspect('mainBody_', this.mainBody_);
   if (goog.DEBUG)
@@ -183,11 +189,11 @@ rflect.cal.ViewManager.prototype.assignEvents_ = function() {
 
   //Listen immediate press on save settings button.
   this.listen(this.mainBody_,
-      rflect.cal.ui.SettingsPane.EventTypes.SAVE, this.onSaveSettingsImmediate_,
+      rflect.cal.ui.SettingsPane.EventTypes.SAVE, this.onSaveUserImmediate_,
       false, this);
   //Listen specific case when save settings need a reload.
-  this.listen(this.transport_, rflect.cal.Transport.EventTypes.SAVE_SETTINGS,
-      this.onSaveSettingsResponse_, false, this);
+  this.listen(this.transport_, rflect.cal.Transport.EventTypes.SAVE_USER,
+      this.onSaveUserResponse_, false, this);
   this.listen(this.screenManager_,
       rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE, this.onPageChange_,
       false, this);
@@ -436,11 +442,11 @@ rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
 /**
  * Save settings immediate (when settings pane 'save' button is pressed)
  * handler.
- * @param {rflect.cal.ui.SettingsPane.SaveSettingsEvent} aEvent Event object.
+ * @param {rflect.cal.ui.SettingsPane.SaveUserEvent} aEvent Event object.
  * @private
  */
-rflect.cal.ViewManager.prototype.onSaveSettingsImmediate_ = function(aEvent) {
-  if (aEvent.settingsChanged) {
+rflect.cal.ViewManager.prototype.onSaveUserImmediate_ = function(aEvent) {
+  if (aEvent.userChanged) {
     this.eventManager_.run();
     this.mainBody_.update();
   }
@@ -448,12 +454,12 @@ rflect.cal.ViewManager.prototype.onSaveSettingsImmediate_ = function(aEvent) {
 
 
 /**
- * Save settings transport response handler. We use it to reload page to apply
- * settings, if needed.
- * @param {rflect.cal.Transport.SaveSettingsEvent} aEvent Event object.
+ * Save user transport response handler. We use it to reload page to apply
+ * user settings, if needed.
+ * @param {rflect.cal.Transport.SaveUserEvent} aEvent Event object.
  * @private
  */
-rflect.cal.ViewManager.prototype.onSaveSettingsResponse_ = function(aEvent) {
+rflect.cal.ViewManager.prototype.onSaveUserResponse_ = function(aEvent) {
   if (aEvent.reload)
     window.location.reload();
 }

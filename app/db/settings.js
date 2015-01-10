@@ -10,8 +10,8 @@
 
 var entityDAO = require('./entity');
 var merge = require('merge');
-var DEFAULT_USER_SETTINGS =
-    require('../config/defaultusersettings').DEFAULT_USER_SETTINGS;
+var DEFAULT_APP_SETTINGS =
+    require('../config/defaultsettings').DEFAULT_APP_SETTINGS;
 var appConfig = require('../config/appconfig');
 var log = appConfig.log;
 
@@ -25,7 +25,7 @@ var log = appConfig.log;
 exports.getSettingsAsync = function(aOnSettingsLoad){
   log.info('getSettingsAsync');
   entityDAO.getEntitiesAsync('settings', {}, aOnSettingsLoad,
-      settingsToTransportJSON, DEFAULT_USER_SETTINGS);
+      settingsToTransportJSON, DEFAULT_APP_SETTINGS);
 };
 
 
@@ -51,7 +51,7 @@ function settingsToTransportJSON(aSettings) {
   //We could have some old settings object in db, without some newly introduced
   // properties. In that case, provide defaults.
 
-  var settings = merge(DEFAULT_USER_SETTINGS, aSettings);
+  var settings = merge(DEFAULT_APP_SETTINGS, aSettings);
 
   return settings;
 };

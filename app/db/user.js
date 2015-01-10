@@ -11,7 +11,7 @@
 var entityDAO = require('./entity');
 var dbUtil = require('./util');
 var db = require('./connection').db;
-var deepClone = require('clone');
+var merge = require('merge');
 var DEFAULT_USER = require('../config/defaultuser').DEFAULT_USER;
 
 
@@ -77,7 +77,7 @@ exports.getUsersAsync = function(aProfile, aOnUsersLoad){
       merge(DEFAULT_USER, {
         username: email,
         openId: openId
-      });
+      })
   );
 };
 

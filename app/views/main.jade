@@ -14,11 +14,9 @@ block jsLinksHead
 block content
   script.
     var CALENDARS = !{calendars};
-    var SETTINGS = !{settings};
     var MODULES = !{modules};
     var LANGUAGE_NAMES = !{languageNames};
-    var USER_ID = '!{userId}';
-    var USER_NAME = '!{userName}';
+    var USER = !{user};
   if !processed
     script.
       // Call main method.

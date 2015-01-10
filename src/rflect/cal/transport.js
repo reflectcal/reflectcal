@@ -106,7 +106,8 @@ rflect.cal.Transport.EventTypes = {
   LOAD_EVENT: 'loadevent',
   SAVE_CALENDAR: 'savecalendar',
   DELETE_CALENDAR: 'deletecalendar',
-  SAVE_SETTINGS: 'savesettings'
+  SAVE_SETTINGS: 'savesettings',
+  SAVE_USER: 'saveuser'
 }
 
 
@@ -193,6 +194,19 @@ rflect.cal.Transport.DeleteCalendarEvent = function(aCalendarId) {
 rflect.cal.Transport.SaveSettingsEvent = function(aSettings, aReload) {
   this.type = rflect.cal.Transport.EventTypes.SAVE_SETTINGS;
   this.settings = aSettings;
+  this.reload = aReload;
+}
+
+
+/**
+ * Event that is fired after saving of user.
+ * @param {Object} aUser User object.
+ * @param {boolean} aReload Whether reload is needed after settings are applied.
+ * @constructor
+ */
+rflect.cal.Transport.SaveUserEvent = function(aUser, aReload) {
+  this.type = rflect.cal.Transport.EventTypes.SAVE_USER;
+  this.user = aUser;
   this.reload = aReload;
 }
 
@@ -637,8 +651,7 @@ rflect.cal.Transport.prototype.onSaveSettings_ = function(aSettings, aReload,
  * @param {Object} aUser User object.
  * @param {boolean} aReload Whether reload is needed after user is saved.
  */
-rflect.cal.Transport.prototype.saveUserAsync = function(aUser,
-                                                            aReload) {
+rflect.cal.Transport.prototype.saveUserAsync = function(aUser, aReload) {
 
   goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.SAVE_USER,
       goog.bind(this.onSaveUser_, this, aUser, aReload),
@@ -655,8 +668,7 @@ rflect.cal.Transport.prototype.saveUserAsync = function(aUser,
  * @param {Object} aUser User.
  * @param {goog.events.Event} aEvent Event object.
  */
-rflect.cal.Transport.prototype.onSaveUser_ = function(aUser, aReload,
-                                                          aEvent) {
+rflect.cal.Transport.prototype.onSaveUser_ = function(aUser, aReload, aEvent) {
   var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
 
   var response = rflect.cal.Transport.getResponseJSON(x);
