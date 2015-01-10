@@ -35,6 +35,14 @@ an instance.
   npm install
   ```
 
+6. Go to [Google developers console][devconsole] and:
+
+  a. Create project for this particular app instance. Name it like something that reflects both app and particular machine from where app is launched, like "Reflect calendar on Alex's iMac".
+  
+  b. Under API and auth/Credentials menu, create new Client ID with Web application bullet point.
+  
+  c. Dowload JSON file and put it in your application root, near app.js.
+
 6. Compile from sources.
 
   ```
@@ -47,7 +55,7 @@ an instance.
   node app
   ```
 
-8. Go to [http://localhost:3000/view/](http://localhost:3000/view/)
+8. Go to [http://localhost:3000/](http://localhost:3000/)
 
 [jdk]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [python]: https://www.python.org/download/releases/2.7/
@@ -57,3 +65,4 @@ an instance.
 [grunt]: https://github.com/gruntjs/grunt
 [less]: https://github.com/less/less
 [bunyan]: https://github.com/trentm/node-bunyan
+[devconsole]: https://console.developers.google.com/project?authuser=1 
