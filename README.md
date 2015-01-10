@@ -8,6 +8,10 @@ Installation and run
 
 1. Clone this repository locally.
 
+  ```
+  git clone https://github.com/alexeykomov/reflectcal.git
+  ```
+
 2. Runtimes - Install [Java][jdk], [Python][python] and [Node.js][node.js].
 
 3. Install [MongoDB][mongodb]. Create storage folder for it, may as well start
