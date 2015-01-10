@@ -9,6 +9,8 @@ Installation and run
 1. Clone this repository locally.
 
   ```
+  mkdir reflectcal
+  cd reflectcal
   git clone https://github.com/alexeykomov/reflectcal.git
   ```
 
