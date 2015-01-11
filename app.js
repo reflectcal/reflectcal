@@ -29,6 +29,7 @@ var app = express();
 var credentials = oauthHelper.getCredentialsObject();
 var GOOGLE_CLIENT_ID = credentials.web.client_id;
 var GOOGLE_CLIENT_SECRET = credentials.web.client_secret;
+var CALLBACK_URL = credentials.web.redirect_uris[0];
 
 // all environments
 app.set('port', process.env.PORT || appConfig.APP_PORT);
@@ -57,8 +58,7 @@ passport.use(new LocalStrategy(login.localStrategy));
 passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: 'http://localhost:' + appConfig.APP_PORT +
-      '/auth/google/callback',
+  callbackURL: CALLBACK_URL,
 }, login.googleStrategy));
 
 passport.serializeUser(login.serializeUser);
