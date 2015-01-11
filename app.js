@@ -24,12 +24,6 @@ var db = require('./app/db/connection').db;
 var oauthHelper = require('./app/util/oauthhelper');
 
 var app = express();
-// API Access link for creating client ID and secret:
-// https://code.google.com/apis/console/
-var credentials = oauthHelper.getCredentialsObject();
-var GOOGLE_CLIENT_ID = credentials.web.client_id;
-var GOOGLE_CLIENT_SECRET = credentials.web.client_secret;
-var CALLBACK_URL = credentials.web.redirect_uris[0];
 
 // all environments
 app.set('port', process.env.PORT || appConfig.APP_PORT);
@@ -50,19 +44,29 @@ app.use(passport.session());
 app.use(app.router);
 app.use('/static', express.static(path.join(__dirname, 'static')));
 
-passport.use(new LocalStrategy(login.localStrategy));
-// Use the GoogleStrategy within Passport.
-// Strategies in Passport require a `verify` function, which accept
-// credentials (in this case, an accessToken, refreshToken, and Google
-// profile), and invoke a callback with a user object.
-passport.use(new GoogleStrategy({
-  clientID: GOOGLE_CLIENT_ID,
-  clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: CALLBACK_URL,
-}, login.googleStrategy));
+if (appConfig.USE_OAUTH) {
+  // API Access link for creating client ID and secret:
+  // https://code.google.com/apis/console/
+  var credentials = oauthHelper.getCredentialsObject();
+  var GOOGLE_CLIENT_ID = credentials.web.client_id;
+  var GOOGLE_CLIENT_SECRET = credentials.web.client_secret;
+  var CALLBACK_URL = credentials.web.redirect_uris[0];
+  // Use the GoogleStrategy within Passport.
+  // Strategies in Passport require a `verify` function, which accept
+  // credentials (in this case, an accessToken, refreshToken, and Google
+  // profile), and invoke a callback with a user object.
+  passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: CALLBACK_URL,
+  }, login.googleStrategy));
+} else {
+  passport.use(new LocalStrategy(login.localStrategy));
+}
 
 passport.serializeUser(login.serializeUser);
 passport.deserializeUser(login.deserializeUser);
+
 // development only
 if ('development' == app.get('env')) {
   app.use('/js', express.static(path.join(__dirname, 'js')));
@@ -78,43 +82,48 @@ if ('development' == app.get('env')) {
 app.get('/', ensureAuthenticated, routesView.render);
 app.get('/login', routesLogin.render);
 app.get('/logout', routesLogin.logout);
-//Local strategy form post.
-app.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true
-}), function(req, res) {
-  // If this function gets called, authentication was successful.
-  // `req.user` contains the authenticated user.
-  log.info(req.user);
-  res.redirect('/');
-});
-// GET /auth/google
-// Use passport.authenticate() as route middleware to authenticate the
-// request. The first step in Google authentication will involve
-// redirecting the user to google.com. After authorization, Google
-// will redirect the user back to this application at /auth/google/callback
-app.get('/auth/google', passport.authenticate('google', {
-  scope: ['https://www.googleapis.com/auth/userinfo.profile',
-          'https://www.googleapis.com/auth/userinfo.email']
-}), function(req, res){
-  // The request will be redirected to Google for authentication, so this
-  // function will not be called.
-});
-// GET /auth/google/callback
-// Use passport.authenticate() as route middleware to authenticate the
-// request. If authentication fails, the user will be redirected back to the
-// login page. Otherwise, the primary route function function will be called,
-// which, in this example, will redirect the user to the home page.
-app.get('/auth/google/callback', passport.authenticate('google', {
-  failureRedirect: '/login'
-}), function(req, res) {
-  res.redirect('/');
-});
+if (!appConfig.USE_OAUTH) {
+  //Local strategy form post.
+  app.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+  }), function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    log.info(req.user);
+    res.redirect('/');
+  });
+}
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/login');
 });
+
+if (appConfig.USE_OAUTH) {
+  // GET /auth/google
+  // Use passport.authenticate() as route middleware to authenticate the
+  // request. The first step in Google authentication will involve
+  // redirecting the user to google.com. After authorization, Google
+  // will redirect the user back to this application at /auth/google/callback
+  app.get('/auth/google', passport.authenticate('google', {
+    scope: ['https://www.googleapis.com/auth/userinfo.profile',
+            'https://www.googleapis.com/auth/userinfo.email']
+  }), function(req, res){
+    // The request will be redirected to Google for authentication, so this
+    // function will not be called.
+  });
+  // GET /auth/google/callback
+  // Use passport.authenticate() as route middleware to authenticate the
+  // request. If authentication fails, the user will be redirected back to the
+  // login page. Otherwise, the primary route function function will be called,
+  // which, in this example, will redirect the user to the home page.
+  app.get('/auth/google/callback', passport.authenticate('google', {
+    failureRedirect: '/login'
+  }), function(req, res) {
+    res.redirect('/');
+  });
+}
 
 app.post('/calendars/save', ensureAuthenticated, routesCalendar.calendarSave);
 app.post('/calendars/delete/:id', ensureAuthenticated, routesCalendar.calendarDelete);

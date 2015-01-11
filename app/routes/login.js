@@ -35,7 +35,7 @@ exports.render = function(req, res) {
       Array.prototype.push.apply(cssFileNames, getCssFileNames());
     }
 
-    res.render('login-google', {
+    res.render(appConfig.USE_OAUTH ? 'login-google' : 'login', {
       processed: appConfig.COMPILED || appConfig.BUILT,
       staticDir: STATIC_DIR,
       jsFileNames: jsFileNames,

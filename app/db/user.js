@@ -91,7 +91,7 @@ function userToTransportJSON(aUser) {
   //We could have some old user object in db, without some newly introduced
   // properties. In that case, provide defaults.
   var userExported = merge(DEFAULT_USER, aUser);
- 
+
   return userExported;
 };
 

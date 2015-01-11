@@ -36,6 +36,13 @@ exports.DB_NAME = 'rflectevents';
 
 
 /**
+ * Whether to use oauth authentication. If false, rollback to local strategy.
+ * @type {boolean}
+ */
+exports.USE_OAUTH = false;
+
+
+/**
  * App HTTP port.
  * @type {number}
  */
