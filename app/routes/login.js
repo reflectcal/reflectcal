@@ -13,6 +13,7 @@ var ua = require('../util/useragent');
 var getJsFileNames = require('../util/pagehelper').getJsFileNames;
 var getCssFileNames = require('../util/pagehelper').getCssFileNames;
 var STATIC_DIR = require('../util/pagehelper').STATIC_DIR;
+var viewAdapter = require('../util/viewadapter');
 
 
 /**

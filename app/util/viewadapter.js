@@ -15,6 +15,7 @@ var accLangParser = require('acc-lang-parser');
 var userDAO = require('../db/user');
 var appConfig = require('../config/appconfig');
 var log = appConfig.log;
+var DEFAULT_USER = require('../config/defaultuser').DEFAULT_USER;
 
 
 /**
@@ -22,9 +23,9 @@ var log = appConfig.log;
  * @return {string} One of named constants for user agent, or null.
  */
 exports.getCompiledTargetAsync = function(aRequest, aOnGetCompiledTarget){
-  var user = aRequest.user[0];
+  var user = aRequest.user ? aRequest.user[0] : DEFAULT_USER;
 
-  log.info('user', aUser);
+  log.info('user', user);
 
   //Set default target.
   var target;

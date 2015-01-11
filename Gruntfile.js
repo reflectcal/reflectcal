@@ -512,7 +512,7 @@ module.exports = function(grunt) {
       app: {
         expand: true,
         flatten: false,
-        src: ['app/**', 'app.js', 'package.json'],
+        src: ['app/**', 'app.js', 'package.json', 'client_secret_*json'],
         dest: 'build/'
       },
       fonts: {
