@@ -47,7 +47,11 @@ an instance.
   
   b. Under API and auth/Credentials menu, create new Client ID with Web application bullet point.
   
-  c. Dowload JSON file and put it in your application root, near app.js.
+  c. In field "Authorized JavaScript origins" put [http://localhost:3000/](http://localhost:3000/).
+  
+  d. In field "Authorized redirect URIs" put [http://localhost:3000/auth/google/callback](http://localhost:3000/auth/google/callback ). Note that you may insert your own part instead of http://localhost:3000.
+  
+  e. Dowload JSON file and put it in your application root, near app.js.
 
 6. Compile from sources.
 
