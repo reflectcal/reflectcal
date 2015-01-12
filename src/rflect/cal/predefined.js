@@ -33,9 +33,9 @@ rflect.MOBILE = rflect.UI_TYPE == 'MOBILE';
 
 /**
  * Feature flag - whether side pane can be hidden for big screen.
- * @define {boolean}
+ * @type {boolean}
  */
-rflect.SIDE_PANE_MOVABLE = true;
+rflect.SIDE_PANE_MOVABLE = rflect.MOBILE;
 
 
 /**
@@ -54,16 +54,16 @@ rflect.VERTICAL_EXPAND_ENABLED = false;
 
 /**
  * Feature flag - whether larger targets enabled, for touch.
- * @define {boolean}
+ * @type {boolean}
  */
-rflect.TOUCH_INTERFACE_ENABLED = false;
+rflect.TOUCH_INTERFACE_ENABLED = rflect.MOBILE;
 
 
 /**
  * Whether wireless communication is used.
- * @define {boolean}
+ * @type {boolean}
  */
-rflect.WIRELESS_COMMUNICATION_IS_USED = false;
+rflect.WIRELESS_COMMUNICATION_IS_USED = rflect.MOBILE;
 
 
 /**

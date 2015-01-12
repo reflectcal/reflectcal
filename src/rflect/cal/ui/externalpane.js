@@ -176,10 +176,8 @@ rflect.cal.ui.ExternalPane.prototype.createDom = function() {
   this.settingsBody = this.createBody(dom);
   settingsBodyOuter.appendChild(this.settingsBody);
 
-  var root = dom.createDom('div', {
-    className: goog.getCssName('settings-pane') + (rflect.MOBILE ?
-        ' slide-pane-left' : '')
-  }, this.getControlPane_(true), settingsBodyOuter, this.getControlPane_(false));
+  var root = dom.createDom('div', 'settings-pane', this.getControlPane_(true),
+      settingsBodyOuter, this.getControlPane_(false));
 
   this.setElementInternal(root);
 }
