@@ -266,7 +266,7 @@ body {
   #main-pane-body-scrollable-wk();
 }
 
-#main-pane-body-scrollable-wk when (@UI_TYPE = 'TOUCH') {
+#main-pane-body-scrollable-wk when (@UI_TYPE = 'MOBILE') {
   #main-pane-body-scrollable-wk();
   overflow-y: hidden;
   z-index: 0;
@@ -494,10 +494,6 @@ body {
   margin-left: 28px; /*11+ 1 pixels from zippies, 15 + 1 pixels from weeknums*/
 }
 
-.main-pane-header-container-mn when (@UI_TYPE = 'MOBILE') {
-  margin-left: 16px; /*15 + 1 pixels from weeknums*/
-}
-
 .main-pane-body-scrollable-mn {
   overflow-x: hidden;
   border: 1px solid #e5e5e5;
@@ -515,7 +511,7 @@ body {
   overflow-y: scroll;
 }
 
-.mpbs-mn-scroll-vert-on when (@UI_TYPE = 'TOUCH') {
+.mpbs-mn-scroll-vert-on when (@UI_TYPE = 'MOBILE') {
   .mpbs-mn-scroll-vert-on();
   overflow-y: hidden;
 }

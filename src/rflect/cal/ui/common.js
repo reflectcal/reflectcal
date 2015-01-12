@@ -32,12 +32,7 @@ rflect.cal.ui.common.setBackButtonContent = function(aButton, opt_right) {
  * @param {goog.ui.Button} aButton Whether button is aligned to right.
  */
 rflect.cal.ui.common.setDeleteButtonContent = function(aButton) {
-  if (rflect.MOBILE) {
-    var content = goog.dom.createDom('i',
-        ['icon', 'icon-in-button', 'icon-trash-o']);
-  } else {
-    var content = rflect.cal.i18n.Symbols.DELETE;
-  }
+  var content = rflect.cal.i18n.Symbols.DELETE;
 
   aButton.setContent(content);
 };
