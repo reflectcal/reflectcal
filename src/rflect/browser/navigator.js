@@ -43,7 +43,9 @@ goog.inherits(rflect.cal.Navigator, goog.events.EventTarget);
  * Query to detect small screens.
  * @type {string}
  */
-rflect.cal.Navigator.SMALL_SCREEN_QUERY = '(max-width: 480px)';
+rflect.cal.Navigator.SMALL_SCREEN_QUERY =
+    '(max-width: 640px) and (orientation: portrait), ' +
+    '(max-width: 832px) and (orientation: landscape)';
 
 
 /**
