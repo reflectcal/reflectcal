@@ -26,7 +26,7 @@ var oauthHelper = require('./app/util/oauthhelper');
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || appConfig.APP_PORT);
+app.set('port', appConfig.APP_PORT);
 app.set('views', path.join(__dirname, 'app', 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
