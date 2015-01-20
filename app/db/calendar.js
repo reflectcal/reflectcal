@@ -10,7 +10,7 @@
 
 var entityDAO = require('./entity');
 var dbUtil = require('./util');
-var DEFAULT_CALENDAR = require('../config/defaultcalendar').DEFAULT_CALENDAR;
+var DEFAULT_CALENDARS = require('../config/defaultcalendar').DEFAULT_CALENDARS;
 var db = require('./connection').db;
 var appConfig = require('../config/appconfig');
 var log = appConfig.log;
@@ -26,10 +26,13 @@ var merge = require('merge');
 exports.getCalendarsAsync = function(aUserName, aOnCalendarsLoad){
   entityDAO.getEntitiesAsync('calendars', { owner: aUserName },
       aOnCalendarsLoad, calendarToTransportJSON, 
-      //Default calendar is personalized for user.
-      merge(DEFAULT_CALENDAR, {
-        owner: aUserName }));
-
+      //Defaults calendars are personalized for user.
+      DEFAULT_CALENDARS.map(function(aDefaultCalendar) {
+        return merge(aDefaultCalendar, {
+          owner: aUserName 
+        });
+      })
+  );
 };
 
 

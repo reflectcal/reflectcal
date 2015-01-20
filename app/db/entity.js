@@ -54,39 +54,48 @@ exports.getEntitiesAsync = function(aCollectionName, aLookupObject,
 
 
 /**
- * Ensures that entity exists.
+ * Ensures that entity(ies) exists.
  * @param {Object} aCollection Collection to which entity belongs.
  * @param {Object} aLookupObject Object with entity lookup params.
- * @param {function()} aOnEnsureEntityExist Callback that will be executed
+ * @param {function()} aOnEnsureEntityExists Callback that will be executed
  * when entity is truly present.
+ * @param {Object|Array.<Object>} aDefaultEntity Default entity(ies) to add if 
+ * they are not already present.
+ *
+ * This method ensures that appropriate quantity of default objects are created 
+ * if they are not present. If, for example, 3 calendars are expected to exist,
+ * but only 1 is present, method will create 2 remaining calendars.
  */
 function ensureEntityExists(aCollection, aLookupObject,
-    aOnEnsureEntityExist, aDefaultEntity){
+    aOnEnsureEntityExists, aDefaultEntity){
   log.info('ensureEntityExists');
-  var howManySuccessesAreNeeded = Array.isArray(aDefaultEntity) ?
-      aDefaultEntity.length : 1;
-  var entities = Array.isArray(aDefaultEntity) ? aDefaultEntity :
+  var defaultEntities = Array.isArray(aDefaultEntity) ? aDefaultEntity :
       [aDefaultEntity];
-
-  entities.forEach(function(){
 
   aCollection.count(aLookupObject, function(aError, aCount){
     log.info('aCount', aCount );
 
-    if (aCount == 0) dbUtil.getUniqueIdAsync(aCollection, function(aId) {
-      var defaultEntity = deepClone(aDefaultEntity);
-      defaultEntity._id = aId;
+    if (aCount < defaultEntities.length) {
+      var howManySuccessesAreNeeded = defaultEntities.length - aCount;
+      var successCounter = 0;
+      
+      defaultEntities.slice(aCount).forEach(function(aEntity) {
+        dbUtil.getUniqueIdAsync(aCollection, function(aId) {
+          var defaultEntity = deepClone(aEntity);
+          defaultEntity._id = aId;
 
-      aCollection.insert(defaultEntity, {}, function(aError, aResult){
-        successCounter++;
-        if (howManySuccessesAreNeeded == successCounter) {
-          aOnEnsureEntityExist();
-        }
-      });
-    })
-    else if (aCount >= 1)
-      aOnEnsureEntityExist();
-  });
+          aCollection.insert(defaultEntity, {}, function(aError, aResult){
+            successCounter++;
+            if (howManySuccessesAreNeeded == successCounter) {
+              aOnEnsureEntityExists();
+            }
+          });
+        });
+      })
+    } else {
+      aOnEnsureEntityExists();
+    }
+    
   });
 }
 
