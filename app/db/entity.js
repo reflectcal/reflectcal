@@ -63,6 +63,13 @@ exports.getEntitiesAsync = function(aCollectionName, aLookupObject,
 function ensureEntityExists(aCollection, aLookupObject,
     aOnEnsureEntityExist, aDefaultEntity){
   log.info('ensureEntityExists');
+  var howManySuccessesAreNeeded = Array.isArray(aDefaultEntity) ?
+      aDefaultEntity.length : 1;
+  var entities = Array.isArray(aDefaultEntity) ? aDefaultEntity :
+      [aDefaultEntity];
+
+  entities.forEach(function(){
+
   aCollection.count(aLookupObject, function(aError, aCount){
     log.info('aCount', aCount );
 
@@ -71,11 +78,15 @@ function ensureEntityExists(aCollection, aLookupObject,
       defaultEntity._id = aId;
 
       aCollection.insert(defaultEntity, {}, function(aError, aResult){
-        aOnEnsureEntityExist();
+        successCounter++;
+        if (howManySuccessesAreNeeded == successCounter) {
+          aOnEnsureEntityExist();
+        }
       });
     })
     else if (aCount >= 1)
       aOnEnsureEntityExist();
+  });
   });
 }
 
