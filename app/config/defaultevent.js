@@ -28,6 +28,27 @@ exports.DEFAULT_EVENTS = [
     start : -86400000 + 16 * 60 * 60 * 1000,
     end : -86400000 + 20 * 60 * 60 * 1000
   },{
+    calendarId : 2,
+    allDay : false,
+    description : '',
+    name : '',
+    start : -3 * 86400000 + 9.5 * 60 * 60 * 1000,
+    end : -3 * 86400000 + 16 * 60 * 60 * 1000
+  },{
+    calendarId : 0,
+    allDay : false,
+    description : '',
+    name : '',
+    start : -3 * 86400000 + 10.5 * 60 * 60 * 1000,
+    end : -3 * 86400000 + 17 * 60 * 60 * 1000
+  },{
+    calendarId : 1,
+    allDay : false,
+    description : '',
+    name : '',
+    start : -3 * 86400000 + 11.5 * 60 * 60 * 1000,
+    end : -3 * 86400000 + 18 * 60 * 60 * 1000
+  },{
     calendarId : 1,
     allDay : false,
     description : '',
