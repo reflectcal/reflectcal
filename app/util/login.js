@@ -53,20 +53,24 @@ exports.googleStrategy = function(accessToken, refreshToken, aProfile, aDone) {
     console.log('accessToken: ', accessToken);
     console.log('refreshToken: ', refreshToken);
     console.log('aProfile: ', aProfile);
-    userDAO.getUsersAsync(aProfile, function(aUsers) {
-      log.info('User: ', JSON.stringify(aUsers));
-      //TODO(alexk): make all callbacks return error as first argument.
-      //if (aError) { return aDone(aError); }
-      if (!aUsers || !aUsers.length) {
-        return aDone(null, false, { message: 'No such user.' });
-      }
-      if (aUsers.length > 1) {
-        return aDone(null, false, {
-          message: 'Ambiguous case. Several users with id: ' +  aId + '.'
-        });
-      }
-      var user = aUsers[0];
-      return aDone(null, user);
+
+    //Initial setup for user (calendars, events).
+    userDAO.setUpUser(aProfile, function(){
+      userDAO.getUsersAsync(aProfile, function(aUsers) {
+        log.info('User: ', JSON.stringify(aUsers));
+        //TODO(alexk): make all callbacks return error as first argument.
+        //if (aError) { return aDone(aError); }
+        if (!aUsers || !aUsers.length) {
+          return aDone(null, false, { message: 'No such user.' });
+        }
+        if (aUsers.length > 1) {
+          return aDone(null, false, {
+            message: 'Ambiguous case. Several users with id: ' +  aId + '.'
+          });
+        }
+        var user = aUsers[0];
+        return aDone(null, user);
+      });
     });
   });
 }

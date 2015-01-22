@@ -12,43 +12,62 @@
 var merge = require('merge');
 
 
-exports.DEFAULT_EVENT = {
-  calendarId : '',
-  allDay : false,
-  description : '',
-  name : '',
-  end : 0,
-  start : 0,
-};
+exports.DEFAULT_EVENTS = [
+  {
+    calendarId : 0,
+    allDay : false,
+    description : '',
+    name : 'Read Blindsight',
+    start : 10 * 60 * 60 * 1000,
+    end : 14 * 60 * 60 * 1000
+  },{
+    calendarId : 0,
+    allDay : false,
+    description : '',
+    name : 'Watch Space Odyssey 2001',
+    start : -86400000 + 16 * 60 * 60 * 1000,
+    end : -86400000 + 20 * 60 * 60 * 1000
+  },{
+    calendarId : 1,
+    allDay : false,
+    description : '',
+    name : 'Meet Elon Musk',
+    start : 16 * 60 * 60 * 1000,
+    end : 18 * 60 * 60 * 1000
+  },{
+    calendarId : 2,
+    allDay : true,
+    description : '',
+    name : 'Test and launch Reflect calendar',
+    start : 86400000 + 0 * 60 * 60 * 1000,
+    end : 86400000 + 24 * 60 * 60 * 1000
+  },{
+    calendarId : 2,
+    allDay : false,
+    description : '',
+    name : 'Expecting call from Carl Sagan',
+    start : -86400000 + 17 * 60 * 60 * 1000,
+    end : -86400000 + 21 * 60 * 60 * 1000
+  }
+];
 
 
 /**
- * @param {Array.<string>} aCalendarIds Calendar ids.
+ * @param {string} aCalendarId Calendar id.
  */
-exports.generateDefaultEvents = function(aCalendarIds) {
-  var now = new Date();
-  
-  var meetElonMuskStart = new Date(now.getFullYear(), now.getMonth(), 
-    now.getDate(), 16, 0, 0);
-  var meetElonMuskEnd = new Date(now.getFullYear(), now.getMonth(),
-    now.getDate(), 18, 0, 0);
-  var meetElonMuskEvent = merge(exports.DEFAULT_EVENT, {
-    start: meetElonMuskStart.getTime(),  
-    end: meetElonMuskEnd.getTime(),
-    calendarId: aCalendarIds[1] || '',
-    name: 'Meet Elon Musk'
-  });
-  
-  var readRainbowsEndStart = new Date(now.getFullYear(), now.getMonth(), 
-    now.getDate(), 5, 30, 0);
-  var readRainbowsEndEnd = new Date(now.getFullYear(), now.getMonth(),
-    now.getDate(), 12, 0, 0);
-  var readRainbowsEndEvent = merge(exports.DEFAULT_EVENT, {
-    start: readRainbowsEndStart.getTime(),  
-    end: readRainbowsEndEnd.getTime(),
-    calendarId: aCalendarIds[2] || '',
-    name: 'Read Rainbow\'s End'
-  });
+exports.generateDefaultEvents = function(aCalendarId, aColorCode) {
+  var today = new Date();
+  var offset = new Date(today.getFullYear(), today.getMonth(), today.getDate(),
+      0, 0, 0).getTime();
 
-  return [readRainbowsEndEvent, meetElonMuskEvent];
+  return exports.DEFAULT_EVENTS.filter(function(aEvent){
+    return aEvent.calendarId == aColorCode;
+  }).map(function(aEvent,
+      aIndex) {
+    return merge(aEvent, {
+      start: aEvent.start + offset,
+      end: aEvent.end + offset,
+      calendarId: aCalendarId,
+    })
+  });
 };

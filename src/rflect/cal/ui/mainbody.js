@@ -113,8 +113,8 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
       this.containerSizeMonitor_, this.navigator_));
 
   //Enabling touch-only interface.
-  this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
-  this.enableMouseInterface(!rflect.TOUCH_INTERFACE_ENABLED, true);
+  //this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
+  //this.enableMouseInterface(!rflect.TOUCH_INTERFACE_ENABLED, true);
 
   if (goog.DEBUG) {
     _inspect('topPane_', this.topPane_);

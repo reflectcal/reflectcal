@@ -14,8 +14,6 @@ var db = require('./connection').db;
 var appConfig = require('../config/appconfig');
 var log = appConfig.log;
 var deepClone = require('clone');
-var generateDefaultEvents = require('../config/defaultevent').
-    generateDefaultEvents;
 
 
 /**
@@ -37,7 +35,7 @@ exports.getEventsAsync = function(aLookupJSON, aOnEventsLoad){
   };
 
   entityDAO.getEntitiesAsync('events', lookupObject, aOnEventsLoad,
-      eventToTransportJSON, generateDefaultEvents(calendarIds));
+      eventToTransportJSON);
 };
 
 
