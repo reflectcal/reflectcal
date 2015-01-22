@@ -9,7 +9,7 @@
 
 
 var entityDAO = require('./entity');
-var merge = require('merge');
+var merge = require('object-merge');
 var DEFAULT_APP_SETTINGS =
     require('../config/defaultsettings').DEFAULT_APP_SETTINGS;
 var appConfig = require('../config/appconfig');

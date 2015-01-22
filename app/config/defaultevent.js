@@ -9,7 +9,7 @@
  */
 
 
-var merge = require('merge');
+var merge = require('object-merge');
 
 
 exports.DEFAULT_EVENTS = [

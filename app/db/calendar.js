@@ -15,7 +15,7 @@ var DEFAULT_CALENDAR = require('../config/defaultcalendar').
 var db = require('./connection').db;
 var appConfig = require('../config/appconfig');
 var log = appConfig.log;
-var merge = require('merge');
+var merge = require('object-merge');
 
 
 /**

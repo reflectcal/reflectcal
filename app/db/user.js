@@ -11,7 +11,7 @@
 var entityDAO = require('./entity');
 var dbUtil = require('./util');
 var db = require('./connection').db;
-var merge = require('merge');
+var merge = require('object-merge');
 var DEFAULT_USER = require('../config/defaultuser').DEFAULT_USER;
 var DEFAULT_CALENDARS = require('../config/defaultcalendar').DEFAULT_CALENDARS;
 var generateDefaultEvents = require('../config/defaultevent').
@@ -97,12 +97,12 @@ exports.setUpUser = function(aProfile, aOnSetUpUser) {
   var openId = aProfile.id;
   var email = aProfile.emails[0].value;
 
-  console.log('setUpUser');
   db.get('users').count({ openId: openId }, function(aError,
       aCount) {
     log.info('aCount', aCount );
 
     if (aCount == 0) {
+      
       insertDefaultEntities(email, aOnSetUpUser);
     } else if (aCount >= 1) {
       aOnSetUpUser(null, true);
@@ -133,8 +133,7 @@ function insertDefaultEntities(aUserName, aOnInsertDefaultEntities) {
           defaultCalendar.colorCodeId);
       eventsExpected += defaultEvents.length;
 
-      defaultEvents.forEach(
-          function(aDefaultEvent) {
+      defaultEvents.forEach(function(aDefaultEvent) {
         eventsCollection.insert(aDefaultEvent, {}, onDefaultEntityInsert);
       });
     });
