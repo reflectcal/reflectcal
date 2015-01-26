@@ -292,14 +292,11 @@ rflect.cal.ui.SettingsPane.prototype.createButtonCont_ =
  */
 rflect.cal.ui.SettingsPane.prototype.createLogoutCont_ =
     function(aDom) {
-  if (goog.DEBUG)
-      console.log('this.viewManager.user: ', this.viewManager.user);
-      
   // Languages select.
   var labelLogout = aDom.createDom('label', {
     'for': 'settings-logout',
     className: rflect.cal.ui.SettingsPane.LABEL_CLASS_NAME +
-        ' event-pane-calendars-label'
+        ' event-pane-calendars-label logged-label'
   }, 'Logged in as ', aDom.createDom('b', null, 
       this.viewManager.user['username']));
   var buttonLogout = aDom.createDom('a', {
