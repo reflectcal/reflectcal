@@ -72,20 +72,18 @@ rflect.cal.ui.SaveDialog.prototype.select_;
  * @const
  * @private
  */
-rflect.cal.ui.SaveDialog.HTML_PARTS_ =
-    '<div class="' + goog.getCssName('event-name-cont') + '">' +
-        '<label for="event-name" class="' + goog.getCssName('event-name-label') + '">Event name</label>' +
-        '<input type="text" value="" id="event-name" name="event-name" ' +
-        'class="event-name-input ep-event-name-input" spellcheck="false" placeholder="' +
-        rflect.cal.i18n.Symbols.NO_NAME_EVENT +
-        '"/>' +
-        '</div>' +
-
-        '<label for="event-cal" class="' + goog.getCssName('event-name-label') + '">Calendar</label>' +
-        '<select id="event-cal" class="event-cal-select dialog-event-cal-select"></select>' +
-
-        '<button id="event-edit" class="event-edit-link">' +
-        'Edit options</button>';
+rflect.cal.ui.SaveDialog.HTML_PARTS_ = [
+  '<div class="event-name-input-cont event-pane-cont-first event-pane-cont">',
+    '<input placeholder="Event name" class="ep-event-name-input" id="event-name" type="text">',
+  '</div>',
+  '<div class="event-pane-cont">',
+    '<label class="label-fluid event-pane-label event-pane-calendars-label" for="dialog-event-calendars">Calendar</label>',
+    '<div class="button dropdown settings-pane-select">',
+      '<select id="dialog-event-calendars">',
+      '</select>',
+    '</div>',
+  '</div>'
+].join('');
 
 
 /**
@@ -107,18 +105,14 @@ rflect.cal.ui.SaveDialog.prototype.focus = function () {
  */
 rflect.cal.ui.SaveDialog.prototype.enterDocument = function () {
   var dom = this.getDomHelper();
-  var link = dom.getElement('event-edit');
   this.input_ = dom.getElement('event-name');
 
-  var selectEl = dom.getElement('event-cal');
+  var selectEl = dom.getElement('dialog-event-calendars');
 
   this.select_ = new rflect.cal.ui.CalendarsSelect(selectEl,
       this.eventManager_);
 
   rflect.cal.ui.SaveDialog.superClass_.enterDocument.call(this);
-
-  this.getHandler().listen(link, goog.events.EventType.CLICK, this.onEditClick_,
-      false, this);
 }
 
 
@@ -135,19 +129,6 @@ rflect.cal.ui.SaveDialog.prototype.getEventName = function () {
  */
 rflect.cal.ui.SaveDialog.prototype.getCalendarId = function () {
   return this.select_.getCalendarId();
-}
-
-
-/**
- * Edit link click listener.
- * @param {goog.events.Event} aEvent Event object.
- * @private
- */
-rflect.cal.ui.SaveDialog.prototype.onEditClick_ = function (aEvent) {
-  var close = this.dispatchEvent({type:
-      rflect.cal.ui.SaveDialog.EVENT_EDIT});
-  if (close)
-    this.setVisible(false);
 }
 
 
