@@ -50,7 +50,7 @@ exports.APP_PORT = exports.BUILT ? 80 : 3000;
 
 
 /**
- * Whether to perfrom user setup, i.e. add dafault calendars and events.
+ * Whether to perform user setup, i.e. add default calendars and events.
  * Interface may look more friendly with some events and calendars already set.
  * @type {boolean}
  */
