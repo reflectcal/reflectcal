@@ -107,12 +107,12 @@ rflect.cal.ui.EditDialog.prototype.eventNameLink_;
  * @const
  * @private
  */
-rflect.cal.ui.EditDialog.HTML_PARTS_ =
-    '<div id="ed-event-time" class="' + goog.getCssName('event-time') + '">' +
-        '</div>' +
-        '<a id="ed-event-edit" class="' + goog.getCssName('event-edit-link') + ' ' + goog.getCssName('edit-dialog-link') + ' ' + goog.getCssName('goog-inline-block') + '" ' +
-        'href="javascript:void(0)">' +
-        '</a>';
+rflect.cal.ui.EditDialog.HTML_PARTS_ = [
+  '<div id="ed-event-time" class="event-pane-cont event-time">',
+  '</div>',
+  '<button id="ed-event-edit" class="event-pane-cont event-edit-link edit-dialog-link goog-inline-block">',
+  '</button>'
+].join('');
 
 
 /**

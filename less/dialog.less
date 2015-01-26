@@ -12,14 +12,15 @@
 
 
 .modal-dialog {
-  background: #fff;
-  overflow:hidden;/*This is to make border-radius clear.*/
+  position: absolute;
+  width: 430px;
   border: 1px solid #e5e5e5;
+  overflow:hidden;/*This is to make border-radius clear.*/
   color: #000;
   /*padding: 4px;*/
-  position: absolute;
   z-index: 100;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  background: #fff;
   border-radius: 5px;
   outline: none;
 }
@@ -45,9 +46,13 @@
 }
 
 .modal-dialog-title {
+  .underlined-section();
+  
+  padding: 25px 0;
   text-align: center;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .modal-dialog-title-close {
@@ -63,10 +68,11 @@
 .modal-dialog-buttons,
 .modal-dialog-content {
   background-color: #fff;
-  padding: 20px;
+  padding: 8px 0;
 }
 
 .modal-dialog-buttons {
+  text-align: right;
 }
 
 .goog-buttonset-default {
