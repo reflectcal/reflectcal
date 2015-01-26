@@ -50,29 +50,31 @@ exports.localStrategy = function(aUsername, aPassword, aDone) {
 exports.googleStrategy = function(accessToken, refreshToken, aProfile, aDone) {
   // Asynchronous verification, for effect...
   process.nextTick(function() {
-    console.log('accessToken: ', accessToken);
-    console.log('refreshToken: ', refreshToken);
-    console.log('aProfile: ', aProfile);
-
     //Initial setup for user (calendars, events).
-    userDAO.setUpUser(aProfile, function(){
-      userDAO.getUsersAsync(aProfile, function(aUsers) {
-        log.info('User: ', JSON.stringify(aUsers));
-        //TODO(alexk): make all callbacks return error as first argument.
-        //if (aError) { return aDone(aError); }
-        if (!aUsers || !aUsers.length) {
-          return aDone(null, false, { message: 'No such user.' });
-        }
-        if (aUsers.length > 1) {
-          return aDone(null, false, {
-            message: 'Ambiguous case. Several users with id: ' +  aId + '.'
-          });
-        }
-        var user = aUsers[0];
-        return aDone(null, user);
-      });
-    });
+    if (appConfig.PERFORM_SET_UP_USER) {
+      userDAO.setUpUser(aProfile, onSetUpUser);
+    } else {
+      setImmediate(onSetUpUser);
+    }
   });
+
+  var onSetUpUser = function() {
+    userDAO.getUsersAsync(aProfile, function(aUsers) {
+      log.info('User: ', JSON.stringify(aUsers));
+      //TODO(alexk): make all callbacks return error as first argument.
+      //if (aError) { return aDone(aError); }
+      if (!aUsers || !aUsers.length) {
+        return aDone(null, false, { message: 'No such user.' });
+      }
+      if (aUsers.length > 1) {
+        return aDone(null, false, {
+          message: 'Ambiguous case. Several users with id: ' +  aId + '.'
+        });
+      }
+      var user = aUsers[0];
+      return aDone(null, user);
+    });
+  }
 }
 
 exports.serializeUser = function(aUser, aDone) {
