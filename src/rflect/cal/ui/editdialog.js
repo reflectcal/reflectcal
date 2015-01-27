@@ -66,7 +66,7 @@ rflect.cal.ui.EditDialog.ButtonCaptions = {
 
 
 /**
- * Creates a new ButtonSet with 'SAVE' (default) and 'Cancel' buttons.
+ * Creates a new ButtonSet with 'Cancel', 'Delete', 'Edit' (default) buttons.
  * @return {!rflect.ui.Dialog.ButtonSet} The created ButtonSet.
  */
 rflect.cal.ui.EditDialog.createButtonSet = function() {
@@ -77,11 +77,10 @@ rflect.cal.ui.EditDialog.createButtonSet = function() {
   var cancel = rflect.ui.Dialog.ButtonSet.getButton(
       rflect.ui.Dialog.DefaultButtonCaptions.CANCEL);
 
-
   return new rflect.ui.Dialog.ButtonSet()
-      .addButton(edit, true, false, true)
-      .addButton(del, false, true)
-      .addButton(cancel, false, true);
+      .addButton(cancel, false, true)
+      .addButton(del, false, false)
+      .addButton(edit, true, false, true);
 };
 
 
@@ -108,10 +107,14 @@ rflect.cal.ui.EditDialog.prototype.eventNameLink_;
  * @private
  */
 rflect.cal.ui.EditDialog.HTML_PARTS_ = [
-  '<div id="ed-event-time" class="event-pane-cont event-time">',
+  '<div class="event-pane-cont">',
+  '<span id="ed-event-time" class="event-time">',
+  '</span>',
   '</div>',
-  '<button id="ed-event-edit" class="event-pane-cont event-edit-link edit-dialog-link goog-inline-block">',
-  '</button>'
+  '<div class="event-pane-cont">',
+  '<button id="ed-event-edit" class="event-edit-link">',
+  '</button>',
+  '</div>'
 ].join('');
 
 

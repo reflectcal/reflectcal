@@ -44,10 +44,45 @@ rflect.cal.ui.SaveDialog = function (opt_class,
   this.setTitle('New event');
   this.setModal(false);
   this.setBackgroundElementOpacity(0);
-  this.setButtonSet(rflect.ui.Dialog.ButtonSet.createSaveCancel());
+  this.setButtonSet(rflect.cal.ui.SaveDialog.createButtonSet());
   this.setContent(rflect.cal.ui.SaveDialog.HTML_PARTS_);
 };
 goog.inherits(rflect.cal.ui.SaveDialog, rflect.ui.DialogMouseMissBehavior);
+
+
+/**
+ * @desc Standard caption for the dialog 'Edit' button.
+ * @private
+ */
+rflect.cal.ui.SaveDialog.MSG_DIALOG_EDIT_ = goog.getMsg('Edit');
+
+
+/**
+ * Captions for the edit dialog.
+ * @enum {string}
+ */
+rflect.cal.ui.SaveDialog.ButtonCaptions = {
+  EDIT: rflect.cal.ui.SaveDialog.MSG_DIALOG_EDIT_
+};
+
+
+/**
+ * Creates a new ButtonSet with 'Cancel', 'Edit', 'Save' (default) buttons.
+ * @return {!rflect.ui.Dialog.ButtonSet} The created ButtonSet.
+ */
+rflect.cal.ui.SaveDialog.createButtonSet = function() {
+  var edit = rflect.ui.Dialog.ButtonSet.getButton(
+      rflect.cal.ui.SaveDialog.ButtonCaptions.EDIT);
+  var cancel = rflect.ui.Dialog.ButtonSet.getButton(
+      rflect.ui.Dialog.DefaultButtonCaptions.CANCEL);
+  var save = rflect.ui.Dialog.ButtonSet.getButton(
+      rflect.ui.Dialog.DefaultButtonCaptions.SAVE);
+
+  return new rflect.ui.Dialog.ButtonSet()
+      .addButton(cancel, false, true)
+      .addButton(edit, false, false)
+      .addButton(save, true, false, true);
+};
 
 
 /**
