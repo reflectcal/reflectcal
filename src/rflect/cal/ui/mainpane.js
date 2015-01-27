@@ -1895,6 +1895,9 @@ rflect.cal.ui.MainPane.prototype.onSaveDialogButtonSelect_ = function(aEvent) {
     this.transport_.saveEventAsync(
         this.eventManager_.eventHolder.getCurrentEvent());
     this.updateAfterSave_();
+  } else if (aEvent.key != this.saveDialog_.getButtonSet().getCancel()) {
+    //Edit button.
+    this.saveDialog_.dispatchEvent({type: rflect.cal.ui.SaveDialog.EVENT_EDIT});
   }
 }
 

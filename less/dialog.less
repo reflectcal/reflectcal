@@ -12,14 +12,16 @@
 
 
 .modal-dialog {
-  background: #c1d9ff;
+  position: absolute;
+  width: 430px;
+  border: 1px solid #e5e5e5;
   overflow:hidden;/*This is to make border-radius clear.*/
   color: #000;
   /*padding: 4px;*/
-  position: absolute;
   z-index: 100;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-
+  background: #fff;
+  border-radius: 5px;
   outline: none;
 }
 
@@ -44,18 +46,13 @@
 }
 
 .modal-dialog-title {
-  background-color: #999;
-  color: #fff;
-  cursor: pointer;
-  font-size: 120%;
+  .underlined-section();
+  
+  padding: 25px 0;
+  text-align: center;
+  font-size: 18px;
   font-weight: bold;
-
-  /* Add padding on the right to ensure the close button has room. */
-  padding: 8px 31px 8px 8px;
-
-  position: relative;
-  border-bottom: 1px solid #DDDDDD;
-  _zoom: 1; /* Ensures proper width in IE6 RTL. */
+  cursor: pointer;
 }
 
 .modal-dialog-title-close {
@@ -71,10 +68,11 @@
 .modal-dialog-buttons,
 .modal-dialog-content {
   background-color: #fff;
-  padding: 20px;
+  padding: 8px 0;
 }
 
 .modal-dialog-buttons {
+  text-align: right;
 }
 
 .goog-buttonset-default {
