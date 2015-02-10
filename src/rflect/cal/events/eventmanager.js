@@ -327,6 +327,9 @@ rflect.cal.events.EventManager.prototype.addEvent =
 
   calendar && calendar.addEvent(aEvent);
 
+  if (goog.DEBUG)
+    console.log('aEvent: ', aEvent.toHumanString());
+
   // Generating chips.
   while (hasNext) {
 
@@ -391,6 +394,9 @@ rflect.cal.events.EventManager.prototype.addEvent =
 
       chip = new rflect.cal.events.Chip(aEvent.id, weekChipStartMins,
           weekChipEndMins, hasPrevWeek, hasNextWeek);
+
+      if (goog.DEBUG)
+        console.log('chip: ', chip);
 
       var cutoff = currentDate.getFirstWeekCutOffDay();
       var cutoffAndCurrentDiff = cutoff - currentDate.getIsoWeekday();
