@@ -23,18 +23,20 @@ body {
   min-height: 376px; /* -8px of .main-body margin-top.*/
 }
 
+body when (@UI_TYPE = 'MOBILE') {
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-highlight: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
 @media (max-width: 640px) and (orientation: portrait), (max-width: 832px) and
     (orientation: landscape) {
   body {
     min-width: 320px;
     min-height: 400px;
-
-    -webkit-touch-callout: none;
-    -webkit-text-size-adjust: none;
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-highlight: none;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
   }
 }
 

@@ -36,10 +36,17 @@ exports.DB_NAME = 'rflectevents';
 
 
 /**
- * Whether to use oauth authentication. If false, rollback to local strategy.
+ * Whether to use oauth authentication. If false, fallback to local strategy.
  * @type {boolean}
  */
-exports.USE_OAUTH = true;
+exports.USE_OAUTH = false;
+
+
+/**
+ * Whether to use local authentication. If false, fallback to guest mode.
+ * @type {boolean}
+ */
+exports.USE_LOCAL_AUTH = false;
 
 
 /**
