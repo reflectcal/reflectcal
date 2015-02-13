@@ -79,9 +79,9 @@ rflect.cal.ui.SaveDialog.createButtonSet = function() {
       rflect.ui.Dialog.DefaultButtonCaptions.SAVE);
 
   return new rflect.ui.Dialog.ButtonSet()
-      .addButton(cancel, false, true)
+      .addButton(save, true, false, true)
       .addButton(edit, false, false)
-      .addButton(save, true, false, true);
+      .addButton(cancel, false, true);
 };
 
 

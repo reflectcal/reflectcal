@@ -78,9 +78,9 @@ rflect.cal.ui.EditDialog.createButtonSet = function() {
       rflect.ui.Dialog.DefaultButtonCaptions.CANCEL);
 
   return new rflect.ui.Dialog.ButtonSet()
-      .addButton(cancel, false, true)
+      .addButton(edit, true, false, true)
       .addButton(del, false, false)
-      .addButton(edit, true, false, true);
+      .addButton(cancel, false, true);
 };
 
 
