@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2015. Rflect, Alex K.
+ */
 
 /**
  * Module dependencies.
@@ -79,26 +82,41 @@ if ('development' == app.get('env')) {
   app.locals.pretty = true;
 }
 
-app.get('/', ensureAuthenticated, routesView.render);
-app.get('/login', routesLogin.render);
-app.get('/logout', routesLogin.logout);
-if (!appConfig.USE_OAUTH) {
+var loginHandler = passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+});
+if (appConfig.USE_OAUTH) {
+  app.get('/', ensureAuthenticated, routesView.render);
+  app.get('/login', routesLogin.render);
+  app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/login');
+  });
+} else if (appConfig.USE_LOCAL_AUTH) {
   //Local strategy form post.
-  app.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
-  }), function(req, res) {
+  app.post('/login', loginHandler, function(req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
     log.info(req.user);
     res.redirect('/');
   });
+  app.get('/', ensureAuthenticated, routesView.render);
+  app.get('/login', routesLogin.render);
+  app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/login');
+  });
+} else {
+  //Guest mode.
+  app.get('/', login.checkGuestMode(loginHandler), ensureAuthenticated,
+      routesView.render);
+  app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/');
+  });
 }
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/login');
-});
 
 if (appConfig.USE_OAUTH) {
   // GET /auth/google

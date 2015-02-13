@@ -102,8 +102,29 @@ exports.setUpUser = function(aProfile, aOnSetUpUser) {
     log.info('aCount', aCount );
 
     if (aCount == 0) {
-      
+
       insertDefaultEntities(email, aOnSetUpUser);
+    } else if (aCount >= 1) {
+      aOnSetUpUser(null, true);
+    }
+  });
+}
+
+
+/**
+ * @param {{username: string}} aProfile
+ * Profile object of user.
+ */
+exports.setUpLocalUser = function(aProfile, aOnSetUpUser) {
+  var username = aProfile.username;
+
+  db.get('users').count({ username: username }, function(aError,
+      aCount) {
+    log.info('aCount', aCount );
+
+    if (aCount == 0) {
+
+      insertDefaultEntities(username, aOnSetUpUser);
     } else if (aCount >= 1) {
       aOnSetUpUser(null, true);
     }
