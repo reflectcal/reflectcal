@@ -17,6 +17,7 @@ exports.DEFAULT_USER = {
   // E-mail is used as an username.
   username: '',
   openId: '',
+  guest: false,
   settings: {
     // Currently used language. If unspecified, language from Accept-Language
     // header will be used.
