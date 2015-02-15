@@ -451,7 +451,8 @@ rflect.ui.MomentumScroller.prototype.animateTo = function(offsetY) {
   // We use webkit-transforms with translate3d because these animations
   // will be hardware accelerated, and therefore significantly faster
   // than changing the top value.
-  this.element.style.webkitTransform = 'translate3d(0, ' + offsetY + 'px, 0)';
+  rflect.browser.css.setTransform(this.element, 'translate3d(0, ' + 
+      offsetY + 'px, 0)');
 }
 
 
@@ -488,8 +489,8 @@ rflect.ui.MomentumScroller.prototype.snapToBounds = function() {
   // 2. If content is higher that frame lower border.
     this.contentOffsetY = this.getLowestContentPosition();
 
-  this.element.style.webkitTransform = 'translate3d(0, ' + this.contentOffsetY
-      + 'px, 0)';
+  rflect.browser.css.setTransform(this.element, 'translate3d(0, ' + this.contentOffsetY
+      + 'px, 0)');
 
   this.isDecelerating_ = true;
 }
@@ -604,7 +605,8 @@ rflect.ui.MomentumScroller.prototype.doMomentum = function() {
       rflect.browser.css.setTransition(this.element, '-webkit-transform ' + time +
           'ms cubic-bezier(0.33, 0.66, 0.66, 1)');
       this.contentOffsetY = newY;
-      this.element.style.webkitTransform = 'translate3d(0, ' + newY + 'px, 0)';
+      rflect.browser.css.setTransform(this.element, 'translate3d(0, ' + newY + 
+          'px, 0)');
 
     }
 
@@ -648,8 +650,8 @@ rflect.ui.MomentumScroller.prototype.setUpTransitionStage1 = function() {
       ',.66,' +
       (1 - valueToLowerCubicBezierWith) +
       ')');
-  this.element.style.webkitTransform = 'translate3d(0, ' +
-      this.contentOffsetY + 'px, 0)';
+  rflect.browser.css.setTransform(this.element, 'translate3d(0, ' + 
+      this.contentOffsetY + 'px, 0)');
 
   this.queuedTransitionStage_ =
       rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.TO_BOUNDS;
@@ -683,7 +685,8 @@ rflect.ui.MomentumScroller.prototype.setUpTransitionStage2 = function() {
 
   rflect.browser.css.setTransition(this.element, '-webkit-transform ' + time +
       'ms cubic-bezier(0.33, 0.66, 0.66, 1)');
-  this.element.style.webkitTransform = 'translate3d(0, ' + newY + 'px, 0)';
+  rflect.browser.css.setTransform(this.element, 'translate3d(0, ' + newY + 
+      'px, 0)');
 
   this.queuedTransitionStage_ =
       rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.BOUNCED_OUT;
