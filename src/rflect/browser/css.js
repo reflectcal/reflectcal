@@ -42,15 +42,13 @@ rflect.browser.css.setTransition = function(aElement,
     aElement.style[rflect.browser.css.transitionPropertyName_] = 
         aTransitionString;
   } else {
-    var vendorNames = rflect.browser.css.TRANSITION_NAMES;
-    for (var vendorCounter = 0; vendorCounter < vendorNames.length; 
-        vendorCounter++){
-      if (vendorNames[vendorCounter] in aElement.style) {
-        rflect.browser.css.transitionPropertyName_ = 
-            vendorNames[vendorCounter];
-        break;
+    rflect.browser.css.TRANSITION_NAMES.some(vendorName => {
+      if (vendorName in aElement.style) {
+        rflect.browser.css.transitionPropertyName_ = vendorName;
+        return true;
       }
-    }
+      return false;
+    });
   }
 };
 
@@ -87,14 +85,12 @@ rflect.browser.css.setTransform = function(aElement,
     aElement.style[rflect.browser.css.transformPropertyName_] = 
         aTransformString;
   } else {
-    var vendorNames = rflect.browser.css.TRANSFORM_NAMES;
-    for (var vendorCounter = 0; vendorCounter < vendorNames.length; 
-        vendorCounter++){
-      if (vendorNames[vendorCounter] in aElement.style) {
-        rflect.browser.css.transformPropertyName_ = 
-            vendorNames[vendorCounter];
-        break;
+    rflect.browser.css.TRANSFORM_NAMES.some(vendorName => {
+      if (vendorName in aElement.style) {
+        rflect.browser.css.transformPropertyName_ = vendorName;
+        return true;
       }
-    }
+      return false;
+    });
   }
 };

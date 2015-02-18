@@ -27,7 +27,7 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
 
 
 
-(function(){
+!('CSSMatrix' in goog.global) && (function() {
   'use strict';
 
   /**
@@ -37,11 +37,10 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
    * @see http://www.w3.org/TR/2009/WD-css3-3d-transforms-20090320/#cssmatrix-interface
    */
   function CSSMatrix(opt_matrix) {
-    var m = this;
     if (opt_matrix) {
-      m.setMatrixValue(opt_matrix);
+      this.setMatrixValue(opt_matrix);
     } else {
-      m.setIdentity();
+      this.setIdentity();
     }
 
     return null;
@@ -174,31 +173,38 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
   CSSMatrix.prototype.f;
 
   /**
+   * @type {boolean}
+   */
+  CSSMatrix.prototype.affine;
+
+  /**
    * @param {string} string
    * @return {void}
    */
   CSSMatrix.prototype.setMatrixValue = function(string) {
     string = String(string).trim();
-    var m = this;
-    m.setIdentity();
+    this.setIdentity();
     if (string == 'none')
       return;
 
     var type = string.slice(0, string.indexOf('(')), parts, i;
-    if (type == 'matrix3d'){
+    if (type == 'matrix3d') {
       parts = string.slice(9, -1).split(',').map(part => parseFloat(part));
-      m.m11 = m.a = parts[0]; m.m12 = m.b = parts[1]; m.m13 = parts[2]; m.m14 =
-          parts[3];
-      m.m21 = m.c = parts[4]; m.m22 = m.d = parts[5]; m.m23 = parts[6]; m.m24 =
-          parts[7];
-      m.m31 = parts[8]; m.m32 = parts[9]; m.m33 = parts[10]; m.m34 = parts[11];
-      m.m41 = m.e = parts[12]; m.m42 = m.f = parts[13]; m.m43 = parts[14];
-          m.m44 = parts[15];
-    } else if (type == 'matrix'){
-      m.affine = true;
+      this.m11 = this.a = parts[0]; this.m12 = this.b = parts[1]; this.m13 =
+          parts[2]; this.m14 = parts[3];
+      this.m21 = this.c = parts[4]; this.m22 = this.d = parts[5]; this.m23 =
+          parts[6]; this.m24 = parts[7];
+      this.m31 = parts[8]; this.m32 = parts[9]; this.m33 = parts[10]; this.m34 =
+          parts[11];
+      this.m41 = this.e = parts[12]; this.m42 = this.f = parts[13]; this.m43 =
+          parts[14]; this.m44 = parts[15];
+    } else if (type == 'matrix') {
+      this.affine = true;
       parts = string.slice(7, -1).split(',').map(part => parseFloat(part));
-      m.m11 = m.a = parts[0]; m.m12 = m.b = parts[2]; m.m41 = m.e = parts[4];
-      m.m21 = m.c = parts[1]; m.m22 = m.d = parts[3]; m.m42 = m.f = parts[5];
+      this.m11 = this.a = parts[0]; this.m12 = this.b = parts[2]; this.m41 =
+          this.e = parts[4];
+      this.m21 = this.c = parts[1]; this.m22 = this.d = parts[3]; this.m42 =
+          this.f = parts[5];
     } else {
       throw new TypeError('Invalid Matrix Value');
     }
@@ -341,6 +347,7 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
     var cosx = Math.cos(rx), sinx = -Math.sin(rx);
     var cosy = Math.cos(ry), siny = -Math.sin(ry);
     var cosz = Math.cos(rz), sinz = -Math.sin(rz);
+
     var m = new CSSMatrix();
 
     m.m11 = m.a = cosy * cosz;
@@ -378,7 +385,7 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
     var sinA = Math.sin(angle), cosA = Math.cos(angle), sinA2 = sinA * sinA;
     var length = Math.sqrt(x * x + y * y + z * z);
 
-    if (length === 0){
+    if (length === 0) {
       // bad vector length, use something reasonable
       x = 0;
       y = 0;
@@ -423,8 +430,30 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
     return this;
   };
 
+  /**
+   * Returns a string representation of the matrix.
+   * @return {string}
+   */
+  CSSMatrix.prototype.toString = function(){
+    var m = this;
+
+    if (this.affine){
+      return  'matrix(' + [
+        m.a, m.b,
+        m.c, m.d,
+        m.e, m.f
+      ].join(', ') + ')';
+    }
+    // note: the elements here are transposed
+    return  'matrix3d(' + [
+      m.m11, m.m12, m.m13, m.m14,
+      m.m21, m.m22, m.m23, m.m24,
+      m.m31, m.m32, m.m33, m.m34,
+      m.m41, m.m42, m.m43, m.m44
+    ].join(', ') + ')';
+  };
+
   //Exporting.
-  if (!('CSSMatrix' in goog.global)) {
-    goog.exportSymbol('', CSSMatrix);
-  }
+  goog.exportSymbol('', CSSMatrix);
+
 })();
