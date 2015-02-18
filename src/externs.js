@@ -38,6 +38,6 @@ var LANGUAGE_NAMES;
 
 /**
  * User object.
- * @type {object}
+ * @type {Object}
  */
 var USER;

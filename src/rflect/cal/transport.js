@@ -247,7 +247,7 @@ rflect.cal.Transport.getResponseJSON = function(x, opt_dontUseXssiPrefix) {
 
 /**
  * Saves event.
- * @param {rflect.cal.events.Event} Event.
+ * @param {rflect.cal.events.Event} aEvent
  */
 rflect.cal.Transport.prototype.saveEventAsync = function(aEvent) {
   this.eventManager_.setEventIsInProgress(aEvent.id, true);
@@ -290,7 +290,7 @@ rflect.cal.Transport.prototype.onSaveEvent_ = function(aCalEventId, aEvent) {
 
 /**
  * Deletes event.
- * @param {rflect.cal.events.Event} Event.
+ * @param {rflect.cal.events.Event} aEvent
  */
 rflect.cal.Transport.prototype.deleteEventAsync = function(aEvent) {
   this.eventManager_.setEventIsInProgress(aEvent.id, true);
@@ -516,7 +516,7 @@ rflect.cal.Transport.prototype.loadCalendars = function() {
 
 /**
  * Saves event.
- * @param {rflect.cal.events.Calendar} Calendar.
+ * @param {rflect.cal.events.Calendar} aCalendar
  */
 rflect.cal.Transport.prototype.saveCalendarAsync = function(aCalendar) {
   // New calendars won't have an id, and won't be shown on UI, so there's no
@@ -568,7 +568,7 @@ rflect.cal.Transport.prototype.onSaveCalendar_ = function(aCalendar, aEvent) {
 
 /**
  * Deletes calendar.
- * @param {rflect.cal.events.Calendar} Calendar.
+ * @param {rflect.cal.events.Calendar} aCalendar
  */
 rflect.cal.Transport.prototype.deleteCalendarAsync = function(aCalendar) {
   this.eventManager_.setCalendarIsInProgress(aCalendar.id, true);

@@ -65,15 +65,15 @@ rflect.cal.events.EventHolder.prototype.sessionType_;
  * @type {rflect.cal.events.Event}
  * @private
  */
-rflect.cal.events.EventHolder.prototype.newTemporaryEvent_;
+rflect.cal.events.EventHolder.prototype.newTemporaryEvent_ = null;
 
 
 /**
  * Old version of event.
- * @type {rflect.cal.events.Event|undefined}
+ * @type {rflect.cal.events.Event}
  * @private
  */
-rflect.cal.events.EventHolder.prototype.backUpEvent_;
+rflect.cal.events.EventHolder.prototype.backUpEvent_ = null;
 
 
 /**
@@ -92,7 +92,7 @@ rflect.cal.events.EventHolder.prototype.openSession =
     this.newTemporaryEvent_ = rflect.cal.events.Event.createEvent('',
         null, null, false);
 
-  this.backUpEvent_ = opt_event && opt_event.clone();
+  this.backUpEvent_ = opt_event ? opt_event.clone() : null;
 
 }
 
@@ -224,7 +224,7 @@ rflect.cal.events.EventHolder.prototype.getCalendarId =
 
 
 /**
- * @return {rflect.cal.events.Event|undefined} Backup event.
+ * @return {rflect.cal.events.Event} Backup event.
  */
 rflect.cal.events.EventHolder.prototype.getBackUpEvent =
     function() {
@@ -233,7 +233,7 @@ rflect.cal.events.EventHolder.prototype.getBackUpEvent =
 
 
 /**
- * @return {rflect.cal.events.Event|undefined} Current event.
+ * @return {rflect.cal.events.Event} Current event.
  */
 rflect.cal.events.EventHolder.prototype.getCurrentEvent =
     function() {

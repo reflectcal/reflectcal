@@ -28,17 +28,23 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
 
 
 (function(){
+  'use strict';
+
   /**
    * @constructor
    * @param {string=} opt_matrix
    * @see https://dvcs.w3.org/hg/FXTF/raw-file/tip/matrix/index.html#the-cssmatrix-interface
+   * @see http://www.w3.org/TR/2009/WD-css3-3d-transforms-20090320/#cssmatrix-interface
    */
   function CSSMatrix(opt_matrix) {
-    m = this;
-    m.setIdentity();
+    var m = this;
     if (opt_matrix) {
       m.setMatrixValue(opt_matrix);
+    } else {
+      m.setIdentity();
     }
+
+    return null;
   }
 
   /**
@@ -175,19 +181,22 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
     string = String(string).trim();
     var m = this;
     m.setIdentity();
-    if (string == 'none') return m;
+    if (string == 'none')
+      return;
+
     var type = string.slice(0, string.indexOf('(')), parts, i;
     if (type == 'matrix3d'){
-      parts = string.slice(9, -1).split(',');
-      for (i = parts.length; i--;) parts[i] = parseFloat(parts[i]);
-      m.m11 = m.a = parts[0]; m.m12 = m.b = parts[1]; m.m13 = parts[2];  m.m14 = parts[3];
-      m.m21 = m.c = parts[4]; m.m22 = m.d = parts[5]; m.m23 = parts[6];  m.m24 = parts[7];
+      parts = string.slice(9, -1).split(',').map(part => parseFloat(part));
+      m.m11 = m.a = parts[0]; m.m12 = m.b = parts[1]; m.m13 = parts[2]; m.m14 =
+          parts[3];
+      m.m21 = m.c = parts[4]; m.m22 = m.d = parts[5]; m.m23 = parts[6]; m.m24 =
+          parts[7];
       m.m31 = parts[8]; m.m32 = parts[9]; m.m33 = parts[10]; m.m34 = parts[11];
-      m.m41 = m.e = parts[12]; m.m42 = m.f = parts[13]; m.m43 = parts[14]; m.m44 = parts[15];
+      m.m41 = m.e = parts[12]; m.m42 = m.f = parts[13]; m.m43 = parts[14];
+          m.m44 = parts[15];
     } else if (type == 'matrix'){
       m.affine = true;
-      parts = string.slice(7, -1).split(',');
-      for (i = parts.length; i--;) parts[i] = parseFloat(parts[i]);
+      parts = string.slice(7, -1).split(',').map(part => parseFloat(part));
       m.m11 = m.a = parts[0]; m.m12 = m.b = parts[2]; m.m41 = m.e = parts[4];
       m.m21 = m.c = parts[1]; m.m22 = m.d = parts[3]; m.m42 = m.f = parts[5];
     } else {
@@ -237,12 +246,14 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
         m44 = secondMatrix.m41 * this.m14 + secondMatrix.m42 * this.m24 +
         secondMatrix.m43 * this.m34 + secondMatrix.m44 * this.m44;
 
-    return new CSSMatrix(
-      m11, m12, m13, m14,
-      m21, m22, m23, m24,
-      m31, m32, m33, m34,
-      m41, m42, m43, m44
-    );
+    var m = new CSSMatrix();
+
+    m.m11 = m11; m.m12 = m12; m.m13 = m13; m.m14 = m14;
+    m.m21 = m21; m.m22 = m22; m.m23 = m23; m.m24 = m24;
+    m.m31 = m31; m.m32 = m32; m.m33 = m33; m.m34 = m34;
+    m.m41 = m41; m.m42 = m42; m.m43 = m43; m.m44 = m44;
+
+    return m;
   };
 
   /**
@@ -270,7 +281,7 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
     m.m42 = m.f = y;
     m.m43 = z;
 
-    return this.multiply(this, m);
+    return this.multiply(m);
   };
 
   /**
@@ -281,10 +292,19 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
    * @see https://dvcs.w3.org/hg/FXTF/raw-file/tip/matrix/index.html#widl-CSSMatrix-scale-CSSMatrix-unrestricted-double-scale-unrestricted-double-originX-unrestricted-double-originY
    */
   CSSMatrix.prototype.scale = function(opt_scaleX, opt_scaleY, opt_scaleZ) {
-    var x, y, z;
-    if (opt_scaleX == null) x = 1 else x = opt_scaleX;
-    if (opt_scaleY == null) y = x else y = opt_scaleY;
-    if (opt_scaleZ == null) z = 1 else z = opt_scaleZ;
+    var x = opt_scaleX;
+    var y = opt_scaleY;
+    var z = opt_scaleY;
+
+    if (x == null) {
+      x = 1;
+    }
+    if (y == null) {
+      y = x;
+    }
+    if (z == null) {
+      z = 1;
+    }
 
     var m = new CSSMatrix();
     m.m11 = m.a = x;
@@ -302,21 +322,40 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
    * @see https://dvcs.w3.org/hg/FXTF/raw-file/tip/matrix/index.html#widl-CSSMatrix-rotate-CSSMatrix-unrestricted-double-angle-unrestricted-double-originX-unrestricted-double-originY
    */
   CSSMatrix.prototype.rotate = function(opt_rotX, opt_rotY, opt_rotZ) {
-    var rx, ry, rz;
-    if (opt_rotX == null) rx = 0 else x = opt_rotX;
-    if (opt_rotY == null) ry = 0 else y = opt_rotY;
-    if (opt_scaleZ == null) {
-      rz = 1
-    } else {
-      z = opt_scaleZ;
+    var rx = opt_rotX || 0;
+    var ry = opt_rotY || 0;
+    var rz = opt_rotZ;
+
+    if (rz == null) {
+      if (opt_rotY == null) {
+        rz = rx;
+      } else {
+        rz = 0;
+      }
     }
 
-    if (ry == null) ry = rx;
-    if (rz == null) rz = rx;
+    rx *= Math.PI / 180;
+    ry *= Math.PI / 180;
+    rz *= Math.PI / 180;
+    // minus sin() because of right-handed system
+    var cosx = Math.cos(rx), sinx = -Math.sin(rx);
+    var cosy = Math.cos(ry), siny = -Math.sin(ry);
+    var cosz = Math.cos(rz), sinz = -Math.sin(rz);
+    var m = new CSSMatrix();
 
+    m.m11 = m.a = cosy * cosz;
+    m.m12 = m.b = - cosy * sinz;
+    m.m13 = siny;
 
+    m.m21 = m.c = sinx * siny * cosz + cosx * sinz;
+    m.m22 = m.d = cosx * cosz - sinx * siny * sinz;
+    m.m23 = - sinx * cosy;
 
-    return this.multiply(this, CSSMatrix.Rotate(rx, ry, rz));
+    m.m31 = sinx * sinz - cosx * siny * cosz;
+    m.m32 = sinx * cosz + cosx * siny * sinz;
+    m.m33 = cosx * cosy;
+
+    return this.multiply(m);
   };
 
   /**
@@ -328,7 +367,46 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
    * @see https://dvcs.w3.org/hg/FXTF/raw-file/tip/matrix/index.html#widl-CSSMatrix-rotateAxisAngle-CSSMatrix-unrestricted-double-x-unrestricted-double-y-unrestricted-double-z-unrestricted-double-angle
    */
   CSSMatrix.prototype.rotateAxisAngle =
-      function(opt_x, opt_y, opt_z, opt_angle) {};
+      function(opt_x, opt_y, opt_z, opt_angle) {
+    var x = opt_x || 0;
+    var y = opt_y || 0;
+    var z = opt_z || 0;
+    var angle = opt_angle || 0;
+
+    angle *= Math.PI / 360;
+
+    var sinA = Math.sin(angle), cosA = Math.cos(angle), sinA2 = sinA * sinA;
+    var length = Math.sqrt(x * x + y * y + z * z);
+
+    if (length === 0){
+      // bad vector length, use something reasonable
+      x = 0;
+      y = 0;
+      z = 1;
+    } else {
+      x /= length;
+      y /= length;
+      z /= length;
+    }
+
+    var x2 = x * x, y2 = y * y, z2 = z * z;
+
+    var m = new CSSMatrix();
+    m.m11 = m.a = 1 - 2 * (y2 + z2) * sinA2;
+    m.m12 = m.b = 2 * (x * y * sinA2 + z * sinA * cosA);
+    m.m13 = 2 * (x * z * sinA2 - y * sinA * cosA);
+    m.m21 = m.c = 2 * (y * x * sinA2 - z * sinA * cosA);
+    m.m22 = m.d = 1 - 2 * (z2 + x2) * sinA2;
+    m.m23 = 2 * (y * z * sinA2 + x * sinA * cosA);
+    m.m31 = 2 * (z * x * sinA2 + y * sinA * cosA);
+    m.m32 = 2 * (z * y * sinA2 - x * sinA * cosA);
+    m.m33 = 1 - 2 * (x2 + y2) * sinA2;
+    m.m14 = m.m24 = m.m34 = 0;
+    m.m41 = m.e = m.m42 = m.f = m.m43 = 0;
+    m.m44 = 1;
+
+    return this.multiply(m);
+  };
 
 
   /**

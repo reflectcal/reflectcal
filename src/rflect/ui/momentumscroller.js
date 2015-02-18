@@ -561,21 +561,20 @@ rflect.ui.MomentumScroller.prototype.getEndMomentumVelocity = function(
  * @param {number} aVelocity
  * @return {number} Acceleration.
  */
-rflect.ui.MomentumScroller.prototype.getAcceleration = function(
-    aVelocity) {
+rflect.ui.MomentumScroller.prototype.getAcceleration = function(aVelocity) {
   return aVelocity < 0 ? rflect.ui.MomentumScroller.ACCELERATION_SLIDING :
       -rflect.ui.MomentumScroller.ACCELERATION_SLIDING;
 }
 
 
 /**
- * @param {number} aVelocity.
+ * @param {number} aVelocity
  * @param {number} aAcceleration
  * @return {number} Time for decelerating motion, assuming acceleration is
  * negative.
  */
-rflect.ui.MomentumScroller.prototype.getTime = function(
-    aVelocity, aAcceleration) {
+rflect.ui.MomentumScroller.prototype.getTime = function(aVelocity,
+    aAcceleration) {
   return - aVelocity / aAcceleration;
 }
 
@@ -731,7 +730,7 @@ rflect.ui.MomentumScroller.prototype.stopMomentum = function() {
 rflect.ui.MomentumScroller.prototype.getEndVelocity = function() {
   var velocity = (this.currentPoint_ - this.previousPoint_) / (
       this.currentMoment_ - this.previousMoment_);
-  return  isNaN(velocity) ? 0 : velocity;
+  return isNaN(velocity) ? 0 : velocity;
 }
 
 

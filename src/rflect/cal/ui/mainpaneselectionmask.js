@@ -322,7 +322,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.initSelection_ = function(
 
 /**
  * @param {goog.math.Coordinate} aEventCoordinate Event coordinate.
- * @param {rflect.cal.events.Event} aCalendarEvent.
+ * @param {rflect.cal.events.Event} aCalendarEvent
  * @param {boolean=} opt_resizingByStart Whether we're resizing event by start
  * grip.
  * @param {boolean=} opt_resizingByEnd Whether we're resizing event by end grip.

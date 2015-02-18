@@ -114,7 +114,7 @@ rflect.cal.ViewManager = function(aMainInstance) {
    * Mutable user object.
    * @type {Object}
    */
-  this.user = goog.object.unsafeClone(USER);
+  this.user = /**@type {Object}*/ (goog.object.unsafeClone(USER));
 
   if (goog.DEBUG)
     _inspect('mainBody_', this.mainBody_);
