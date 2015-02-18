@@ -10,6 +10,7 @@
 goog.provide('rflect.browser.css');
 
 
+
 /**
  * Detected transition property name.
  * @type {string}
@@ -92,3 +93,21 @@ rflect.browser.css.setTransform = function(aElement,
   aElement.style[rflect.browser.css.transformPropertyName_] =
       aTransformString;
 };
+
+
+/**
+ * @param {string} aPropertyName Property name, selector-cased.
+ * @return {string} Property name with right vendor prefix or without one.
+ */
+rflect.browser.css.getPrefixedProperty = function(aPropertyName) {
+  var property = aPropertyName;
+  ['', 'webkit', 'moz', 'ms', 'o'].some(vendorPrefix => {
+    if (goog.string.toCamelCase(vendorPrefix + '-' + aPropertyName) in
+        document.documentElement.style) {
+      property = (vendorPrefix ? '-' : '') + vendorPrefix + '-' + aPropertyName;
+      return true;
+    }
+    return false;
+  });
+  return property;
+}
