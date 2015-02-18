@@ -38,10 +38,7 @@ rflect.browser.css.TRANSITION_NAMES = [
  */
 rflect.browser.css.setTransition = function(aElement, 
     aTransitionString) {
-  if (rflect.browser.css.transitionPropertyName_) {
-    aElement.style[rflect.browser.css.transitionPropertyName_] = 
-        aTransitionString;
-  } else {
+  if (!rflect.browser.css.transitionPropertyName_) {
     rflect.browser.css.TRANSITION_NAMES.some(vendorName => {
       if (vendorName in aElement.style) {
         rflect.browser.css.transitionPropertyName_ = vendorName;
@@ -50,6 +47,8 @@ rflect.browser.css.setTransition = function(aElement,
       return false;
     });
   }
+  aElement.style[rflect.browser.css.transitionPropertyName_] =
+      aTransitionString;
 };
 
 
@@ -81,10 +80,7 @@ rflect.browser.css.TRANSFORM_NAMES = [
  */
 rflect.browser.css.setTransform = function(aElement, 
     aTransformString) {
-  if (rflect.browser.css.transformPropertyName_) {
-    aElement.style[rflect.browser.css.transformPropertyName_] = 
-        aTransformString;
-  } else {
+  if (!rflect.browser.css.transformPropertyName_) {
     rflect.browser.css.TRANSFORM_NAMES.some(vendorName => {
       if (vendorName in aElement.style) {
         rflect.browser.css.transformPropertyName_ = vendorName;
@@ -93,4 +89,6 @@ rflect.browser.css.setTransform = function(aElement,
       return false;
     });
   }
+  aElement.style[rflect.browser.css.transformPropertyName_] =
+      aTransformString;
 };
