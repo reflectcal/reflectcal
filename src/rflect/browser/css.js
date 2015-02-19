@@ -9,6 +9,7 @@
 
 goog.provide('rflect.browser.css');
 
+goog.require('goog.string');
 
 
 /**
@@ -96,18 +97,46 @@ rflect.browser.css.setTransform = function(aElement,
 
 
 /**
+ * Lookup of property -> prefixed property.
+ * @type {Object.<string, Array.<string>>}
+ */
+rflect.browser.css.propertyToPrefixedProperties_ = {};
+
+
+/**
  * @param {string} aPropertyName Property name, selector-cased.
- * @return {string} Property name with right vendor prefix or without one.
+ * @return {Array.<string>} Property names: 1. selector-cased 2. CamelCased.
  */
 rflect.browser.css.getPrefixedProperty = function(aPropertyName) {
-  var property = aPropertyName;
-  ['', 'webkit', 'moz', 'ms', 'o'].some(vendorPrefix => {
-    if (goog.string.toCamelCase(vendorPrefix + '-' + aPropertyName) in
-        document.documentElement.style) {
-      property = (vendorPrefix ? '-' : '') + vendorPrefix + '-' + aPropertyName;
-      return true;
-    }
-    return false;
-  });
-  return property;
+  if (!rflect.browser.css.propertyToPrefixedProperties_[aPropertyName]){
+
+    var property;
+    var style = document.createElement('div').style;
+
+    ['', 'Webkit', 'Ms', 'ms', 'Moz', 'O', 'o', 'webkit', 'moz'].some(
+        vendorPrefix => {
+      property = vendorPrefix + goog.string.toTitleCase(aPropertyName).
+          replace(/\-/, '');
+      if (property in style) {
+        rflect.browser.css.propertyToPrefixedProperties_[aPropertyName] = [
+          rflect.browser.css.getPrefixWithDashes_(vendorPrefix.toLowerCase()) +
+              aPropertyName,
+          property
+        ]
+        return true;
+      }
+      return false;
+    });
+  }
+
+  return rflect.browser.css.propertyToPrefixedProperties_[aPropertyName];
+}
+
+
+/**
+ * @param {string} aPrefix
+ * @return {string} Prefix with or without dash.
+ */
+rflect.browser.css.getPrefixWithDashes_ = function(aPrefix) {
+  return (aPrefix ? '-' : '') + aPrefix + (aPrefix ? '-' : '');
 }

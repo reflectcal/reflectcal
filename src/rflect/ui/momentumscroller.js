@@ -478,7 +478,8 @@ rflect.ui.MomentumScroller.prototype.animateWithinBounds = function(aOffsetY) {
 // relative to the frame. If the content is outside of the boundaries
 // then simply reposition it to be just within the appropriate boundary.
 rflect.ui.MomentumScroller.prototype.snapToBounds = function() {
-  rflect.browser.css.setTransition(this.element, '-webkit-transform ' + 500 +
+  rflect.browser.css.setTransition(this.element,
+      rflect.browser.css.getPrefixedProperty('transform')[0] + ' ' + 500 +
       'ms ease-out');
 
   // Different out of bounds cases:
@@ -489,8 +490,8 @@ rflect.ui.MomentumScroller.prototype.snapToBounds = function() {
   // 2. If content is higher that frame lower border.
     this.contentOffsetY = this.getLowestContentPosition();
 
-  rflect.browser.css.setTransform(this.element, 'translate3d(0, ' + this.contentOffsetY
-      + 'px, 0)');
+  rflect.browser.css.setTransform(this.element, 'translate3d(0, ' +
+      this.contentOffsetY + 'px, 0)');
 
   this.isDecelerating_ = true;
 }
@@ -601,7 +602,8 @@ rflect.ui.MomentumScroller.prototype.doMomentum = function() {
       // Set up the transition and execute the transform. Once you implement this
       // you will need to figure out an appropriate time to clear the transition
       // so that it doesn’t apply to subsequent scrolling.
-      rflect.browser.css.setTransition(this.element, '-webkit-transform ' + time +
+      rflect.browser.css.setTransition(this.element,
+          rflect.browser.css.getPrefixedProperty('transform')[0] + ' ' +  time +
           'ms cubic-bezier(0.33, 0.66, 0.66, 1)');
       this.contentOffsetY = newY;
       rflect.browser.css.setTransform(this.element, 'translate3d(0, ' + newY + 
@@ -641,9 +643,10 @@ rflect.ui.MomentumScroller.prototype.setUpTransitionStage1 = function() {
   // velocity is non-zero. In corner case, when velocity didn't slow at all,
   // bezier curve becomes linear.
   var valueToLowerCubicBezierWith = Math.abs(this.endMomentumVelocity_ /
-    velocity) * .33;
+      velocity) * .33;
 
-  rflect.browser.css.setTransition(this.element, '-webkit-transform ' + time +
+  rflect.browser.css.setTransition(this.element,
+      rflect.browser.css.getPrefixedProperty('transform')[0] + ' ' + time +
       'ms cubic-bezier(.33,' +
       (.66 - valueToLowerCubicBezierWith) +
       ',.66,' +
@@ -682,7 +685,8 @@ rflect.ui.MomentumScroller.prototype.setUpTransitionStage2 = function() {
 
   this.contentOffsetY = newY;
 
-  rflect.browser.css.setTransition(this.element, '-webkit-transform ' + time +
+  rflect.browser.css.setTransition(this.element,
+      rflect.browser.css.getPrefixedProperty('transform')[0] + ' ' + time +
       'ms cubic-bezier(0.33, 0.66, 0.66, 1)');
   rflect.browser.css.setTransform(this.element, 'translate3d(0, ' + newY + 
       'px, 0)');
@@ -706,7 +710,7 @@ rflect.ui.MomentumScroller.prototype.stopMomentum = function() {
     var style = document.defaultView.getComputedStyle(this.element, null);
     // Computed the transform in a matrix object given the style.
     var transform = rflect.browser.cssmatrix.getInstance(
-        style.webkitTransform);
+        style[rflect.browser.css.getPrefixedProperty('transform')[1]]);
 
     // Clear the active transition so it doesn’t apply to our next transform.
     rflect.browser.css.setTransition(this.element, '');
