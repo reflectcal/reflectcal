@@ -13,66 +13,14 @@ goog.require('goog.string');
 
 
 /**
- * Detected transition property name.
- * @type {string}
- * @private
- */
-rflect.browser.css.transitionPropertyName_;
- 
- 
-/**
- * Vendor-specific names for <code>transition</code>.
- * @type {Array.<string>}
- * @const
- */
-rflect.browser.css.TRANSITION_NAMES = [
-  'transition',
-  'webkitTransition',
-  'mozTransition',
-  'msTransition'
-]; 
-
-
-/**
  * Sets transition in cross-browser way.
  * @param {Element} aElement Element to set property to.
  * @param {string} aTransitionString Property value.
  */
-rflect.browser.css.setTransition = function(aElement, 
+rflect.browser.css.setTransition = function(aElement,
     aTransitionString) {
-  if (!rflect.browser.css.transitionPropertyName_) {
-    rflect.browser.css.TRANSITION_NAMES.some(vendorName => {
-      if (vendorName in aElement.style) {
-        rflect.browser.css.transitionPropertyName_ = vendorName;
-        return true;
-      }
-      return false;
-    });
-  }
-  aElement.style[rflect.browser.css.transitionPropertyName_] =
-      aTransitionString;
+  rflect.browser.css.setProperty(aElement, 'transition', aTransitionString);
 };
-
-
-/**
- * Detected transform property name.
- * @type {string}
- * @private
- */
-rflect.browser.css.transformPropertyName_;
- 
- 
-/**
- * Vendor-specific names for <code>transform</code>.
- * @type {Array.<string>}
- * @const
- */
-rflect.browser.css.TRANSFORM_NAMES = [
-  'transform',
-  'webkitTransform',
-  'mozTransform',
-  'msTransform'
-]; 
 
 
 /**
@@ -80,19 +28,9 @@ rflect.browser.css.TRANSFORM_NAMES = [
  * @param {Element} aElement Element to set property to.
  * @param {string} aTransformString Property value.
  */
-rflect.browser.css.setTransform = function(aElement, 
+rflect.browser.css.setTransform = function(aElement,
     aTransformString) {
-  if (!rflect.browser.css.transformPropertyName_) {
-    rflect.browser.css.TRANSFORM_NAMES.some(vendorName => {
-      if (vendorName in aElement.style) {
-        rflect.browser.css.transformPropertyName_ = vendorName;
-        return true;
-      }
-      return false;
-    });
-  }
-  aElement.style[rflect.browser.css.transformPropertyName_] =
-      aTransformString;
+  rflect.browser.css.setProperty(aElement, 'transform', aTransformString);
 };
 
 
@@ -107,13 +45,13 @@ rflect.browser.css.propertyToPrefixedProperties_ = {};
  * @param {string} aPropertyName Property name, selector-cased.
  * @return {Array.<string>} Property names: 1. selector-cased 2. CamelCased.
  */
-rflect.browser.css.getPrefixedProperty = function(aPropertyName) {
+rflect.browser.css.findAndCacheProperty_ = function(aPropertyName) {
   if (!rflect.browser.css.propertyToPrefixedProperties_[aPropertyName]){
 
     var property;
     var style = document.createElement('div').style;
 
-    ['', 'Webkit', 'Ms', 'ms', 'Moz', 'O', 'o', 'webkit', 'moz'].some(
+    ['', 'Webkit', 'ms', 'Ms', 'Moz', 'O', 'o', 'webkit', 'moz'].some(
         vendorPrefix => {
       property = vendorPrefix + goog.string.toTitleCase(aPropertyName).
           replace(/\-/, '');
@@ -140,3 +78,27 @@ rflect.browser.css.getPrefixedProperty = function(aPropertyName) {
 rflect.browser.css.getPrefixWithDashes_ = function(aPrefix) {
   return (aPrefix ? '-' : '') + aPrefix + (aPrefix ? '-' : '');
 }
+
+
+/**
+ * @param {string} aPropertyName Property name, selector-cased.
+ */
+rflect.browser.css.setProperty = function(aElement, aPropertyName,
+    aPropertyValue) {
+  var props = rflect.browser.css.findAndCacheProperty_(aPropertyName);
+
+  aElement.style[props[1]] = aPropertyValue;
+}
+
+
+/**
+ * @param {string} aPropertyName Property name, selector-cased.
+ * @return {Array.<string>} Property names: 1. selector-cased 2. CamelCased.
+ */
+rflect.browser.css.getPrefixedProperty = function(aPropertyName) {
+  var props = rflect.browser.css.findAndCacheProperty_(aPropertyName);
+
+  return props;
+}
+
+
