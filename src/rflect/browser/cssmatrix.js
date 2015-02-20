@@ -43,7 +43,7 @@ rflect.browser.cssmatrix.getInstance = function(aComputedStyle){
       this.setIdentity();
     }
 
-    return null;
+    return this;
   }
 
   /**
