@@ -603,8 +603,8 @@ rflect.ui.MomentumScroller.prototype.doMomentum = function() {
       // you will need to figure out an appropriate time to clear the transition
       // so that it doesn’t apply to subsequent scrolling.
       rflect.browser.css.setTransition(this.element,
-          rflect.browser.css.getSelectorCasedProperty('transform') + ' ' +  time +
-          'ms cubic-bezier(0.33, 0.66, 0.66, 1)');
+          rflect.browser.css.getSelectorCasedProperty('transform') + ' ' +
+          time + 'ms cubic-bezier(0.33, 0.66, 0.66, 1)');
       this.contentOffsetY = newY;
       rflect.browser.css.setTransform(this.element, 'translate3d(0, ' + newY + 
           'px, 0)');
