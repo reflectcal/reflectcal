@@ -479,7 +479,7 @@ rflect.ui.MomentumScroller.prototype.animateWithinBounds = function(aOffsetY) {
 // then simply reposition it to be just within the appropriate boundary.
 rflect.ui.MomentumScroller.prototype.snapToBounds = function() {
   rflect.browser.css.setTransition(this.element,
-      rflect.browser.css.getPrefixedProperty('transform')[0] + ' ' + 500 +
+      rflect.browser.css.getSelectorCasedProperty('transform') + ' ' + 500 +
       'ms ease-out');
 
   // Different out of bounds cases:
@@ -603,7 +603,7 @@ rflect.ui.MomentumScroller.prototype.doMomentum = function() {
       // you will need to figure out an appropriate time to clear the transition
       // so that it doesn’t apply to subsequent scrolling.
       rflect.browser.css.setTransition(this.element,
-          rflect.browser.css.getPrefixedProperty('transform')[0] + ' ' +  time +
+          rflect.browser.css.getSelectorCasedProperty('transform') + ' ' +  time +
           'ms cubic-bezier(0.33, 0.66, 0.66, 1)');
       this.contentOffsetY = newY;
       rflect.browser.css.setTransform(this.element, 'translate3d(0, ' + newY + 
@@ -646,7 +646,7 @@ rflect.ui.MomentumScroller.prototype.setUpTransitionStage1 = function() {
       velocity) * .33;
 
   rflect.browser.css.setTransition(this.element,
-      rflect.browser.css.getPrefixedProperty('transform')[0] + ' ' + time +
+      rflect.browser.css.getSelectorCasedProperty('transform') + ' ' + time +
       'ms cubic-bezier(.33,' +
       (.66 - valueToLowerCubicBezierWith) +
       ',.66,' +
@@ -686,7 +686,7 @@ rflect.ui.MomentumScroller.prototype.setUpTransitionStage2 = function() {
   this.contentOffsetY = newY;
 
   rflect.browser.css.setTransition(this.element,
-      rflect.browser.css.getPrefixedProperty('transform')[0] + ' ' + time +
+      rflect.browser.css.getSelectorCasedProperty('transform') + ' ' + time +
       'ms cubic-bezier(0.33, 0.66, 0.66, 1)');
   rflect.browser.css.setTransform(this.element, 'translate3d(0, ' + newY + 
       'px, 0)');
@@ -709,13 +709,13 @@ rflect.ui.MomentumScroller.prototype.stopMomentum = function() {
     // Get the computed style object.
     var style = document.defaultView.getComputedStyle(this.element, null);
     // Computed the transform in a matrix object given the style.
-    var transform = rflect.browser.cssmatrix.getInstance(
-        style[rflect.browser.css.getPrefixedProperty('transform')[1]]);
+    var matrix = rflect.browser.cssmatrix.getInstance(
+        style[rflect.browser.css.getCamelCasedProperty('transform')]);
 
     // Clear the active transition so it doesn’t apply to our next transform.
     rflect.browser.css.setTransition(this.element, '');
     // Set the element transform to where it is right now.
-    this.animateTo(transform.m42);
+    this.animateTo(matrix.m42);
     this.queuedTransitionStage_ =
         rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.NONE;
 

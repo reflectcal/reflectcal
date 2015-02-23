@@ -102,3 +102,25 @@ rflect.browser.css.getPrefixedProperty = function(aPropertyName) {
 }
 
 
+/**
+ * @param {string} aPropertyName Property name, selector-cased.
+ * @return {string} Property name, selector-cased.
+ */
+rflect.browser.css.getSelectorCasedProperty = function(aPropertyName) {
+  var props = rflect.browser.css.findAndCacheProperty_(aPropertyName);
+
+  return props[0];
+}
+
+
+/**
+ * @param {string} aPropertyName Property name, selector-cased.
+ * @return {string} Property name, CamelCased.
+ */
+rflect.browser.css.getCamelCasedProperty = function(aPropertyName) {
+  var props = rflect.browser.css.findAndCacheProperty_(aPropertyName);
+
+  return props[1];
+}
+
+
