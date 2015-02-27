@@ -48,7 +48,7 @@ goog.gears.HttpRequest.setup = function() {
 
 /**
  * The factory for creating Gears HttpRequest's.
- * @return {!(GearsHttpRequest|XMLHttpRequest)} The request object.
+ * @return {!(XMLHttpRequest)} The request object.
  * @private
  */
 goog.gears.HttpRequest.factory_ = function() {

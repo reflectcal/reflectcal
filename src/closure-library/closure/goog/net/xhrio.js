@@ -150,7 +150,7 @@ goog.net.XhrIo.sendInstances_ = [];
  * @param {Function=} opt_callback Callback function for when request is
  *     complete.
  * @param {string=} opt_method Send method, default: GET.
- * @param {ArrayBuffer|Blob|Document|FormData|GearsBlob|string=} opt_content
+ * @param {ArrayBuffer|Blob|Document|FormData|string=} opt_content
  *     Post data. This can be a Gears blob if the underlying HTTP request object
  *     is a Gears HTTP request.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
@@ -248,7 +248,7 @@ goog.net.XhrIo.prototype.active_ = false;
 
 /**
  * Reference to an XMLHttpRequest object that is being used for the transfer.
- * @type {XMLHttpRequest|GearsHttpRequest}
+ * @type {XMLHttpRequest}
  * @private
  */
 goog.net.XhrIo.prototype.xhr_ = null;
@@ -442,9 +442,8 @@ goog.net.XhrIo.prototype.getWithCredentials = function() {
  * Instance send that actually uses XMLHttpRequest to make a server call.
  * @param {string|goog.Uri} url Uri to make request to.
  * @param {string=} opt_method Send method, default: GET.
- * @param {ArrayBuffer|Blob|Document|FormData|GearsBlob|string=} opt_content
- *     Post data. This can be a Gears blob if the underlying HTTP request object
- *     is a Gears HTTP request.
+ * @param {ArrayBuffer|Blob|Document|FormData|string=} opt_content
+ *     Post data.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  */
@@ -480,7 +479,7 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
   try {
     this.logger_.fine(this.formatMsg_('Opening Xhr'));
     this.inOpen_ = true;
-    this.xhr_.open(method, url, true);  // Always async!
+    this.xhr_.open(method, url.toString(), true);  // Always async!
     this.inOpen_ = false;
   } catch (err) {
     this.logger_.fine(this.formatMsg_('Error opening Xhr: ' + err.message));
@@ -558,7 +557,7 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
 
 /**
  * Creates a new XHR object.
- * @return {XMLHttpRequest|GearsHttpRequest} The newly created XHR object.
+ * @return {XMLHttpRequest} The newly created XHR object.
  * @protected
  */
 goog.net.XhrIo.prototype.createXhr = function() {

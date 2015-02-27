@@ -269,6 +269,7 @@ goog.debug.normalizeErrorObject = function(err) {
  * @return {Error} If err is a string, it is used to create a new Error,
  *     which is enhanced and returned.  Otherwise err itself is enhanced
  *     and returned.
+ * @suppress {es5Strict}
  */
 goog.debug.enhanceError = function(err, opt_message) {
   var error = typeof err == 'string' ? Error(err) : err;
@@ -293,6 +294,7 @@ goog.debug.enhanceError = function(err, opt_message) {
  * @param {number=} opt_depth Optional maximum depth to trace back to.
  * @return {string} A string with the function names of all functions in the
  *     stack, separated by \n.
+ * @suppress {es5Strict}
  */
 goog.debug.getStacktraceSimple = function(opt_depth) {
   var sb = [];
@@ -338,6 +340,7 @@ goog.debug.MAX_STACK_DEPTH = 50;
  * @param {Function=} opt_fn Optional function to start getting the trace from.
  *     If not provided, defaults to the function that called this.
  * @return {string} Stack trace.
+ * @suppress {es5Strict}
  */
 goog.debug.getStacktrace = function(opt_fn) {
   return goog.debug.getStacktraceHelper_(opt_fn || arguments.callee.caller, []);
@@ -349,6 +352,7 @@ goog.debug.getStacktrace = function(opt_fn) {
  * @param {Function} fn Function to start getting the trace from.
  * @param {Array} visited List of functions visited so far.
  * @return {string} Stack trace starting from function fn.
+ * @suppress {es5Strict}
  * @private
  */
 goog.debug.getStacktraceHelper_ = function(fn, visited) {

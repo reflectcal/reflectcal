@@ -1498,6 +1498,8 @@ goog.inherits = function(childCtor, parentCtor) {
  * @param {*=} opt_methodName The method name if calling a super method.
  * @param {...*} var_args The rest of the arguments.
  * @return {*} The return value of the superclass method.
+ * @suppress {es5Strict} This method can not be used in strict mode, but
+ *     all Closure Library consumers must depend on this file.
  */
 goog.base = function(me, opt_methodName, var_args) {
   var caller = arguments.callee.caller;

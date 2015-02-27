@@ -29,7 +29,7 @@ goog.require('goog.net.XmlHttpFactory');
 
 /**
  * Static class for creating XMLHttpRequest objects.
- * @return {!(XMLHttpRequest|GearsHttpRequest)} A new XMLHttpRequest object.
+ * @return {!(XMLHttpRequest)} A new XMLHttpRequest object.
  */
 goog.net.XmlHttp = function() {
   return goog.net.XmlHttp.factory_.createInstance();
@@ -123,7 +123,7 @@ goog.net.XmlHttp.factory_;
  */
 goog.net.XmlHttp.setFactory = function(factory, optionsFactory) {
   goog.net.XmlHttp.setGlobalFactory(new goog.net.WrapperXmlHttpFactory(
-      /** @type {function() : !(XMLHttpRequest|GearsHttpRequest)} */ (factory),
+      /** @type {function() : !(XMLHttpRequest)} */ (factory),
       /** @type {function() : !Object}*/ (optionsFactory)));
 };
 
