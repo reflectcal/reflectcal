@@ -1,0 +1,4 @@
+# Ignore everything in this directory
+# Except these files:
+*compiled*.js
+*compiled*.map
