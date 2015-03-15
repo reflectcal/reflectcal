@@ -24,7 +24,13 @@ block content
         span(class='login-error')
         i(class='fa fa-times icon-alert-close')
 
-  div.login-cont.login-submit-cont
-    a(href='/auth/google', class='goog-inline-block goog-flat-button cal-menu-button emphasis-button login-submit').
+  form(class='login-cont login-submit-cont', action='/auth/google', method='GET')
+    button(class='goog-inline-block login-submit').
       Login with Google
+  div.login-delimiter.
+    or
+  a(href='/guest', class='login-guest-link').
+      Take a look
+
+
   script.

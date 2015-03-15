@@ -6,15 +6,17 @@
 
 /* Styles for login page. */
 
+body {
+  font-size: 30px;
+}
+
 .login-header {
   padding: 18px 10px 10px 10px;
   text-align: center;
 }
 
 .login-cont {
-  margin: 0 15px;
-  padding: 2em 0;
-  height: 20px;
+  padding-top: 20px;
 }
 
 .login-label {
@@ -33,8 +35,31 @@
 }
 
 .login-submit {
+  position: relative;
+  font: bold 30px/24px 'Roboto', Tahoma, Arial, sans-serif;
   height: auto;
-  padding: 10px 30px;
+  padding: 30px 50px;
+  border: 5px solid #39F;
+  background-color: transparent;
+  color: #39F;
+  margin: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  vertical-align: top;
+  .border-radius(2px);
+  transition: box-shadow .1s, border .2s, background-color .2s;
+  .no-tap-delay();
+}
+
+.login-submit:active {
+  border-color: #bbbbbb;
+  color: #fff;
+  z-index: 1;
+  .box-shadow(1px 1px 1px #e9e9e9);
+  background-color: #4080fe;
+  border-color: #3399ff;
+  color: white;
 }
 
 .status-mark {
@@ -42,9 +67,16 @@
   text-transform: lowercase;
 }
 
-.login-button {
-  border: 5px solid #39F;
-  background: none repeat scroll 0% 0% transparent;
-  color: #39F;
+.login-delimiter {
+  display: block;
+  font-size: 25px;
+  margin: 0px auto;
+  text-align: center;
+  padding: 34px;
 }
 
+.login-guest-link {
+  display: block;
+  font-size: 25px;
+  text-align: center;
+}
