@@ -15,7 +15,7 @@ block content
     sup.status-mark.
       alpha
 
-  h2.login-header.
+  h2.login-sub-header.
     Fast and minimal web-calendar
 
   div(id='wrong-alert-cont', class='hide alert-cont', style='display:none')
@@ -27,10 +27,10 @@ block content
   form(class='login-cont login-submit-cont', action='/auth/google', method='GET')
     button(class='goog-inline-block login-submit').
       Login with Google
-  div.login-delimiter.
-    or
-  a(href='/guest', class='login-guest-link').
-      Take a look
-
+  div.login-guest-link
+    span.
+      or
+    a(href='/guest').
+      take a look
 
   script.

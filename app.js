@@ -64,8 +64,8 @@ if (appConfig.USE_OAUTH) {
     callbackURL: CALLBACK_URL,
   }, login.googleStrategy));
 } else {
-  passport.use(new LocalStrategy(login.localStrategy));
 }
+passport.use(new LocalStrategy(login.localStrategy));
 
 passport.serializeUser(login.serializeUser);
 passport.deserializeUser(login.deserializeUser);
@@ -82,19 +82,7 @@ if ('development' == app.get('env')) {
   app.locals.pretty = true;
 }
 
-var loginHandler = passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true
-});
-if (appConfig.USE_OAUTH) {
-  app.get('/', ensureAuthenticated, routesView.render);
-  app.get('/login', routesLogin.render);
-  app.get('/logout', function(req, res){
-    req.logout();
-    res.redirect('/login');
-  });
-} else if (appConfig.USE_LOCAL_AUTH) {
+if (appConfig.USE_LOCAL_AUTH) {
   //Local strategy form post.
   app.post('/login', loginHandler, function(req, res) {
     // If this function gets called, authentication was successful.
@@ -102,21 +90,21 @@ if (appConfig.USE_OAUTH) {
     log.info(req.user);
     res.redirect('/');
   });
-  app.get('/', ensureAuthenticated, routesView.render);
-  app.get('/login', routesLogin.render);
-  app.get('/logout', function(req, res){
-    req.logout();
-    res.redirect('/login');
-  });
-} else {
-  //Guest mode.
-  app.get('/', login.checkGuestMode(loginHandler), ensureAuthenticated,
-      routesView.render);
-  app.get('/logout', function(req, res){
-    req.logout();
-    res.redirect('/');
-  });
 }
+app.get('/', ensureAuthenticated, routesView.render);
+app.get('/login', routesLogin.render);
+var loginHandler = passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+});
+//Guest mode.
+app.get('/guest', login.checkGuestMode(loginHandler), ensureAuthenticated,
+    routesView.render);
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
 
 if (appConfig.USE_OAUTH) {
   // GET /auth/google

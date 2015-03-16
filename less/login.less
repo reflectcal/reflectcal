@@ -7,16 +7,26 @@
 /* Styles for login page. */
 
 body {
-  font-size: 30px;
+  font-size: 17px;
 }
 
 .login-header {
-  padding: 18px 10px 10px 10px;
+  padding: 18px 10px 0;
+  margin-bottom: 0;
   text-align: center;
+  color: #2c2c2c;
+}
+
+.login-sub-header {
+  padding: 0 10px 10px;
+  margin-top: 0;
+  text-align: center;
+  color: #2c2c2c;
 }
 
 .login-cont {
   padding-top: 20px;
+  color: #757575;
 }
 
 .login-label {
@@ -31,12 +41,13 @@ body {
 }
 
 .login-submit-cont {
+  margin-top: 150px;
   text-align: center;
 }
 
 .login-submit {
   position: relative;
-  font: bold 30px/24px 'Roboto', Tahoma, Arial, sans-serif;
+  font: bold 25px/24px 'Roboto', Tahoma, Arial, sans-serif;
   height: auto;
   padding: 30px 50px;
   border: 5px solid #39F;
@@ -50,6 +61,7 @@ body {
   .border-radius(2px);
   transition: box-shadow .1s, border .2s, background-color .2s;
   .no-tap-delay();
+
 }
 
 .login-submit:active {
@@ -77,6 +89,7 @@ body {
 
 .login-guest-link {
   display: block;
-  font-size: 25px;
+  margin-top: 30px;
+  font-size: 20px;
   text-align: center;
 }
