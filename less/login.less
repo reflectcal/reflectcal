@@ -50,7 +50,7 @@ body {
   font: bold 25px/24px 'Roboto', Tahoma, Arial, sans-serif;
   height: auto;
   padding: 30px 50px;
-  border: 5px solid #39F;
+  border: 1px solid #39F;
   background-color: transparent;
   color: #39F;
   margin: 2px;
@@ -59,17 +59,18 @@ body {
   outline: none;
   vertical-align: top;
   .border-radius(2px);
-  transition: box-shadow .1s, border .2s, background-color .2s;
+  transition: box-shadow .1s, border .2s, background-color .2s, color .2s;
   .no-tap-delay();
 
 }
 
+.login-submit:hover,
 .login-submit:active {
   border-color: #bbbbbb;
   color: #fff;
   z-index: 1;
   .box-shadow(1px 1px 1px #e9e9e9);
-  background-color: #4080fe;
+  background-color: #3399ff;
   border-color: #3399ff;
   color: white;
 }
