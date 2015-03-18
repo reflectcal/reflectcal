@@ -34,3 +34,23 @@ block content
       take a look
 
   script.
+
+    var submitBtn;
+    function getSubmitBtn() {
+      return submitBtn || (submitBtn = document.querySelector('.login-submit'));
+    }
+
+    function removeSubmitActiveState(e) {
+      getSubmitBtn().classList.remove('active');
+    }
+
+    function onLoginLoad() {
+
+      getSubmitBtn().addEventListener('touchstart', function(e) {
+        getSubmitBtn().classList.add('active');
+      }, false);
+      document.addEventListener('touchend', removeSubmitActiveState, false);
+    }
+
+    window.addEventListener('pageshow', removeSubmitActiveState, false);
+    window.addEventListener('load', onLoginLoad, false);
