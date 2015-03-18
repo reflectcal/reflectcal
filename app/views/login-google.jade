@@ -9,29 +9,44 @@ block cssLinks
 
 block content
 
-  h1.login-header
-    span.
-      Reflect calendar
-    sup.status-mark.
-      alpha
+  div.login-body
 
-  h2.login-sub-header.
-    Fast and minimal web-calendar
+    h1.login-header
+      span.
+        Reflect calendar
+      sup.status-mark.
+        alpha
 
-  div(id='wrong-alert-cont', class='hide alert-cont', style='display:none')
-    div(class='alert alert-error')
-      strong
-        span(class='login-error')
-        i(class='fa fa-times icon-alert-close')
+    h2.login-sub-header.
+      Fast and minimal web-calendar
 
-  form(class='login-cont login-submit-cont', action='/auth/google', method='GET')
-    button(class='goog-inline-block login-submit').
-      Login with Google
-  div.login-guest-link-cont
-    span.
-      or
-    a(href='/guest').
-      take a look
+    div(id='wrong-alert-cont', class='hide alert-cont', style='display:none')
+      div(class='alert alert-error')
+        strong
+          span(class='login-error')
+          i(class='fa fa-times icon-alert-close')
+
+    form(class='login-cont login-submit-cont', action='/auth/google', method='GET')
+      button(class='goog-inline-block login-submit').
+        Login with Google
+    div.login-guest-link-cont
+      span.
+        or
+      a(href='/guest').
+        take a look
+
+    div.button-aux-cont
+      a(
+        href='mailto:reflectcal@gmail.com?subject=Reflect calendar feedback.&body=',
+        class='goog-inline-block button-login-mail'
+      ).
+        Mail developer
+      a(
+        href='https://twitter.com/intent/tweet?text=Fast and simple web-calendar by @alexey_komov&tw_p=tweetbutton&url=http%3A%2F%2Freflectcal.com',
+        target='_blank',
+        class='goog-inline-block button-login-tweet twitter-share-button'
+      ).
+        Tweet about
 
   script.
 
@@ -45,7 +60,6 @@ block content
     }
 
     function onLoginLoad() {
-
       getSubmitBtn().addEventListener('touchstart', function(e) {
         getSubmitBtn().classList.add('active');
       }, false);

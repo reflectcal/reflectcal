@@ -6,7 +6,7 @@
 
 /* Styles for login page. */
 
-body {
+.login-body {
   font-size: 17px;
 }
 
@@ -45,11 +45,11 @@ body {
   text-align: center;
 }
 
-.login-submit {
+.light-button() {
   position: relative;
-  font: bold 25px/24px 'Roboto', Tahoma, Arial, sans-serif;
+  font: bold 14px/24px 'Roboto', Tahoma, Arial, sans-serif;
   height: auto;
-  padding: 30px 50px;
+  padding: 8px 16px;
   border: 1px solid #39F;
   background-color: transparent;
   color: #39F;
@@ -64,6 +64,14 @@ body {
 
 }
 
+.login-submit {
+  .light-button();
+  font: bold 25px/24px 'Roboto', Tahoma, Arial, sans-serif;
+  padding: 30px 50px;
+  border: 1px solid #39F;
+  color: #39F;
+}
+
 .login-submit:hover,
 .login-submit:active {
   border-color: #bbbbbb;
@@ -72,7 +80,6 @@ body {
   .box-shadow(1px 1px 1px #e9e9e9);
   background-color: #3399ff;
   border-color: #3399ff;
-  color: white;
 }
 
 .status-mark {
@@ -102,4 +109,40 @@ body {
 
 .login-guest-link-cont a:hover {
   text-decoration: underline;
+}
+
+.button-aux-cont {
+  margin: 150px auto 0;
+  text-align: center;
+  max-width: 310px;
+}
+
+.button-login-mail {
+  .light-button();
+  border: 1px solid #008000;
+  color: #008000;
+  float: left;
+}
+
+.button-login-tweet {
+  .light-button();
+  border: 1px solid #593F7F;
+  color: #593F7F;
+  float: right;
+}
+
+.button-login-mail:hover,
+.button-login-mail:active {
+  color: #fff;
+  z-index: 1;
+  background-color:  #008000;
+  border-color:  #008000;
+}
+
+.button-login-tweet:hover,
+.button-login-tweet:active {
+  z-index: 1;
+  color: #fff;
+  background-color:  #593F7F;
+  border-color: #593F7F;
 }
