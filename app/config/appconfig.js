@@ -57,6 +57,13 @@ exports.APP_PORT = exports.BUILT ? 80 : 3000;
 
 
 /**
+ * Port for web sockets.
+ * @type {number}
+ */
+exports.WEBSOCKETS_PORT = 3002;
+
+
+/**
  * Whether to perform user setup, i.e. add default calendars and events.
  * Interface may look more friendly with some events and calendars already set.
  * @type {boolean}
