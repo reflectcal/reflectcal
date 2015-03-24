@@ -25,6 +25,8 @@ var appConfig = require('./app/config/appconfig');
 var log = appConfig.log;
 var db = require('./app/db/connection').db;
 var oauthHelper = require('./app/util/oauthhelper');
+var addUserToMap = require('./app/util/globalusermap').addUserToMap;
+var removeUserFromMap = require('./app/util/globalusermap').removeUserFromMap;
 
 var app = express();
 
@@ -91,7 +93,7 @@ if (appConfig.USE_LOCAL_AUTH) {
     res.redirect('/');
   });
 }
-app.get('/', ensureAuthenticated, routesView.render);
+app.get('/', ensureAuthenticated, addUserToMap, routesView.render);
 app.get('/login', routesLogin.render);
 var loginHandler = passport.authenticate('local', {
   successRedirect: '/',
@@ -100,11 +102,11 @@ var loginHandler = passport.authenticate('local', {
 });
 //Guest mode.
 app.get('/guest', login.checkGuestMode(loginHandler), ensureAuthenticated,
-    routesView.render);
+    addUserToMap, routesView.render);
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
-});
+}, removeUserFromMap);
 
 if (appConfig.USE_OAUTH) {
   // GET /auth/google
@@ -144,6 +146,16 @@ app.post('/user/save', ensureAuthenticated, routesUser.userSave);
 // the request will proceed. Otherwise, the user will be redirected to the
 // login page.
 function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/login');
+}
+
+function addUserToMap(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/login');
+}
+
+function removeUserFromMap(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
 }

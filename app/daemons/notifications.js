@@ -14,35 +14,77 @@ var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var appConfig = require('../config/appconfig');
 var log = appConfig.log;
+var addUserToMap = require('../util/globalusermap').addUserToMap;
+var removeUserFromMap = require('../util/globalusermap').removeUserFromMap;
 
+
+var wss;
+var checkTimer;
+const SECOND = 1000;
+const MINUTE = SECOND * 60;
+const FIFTEEN_MINUTES = MINUTE * 15;
 
 exports.start = function(aServer){
 
-  var wss = new WebSocketServer({port: appConfig.WEBSOCKETS_PORT,
-    path: '/events-stream'
+  wss = new WebSocketServer({
+    port: appConfig.WEBSOCKETS_PORT
   });
-  var target;
+
+  checkTimer = setTimeout(notificationLoopCallback, SECOND);
 
   wss.on('connection', function(ws) {
-    var callback = function(document) {
-      ws.send(JSON.stringify(document));
-    }
-
     log.info('Connection is established.');
     ws.send('Test signal.');
-    ws.on('message', function(message) {
-      log.info('received: %s', message);
-      target = eventDAO.addListenerForNewEvent(getEventFilter(message),
-          callback);
-    });
     ws.on('close', function() {
-      eventDAO.removeListenerForNewEvent(target);
+      removeUserFromMap(ws.upgradeReq);
       log.info('disconnected');
     });
   });
 
+  wss.broadcast = function broadcast(data) {
+    wss.clients.forEach(function each(client) {
+      client.send(data);
+    });
+  };
+
   log.info('Started daemon for listening new events for port ' +
       appConfig.WEBSOCKETS_PORT + '.');
+}
+
+
+exports.stop = function(aServer){
+  if (wss) {
+    wss.close();
+  }
+  clearTimeout(checkTimer);
+}
+
+
+var lastCheckedTime = 0;
+
+
+function notificationLoopCallback() {
+  var eventsToNotifyOf;
+
+  var now = new Date;
+  now.setSeconds(0);
+  now.setMilliseconds(0);
+
+  var intervalStart = now.getTime() + FIFTEEN_MINUTES;
+
+  //Allow body to run every minute.
+  if (lastCheckedTime != intervalStart) {
+    lastCheckedTime = intervalStart;
+
+    entityDAO.getEntitiesAsync('events', {
+      start: {
+        $lt: intervalStart + MINUTE,
+        $gte: intervalStart
+      }
+    }, aOnEventsLoad, eventToTransportJSON);
+
+    checkTimer = setTimeout(notificationLoopCallback, SECOND);
+  }
 }
 
 

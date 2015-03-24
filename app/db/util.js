@@ -22,7 +22,7 @@ var idAlphabet = '0123456789abcdefghijklmnopqrstuvwxyz' +
  */
 exports.getUniqueIdAsync = function(aCollection, aCallback){
 
-  var uniqueId = idgen(32, idAlphabet);
+  var uniqueId = idgen(64, idAlphabet);
 
   aCollection && aCollection.count({_id: uniqueId}, function(aError, aCount){
     if (aCount == 0)
