@@ -25,8 +25,10 @@ var appConfig = require('./app/config/appconfig');
 var log = appConfig.log;
 var db = require('./app/db/connection').db;
 var oauthHelper = require('./app/util/oauthhelper');
-var addUserToMap = require('./app/util/globalusermap').addUserToMap;
-var removeUserFromMap = require('./app/util/globalusermap').removeUserFromMap;
+var registerUser = require('./app/util/users').registerUser;
+var unregisterUser = require('./app/util/users').unregisterUser;
+var dbUtil = require('./app/db/util');
+var getEntitiesWithPromise = require('./app/db/entity').getEntitiesWithPromise;
 
 var app = express();
 
@@ -93,7 +95,7 @@ if (appConfig.USE_LOCAL_AUTH) {
     res.redirect('/');
   });
 }
-app.get('/', ensureAuthenticated, addUserToMap, routesView.render);
+app.get('/', ensureAuthenticated, registerUser, routesView.render);
 app.get('/login', routesLogin.render);
 var loginHandler = passport.authenticate('local', {
   successRedirect: '/',
@@ -102,11 +104,11 @@ var loginHandler = passport.authenticate('local', {
 });
 //Guest mode.
 app.get('/guest', login.checkGuestMode(loginHandler), ensureAuthenticated,
-    addUserToMap, routesView.render);
+    registerUser, routesView.render);
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
-}, removeUserFromMap);
+}, unregisterUser);
 
 if (appConfig.USE_OAUTH) {
   // GET /auth/google
@@ -150,12 +152,12 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
-function addUserToMap(req, res, next) {
+function registerUser(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
 }
 
-function removeUserFromMap(req, res, next) {
+function unregisterUser(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
 }
@@ -184,3 +186,8 @@ process.on('SIGTERM', function () {
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+dbUtil.getUniqueIdAsyncWithPromise(db.get('events')).then(console.log.bind('Get unique id: '), console.log);
+getEntitiesWithPromise('events', {name: 'eventCreatedWithPromiseFunction'},
+    function(o) {return o}, {name: 'eventCreatedWithPromiseFunction'}).then(
+    console.log, function(e) {console.log(e.stack)});

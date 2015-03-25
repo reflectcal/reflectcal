@@ -3,18 +3,23 @@
  */
 
 /**
- * @fileoverview Map of sid -> username@mail.com.
+ * @fileoverview User registry.
  */
 
 
-var globalUserMap = new Map();
+/**
+ * Map of sid -> username@mail.com
+ */
+var globalSidToUserName = new Map();
+var globalUserNames = new Set();
 
 
 /**
  * Clear all users.
  */
 exports.clear = function() {
-  globalUserMap.clear();
+  globalSidToUserName.clear();
+  globalUserNames.clear();
 };
 
 
@@ -33,18 +38,25 @@ function extractSidFromRequest(aReq) {
 }
 
 
-export.getUserNameFromRequest = function(req) {
-  return globalUserMap.get(extractSidFromRequest(req));
+exports.getUserNameFromRequest = function(req) {
+  return globalSidToUserName.get(extractSidFromRequest(req));
 }
 
 
-export.addUserToMap = function(req, res, next) {
-  globalUserMap.set(extractSidFromRequest(req), req.username);
+exports.registerUser = function(req, res, next) {
+  globalSidToUserName.set(extractSidFromRequest(req), req.username);
+  globalUserNames.add(req.username);
   return next();
 }
 
 
-export.removeUserFromMap = function(req, res, next) {
-  globalUserMap.delete(extractSidFromRequest(req));
+exports.unregisterUser = function(req, res, next) {
+  globalSidToUserName.delete(extractSidFromRequest(req));
+  globalUserNames.delete(req.username);
   return next();
+}
+
+
+exports.userIsRegistered = function(aUserName) {
+  globalUserNames.has(aUserName);
 }

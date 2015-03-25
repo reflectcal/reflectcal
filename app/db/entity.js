@@ -13,6 +13,7 @@ var dbUtil = require('./util');
 var deepClone = require('clone');
 var appConfig = require('../config/appconfig');
 var log = appConfig.log;
+var Q = require('Q');
 
 
 /**
@@ -77,6 +78,92 @@ function ensureEntityExists(aCollection, aLookupObject,
     else if (aCount >= 1)
       aOnEnsureEntityExist();
   });
+}
+
+
+/**
+ * Loads entities.
+ * @param {string} aCollectionName Collection to which entity belongs.
+ * @param {Object} aLookupObject Object with entity lookup params.
+ * @param {function(Array)} aOnEntitiesLoad Callback that will be executed
+ * when db request is ready.
+ * @param {function(Object):Object} aEntityToTransportJSON Function that
+ * transforms db representation of entity to its transportable form.
+ * @param {Object=} opt_defaultEntity Optional - default entity that should be
+ * inserted when none exists. If omitted, no check is performed, so it's ok when
+ * no entities are present.
+ */
+exports.getEntitiesWithPromise = function(aCollectionName, aLookupObject,
+    aEntityToTransportJSON, opt_defaultEntity){
+  return new Promise(function(resolve, reject) {
+    var collection = db.get(aCollectionName);
+    ensureEntityExistsWithPromise(collection, aLookupObject,
+        opt_defaultEntity).then(function() {
+      collection.find(aLookupObject, {}, function(aError, aEntities) {
+        if (aError) {
+          reject(aError);
+        } else {
+          var entities = [];
+          aEntities.forEach(function(aEntity) {
+            entities.push(aEntityToTransportJSON(aEntity));
+          });
+
+          resolve(entities);
+        }
+      });
+    }).catch(reject);
+  });
+}
+
+
+/**
+ * Ensures that entity exists.
+ * @param {Object} aCollection Collection to which entity belongs.
+ * @param {Object} aLookupObject Object with entity lookup params.
+ * @param {function()} aOnEnsureEntityExist Callback that will be executed
+ * when entity is truly present.
+ */
+function ensureEntityExistsWithPromise(aCollection, aLookupObject,
+    aDefaultEntity){
+  return new Promise(function(resolve, reject) {
+    if (!aDefaultEntity) {
+      resolve();
+    } else {
+      aCollection.count(aLookupObject, function(aError, aCount) {
+        if (aError) {
+          reject(aError)
+        } else if (aCount == 0) {
+          dbUtil.getUniqueIdAsyncWithPromise(aCollection).
+              then(insertDefaultEntityWithPromise.bind(null, aCollection,
+                  aDefaultEntity)).
+              then(resolve).
+              catch(reject);
+        } else if (aCount >= 1) {
+          resolve();
+        } else {
+          reject(new Error('Meaningless count.'));
+        }
+      });
+    } 
+  });
+}
+
+
+function insertDefaultEntityWithPromise(aCollection, aDefaultEntity, aId) {
+  var defaultEntity = deepClone(aDefaultEntity);
+  defaultEntity._id = aId;
+
+  var insertWithPromise = Q.denodeify(aCollection.insert.bind(aCollection));
+  return insertWithPromise(defaultEntity, {});
+}
+
+
+function insertDefaultEntityWithPromise(aCollection, aDefaultEntity, aId) {
+  var defaultEntity = deepClone(aDefaultEntity);
+  defaultEntity._id = aId;
+
+  var insertWithPromise = Q.denodeify(aCollection.insert);
+  return insertWithPromise(aDefaultEntity, {});
 }
 
 

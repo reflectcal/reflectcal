@@ -14,47 +14,51 @@ var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var appConfig = require('../config/appconfig');
 var log = appConfig.log;
-var addUserToMap = require('../util/globalusermap').addUserToMap;
-var removeUserFromMap = require('../util/globalusermap').removeUserFromMap;
+var registerUser = require('../util/users').registerUser;
+var unregisterUser = require('../util/users').unregisterUser;
+var getUserNameFromRequest = require('../util/users').getUserNameFromRequest;
+var userIsRegistered = require('../util/users').userIsRegistered;
 
 
-var wss;
+var webSocketServer;
+var userNamesToWebSockets;
 var checkTimer;
 const SECOND = 1000;
 const MINUTE = SECOND * 60;
 const FIFTEEN_MINUTES = MINUTE * 15;
 
-exports.start = function(aServer){
 
-  wss = new WebSocketServer({
-    port: appConfig.WEBSOCKETS_PORT
+exports.start = function(aServer) {
+
+  webSocketServer = new WebSocketServer({
+    port: appConfig.WEBSOCKETS_PORT,
+    url: '/notifications'
   });
+  userNamesToWebSockets = new Map();
 
   checkTimer = setTimeout(notificationLoopCallback, SECOND);
 
-  wss.on('connection', function(ws) {
-    log.info('Connection is established.');
-    ws.send('Test signal.');
-    ws.on('close', function() {
-      removeUserFromMap(ws.upgradeReq);
+  webSocketServer.on('connection', function(aWebSocket) {
+    userNamesToWebSockets.set(getUserNameFromRequest(aWebSocket.upgradeReq),
+        aWebSocket);
+    aWebSocket.on('close', function() {
+      userNamesToWebSockets.delete(getUserNameFromRequest(aWebSocket.
+          upgradeReq));
       log.info('disconnected');
     });
   });
-
-  wss.broadcast = function broadcast(data) {
-    wss.clients.forEach(function each(client) {
-      client.send(data);
-    });
-  };
 
   log.info('Started daemon for listening new events for port ' +
       appConfig.WEBSOCKETS_PORT + '.');
 }
 
 
-exports.stop = function(aServer){
-  if (wss) {
-    wss.close();
+exports.stop = function(aServer) {
+  if (webSocketServer) {
+    webSocketServer.close();
+  }
+  if (userNamesToWebSockets) {
+    userNamesToWebSockets.clear();
   }
   clearTimeout(checkTimer);
 }
@@ -76,40 +80,36 @@ function notificationLoopCallback() {
   if (lastCheckedTime != intervalStart) {
     lastCheckedTime = intervalStart;
 
-    entityDAO.getEntitiesAsync('events', {
+    entityDAO.getEntitiesWithPromise('events', {
       start: {
         $lt: intervalStart + MINUTE,
         $gte: intervalStart
       }
-    }, aOnEventsLoad, eventToTransportJSON);
+    }, function(aEvent) {return aEvent}).then(processEventsArray).catch(log);
 
     checkTimer = setTimeout(notificationLoopCallback, SECOND);
   }
 }
 
 
-/**
- * @param {string} aJSONFilter JSON representation of filter.
- * @return {Object} Mongo collection filter.
- */
-function getEventFilter(aJSONFilter) {
-  var jsonFilter = JSON.parse(aJSONFilter);
-  var fieldName = jsonFilter.fieldName;
-  var filter = {
-    time: {}
-  };
-  filter.time.$gte = new Date(jsonFilter.time);
+function processEventsArray(aEvents) {
+  var userNamesToEvents = new Map();
 
-  //Initially we show all request types.
-  if (!jsonFilter.allTypes) {
-    filter[fieldName] = {};
-    filter[fieldName].$in = [];
-    jsonFilter.requestType.forEach(function(key){
-      filter[fieldName].$in.push(key);
-    });
-  }
+  aEvents.forEach(function(aEvent) {
+    var event = aEvents[counter];
+    if (userIsRegistered(event.username)) {
+      if (!userNamesToEvents.has(event.username)) {
+        userNamesToEvents.set(event.username, [event]);
+      } else {
+        userNamesToEvents.get(event.username).push(event);  
+      }
+    }
+  });
 
-  console.log('jsonFilter: ', jsonFilter);
-  console.log('filter: ', JSON.stringify(filter));
-  return filter;
+  userNamesToEvents.forEach(function(aEvents, aUserName) {
+    var ws = userNamesToWebSockets.get(aUserName);
+    if (ws) {
+      ws.send(JSON.stringify(aEvents));
+    }
+  });
 }
