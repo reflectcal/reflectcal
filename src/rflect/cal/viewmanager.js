@@ -169,9 +169,8 @@ rflect.cal.ViewManager.prototype.getScreenManager = function(){
 
 /**
  * Attaches event handlers.
- * @private
  */
-rflect.cal.ViewManager.prototype.assignEvents_ = function() {
+rflect.cal.ViewManager.prototype.enterDocument = function() {
   // Container resize listener.
   this.listen(this.containerSizeMonitor_, goog.events.EventType.RESIZE,
       this.onViewportResize_, false, this);
@@ -522,7 +521,8 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
       this.screenManager_.render();
       // Render main body and places it in screen manager element.
       this.screenManager_.showScreen(this.mainBody_, true);
-      this.assignEvents_();
+      this.enterDocument();
+      this.transport_.enterNotificationsListening();
       this.isOnStartup_ = false;
 
     } else if (calledByMiniCal) {

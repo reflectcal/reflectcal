@@ -10,6 +10,9 @@
 goog.provide('rflect.cal.Transport');
 goog.provide('rflect.cal.Transport.EventTypes');
 
+goog.require('goog.events.EventHandler');
+goog.require('goog.net.WebSocket');
+goog.require('goog.net.WebSocket.MessageEvent');
 goog.require('goog.net.XhrIo');
 goog.require('goog.testing.net.XhrIo');
 goog.require('rflect.cal.events.Calendar');
@@ -73,6 +76,21 @@ rflect.cal.Transport = function(aViewManager, aTimeManager,
    * @private
    */
   this.loadedEventIds_ = {};
+
+  /**
+   * Web socket for notifications.
+   * @type {goog.net.WebSocket}
+   * @private
+   */
+  this.notificationsWebSocket_ = new goog.net.WebSocket();
+
+
+  /**
+   * Event handler.
+   * @type {goog.events.EventHandler}
+   * @private
+   */
+  this.handler_ = new goog.events.EventHandler(this);
 };
 goog.inherits(rflect.cal.Transport, goog.events.EventTarget);
 
@@ -96,6 +114,30 @@ rflect.cal.Transport.DEFAULT_POST_HEADERS = {
 
 
 /**
+ * Web sockets protocol.
+ * @type {string}
+ * @const
+ */
+rflect.cal.Transport.WEB_SOCKET_PROTOCOL = 'ws://';
+
+
+/**
+ * Web sockets port.
+ * @type {number}
+ * @const
+ */
+rflect.cal.Transport.WEB_SOCKET_PORT = 3002;
+
+
+/**
+ * Notifications web socket path.
+ * @type {string}
+ * @const
+ */
+rflect.cal.Transport.WEB_SOCKET_NOTIFICATIONS_PATH = '/notifications';
+
+
+/**
  * @enum {string}
  */
 rflect.cal.Transport.EventTypes = {
@@ -107,7 +149,8 @@ rflect.cal.Transport.EventTypes = {
   SAVE_CALENDAR: 'savecalendar',
   DELETE_CALENDAR: 'deletecalendar',
   SAVE_SETTINGS: 'savesettings',
-  SAVE_USER: 'saveuser'
+  SAVE_USER: 'saveuser',
+  NOTIFICATION_MESSAGE: 'notificationMessage'
 }
 
 
@@ -212,6 +255,17 @@ rflect.cal.Transport.SaveUserEvent = function(aUser, aReload) {
 
 
 /**
+ * Event that is fired when notification comes.
+ * @param {Array.<Object>} aNotification Notification message.
+ * @constructor
+ */
+rflect.cal.Transport.NotificationMessageEvent = function(aNotification) {
+  this.type = rflect.cal.Transport.EventTypes.NOTIFICATION_MESSAGE;
+  this.notification = aNotification;
+}
+
+
+/**
  * @param {Object} aOperation Object to turn into JSON.
  * @return {string} JSON string.
  */
@@ -230,18 +284,18 @@ rflect.cal.Transport.parse = function(aOperation) {
 
 
 /**
- * @param {goog.net.XhrIo} x Response to extract JSON from.
+ * @param {string} aResponseText Response to extract JSON from.
  * @param {boolean=} opt_dontUseXssiPrefix Whether not to use anti-xssi prefix.
  * @see {http://jeremiahgrossman.blogspot.com/2006/01/advanced-web-attack-techniques-using.html}
  */
-rflect.cal.Transport.getResponseJSON = function(x, opt_dontUseXssiPrefix) {
-  var responseText = x.getResponseText();
+rflect.cal.Transport.getResponseJSON = function(aResponseText, 
+    opt_dontUseXssiPrefix) {
   var xssiPrefix = rflect.cal.Transport.JSON_XSS_PREPENDER;
 
-  if (!opt_dontUseXssiPrefix && responseText.indexOf(xssiPrefix) == 0) {
-    responseText = responseText.substring(xssiPrefix.length);
+  if (!opt_dontUseXssiPrefix && aResponseText.indexOf(xssiPrefix) == 0) {
+    aResponseText = aResponseText.substring(xssiPrefix.length);
   }
-  return rflect.cal.Transport.parse(responseText);
+  return rflect.cal.Transport.parse(aResponseText);
 }
 
 
@@ -269,7 +323,7 @@ rflect.cal.Transport.prototype.saveEventAsync = function(aEvent) {
 rflect.cal.Transport.prototype.onSaveEvent_ = function(aCalEventId, aEvent) {
   var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
 
-  var response = rflect.cal.Transport.getResponseJSON(x);
+  var response = rflect.cal.Transport.getResponseJSON(x.getResponseText());
 
   var event = this.eventManager_.getEventById(aCalEventId);
 
@@ -313,7 +367,7 @@ rflect.cal.Transport.prototype.onDeleteEvent_ = function(aCalEventId, aLongId,
     aEvent) {
   var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
 
-  var response = rflect.cal.Transport.getResponseJSON(x);
+  var response = rflect.cal.Transport.getResponseJSON(x.getResponseText());
   var operationCode = response;
 
   if (operationCode == 0) {
@@ -366,7 +420,7 @@ rflect.cal.Transport.prototype.loadEventsAsync = function() {
 rflect.cal.Transport.prototype.onLoadEvents_ = function(aInterval, aEvent) {
   var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
 
-  var response = rflect.cal.Transport.getResponseJSON(x);
+  var response = rflect.cal.Transport.getResponseJSON(x.getResponseText());
   var events = response;
 
   this.updateIntervals_(aInterval);
@@ -544,7 +598,7 @@ rflect.cal.Transport.prototype.saveCalendarAsync = function(aCalendar) {
 rflect.cal.Transport.prototype.onSaveCalendar_ = function(aCalendar, aEvent) {
   var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
 
-  var response = rflect.cal.Transport.getResponseJSON(x);
+  var response = rflect.cal.Transport.getResponseJSON(x.getResponseText());
 
   var calendar = aCalendar;
 
@@ -590,7 +644,7 @@ rflect.cal.Transport.prototype.onDeleteCalendar_ = function(aCalendarId,
     aEvent) {
   var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
 
-  var response = rflect.cal.Transport.getResponseJSON(x);
+  var response = rflect.cal.Transport.getResponseJSON(x.getResponseText());
   var operationCode = response;
 
   if (operationCode == 0) {
@@ -636,7 +690,7 @@ rflect.cal.Transport.prototype.onSaveSettings_ = function(aSettings, aReload,
                                                           aEvent) {
   var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
 
-  var response = rflect.cal.Transport.getResponseJSON(x);
+  var response = rflect.cal.Transport.getResponseJSON(x.getResponseText());
 
   /*if (response == 0) {
   }*/
@@ -671,7 +725,7 @@ rflect.cal.Transport.prototype.saveUserAsync = function(aUser, aReload) {
 rflect.cal.Transport.prototype.onSaveUser_ = function(aUser, aReload, aEvent) {
   var x = /**@type {goog.net.XhrIo}*/ (aEvent.target);
 
-  var response = rflect.cal.Transport.getResponseJSON(x);
+  var response = rflect.cal.Transport.getResponseJSON(x.getResponseText());
 
   /*if (response == 0) {
   }*/
@@ -682,10 +736,64 @@ rflect.cal.Transport.prototype.onSaveUser_ = function(aUser, aReload, aEvent) {
 
 
 /**
+ * Starts listening for notifications.
+ */
+rflect.cal.Transport.prototype.enterNotificationsListening = function() {
+  this.handler_.listen(this.notificationsWebSocket_,
+      goog.net.WebSocket.EventType.OPENED, this.onNotificationsOpen_);
+  this.handler_.listen(this.notificationsWebSocket_,
+      goog.net.WebSocket.EventType.MESSAGE, this.onNotificationsMessage_);
+
+  try {
+    this.notificationsWebSocket_.open(
+        rflect.cal.Transport.WEB_SOCKET_PROTOCOL + location.hostname +
+        ':' + rflect.cal.Transport.WEB_SOCKET_PORT +
+        rflect.cal.Transport.WEB_SOCKET_NOTIFICATIONS_PATH);
+  } catch (e) {
+    if (goog.DEBUG) {
+      console.log('Failed to establish websocket connection at: ', e);
+    }
+  }
+}
+
+
+/**
+ * Stops listening for notifications.
+ */
+rflect.cal.Transport.prototype.exitNotificationsListening = function() {
+  this.handler_.unlisten(this.notificationsWebSocket_,
+      goog.net.WebSocket.EventType.OPENED, this.onNotificationsOpen_);
+  this.handler_.unlisten(this.notificationsWebSocket_,
+      goog.net.WebSocket.EventType.MESSAGE, this.onNotificationsMessage_);
+  this.notificationsWebSocket_.close();
+}
+
+
+/**
+ * Notifications connection open callback.
+ */
+rflect.cal.Transport.prototype.onNotificationsOpen_ = function() {
+};
+
+
+/**
+ * Notifications message callback.
+ * @param {goog.net.WebSocket.MessageEvent} aEvent Event object.
+ */
+rflect.cal.Transport.prototype.onNotificationsMessage_ = function(aEvent) {
+  var response = rflect.cal.Transport.getResponseJSON(aEvent.message);
+  this.dispatchEvent(new rflect.cal.Transport.NotificationMessageEvent(
+      response));
+  alert(response.name + ' starts at ' + response.start);
+};
+
+
+/**
  * @override
  */
 rflect.cal.Transport.prototype.disposeInternal = function() {
   goog.net.XhrIo.cleanup();
-
   rflect.cal.Transport.superClass_.disposeInternal.call(this);
+  this.exitNotificationsListening();
+  this.handler_.dispose();
 }

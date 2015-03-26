@@ -64,6 +64,13 @@ exports.WEBSOCKETS_PORT = 3002;
 
 
 /**
+ * Path for notifications web sockets.
+ * @type {string}
+ */
+exports.WEBSOCKETS_NOTIFICATIONS_PATH = '/notifications';
+
+
+/**
  * Whether to perform user setup, i.e. add default calendars and events.
  * Interface may look more friendly with some events and calendars already set.
  * @type {boolean}

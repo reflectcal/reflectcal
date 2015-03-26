@@ -29,10 +29,10 @@ exports.clear = function() {
  */
 function extractSidFromRequest(aReq) {
   var cookie = aReq.headers.cookie;
-  var matches = /connect\.sid\=.+/.exec(cookie);
+  var matches = /connect\.sid\=.+;/.exec(cookie);
 
-  if (matches.length) {
-    return matches[0].replace(/connect\.sid\=/, '');
+  if (matches && matches.length) {
+    return matches[0].replace(/connect\.sid\=/, '').replace(/\;/, '');
   }
   return '';
 }
@@ -44,19 +44,21 @@ exports.getUserNameFromRequest = function(req) {
 
 
 exports.registerUser = function(req, res, next) {
-  globalSidToUserName.set(extractSidFromRequest(req), req.username);
-  globalUserNames.add(req.username);
+  var userName = req.user[0].username;
+  globalSidToUserName.set(extractSidFromRequest(req), userName);
+  globalUserNames.add(userName);
   return next();
 }
 
 
 exports.unregisterUser = function(req, res, next) {
+  var userName = req.user[0].username;
   globalSidToUserName.delete(extractSidFromRequest(req));
-  globalUserNames.delete(req.username);
+  globalUserNames.delete(userName);
   return next();
 }
 
 
 exports.userIsRegistered = function(aUserName) {
-  globalUserNames.has(aUserName);
+  return globalUserNames.has(aUserName);
 }

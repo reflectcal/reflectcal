@@ -9,13 +9,12 @@
 
 
 var eventDAO = require('../db/event');
+var entityDAO = require('../db/entity');
 var WebSocketServer = require('ws').Server;
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var appConfig = require('../config/appconfig');
 var log = appConfig.log;
-var registerUser = require('../util/users').registerUser;
-var unregisterUser = require('../util/users').unregisterUser;
 var getUserNameFromRequest = require('../util/users').getUserNameFromRequest;
 var userIsRegistered = require('../util/users').userIsRegistered;
 
@@ -32,13 +31,14 @@ exports.start = function(aServer) {
 
   webSocketServer = new WebSocketServer({
     port: appConfig.WEBSOCKETS_PORT,
-    url: '/notifications'
+    path: appConfig.WEBSOCKETS_NOTIFICATIONS_PATH
   });
   userNamesToWebSockets = new Map();
 
   checkTimer = setTimeout(notificationLoopCallback, SECOND);
 
   webSocketServer.on('connection', function(aWebSocket) {
+    console.log('connection: ', aWebSocket);
     userNamesToWebSockets.set(getUserNameFromRequest(aWebSocket.upgradeReq),
         aWebSocket);
     aWebSocket.on('close', function() {
@@ -48,7 +48,7 @@ exports.start = function(aServer) {
     });
   });
 
-  log.info('Started daemon for listening new events for port ' +
+  console.log('Started daemon for listening notifications on port ' +
       appConfig.WEBSOCKETS_PORT + '.');
 }
 
@@ -78,8 +78,10 @@ function notificationLoopCallback() {
 
   //Allow body to run every minute.
   if (lastCheckedTime != intervalStart) {
+    console.log('Once a minute tick.');
     lastCheckedTime = intervalStart;
 
+    console.log('Requesting interval from: ', new Date(intervalStart).toISOString(), ' to: ', new Date(intervalStart + MINUTE).toISOString())
     entityDAO.getEntitiesWithPromise('events', {
       start: {
         $lt: intervalStart + MINUTE,
@@ -87,24 +89,28 @@ function notificationLoopCallback() {
       }
     }, function(aEvent) {return aEvent}).then(processEventsArray).catch(log);
 
-    checkTimer = setTimeout(notificationLoopCallback, SECOND);
   }
+  checkTimer = setTimeout(notificationLoopCallback, SECOND);
 }
 
 
 function processEventsArray(aEvents) {
+  console.log('aEvents: ', aEvents);
   var userNamesToEvents = new Map();
 
   aEvents.forEach(function(aEvent) {
-    var event = aEvents[counter];
-    if (userIsRegistered(event.username)) {
-      if (!userNamesToEvents.has(event.username)) {
-        userNamesToEvents.set(event.username, [event]);
+    var userName = aEvent.username;
+    var userName = 'alexeykofficial@gmail.com';
+    if (userIsRegistered(userName)) {
+      if (!userNamesToEvents.has(userName)) {
+        userNamesToEvents.set(userName, [aEvent]);
       } else {
-        userNamesToEvents.get(event.username).push(event);  
+        userNamesToEvents.get(userName).push(aEvent);  
       }
     }
   });
+
+  console.log('userNamesToEvents: ', userNamesToEvents);
 
   userNamesToEvents.forEach(function(aEvents, aUserName) {
     var ws = userNamesToWebSockets.get(aUserName);

@@ -13,6 +13,7 @@ var routesCalendar = require('./app/routes/calendar');
 var routesSettings = require('./app/routes/settings');
 var routesUser = require('./app/routes/user');
 var routesEvent = require('./app/routes/event');
+var daemonNotifications = require('./app/daemons/notifications');
 var settingsDAO = require('./app/db/settings');
 var http = require('http');
 var path = require('path');
@@ -168,6 +169,7 @@ process.on('exit', function () {
   if (null != db) {
     db.close();
   }
+  daemonNotifications.stop();
 });
 
 // Happens when you press Ctrl+C.
@@ -186,8 +188,5 @@ process.on('SIGTERM', function () {
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
-
-dbUtil.getUniqueIdAsyncWithPromise(db.get('events')).then(console.log.bind('Get unique id: '), console.log);
-getEntitiesWithPromise('events', {name: 'eventCreatedWithPromiseFunction'},
-    function(o) {return o}, {name: 'eventCreatedWithPromiseFunction'}).then(
-    console.log, function(e) {console.log(e.stack)});
+//Start notifications daemon.
+daemonNotifications.start();

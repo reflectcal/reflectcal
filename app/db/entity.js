@@ -98,20 +98,18 @@ exports.getEntitiesWithPromise = function(aCollectionName, aLookupObject,
   return new Promise(function(resolve, reject) {
     var collection = db.get(aCollectionName);
     ensureEntityExistsWithPromise(collection, aLookupObject,
-        opt_defaultEntity).then(function() {
-      collection.find(aLookupObject, {}, function(aError, aEntities) {
-        if (aError) {
-          reject(aError);
-        } else {
+        opt_defaultEntity)
+        .then(function() {
+          var findWithPromise = Q.denodeify(collection.find.bind(collection));
+          return findWithPromise(aLookupObject, {});
+        })
+        .then(function(aEntities) {
           var entities = [];
           aEntities.forEach(function(aEntity) {
             entities.push(aEntityToTransportJSON(aEntity));
           });
-
           resolve(entities);
-        }
-      });
-    }).catch(reject);
+        }, reject);
   });
 }
 
@@ -129,21 +127,21 @@ function ensureEntityExistsWithPromise(aCollection, aLookupObject,
     if (!aDefaultEntity) {
       resolve();
     } else {
-      aCollection.count(aLookupObject, function(aError, aCount) {
-        if (aError) {
-          reject(aError)
-        } else if (aCount == 0) {
+      var countWithPromise = Q.denodeify(aCollection.count.bind(aCollection));
+      countWithPromise(aLookupObject).then(function(aCount) {
+        if (aCount == 0) {
           dbUtil.getUniqueIdAsyncWithPromise(aCollection).
-              then(insertDefaultEntityWithPromise.bind(null, aCollection,
-                  aDefaultEntity)).
-              then(resolve).
-              catch(reject);
+              then(function(aId) {
+                return insertDefaultEntityWithPromise(aCollection,
+                    aDefaultEntity, aId);
+              }).
+              then(resolve, reject);
         } else if (aCount >= 1) {
           resolve();
         } else {
           reject(new Error('Meaningless count.'));
         }
-      });
+      }, reject);
     } 
   });
 }
@@ -155,15 +153,6 @@ function insertDefaultEntityWithPromise(aCollection, aDefaultEntity, aId) {
 
   var insertWithPromise = Q.denodeify(aCollection.insert.bind(aCollection));
   return insertWithPromise(defaultEntity, {});
-}
-
-
-function insertDefaultEntityWithPromise(aCollection, aDefaultEntity, aId) {
-  var defaultEntity = deepClone(aDefaultEntity);
-  defaultEntity._id = aId;
-
-  var insertWithPromise = Q.denodeify(aCollection.insert);
-  return insertWithPromise(aDefaultEntity, {});
 }
 
 
