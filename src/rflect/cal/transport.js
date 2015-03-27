@@ -784,7 +784,12 @@ rflect.cal.Transport.prototype.onNotificationsMessage_ = function(aEvent) {
   var response = rflect.cal.Transport.getResponseJSON(aEvent.message);
   this.dispatchEvent(new rflect.cal.Transport.NotificationMessageEvent(
       response));
-  alert(response.name + ' starts at ' + response.start);
+  var notificationText = response.map(aEvent =>
+    aEvent.name + ' starts at ' + aEvent.start
+  ).reduce((aText1, aText2) =>
+    aText1 + '\n' + aText2
+  )
+  alert(notificationText);
 };
 
 

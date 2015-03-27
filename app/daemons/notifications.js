@@ -38,7 +38,6 @@ exports.start = function(aServer) {
   checkTimer = setTimeout(notificationLoopCallback, SECOND);
 
   webSocketServer.on('connection', function(aWebSocket) {
-    console.log('connection: ', aWebSocket);
     userNamesToWebSockets.set(getUserNameFromRequest(aWebSocket.upgradeReq),
         aWebSocket);
     aWebSocket.on('close', function() {
@@ -78,7 +77,6 @@ function notificationLoopCallback() {
 
   //Allow body to run every minute.
   if (lastCheckedTime != intervalStart) {
-    console.log('Once a minute tick.');
     lastCheckedTime = intervalStart;
 
     console.log('Requesting interval from: ', new Date(intervalStart).toISOString(), ' to: ', new Date(intervalStart + MINUTE).toISOString())
@@ -87,7 +85,9 @@ function notificationLoopCallback() {
         $lt: intervalStart + MINUTE,
         $gte: intervalStart
       }
-    }, function(aEvent) {return aEvent}).then(processEventsArray).catch(log);
+    }, function(aEvent) {return aEvent}).
+        then(processEventsArray).
+        catch(log.error);
 
   }
   checkTimer = setTimeout(notificationLoopCallback, SECOND);
