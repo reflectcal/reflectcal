@@ -138,6 +138,14 @@ rflect.cal.Transport.WEB_SOCKET_NOTIFICATIONS_PATH = '/notifications';
 
 
 /**
+ * How many milliseconds to add left and right to request interval.
+ * @type {number}
+ * @const
+ */
+rflect.cal.Transport.INTERVAL_SHOULDER = 1000 * 60 * 60 * 24 * 60;
+
+
+/**
  * @enum {string}
  */
 rflect.cal.Transport.EventTypes = {
@@ -396,8 +404,8 @@ rflect.cal.Transport.prototype.loadEventsAsync = function() {
 
   var paramsVector = [];
 
-  paramsVector[0] = interval.start;
-  paramsVector[1] = interval.end;
+  paramsVector[0] = interval.start - rflect.cal.Transport.INTERVAL_SHOULDER;
+  paramsVector[1] = interval.end + rflect.cal.Transport.INTERVAL_SHOULDER;
 
   this.eventManager_.forEachCalendar(function(cal){
     paramsVector.push(cal.id);
