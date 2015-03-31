@@ -8,18 +8,10 @@
  */
 
 goog.provide('rflect.cal.NotificationManager');
-goog.provide('rflect.cal.NotificationManager.EventTypes');
 
-goog.require('goog.events.EventHandler');
-goog.require('goog.net.WebSocket');
-goog.require('goog.net.WebSocket.MessageEvent');
-goog.require('goog.net.XhrIo');
-goog.require('goog.testing.net.XhrIo');
-goog.require('rflect.cal.events.Calendar');
-goog.require('rflect.cal.events.Event');
-goog.require('rflect.cal.events.EventManager');
-goog.require('rflect.cal.i18n.PREDEFINED_COLOR_CODES');
-goog.require('rflect.date.Interval');
+goog.require('goog.date.DateTime');
+goog.require('goog.i18n.DateTimeSymbols');
+goog.require('rflect.cal.i18n.Symbols');
 
 
 
@@ -30,6 +22,7 @@ goog.require('rflect.date.Interval');
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @unrestricted
  */
 class NotificationManager extends goog.events.EventTarget {
   constructor(aViewManager, aTimeManager, aEventManager) {
@@ -57,47 +50,18 @@ class NotificationManager extends goog.events.EventTarget {
     this.eventManager_ = aEventManager;
 
     /**
-     * Send implementation.
-     * @type {Function}
-     * @private
-     */
-    this.send_ = goog.net.XhrIo.send;
-
-    /**
-     * Set of intervals that were already updated.
-     * @type {Array.<rflect.date.Interval>}
-     * @private
-     */
-    this.updatedIntervals_ = [];
-
-    /**
-     * Set of event ids that already present.
-     * @type {Object.<string, boolean>}
-     * @private
-     */
-    this.loadedEventIds_ = {};
-
-    /**
-     * Web socket for notifications.
-     * @type {goog.net.WebSocket}
-     * @private
-     */
-    this.notificationsWebSocket_ = new goog.net.WebSocket();
-
-
-    /**
-     * Event handler.
-     * @type {goog.events.EventHandler}
-     * @private
-     */
-    this.handler_ = new goog.events.EventHandler(this);
-
-    /**
      * Time that was last checked in notifications sequence.
      * @type {number}
      * @private
      */
     this.lastCheckedTime_ = 0;
+
+    /**
+     * Watching timeout id.
+     * @type {number}
+     * @private
+     */
+    this.watchingTimeout_ = 0;
   };
 
 
@@ -105,52 +69,8 @@ class NotificationManager extends goog.events.EventTarget {
    * Starts listening for notifications.
    */
   enterNotificationsWatching() {
-    this.handler_.listen(this.notificationsWebSocket_,
-        goog.net.WebSocket.EventType.OPENED, this.onNotificationsOpen_);
-    this.handler_.listen(this.notificationsWebSocket_,
-        goog.net.WebSocket.EventType.MESSAGE, this.onNotificationsMessage_);
-
-    this.watchingTimeout_ = setTimeout(this.onSecondTick_.bind(this),
-        SECOND_TIMEOUT);
-    try {
-      this.notificationsWebSocket_.open(
-          rflect.cal.NotificationManager.WEB_SOCKET_PROTOCOL + location.hostname +
-          ':' + rflect.cal.NotificationManager.WEB_SOCKET_PORT +
-          rflect.cal.NotificationManager.WEB_SOCKET_NOTIFICATIONS_PATH);
-    } catch (e) {
-      if (goog.DEBUG) {
-        console.log('Failed to establish websocket connection at: ', e);
-      }
-    }
-  }
-
-
-  onSecondTick_ = function() {
-    var eventsToNotifyOf;
-    var now = new Date;
-    now.setSeconds(0);
-    now.setMilliseconds(0);
-
-    var intervalStart = now.getTime() +
-        rflect.cal.NotificationManager.AlertInterval.FIFTEEN_MINUTES;
-
-    //Allow body to run every minute.
-    if (this.lastCheckedTime_ != intervalStart) {
-      this.lastCheckedTime_ = intervalStart;
-      this.onMinuteTick_(intervalStart);
-    }
     this.watchingTimeout_ = setTimeout(this.onSecondTick_.bind(this),
         rflect.cal.NotificationManager.SECOND_TIMEOUT);
-  }
-
-
-  onMinuteTick_(aIntervalStart) {
-    if (this.viewManager_.isInDayMode()) {
-
-    } else if (this.viewManager_.isInWeekMode()) {
-
-    }
-    this.eventManager_
   }
 
 
@@ -162,19 +82,96 @@ class NotificationManager extends goog.events.EventTarget {
   }
 
 
+  onSecondTick_() {
+    var now = new Date;
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+
+    var intervalStart = now.getTime() +
+        rflect.cal.NotificationManager.AlertInterval.FIFTEEN_MINUTES;
+    var intervalEnd = intervalStart + 1000 * 60;
+
+    //Allow body to run every minute.
+    if (this.lastCheckedTime_ != intervalStart) {
+      this.lastCheckedTime_ = intervalStart;
+      this.onMinuteTick_(intervalStart, intervalEnd);
+    }
+
+    this.enterNotificationsWatching();
+  }
+
+
+  onMinuteTick_(aIntervalStart, aIntervalEnd) {
+    var now = new goog.date.DateTime();
+    now.setTime(aIntervalStart);
+    var year = now.getFullYear();
+    var chips = [];
+
+    if (goog.DEBUG)
+      console.log('aIntervalStart: ', aIntervalStart);
+    if (goog.DEBUG)
+      console.log('aIntervalEnd: ', aIntervalEnd);
+    if (goog.DEBUG)
+      console.log('now: ', now);
+
+    if (this.viewManager_.isInWeekMode()) {
+      var dayOfYear = now.getDayOfYear();
+      var allDayChipsInYear = this.eventManager_.allDayChipsByDay_[year];
+      var chipsInYear = this.eventManager_.chipsByDay_[year];
+      chips = chips.
+          concat(allDayChipsInYear && allDayChipsInYear[dayOfYear] || []).
+          concat(chipsInYear && chipsInYear[dayOfYear] || []);
+    } else if (this.viewManager_.isInMonthMode()) {
+      var weekOfYear = now.getWeekNumber();
+      var weekChipsInYear = this.eventManager_.chipsByWeek_[year];
+      chips = chips.
+          concat(weekChipsInYear && weekChipsInYear[weekOfYear] || []);
+    }
+
+    if (goog.DEBUG)
+      console.log('chips: ', chips);
+    var events = chips.map(chip => this.eventManager_.events_[chip.eventId]).
+        filter(event => event.startDate.getTime() >= aIntervalStart &&
+            event.startDate.getTime() < aIntervalEnd);
+
+    this.showAlert_(events, now);
+  }
+
+
+  showAlert_(aEvents, aDate) {
+    var firstEvent = aEvents[0];
+
+    if (firstEvent) {
+      var formatStringDate = goog.i18n.DateTimeSymbols.DATEFORMATS[3].
+          replace(/y+/, 'yyyy');
+      var formatStringTime = goog.i18n.DateTimeSymbols.TIMEFORMATS[3];
+      var otherEventsNumber = aEvents.length - 1;
+
+      var alertText = (firstEvent.name ||
+          rflect.cal.i18n.Symbols.NO_NAME_EVENT) +
+          (otherEventsNumber > 0 ?
+          ' and ' + otherEventsNumber + ' other events start at ' :
+          ' starts at ') +
+          new goog.i18n.DateTimeFormat(formatStringDate).format(aDate) + ' ' +
+          new goog.i18n.DateTimeFormat(formatStringTime).format(aDate);
+      alert(alertText);
+    }
+  }
+
+
   /**
    * @override
    */
-  disposeInternal = function() {
-    goog.net.XhrIo.cleanup();
+  disposeInternal() {
     super.disposeInternal();
-    this.exitNotificationsListening();
-    this.handler_.dispose();
+    this.exitNotificationsWatching();
   }
-
 }
 
 
+/**
+ * @typedef {NotificationManager}
+ */
 rflect.cal.NotificationManager = NotificationManager;
 
 
@@ -200,15 +197,4 @@ rflect.cal.NotificationManager.AlertInterval = {
   ONE_DAY: 1000 * 60 * 60 * 24,
   TWO_DAYS: 1000 * 60 * 60 * 24 * 2,
   ONE_WEEK: 1000 * 60 * 60 * 24 * 7
-}
-
-
-/**
- * Event that is fired when notification comes.
- * @param {Array.<Object>} aNotification Notification message.
- * @constructor
- */
-rflect.cal.NotificationManager.NotificationMessageEvent = function(aNotification) {
-  this.type = rflect.cal.NotificationManager.EventTypes.NOTIFICATION_MESSAGE;
-  this.notification = aNotification;
 }

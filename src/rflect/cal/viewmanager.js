@@ -17,6 +17,7 @@ goog.require('rflect.cal.ContainerSizeMonitor');
 goog.require('rflect.cal.events.EventManager');
 goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.Navigator');
+goog.require('rflect.cal.NotificationManager');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
@@ -107,8 +108,17 @@ rflect.cal.ViewManager = function(aMainInstance) {
    * @type {rflect.cal.ui.ScreenManager}
    * @private
    */
+
   this.screenManager_ = new rflect.cal.ui.ScreenManager(this);
   this.screenManager_.setSlidingIsEnabled(rflect.TOUCH_INTERFACE_ENABLED);
+
+   /**
+   * Notification manager.
+   * @type {rflect.cal.NotificationManager}
+   * @private
+   */
+  this.notificationManager_ = new rflect.cal.NotificationManager(this,
+      this.timeManager, this.eventManager_);
 
   /**
    * Mutable user object.
@@ -522,7 +532,8 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
       // Render main body and places it in screen manager element.
       this.screenManager_.showScreen(this.mainBody_, true);
       this.enterDocument();
-      this.transport_.enterNotificationsListening();
+      //this.transport_.enterNotificationsListening();
+      this.notificationManager_.enterNotificationsWatching();
       this.isOnStartup_ = false;
 
     } else if (calledByMiniCal) {
@@ -617,6 +628,7 @@ rflect.cal.ViewManager.prototype.disposeInternal = function() {
   this.containerSizeMonitor_.dispose();
   this.mainBody_.dispose();
   this.transport_.dispose();
+  this.notificationManager_.dispose();
   this.screenManager_.dispose();
 
 
