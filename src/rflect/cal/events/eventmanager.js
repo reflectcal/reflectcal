@@ -224,6 +224,43 @@ rflect.cal.events.EventManager.pushNestedAllDayChips_ = function(
 
 
 /**
+ * Returns map of year -> {dayOfYear -> chip}.
+ * @return {Object.<number, Object.<number, Array.<rflect.cal.events.Chip>>>}
+ */
+rflect.cal.events.EventManager.prototype.getChipsByDay = function() {
+  return this.chipsByDay_;
+}
+
+
+/**
+ * Returns the same as day chips map, but only for all day chips.
+ * @return {Object.<number, Object.<number, Array.<rflect.cal.events.Chip>>>}
+ */
+rflect.cal.events.EventManager.prototype.getAllDayChipsByDay = function() {
+  return this.allDayChipsByDay_;
+}
+
+
+
+/**
+ * Returns map of year -> {weekOfYear -> chip}.
+ * @return {Object.<number, Object.<number, Array.<rflect.cal.events.Chip>>>}
+ */
+rflect.cal.events.EventManager.prototype.getChipsByWeek = function() {
+  return this.chipsByWeek_;
+}
+
+
+/**
+ * Returns map of event id to event.
+ * @return {Object.<number, rflect.cal.events.Event|rflect.cal.events.Plan>}
+ */
+rflect.cal.events.EventManager.prototype.getEvents = function() {
+  return this.events_;
+}
+
+
+/**
  * @param {number} aEventId Event id.
  * @return {boolean} Whether this chip is in visible calendar.
  */

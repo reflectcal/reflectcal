@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2013. Rflect, Alex K.
+ * Copyright (c) 2015. Rflect, Alex K.
  */
 
 /**
- * @fileoverview Network interaction helper class.
+ * @fileoverview Notifications helper class.
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
@@ -17,14 +17,14 @@ goog.require('rflect.cal.i18n.Symbols');
 
 /**
  * Transport manager main class.
- * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
- * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
- * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
- * @constructor
- * @extends {goog.events.EventTarget}
  * @unrestricted
  */
 class NotificationManager extends goog.events.EventTarget {
+  /**
+   * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
+   * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
+   * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
+   */
   constructor(aViewManager, aTimeManager, aEventManager) {
     super();
 
@@ -102,9 +102,9 @@ class NotificationManager extends goog.events.EventTarget {
 
 
   onMinuteTick_(aIntervalStart, aIntervalEnd) {
-    var now = new goog.date.DateTime();
-    now.setTime(aIntervalStart);
-    var year = now.getFullYear();
+    var dateAhead = new goog.date.DateTime();
+    dateAhead.setTime(aIntervalStart);
+    var year = dateAhead.getFullYear();
     var chips = [];
 
     if (goog.DEBUG)
@@ -112,33 +112,34 @@ class NotificationManager extends goog.events.EventTarget {
     if (goog.DEBUG)
       console.log('aIntervalEnd: ', aIntervalEnd);
     if (goog.DEBUG)
-      console.log('now: ', now);
+      console.log('dateAhead: ', dateAhead);
 
     if (this.viewManager_.isInWeekMode()) {
-      var dayOfYear = now.getDayOfYear();
-      var allDayChipsInYear = this.eventManager_.allDayChipsByDay_[year];
-      var chipsInYear = this.eventManager_.chipsByDay_[year];
+      var dayOfYear = dateAhead.getDayOfYear();
+      var allDayChipsInYear = this.eventManager_.getAllDayChipsByDay()[year];
+      var chipsInYear = this.eventManager_.getChipsByDay()[year];
       chips = chips.
           concat(allDayChipsInYear && allDayChipsInYear[dayOfYear] || []).
           concat(chipsInYear && chipsInYear[dayOfYear] || []);
     } else if (this.viewManager_.isInMonthMode()) {
-      var weekOfYear = now.getWeekNumber();
-      var weekChipsInYear = this.eventManager_.chipsByWeek_[year];
+      var weekOfYear = dateAhead.getWeekNumber();
+      var weekChipsInYear = this.eventManager_.getChipsByWeek()[year];
       chips = chips.
           concat(weekChipsInYear && weekChipsInYear[weekOfYear] || []);
     }
 
     if (goog.DEBUG)
       console.log('chips: ', chips);
-    var events = chips.map(chip => this.eventManager_.events_[chip.eventId]).
+    var events = chips.map(chip =>
+        this.eventManager_.getEvents()[chip.eventId]).
         filter(event => event.startDate.getTime() >= aIntervalStart &&
             event.startDate.getTime() < aIntervalEnd);
 
-    this.showAlert_(events, now);
+    this.showAlert_(events, dateAhead);
   }
 
 
-  showAlert_(aEvents, aDate) {
+  showAlert_(aEvents, aDateAhead) {
     var firstEvent = aEvents[0];
 
     if (firstEvent) {
@@ -152,8 +153,9 @@ class NotificationManager extends goog.events.EventTarget {
           (otherEventsNumber > 0 ?
           ' and ' + otherEventsNumber + ' other events start at ' :
           ' starts at ') +
-          new goog.i18n.DateTimeFormat(formatStringDate).format(aDate) + ' ' +
-          new goog.i18n.DateTimeFormat(formatStringTime).format(aDate);
+          new goog.i18n.DateTimeFormat(formatStringDate).format(aDateAhead) +
+          ' ' +
+          new goog.i18n.DateTimeFormat(formatStringTime).format(aDateAhead);
       alert(alertText);
     }
   }
