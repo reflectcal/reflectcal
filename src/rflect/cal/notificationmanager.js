@@ -10,6 +10,8 @@
 goog.provide('rflect.cal.NotificationManager');
 
 goog.require('goog.date.DateTime');
+goog.require('goog.events.EventTarget');
+goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('rflect.cal.i18n.Symbols');
 
