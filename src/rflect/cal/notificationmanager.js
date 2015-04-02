@@ -64,6 +64,13 @@ class NotificationManager extends goog.events.EventTarget {
      * @private
      */
     this.watchingTimeout_ = 0;
+
+     /**
+     * Whether notifications are enabled.
+     * @type {boolean}
+     * @private
+     */
+    this.notificationsEnabled_ = false;
   };
 
 
@@ -71,8 +78,12 @@ class NotificationManager extends goog.events.EventTarget {
    * Starts listening for notifications.
    */
   enterNotificationsWatching() {
-    this.watchingTimeout_ = setTimeout(this.onSecondTick_.bind(this),
-        rflect.cal.NotificationManager.SECOND_TIMEOUT);
+    this.watchingTimeout_ = setTimeout(() => {
+      this.onSecondTick_();
+    }, rflect.cal.NotificationManager.SECOND_TIMEOUT);
+    setTimeout(() => {
+      this.requestSystemNotification();
+    }, rflect.cal.NotificationManager.ASK_FOR_NOTIFICATIONS_TIMEOUT);
   }
 
 
@@ -84,6 +95,9 @@ class NotificationManager extends goog.events.EventTarget {
   }
 
 
+  /**
+   * Once-a-second heartbeat.
+   */
   onSecondTick_() {
     var now = new Date;
     now.setSeconds(0);
@@ -103,6 +117,12 @@ class NotificationManager extends goog.events.EventTarget {
   }
 
 
+  /**
+   * Once-a-minute heartbeat.
+   * @param {number} aIntervalStart Start of the interval to check upcoming
+   * events.
+   * @param {number} aIntervalEnd End of the interval to check upcoming events.
+   */
   onMinuteTick_(aIntervalStart, aIntervalEnd) {
     var dateAhead = new goog.date.DateTime();
     dateAhead.setTime(aIntervalStart);
@@ -141,6 +161,12 @@ class NotificationManager extends goog.events.EventTarget {
   }
 
 
+  /**
+   * Shows alerts - window.alert and system notification, where possible.
+   * @param {Array.<rflect.cal.events.Event>} aEvents Events.
+   * @param {goog.date.DateTime} aDateAhead Start of interval in
+   * which events will occur.
+   */
   showAlert_(aEvents, aDateAhead) {
     var firstEvent = aEvents[0];
 
@@ -150,7 +176,7 @@ class NotificationManager extends goog.events.EventTarget {
       var formatStringTime = goog.i18n.DateTimeSymbols.TIMEFORMATS[3];
       var otherEventsNumber = aEvents.length - 1;
 
-      var alertText = (firstEvent.name ||
+      var alertText = (firstEvent.summary ||
           rflect.cal.i18n.Symbols.NO_NAME_EVENT) +
           (otherEventsNumber > 0 ?
           ' and ' + otherEventsNumber + ' other events start at ' :
@@ -158,8 +184,67 @@ class NotificationManager extends goog.events.EventTarget {
           new goog.i18n.DateTimeFormat(formatStringDate).format(aDateAhead) +
           ' ' +
           new goog.i18n.DateTimeFormat(formatStringTime).format(aDateAhead);
+      this.showSystemNotification(alertText);
       alert(alertText);
     }
+  }
+
+
+  /**
+   * @return {boolean} Whether notifications API is supported.
+   */
+  getSystemNotificationsSupported() {
+    return 'Notification' in goog.global;
+  }
+
+  /**
+   * @return {boolean} Whether system notifications are enabled.
+   */
+  getSystemNotificationsEnabled() {
+    return this.getSystemNotificationsSupported() && this.notificationsEnabled_;
+  }
+
+
+  /**
+   * @param {function()=} opt_showSystemNotificationCallback Callback to call
+   * when permission granted.
+   */
+  requestSystemNotification(opt_showSystemNotificationCallback) {
+    if (this.getSystemNotificationsSupported() && !this.notificationsEnabled_) {
+      Notification.requestPermission(() => {
+        this.notificationsEnabled_ = true;
+        opt_showSystemNotificationCallback &&
+            opt_showSystemNotificationCallback();
+      });
+    }
+  }
+
+
+  /**
+   * @param {string} aAlertText Alert text.
+   */
+  showSystemNotification(aAlertText) {
+    if (!this.getSystemNotificationsSupported()) {
+      return;
+    }
+
+    if (!this.notificationsEnabled_) {
+      this.requestSystemNotification(() => {
+        this.showSystemNotificationCallback(aAlertText);
+      });
+    } else {
+      this.showSystemNotificationCallback(aAlertText);
+    }
+  }
+
+
+  /**
+   * @param {string} aAlertText Alert text.
+   */
+  showSystemNotificationCallback(aAlertText) {
+    new Notification('Event', {
+      body: aAlertText
+    });
   }
 
 
@@ -185,6 +270,14 @@ rflect.cal.NotificationManager = NotificationManager;
  * @const
  */
 rflect.cal.NotificationManager.SECOND_TIMEOUT = 1000;
+
+
+/**
+ * How much time to wait till ask for system notifications permission.
+ * @type {number}
+ * @const
+ */
+rflect.cal.NotificationManager.ASK_FOR_NOTIFICATIONS_TIMEOUT = 5000;
 
 
 /**
