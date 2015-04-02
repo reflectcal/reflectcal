@@ -185,7 +185,10 @@ class NotificationManager extends goog.events.EventTarget {
           ' ' +
           new goog.i18n.DateTimeFormat(formatStringTime).format(aDateAhead);
       this.showSystemNotification(alertText);
-      alert(alertText);
+      //To make alert show after system notification.
+      setTimeout(() => {
+        alert(alertText);
+      }, 0);
     }
   }
 
