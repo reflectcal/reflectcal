@@ -65,12 +65,19 @@ class NotificationManager extends goog.events.EventTarget {
      */
     this.watchingTimeout_ = 0;
 
-     /**
-     * Whether notifications are enabled.
-     * @type {boolean}
-     * @private
-     */
+    /**
+    * Whether notifications are enabled.
+    * @type {boolean}
+    * @private
+    */
     this.notificationsEnabled_ = false;
+
+    /**
+    * Whether permission for notifications was asked.
+    * @type {boolean}
+    * @private
+    */
+    this.askedSystemNotificationsPermissionInTimeout_ = true;
   };
 
 
@@ -81,9 +88,12 @@ class NotificationManager extends goog.events.EventTarget {
     this.watchingTimeout_ = setTimeout(() => {
       this.onSecondTick_();
     }, rflect.cal.NotificationManager.SECOND_TIMEOUT);
-    setTimeout(() => {
-      this.requestSystemNotification();
-    }, rflect.cal.NotificationManager.ASK_FOR_NOTIFICATIONS_TIMEOUT);
+    if (!this.askedSystemNotificationsPermissionInTimeout_) {
+      setTimeout(() => {
+        this.requestSystemNotification();
+      }, rflect.cal.NotificationManager.ASK_FOR_NOTIFICATIONS_TIMEOUT);
+      this.askedSystemNotificationsPermissionInTimeout_ = true;
+    }
   }
 
 
@@ -154,7 +164,7 @@ class NotificationManager extends goog.events.EventTarget {
       console.log('chips: ', chips);
     var events = chips.map(chip =>
         this.eventManager_.getEvents()[chip.eventId]).
-        filter(event => event.startDate.getTime() >= aIntervalStart &&
+        filter(event => event && event.startDate.getTime() >= aIntervalStart &&
             event.startDate.getTime() < aIntervalEnd);
 
     this.showAlert_(events, dateAhead);
