@@ -113,14 +113,10 @@ class NotificationManager extends goog.events.EventTarget {
     now.setSeconds(0);
     now.setMilliseconds(0);
 
-    var intervalStart = now.getTime() +
-        rflect.cal.NotificationManager.AlertInterval.FIFTEEN_MINUTES;
-    var intervalEnd = intervalStart + 1000 * 60;
-
     //Allow body to run every minute.
-    if (this.lastCheckedTime_ != intervalStart) {
-      this.lastCheckedTime_ = intervalStart;
-      this.onMinuteTick_(intervalStart, intervalEnd);
+    if (this.lastCheckedTime_ != now.getTime()) {
+      this.lastCheckedTime_ = now.getTime();
+      this.onMinuteTick_();
     }
 
     this.enterNotificationsWatching();
@@ -129,77 +125,105 @@ class NotificationManager extends goog.events.EventTarget {
 
   /**
    * Once-a-minute heartbeat.
-   * @param {number} aIntervalStart Start of the interval to check upcoming
-   * events.
-   * @param {number} aIntervalEnd End of the interval to check upcoming events.
    */
-  onMinuteTick_(aIntervalStart, aIntervalEnd) {
-    var dateAhead = new goog.date.DateTime();
-    dateAhead.setTime(aIntervalStart);
-    var year = dateAhead.getFullYear();
+  onMinuteTick_() {
+
+    var upcomingEvents = rflect.cal.NotificationManager.AlertInterval.map(
+        alertInterval => {
+      var dateAhead = new goog.date.DateTime();
+      dateAhead.setTime(dateAhead.getTime() + alertInterval);
+      var events = this.getEventsForDate(dateAhead);
+      return {_1: dateAhead, _2: events};
+    });
+    
+    this.showAlert_(upcomingEvents);
+  }
+
+
+  /**
+   * @param {goog.date.DateTime} aDateAhead Date for which to extract chips.
+   * @return {Array.<rflect.cal.events.Chip>}
+   * Date -> chips.
+   */
+  getChipsForDate(aDateAhead) {
+    var year = aDateAhead.getFullYear();
     var chips = [];
 
-    if (goog.DEBUG)
-      console.log('aIntervalStart: ', aIntervalStart);
-    if (goog.DEBUG)
-      console.log('aIntervalEnd: ', aIntervalEnd);
-    if (goog.DEBUG)
-      console.log('dateAhead: ', dateAhead);
-
     if (this.viewManager_.isInWeekMode()) {
-      var dayOfYear = dateAhead.getDayOfYear();
+      var dayOfYear = aDateAhead.getDayOfYear();
       var allDayChipsInYear = this.eventManager_.getAllDayChipsByDay()[year];
       var chipsInYear = this.eventManager_.getChipsByDay()[year];
       chips = chips.
           concat(allDayChipsInYear && allDayChipsInYear[dayOfYear] || []).
           concat(chipsInYear && chipsInYear[dayOfYear] || []);
     } else if (this.viewManager_.isInMonthMode()) {
-      var weekOfYear = dateAhead.getWeekNumber();
+      var weekOfYear = aDateAhead.getWeekNumber();
       var weekChipsInYear = this.eventManager_.getChipsByWeek()[year];
       chips = chips.
           concat(weekChipsInYear && weekChipsInYear[weekOfYear] || []);
     }
+    return chips;
+  }
 
-    if (goog.DEBUG)
-      console.log('chips: ', chips);
-    var events = chips.map(chip =>
+  /**
+   * @param {goog.date.DateTime} aDateAhead
+   * @return {Array.<rflect.cal.events.Event>}
+   */
+  getEventsForDate(aDateAhead) {
+    var intervalStart = aDateAhead.getTime();
+    var intervalEnd = intervalStart + 1000 * 60;
+    var events = this.getChipsForDate(aDateAhead).map(chip =>
         this.eventManager_.getEvents()[chip.eventId]).
-        filter(event => event && event.startDate.getTime() >= aIntervalStart &&
-            event.startDate.getTime() < aIntervalEnd);
+        filter(event => event && event.startDate.getTime() >= intervalStart &&
+            event.startDate.getTime() < intervalEnd);
 
-    this.showAlert_(events, dateAhead);
+    return events;
   }
 
 
   /**
-   * Shows alerts - window.alert and system notification, where possible.
-   * @param {Array.<rflect.cal.events.Event>} aEvents Events.
-   * @param {goog.date.DateTime} aDateAhead Start of interval in
-   * which events will occur.
+   * @param {Array.<{_1: goog.date.DateTime, _2: Array.<rflect.cal.events.Event>}>}
+   * aUpcomingEvents Sequence of date -> events.
    */
-  showAlert_(aEvents, aDateAhead) {
-    var firstEvent = aEvents[0];
+  showAlert_(aUpcomingEvents) {
+    var alertText = aUpcomingEvents.map(this.upcomingEventsEntryToText).
+        join('\n');
 
-    if (firstEvent) {
-      var formatStringDate = goog.i18n.DateTimeSymbols.DATEFORMATS[3].
-          replace(/y+/, 'yyyy');
-      var formatStringTime = goog.i18n.DateTimeSymbols.TIMEFORMATS[3];
-      var otherEventsNumber = aEvents.length - 1;
-
-      var alertText = (firstEvent.summary ||
-          rflect.cal.i18n.Symbols.NO_NAME_EVENT) +
-          (otherEventsNumber > 0 ?
-          ' and ' + otherEventsNumber + ' other events start at ' :
-          ' starts at ') +
-          new goog.i18n.DateTimeFormat(formatStringDate).format(aDateAhead) +
-          ' ' +
-          new goog.i18n.DateTimeFormat(formatStringTime).format(aDateAhead);
+    if (alertText) {
       this.showSystemNotification(alertText);
       //To make alert show after system notification.
       setTimeout(() => {
         alert(alertText);
       }, 0);
     }
+  }
+
+  /**
+   * @param {{_1: goog.date.DateTime, _2: Array.<rflect.cal.events.Event>}} aEntry
+   * @return {string} Alert text.
+   */
+  upcomingEventsEntryToText(aEntry) {
+    var dateAhead = aEntry._1;
+    var events = aEntry._2;
+    var firstEvent = events[0];
+    var alertText = "";
+
+    if (firstEvent) {
+      var formatStringDate = goog.i18n.DateTimeSymbols.DATEFORMATS[3].
+          replace(/y+/, 'yyyy');
+      var formatStringTime = goog.i18n.DateTimeSymbols.TIMEFORMATS[3];
+      var otherEventsNumber = events.length - 1;
+
+      alertText = (firstEvent.summary ||
+          rflect.cal.i18n.Symbols.NO_NAME_EVENT) +
+          (otherEventsNumber > 0 ?
+          ' and ' + otherEventsNumber + ' other events start at ' :
+          ' starts at ') +
+          new goog.i18n.DateTimeFormat(formatStringDate).format(dateAhead) +
+          ' ' +
+          new goog.i18n.DateTimeFormat(formatStringTime).format(dateAhead);
+    }
+    return alertText;
   }
 
 
@@ -295,16 +319,26 @@ rflect.cal.NotificationManager.ASK_FOR_NOTIFICATIONS_TIMEOUT = 5000;
 
 /**
  * How much time before alert should be shown.
- * @enum {number}
+ * @type {Array.<number>}
+ * @const
  */
-rflect.cal.NotificationManager.AlertInterval = {
-  FIVE_MINUTES: 1000 * 60 * 5,
-  TEN_MINUTES: 1000 * 60 * 10,
-  FIFTEEN_MINUTES: 1000 * 60 * 15,
-  THIRTY_MINUTES: 1000 * 60 * 30,
-  HOUR: 1000 * 60 * 60,
-  TWO_HOUR: 1000 * 60 * 60 * 2,
-  ONE_DAY: 1000 * 60 * 60 * 24,
-  TWO_DAYS: 1000 * 60 * 60 * 24 * 2,
-  ONE_WEEK: 1000 * 60 * 60 * 24 * 7
-}
+rflect.cal.NotificationManager.AlertInterval = [
+  //Five minutes.
+  1000 * 60 * 5,
+  //Ten minutes.
+  1000 * 60 * 10,
+  //Fifteen minutes.
+  1000 * 60 * 15,
+  //Thirty minutes.
+  1000 * 60 * 30,
+  //Hour.
+  1000 * 60 * 60,
+  //Two hours.
+  1000 * 60 * 60 * 2,
+  //One day.
+  1000 * 60 * 60 * 24,
+  //Two days.
+  1000 * 60 * 60 * 24 * 2,
+  //One week.
+  1000 * 60 * 60 * 24 * 7
+];
