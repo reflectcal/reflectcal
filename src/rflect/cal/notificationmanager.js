@@ -131,11 +131,17 @@ class NotificationManager extends goog.events.EventTarget {
     var upcomingEvents = rflect.cal.NotificationManager.AlertInterval.map(
         alertInterval => {
       var dateAhead = new goog.date.DateTime();
+      dateAhead.setSeconds(0);
+      dateAhead.setMilliseconds(0);
+
       dateAhead.setTime(dateAhead.getTime() + alertInterval);
       var events = this.getEventsForDate(dateAhead);
+      if (goog.DEBUG)
+        console.log('dateAhead: ', dateAhead);
+      if (goog.DEBUG)
+        console.log('upcomingEvents: ', events);
       return {_1: dateAhead, _2: events};
     });
-    
     this.showAlert_(upcomingEvents);
   }
 
@@ -187,7 +193,10 @@ class NotificationManager extends goog.events.EventTarget {
    */
   showAlert_(aUpcomingEvents) {
     var alertText = aUpcomingEvents.map(this.upcomingEventsEntryToText).
-        join('\n');
+        filter(alertText => !!alertText).join('\n');
+
+    if (goog.DEBUG)
+      console.log('alertText: ', alertText);
 
     if (alertText) {
       this.showSystemNotification(alertText);
