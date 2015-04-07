@@ -9,6 +9,7 @@
 
 goog.provide('rflect.cal.NotificationManager');
 
+goog.require('goog.array');
 goog.require('goog.date.DateTime');
 goog.require('goog.events.EventTarget');
 goog.require('goog.i18n.DateTimeFormat');
@@ -112,11 +113,12 @@ class NotificationManager extends goog.events.EventTarget {
     var now = new Date;
     now.setSeconds(0);
     now.setMilliseconds(0);
+    var nowTime = now.getTime();
 
     //Allow body to run every minute.
-    if (this.lastCheckedTime_ != now.getTime()) {
-      this.lastCheckedTime_ = now.getTime();
-      this.onMinuteTick_();
+    if (this.lastCheckedTime_ != nowTime) {
+      this.lastCheckedTime_ = nowTime;
+      this.onMinuteTick_(nowTime);
     }
 
     this.enterNotificationsWatching();
@@ -125,30 +127,56 @@ class NotificationManager extends goog.events.EventTarget {
 
   /**
    * Once-a-minute heartbeat.
+   * @param {number} aNowTime Timestamp of beginning minute.
    */
-  onMinuteTick_() {
-
-    var upcomingEvents = rflect.cal.NotificationManager.AlertInterval.map(
-        alertInterval => {
-      var dateAhead = new goog.date.DateTime();
-      dateAhead.setSeconds(0);
-      dateAhead.setMilliseconds(0);
-
-      dateAhead.setTime(dateAhead.getTime() + alertInterval);
-      var events = this.getEventsForDate(dateAhead);
-      if (goog.DEBUG)
-        console.log('dateAhead: ', dateAhead);
-      if (goog.DEBUG)
-        console.log('upcomingEvents: ', events);
-      return {_1: dateAhead, _2: events};
+  onMinuteTick_(aNowTime) {
+    var upcomingEvents = this.eventManager_.getSortedEvents().filter(aEvent => {
+      var eventStartTime = aEvent.startDate.getTime();
+      return aEvent.alertIntervals.some(aAlertInterval => {
+        var intervalStart = aNowTime + aAlertInterval;
+        var intervalEnd = intervalStart + 1000 * 60;
+        if (goog.DEBUG)
+          console.log('intervalStart: ', new Date(intervalStart).toISOString());
+        return eventStartTime >= intervalStart && eventStartTime < intervalEnd;
+      })
     });
-    this.showAlert_(upcomingEvents);
+    if (goog.DEBUG)
+      console.log('upcomingEvents: ', upcomingEvents);
+    var groupedEvents = this.groupEventsByStartDate(upcomingEvents);  
+    if (goog.DEBUG)
+      console.log('groupedEvents: ', groupedEvents);
+    this.showAlert_(groupedEvents);
+  }
+
+
+  /**
+   * @param {Array<rflect.cal.events.Event>} aEvents Events to be grouped.
+   * @return {Array<{_1: goog.date.DateTime, _2: Array<rflect.cal.events.Event>}>}
+   * Events grouped in form date -> array of events for this date.
+   */
+  groupEventsByStartDate(aEvents) {
+    var groupedEvents = [];
+    var eventBuckets = goog.array.bucket(aEvents, aEvent =>
+        aEvent.startDate.getTime());
+    for (var key in eventBuckets) {
+      var date = new goog.date.DateTime();
+      date.setTime(+key);
+      groupedEvents.push({
+        _1: date,
+        _2: eventBuckets[key]
+      })
+    }
+    return groupedEvents.sort((a, b) => {
+      var aTime = a._1.getTime();
+      var bTime = b._1.getTime();
+      return aTime > bTime ? 1 : (aTime < bTime ? -1 : 0);
+    });
   }
 
 
   /**
    * @param {goog.date.DateTime} aDateAhead Date for which to extract chips.
-   * @return {Array.<rflect.cal.events.Chip>}
+   * @return {Array<rflect.cal.events.Chip>}
    * Date -> chips.
    */
   getChipsForDate(aDateAhead) {
@@ -173,7 +201,7 @@ class NotificationManager extends goog.events.EventTarget {
 
   /**
    * @param {goog.date.DateTime} aDateAhead
-   * @return {Array.<rflect.cal.events.Event>}
+   * @return {Array<rflect.cal.events.Event>}
    */
   getEventsForDate(aDateAhead) {
     var intervalStart = aDateAhead.getTime();
@@ -188,7 +216,7 @@ class NotificationManager extends goog.events.EventTarget {
 
 
   /**
-   * @param {Array.<{_1: goog.date.DateTime, _2: Array.<rflect.cal.events.Event>}>}
+   * @param {Array<{_1: goog.date.DateTime, _2: Array<rflect.cal.events.Event>}>}
    * aUpcomingEvents Sequence of date -> events.
    */
   showAlert_(aUpcomingEvents) {
@@ -208,7 +236,7 @@ class NotificationManager extends goog.events.EventTarget {
   }
 
   /**
-   * @param {{_1: goog.date.DateTime, _2: Array.<rflect.cal.events.Event>}} aEntry
+   * @param {{_1: goog.date.DateTime, _2: Array<rflect.cal.events.Event>}} aEntry
    * @return {string} Alert text.
    */
   upcomingEventsEntryToText(aEntry) {
@@ -328,7 +356,7 @@ rflect.cal.NotificationManager.ASK_FOR_NOTIFICATIONS_TIMEOUT = 5000;
 
 /**
  * How much time before alert should be shown.
- * @type {Array.<number>}
+ * @type {Array<number>}
  * @const
  */
 rflect.cal.NotificationManager.AlertInterval = [

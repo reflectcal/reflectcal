@@ -38,6 +38,7 @@ rflect.cal.events.Event = function(aUid, aLongId, aStartDate, aEndDate, aAllDay,
   this.allDay = aAllDay;
   this.summary = opt_summary || '';
   this.description = opt_description || '';
+  this.alertIntervals = [15 * 60 * 1000];
   goog.isDef(opt_calendarId) && (this.calendarId = opt_calendarId);
 };
 
@@ -214,6 +215,14 @@ rflect.cal.events.Event.prototype.allDay;
  * @type {string}
  */
 rflect.cal.events.Event.prototype.calendarId = '';
+
+
+/**
+ * Intervals showing how much time before should we alert user above event, in
+ * ms.
+ * @type {Array.<number>}
+ */
+rflect.cal.events.Event.prototype.alertIntervals;
 
 
 /**

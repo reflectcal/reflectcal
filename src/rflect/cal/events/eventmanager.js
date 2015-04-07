@@ -9,6 +9,7 @@
 
 goog.provide('rflect.cal.events.EventManager');
 
+goog.require('goog.array');
 goog.require('goog.date.DateTime');
 goog.require('rflect.structs.IntervalTree');
 goog.require('rflect.cal.events.Calendar');
@@ -55,6 +56,13 @@ rflect.cal.events.EventManager = function(aViewManager, aTimeManager) {
    * @private
    */
   this.events_ = {};
+
+  /**
+   * Events sorted by startDate.
+   * @type {Array.<rflect.cal.events.Event|rflect.cal.events.Plan>}
+   * @private
+   */
+  this.sortedEvents_ = [];
 
   /**
    * Map of year -> {dayOfYear -> chip}.
@@ -224,6 +232,19 @@ rflect.cal.events.EventManager.pushNestedAllDayChips_ = function(
 
 
 /**
+ * @param {rflect.cal.events.Event} aEventA Event 1.
+ * @param {rflect.cal.events.Event} aEventB Event 2.
+ * @return {number} Comparation result.
+ */
+rflect.cal.events.EventManager.eventByStartDateComparator = function(aEventA,
+    aEventB) {
+  var aTime = aEventA.startDate.getTime();
+  var bTime = aEventB.startDate.getTime();
+  return aTime > bTime ? 1 : (aTime < bTime ? -1 : 0);
+}
+
+
+/**
  * Returns map of year -> {dayOfYear -> chip}.
  * @return {Object.<number, Object.<number, Array.<rflect.cal.events.Chip>>>}
  */
@@ -257,6 +278,15 @@ rflect.cal.events.EventManager.prototype.getChipsByWeek = function() {
  */
 rflect.cal.events.EventManager.prototype.getEvents = function() {
   return this.events_;
+}
+
+
+/**
+ * Returns array of events sorted by startDate.
+ * @return {Array.<rflect.cal.events.Event|rflect.cal.events.Plan>}
+ */
+rflect.cal.events.EventManager.prototype.getSortedEvents = function() {
+  return this.sortedEvents_;
 }
 
 
@@ -361,6 +391,8 @@ rflect.cal.events.EventManager.prototype.addEvent =
     var allDayIndexes = [];
 
   this.events_[aEvent.id] = aEvent;
+  goog.array.binaryInsert(this.sortedEvents_, aEvent,
+      rflect.cal.events.EventManager.eventByStartDateComparator);
 
   calendar && calendar.addEvent(aEvent);
 
@@ -453,6 +485,8 @@ rflect.cal.events.EventManager.prototype.addEvent =
  */
 rflect.cal.events.EventManager.prototype.removeEventById =
     function(aId) {
+  goog.array.binaryRemove(this.sortedEvents_, this.getEventById(aId),
+      rflect.cal.events.EventManager.eventByStartDateComparator);
   delete this.events_[aId];
   this.removeChips_(aId, this.chipsByDay_, this.tracksChipsByDay_);
   this.removeChips_(aId, this.allDayChipsByDay_, this.tracksAllDayChipsByDay_);
