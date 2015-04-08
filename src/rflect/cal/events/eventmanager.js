@@ -292,6 +292,46 @@ rflect.cal.events.EventManager.prototype.getSortedEvents = function() {
 
 
 /**
+ * Returns array of events sorted by startDate.
+ * @param {number} aIntervalStart Interval start, inclusive.
+ * @param {number} aIntervalEnd Interval end, inclusive.
+ * @return {Array.<rflect.cal.events.Event|rflect.cal.events.Plan>}
+ */
+rflect.cal.events.EventManager.prototype.getSortedEventsForInterval =
+    function(aIntervalStart, aIntervalEnd) {
+  //Dummy event for search.
+  var dummyEventStart = {
+    startDate: new Date(aIntervalStart)
+  };
+  var dummyEventEnd = {
+    startDate: new Date(aIntervalEnd)
+  };
+  var startIndex = goog.array.binarySearch(this.sortedEvents_, dummyEventStart,
+      rflect.cal.events.EventManager.eventByStartDateComparator);
+  if (startIndex < 0) {
+    startIndex = -startIndex - 1;
+  }
+  var endIndex = goog.array.binarySearch(this.sortedEvents_, dummyEventEnd,
+      rflect.cal.events.EventManager.eventByStartDateComparator);
+  if (endIndex < 0) {
+    endIndex = -endIndex - 1;
+  } else {
+    //Since we've found lowest possible end index, try to find highest one.
+    for (let counter = endIndex, length = this.sortedEvents_; counter < length;
+        counter++) {
+      if (this.sortedEvents_[counter].startDate.getTime() <= aIntervalEnd) {
+        endIndex = counter;
+      }
+    }
+  }
+
+  return this.sortedEvents_.slice(startIndex, /*Because 2nd arg of splice is
+      exclusive*/
+      endIndex + 1);
+}
+
+
+/**
  * @param {number} aEventId Event id.
  * @return {boolean} Whether this chip is in visible calendar.
  */

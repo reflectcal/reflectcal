@@ -130,7 +130,16 @@ class NotificationManager extends goog.events.EventTarget {
    * @param {number} aNowTime Timestamp of beginning minute.
    */
   onMinuteTick_(aNowTime) {
-    var upcomingEvents = this.eventManager_.getSortedEvents().filter(aEvent => {
+    var eventsWithinInterval = this.eventManager_.
+        getSortedEventsForInterval(aNowTime, aNowTime +
+        /**@type {number}*/ (goog.array.peek(
+        rflect.cal.NotificationManager.AlertInterval)));
+    if (goog.DEBUG)
+      console.log('eventsWithinInterval: ', eventsWithinInterval);
+    var upcomingEvents = this.eventManager_.
+        getSortedEventsForInterval(aNowTime, aNowTime +
+        goog.array.peek(rflect.cal.NotificationManager.AlertInterval)).
+        filter(aEvent => {
       var eventStartTime = aEvent.startDate.getTime();
       return aEvent.alertIntervals.some(aAlertInterval => {
         var intervalStart = aNowTime + aAlertInterval;
