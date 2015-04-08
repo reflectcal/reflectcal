@@ -156,8 +156,16 @@ class NotificationManager extends goog.events.EventTarget {
    */
   groupEventsByStartDate(aEvents) {
     var groupedEvents = [];
-    var eventBuckets = goog.array.bucket(aEvents, aEvent =>
-        aEvent.startDate.getTime());
+    //Phase 1: group events by start date.
+    var eventBuckets = goog.array.bucket(aEvents, aEvent => {
+      var date = new Date;
+      date.setTime(aEvent.startDate.getTime());
+      //We only group events with minute precision.
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+      return date.getTime();
+    });
+    //Phase 2: sort buckets by start date.
     for (var key in eventBuckets) {
       var date = new goog.date.DateTime();
       date.setTime(+key);

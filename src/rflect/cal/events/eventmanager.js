@@ -18,6 +18,7 @@ goog.require('rflect.cal.events.Event');
 goog.require('rflect.cal.events.EventHolder');
 goog.require('rflect.cal.i18n.PREDEFINED_COLOR_CODES');
 goog.require('rflect.cal.predefined.chips');
+goog.require('rflect.array');
 goog.require('rflect.object');
 
 
@@ -391,7 +392,7 @@ rflect.cal.events.EventManager.prototype.addEvent =
     var allDayIndexes = [];
 
   this.events_[aEvent.id] = aEvent;
-  goog.array.binaryInsert(this.sortedEvents_, aEvent,
+  rflect.array.binaryInsert(this.sortedEvents_, aEvent,
       rflect.cal.events.EventManager.eventByStartDateComparator);
 
   calendar && calendar.addEvent(aEvent);
@@ -480,13 +481,31 @@ rflect.cal.events.EventManager.prototype.addEvent =
 
 
 /**
+ * Removes event by its id from sorted events.
+ * @param {number} aId Event id.
+ */
+rflect.cal.events.EventManager.prototype.removeEventByIdFromSorted_ =
+    function(aId) {
+  var eventDoDelete = this.getEventById(aId);
+  var indexOfDeletionStart = goog.array.binarySearch(this.sortedEvents_,
+      eventDoDelete, rflect.cal.events.EventManager.eventByStartDateComparator);
+  if (indexOfDeletionStart >= 0) {
+    for (let counter = indexOfDeletionStart, length = this.sortedEvents_.length;
+        counter < length; counter++) {
+      if (eventDoDelete == this.sortedEvents_[counter]) {
+        this.sortedEvents_.splice(counter, 1);
+      }
+    }
+  }
+}
+
+/**
  * Removes event by its id.
  * @param {number} aId Event id.
  */
 rflect.cal.events.EventManager.prototype.removeEventById =
     function(aId) {
-  goog.array.binaryRemove(this.sortedEvents_, this.getEventById(aId),
-      rflect.cal.events.EventManager.eventByStartDateComparator);
+  this.removeEventByIdFromSorted_(aId);
   delete this.events_[aId];
   this.removeChips_(aId, this.chipsByDay_, this.tracksChipsByDay_);
   this.removeChips_(aId, this.allDayChipsByDay_, this.tracksAllDayChipsByDay_);
