@@ -78,6 +78,12 @@ function eventToTransportJSON(aEvent) {
   event.push(aEvent.description);
   event.push(aEvent.allDay);
   event.push(aEvent.calendarId);
+  event.push((aEvent.alerts || []).map(function(aAlert) {
+    var alertAsArray = [];
+    alertAsArray.push(aAlert.type);
+    alertAsArray.push(aAlert.interval);
+    return alertAsArray;
+  }));
 
   return event;
 };
@@ -92,6 +98,12 @@ function eventFromTransportJSON(aEventJSON) {
   log.info(aEventJSON);
   var event = {};
 
+  event.alerts = aEventJSON.pop().map(function(aAlert) {
+    return {
+      type: aAlert[0],
+      interval: aAlert[1]
+    }
+  });
   event.calendarId = aEventJSON.pop();
   event.allDay = aEventJSON.pop();
   event.description = aEventJSON.pop();

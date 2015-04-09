@@ -79,6 +79,14 @@ exports.PERFORM_SET_UP_USER = true;
 
 
 /**
+ * Whether to send user notifications through web sockets, for example, when
+ * someone edits calendar they are subscribed to, etc.
+ * @type {boolean}
+ */
+exports.USE_WEBSOCKETS_NOTIFICATIONS = true;
+
+
+/**
  * List of locales.
  * @type {Array.<string>}
  */

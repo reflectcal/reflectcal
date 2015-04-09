@@ -11,6 +11,7 @@ goog.require('goog.date.Interval');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimePatterns');
+goog.require('rflect.cal.events.Alert');
 goog.require('rflect.date');
 
 goog.provide('rflect.cal.events.Event');
@@ -27,10 +28,11 @@ goog.provide('rflect.cal.events.Event');
  * @param {string=} opt_summary Name of event.
  * @param {string=} opt_description Longer description of event.
  * @param {string=} opt_calendarId Id of calendar this event belongs to.
+ * @param {Array<rflect.cal.events.Alert>=} opt_alerts Alerts for this event.
  * @constructor
  */
 rflect.cal.events.Event = function(aUid, aLongId, aStartDate, aEndDate, aAllDay,
-    opt_summary, opt_description, opt_calendarId) {
+    opt_summary, opt_description, opt_calendarId, opt_alerts) {
   this.id = aUid;
   this.longId = aLongId;
   this.startDate = aStartDate;
@@ -38,7 +40,7 @@ rflect.cal.events.Event = function(aUid, aLongId, aStartDate, aEndDate, aAllDay,
   this.allDay = aAllDay;
   this.summary = opt_summary || '';
   this.description = opt_description || '';
-  this.alertIntervals = [15 * 60 * 1000];
+  this.alerts = opt_alerts || [];
   goog.isDef(opt_calendarId) && (this.calendarId = opt_calendarId);
 };
 
@@ -100,6 +102,14 @@ rflect.cal.events.Event.FIELD_CALENDAR_ID = 6;
 
 
 /**
+ * Index of alerts in JSON array.
+ * @type {number}
+ * @const
+ */
+rflect.cal.events.Event.FIELD_ALERTS = 7;
+
+
+/**
  * Event short id.
  * @type {number}
  * @private
@@ -136,9 +146,11 @@ rflect.cal.events.Event.fromJSON = function(aArray) {
   var description = aArray[rflect.cal.events.Event.FIELD_DESCRIPTION];
   var allDay = aArray[rflect.cal.events.Event.FIELD_ALL_DAY];
   var calendarId = aArray[rflect.cal.events.Event.FIELD_CALENDAR_ID];
+  var alerts = aArray[rflect.cal.events.Event.FIELD_ALERTS].
+      map(rflect.cal.events.Alert.fromJSON);
 
   return rflect.cal.events.Event.createEvent(longId, startDate, endDate,
-      allDay, summary, description, calendarId);
+      allDay, summary, description, calendarId, alerts);
 }
 
 
@@ -151,14 +163,25 @@ rflect.cal.events.Event.fromJSON = function(aArray) {
  * @param {string=} opt_summary Name of event.
  * @param {string=} opt_description Longer description of event.
  * @param {string=} opt_calendarId Calendar id.
+ * @param {Array<rflect.cal.events.Alert>=} opt_alerts Alerts for this event.
  * @return {rflect.cal.events.Event} Event representation.
  */
 rflect.cal.events.Event.createEvent = function(aLongId,
     aStartDate, aEndDate, aAllDay, opt_summary, opt_description,
-    opt_calendarId) {
+    opt_calendarId, opt_alerts) {
   var uid = rflect.cal.events.Event.createEventId();
   return new rflect.cal.events.Event(uid, aLongId, aStartDate, aEndDate,
-      aAllDay, opt_summary, opt_description, opt_calendarId);
+      aAllDay, opt_summary, opt_description, opt_calendarId, opt_alerts ||
+      //TODO(alexk): when UI for alerts will be added, remove this and use that
+      // instead.
+      [
+        new rflect.cal.events.Alert(rflect.cal.events.Alert.AlertType.POPUP,
+            15 * 60 * 1000),
+        new rflect.cal.events.Alert(rflect.cal.events.Alert.AlertType.SOUND,
+            15 * 60 * 1000),
+        new rflect.cal.events.Alert(rflect.cal.events.Alert.AlertType.E_MAIL,
+            15 * 60 * 1000)
+      ]);
 }
 
 
@@ -218,11 +241,10 @@ rflect.cal.events.Event.prototype.calendarId = '';
 
 
 /**
- * Intervals showing how much time before should we alert user above event, in
- * ms.
- * @type {Array.<number>}
+ * Event alerts.
+ * @type {Array.<rflect.cal.events.Alert>}
  */
-rflect.cal.events.Event.prototype.alertIntervals;
+rflect.cal.events.Event.prototype.alerts;
 
 
 /**
@@ -306,7 +328,9 @@ rflect.cal.events.Event.prototype.toString = function() {
       ', description: ' +
       this.description +
       ', calendarId: ' +
-      this.calendarId;
+      this.calendarId +
+      ', alerts: ' +
+      this.alerts;
 };
 
 /**
@@ -315,7 +339,7 @@ rflect.cal.events.Event.prototype.toString = function() {
 rflect.cal.events.Event.prototype.clone = function() {
   var clone = new rflect.cal.events.Event(this.id, this.longId, this.startDate,
       this.endDate, this.allDay, this.summary, this.description,
-      this.calendarId);
+      this.calendarId, this.alerts.slice());
 
   return clone;
 };
@@ -334,6 +358,7 @@ rflect.cal.events.Event.prototype['toJSON'] = function() {
   event[rflect.cal.events.Event.FIELD_DESCRIPTION] = this.description;
   event[rflect.cal.events.Event.FIELD_ALL_DAY] = this.allDay;
   event[rflect.cal.events.Event.FIELD_CALENDAR_ID] = this.calendarId;
+  event[rflect.cal.events.Event.FIELD_ALERTS] = this.alerts;
 
   return event;
 };

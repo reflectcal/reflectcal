@@ -15,6 +15,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('rflect.cal.i18n.Symbols');
+goog.require('rflect.cal.events.Alert.AlertType');
 
 
 
@@ -83,6 +84,28 @@ class NotificationManager extends goog.events.EventTarget {
 
 
   /**
+   * Creates a function that takes Event as a parameter and returns whether
+   * event has notifications for current time and of given type.
+   * @param {number} aNowTime Timestamp of current time.
+   * @param {rflect.cal.events.Alert.AlertType} aType Alert type.
+   * @return {function(rflect.cal.events.Event):boolean}
+   */
+  static eventFilterFunctionFactory(aNowTime, aType) {
+    return aEvent => {
+      var eventStartTime = aEvent.startDate.getTime();
+      return aEvent.alerts.some(aAlert => {
+        var intervalStart = aNowTime + aAlert.interval;
+        var intervalEnd = intervalStart + 1000 * 60;
+        if (goog.DEBUG)
+          console.log('intervalStart: ', new Date(intervalStart).toISOString());
+        return aType == aAlert.type && eventStartTime >= intervalStart &&
+            eventStartTime < intervalEnd;
+      });
+    }
+  }
+  
+
+  /**
    * Starts listening for notifications.
    */
   enterNotificationsWatching() {
@@ -127,33 +150,27 @@ class NotificationManager extends goog.events.EventTarget {
 
   /**
    * Once-a-minute heartbeat.
-   * @param {number} aNowTime Timestamp of beginning minute.
+   * @param {number} aNowTime Timestamp of beginning minute, .
    */
   onMinuteTick_(aNowTime) {
     var eventsWithinInterval = this.eventManager_.
         getSortedEventsForInterval(aNowTime, aNowTime +
         /**@type {number}*/ (goog.array.peek(
-        rflect.cal.NotificationManager.AlertInterval)));
+            rflect.cal.NotificationManager.AlertInterval)));
+    var upcomingEvents = eventsWithinInterval.filter(
+        rflect.cal.NotificationManager.eventFilterFunctionFactory(aNowTime,
+            rflect.cal.events.Alert.AlertType.POPUP)
+    );
+    var playSound = eventsWithinInterval.some(
+        rflect.cal.NotificationManager.eventFilterFunctionFactory(aNowTime,
+            rflect.cal.events.Alert.AlertType.SOUND)
+    );
+    var groupedEvents = this.groupEventsByStartDate(upcomingEvents);
     if (goog.DEBUG)
-      console.log('eventsWithinInterval: ', eventsWithinInterval);
-    var upcomingEvents = this.eventManager_.
-        getSortedEventsForInterval(aNowTime, aNowTime +
-        goog.array.peek(rflect.cal.NotificationManager.AlertInterval)).
-        filter(aEvent => {
-      var eventStartTime = aEvent.startDate.getTime();
-      return aEvent.alertIntervals.some(aAlertInterval => {
-        var intervalStart = aNowTime + aAlertInterval;
-        var intervalEnd = intervalStart + 1000 * 60;
-        if (goog.DEBUG)
-          console.log('intervalStart: ', new Date(intervalStart).toISOString());
-        return eventStartTime >= intervalStart && eventStartTime < intervalEnd;
-      })
-    });
-    if (goog.DEBUG)
-      console.log('upcomingEvents: ', upcomingEvents);
-    var groupedEvents = this.groupEventsByStartDate(upcomingEvents);  
-    if (goog.DEBUG)
-      console.log('groupedEvents: ', groupedEvents);
+      console.log('playSound: ', playSound);
+    if (playSound) {
+      this.playSoundNotification();
+    }
     this.showAlert_(groupedEvents);
   }
 
@@ -188,47 +205,6 @@ class NotificationManager extends goog.events.EventTarget {
       var bTime = b._1.getTime();
       return aTime > bTime ? 1 : (aTime < bTime ? -1 : 0);
     });
-  }
-
-
-  /**
-   * @param {goog.date.DateTime} aDateAhead Date for which to extract chips.
-   * @return {Array<rflect.cal.events.Chip>}
-   * Date -> chips.
-   */
-  getChipsForDate(aDateAhead) {
-    var year = aDateAhead.getFullYear();
-    var chips = [];
-
-    if (this.viewManager_.isInWeekMode()) {
-      var dayOfYear = aDateAhead.getDayOfYear();
-      var allDayChipsInYear = this.eventManager_.getAllDayChipsByDay()[year];
-      var chipsInYear = this.eventManager_.getChipsByDay()[year];
-      chips = chips.
-          concat(allDayChipsInYear && allDayChipsInYear[dayOfYear] || []).
-          concat(chipsInYear && chipsInYear[dayOfYear] || []);
-    } else if (this.viewManager_.isInMonthMode()) {
-      var weekOfYear = aDateAhead.getWeekNumber();
-      var weekChipsInYear = this.eventManager_.getChipsByWeek()[year];
-      chips = chips.
-          concat(weekChipsInYear && weekChipsInYear[weekOfYear] || []);
-    }
-    return chips;
-  }
-
-  /**
-   * @param {goog.date.DateTime} aDateAhead
-   * @return {Array<rflect.cal.events.Event>}
-   */
-  getEventsForDate(aDateAhead) {
-    var intervalStart = aDateAhead.getTime();
-    var intervalEnd = intervalStart + 1000 * 60;
-    var events = this.getChipsForDate(aDateAhead).map(chip =>
-        this.eventManager_.getEvents()[chip.eventId]).
-        filter(event => event && event.startDate.getTime() >= intervalStart &&
-            event.startDate.getTime() < intervalEnd);
-
-    return events;
   }
 
 
@@ -326,6 +302,13 @@ class NotificationManager extends goog.events.EventTarget {
     } else {
       this.showSystemNotificationCallback(aAlertText);
     }
+  }
+
+
+  /**
+   * Plays sound notification with <audio> element.
+   */
+  playSoundNotification() {
   }
 
 
