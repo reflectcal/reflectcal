@@ -235,7 +235,7 @@ rflect.cal.events.EventManager.pushNestedAllDayChips_ = function(
 /**
  * @param {rflect.cal.events.Event} aEventA Event 1.
  * @param {rflect.cal.events.Event} aEventB Event 2.
- * @return {number} Comparation result.
+ * @return {number} Comparison result.
  */
 rflect.cal.events.EventManager.eventByStartDateComparator = function(aEventA,
     aEventB) {
