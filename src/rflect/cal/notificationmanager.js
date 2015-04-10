@@ -5,6 +5,7 @@
 /**
  * @fileoverview Notifications helper class.
  * @author alexeykofficial@gmail.com (Alex K.)
+ * @suppress {accessControls}
  */
 
 goog.provide('rflect.cal.NotificationManager');
