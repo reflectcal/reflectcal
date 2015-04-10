@@ -13,7 +13,7 @@ var dbUtil = require('./util');
 var deepClone = require('clone');
 var appConfig = require('../config/appconfig');
 var log = appConfig.log;
-var Q = require('Q');
+var Q = require('q');
 
 
 /**
