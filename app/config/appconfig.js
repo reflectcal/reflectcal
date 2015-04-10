@@ -83,7 +83,7 @@ exports.PERFORM_SET_UP_USER = true;
  * someone edits calendar they are subscribed to, etc.
  * @type {boolean}
  */
-exports.USE_WEBSOCKETS_NOTIFICATIONS = true;
+exports.USE_WEBSOCKETS_NOTIFICATIONS = false;
 
 
 /**

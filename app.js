@@ -2,6 +2,7 @@
  * Copyright (c) 2015. Rflect, Alex K.
  */
 
+
 /**
  * Module dependencies.
  */
@@ -153,16 +154,6 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
-function registerUser(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
-}
-
-function unregisterUser(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
-}
-
 // Execute commands in clean exit.
 process.on('exit', function () {
   log.info('Exiting...');
@@ -189,4 +180,6 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 //Start notifications daemon.
-daemonNotifications.start();
+if (appConfig.USE_WEBSOCKETS_NOTIFICATIONS) {
+  daemonNotifications.start();
+}
