@@ -14,7 +14,7 @@ Installation and run
   git clone https://github.com/alexeykomov/reflectcal.git
   ```
 
-2. Runtimes - Install [Java][jdk], [Python][python] and [Node.js][node.js].
+2. Runtimes - Install [Java][jdk], [Python][python] and [Node.js][node.js]. Node.js must be at least of version v0.12.2.
 
 3. Install [MongoDB][mongodb]. Create storage folder for it, may as well start
 an instance.
@@ -62,7 +62,7 @@ an instance.
 7. Launch an application.
 
   ```
-  node app
+  node --harmony app
   ```
 
 8. Go to [http://localhost:3000/](http://localhost:3000/)
