@@ -752,14 +752,14 @@ rflect.ui.Dialog.prototype.setVisible = function(visible) {
 /** @override */
 rflect.ui.Dialog.prototype.onShow = function() {
   goog.base(this, 'onShow');
-  this.dispatchEvent(rflect.ui.Dialog.EventType.AFTER_SHOW);
+  this.dispatchEvent(goog.ui.PopupBase.EventType.SHOW);
 };
 
 
 /** @override */
 rflect.ui.Dialog.prototype.onHide = function() {
   goog.base(this, 'onHide');
-  this.dispatchEvent(rflect.ui.Dialog.EventType.AFTER_HIDE);
+  this.dispatchEvent(goog.ui.PopupBase.EventType.HIDE);
   if (this.disposeOnHide_) {
     this.dispose();
   }
