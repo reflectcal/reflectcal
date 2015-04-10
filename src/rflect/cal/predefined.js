@@ -474,7 +474,7 @@ rflect.cal.predefined.SCROLLABLE_AND_GRID_WIDTH_DIFFERENCE_MONTH =
  * @type {number}
  * @const
  */
-rflect.cal.predefined.HOUR_ROW_HEIGHT = 24;
+rflect.cal.predefined.HOUR_ROW_HEIGHT = 36;
 
 
 /**
