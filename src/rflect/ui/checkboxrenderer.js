@@ -42,7 +42,7 @@ rflect.ui.CheckboxRenderer.prototype.createDom = function(checkbox) {
   var element = checkbox.getDomHelper().createDom(
       'span', this.getClassNames(checkbox).join(' '),
       checkbox.getDomHelper().createDom('div',
-      [goog.getCssName('icon'), goog.getCssName('icon-check'),
+      [goog.getCssName('mega-octicon'), goog.getCssName('octicon-check'),
       goog.getCssName('checked-sign')]));
 
   var state = checkbox.getChecked();

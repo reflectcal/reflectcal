@@ -306,7 +306,7 @@ rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
     '<li class="side-pane-menu-item">',
     // Options button.
     '<div id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '" class="button-minimal">',
-    '<div class="icon icon-cog icon-settings icon-in-button"></div>',
+    '<span class="mega-octicon octicon-gear icon-settings icon-in-button"></span>',
     '&nbsp;',
     rflect.cal.i18n.Symbols.SETTINGS,
     '</div>',

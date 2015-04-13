@@ -22,7 +22,7 @@ goog.require('rflect.cal.i18n.Symbols');
  */
 rflect.cal.ui.common.setBackButtonContent = function(aButton, opt_right) {
   var content = goog.dom.createDom('span', null, goog.dom.createDom('i',
-      ['icon', 'icon-chevron-left']), rflect.cal.i18n.Symbols.TO_CALENDAR);
+      ['mega-octicon', 'octicon-chevron-left']), rflect.cal.i18n.Symbols.TO_CALENDAR);
 
   aButton.setContent(content);
 };

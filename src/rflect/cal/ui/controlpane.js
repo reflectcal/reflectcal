@@ -170,13 +170,13 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       '<div class="pane-left">',
       '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
           'id="' + rflect.cal.predefined.BUTTON_MENU_ID + '">' +
-          '<div class="icon icon-in-button icon-bars goog-inline-block"></div>',
+          '<span class="mega-octicon octicon-three-bars"></span>',
       '</div>',
       '</div>',
       '<div class="pane-right">',
       '<div class="cal-menu-button-new-event emphasis-button cal-menu-button goog-flat-button goog-inline-block"',
       'id="' + rflect.cal.predefined.BUTTON_NEW_EVENT_ID + '">',
-      '<div class="icon icon-in-button icon-plus goog-inline-block"></div>',
+      '<span class="mega-octicon octicon-plus"></span>',
       '</div>',
       '</div>',
 
@@ -190,11 +190,11 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       '</div>',
       '<div class="goog-flat-button-collapse-left goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"',
       'id="' + rflect.cal.predefined.BUTTON_PREV_ID + '">',
-      '<div class="icon-triangle icon-nav-left goog-inline-block"></div>',
+      '<span class="mega-octicon octicon-triangle-left"></span>',
       '</div>',
       '<div class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"',
       'id="' + rflect.cal.predefined.BUTTON_NEXT_ID + '">',
-      '<div class="icon-triangle icon-nav-right goog-inline-block"></div>',
+      '<span class="mega-octicon octicon-triangle-right"></span>',
       '</div>',
       '</div>',
 
@@ -213,7 +213,7 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
         // 'Menu' button.
         '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
             'id="' + rflect.cal.predefined.BUTTON_MENU_ID + '">' +
-            '<div class="icon icon-in-button icon-bars goog-inline-block"></div>',
+            '<span class="mega-octicon octicon-three-bars"></span>',
         '</div>'
       ]);
     }
@@ -230,12 +230,12 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       '<div id="' + rflect.cal.predefined.BUTTON_PREV_ID +
           '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
       goog.getCssName('goog-flat-button-collapse-right') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-both') + ' ',
-      goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-back') + '"><div class="' + goog.getCssName('icon-triangle') + ' ' + goog.getCssName('icon-nav-left') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div>',
+      goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-back') + '"><span class="mega-octicon octicon-triangle-left"></span></div>',
 
       // Forward button.
       '<div id="' + rflect.cal.predefined.BUTTON_NEXT_ID + '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
       goog.getCssName('cal-menu-rightmost-button') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-left') + ' ',
-      goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-forward') + '"><div class="' + goog.getCssName('icon-triangle') + ' ' + goog.getCssName('icon-nav-right') + ' ' + goog.getCssName('goog-inline-block') + '"></div></div></div>',
+      goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-forward') + '"><span class="mega-octicon octicon-triangle-right"></span></div></div>',
 
       '<div id="main-pane-controls"><div id="main-pane-controls-right">',
       '<div style="margin-right: 0px;" class="' + goog.getCssName('goog-inline-block') + '">',
@@ -259,7 +259,7 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       // Options button.
       '<div id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '" class="' + goog.getCssName('goog-flat-button') + ' ' + goog.getCssName('cal-menu-rightmost-button') + ' ' + goog.getCssName('cal-menu-button') + ' ',
       goog.getCssName('cal-menu-button-options') + '">',
-      '<div class="icon icon-cog icon-settings icon-in-button"></div>',
+      '<span class="mega-octicon octicon-gear"></span>',
       '</div></div>',
       '<div id="main-pane-controls-left"><div id="main-pane-controls-left-left">',
       // New event button.
