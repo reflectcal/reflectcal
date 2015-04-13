@@ -568,7 +568,8 @@ rflect.cal.ui.MainPane.prototype.getHandyScrollTopPosition_ = function() {
   if (this.timeManager_.isInNowPoint)
     scrollTop = this.timeMarker_.getPosition(true);
   else
-    scrollTop = earliestChipStart * 1152 / 1440;
+    scrollTop = earliestChipStart * (rflect.cal.predefined.HOUR_ROW_HEIGHT *
+        48) / (24 * 60);
 
   return scrollTop;
 }
