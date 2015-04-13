@@ -280,7 +280,7 @@ rflect.cal.ui.SettingsPane.prototype.createButtonCont_ =
   goog.dom.classes.add(this.buttonCalendars_.getElement(), 'button-next-pane',
       'button-minimal');
   this.buttonCalendars_.getElement().appendChild(aDom.createDom('i',
-      ['icon', 'icon-chevron-right', 'icon-next-pane']));
+      ['octicon', 'icon-button', 'octicon-chevron-right', 'icon-next-pane']));
 
   return buttonCont;
 }

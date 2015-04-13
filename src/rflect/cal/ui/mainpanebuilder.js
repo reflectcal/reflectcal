@@ -151,7 +151,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   '<div id="main-pane-header">',
   // Daynames zippy.
   '<div id="daynames-prefix-wk">',
-  '<div id="daynames-zippy" class="' + goog.getCssName('zippy') + ' ' + goog.getCssName('wk-ad-zippy') + ' ' + goog.getCssName('icon-triangle') + ' ',
+  '<div id="daynames-zippy" class="zippy wk-ad-zippy octicon ',
   /* Zippy state is here
   (goog-zippy-collapsed, goog-zippy-expanded).*/
   '"></div>',
@@ -178,7 +178,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_ = [
   /*Dayname is here (Monday).*/
   '</span>',
   '<div id="wk-zippy-col',/*Id of zippy (wk-zippy-col2).*/
-    '" class="' + goog.getCssName('zippy') + ' ' + goog.getCssName('wk-col-zippy') + ' ' + goog.getCssName('icon-triangle') + ' ',/*State of zippy
+    '" class="zippy wk-col-zippy octicon ',/*State of zippy
     (goog-zippy-expanded, goog-zippy-collapsed).*/
     '"></div>',
   '</div>',
@@ -418,7 +418,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '<div class="' + goog.getCssName('mn-row-zippy-cont') + '">',
   '<div id="mn-zippy-row',
   /*Id of individual zippy (0)*/
-  '" class="' + goog.getCssName('zippy') + ' ' + goog.getCssName('mn-row-zippy') + ' ' + goog.getCssName('icon-triangle') + ' ',
+  '" class="zippy mn-row-zippy octicon ',
   /*State of individual zippy (mn-row-zippy-collapsed).*/
   '"></div>',
   '</div>',
@@ -786,8 +786,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth = function(aSb,
 rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesZippy_ =
     function(aSb, aOffset) {
   aSb.append(this.blockPoolAllDay_.expanded ?
-      goog.getCssName('wk-ad-zippy-expanded') :
-      goog.getCssName('wk-ad-zippy-collapsed'));
+      'wk-ad-zippy-expanded octicon-triangle-down' :
+      'wk-ad-zippy-collapsed octicon-triangle-right');
 };
 
 
@@ -863,8 +863,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekColZippy_ = function(aSb,
   aSb.append(aColCounter);
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
   aSb.append(this.blockPoolWeek_.blocks[aColCounter].expanded ?
-      goog.getCssName('wk-col-zippy-expanded') :
-      goog.getCssName('wk-col-zippy-collapsed'));
+      'wk-col-zippy-expanded octicon-triangle-right' :
+      'wk-col-zippy-collapsed octicon-triangle-down');
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
 }
 
@@ -1161,7 +1161,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekColZippies_ =
     aSb.append(colCounter);
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
     aSb.append(this.blockPoolWeek_.blocks[colCounter].expanded ?
-        goog.getCssName('wk-col-zippy-expanded') : goog.getCssName('wk-col-zippy-collapsed'));
+        'wk-col-zippy-expanded octicon-triangle-right' :
+        'wk-col-zippy-collapsed octicon-triangle-down');
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 9]);
   }
@@ -1202,7 +1203,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildMnRowZippies_ =
     aSb.append(rowCounter);
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 5]);
     aSb.append(this.blockPoolMonth_.blocks[rowCounter].expanded ?
-        goog.getCssName('mn-row-zippy-expanded') : goog.getCssName('mn-row-zippy-collapsed'));
+        'mn-row-zippy-expanded octicon-triangle-down' :
+        'mn-row-zippy-collapsed octicon-triangle-right');
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 6]);
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 7]);
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 8]);

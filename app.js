@@ -80,7 +80,7 @@ passport.deserializeUser(login.deserializeUser);
 if ('development' == app.get('env')) {
   app.use('/js', express.static(path.join(__dirname, 'js')));
   app.use('/css', express.static(path.join(__dirname, 'css')));
-  app.use('/fonts', express.static(path.join(__dirname, 'fonts')));
+  app.use('/font', express.static(path.join(__dirname, 'font')));
   app.use('/src', express.static(path.join(__dirname, 'src')));
   app.use('/templates', express.static(path.join(__dirname, 'templates')));
 

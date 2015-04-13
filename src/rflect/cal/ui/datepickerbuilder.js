@@ -56,16 +56,16 @@ rflect.cal.ui.DatePickerBuilder.HTML_PARTS_ = [
   * Date picker head classname ().
   */
   '"><td colspan="7">' + '<div class="' +
-      goog.getCssName('goog-date-picker-buttons') + '">' +
-      '<div class="' + goog.getCssName('goog-date-picker-btn') + ' ' +
-      goog.getCssName('icon-triangle') + ' ' +
-      goog.getCssName('month-sel-btn') + ' ' +
-      goog.getCssName('month-sel-btn-back') +
+      'goog-date-picker-buttons">' +
+      '<div class="goog-date-picker-btn ' +
+      'octicon octicon-triangle-left ' +
+      'month-sel-btn ' +
+      'month-sel-btn-back' +
       '">&nbsp;</div>' +
-      '<div class="' + goog.getCssName('goog-date-picker-btn') + ' ' +
-      goog.getCssName('icon-triangle') + ' ' +
-      goog.getCssName('month-sel-btn') + ' ' +
-      goog.getCssName('month-sel-btn-forward') +
+      '<div class="goog-date-picker-btn ' +
+      'octicon octicon-triangle-right ' +
+      'month-sel-btn ' +
+      'month-sel-btn-forward' +
       '">&nbsp;</div></div>',
   '<div class="' + goog.getCssName('goog-date-picker-month') + '">',
   /*
