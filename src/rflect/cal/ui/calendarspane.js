@@ -273,6 +273,9 @@ rflect.cal.ui.CalendarsPane.prototype.updateCalendarTables_ = function(aDom,
     aParent.appendChild(otherCalendarsCont);
   }
 
+  goog.dom.classes.add(/**@type Node*/(goog.array.peek(aParent.querySelectorAll(
+      '.calendars-outer-cont'))), 'event-pane-cont-last');
+
 }
 
 
