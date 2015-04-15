@@ -520,7 +520,7 @@ module.exports = function(grunt) {
       fonts: {
         expand: true,
         flatten: false,
-        src: ['fonts/**'],
+        src: ['font/**'],
         dest: 'build/static'
       },
       sourceMaps: {
