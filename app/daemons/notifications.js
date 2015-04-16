@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2013. Epam, Alex K.
+ * Copyright (c) 2013. Rflect, Alex K.
  */
 
 /**
- * @fileoverview Listener for new events.
- * @author aliaksei_komleu@epam.com (Alex K.)
+ * @fileoverview Listener for new notifications.
+ * @author alexeykofficial@gmail.com (Alex K.)
  */
 
 
