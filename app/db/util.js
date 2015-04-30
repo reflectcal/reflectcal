@@ -10,8 +10,7 @@
 
 var idgen = require('idgen');
 
-var idAlphabet = '0123456789abcdefghijklmnopqrstuvwxyz' +
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZ-_';
+var idAlphabet = '0123456789abcdef';
 
 
 /**
@@ -22,7 +21,7 @@ var idAlphabet = '0123456789abcdefghijklmnopqrstuvwxyz' +
  */
 exports.getUniqueIdAsync = function(aCollection, aCallback){
 
-  var uniqueId = idgen(64, idAlphabet);
+  var uniqueId = idgen(24, idAlphabet);
 
   aCollection && aCollection.count({_id: uniqueId}, function(aError, aCount){
     if (aCount == 0)
@@ -43,7 +42,7 @@ exports.getUniqueIdAsync = function(aCollection, aCallback){
  */
 exports.getUniqueIdAsyncWithPromise = function(aCollection){
   return new Promise(function(resolve, reject) {
-    var uniqueId = idgen(64, idAlphabet);
+    var uniqueId = idgen(24, idAlphabet);
 
     aCollection.count({_id: uniqueId}, function(aError, aCount) {
       if (aError) {
@@ -74,7 +73,7 @@ exports.getUniqueIdAsyncWithPromise = function(aCollection){
 exports.getUniqueFieldAsync = function(aCollection, aFieldName, aIdPrefix, 
     aCallback){
 
-  var uniqueId = (aIdPrefix || '') + idgen(32, idAlphabet);
+  var uniqueId = (aIdPrefix || '') + idgen(24, idAlphabet);
 
   var lookupObject = {};
   lookupObject[aFieldName] = uniqueId;
