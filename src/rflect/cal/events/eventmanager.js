@@ -239,6 +239,10 @@ rflect.cal.events.EventManager.pushNestedAllDayChips_ = function(
  */
 rflect.cal.events.EventManager.eventByStartDateComparator = function(aEventA,
     aEventB) {
+  if (goog.DEBUG)
+      console.log('aEventA: ', aEventA);
+  if (goog.DEBUG)
+        console.log('aEventB: ', aEventB);
   var aTime = aEventA.startDate.getTime();
   var bTime = aEventB.startDate.getTime();
   return aTime > bTime ? 1 : (aTime < bTime ? -1 : 0);
@@ -526,16 +530,9 @@ rflect.cal.events.EventManager.prototype.addEvent =
  */
 rflect.cal.events.EventManager.prototype.removeEventByIdFromSorted_ =
     function(aId) {
-  var eventDoDelete = this.getEventById(aId);
-  var indexOfDeletionStart = goog.array.binarySearch(this.sortedEvents_,
-      eventDoDelete, rflect.cal.events.EventManager.eventByStartDateComparator);
-  if (indexOfDeletionStart >= 0) {
-    for (let counter = indexOfDeletionStart, length = this.sortedEvents_.length;
-        counter < length; counter++) {
-      if (eventDoDelete == this.sortedEvents_[counter]) {
-        this.sortedEvents_.splice(counter, 1);
-      }
-    }
+  var index = goog.array.findIndex(this.sortedEvents_, el => el.id == aId);
+  if (index >= 0) {
+    this.sortedEvents_.splice(index, 1);
   }
 }
 
