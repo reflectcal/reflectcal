@@ -598,7 +598,7 @@ module.exports = function(grunt) {
               var sourceMapName = 'outputcompiled-' +
                   global.TARGETS[fileIndex].locale + '.js.' + fileIndex + '.map';
 
-              return ['', '//@ sourceMappingURL=' + sourceMapName];
+              return ['', '//# sourceMappingURL=' + sourceMapName];
             }
 
             return ['', ''];
