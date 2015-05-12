@@ -239,10 +239,6 @@ rflect.cal.events.EventManager.pushNestedAllDayChips_ = function(
  */
 rflect.cal.events.EventManager.eventByStartDateComparator = function(aEventA,
     aEventB) {
-  if (goog.DEBUG)
-      console.log('aEventA: ', aEventA);
-  if (goog.DEBUG)
-        console.log('aEventB: ', aEventB);
   var aTime = aEventA.startDate.getTime();
   var bTime = aEventB.startDate.getTime();
   return aTime > bTime ? 1 : (aTime < bTime ? -1 : 0);
