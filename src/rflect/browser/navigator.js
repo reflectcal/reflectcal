@@ -131,7 +131,27 @@ rflect.cal.Navigator.prototype.isInputTypeSupported_ = function(aType) {
   this.supportedInputTypes_[aType] =
       rflect.cal.Navigator.INPUT_VALUE_TEST_STRING != input.value;
 
+  if (rflect.cal.Navigator.prototype.isFirefoxFalseNegative_(aType)) {
+    this.supportedInputTypes_[aType] = true;
+  }
+
   return this.supportedInputTypes_[aType];
+}
+
+
+/**
+ * @return {boolean} Whether input date is supported in current Firefox, for
+ * some types in reports false negatives.
+ * @private
+ * @see {http://quirksmode.org/html5/inputs/tests/inputs_js.html}
+ */
+rflect.cal.Navigator.prototype.isFirefoxFalseNegative_ = function(aType) {
+  var uaString = navigator.userAgent.toLowerCase();
+  return goog.userAgent.GECKO && (
+      (uaString.indexOf('mobile') > -1 || uaString.indexOf('tablet') > -1) &&
+      goog.userAgent.isVersion('21') &&
+      (aType == 'datetime-local' || aType == 'datetime' || aType == 'month' ||
+      aType == 'week'));
 }
 
 
