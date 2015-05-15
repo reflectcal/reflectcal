@@ -60,6 +60,14 @@ rflect.TOUCH_INTERFACE_ENABLED = rflect.MOBILE;
 
 
 /**
+ * Feature flag - whether non-native scroller enabled.
+ * @type {boolean}
+ */
+rflect.ARTIFICIAL_SCROLLER_ENABLED = goog.userAgent.IPHONE ||
+    goog.userAgent.IPAD;
+
+
+/**
  * Whether wireless communication is used.
  * @type {boolean}
  */
