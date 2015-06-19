@@ -45,6 +45,13 @@ rflect.cal.ui.ScreenManager = function(aViewManager) {
    * @type {Array.<goog.ui.Component>}
    */
   this.pageStack_ = [];
+  
+  /**
+   * Components that are queued to be hidden after page slide.
+   * @type {Array<goog.ui.Component>}
+   * @private
+   */
+  this.componentsToHide_ = [];
 }
 goog.inherits(rflect.cal.ui.ScreenManager, goog.events.EventTarget);
 
@@ -62,13 +69,14 @@ rflect.cal.ui.ScreenManager.EventTypes = {
  * Event that is fired at the end of page change.
  * @param {number} aPageNumber Number of current page.
  * @param {goog.ui.Component} aCurrentScreen Current screen component.
- * @param {goog.ui.Component} aPreviousScreen Previous screen component.
+ * @param {Array<goog.ui.Component>} aPreviousScreens Previous screen
+ * components.
  * @param {boolean} aActionIsIrreversible Whether this action is irreversible.
  * @constructor
  * @extends {goog.events.Event}
  */
 rflect.cal.ui.ScreenManager.PageChangeEvent = function(aPageNumber,
-    aCurrentScreen, aPreviousScreen, aActionIsIrreversible) {
+    aCurrentScreen, aPreviousScreens, aActionIsIrreversible) {
   goog.events.Event.call(this,
       rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE);
 
@@ -86,9 +94,9 @@ rflect.cal.ui.ScreenManager.PageChangeEvent = function(aPageNumber,
 
   /**
    * Previous screen component.
-   * @type {goog.ui.Component}
+   * @type {Array<goog.ui.Component>}
    */
-  this.previousScreen = aPreviousScreen;
+  this.previousScreens = aPreviousScreens;
 
   /**
    * Whether this action is irreversible.
@@ -104,12 +112,13 @@ goog.inherits(rflect.cal.ui.ScreenManager.PageChangeEvent, goog.events.Event);
  * Event that is fired at the start of page change.
  * @param {number} aPageNumber Number of current page.
  * @param {goog.ui.Component} aCurrentScreen Current screen component.
- * @param {goog.ui.Component} aPreviousScreen Previous screen component.
+ * @param {Array<goog.ui.Component>} aPreviousScreens Previous screen
+ * components.
  * @constructor
  * @extends {goog.events.Event}
  */
 rflect.cal.ui.ScreenManager.BeforePageChangeEvent = function(aPageNumber,
-    aCurrentScreen, aPreviousScreen) {
+    aCurrentScreen, aPreviousScreens) {
   goog.events.Event.call(this,
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE);
 
@@ -127,9 +136,9 @@ rflect.cal.ui.ScreenManager.BeforePageChangeEvent = function(aPageNumber,
 
   /**
    * Previous screen component.
-   * @type {goog.ui.Component}
+   * @type {Array<goog.ui.Component>}
    */
-  this.previousScreen = aPreviousScreen;
+  this.previousScreens = aPreviousScreens;
 }
 goog.inherits(rflect.cal.ui.ScreenManager.BeforePageChangeEvent,
     goog.events.Event);
@@ -162,22 +171,12 @@ rflect.cal.ui.ScreenManager.translateElement = function(aElement,
 }
 
 
-
-
 /**
  * Main element of screen manager.
  * @type {Element}
  * @private
  */
 rflect.cal.ui.ScreenManager.prototype.element_;
-
-
-/**
- * Component that is queued to be hidden after page slide.
- * @type {goog.ui.Component}
- * @private
- */
-rflect.cal.ui.ScreenManager.prototype.componentToHide_;
 
 
 /**
@@ -276,8 +275,8 @@ rflect.cal.ui.ScreenManager.prototype.showScreen = function(aComponent, aShow,
   this.actionIsIrreversible_ = !!opt_irreversible;
 
   if (aShow){
-    this.componentToHide_ = /**@type {goog.ui.Component}*/
-        (goog.array.peek(this.pageStack_));
+    this.componentsToHide_.length && this.componentsToHide_.push(
+        /**@type {goog.ui.Component}*/ (goog.array.peek(this.pageStack_)));
 
     var position = this.pushToStack(aComponent) - 1;
 
@@ -290,7 +289,7 @@ rflect.cal.ui.ScreenManager.prototype.showScreen = function(aComponent, aShow,
     if (rflect.TOUCH_INTERFACE_ENABLED)
       this.assignPosition(aComponent, position);
   } else {
-    this.componentToHide_ = this.popFromStack();
+    this.componentsToHide_.push(this.popFromStack());
     position = this.pageStack_.length - 1;
 
     goog.style.showElement(/**@type {goog.ui.Component}*/
@@ -337,7 +336,7 @@ rflect.cal.ui.ScreenManager.prototype.dispatchBeforePageChangeEvent_ =
   this.dispatchEvent(new rflect.cal.ui.ScreenManager.BeforePageChangeEvent(
       this.pageStack_.length - 1,
       /**@type {goog.ui.Component}*/ (goog.array.peek(this.pageStack_)),
-      this.componentToHide_));
+      this.componentsToHide_));
 }
 
 
@@ -408,16 +407,19 @@ rflect.cal.ui.ScreenManager.prototype.onSlideEnd_ = function(aEvent) {
  * @private
  */
 rflect.cal.ui.ScreenManager.prototype.finishScreenChange_ = function() {
-  if (this.componentToHide_){
-    goog.style.showElement(this.componentToHide_.getElement(), false);
-  }
+  var currentComponent = /**@type {goog.ui.Component}*/
+      (goog.array.peek(this.pageStack_));
+
+  this.componentsToHide_.forEach(component => {
+    (component != currentComponent) &&
+        goog.style.showElement(component.getElement(), false);
+  })
 
   this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageChangeEvent(
-      this.pageStack_.length - 1,
-      /**@type {goog.ui.Component}*/ (goog.array.peek(this.pageStack_)),
-      this.componentToHide_, this.actionIsIrreversible_));
+      this.pageStack_.length - 1, currentComponent, this.componentsToHide_,
+      this.actionIsIrreversible_));
 
-  this.componentToHide_ = null;
+  this.componentsToHide_.length = 0;
   this.actionIsIrreversible_ = false;
 }
 
