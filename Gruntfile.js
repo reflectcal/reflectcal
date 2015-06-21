@@ -70,7 +70,7 @@ module.exports = function(grunt) {
     // targets is product of array lengths.
     var LOCALES = !global.DEV_COMPILATION ? appConfig.LOCALES : ['en'];
     var DEBUG = !global.DEV_COMPILATION ? [true, false] : [true];
-    var UI_TYPE = !global.DEV_COMPILATION ? ['', 'MOBILE'] : ['MOBILE'];
+    var UI_TYPE = !global.DEV_COMPILATION ? ['', 'MOBILE'] : [''];
     // Empty string means that user agent is not specified.
     var USER_AGENT = !global.DEV_COMPILATION ?
         ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'] : [''];

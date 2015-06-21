@@ -263,8 +263,8 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
       '</div></div>',
       '<div id="main-pane-controls-left"><div id="main-pane-controls-left-left">',
       // New event button.
-      '<div id="' + rflect.cal.predefined.BUTTON_NEW_EVENT_ID + '" class="' + goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-new-event') + ' ' + goog.getCssName('emphasis-button') + ' ',
-      goog.getCssName('cal-menu-leftmost-button') + '">',
+      '<div id="' + rflect.cal.predefined.BUTTON_NEW_EVENT_ID + '" class="' + goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-new-event') + ' ' + goog.getCssName('emphasis-button'),
+      '">',
       '<span class="octicon icon-button octicon-plus"></span>&nbsp;&nbsp;' +
           rflect.cal.i18n.Symbols.NEW_EVENT,
       '</div></div>',

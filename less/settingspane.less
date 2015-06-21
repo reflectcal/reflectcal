@@ -103,8 +103,12 @@
   border-collapse:collapse;
 }
 
-.calendar-colors-table td {
-  padding: 2px;
+.calendar-colors-table td when (@UI_TYPE = '') {
+  padding: 4px;
+}
+
+.calendar-colors-table td when (@UI_TYPE = 'MOBILE') {
+  padding: 8px;
 }
 
 .calendar-color {
@@ -112,6 +116,8 @@
   transition: opacity @transitionTime;
   border-width: 1px;
   border-style: solid;
+  .transition(-webkit-transform .3s);
+  .transition(transform .3s);
 }
 
 .calendar-color:hover {
@@ -120,6 +126,9 @@
 
 .calendar-color-selected {
   border: black 1px solid !important;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  z-index: 1;
 }
 
 .settings-link {
@@ -130,10 +139,6 @@
   padding: 8px 6px;
   color: #333;
   text-decoration: none;
-}
-
-.calendar-color:focus {
-  outline: 1px dotted black;
 }
 
 .cal-list-link {

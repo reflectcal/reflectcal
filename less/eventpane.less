@@ -25,6 +25,11 @@
 
 .event-pane-cont {
   .underlined-section();
+  transition: background-color .2s;
+}
+
+.event-pane-cont-touch {
+  background-color: rgba(213, 213, 213, .2);
 }
 
 .event-pane-cont-first {
@@ -55,7 +60,6 @@
 
   font-size: 16px;
   font-family: 'Roboto', arial, sans-serif;
-  font-weight: bold;
 }
 
 .date-sub-cont {
@@ -144,14 +148,6 @@
 
 .aligned-checkbox{
   float: right;
-  margin-right: 80px !important;
-}
-
-@media (max-width: 640px) and (orientation: portrait), (max-width: 832px) and
-    (orientation: landscape) {
-  .aligned-checkbox{
-    margin-right: 20px !important;
-  }
 }
 
 .event-edit-pane-button {
