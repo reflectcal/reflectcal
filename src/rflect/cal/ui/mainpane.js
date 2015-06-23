@@ -201,8 +201,9 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
 
   this.addChild(this.editDialog_);
 
-  if (rflect.TOUCH_INTERFACE_ENABLED)
+  if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
     this.momentumScroller_ = new rflect.ui.MomentumScroller();
+  }
 };
 goog.inherits(rflect.cal.ui.MainPane, rflect.ui.Component);
 
@@ -542,8 +543,9 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
   if (!opt_doNotRemoveScrollListeners)
     this.removeScrollListeners_();
 
-  if (rflect.TOUCH_INTERFACE_ENABLED)
+  if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
     this.removeMomentumScroller();
+  }
 
   if (opt_updateByNavigation && !rflect.TOUCH_INTERFACE_ENABLED){
     var scrollTop = this.getHandyScrollTopPosition_();
@@ -729,8 +731,9 @@ rflect.cal.ui.MainPane.prototype.updateByRedraw = function(opt_deep,
     this.addScrollListeners_();
     this.restoreOffsetsOfScrollables_();
   }
-  if (rflect.TOUCH_INTERFACE_ENABLED && !opt_doNotAddMomentumScroller)
+  if (rflect.ARTIFICIAL_SCROLLER_ENABLED && !opt_doNotAddMomentumScroller) {
     this.addMomentumScroller();
+  }
 };
 
 
@@ -907,10 +910,14 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
 
   rflect.cal.ui.MainPane.superClass_.enterDocument.call(this);
 
-  this.getHandler().listen(this.getElement(), goog.events.EventType.TOUCHSTART,
-      this.onTouchStart_, false, this)
-      .listen(this.getElement(), goog.events.EventType.TOUCHEND,
-      this.onTouchEnd_, false, this)
+  if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
+    this.getHandler().listen(this.getElement(),
+        goog.events.EventType.TOUCHSTART, this.onTouchStart_, false, this).
+        listen(this.getElement(), goog.events.EventType.TOUCHEND,
+        this.onTouchEnd_, false, this);
+  }
+
+  this.getHandler()
       .listen(this.saveDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
       this.onEventEdit_, false, this)
       .listen(this.saveDialog_, rflect.ui.Dialog.EventType.SELECT,
@@ -922,10 +929,12 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
       .listen(this.transport_, rflect.cal.Transport.EventTypes.SAVE_EVENT,
       this.onSaveEvent_, false, this);
 
+  this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
+      this.onClick_, false, this);
+
   //Mouse events.
   if (!rflect.TOUCH_INTERFACE_ENABLED) {
-    this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
-        this.onClick_, false, this)
+    this.getHandler()
         .listen(this.getElement(), goog.events.EventType.DBLCLICK,
         this.onDoubleClick_, false, this)
         .listen(this.getElement(), goog.events.EventType.MOUSEOVER,
@@ -1032,7 +1041,8 @@ rflect.cal.ui.MainPane.prototype.onClick_ = function(aEvent) {
   } else if ((this.isChipOrChild_(className) || this.isGrip_(className)) &&
       !this.selectionMask_.wasDragged()) {
 
-    this.showEventEditComponent_(target, className);
+    this.showEventEditComponent_(target, className,
+        rflect.TOUCH_INTERFACE_ENABLED);
 
   }
 };

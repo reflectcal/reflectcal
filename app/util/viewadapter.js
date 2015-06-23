@@ -84,8 +84,9 @@ function getUserAgentName(aUAObject) {
   var userAgentName = '';
 
   ['WEBKIT', 'IE', 'GECKO', 'OPERA'].forEach(function(aProperty){
-    if (aUAObject[aProperty])
+    if (aUAObject[aProperty]) {
       userAgentName = aProperty;
+    }
   });
 
   return userAgentName;

@@ -612,14 +612,18 @@ rflect.cal.ui.MainBody.prototype.onBeforePageChange_ = function(aEvent) {
   // If switching to main body, add momentum scroller...
   if (aEvent.currentScreen == this) {
     var htmlElement = this.getDomHelper().getDocument().documentElement;
-    if (rflect.TOUCH_INTERFACE_ENABLED) this.mainPane_.addMomentumScroller();
+    if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
+      this.mainPane_.addMomentumScroller();
+    }
     goog.dom.classes.add(htmlElement, 'overflow-vertical-protected');
     //To prevent offset after scrolling external panes.
     htmlElement.scrollTop = 0;
   }
   //... and remove otherwise.
   else {
-    if (rflect.TOUCH_INTERFACE_ENABLED) this.mainPane_.removeMomentumScroller();
+    if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
+      this.mainPane_.removeMomentumScroller();
+    }
     goog.dom.classes.remove(this.getDomHelper().getDocument().documentElement,
         'overflow-vertical-protected');
   }

@@ -240,16 +240,17 @@ body when (@UI_TYPE = 'MOBILE') {
   border-right: none;
   height: 400px;
   position: relative;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
 }
 
 #main-pane-body-scrollable-wk when (@UI_TYPE = '') {
-  overflow-y: scroll;
   #main-pane-body-scrollable-wk();
 }
 
 #main-pane-body-scrollable-wk when (@UI_TYPE = 'MOBILE') {
   #main-pane-body-scrollable-wk();
-  overflow-y: hidden;
   z-index: 0;
 }
 
@@ -294,7 +295,7 @@ body when (@UI_TYPE = 'MOBILE') {
 .grid-table-wk-outer {
   position:absolute;
   top:0;
-  height:1728px;
+  height:1776px;
   overflow:hidden
 }
 
@@ -438,7 +439,7 @@ body when (@UI_TYPE = 'MOBILE') {
 }
 
 .mask {
-  background-color: #cecece;
+  background-color: rgb(166,203,254);
   position: absolute;
   .opacity(0.5);
 }
@@ -485,16 +486,17 @@ body when (@UI_TYPE = 'MOBILE') {
 .mpbs-mn-scroll-vert-on() {
   margin-right: 0;
   border-right: none !important;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
 }
 
 .mpbs-mn-scroll-vert-on when (@UI_TYPE = '') {
   .mpbs-mn-scroll-vert-on();
-  overflow-y: scroll;
 }
 
 .mpbs-mn-scroll-vert-on when (@UI_TYPE = 'MOBILE') {
   .mpbs-mn-scroll-vert-on();
-  overflow-y: hidden;
 }
 
 .mpbs-mn-scroll-vert-off {
@@ -768,7 +770,7 @@ body when (@UI_TYPE = 'MOBILE') {
   ,white:ba,whitesmoke:"#f5f5f5",yellow:"#ffff00",yellowgreen:"#9acd32"}*/
 
 .wk-event-grip-cont {
-  cursor: n-resize;
+  cursor: ns-resize;
   height: 5px;
   left: 1px;
   position: absolute;
@@ -795,7 +797,7 @@ body when (@UI_TYPE = 'MOBILE') {
 }
 
 .mn-event-grip-cont {
-  cursor: w-resize;
+  cursor: ew-resize;
   width: 5px;
   top: 1px;
   position: absolute;

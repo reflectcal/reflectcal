@@ -433,5 +433,6 @@ rflect.cal.ui.ScreenManager.prototype.disposeInternal = function() {
   rflect.cal.ui.ScreenManager.superClass_.disposeInternal.call(this);
 
   this.pageStack_.length = 0;
+  this.componentsToHide_.length = 0;
   goog.events.unlistenByKey(this.transitionEndKey_);
 };
