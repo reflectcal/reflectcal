@@ -839,6 +839,24 @@ rflect.cal.events.EventManager.prototype.forEachCalendar = function(aFunction,
 
 
 /**
+ * @return {boolean} Whether this event manager has at least one non-owner
+ * calendar.
+ */
+rflect.cal.events.EventManager.prototype.hasNonOwnerCalendars = function() {
+  var calendars = this.calendars;
+  for (var calendarId in calendars) {
+    if (calendars[calendarId] instanceof rflect.cal.events.Calendar) {
+      //This is indeed a calendar.
+      if (!calendars[calendarId].own) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+
+/**
  * @param {number} aEventId Event id of event to indicate whether it's in
  * progress.
  * @param {boolean} aInProgress Whether event is in progress.

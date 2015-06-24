@@ -243,27 +243,31 @@ rflect.cal.ui.CalSelector.prototype.isMyCalendars = false;
  * @see {rflect.cal.ui.MainPaneBuilder#buildBodyInternalWeek}
  */
 rflect.cal.ui.CalSelector.prototype.buildInternal = function(aSb) {
-  var offset = 0;
-  var length = rflect.cal.ui.CalSelector.HTML_PARTS_.length;
-  while (++offset < length - 1) {
-    aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[offset]);
-    switch (offset) {
-      case 1: {
-        this.buildLabel_(aSb);
-      };break;
-      case 2: {
-        this.buildOptions(aSb);
-      };break;
-      /*case 4: {
-        this.buildListBodyClass_(aSb);
-      };break;*/
-      case 5: {
-        this.buildScrollableHeight_(aSb);
-      };break;
-      case 6: {
-        this.buildContent(aSb);
-      };break;
-      default: break;
+  if (!this.isMyCalendars && !this.eventManager_.hasNonOwnerCalendars()) {
+    //Do not draw empty 'other calendars'.
+  } else {
+    var offset = 0;
+    var length = rflect.cal.ui.CalSelector.HTML_PARTS_.length;
+    while (++offset < length - 1) {
+      aSb.append(rflect.cal.ui.CalSelector.HTML_PARTS_[offset]);
+      switch (offset) {
+        case 1: {
+          this.buildLabel_(aSb);
+        };break;
+        case 2: {
+          this.buildOptions(aSb);
+        };break;
+        /*case 4: {
+          this.buildListBodyClass_(aSb);
+        };break;*/
+        case 5: {
+          this.buildScrollableHeight_(aSb);
+        };break;
+        case 6: {
+          this.buildContent(aSb);
+        };break;
+        default: break;
+      }
     }
   }
 };
@@ -392,7 +396,11 @@ rflect.cal.ui.CalSelector.prototype.updateBeforeRedraw = function(opt_deep) {
 
     // Default behaviour is to have two selectors in a column, so divide height
     // by 2.
-    this.scrollableSize_.height /= 2;
+    if (this.eventManager_.hasNonOwnerCalendars()) {
+      this.scrollableSize_.height /= 2;
+    } else if (!this.isMyCalendars) {
+      this.scrollableSize_.height = 0;
+    } // Else leave scroll size as is.
 
   }
 };
@@ -421,8 +429,9 @@ rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
 
   }
 
-  if (!isSmallScreen)
+  if (!isSmallScreen && this.scrollableEl) {
     this.scrollableEl.style.height = this.scrollableSize_.height + 'px';
+  }
 };
 
 
