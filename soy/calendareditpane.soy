@@ -1,0 +1,66 @@
+{namespace rflect.cal.ui.soy.calendareditpane}
+
+/**
+ * @param id Unique id.
+ * @param? includeOuterHTML Whether to include outer html of element.
+ * @param colorRows
+ */
+{template .calendarEditPane autoescape="false"}
+  {if $includeOuterHTML}
+  <div id="{$id}" class="settings-pane">
+  {/if}
+    {call rflect.cal.ui.soy.externalpane.controlPane}
+      {param backButtonLabel: rflect.cal.i18n.Symbols.TO_CALENDARS /}
+      {param showDeleteButton: false /}
+      {param showNewButton: false /}
+      {param showSaveButton: true /}
+    {/call}
+
+    <div class="settings-body-outer">
+      <div class="settings-body">
+        <div class="event-name-input-cont event-pane-cont">
+          <label class="goog-inline-block event-pane-label label-fluid"
+            for="sp-calendar-name-input">
+            {rflect.cal.i18n.Symbols.CALENDAR_NAME}
+          </label>
+
+          <div class="control-wrapper">
+            <input placeholder="" class="ep-event-name-input"
+                id="sp-calendar-name-input" type="text"/>
+          </div>
+        </div>
+
+        <div class="event-name-input-cont event-pane-cont event-pane-cont-last">
+          <label class="goog-inline-block event-pane-label label-fluid calendar-colors-label"
+              for="calendar-colors">
+            {rflect.cal.i18n.Symbols.CALENDAR_COLORS}
+          </label>
+          <table id="calendar-colors" class="calendar-colors-table goog-inline-block">
+            <tbody>
+            {foreach $colorRow in $colorRows}
+              <tr>
+                {foreach $colorCell in $colorRow}
+                <td>
+                  <button class="calitem-color-cont calendar-color{sp}{$colorCell.eventClass}"
+                      id="calendar-color{index($colorRow) + index($colorCell)}"></button>
+                </td>
+                {/foreach}
+              </tr>
+            {/foreach}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    {call rflect.cal.ui.soy.externalpane.controlPane}
+      {param backButtonLabel: rflect.cal.i18n.Symbols.TO_CALENDARS /}
+      {param showDeleteButton: true /}
+      {param showNewButton: false /}
+      {param showSaveButton: true /}
+    {/call}
+  {if $includeOuterHTML}
+  </div>
+  {/if}
+{/template}

@@ -1,0 +1,146 @@
+{namespace rflect.cal.ui.soy.eventpane}
+
+/**
+ * @param id Unique id.
+ * @param? includeOuterHTML Whether to include outer html of element.
+ * @param isNativeTimeInput Whether to include outer html of element.
+ * @param calendarsSelectHTML Calendars select HTML.
+ * @param calendarsSelectId Calendars select id.
+ */
+{template .eventPane autoescape="false"}
+  {if $includeOuterHTML}
+  <div id="{$id}" class="settings-pane">
+  {/if}
+    {call rflect.cal.ui.soy.externalpane.controlPane}
+      {param backButtonLabel: rflect.cal.i18n.Symbols.TO_CALENDAR /}
+      {param showDeleteButton: false /}
+      {param showNewButton: false /}
+      {param showSaveButton: true /}
+    {/call}
+
+    <div class="settings-body-outer">
+      <div class="settings-body">
+
+        <div class="event-name-input-cont event-pane-cont-first event-pane-cont">
+          <input placeholder="{rflect.cal.i18n.Symbols.EVENT_NAME}"
+              class="ep-event-name-input"
+              id="ep-event-name-input" type="text">
+        </div>
+
+        <div class="description-cont event-pane-cont" id="all-day-label">
+          <span id="all-day-label-sub-cont">
+            <label class="goog-inline-block event-pane-label all-day-label"
+            for="event-all-day">{rflect.cal.i18n.Symbols.ALL_DAY_EVENT}</label>
+          </span>
+        </div>
+
+        {call .dateInputs}
+          {param isNativeTimeInput: $isNativeTimeInput /}
+        {/call}
+
+        <div class="event-pane-cont">
+          <label class="label-fluid event-pane-label event-pane-calendars-label"
+            for="{$calendarsSelectId}">
+            {rflect.cal.i18n.Symbols.CALENDAR}
+          </label>
+
+          {$calendarsSelectHTML}
+
+        </div>
+
+        <div class="description-cont event-pane-cont event-pane-cont-last">
+          <label class="label-fluid event-pane-label event-description-label"
+            for="event-description">
+            {rflect.cal.i18n.Symbols.DESCRIPTION}
+          </label>
+          <textarea class="event-description" placeholder="{rflect.cal.i18n.Symbols.ENTER_DESCRIPTION}"
+            id="event-description">
+          </textarea>
+        </div>
+
+      </div>
+
+    </div>
+
+    {call rflect.cal.ui.soy.externalpane.controlPane}
+      {param backButtonLabel: rflect.cal.i18n.Symbols.TO_CALENDAR /}
+      {param showDeleteButton: true /}
+      {param showNewButton: false /}
+      {param showSaveButton: true /}
+    {/call}
+  {if $includeOuterHTML}
+  </div>
+  {/if}
+{/template}
+
+
+/**
+ * @param isNativeTimeInput
+ */
+{template .dateInputs autoescape="false"}
+  {if $isNativeTimeInput}
+
+  <div class="date-input-cont event-pane-cont">
+    <div class="pane-left goog-inline-block">
+      <label id="label-start" for="event-start-date" class="label-fluid event-pane-label">
+        {rflect.cal.i18n.Symbols.START}
+      </label>
+    </div>
+    <div class="pane-right goog-inline-block">
+      <input class="event-date-input-native" id="event-start-date" type="date"/>
+      <input class="event-datetime-input-native" id="event-start-datetime" type="datetime"/>
+    </div>
+    <div class="pane-center goog-inline-block">
+      <div class="spacer">s</div>
+    </div>
+  </div>
+
+  <div class="date-input-cont event-pane-cont">
+    <div class="pane-left goog-inline-block">
+      <label id="label-end" for="event-end-date" class="label-fluid event-pane-label">
+        {rflect.cal.i18n.Symbols.END}
+      </label>
+    </div>
+    <div class="pane-right goog-inline-block">
+      <input class="event-date-input-native" id="event-end-date" type="date"/>
+      <input class="event-datetime-input-native" id="event-end-datetime" type="datetime"/>
+    </div>
+    <div class="pane-center goog-inline-block">
+      <div class="spacer">s</div>
+    </div>
+  </div>
+
+  {else}
+
+  <div class="date-input-cont event-pane-cont">
+    <div class="pane-left goog-inline-block">
+      <label id="label-start" for="event-start-date" class="label-fluid event-pane-label">
+        {rflect.cal.i18n.Symbols.START}
+      </label>
+    </div>
+    <div class="pane-right goog-inline-block">
+      <input class="event-date-input" id="event-start-date" type="text"/>
+      <input aria-haspopup="true" class="event-time-input" id="event-start-time" type="text"/>
+    </div>
+    <div class="pane-center goog-inline-block">
+      <div class="spacer">s</div>
+    </div>
+  </div>
+
+  <div class="date-input-cont event-pane-cont">
+    <div class="pane-left goog-inline-block">
+      <label id="label-end" for="event-end-date" class="label-fluid event-pane-label">
+        {rflect.cal.i18n.Symbols.END}
+      </label>
+    </div>
+    <div class="pane-right goog-inline-block">
+      <input class="event-date-input" id="event-end-date" type="text"/>
+      <input aria-haspopup="true" class="event-time-input" id="event-end-time" type="text"/>
+    </div>
+    <div class="pane-center goog-inline-block">
+      <div class="spacer">s</div>
+    </div>
+  </div>
+
+  {/if}
+{/template}

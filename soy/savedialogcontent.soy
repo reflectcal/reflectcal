@@ -1,0 +1,16 @@
+{namespace rflect.cal.ui.soy.savedialogcontent}
+
+
+/**
+ * @param calendarsSelectId Calendars select id.
+ * @param calendarsSelectHTML Calendars select HTML.
+ */
+{template .saveDialogContent autoescape="false"}
+  <div class="event-name-input-cont event-pane-cont-first event-pane-cont">
+    <input placeholder="{rflect.cal.i18n.Symbols.EVENT_NAME}" class="ep-event-name-input" id="event-name" type="text">
+  </div>
+  <div class="event-pane-cont">
+    <label class="label-fluid event-pane-label event-pane-calendars-label" for="{$calendarsSelectId}">{rflect.cal.i18n.Symbols.CALENDAR}</label>
+    {$calendarsSelectHTML}
+  </div>
+{/template}

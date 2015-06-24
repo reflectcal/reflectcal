@@ -715,7 +715,7 @@ rflect.cal.ui.MainPane.prototype.updateBlockManager = function() {
  */
 rflect.cal.ui.MainPane.prototype.updateByRedraw = function(opt_deep,
     opt_doNotAddMomentumScroller) {
-  this.getElement().innerHTML = this.build();
+  this.getElement().innerHTML = this.buildHTML();
 
   if (this.getParent().firstBuildWk && this.viewManager_.isInWeekMode()) {
     this.getParent().rebuildMainPaneWithSizes();
@@ -773,21 +773,20 @@ rflect.cal.ui.MainPane.prototype.restoreOffsetsOfScrollables_ =
 
 /**
  * Builds body of component.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
- * @see rflect.ui.Component#build
- * @protected
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @return {string} HTML of component.
+ * @override
  */
-rflect.cal.ui.MainPane.prototype.buildInternal = function(aSb) {
+rflect.cal.ui.MainPane.prototype.buildHTML = function(opt_outerHTML) {
   var firstBuild;
-
   if (this.viewManager_.isInMonthMode()) {
     firstBuild = this.getParent().firstBuildMn;
-    this.mainPaneBuilder_.buildBodyInternalMonth(aSb, firstBuild);
+    return this.mainPaneBuilder_.buildBodyMonth(firstBuild, opt_outerHTML);
   } else if (this.viewManager_.isInWeekMode()) {
     firstBuild = this.getParent().firstBuildWk;
-    this.mainPaneBuilder_.buildBodyInternalWeek(aSb, firstBuild);
+    return this.mainPaneBuilder_.buildBodyWeek(firstBuild, opt_outerHTML);
   }
+  return '';
 };
 
 
@@ -796,9 +795,8 @@ rflect.cal.ui.MainPane.prototype.buildInternal = function(aSb) {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.updateByRedrawWeekGrid_ = function() {
-  var sb = new goog.string.StringBuffer();
-  this.mainPaneBuilder_.buildWeekGrid(sb);
-  this.getDomHelper().getElement('grid-table-wk').innerHTML = sb.toString();
+  this.getDomHelper().getElement('grid-table-wk').innerHTML =
+      this.mainPaneBuilder_.buildWeekGrid();
 }
 
 
@@ -807,9 +805,9 @@ rflect.cal.ui.MainPane.prototype.updateByRedrawWeekGrid_ = function() {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.updateByRedrawAllDayGrid_ = function() {
-  var sb = new goog.string.StringBuffer();
-  this.mainPaneBuilder_.buildAllDayGrid(sb);
-  this.getDomHelper().getElement('alldayevents-grid').innerHTML = sb.toString();
+  this.getDomHelper().getElement('alldayevents-grid').innerHTML =
+      this.mainPaneBuilder_.buildAllDayGrid();
+
 }
 
 
@@ -818,9 +816,8 @@ rflect.cal.ui.MainPane.prototype.updateByRedrawAllDayGrid_ = function() {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.updateByRedrawMonthGrid_ = function() {
-  var sb = new goog.string.StringBuffer();
-  this.mainPaneBuilder_.buildMonthGrid(sb);
-  this.getDomHelper().getElement('grid-table-mn').innerHTML = sb.toString();
+  this.getDomHelper().getElement('grid-table-mn').innerHTML =
+      this.mainPaneBuilder_.buildMonthGrid();
 }
 
 
@@ -892,22 +889,9 @@ rflect.cal.ui.MainPane.prototype.updateAfterSave_ = function() {
 
 
 /**
- * Decorates an existing html div element as a Main Pane.
- * @override
- */
-rflect.cal.ui.MainPane.prototype.decorateInternal = function(aElement,
-    opt_doNotBuildBody) {
-  // Set this.element_.
-  rflect.cal.ui.MainPane.superClass_.decorateInternal.call(this, aElement,
-      opt_doNotBuildBody);
-};
-
-
-/**
  * @inheritDoc
  */
 rflect.cal.ui.MainPane.prototype.enterDocument = function() {
-
   rflect.cal.ui.MainPane.superClass_.enterDocument.call(this);
 
   if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
@@ -1953,7 +1937,7 @@ rflect.cal.ui.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
 rflect.cal.ui.MainPane.prototype.onSaveEvent_ = function(aEvent) {
   var eventId = aEvent.eventId;
 
-  var mp = this.getDomHelper().getElement('main-pane');
+  var mp = this.getDomHelper().getElement(this.getId());
   mp && goog.array.forEach(mp.querySelectorAll('.' +
       rflect.cal.predefined.chips.CHIP_EVENT_CLASS + eventId), function(el) {
     goog.dom.classes.remove(el, goog.getCssName('event-in-progress'));

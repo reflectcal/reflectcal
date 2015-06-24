@@ -1,0 +1,87 @@
+{namespace rflect.cal.ui.soy.calendarspane}
+
+/**
+ * @param id Unique id.
+ * @param? includeOuterHTML Whether to include outer html of element.
+ * @param calendarCollections
+ */
+{template .calendarsPane autoescape="false"}
+  {if $includeOuterHTML}
+  <div id="{$id}" class="settings-pane">
+  {/if}
+    {call rflect.cal.ui.soy.externalpane.controlPane}
+      {param backButtonLabel: rflect.cal.i18n.Symbols.TO_SETTINGS /}
+      {param showDeleteButton: false /}
+      {param showNewButton: true /}
+      {param showSaveButton: false /}
+    {/call}
+
+    <div class="settings-body-outer">
+      <div class="settings-body">
+      {call .calendarsPaneEntry}
+        {param calendarCollection: $calendarCollections[0] /}
+      {/call}
+      {call .calendarsPaneEntry}
+        {param calendarCollection: $calendarCollections[1] /}
+      {/call}
+      </div>
+    </div>
+
+    {call rflect.cal.ui.soy.externalpane.controlPane}
+      {param backButtonLabel: rflect.cal.i18n.Symbols.TO_SETTINGS /}
+      {param showDeleteButton: false /}
+      {param showNewButton: true /}
+      {param showSaveButton: false /}
+    {/call}
+  {if $includeOuterHTML}
+  </div>
+  {/if}
+{/template}
+
+
+/**
+ * @param calendarCollection
+ */
+{template .calendarsPaneEntry autoescape="false"}
+  {if length($calendarCollection.calendars) != 0}
+  <div class="event-pane-cont calendars-outer-cont event-pane-cont-last">
+    <label>
+      {$calendarCollection.label}
+    </label>
+    <div class="calendars-cont">
+      <table class="calendars-table">
+        <tbody>
+        {foreach $calendar in $calendarCollection.calendars}
+          <tr class="calendar-row">
+            <td class="listitem-cont name-cell">
+              <button id="{rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX}{$calendar.id}"
+                  class="settings-link cal-link{sp}{if $calendar.isInProgress}cal-link-in-progress{/if}">
+                {$calendar.name}
+              </button>
+            </td>
+            <td class="color-cell">
+              <div class="calitem-color-cont calendar-color{sp}{$calendar.colorClass}"></div>
+            </td>
+          </tr>
+        {/foreach}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {/if}
+{/template}
+
+
+/**
+ * @param calendarCollections
+ */
+{template .calendarsPaneBody autoescape="false"}
+  {call .calendarsPaneEntry}
+    {param calendarCollection: $calendarCollections[0] /}
+  {/call}
+  {call .calendarsPaneEntry}
+    {param calendarCollection: $calendarCollections[1] /}
+  {/call}
+{/template}
+
+
