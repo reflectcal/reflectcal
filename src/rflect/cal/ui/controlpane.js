@@ -23,6 +23,7 @@ goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.ui.ViewButtonUpdater');
+goog.require('rflect.cal.ui.soy');
 
 
 
@@ -284,6 +285,7 @@ rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
        counter < length; counter++) {
     aSb.append(parts[counter]);
   }
+  rflect.cal.ui.soy.controlpane();
 }
 
 

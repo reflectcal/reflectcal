@@ -1,0 +1,5 @@
+# Created by .ignore support plugin (hsz.mobi)
+### ExtJs template
+*.js
+!soyutils_usegoog.js
+

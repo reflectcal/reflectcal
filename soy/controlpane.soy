@@ -1,0 +1,92 @@
+{namespace rflect.cal.ui.soy}
+
+/**
+ * @param? isSmallScreen Whether screen is small.
+ */
+{template .controlpane}
+  {if $isSmallScreen}
+    <div id="top-pane" class="control-pane">
+      <div id="sidebar-controls">
+        <div tabindex="0" style="-moz-user-select: none;" role="button"
+             aria-pressed="true" id="nb1"
+             class="goog-flat-button-collapse-right cal-menu-leftmost-button goog-flat-button-bord-rad-collapse-right cal-menu-button cal-menu-button-now goog-inline-block goog-flat-button goog-flat-button-checked">
+          Now
+        </div>
+        <div tabindex="0" style="-moz-user-select: none;" role="button" id="nb2"
+             class="goog-flat-button-collapse-left goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button cal-menu-button-back goog-inline-block goog-flat-button">
+          <span class="octicon icon-button octicon-triangle-left"></span></div>
+        <div tabindex="0" style="-moz-user-select: none;" role="button" id="nb3"
+             class="goog-flat-button-collapse-left cal-menu-rightmost-button goog-flat-button-bord-rad-collapse-left cal-menu-button cal-menu-button-forward goog-inline-block goog-flat-button">
+          <span class="octicon icon-button octicon-triangle-right"></span></div>
+      </div>
+      <div id="main-pane-controls">
+        <div id="main-pane-controls-right">
+          <div style="margin-right: 0px;" class="goog-inline-block">
+            <div tabindex="0" style="-moz-user-select: none;" role="button"
+                 aria-pressed="false" id="nb4"
+                 class="goog-flat-button-collapse-right goog-toggle-button goog-flat-button-bord-rad-collapse-right cal-menu-button goog-inline-block goog-flat-button">
+              Day
+            </div>
+            <div tabindex="0" style="-moz-user-select: none;" role="button"
+                 aria-pressed="true" id="nb5"
+                 class="goog-flat-button-collapse-left goog-toggle-button goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button goog-inline-block goog-flat-button goog-flat-button-checked">
+              Week
+            </div>
+            <div tabindex="0" style="-moz-user-select: none;" role="button"
+                 aria-pressed="false" id="nb6"
+                 class="goog-flat-button goog-flat-button-collapse-left goog-toggle-button goog-flat-button-bord-rad-collapse-left cal-menu-button cal-menu-button-month-view goog-inline-block">
+              Month
+            </div>
+          </div>
+          <div tabindex="0" style="-moz-user-select: none;" role="button" id="nb8"
+               class="goog-flat-button cal-menu-rightmost-button cal-menu-button cal-menu-button-options goog-inline-block">
+            <span class="octicon icon-button octicon-gear"></span></div>
+        </div>
+        <div id="main-pane-controls-left">
+          <div id="main-pane-controls-left-left">
+            <div tabindex="0" style="-moz-user-select: none;" role="button" id="nb7"
+                 class="cal-menu-button cal-menu-button-new-event emphasis-button goog-inline-block goog-flat-button">
+              <span class="octicon icon-button octicon-plus"></span>&nbsp;&nbsp;New
+              event
+            </div>
+          </div>
+          <div id="main-pane-controls-left-right">
+            <div id="time-period-label" class="time-period-label">21 - 27 Jun,
+              2015
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {else}
+    <div id="top-pane" class="control-pane">
+      <div class="pane-left">
+        <div tabindex="0" style="-moz-user-select: none;" role="button"
+             class="cal-menu-button goog-flat-button goog-inline-block" id="nb9">
+          <span class="octicon icon-button octicon-three-bars"></span></div>
+      </div>
+      <div class="pane-right">
+        <div tabindex="0" style="-moz-user-select: none;" role="button"
+             class="cal-menu-button-new-event emphasis-button cal-menu-button goog-flat-button goog-inline-block"
+             id="nb7"><span class="octicon icon-button octicon-plus"></span></div>
+      </div>
+      <div class="pane-center pane-center-nav">
+        <div id="time-period-label" class="time-period-label">Wed, Jun 24, 2015
+        </div>
+        <div tabindex="0" style="-moz-user-select: none;" role="button"
+             aria-pressed="true"
+             class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav goog-flat-button-checked"
+             id="nb1">Now
+        </div>
+        <div tabindex="0" style="-moz-user-select: none;" role="button"
+             class="goog-flat-button-collapse-left goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"
+             id="nb2"><span
+            class="octicon icon-button octicon-triangle-left"></span></div>
+        <div tabindex="0" style="-moz-user-select: none;" role="button"
+             class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"
+             id="nb3"><span
+            class="octicon icon-button octicon-triangle-right"></span></div>
+      </div>
+    </div>
+  {/if}
+{/template}
