@@ -483,7 +483,9 @@ rflect.cal.ui.SidePane.prototype.onSlideBreak_ = function(aEvent) {
 rflect.cal.ui.SidePane.prototype.updateByRedraw = function(opt_deep) {
   // Update buttons.
   this.viewButtonUpdater_.updateButtons();
-  this.miniCal_ && this.miniCal_.updateByRedraw();
+  if (opt_deep && this.miniCal_) {
+    this.miniCal_.updateByRedraw();
+  }
 };
 
 
