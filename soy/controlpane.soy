@@ -2,20 +2,30 @@
 
 /**
  * @param? isSmallScreen Whether screen is small.
+ * @param? includeOuterHTML Whether to include outer html of element.
+ * @param timePeriodLabel Whether to include outer html of element.
+ * @param sidePaneMovable Whether side pane is movable.
  */
-{template .controlpane}
-  {if $isSmallScreen}
+{template .controlpane autoescape="false"}
+  {if not $isSmallScreen}
+    {if $includeOuterHTML}
     <div id="top-pane" class="control-pane">
+    {/if}
       <div id="sidebar-controls">
-        <div tabindex="0" style="-moz-user-select: none;" role="button"
-             aria-pressed="true" id="nb1"
-             class="goog-flat-button-collapse-right cal-menu-leftmost-button goog-flat-button-bord-rad-collapse-right cal-menu-button cal-menu-button-now goog-inline-block goog-flat-button goog-flat-button-checked">
-          Now
+        {if $sidePaneMovable}
+        <div class="cal-menu-button goog-flat-button goog-inline-block" id="{rflect.cal.predefined.BUTTON_MENU_ID}">
+          <span class="octicon icon-button octicon-three-bars"></span>
         </div>
-        <div tabindex="0" style="-moz-user-select: none;" role="button" id="nb2"
+        {/if}
+        <div tabindex="0" style="-moz-user-select: none;" role="button"
+             aria-pressed="true" id="{rflect.cal.predefined.BUTTON_NOW_ID}"
+             class="goog-flat-button-collapse-right cal-menu-leftmost-button goog-flat-button-bord-rad-collapse-right cal-menu-button cal-menu-button-now goog-inline-block goog-flat-button goog-flat-button-checked">
+          {rflect.cal.i18n.Symbols.NOW}
+        </div>
+        <div tabindex="0" style="-moz-user-select: none;" role="button" id="{rflect.cal.predefined.BUTTON_PREV_ID}"
              class="goog-flat-button-collapse-left goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button cal-menu-button-back goog-inline-block goog-flat-button">
           <span class="octicon icon-button octicon-triangle-left"></span></div>
-        <div tabindex="0" style="-moz-user-select: none;" role="button" id="nb3"
+        <div tabindex="0" style="-moz-user-select: none;" role="button" id="{rflect.cal.predefined.BUTTON_NEXT_ID}"
              class="goog-flat-button-collapse-left cal-menu-rightmost-button goog-flat-button-bord-rad-collapse-left cal-menu-button cal-menu-button-forward goog-inline-block goog-flat-button">
           <span class="octicon icon-button octicon-triangle-right"></span></div>
       </div>
@@ -23,43 +33,47 @@
         <div id="main-pane-controls-right">
           <div style="margin-right: 0px;" class="goog-inline-block">
             <div tabindex="0" style="-moz-user-select: none;" role="button"
-                 aria-pressed="false" id="nb4"
+                 aria-pressed="false" id="{rflect.cal.predefined.BUTTON_DAY_ID}"
                  class="goog-flat-button-collapse-right goog-toggle-button goog-flat-button-bord-rad-collapse-right cal-menu-button goog-inline-block goog-flat-button">
-              Day
+              {rflect.cal.i18n.Symbols.DAY}
             </div>
             <div tabindex="0" style="-moz-user-select: none;" role="button"
-                 aria-pressed="true" id="nb5"
+                 aria-pressed="true" id="{rflect.cal.predefined.BUTTON_WEEK_ID}"
                  class="goog-flat-button-collapse-left goog-toggle-button goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button goog-inline-block goog-flat-button goog-flat-button-checked">
-              Week
+              {rflect.cal.i18n.Symbols.WEEK}
             </div>
             <div tabindex="0" style="-moz-user-select: none;" role="button"
-                 aria-pressed="false" id="nb6"
+                 aria-pressed="false" id="{rflect.cal.predefined.BUTTON_MONTH_ID}"
                  class="goog-flat-button goog-flat-button-collapse-left goog-toggle-button goog-flat-button-bord-rad-collapse-left cal-menu-button cal-menu-button-month-view goog-inline-block">
-              Month
+              {rflect.cal.i18n.Symbols.MONTH}
             </div>
           </div>
-          <div tabindex="0" style="-moz-user-select: none;" role="button" id="nb8"
+          <div tabindex="0" style="-moz-user-select: none;" role="button" id="{rflect.cal.predefined.BUTTON_SETTINGS_ID}"
                class="goog-flat-button cal-menu-rightmost-button cal-menu-button cal-menu-button-options goog-inline-block">
             <span class="octicon icon-button octicon-gear"></span></div>
         </div>
         <div id="main-pane-controls-left">
           <div id="main-pane-controls-left-left">
-            <div tabindex="0" style="-moz-user-select: none;" role="button" id="nb7"
+            <div tabindex="0" style="-moz-user-select: none;" role="button" id="{rflect.cal.predefined.BUTTON_NEW_EVENT_ID}"
                  class="cal-menu-button cal-menu-button-new-event emphasis-button goog-inline-block goog-flat-button">
-              <span class="octicon icon-button octicon-plus"></span>&nbsp;&nbsp;New
-              event
+              <span class="octicon icon-button octicon-plus"></span>&nbsp;&nbsp;
+                {rflect.cal.i18n.Symbols.NEW_EVENT}
             </div>
           </div>
           <div id="main-pane-controls-left-right">
-            <div id="time-period-label" class="time-period-label">21 - 27 Jun,
-              2015
+            <div id="time-period-label" class="time-period-label">
+              {$timePeriodLabel}
             </div>
           </div>
         </div>
       </div>
+    {if $includeOuterHTML}
     </div>
+    {/if}
   {else}
+    {if $includeOuterHTML}
     <div id="top-pane" class="control-pane">
+    {/if}
       <div class="pane-left">
         <div tabindex="0" style="-moz-user-select: none;" role="button"
              class="cal-menu-button goog-flat-button goog-inline-block" id="nb9">
@@ -71,12 +85,14 @@
              id="nb7"><span class="octicon icon-button octicon-plus"></span></div>
       </div>
       <div class="pane-center pane-center-nav">
-        <div id="time-period-label" class="time-period-label">Wed, Jun 24, 2015
+        <div id="time-period-label" class="time-period-label">
+          {$timePeriodLabel}
         </div>
         <div tabindex="0" style="-moz-user-select: none;" role="button"
              aria-pressed="true"
              class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav goog-flat-button-checked"
-             id="nb1">Now
+             id="nb1">
+          {rflect.cal.i18n.Symbols.NOW}
         </div>
         <div tabindex="0" style="-moz-user-select: none;" role="button"
              class="goog-flat-button-collapse-left goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"
@@ -87,6 +103,8 @@
              id="nb3"><span
             class="octicon icon-button octicon-triangle-right"></span></div>
       </div>
+    {if $includeOuterHTML}
     </div>
+    {/if}
   {/if}
 {/template}
