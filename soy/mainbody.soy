@@ -1,0 +1,13 @@
+{namespace rflect.cal.ui.soy}
+
+/**
+ * @param? includeOuterHTML Whether to include outer html of element.
+ */
+{template .mainbody autoescape="false"}
+  {if $includeOuterHTML}
+  <div id="main-body" class="main-body">
+  {/if}
+  {if $includeOuterHTML}
+  </div>
+  {/if}
+{/template}

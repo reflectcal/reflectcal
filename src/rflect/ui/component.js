@@ -100,6 +100,20 @@ rflect.ui.Component.prototype.buildInternal = function(aSb) {
 
 
 /**
+ * Builds body of component.
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @return {string} HTML of component.
+ * @protected
+ */
+rflect.ui.Component.prototype.buildHTML = function(opt_outerHTML) {
+  if (opt_outerHTML) {
+    return '<div></div>';
+  }
+  return '';
+};
+
+
+/**
  * Updates component before redraw. This is used when some part of
  * component's update logic need to be separated from redraw. Propagates to
  * component's children by default. For custom behavior, should be overridden by
