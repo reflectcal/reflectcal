@@ -630,6 +630,18 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
     }
 
   }
+
+  var gridWidth = this.blockPoolWeek_.gridSize.width;
+
+    // Daynames table width.
+    rflect.math.pixelToPercent(gridWidth,
+        this.blockPoolAllDay_.gridContainerSize.width).toFixed(4));
+
+  return rflect.cal.ui.soy.mainpane.mainPane({
+    allDayGridWidth: rflect.math.pixelToPercent(gridWidth,
+        this.blockPoolAllDay_.gridContainerSize.width).toFixed(4)),
+    dayNamesSeq: this.buildDayNamesWeek_(),
+  })
 };
 
 
@@ -812,43 +824,28 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesWeek_ =
   var gridWidth = this.blockPoolWeek_.gridSize.width;
 
   // Daynames table width.
-  aSb.append(rflect.math.pixelToPercent(gridWidth,
+  rflect.math.pixelToPercent(gridWidth,
       this.blockPoolAllDay_.gridContainerSize.width).toFixed(4));
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
 
+  var str = '';
   for (var colCounter = 0, blocksNumber = this.blockPoolWeek_.getBlocksNumber();
       colCounter < blocksNumber;
       colCounter++) {
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
-    aSb.append(colCounter);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
 
-    // Margin left (for rtl).
-    aSb.append(rflect.math.pixelToPercent(
-        prevColsCumulativeSize, gridWidth).toFixed(4));
-
+    var data = {};
+    data.colNumber = colCounter;
+    data.marginLeft = rflect.math.pixelToPercent(prevColsCumulativeSize, gridWidth).toFixed(4);
     prevColsCumulativeSize += this.blockPoolWeek_.blocks[colCounter].size;
+    data.marginRight = (100 - rflect.math.pixelToPercent(prevColsCumulativeSize, gridWidth)).toFixed(4);
+    data.top = -100 * colCounter;
+    data.howManyBlocks = blocksNumber;
+    data.horizontalExpandEnabled = rflect.HORIZONTAL_EXPAND_ENABLED;
+    data.dayZippyExpanded = this.blockPoolWeek_.blocks[colCounter].expanded;
 
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 4]);
-    // Margin right (for rtl).
-    aSb.append((100 - rflect.math.pixelToPercent(
-        prevColsCumulativeSize, gridWidth)).toFixed(4));
+    str += rflect.cal.ui.soy.mainpane.dayNameEntry(data);
 
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 5]);
-    aSb.append(-100 * colCounter);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 6]);
-    aSb.append(blocksNumber != 1 ? goog.getCssName('dayname-wk-inner') : '');
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
-    // Day name formatted.
-    aSb.append(this.weekDayNameFormatWeek_.format(daySeries[colCounter]));
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
-
-    if (rflect.HORIZONTAL_EXPAND_ENABLED) {
-      this.buildWeekColZippy_(aSb, aOffset + 8, colCounter);
-    }
-
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 12]);
   }
+  return str;
 };
 
 

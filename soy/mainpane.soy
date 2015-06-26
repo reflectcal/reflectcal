@@ -1,47 +1,28 @@
-{namespace rflect.cal.ui.soy}
+{namespace rflect.cal.ui.soy.mainpane}
 
 /**
  * @param? isSmallScreen Whether screen is small.
  * @param? includeOuterHTML Whether to include outer html of element.
- * @param? allDayZippyExpanded Whether to include outer html of element.
+ * @param? allDayExpanded Whether to include outer html of element.
  * @param? verticalExpandEnabled Whether to include outer html of element.
  * @param? allDayGridWidth Whether to include outer html of element.
+ * @param dayNamesSeq HTML of day names.
  */
-{template .mainpane autoescape="false"}
+{template .mainPane autoescape="false"}
   {if $includeOuterHTML}
   <div id="main-pane" class="main-pane">
   {/if}
     <div id="main-pane-header">
       <div id="daynames-prefix-wk">
         {if $verticalExpandEnabled}
-        <div id="daynames-zippy" class="zippy wk-ad-zippy octicon{sp}{if $allDayZippyExpanded}wk-ad-zippy-expanded octicon-triangle-down{else}wk-ad-zippy-collapsed octicon-triangle-right{/if}">
+        <div id="daynames-zippy" class="zippy wk-ad-zippy octicon{sp}{if $allDayExpanded}wk-ad-zippy-expanded octicon-triangle-down{else}wk-ad-zippy-collapsed octicon-triangle-right{/if}">
         </div>
         {/if}
       </div>
       <div id="main-pane-header-container" class="main-pane-header-container-wk">
         <div id="main-pane-header-wk-daynames">
           <div id="weekmode-daynames-table" style="width:{$allDayGridWidth}%; left: 0px;">
-            <div id="dayname0" class="dayname-wk"
-                 style="margin-left:0.0000%;margin-right:85.7143%;top:0%"><span
-                class="dayname-wk-inner">Sun, 21 Jun</span></div>
-            <div id="dayname1" class="dayname-wk"
-                 style="margin-left:14.2857%;margin-right:71.4286%;top:-100%"><span
-                class="dayname-wk-inner">Mon, 22 Jun</span></div>
-            <div id="dayname2" class="dayname-wk"
-                 style="margin-left:28.5714%;margin-right:57.1429%;top:-200%"><span
-                class="dayname-wk-inner">Tue, 23 Jun</span></div>
-            <div id="dayname3" class="dayname-wk"
-                 style="margin-left:42.8571%;margin-right:42.8571%;top:-300%"><span
-                class="dayname-wk-inner">Wed, 24 Jun</span></div>
-            <div id="dayname4" class="dayname-wk"
-                 style="margin-left:57.1429%;margin-right:28.5714%;top:-400%"><span
-                class="dayname-wk-inner">Thu, 25 Jun</span></div>
-            <div id="dayname5" class="dayname-wk"
-                 style="margin-left:71.4286%;margin-right:14.2857%;top:-500%"><span
-                class="dayname-wk-inner">Fri, 26 Jun</span></div>
-            <div id="dayname6" class="dayname-wk"
-                 style="margin-left:85.7143%;margin-right:0.0000%;top:-600%"><span
-                class="dayname-wk-inner">Sat, 27 Jun</span></div>
+            {$dayNamesSeq}
           </div>
         </div>
         <div id="main-pane-header-scrollable"
@@ -652,4 +633,28 @@
   {if $includeOuterHTML}
   </div>
   {/if}
+{/template}
+
+
+/**
+ * @param colNumber Number of column.
+ * @param marginLeft Left margin.
+ * @param marginRight Right margin.
+ * @param top Top position.
+ * @param dayNameFormatted Day name.
+ * @param howManyBlocks How many blocks.
+ * @param horizontalExpandEnabled Whether horizontal expand is enabled.
+ * @param dayZippyExpanded Whether day zippy is expanded.
+ */
+{template .dayNameEntry autoescape="false"}
+  <div id="dayname{$colNumber}" class="dayname-wk"
+      style="margin-left:{$marginLeft}%;margin-right:{$marginRight}%;top:{$top}%">
+    <span class="{if $howManyBlocks is not 1}dayname-wk-inner{/if}">
+      {$dayNameFormatted}
+    </span>
+    {if $horizontalExpandEnabled}
+    <div id="wk-zippy-col{$colNumber}" class="zippy wk-col-zippy octicon{sp}{if $dayZippyExpanded}wk-col-zippy-expanded octicon-triangle-right{else}wk-col-zippy-collapsed octicon-triangle-down{/if}">
+    </div>
+    {/if}
+  </div>
 {/template}
