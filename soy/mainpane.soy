@@ -1,11 +1,15 @@
 {namespace rflect.cal.ui.soy.mainpane}
 
 /**
- * @param? isSmallScreen Whether screen is small.
+ * @param isSmallScreen Whether screen is small.
  * @param? includeOuterHTML Whether to include outer html of element.
- * @param? allDayExpanded Whether to include outer html of element.
- * @param? verticalExpandEnabled Whether to include outer html of element.
- * @param? allDayGridWidth Whether to include outer html of element.
+ * @param allDayExpanded Whether to include outer html of element.
+ * @param weekPoolExpanded Whether at least one of the week blocks is expanded.
+ * @param allDayGridContainerHeight Height of all-day grid container.
+ * @param allDayGridHeight Height of all-day grid.
+ * @param navigatorScrollBarWidth Width of system scroll bar.
+ * @param verticalExpandEnabled Whether vertical expand is enabled.
+ * @param allDayGridWidth Whether to include outer html of element.
  * @param dayNamesSeq HTML of day names.
  */
 {template .mainPane autoescape="false"}
@@ -22,14 +26,15 @@
       <div id="main-pane-header-container" class="main-pane-header-container-wk">
         <div id="main-pane-header-wk-daynames">
           <div id="weekmode-daynames-table" style="width:{$allDayGridWidth}%; left: 0px;">
+            // From .dayNameEntry template.
             {$dayNamesSeq}
           </div>
         </div>
         <div id="main-pane-header-scrollable"
-             class="mphs-scroll-vert-on mphs-scroll-horz-off"
-             style="height:47px;margin-right:0px">
+             class="{if $allDayExpanded}mphs-scroll-vert-on{else}mphs-scroll-vert-off{/if}{sp}{if $weekPoolExpanded}mphs-scroll-horz-on{else}mphs-scroll-horz-off{/if}"
+             style="height:{$allDayGridContainerHeight}px;margin-right:{if $allDayExpanded}0{else}{$navigatorScrollBarWidth - 1}{/if}px">
           <div id="alldayevents-grid-wrapper">
-            <div id="alldayevents-grid" style="height:47px;width:100.0000%">
+            <div id="alldayevents-grid" style="height:{$allDayGridHeight}px;width:{$allDayGridWidth}%">
               <div id="wk-ad-mask-cnt"></div>
               <div id="weekgrid-ad-col0"
                    class="weekgrid-col wk-ad-layers-cont-outer"
@@ -656,5 +661,43 @@
     <div id="wk-zippy-col{$colNumber}" class="zippy wk-col-zippy octicon{sp}{if $dayZippyExpanded}wk-col-zippy-expanded octicon-triangle-right{else}wk-col-zippy-collapsed octicon-triangle-down{/if}">
     </div>
     {/if}
+  </div>
+{/template}
+
+
+/**
+ * @param colNumber Number of column.
+ * @param howManyBlocks How many blocks.
+ * @param marginLeft Left margin.
+ * @param marginRight Right margin.
+ * @param top Top position.
+ * @param verticalExpandEnabled Whether vertical expand is enabled.
+ * @param block All-day block.
+ * @param adChipsSeq All-day chips HTML.
+ */
+{template .weekGridAdCol autoescape="false"}
+  <div id="weekgrid-ad-col{$colNumber}"
+       class="weekgrid-col wk-ad-layers-cont-outer{sp}{if $colNumber is ($howManyBlocks - 1)}weekgrid-col-last{/if}"
+       style="margin-left:{$marginLeft}%;margin-right:{$marginRight}%;top:{$top}%">
+    <div class="wk-ad-layers-cont">
+      <div id="wk-ad-dec-layer-col{$colNumber}" class="wk-ad-decoration-layer">
+        {if $verticalExpandEnabled}
+        <div class="expand-sign-wk-ad-cont">
+          <div class="expand-sign-wk-ad icon{sp}
+            {if (not $block.expanded) and $block.couldBeExpanded}
+              expand-sign-wk-ad-collapsed
+            {else}
+              {if $block.expanded and $block.couldBeCollapsed}
+                expand-sign-wk-ad-expanded
+              {/if}
+            {/if}">
+          </div>
+        </div>
+        {/if}
+      </div>
+      <div id="wk-ad-events-layer-col{$colNumber}" class="wk-ad-events-layer">
+        {$adChipsSeq}
+      </div>
+    </div>
   </div>
 {/template}

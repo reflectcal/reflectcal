@@ -633,15 +633,21 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
 
   var gridWidth = this.blockPoolWeek_.gridSize.width;
 
-    // Daynames table width.
-    rflect.math.pixelToPercent(gridWidth,
-        this.blockPoolAllDay_.gridContainerSize.width).toFixed(4));
-
   return rflect.cal.ui.soy.mainpane.mainPane({
+    isSmallScreen: this.navigator_.isSmallScreen(),
+    includeOuterHTML: false,
+    allDayExpanded: this.blockPoolAllDay_.expanded,
+    weekPoolExpanded: this.blockPoolWeek_.expanded,
+    allDayGridContainerHeight: this.blockPoolAllDay_.gridContainerSize.height,
     allDayGridWidth: rflect.math.pixelToPercent(gridWidth,
         this.blockPoolAllDay_.gridContainerSize.width).toFixed(4)),
+    allDayGridHeight: this.blockPoolAllDay_.gridSize.height,
+    navigatorScrollBarWidth: this.navigator_.getScrollbarWidth(),
+    verticalExpandEnabled: rflect.VERTICAL_EXPAND_ENABLED,
+    horizontalExpandEnabled: rflect.HORIZONTAL_EXPAND_ENABLED,
     dayNamesSeq: this.buildDayNamesWeek_(),
-  })
+    weekGridAdColsSeq: this.buildWeekGridAdCols_()
+  });
 };
 
 
@@ -822,10 +828,6 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesWeek_ =
   var daySeries = this.timeManager_.daySeries;
   var prevColsCumulativeSize = 0;
   var gridWidth = this.blockPoolWeek_.gridSize.width;
-
-  // Daynames table width.
-  rflect.math.pixelToPercent(gridWidth,
-      this.blockPoolAllDay_.gridContainerSize.width).toFixed(4));
 
   var str = '';
   for (var colCounter = 0, blocksNumber = this.blockPoolWeek_.getBlocksNumber();
@@ -1009,10 +1011,23 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGridAdCols_ =
   var prevColsCumulativeSize = 0;
   var gridWidth = this.blockPoolWeek_.gridSize.width;
   var sparseArrays = this.blockPoolAllDay_.blocks[0].sparseArrays;
+  var str = '';
 
   for (var colCounter = 0, blocksNumber = this.blockPoolWeek_.getBlocksNumber();
       colCounter < blocksNumber;
       colCounter++) {
+
+    var data = {};
+    data.colNumber = colCounter;
+    data.blocksNumber = blocksNumber;
+    data.marginLeft = rflect.math.pixelToPercent(prevColsCumulativeSize, gridWidth).toFixed(4)
+    prevColsCumulativeSize += this.blockPoolWeek_.blocks[colCounter].size;
+    data.marginRight = (100 - rflect.math.pixelToPercent(prevColsCumulativeSize,
+        gridWidth)).toFixed(4);
+    data.top = -100 * colCounter;
+
+    str += rflect.cal.ui.soy.mainpane.weekGridAdCol(data);
+
     if (colCounter > 0)
       aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
     aSb.append(colCounter);
@@ -1025,7 +1040,6 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGridAdCols_ =
     aSb.append(rflect.math.pixelToPercent(
         prevColsCumulativeSize, gridWidth).toFixed(4));
 
-    prevColsCumulativeSize += this.blockPoolWeek_.blocks[colCounter].size;
 
     aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
     // Margin right (for rtl).
