@@ -673,7 +673,8 @@
  * @param top Top position.
  * @param verticalExpandEnabled Whether vertical expand is enabled.
  * @param block All-day block.
- * @param adChipsSeq All-day chips HTML.
+ * @param adChipsHTML All-day chips HTML.
+ * @param eventManager Event manager.
  */
 {template .weekGridAdCol autoescape="false"}
   <div id="weekgrid-ad-col{$colNumber}"
@@ -696,7 +697,39 @@
         {/if}
       </div>
       <div id="wk-ad-events-layer-col{$colNumber}" class="wk-ad-events-layer">
-        {$adChipsSeq}
+        {$adChipsHTML}
+      </div>
+    </div>
+  </div>
+{/template}
+
+
+/**
+    cellWidth: aChip.end - aChip.start,
+    widthQuant: 100 / 7,
+    chip: aChip,
+    event: aEventManager.getEventById(aChip.eventId),
+    eventIsInProgress: aEventManager.eventIsInProgress(aChip.eventId)
+ * @param cellStart : aChip.start,
+ * @param eventManager Event manager.
+ * @param chip Chip to build.
+ * @param totalCols How many cols are in this chip's blob.
+ * @param startCol In which col chip starts.
+ * @param colSpan How many cols chip spans.
+ * @param? opt_allDay Whether this is all-day chip.
+ */
+{template .monthChip autoescape="false"}
+  <div style="margin-left:{if not $opt_allDay}{widthQuant * cellStart}{/if}%;margin-right:{if not $opt_allDay}{(100 - 100 / 7 * ($chip.start + ($chip.end - $chip.start)))}{/if}%;top:{$startCol * rflect.cal.predefined.MN_EVENT_HEIGHT}px"
+       class="event-rect-mn-outer">
+    <div class="event-rect-mn ">
+      <div class="event-rect-mn-inner{sp}
+          {rflect.cal.predefined.chips.CHIP_EVENT_CLASS}{$eventManager.events_[chip.eventId]}{sp}
+          {if $opt_allDay}event-rect-all-day{/if}{sp}
+          {if chip.startIsCut}event-rect-mn-collapse-left{/if}
+          {if chip.endIsCut}event-rect-mn-collapse-right{/if}{sp}
+          {$chip.colorClass}{sp}
+          {if $eventManager.eventsInProgress_[chip.eventId]}event-in-progress{/if}">
+        {$eventManager.events_[chip.eventId] || rflect.cal.i18n.Symbols.NO_NAME_EVENT}
       </div>
     </div>
   </div>

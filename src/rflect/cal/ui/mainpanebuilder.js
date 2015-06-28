@@ -1634,7 +1634,7 @@ rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip_ =
   aSb.append(/*lastCol ? shift * 2  : */shift);
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
   // margin-right.
-  var width = shift + widthQuant * (aColSpan +
+  var width = shift + widthQuant * ( aColSpan +
       rflect.cal.predefined.chips.OVERLAPPING_DEGREE);
   if (coversLastCol)
     width -= widthQuant * rflect.cal.predefined.chips.OVERLAPPING_DEGREE;
@@ -1753,6 +1753,16 @@ rflect.cal.ui.MainPaneBuilder.buildMonthBlockChip_ =
   // Description.
   aSb.append(event.summary || rflect.cal.i18n.Symbols.NO_NAME_EVENT);
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 6]);
+
+  return rflect.cal.ui.soy.mainpane.monthChip({
+    cellStart: aChip.start,
+    cellWidth: aChip.end - aChip.start,
+    widthQuant: 100 / 7,
+    chip: aChip,
+    event: aEventManager.getEventById(aChip.eventId),
+    eventIsInProgress: aEventManager.eventIsInProgress(aChip.eventId)
+  })
+
   }
 
 
