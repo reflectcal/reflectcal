@@ -813,11 +813,11 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth = function(aSb,
     horizontalExpandEnabled: rflect.HORIZONTAL_EXPAND_ENABLED,
     dayNamesHTML: this.buildDayNamesMonth_(),
     weekNumsHTML: this.buildWeekNumbers_(),
+    monthGridColsHTML: this.buildMonthGridCols_()
     weekGridAdColsHTML: this.buildWeekGridAdCols_(),
     timeMarkerHeadHTML: this.timeMarker_.buildHead(),
     hourRowsHTML: this.buildHourRows_(),
     gridRowsHTML: this.buildGridRows_(),
-    weekGridColsHTML: this.buildWeekGridCols_()
   });
 };
 
@@ -1776,16 +1776,14 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayCells_ = function(aSb, aOffset,
 
 /**
  * Individual monthgrid col.
- * '<td class="weekgrid-col',
- * // Individual monthgrid col class.
- * '">&nbsp;</td>',
+ * @return {string}
  */
-rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGridCols_ = function(aSb, aOffset) {
+rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGridCols_ = function() {
+  var str = '';
   for (var counter = 0; counter < 7; counter++) {
-    if (counter > 0)
-      aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset]);
-    if (counter == 6)
-      aSb.append(' ' + goog.getCssName('weekgrid-col-last'));
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 1]);
+    str += rflect.cal.ui.soy.mainpane.weekGridCol({
+      last: counter == 6
+    });
   }
+  return str;
 };

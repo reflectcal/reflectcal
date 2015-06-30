@@ -90,6 +90,8 @@
  * @param gridHeight Grid height.
  * @param dayNamesHTML HTML of day names.
  * @param weekNumsHTML HTML of week numbers.
+ * @param monthGridColsHTML HTML of month grid cols.
+ * @param monthGridRowsHTML HTML of month grid rows.
  * @param weekGridAdColsHTML HTML of all-day cols.
  * @param timeMarkerHeadHTML HTML of time marker.
  * @param hourRowsHTML HTML of hour rows.
@@ -132,13 +134,7 @@
               <table id="grid-cols-cont-inner" cellpadding="0" cellspacing="0">
                 <tbody>
                 <tr>
-                  <td class="weekgrid-col">&nbsp;</td>
-                  <td class="weekgrid-col">&nbsp;</td>
-                  <td class="weekgrid-col">&nbsp;</td>
-                  <td class="weekgrid-col">&nbsp;</td>
-                  <td class="weekgrid-col">&nbsp;</td>
-                  <td class="weekgrid-col">&nbsp;</td>
-                  <td class="weekgrid-col weekgrid-col-last">&nbsp;</td>
+                  {$monthGridColsHTML}
                 </tr>
                 </tbody>
               </table>
@@ -147,6 +143,7 @@
                    cellspacing="0">
               <tbody>
               <tr>
+                {$monthGridRowsHTML}
                 <td id="monthgrid-row0" class="monthgrid-row "
                     style="height:109.2px;">
                   <div class="mn-layers-cont">
@@ -759,6 +756,117 @@
 
 
 /**
+ * @param rowNumber Number of row.
+ */
+{template .monthGridRow autoescape="false"}
+  <tr>
+    <td id="monthgrid-row{$rowNumber}" class="monthgrid-row "
+        style="height:109.2px;">
+      <div class="mn-layers-cont">
+        <div id="mn-dec-layer-row{$rowNumber}" class="mn-decoration-layer">
+          <table class="daynums" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+              <td class="daycell">
+                <div class="daycell-decoration-cont"></div>
+                <div class="daycell-daynum-outer-cont">
+                  <div class="expand-sign-mn-cont">
+                    <div class="expand-sign-mn icon "></div>
+                  </div>
+                  <div class="daynum-cont">
+                    <div id="daynum-7" class="daynum-label ">7</div>
+                  </div>
+                </div>
+              </td>
+              <td class="daycell">
+                <div class="daycell-decoration-cont"></div>
+                <div class="daycell-daynum-outer-cont">
+                  <div class="expand-sign-mn-cont">
+                    <div class="expand-sign-mn icon "></div>
+                  </div>
+                  <div class="daynum-cont">
+                    <div id="daynum-8" class="daynum-label ">8</div>
+                  </div>
+                </div>
+              </td>
+              <td class="daycell">
+                <div class="daycell-decoration-cont"></div>
+                <div class="daycell-daynum-outer-cont">
+                  <div class="expand-sign-mn-cont">
+                    <div class="expand-sign-mn icon "></div>
+                  </div>
+                  <div class="daynum-cont">
+                    <div id="daynum-9" class="daynum-label ">9</div>
+                  </div>
+                </div>
+              </td>
+              <td class="daycell">
+                <div class="daycell-decoration-cont"></div>
+                <div class="daycell-daynum-outer-cont">
+                  <div class="expand-sign-mn-cont">
+                    <div class="expand-sign-mn icon "></div>
+                  </div>
+                  <div class="daynum-cont">
+                    <div id="daynum-10" class="daynum-label ">10</div>
+                  </div>
+                </div>
+              </td>
+              <td class="daycell">
+                <div class="daycell-decoration-cont"></div>
+                <div class="daycell-daynum-outer-cont">
+                  <div class="expand-sign-mn-cont">
+                    <div class="expand-sign-mn icon "></div>
+                  </div>
+                  <div class="daynum-cont">
+                    <div id="daynum-11" class="daynum-label ">11</div>
+                  </div>
+                </div>
+              </td>
+              <td class="daycell">
+                <div class="daycell-decoration-cont"></div>
+                <div class="daycell-daynum-outer-cont">
+                  <div class="expand-sign-mn-cont">
+                    <div class="expand-sign-mn icon "></div>
+                  </div>
+                  <div class="daynum-cont">
+                    <div id="daynum-12" class="daynum-label ">12</div>
+                  </div>
+                </div>
+              </td>
+              <td class="daycell">
+                <div class="daycell-decoration-cont"></div>
+                <div class="daycell-daynum-outer-cont">
+                  <div class="expand-sign-mn-cont">
+                    <div class="expand-sign-mn icon "></div>
+                  </div>
+                  <div class="daynum-cont">
+                    <div id="daynum-13" class="daynum-label ">13</div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="mn-events-layer-row{$rowNumber}" class="mn-events-layer">
+          <div
+              style="margin-left:28.571428571428573%; margin-right:57.14285714285714%;top:0px"
+              class="event-rect-mn-outer">
+            <div class="event-rect-mn ">
+              <div
+                  class="event-rect-mn-inner ev12 event-rect-blue event-in-progress-blue event-in-progress">
+                (Untitled)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </td>
+  </tr>
+{/template}
+
+
+/**
  * @param chip Chip to build.
  * @param event Event.
  * @param eventIsInProgress Whether event is in progress.
@@ -836,9 +944,11 @@
 {/template}
 
 
-/***/
+/**
+ * @param last Whether col is last.
+ */
 {template .weekGridCol autoescape="false"}
-<td class="weekgrid-col">&nbsp;</td>
+  <td class="weekgrid-col{sp}{if $last}weekgrid-col-last{/if}">&nbsp;</td>
 {/template}
 
 
