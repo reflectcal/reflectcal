@@ -19,7 +19,7 @@
  * @param gridTableRowsHTML HTML of grid rows.
  * @param weekColsHTML HTML of week cols.
  */
-{template .mainPane autoescape="false"}
+{template .mainPaneWeek autoescape="false"}
   {if $includeOuterHTML}
   <div id="main-pane" class="main-pane">
   {/if}
@@ -77,6 +77,576 @@
 
 
 /**
+ * @param isSmallScreen Whether screen is small.
+ * @param? includeOuterHTML Whether to include outer html of element.
+ * @param allDayExpanded Whether to include outer html of element.
+ * @param monthPoolExpanded Whether at least one of the week blocks is expanded.
+ * @param allDayGridContainerHeight Height of all-day grid container.
+ * @param allDayGridHeight Height of all-day grid.
+ * @param gridContainerHeight Height of month grid container.
+ * @param navigatorScrollBarWidth Width of system scroll bar.
+ * @param verticalExpandEnabled Whether vertical expand is enabled.
+ * @param allDayGridWidth Whether to include outer html of element.
+ * @param gridHeight Grid height.
+ * @param dayNamesHTML HTML of day names.
+ * @param weekNumsHTML HTML of week numbers.
+ * @param weekGridAdColsHTML HTML of all-day cols.
+ * @param timeMarkerHeadHTML HTML of time marker.
+ * @param hourRowsHTML HTML of hour rows.
+ * @param gridTableRowsHTML HTML of grid rows.
+ * @param weekColsHTML HTML of week cols.
+ */
+{template .mainPaneMonth autoescape="false"}
+  {if $includeOuterHTML}
+  <div id="main-pane" class="main-pane">
+  {/if}
+    <div id="main-pane-header">
+      <div id="daynames-prefix-mn"></div>
+      <div id="main-pane-header-container" class="main-pane-header-container-mn">
+        <div id="main-pane-header-wk-daynames" style="
+            margin-right:{if $monthPoolExpanded}{$navigatorScrollBarWidth + 2 * rflect.cal.predefined.DEFAULT_BORDER_WIDTH}
+            {else}{2 * rflect.cal.predefined.DEFAULT_BORDER_WIDTH}{/if}px">
+          <table id="weekmode-daynames-table" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+              {$dayNamesHTML}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="main-pane-body-scrollable-wrapper" style="height:{$gridContainerHeight}px;">
+      <div id="main-pane-body-scrollable-mn" class="main-pane-body-scrollable-mn{sp}{if $monthPoolExpanded}mpbs-mn-scroll-vert-on{else}mpbs-mn-scroll-vert-off{/if}">
+        <div id="grid-table-wrapper-outer" style="height:{$gridHeight}px;">
+          <div id="weeknum-cont">
+            <table id="weeknums" cellpadding="0" cellspacing="0">
+              <tbody>
+                {$weekNumsHTML}
+              </tbody>
+            </table>
+          </div>
+          <div id="grid-table-wrapper-mn">
+            <div id="mn-mask-cnt"></div>
+            <div id="grid-cols-container" class="mn-grid-cols-cont">
+              <table id="grid-cols-cont-inner" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                  <td class="weekgrid-col">&nbsp;</td>
+                  <td class="weekgrid-col">&nbsp;</td>
+                  <td class="weekgrid-col">&nbsp;</td>
+                  <td class="weekgrid-col">&nbsp;</td>
+                  <td class="weekgrid-col">&nbsp;</td>
+                  <td class="weekgrid-col">&nbsp;</td>
+                  <td class="weekgrid-col weekgrid-col-last">&nbsp;</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <table id="grid-table-mn" class="grid-table-mn" cellpadding="0"
+                   cellspacing="0">
+              <tbody>
+              <tr>
+                <td id="monthgrid-row0" class="monthgrid-row "
+                    style="height:109.2px;">
+                  <div class="mn-layers-cont">
+                    <div id="mn-dec-layer-row0" class="mn-decoration-layer">
+                      <table class="daynums" cellpadding="0" cellspacing="0">
+                        <tbody>
+                        <tr>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-0"
+                                     class="daynum-label dl-other-month">31
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-1" class="daynum-label ">1</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-2" class="daynum-label ">2</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-3" class="daynum-label ">3</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-4" class="daynum-label ">4</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-5" class="daynum-label ">5</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-6" class="daynum-label ">6</div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div id="mn-events-layer-row0" class="mn-events-layer"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td id="monthgrid-row1" class="monthgrid-row "
+                    style="height:109.2px;">
+                  <div class="mn-layers-cont">
+                    <div id="mn-dec-layer-row1" class="mn-decoration-layer">
+                      <table class="daynums" cellpadding="0" cellspacing="0">
+                        <tbody>
+                        <tr>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-7" class="daynum-label ">7</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-8" class="daynum-label ">8</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-9" class="daynum-label ">9</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-10" class="daynum-label ">10</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-11" class="daynum-label ">11</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-12" class="daynum-label ">12</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-13" class="daynum-label ">13</div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div id="mn-events-layer-row1" class="mn-events-layer">
+                      <div
+                          style="margin-left:28.571428571428573%; margin-right:57.14285714285714%;top:0px"
+                          class="event-rect-mn-outer">
+                        <div class="event-rect-mn ">
+                          <div
+                              class="event-rect-mn-inner ev12 event-rect-blue event-in-progress-blue event-in-progress">
+                            (Untitled)
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td id="monthgrid-row2" class="monthgrid-row "
+                    style="height:109.2px;">
+                  <div class="mn-layers-cont">
+                    <div id="mn-dec-layer-row2" class="mn-decoration-layer">
+                      <table class="daynums" cellpadding="0" cellspacing="0">
+                        <tbody>
+                        <tr>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-14" class="daynum-label ">14</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-15" class="daynum-label ">15</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-16" class="daynum-label ">16</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-17" class="daynum-label ">17</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-18" class="daynum-label ">18</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-19" class="daynum-label ">19</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-20" class="daynum-label ">20</div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div id="mn-events-layer-row2" class="mn-events-layer"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td id="monthgrid-row3" class="monthgrid-row "
+                    style="height:109.2px;">
+                  <div class="mn-layers-cont">
+                    <div id="mn-dec-layer-row3" class="mn-decoration-layer">
+                      <table class="daynums" cellpadding="0" cellspacing="0">
+                        <tbody>
+                        <tr>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-21" class="daynum-label ">21</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-22" class="daynum-label ">22</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-23" class="daynum-label ">23</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-24" class="daynum-label ">24</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-25" class="daynum-label ">25</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-26" class="daynum-label ">26</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-27" class="daynum-label ">27</div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div id="mn-events-layer-row3" class="mn-events-layer"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td id="monthgrid-row4" class="monthgrid-row monthgrid-row-last"
+                    style="height:109.2px;">
+                  <div class="mn-layers-cont">
+                    <div id="mn-dec-layer-row4" class="mn-decoration-layer">
+                      <table class="daynums" cellpadding="0" cellspacing="0">
+                        <tbody>
+                        <tr>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-28" class="daynum-label ">28</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-29" class="daynum-label ">29</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont">
+                              <div class="today-mask-mn"></div>
+                            </div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-30" class="daynum-label ">30</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-31"
+                                     class="daynum-label dl-other-month">1
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-32"
+                                     class="daynum-label dl-other-month">2
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-33"
+                                     class="daynum-label dl-other-month">3
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="daycell">
+                            <div class="daycell-decoration-cont"></div>
+                            <div class="daycell-daynum-outer-cont">
+                              <div class="expand-sign-mn-cont">
+                                <div class="expand-sign-mn icon "></div>
+                              </div>
+                              <div class="daynum-cont">
+                                <div id="daynum-34"
+                                     class="daynum-label dl-other-month">4
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div id="mn-events-layer-row4" class="mn-events-layer"></div>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  {if $includeOuterHTML}
+  </div>
+  {/if}
+{/template}
+
+
+/**
  * @param colNumber Number of column.
  * @param marginLeft Left margin.
  * @param marginRight Right margin.
@@ -97,6 +667,29 @@
     </div>
     {/if}
   </div>
+{/template}
+
+
+/**
+ * @param colNumber Number of column.
+ * @param dayName Day name.
+ */
+{template .dayNameEntryMonth autoescape="false"}
+  <td id="dayname{$colNumber}">{$dayName}</td>
+{/template}
+
+
+/**
+ * @param rowNumber Row number.
+ * @param height Height of week num.
+ * @param label Label.
+ */
+{template .weekNum autoescape="false"}
+  <tr>
+    <td id="weeknum{$rowNumber}" class="weeknum-label" style="height:{$height}px;">
+      <span class="weeknum-label-inner">{$label}</span>
+    </td>
+  </tr>
 {/template}
 
 
@@ -140,6 +733,7 @@
 
 /**
  * @param colNumber Number of column.
+ * @param howManyBlocks Number of column.
  * @param marginLeft Left margin.
  * @param marginRight Right margin.
  * @param top Top position.
@@ -148,8 +742,10 @@
  * @param weekChipsHTML Week chips HTML.
  */
 {template .weekGridCol autoescape="false"}
-  <div id="weekgrid-col{$colNumber}" class="weekgrid-col"
-       style="margin-left:{$marginLeft}%;margin-right:{$marginRight}%;top:{$top}%">
+  <div id="weekgrid-col{$colNumber}" class="weekgrid-col
+      {if $colNumber is ($howManyBlocks - 1)}weekgrid-col-last{/if}
+      "
+      style="margin-left:{$marginLeft}%;margin-right:{$marginRight}%;top:{$top}%">
     <div id="wk-dec-layer-in-col{$colNumber}" class="wk-decoration-layer">
       {if $horizontalExpandEnabled}
         {$weekExpandSignsHTML}
@@ -193,8 +789,6 @@
  * @param chip Chip to build.
  * @param event Event.
  * @param eventIsInProgress Whether event is in progress.
- * @param startCol In which col chip starts.
- * @param? opt_allDay Whether this is all-day chip.
  * @param marginLeft Left margin.
  * @param marginRight Right margin.
  * @param marginBottom Bottom margin.
@@ -205,13 +799,18 @@
  */
 {template .weekChip autoescape="false"}
   <div class="event-rect-wk"
-       style="top:{$top}px;margin-left:{$marginLeft}%;margin-right:{$marginRight}%;height:{$height}px;margin-bottom:{$marginBottom}px;z-index:{$zIndex}">
+      style="top:{$top}px;margin-left:{$marginLeft}%;
+      margin-right:{$marginRight}%;
+      height:{$height}px;
+      margin-bottom:{$marginBottom}px;
+      z-index:{$zIndex}">
     <div class="event-rect-wk-inner{sp}
         {rflect.cal.predefined.chips.CHIP_EVENT_CLASS}{$event.id}{sp}
         {$chip.colorClass}{sp}
         {if $eventIsInProgress}event-in-progress{/if}{sp}
-        "><span
-        class="event-wk-timelabel">{$timeLabel}</span>&nbsp;
+        ">
+      <span class="event-wk-timelabel">{$timeLabel}</span>
+      &nbsp;
       {if $event.summary}{$event.summary}{else}{rflect.cal.i18n.Symbols.NO_NAME_EVENT}{/if}
     </div>
   </div>
@@ -234,6 +833,12 @@
  */
 {template .gridRow autoescape="false"}
   <div class="grid-table-row{sp}{if $even}grid-table-row-even{else}grid-table-row-odd{/if}"></div>
+{/template}
+
+
+/***/
+{template .weekGridCol autoescape="false"}
+<td class="weekgrid-col">&nbsp;</td>
 {/template}
 
 
