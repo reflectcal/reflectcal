@@ -479,7 +479,7 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
   '<div id="mn-dec-layer-row',
   /*Individual decoration layer id (0)*/
   '" class="' + goog.getCssName('mn-decoration-layer') + '">',
-  '<table cellspacing="0" cellpadding="0" class="' + goog.getCssName('daynums') + '"><tbody><tr>',
+  '<table cellspacing="0" cellpadding="0" class="' + goog.getCssName('mn-row-zippy') + '"><tbody><tr>',
   // Individual daycell.
   '<td class="' + goog.getCssName('daycell') + '"><div class="' + goog.getCssName('daycell-decoration-cont') + '">',
   '<div class="' + goog.getCssName('today-mask-mn') + '"></div>',
@@ -813,11 +813,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth = function(aSb,
     horizontalExpandEnabled: rflect.HORIZONTAL_EXPAND_ENABLED,
     dayNamesHTML: this.buildDayNamesMonth_(),
     weekNumsHTML: this.buildWeekNumbers_(),
-    monthGridColsHTML: this.buildMonthGridCols_()
-    weekGridAdColsHTML: this.buildWeekGridAdCols_(),
-    timeMarkerHeadHTML: this.timeMarker_.buildHead(),
-    hourRowsHTML: this.buildHourRows_(),
-    gridRowsHTML: this.buildGridRows_(),
+    monthGridColsHTML: this.buildMonthGridCols_(),
+    monthGridRowsHTML: this.buildMonthGridRows_()
   });
 };
 
@@ -1148,45 +1145,22 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekColZippies_ =
 
 
 /**
- *Individual month mode zippy.
- * '<tr><td id="mn-zippy-cont-row',
- * Id of individual month zippy container(0).
- * '" style="height:',
- * Height of individual month zippy container in pixels (70).
- * 'px;">',
- * '<div class="mn-row-zippy-cont">',
- * '<div id="mn-zippy-row',
- * Id of individual zippy (0)
- * '" class="zippy mn-row-zippy ',
- * State of individual zippy (mn-row-zippy-collapsed).
- * '"></div>',
- * '</div>',
- * // End of individual month zippy.
- * '</td></tr>',
+ * Individual month mode zippy.
+ * @return {string}
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildMnRowZippies_ =
     function(aSb, aOffset) {
+  var str = '';
   for (var rowCounter = 0, blocksNumber =
       this.blockPoolMonth_.getBlocksNumber(); rowCounter < blocksNumber;
       rowCounter++) {
-    if (rowCounter > 0)
-      aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset]);
-    aSb.append(rowCounter);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 1]);
-    // Height of zippy container
-    aSb.append(this.blockPoolMonth_.blocks[rowCounter].size);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 2]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 3]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 4]);
-    aSb.append(rowCounter);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 5]);
-    aSb.append(this.blockPoolMonth_.blocks[rowCounter].expanded ?
-        'mn-row-zippy-expanded octicon-triangle-down' :
-        'mn-row-zippy-collapsed octicon-triangle-right');
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 6]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 7]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 8]);
+    let block = this.blockPoolMonth_.blocks[rowCounter].size
+    str += rflect.cal.ui.soy.mainpane.monthZippy({
+      index: rowCounter,
+      block: block
+    })
   }
+  return str;
 };
 
 
@@ -1599,7 +1573,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildMonthBlockChips_ =
  * @param {function(rflect.cal.events.EventManager, rflect.cal.events.Chip, number, number, number):string} aChipBuilder
  * Callback to call on each
  * iteration.
- * @return {string} Build chips.
+ * @return {string} Built chips.
  * @private
  */
 rflect.cal.ui.MainPaneBuilder.buildChips_ =
@@ -1626,151 +1600,57 @@ rflect.cal.ui.MainPaneBuilder.buildChips_ =
 
 /**
  * Individual monthgrid row.
- * '<tr><td id="monthgrid-row',
- * Individual monthgrid row id (0).
- * '" class="monthgrid-row ',
- * Class of monthgrid row (monthgrid-row-last).
- * '" style="height:',
- * Individual monthgrid row height in pixels (69).
- * 'px;">',
- * '<div class="mn-layers-cont">',
- * // Individual decoration layer.
- * '<div id="mn-dec-layer-row',
- * Individual decoration layer id (0)
- * '" class="mn-decoration-layer">',
- * '<table cellspacing="0" cellpadding="0" class="daynums"><tbody><tr>',
- * // Individual daycell.
- * '<td class="daycell"><div class="expand-sign-mn-cont">',
- * '<div class="expand-sign-mn ',
- * Individual expand sign state
- * (expand-sign-mn-collapsed, expand-sign-mn-expanded).
- * '"></div>'
- * '</div>',
- * '<div class="daynum-cont"><div id="daynum-',
- * Id of daynum row (0).
- * Id of daynum col (0).
- * '" class="daynum-label '
- * Daynum state (dl-other-month).
- * '">'
- * Daynum name (26).
- * '</div>',
- * '</div>',
- * // End of individual daycell.
- * '</td>',
- * '</tr></tbody></table>',
- * // End of individual decoration layer.
- * '</div>',
- * // Individual events layer.
- * '<div id="mn-events-layer-row'
- * Individual events layer id (0).
- * '" class="mn-events-layer">',
- * Events are placed here.
- * // End of individual events layer.
- * '</div>',
- * '</div>',
- * // End of individual monthgrid row.
- * '</td></tr>',
+ * @return {string}
  */
-rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGridRows_ = function(aSb, aOffset) {
-
+rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGridRows_ = function() {
+  var str = '',
   for (var rowCounter = 0, rowsNumber = this.blockPoolMonth_.getBlocksNumber();
       rowCounter < rowsNumber;
       rowCounter++) {
-    if (rowCounter > 0)
-      aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset]);
-    aSb.append(rowCounter);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 1]);
-    if (rowCounter == rowsNumber - 1)
-      aSb.append(goog.getCssName('monthgrid-row-last'));
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 2]);
-    // Height of month grid row.
-    aSb.append(this.blockPoolMonth_.blocks[rowCounter].size -
-        // Actual block height doesn't include border width.
-        rflect.cal.predefined.MONTHGRID_ROW_BORDER_WIDTH);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 3]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 4]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 5]);
-    aSb.append(rowCounter);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 6]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 7]);
-
-    // Build day cells containing expand signs and day numbers.
-    this.buildDayCells_(aSb, aOffset + 8, rowCounter);
-
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 19]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 20]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 21]);
-    aSb.append(rowCounter);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 22]);
-    // Events are placed here.
-    this.buildMonthBlockChips_(aSb, aOffset + 23, rowCounter);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 30]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 31]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 32]);
+    rflect.cal.ui.soy.mainpane.monthGridRow({
+      rowNumber: rowCounter,
+      howManyBlocks: rowsNumber,
+      height: this.blockPoolMonth_.blocks[rowCounter].size -
+          // Actual block height doesn't include border width.
+          rflect.cal.predefined.MONTHGRID_ROW_BORDER_WIDTH,
+      dayCellsHTML: this.buildDayCells_(rowCounter),
+      monthChipsHTML: this.buildMonthBlockChips_(rowCounter),
+      verticalExpandEnabled: rflect.VERTICAL_EXPAND_ENABLED,
+    });
   }
+  return str;
 };
 
 
 /**
- * Individual daycell.
- *'<td class="daycell ',
- * Daycell class (today-mask-mn).
- * '"><div class="expand-sign-mn-cont">',
- * '<div class="expand-sign-mn ',
- * Individual expand sign state
- * (expand-sign-mn-collapsed, expand-sign-mn-expanded).
- * '"></div>',
- * '</div>',
- * '<div class="daynum-cont"><div id="daynum-',
- * Id of daynum row (0).
- * Id of daynum col (0).
- * '" class="daynum-label ',
- * Daynum state (dl-other-month).
- * '">',
- * Daynum name (26).
- * '</div>',
- * '</div>',
- * // End of individual daycell.
- * '</td>',
+ * Individual day cell.
+ * @return {string}
  */
-rflect.cal.ui.MainPaneBuilder.prototype.buildDayCells_ = function(aSb, aOffset,
-    aRowCounter) {
+rflect.cal.ui.MainPaneBuilder.prototype.buildDayCells_ = function(aRowCounter) {
   var daySeries = this.timeManager_.daySeries;
   var day;
-  var block;
   var currentMonth = this.timeManager_.basis.getMonth();
   var isInMonthView = this.viewManager_.currentView ==
       rflect.cal.ViewType.MONTH;
+  var str = '';
 
-  for (var colCounter = 0; colCounter < 7; colCounter++) {
-    block = this.blockPoolMonth_.blocks[aRowCounter];
+  for (let colCounter = 0; colCounter < 7; colCounter++) {
+    let block = this.blockPoolMonth_.blocks[aRowCounter];
+    let index = aRowCounter * 7 + colCounter;
 
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset]);
-    if (this.timeManager_.isCurrentDay(
-        this.timeManager_.daySeries[aRowCounter * 7 + colCounter]))
-      aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 1]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 2]);
-    aSb.append(!block.expanded && block.couldBeExpanded ?
-        goog.getCssName('expand-sign-mn-collapsed') :
-        (block.expanded && block.couldBeCollapsed ?
-        goog.getCssName('expand-sign-mn-expanded') : ''));
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 3]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 4]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 5]);
-    aSb.append(aRowCounter * 7 + colCounter);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 6]);
-    // Show days from another month differently.
-    if (isInMonthView && currentMonth !=
-        (day = daySeries[aRowCounter * 7 + colCounter]).getMonth())
-      aSb.append(goog.getCssName('dl-other-month'));
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 7]);
-    // Build daycell day number.
-    aSb.append(daySeries[aRowCounter * 7 + colCounter].getDate());
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 8]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 9]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[aOffset + 10]);
-
+    str += rflect.cal.ui.soy.mainpane.dayCell({
+      isCurrentDay: this.timeManager_.isCurrentDay(this.timeManager_.daySeries[
+          index]),
+      index: index,
+      block: block,
+      verticalExpandEnabled: rflect.VERTICAL_EXPAND_ENABLED,
+      decorateOtherMonth: isInMonthView && currentMonth != (day =
+          daySeries[index]).getMonth(),
+      label: daySeries[index].getDate()
+    });
   }
+
+  return str;
 };
 
 
