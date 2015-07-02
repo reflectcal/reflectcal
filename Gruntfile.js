@@ -357,6 +357,7 @@ module.exports = function(grunt) {
 
   var gJsLintTaskName = 'gjslinter';
   var fixJsStyleTaskName = 'fixjsstyle';
+  var compileSoyExecTaskName = 'compile-soy';
 
   //Creating linter tasks;
   (function(){
@@ -373,6 +374,14 @@ module.exports = function(grunt) {
     targetOptions.command = ['python', 'bin/fixjsstyle.py',
         '--strict', '-r', 'src/rflect'].join(' ');
     execTask[fixJsStyleTaskName] = targetOptions;
+  })();
+
+  (function(){
+    var targetOptions = deepClone(execTaskTemplate);
+
+    targetOptions.command = ['python', 'bin/fixjsstyle.py',
+        '--strict', '-r', 'src/rflect'].join(' ');
+    execTask[compileSoyExecTaskName] = targetOptions;
   })();
 
 
@@ -462,10 +471,12 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     clean: {
       build: ['build/*'],
-      temp: ['build/**/_temp*', 'js/**/*compiled*', 'css/**/*compiled*'],
+      temp: ['build/**/_temp*', 'js/**/*compiled*', 'css/**/*compiled*',
+          'src/**/*.soy.js'],
       allExceptPack: ['build/*', '!build/*.tgz'],
       allExceptCompiled: ['build/*', '!build/js', '!build/css', '!build/font'],
       css: ['css/*compiled*'],
+      soy: ['src/**/*.soy.js'],
       js: ['js/*compiled*'],
       static: ['static/*']
     },
@@ -791,6 +802,8 @@ module.exports = function(grunt) {
   grunt.registerTask('compile-js', compileJsTask);
 
   grunt.registerTask('compile-less', compileLessTask);
+
+  grunt.registerTask('compile-soy', compileSoyTask);
 
   grunt.registerTask('gjslinter', [
     'exec:' + gJsLintTaskName

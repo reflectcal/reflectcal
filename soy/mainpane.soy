@@ -1,7 +1,6 @@
 {namespace rflect.cal.ui.soy.mainpane}
 
 /**
- * @param isSmallScreen Whether screen is small.
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param allDayExpanded Whether to include outer html of element.
  * @param weekPoolExpanded Whether at least one of the week blocks is expanded.
@@ -77,7 +76,6 @@
 
 
 /**
- * @param isSmallScreen Whether screen is small.
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param monthPoolExpanded Whether at least one of the week blocks is expanded.
  * @param gridContainerHeight Height of month grid container.
@@ -270,8 +268,7 @@
  */
 {template .weekGridCol autoescape="false"}
   <div id="weekgrid-col{$colNumber}" class="weekgrid-col
-      {if $colNumber is ($howManyBlocks - 1)}weekgrid-col-last{/if}
-      "
+      {if $colNumber is ($howManyBlocks - 1)}weekgrid-col-last{/if}"
       style="margin-left:{$marginLeft}%;margin-right:{$marginRight}%;top:{$top}%">
     <div id="wk-dec-layer-in-col{$colNumber}" class="wk-decoration-layer">
       {if $horizontalExpandEnabled}

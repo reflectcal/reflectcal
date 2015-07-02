@@ -801,7 +801,6 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth = function(aSb,
   var gridWidth = this.blockPoolWeek_.gridSize.width;
 
   return rflect.cal.ui.soy.mainpane.mainPaneMonth({
-    isSmallScreen: this.navigator_.isSmallScreen(),
     includeOuterHTML: false,
     monthPoolExpanded: this.blockPoolWeek_.expanded,
     gridWidth: rflect.math.pixelToPercent(this.blockPoolWeek_.gridSize.width,
@@ -810,11 +809,12 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth = function(aSb,
     gridHeight: this.blockPoolMonth_.gridSize.height,
     navigatorScrollBarWidth: this.navigator_.getScrollbarWidth(),
     verticalExpandEnabled: rflect.VERTICAL_EXPAND_ENABLED,
-    horizontalExpandEnabled: rflect.HORIZONTAL_EXPAND_ENABLED,
     dayNamesHTML: this.buildDayNamesMonth_(),
     weekNumsHTML: this.buildWeekNumbers_(),
     monthGridColsHTML: this.buildMonthGridCols_(),
-    monthGridRowsHTML: this.buildMonthGridRows_()
+    monthGridRowsHTML: this.buildMonthGridRows_(),
+    monthZippiesHTML: rflect.VERTICAL_EXPAND_ENABLED ?
+        rflect.this.buildMnRowZippies_() : ''
   });
 };
 
@@ -837,17 +837,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesZippy_ =
 
 /**
  * Individual dayname.
- * '<div id="dayname',Dayname id is here (dayname0).
- * '" class="dayname-wk" style="margin-left:',Dayname position left edge
- * margin in percents (0).
- *'%;margin-right:',/*Dayname right margin in percents
- * (85.7143).
- * '%;top:',
- * Dayname top position in percents (0).
- * '%"><span class="',
- * Dayname label class (dayname-wk-inner).
- * '">',
- * Dayname is here (Monday).,
+ * @return {string}
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesWeek_ =
     function(aSb, aOffset) {
@@ -1043,6 +1033,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGridAdCols_ =
  * sparse array.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @private
+ * @return {string}
  */
 rflect.cal.ui.MainPaneBuilder.buildAdBlockChips_ =
     function(aChips, aEventManager) {
@@ -1240,6 +1231,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekNumbers_ =
 
 /**
  * Builds hours.
+ * @return {string}
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildHourRows_ = function() {
 
@@ -1264,6 +1256,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildHourRows_ = function() {
 
 /**
  * Builds grid rows.
+ * @return {string}
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildGridRows_ = function() {
   if (!(rflect.cal.ui.MainPaneBuilder.CACHE_KEY_GRID_ROWS in
@@ -1404,30 +1397,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGridCols_ =
  * @param {number} aStartCol In which col chip starts.
  * @param {number} aColSpan How many cols chip spans.
  * @private
- *
- * Individual event chip
- * '<div class="event-rect-wk" style="top:',
- * Chip top in pixels (30)
- * 'px; margin-left:',
- * Chip margin-left in percents (33.3)
- * '%; margin-right:',
- * Chip margin-right in percents (33.3)
- * '%; height:',
- * Chip height in pixels (30)
- * 'px; margin-bottom:',
- * Chip margin-bottom in pixels (-30)
- * 'px;z-index:',
- * Chip z-index (1)
- * '"><div class="event-rect-wk-inner ',
- * Chip inner class (event-rect-focused)
- * '"><div class="event-wk-timelabel">',
- * Chip start time (14:00)
- * ' - ',
- * Chip end time (00:00)
- * '</div>',
- * Chip description (Conference)
- * '</div></div>',
- * // End of individual event chip.
+ * @return {string}
  */
 rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip_ =
     function(aEventManager, aChip, aTotalCols, aStartCol,
@@ -1438,6 +1408,42 @@ rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip_ =
   var widthQuant = 100 / aTotalCols;
   var event = aEventManager.getEventById(aChip.eventId);
   var coversLastCol = aStartCol + aColSpan == aTotalCols;
+  var str = '';
+
+  // margin-left.
+  var shift = widthQuant * aStartCol;
+  // margin-right.
+  var width = shift + widthQuant * ( aColSpan +
+      rflect.cal.predefined.chips.OVERLAPPING_DEGREE);
+  if (coversLastCol) {
+    width -= widthQuant * rflect.cal.predefined.chips.OVERLAPPING_DEGREE;
+  }
+
+  str += rflect.cal.ui.soy.weekChip({
+    chip: aChip,
+    event: event,
+    eventIsInProgress: aEventManager.eventIsInProgress(aChip.eventId),
+    marginLeft: shift,
+    marginRight: 100 - width,
+    marginBottom: -pixelHeight +
+        (aChip.startIsCut ? 0 : rflect.cal.predefined.DEFAULT_BORDER_WIDTH) +
+        (aChip.endIsCut ? 0 : rflect.cal.predefined.DEFAULT_BORDER_WIDTH) +
+        rflect.cal.predefined.chips.PADDING_TOP,
+    zIndex: aStartCol,
+    timeLabel:
+        // Start time.
+        rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip,
+            true) +
+        ' - ' +
+        // End time.
+        rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip,
+            false),
+    top: pixelStart,
+    height: pixelHeight -
+        (aChip.startIsCut ? 0 : rflect.cal.predefined.DEFAULT_BORDER_WIDTH) -
+        (aChip.endIsCut ? 0 : rflect.cal.predefined.DEFAULT_BORDER_WIDTH) -
+        rflect.cal.predefined.chips.PADDING_TOP
+  });
 
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
   aSb.append(pixelStart);
@@ -1490,6 +1496,8 @@ rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip_ =
   // Description.
   aSb.append(event.summary || rflect.cal.i18n.Symbols.NO_NAME_EVENT);
   aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 10]);
+
+  return str;
 }
 
 
@@ -1502,6 +1510,7 @@ rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip_ =
  * @param {number} aColSpan How many cols chip spans.
  * @param {boolean=} opt_allDay Whether this is all-day chip.
  * @private
+ * @return {string}
  */
 rflect.cal.ui.MainPaneBuilder.buildMonthBlockChip_ =
     function(aEventManager, aChip, aTotalCols, aStartCol,
