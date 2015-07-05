@@ -1,0 +1,51 @@
+{namespace rflect.cal.ui.soy.sidepane}
+
+/**
+ * @param? includeOuterHTML Whether to include outer html of element.
+ * @param? isSmallScreen Whether screen is small.
+ */
+{template .sidePane autoescape="false"}
+  {if $includeOuterHTML}
+  <div id="side-pane" class="side-pane slide-pane-left slide-pane-left-visible">
+  {/if}
+    <ul class="side-pane-menu">
+      {if $isSmallScreen}
+        {call .sidePaneMenu /}
+      {/if}
+    </ul>
+    <div id="month-selector"></div>
+  {if $includeOuterHTML}
+  </div>
+  {/if}
+{/template}
+
+
+/***/
+{template .sidePaneMenu autoescape="false"}
+  <li class="side-pane-menu-item">
+    // Calendar button.
+    <div id="{rflect.cal.predefined.BUTTON_TO_CALENDAR_ID}" class="button-minimal">
+      {rflect.cal.i18n.Symbols.TO_CALENDAR}
+    </div>
+  </li>
+  <li class="side-pane-menu-item">
+    // Day button.
+    <div id="{rflect.cal.predefined.BUTTON_DAY_ID}" class="button-minimal">
+      {rflect.cal.i18n.Symbols.DAY}
+    </div>
+  </li>
+  <li class="side-pane-menu-item">
+    // Month button.
+    <div id="{rflect.cal.predefined.BUTTON_MONTH_ID}" class="button-minimal">
+      {rflect.cal.i18n.Symbols.MONTH}
+    </div>
+  </li>
+  <li class="side-pane-menu-item">
+    // Options button.
+    <div id="{rflect.cal.predefined.BUTTON_SETTINGS_ID}" class="button-minimal">
+      <span class="octicon icon-button octicon-gear icon-settings icon-in-button"></span>
+      &nbsp;
+      {rflect.cal.i18n.Symbols.SETTINGS}
+    </div>
+  </li>
+{/template}

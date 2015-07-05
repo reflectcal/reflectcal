@@ -546,97 +546,17 @@ rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_ = [
 
 /**
  * Builds body of component in week mode.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
  * @param {boolean} aFirstBuild Whether we build for the fist time.
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @return {string}
  */
-rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
-    aFirstBuild) {
-  // Form html. From index 1 (see offset increment before append), because 0
-  // is the html of outer container, which we don't create in that method but
-  // just decorate.
-  var offset = 0;
-  var length = rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_.length;
-  var isSmallScreen = this.navigator_.isSmallScreen();
-
-  while (++offset < length - 1) {
-    // We move through parts array and increment offset. Each cycle, we append
-    // some part and increment offset by 1. Sometimes we find special case when
-    // we need to build some subpart and give control of building it to some
-    // method. Because this method could shift offset down as it 'eats' some
-    // array items, we reflect it here by incrementing offset by more than 1,
-    // or not incrementing at all, according to the number of 'eaten' parts.
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[offset]);
-
-    switch (offset) {
-      case 1: if (isSmallScreen) {
-        //Skipping main pane header.
-        offset += 65;
-      };break;
-      case 2: if (!rflect.VERTICAL_EXPAND_ENABLED) {
-        //Skipping all day zippy.
-        offset += 2;
-      };break;
-      case 3: {
-        this.buildDayNamesZippy_(aSb, offset);
-      };break;
-      case 8: {
-        this.buildDayNamesWeek_(aSb, offset);
-        offset += 12;
-      };break;
-      case 23: {
-        this.buildScrollableAllday_(aSb, offset);
-          offset += 3;
-      };break;
-      case 26: {
-        if (aFirstBuild)
-          offset += 26;
-      };break;
-      case 28: {
-        this.buildAllDayGrid_(aSb, offset);
-        offset += 2;
-      };break;
-      case 32: {
-        this.buildWeekGridAdCols_(aSb, offset);
-        offset += 17;
-      };break;
-      case 52: {
-        //Skipping week col zippies.
-        offset += 13;
-      };break;
-      case 68: {
-        this.buildScrollableWeek_(aSb, offset);
-        offset++;
-      };break;
-      case 70: {
-        if (aFirstBuild)
-          offset += 45;
-      };break;
-      case 71: {
-        this.timeMarker_.buildHead(aSb);
-      };break;
-      case 72: {
-        this.buildHoursAndGridRows_(aSb, offset);
-        offset += 9;
-      };break;
-      case 83: {
-        this.buildGridTableWeek_(aSb, offset);
-        offset++;
-      };break;
-      case 86: {
-        this.buildWeekGridCols_(aSb, offset);
-        offset += 26;
-      };break;
-      default: break;
-    }
-
-  }
-
+rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
+    opt_outerHTML) {
   var gridWidth = this.blockPoolWeek_.gridSize.width;
 
   return rflect.cal.ui.soy.mainpane.mainPaneWeek({
-    isSmallScreen: this.navigator_.isSmallScreen(),
-    includeOuterHTML: false,
+    firstBuild: aFirstBuild,
+    includeOuterHTML: opt_outerHTML,
     allDayExpanded: this.blockPoolAllDay_.expanded,
     weekPoolExpanded: this.blockPoolWeek_.expanded,
     allDayGridContainerHeight: this.blockPoolAllDay_.gridContainerSize.height,
@@ -660,148 +580,51 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalWeek = function(aSb,
 
 /**
  * Builds internals of week grid.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
+ * @return {string}
  */
-rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGrid = function(aSb) {
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[85]);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[86]);
-  this.buildWeekGridCols_(aSb, 86);
+rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGrid = function() {
+  return rflect.cal.ui.soy.mainpane.weekGrid({
+    weekGridColsHTML: this.buildWeekGridCols_()
+  })
 }
 
 
 /**
  * Builds internals of all day grid.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
+ * @return {string}
  */
-rflect.cal.ui.MainPaneBuilder.prototype.buildAllDayGrid = function(aSb) {
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[31]);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[32]);
-  this.buildWeekGridAdCols_(aSb, 32);
+rflect.cal.ui.MainPaneBuilder.prototype.buildAllDayGrid = function() {
+  return rflect.cal.ui.soy.mainpane.allDayGrid({
+    weekGridAdColsHTML: this.buildWeekGridAdCols_()
+  })
 }
 
 
 /**
  * Builds internals of all day grid.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
+ * @return {string}
  */
-rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGrid = function(aSb) {
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[48]);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[49]);
-  this.buildMonthGridRows_(aSb, 49);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[80]);
+rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGrid = function() {
+  return rflect.cal.ui.soy.mainpane.monthGrid({
+    monthGridRowsHTML: this.buildMonthGridRows_()
+  })
 }
 
 
 /**
  * Builds body of component in month mode.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
  * @param {boolean} aFirstBuild Whether we build for the fist time.
- * @see rflect.cal.ui.MainPaneBuilder#buildBodyInternalWeek
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @return {string}
+ * @see rflect.cal.ui.MainPaneBuilder#buildBodyWeek
  */
-rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth = function(aSb,
-    aFirstBuild) {
-  var offset = 0;
-  var length = rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_.length;
-  var isSmallScreen = this.navigator_.isSmallScreen();
-
-  while (++offset < length - 1) {
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_MONTH_[offset]);
-    if (isSmallScreen) {
-      switch (offset) {
-        case 5: {
-          this.buildMainPaneHeaderMonth_(aSb);
-        };break;
-        case 8: {
-          this.buildDayNamesMonth_(aSb, offset);
-          offset += 2;
-        };break;
-        case 15: {
-          this.buildScrollableWrapperMn_(aSb, offset);
-        };break;
-        case 16: {
-          offset += 13;
-        };break;
-        case 30: {
-          this.buildScrollableMonth_(aSb, offset);
-        };break;
-        case 31: {
-          if (aFirstBuild)
-            offset += 54;
-        };break;
-        case 32: {
-          this.buildGridTableWrapperOuter_(aSb, offset);
-        };break;
-        case 35: {
-          this.buildWeekNumbers_(aSb, offset);
-          offset += 3;
-        };break;
-        case 43: {
-          this.buildMonthGridCols_(aSb, offset);
-          offset++;
-        };break;
-        case 49: {
-          this.buildMonthGridRows_(aSb, offset);
-          offset += 32;
-        };break;
-        default: break;
-      }
-    } else {
-      switch (offset) {
-        case 5: {
-          this.buildMainPaneHeaderMonth_(aSb);
-        };break;
-        case 8: {
-          this.buildDayNamesMonth_(aSb, offset);
-          offset += 2;
-        };break;
-        case 15: {
-          this.buildScrollableWrapperMn_(aSb, offset);
-        };break;
-        case 16: {
-          if (!rflect.VERTICAL_EXPAND_ENABLED) {
-            offset += 13;
-          }
-        };break;
-        case 19: {
-          this.buildMnRowZippies_(aSb, offset);
-          offset += 7;
-        };break;
-        case 30: {
-          this.buildScrollableMonth_(aSb, offset);
-        };break;
-        case 31: {
-          if (aFirstBuild)
-            offset += 55;
-        };break;
-        case 32: {
-          this.buildGridTableWrapperOuter_(aSb, offset);
-        };break;
-        case 35: {
-          this.buildWeekNumbers_(aSb, offset);
-          offset += 3;
-        };break;
-        case 43: {
-          this.buildMonthGridCols_(aSb, offset);
-          offset++;
-        };break;
-        case 49: {
-          this.buildMonthGridRows_(aSb, offset);
-          offset += 32;
-        };break;
-        default: break;
-      }
-    }
-
-  }
-
+rflect.cal.ui.MainPaneBuilder.prototype.buildBodyMonth = function(aFirstBuild,
+    opt_outerHTML) {
   var gridWidth = this.blockPoolWeek_.gridSize.width;
 
   return rflect.cal.ui.soy.mainpane.mainPaneMonth({
-    includeOuterHTML: false,
+    includeOuterHTML: opt_outerHTML,
+    firstBuild: aFirstBuild,
     monthPoolExpanded: this.blockPoolWeek_.expanded,
     gridWidth: rflect.math.pixelToPercent(this.blockPoolWeek_.gridSize.width,
         this.blockPoolWeek_.gridContainerSize.width),
@@ -814,24 +637,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyInternalMonth = function(aSb,
     monthGridColsHTML: this.buildMonthGridCols_(),
     monthGridRowsHTML: this.buildMonthGridRows_(),
     monthZippiesHTML: rflect.VERTICAL_EXPAND_ENABLED ?
-        rflect.this.buildMnRowZippies_() : ''
+        this.buildMnRowZippies_() : ''
   });
-};
-
-
-/**
- *
- * <pre>
- * '<div id="daynames-zippy" class="zippy ',Zippy state is here
- *(goog-zippy-collapsed, goog-zippy-expanded).
- * '"></div>',
- * </pre>
- */
-rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesZippy_ =
-    function(aSb, aOffset) {
-  aSb.append(this.blockPoolAllDay_.expanded ?
-      'wk-ad-zippy-expanded octicon-triangle-down' :
-      'wk-ad-zippy-collapsed octicon-triangle-right');
 };
 
 
@@ -872,36 +679,6 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesWeek_ =
 
 
 /**
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
- * @param {number} aOffset Current offset.
- * @param {number} aColCounter Column number.
- */
-rflect.cal.ui.MainPaneBuilder.prototype.buildWeekColZippy_ = function(aSb,
-    aOffset, aColCounter) {
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
-  aSb.append(aColCounter);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
-  aSb.append(this.blockPoolWeek_.blocks[aColCounter].expanded ?
-      'wk-col-zippy-expanded octicon-triangle-right' :
-      'wk-col-zippy-collapsed octicon-triangle-down');
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
-}
-
- /**
- *'<div id="main-pane-header-wk-daynames" style="margin-right:>',
- *  Main pane header container margin left (19).
- * 'px"><table id="weekmode-daynames-table" cellspacing="0" cellpadding="0">',
- */
-rflect.cal.ui.MainPaneBuilder.prototype.buildMainPaneHeaderMonth_ = function(aSb) {
-  if (this.blockPoolMonth_.expanded)
-    aSb.append(this.navigator_.getScrollbarWidth() +
-        rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2);
-  else
-    aSb.append(rflect.cal.predefined.DEFAULT_BORDER_WIDTH * 2);
-};
-
-
-/**
  * Individual dayname.
  * @return {string}
  */
@@ -915,7 +692,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesMonth_ = function() {
     // sunday and WEEKDAY gives weekday number starting from monday.
     dayNameNumber = (dayNamesFirstNumber + counter + 1) % 7;
 
-    rflect.cal.ui.soy.mainpane.dayNameEntryMonth({
+    str += rflect.cal.ui.soy.mainpane.dayNameEntryMonth({
       colNumber: counter,
       label: this.navigator_.isSmallScreen() ?
           goog.i18n.DateTimeSymbols.SHORTWEEKDAYS[dayNameNumber] :
@@ -923,70 +700,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesMonth_ = function() {
     });
 
   }
-};
 
-
-/**
- * Scrollable in header.
- * '<div id="main-pane-header-scrollable" class="',Scrollable states
- * (mphs-scroll-vert-off, mphs-scroll-horz-off,
- *  mphs-scroll-vert-on, mphs-scroll-horz-on).
- * '" style="height:',Height of scrollable in pixels (100).
- * 'px">',
- */
-rflect.cal.ui.MainPaneBuilder.prototype.buildScrollableAllday_ =
-    function(aSb, aOffset) {
-  if (this.blockPoolAllDay_.expanded)
-    aSb.append(goog.getCssName('mphs-scroll-vert-on') + ' ');
-  else
-    aSb.append(goog.getCssName('mphs-scroll-vert-off') + ' ');
-  if (this.blockPoolWeek_.expanded)
-    aSb.append(goog.getCssName('mphs-scroll-horz-on'));
-  else
-    aSb.append(goog.getCssName('mphs-scroll-horz-off'));
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
-  // Size of allday scrollable.
-  aSb.append(this.blockPoolAllDay_.gridContainerSize.height);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
-  // Margin that replaces scrollbar.
-  if (this.blockPoolAllDay_.expanded)
-    aSb.append(0);
-  else
-    aSb.append(this.navigator_.getScrollbarWidth() - 1);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
-};
-
-
-/**
- * Main pane scrolalble wrapper.
- * '<div id="main-pane-body-scrollable-wrapper" style="height:',
- * Height of scrollable wrapper in pixels (420).
- * 'px;">',
- */
-rflect.cal.ui.MainPaneBuilder.prototype.buildScrollableWrapperMn_ =
-    function(aSb, aOffset) {
-  // Height of main pane scrollable wrapper.
-  aSb.append(this.blockPoolMonth_.gridContainerSize.height);
-};
-
-
-/**
- * Allday events grid.
- * '<div id="alldayevents-grid" style="height:',Allday grid height
- * in pixels (200).
- * 'px;width:',Allday grid width in percents (120).
- * '%">',
- */
-rflect.cal.ui.MainPaneBuilder.prototype.buildAllDayGrid_ = function(aSb, aOffset) {
-  // Height of allday grid.
-  aSb.append(this.blockPoolAllDay_.gridSize.height);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
-  // Width of allday grid.
-  aSb.append(rflect.math.pixelToPercent(
-      this.blockPoolWeek_.gridSize.width,
-      this.blockPoolAllDay_.gridContainerSize.width)
-      .toFixed(4));
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
+  return str;
 };
 
 
@@ -1039,6 +754,7 @@ rflect.cal.ui.MainPaneBuilder.buildAdBlockChips_ =
     function(aChips, aEventManager) {
   var chip;
   var str = '';
+
   for (var chipCounter = 0, length = aChips.length; chipCounter < length;
       chipCounter++) {
     if (chip = aChips[chipCounter]) {
@@ -1047,92 +763,9 @@ rflect.cal.ui.MainPaneBuilder.buildAdBlockChips_ =
           aEventManager, chip, 0, chipCounter, 0, true);
     }
   }
+
   return str;
 }
-
-
-/**
- * // Expand sign
- * '<div class="expand-sign-wk-ad-cont">',
- * '<div class="expand-sign-wk-ad ',Expand sign state is here
- * (expand-sign-wk-ad-collapsed, expand-sign-wk-ad-expanded).
- * '"></div></div>',
- */
-rflect.cal.ui.MainPaneBuilder.prototype.buildWkAdExpandSign_ =
-    function(aSb, aOffset) {
-  var block = this.blockPoolAllDay_.blocks[0];
-
-  // Expand signs build.
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
-  aSb.append(!block.expanded && block.couldBeExpanded ?
-      goog.getCssName('expand-sign-wk-ad-collapsed') :
-      (block.expanded && block.couldBeCollapsed ?
-      goog.getCssName('expand-sign-wk-ad-expanded') : ''));
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
-};
-
-
-/**
- * Builds zippies table and individual zippies.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
- * @param {number} aOffset Passed offset.
- * @private
- *
- * '<div id="weekmode-zippies-table" style="width:',
- *  Width of zippies table in percent (100).
- * '%">',
- * Individual zippy.
- * '<div class="wk-col-zippy-cont" style="margin-left:',Individual zippy left
- * margin in percent (14.2857).
- * '%;margin-right:',Individual zippy right margin in percent (71.4286).
- * '%;top:',Individual zippy top in percent (0).
- * '%">',
- * '<div id="',Id of zippy (wk-zippy-col2).
- * '" class="zippy wk-col-zippy ',State of zippy
- * (goog-zippy-expanded, goog-zippy-collapsed).
- * '"></div>',
- * '</div>',
- */
-rflect.cal.ui.MainPaneBuilder.prototype.buildWeekColZippies_ =
-    function(aSb, aOffset) {
-  var prevColsCumulativeSize = 0;
-  var gridWidth = this.blockPoolWeek_.gridSize.width;
-
-  // Zippies table width.
-  aSb.append(rflect.math.pixelToPercent(gridWidth,
-      this.blockPoolWeek_.gridContainerSize.width).toFixed(4));
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
-
-  for (var colCounter = 0, blocksNumber = this.blockPoolWeek_.getBlocksNumber();
-      colCounter < blocksNumber;
-      colCounter++) {
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
-
-    // Margin left (for rtl).
-    aSb.append(rflect.math.pixelToPercent(
-        prevColsCumulativeSize, gridWidth).toFixed(4));
-
-    prevColsCumulativeSize += this.blockPoolWeek_.blocks[colCounter].size;
-
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
-    // Margin right (for rtl).
-    aSb.append((100 - rflect.math.pixelToPercent(
-        prevColsCumulativeSize, gridWidth)).toFixed(4));
-
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 4]);
-    aSb.append(-100 * colCounter);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 5]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 6]);
-    aSb.append(colCounter);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
-    aSb.append(this.blockPoolWeek_.blocks[colCounter].expanded ?
-        'wk-col-zippy-expanded octicon-triangle-right' :
-        'wk-col-zippy-collapsed octicon-triangle-down');
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 9]);
-  }
-};
 
 
 /**
@@ -1140,8 +773,9 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekColZippies_ =
  * @return {string}
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildMnRowZippies_ =
-    function(aSb, aOffset) {
+    function() {
   var str = '';
+
   for (var rowCounter = 0, blocksNumber =
       this.blockPoolMonth_.getBlocksNumber(); rowCounter < blocksNumber;
       rowCounter++) {
@@ -1151,56 +785,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildMnRowZippies_ =
       block: block
     })
   }
+
   return str;
-};
-
-
-/**
- * Main pane scrollable.
- * '<div id="main-pane-body-scrollable-mn" class="'
- * Main pane scrollable state
- * (mpbs-mn-scroll-vert-off, mpbs-mn-scroll-vert-on).
- * '">',
- */
-rflect.cal.ui.MainPaneBuilder.prototype.buildScrollableMonth_ =
-    function(aSb, aOffset) {
-  if (this.blockPoolMonth_.expanded)
-    aSb.append(goog.getCssName('mpbs-mn-scroll-vert-on'));
-  else
-    aSb.append(goog.getCssName('mpbs-mn-scroll-vert-off'));
-};
-
-
-/**
- * Main pane scrollable body.
- * '<div id="main-pane-body-scrollable-wk" style="height:',
- * Scrollable height in pixels (400).
- * 'px" class="', Scrollable state is here
- * (mpbs-wk-scroll-horz-on, mpbs-wk-scroll-horz-of).
- * '">',
- */
-rflect.cal.ui.MainPaneBuilder.prototype.buildScrollableWeek_ =
-    function(aSb, aOffset) {
-  // Height of scrollable.
-  aSb.append(this.blockPoolWeek_.gridContainerSize.height);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
-  if (this.blockPoolWeek_.expanded)
-    aSb.append(goog.getCssName('mpbs-wk-scroll-horz-on'));
-  else
-    aSb.append(goog.getCssName('mpbs-wk-scroll-horz-off'));
-};
-
-
-/**
- * Grid table wrapper outer.
- * '<div id="grid-table-wrapper-outer" style="height:',
- * Height of grid table outer in pixels (420).
- * 'px;">',
- */
-rflect.cal.ui.MainPaneBuilder.prototype.buildGridTableWrapperOuter_ =
-    function(aSb, aOffset) {
-  // Height of grid table wrapper outer.
-  aSb.append(this.blockPoolMonth_.gridSize.height);
 };
 
 
@@ -1209,7 +795,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildGridTableWrapperOuter_ =
  * @return {string}
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildWeekNumbers_ =
-    function(aSb, aOffset) {
+    function() {
   var str = '';
 
   for (var rowCounter = 0, blocksNumber =
@@ -1278,33 +864,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildGridRows_ = function() {
 
 
 /**
- * Individual row.
- * '<div class=",Grid row state (grid-table-row grid-table-row-odd,
- * grid-table-row grid-table-row-even).
- * '"></div>',
- */
-rflect.cal.ui.MainPaneBuilder.prototype.buildGridRows_ =
-    function(aSb, aOffset) {
-  for (var counter = 0; counter < rflect.cal.predefined.HOUR_ROWS_NUMBER;
-      counter++) {
-    if (counter > 0)
-      aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
-    if (counter != 47)
-      aSb.append(goog.getCssName('grid-table-row') + ' ');
-    if (counter % 2 == 0) {
-      aSb.append(goog.getCssName('grid-table-row-even'));
-    } else {
-      aSb.append(goog.getCssName('grid-table-row-odd'));
-    }
-    aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
-  }
-};
-
-
-/**
  * Builds week expand signs.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
- * @param {number} aOffset Passed offset.
  * @param {number} aColCounter Number of column.
  * @private
  *
@@ -1329,32 +889,11 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekExpandSigns_ =
 
 
 /**
- * Builds html for grid table in week mode.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
- * @param {number} aOffset Passed offset.
- * @private
- *
- * Grid table.
- * '<div class="grid-table-wk-outer" style="width:',
- * Width of grid table in percents (100%). 
- * '%"><div id="grid-table-wk" class="' + goog.getCssName('grid-table-wk') + '">',
- */
-rflect.cal.ui.MainPaneBuilder.prototype.buildGridTableWeek_ =
-    function(aSb, aOffset) {
-  aSb.append(rflect.math.pixelToPercent(
-      this.blockPoolWeek_.gridSize.width,
-      this.blockPoolWeek_.gridContainerSize.width));
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
-};
-
-
-/**
  * Builds html for individual grid table col for week mode.
  * @private
  * @return {string}
  */
-rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGridCols_ =
-    function(aSb, aOffset) {
+rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGridCols_ = function() {
   var prevColsCumulativeSize = 0;
   var gridWidth = this.blockPoolWeek_.gridSize.width;
   var todayDate;
@@ -1383,14 +922,13 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGridCols_ =
 
     str += rflect.cal.ui.soy.mainpane.weekGridCol(data);
   }
+
   return str;
 };
 
 
 /**
  * Builds html for individual week chip.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
- * @param {number} aOffset Passed offset.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @param {rflect.cal.events.Chip} aChip Chip to build.
  * @param {number} aTotalCols How many cols are in this chip's blob.
@@ -1445,58 +983,6 @@ rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip_ =
         rflect.cal.predefined.chips.PADDING_TOP
   });
 
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset]);
-  aSb.append(pixelStart);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 1]);
-  // margin-left.
-  var shift = widthQuant * aStartCol ;
-  aSb.append(/*lastCol ? shift * 2  : */shift);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 2]);
-  // margin-right.
-  var width = shift + widthQuant * ( aColSpan +
-      rflect.cal.predefined.chips.OVERLAPPING_DEGREE);
-  if (coversLastCol)
-    width -= widthQuant * rflect.cal.predefined.chips.OVERLAPPING_DEGREE;
-  aSb.append(100 - width);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 3]);
-  // Height.
-  aSb.append(pixelHeight -
-      (aChip.startIsCut ? 0 : rflect.cal.predefined.DEFAULT_BORDER_WIDTH) -
-      (aChip.endIsCut ? 0 : rflect.cal.predefined.DEFAULT_BORDER_WIDTH) -
-      rflect.cal.predefined.chips.PADDING_TOP);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 4]);
-  // margin-bottom.
-  aSb.append(-pixelHeight +
-      (aChip.startIsCut ? 0 : rflect.cal.predefined.DEFAULT_BORDER_WIDTH) +
-      (aChip.endIsCut ? 0 : rflect.cal.predefined.DEFAULT_BORDER_WIDTH) +
-      rflect.cal.predefined.chips.PADDING_TOP);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 5]);
-  // z-index.
-  aSb.append(aStartCol);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 6]);
-  // Class that identify event.
-  aSb.append(rflect.cal.predefined.chips.CHIP_EVENT_CLASS);
-  aSb.append(aChip.eventId);
-  // Additional classes.
-  if (aChip.startIsCut)
-    aSb.append(' ' + goog.getCssName('event-rect-wk-collapse-top'));
-  if (aChip.endIsCut)
-    aSb.append(' ' + goog.getCssName('event-rect-wk-collapse-bottom'));
-  // Color class
-  aSb.append(' ' + aChip.colorClass);
-  if (aEventManager.eventIsInProgress(aChip.eventId))
-    aSb.append(' ' + goog.getCssName('event-in-progress'));
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 7]);
-  // Start time.
-  rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, true);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 8]);
-  // End time.
-  rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip, false);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 9]);
-  // Description.
-  aSb.append(event.summary || rflect.cal.i18n.Symbols.NO_NAME_EVENT);
-  aSb.append(rflect.cal.ui.MainPaneBuilder.HTML_PARTS_WEEK_[aOffset + 10]);
-
   return str;
 }
 
@@ -1527,26 +1013,29 @@ rflect.cal.ui.MainPaneBuilder.buildMonthBlockChip_ =
 
 /**
  * Builds time label for chip.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @param {rflect.cal.events.Chip} aChip Chip.
  * @param {boolean} aStart Whether label is for start.
  * @private
  */
 rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_ =
-    function(aSb, aChip, aStart) {
+    function(aChip, aStart) {
   var edgeIsCut = aStart && aChip.startIsCut || !aStart && aChip.endIsCut;
   var totalMins = aStart ? aChip.start : aChip.end;
+  var  str = '';
+
   if (edgeIsCut || totalMins >= 1440)
-    aSb.append('00:00');
+    str += '00:00';
   else {
     var mins = totalMins % 60;
     var hours = (totalMins - mins) / 60;
-    if (hours < 10) aSb.append('0');
-    aSb.append(hours);
-    aSb.append(':');
-    if (mins < 10) aSb.append('0');
-    aSb.append(mins);
+    if (hours < 10) str += '0';
+    str += hours;
+    str += ':';
+    if (mins < 10) str += '0';
+    str += mins;
   }
+
+  return str;
 }
 
 
@@ -1567,10 +1056,11 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekBlockChips_ =
  * Builds html for chips for particular block.
  * @param {rflect.cal.blocks.Block} aBlock Block.
  * @private
+ * @return {string}
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildMonthBlockChips_ =
     function(aBlock) {
-  rflect.cal.ui.MainPaneBuilder.buildChips_(this.eventManager_, aBlock,
+  return rflect.cal.ui.MainPaneBuilder.buildChips_(this.eventManager_, aBlock,
       rflect.cal.ui.MainPaneBuilder.buildMonthBlockChip_);
 }
 
@@ -1589,6 +1079,7 @@ rflect.cal.ui.MainPaneBuilder.buildChips_ =
     function(aEventManager, aBlock, aChipBuilder) {
   var blobs = aBlock.blobs;
   var str = '';
+
   for (var blobCounter = 0, blobLength = blobs.length; blobCounter < blobLength;
       blobCounter++) {
     var blob = blobs[blobCounter].blob;
@@ -1603,6 +1094,7 @@ rflect.cal.ui.MainPaneBuilder.buildChips_ =
       str += aChipBuilder(aEventManager, chip, totalCols, startCol, colSpan);
     }
   }
+
   return str;
 }
 
@@ -1612,7 +1104,8 @@ rflect.cal.ui.MainPaneBuilder.buildChips_ =
  * @return {string}
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGridRows_ = function() {
-  var str = '',
+  var str = '';
+
   for (var rowCounter = 0, rowsNumber = this.blockPoolMonth_.getBlocksNumber();
       rowCounter < rowsNumber;
       rowCounter++) {
@@ -1627,12 +1120,14 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGridRows_ = function() {
       verticalExpandEnabled: rflect.VERTICAL_EXPAND_ENABLED,
     });
   }
+
   return str;
 };
 
 
 /**
  * Individual day cell.
+ * @param {number} aRowCounter
  * @return {string}
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildDayCells_ = function(aRowCounter) {
@@ -1670,7 +1165,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayCells_ = function(aRowCounter) {
 rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGridCols_ = function() {
   var str = '';
   for (var counter = 0; counter < 7; counter++) {
-    str += rflect.cal.ui.soy.mainpane.weekGridCol({
+    str += rflect.cal.ui.soy.mainpane.monthGridCol({
       last: counter == 6
     });
   }

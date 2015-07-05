@@ -773,21 +773,20 @@ rflect.cal.ui.MainPane.prototype.restoreOffsetsOfScrollables_ =
 
 /**
  * Builds body of component.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
- * @see rflect.ui.Component#build
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @return {string} HTML of component.
  * @protected
  */
-rflect.cal.ui.MainPane.prototype.buildInternal = function(aSb) {
+rflect.ui.Component.prototype.buildHTML = function(opt_outerHTML) {
   var firstBuild;
-
   if (this.viewManager_.isInMonthMode()) {
     firstBuild = this.getParent().firstBuildMn;
-    this.mainPaneBuilder_.buildBodyInternalMonth(aSb, firstBuild);
+    return this.mainPaneBuilder_.buildBodyMonth(firstBuild, opt_outerHTML);
   } else if (this.viewManager_.isInWeekMode()) {
     firstBuild = this.getParent().firstBuildWk;
-    this.mainPaneBuilder_.buildBodyInternalWeek(aSb, firstBuild);
+    return this.mainPaneBuilder_.buildBodyWeek(firstBuild, opt_outerHTML);
   }
+  return '';
 };
 
 
@@ -796,9 +795,8 @@ rflect.cal.ui.MainPane.prototype.buildInternal = function(aSb) {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.updateByRedrawWeekGrid_ = function() {
-  var sb = new goog.string.StringBuffer();
-  this.mainPaneBuilder_.buildWeekGrid(sb);
-  this.getDomHelper().getElement('grid-table-wk').innerHTML = sb.toString();
+  this.getDomHelper().getElement('grid-table-wk').innerHTML =
+      this.mainPaneBuilder_.buildWeekGrid();
 }
 
 
@@ -807,9 +805,9 @@ rflect.cal.ui.MainPane.prototype.updateByRedrawWeekGrid_ = function() {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.updateByRedrawAllDayGrid_ = function() {
-  var sb = new goog.string.StringBuffer();
-  this.mainPaneBuilder_.buildAllDayGrid(sb);
-  this.getDomHelper().getElement('alldayevents-grid').innerHTML = sb.toString();
+  this.getDomHelper().getElement('alldayevents-grid').innerHTML =
+      this.mainPaneBuilder_.buildAllDayGrid();
+
 }
 
 
@@ -818,9 +816,8 @@ rflect.cal.ui.MainPane.prototype.updateByRedrawAllDayGrid_ = function() {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.updateByRedrawMonthGrid_ = function() {
-  var sb = new goog.string.StringBuffer();
-  this.mainPaneBuilder_.buildMonthGrid(sb);
-  this.getDomHelper().getElement('grid-table-mn').innerHTML = sb.toString();
+  this.getDomHelper().getElement('grid-table-mn').innerHTML =
+      this.mainPaneBuilder_.buildMonthGrid();
 }
 
 

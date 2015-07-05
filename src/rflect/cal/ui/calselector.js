@@ -240,7 +240,7 @@ rflect.cal.ui.CalSelector.prototype.isMyCalendars = false;
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
  * @protected
- * @see {rflect.cal.ui.MainPaneBuilder#buildBodyInternalWeek}
+ * @see {rflect.cal.ui.MainPaneBuilder#buildBodyWeek}
  */
 rflect.cal.ui.CalSelector.prototype.buildInternal = function(aSb) {
   if (!this.isMyCalendars && !this.eventManager_.hasNonOwnerCalendars()) {

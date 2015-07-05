@@ -16,7 +16,8 @@
  * @param timeMarkerHeadHTML HTML of time marker.
  * @param hourRowsHTML HTML of hour rows.
  * @param gridTableRowsHTML HTML of grid rows.
- * @param weekColsHTML HTML of week cols.
+ * @param weekGridColsHTML HTML of week cols.
+ * @param firstBuild Whether this is a first build.
  */
 {template .mainPaneWeek autoescape="false"}
   {if $includeOuterHTML}
@@ -41,8 +42,10 @@
              style="height:{$allDayGridContainerHeight}px;margin-right:{if $allDayExpanded}0{else}{$navigatorScrollBarWidth - 1}{/if}px">
           <div id="alldayevents-grid-wrapper">
             <div id="alldayevents-grid" style="height:{$allDayGridHeight}px;width:{$allDayGridWidth}%">
+              {if not $firstBuild}
               <div id="wk-ad-mask-cnt"></div>
                 {$weekGridAdColsHTML}
+              {/if}
             </div>
           </div>
         </div>
@@ -50,6 +53,7 @@
     </div>
     <div id="main-pane-body-scrollable-wk" style="height:{$gridContainerHeight}px"
          class="{if $weekPoolExpanded}mpbs-wk-scroll-horz-on{else}mpbs-wk-scroll-horz-off{/if}">
+      {if not $firstBuild}
       <div id="grid-table-cont">
         <div id="hours-container">
           {$timeMarkerHeadHTML}
@@ -63,15 +67,45 @@
           <div class="grid-table-wk-outer" style="{$gridWidth}:100%">
             <div id="grid-table-wk" class="grid-table-wk">
               <div id="wk-mask-cnt"></div>
-              {$weekColsHTML}
+              {$weekGridColsHTML}
             </div>
           </div>
         </div>
       </div>
+      {/if}
     </div>
   {if $includeOuterHTML}
   </div>
   {/if}
+{/template}
+
+
+/**
+ * @param weekGridColsHTML Week cols.
+ */
+{template .weekGrid autoescape="false"}
+  <div id="wk-mask-cnt">
+  </div>
+  {$weekGridColsHTML}
+{/template}
+
+
+/**
+ * @param weekGridAdColsHTML Week all-day cols.
+ */
+{template .allDayGrid autoescape="false"}
+  <div id="wk-ad-mask-cnt"></div>
+  {$weekGridAdColsHTML}
+{/template}
+
+
+/**
+ * @param monthGridRowsHTML Month grid rows.
+ */
+{template .monthGrid autoescape="false"}
+  <tbody>
+    {$monthGridRowsHTML}
+  </tbody>
 {/template}
 
 
@@ -87,6 +121,10 @@
  * @param monthGridColsHTML HTML of month grid cols.
  * @param monthGridRowsHTML HTML of month grid rows.
  * @param? monthZippiesHTML HTML of month zippies.
+<<<<<<< Updated upstream
+=======
+ * @param firstBuild Whether this is a first build.
+>>>>>>> Stashed changes
  */
 {template .mainPaneMonth autoescape="false"}
   {if $includeOuterHTML}
@@ -120,6 +158,10 @@
       {/if}
       <div id="main-pane-body-scrollable-mn" class="main-pane-body-scrollable-mn{sp}{if $monthPoolExpanded}mpbs-mn-scroll-vert-on{else}mpbs-mn-scroll-vert-off{/if}">
         <div id="grid-table-wrapper-outer" style="height:{$gridHeight}px;">
+<<<<<<< Updated upstream
+=======
+          {if not $firstBuild}
+>>>>>>> Stashed changes
           <div id="weeknum-cont">
             <table id="weeknums" cellpadding="0" cellspacing="0">
               <tbody>
@@ -145,6 +187,10 @@
               </tbody>
             </table>
           </div>
+<<<<<<< Updated upstream
+=======
+          {/if}
+>>>>>>> Stashed changes
         </div>
       </div>
     </div>
@@ -184,7 +230,7 @@
 {template .dayNameEntry autoescape="false"}
   <div id="dayname{$colNumber}" class="dayname-wk"
       style="margin-left:{$marginLeft}%;margin-right:{$marginRight}%;top:{$top}%">
-    <span class="{if $howManyBlocks is not 1}dayname-wk-inner{/if}">
+    <span class="{if $howManyBlocks != 1}dayname-wk-inner{/if}">
       {$dayNameFormatted}
     </span>
     {if $horizontalExpandEnabled}
@@ -230,7 +276,7 @@
  */
 {template .weekGridAdCol autoescape="false"}
   <div id="weekgrid-ad-col{$colNumber}"
-       class="weekgrid-col wk-ad-layers-cont-outer{sp}{if $colNumber is ($howManyBlocks - 1)}weekgrid-col-last{/if}"
+       class="weekgrid-col wk-ad-layers-cont-outer{sp}{if $colNumber == ($howManyBlocks - 1)}weekgrid-col-last{/if}"
        style="margin-left:{$marginLeft}%;margin-right:{$marginRight}%;top:{$top}%">
     <div class="wk-ad-layers-cont">
       <div id="wk-ad-dec-layer-col{$colNumber}" class="wk-ad-decoration-layer">
@@ -268,7 +314,11 @@
  */
 {template .weekGridCol autoescape="false"}
   <div id="weekgrid-col{$colNumber}" class="weekgrid-col
+<<<<<<< Updated upstream
       {if $colNumber is ($howManyBlocks - 1)}weekgrid-col-last{/if}"
+=======
+      {if $colNumber == ($howManyBlocks - 1)}weekgrid-col-last{/if}"
+>>>>>>> Stashed changes
       style="margin-left:{$marginLeft}%;margin-right:{$marginRight}%;top:{$top}%">
     <div id="wk-dec-layer-in-col{$colNumber}" class="wk-decoration-layer">
       {if $horizontalExpandEnabled}
@@ -291,7 +341,7 @@
  */
 {template .monthGridRow autoescape="false"}
   <tr>
-    <td id="monthgrid-row{$rowNumber}" class="monthgrid-row{sp}{if $rowNumber is ($howManyBlocks - 1)}monthgrid-row-last{/if}"
+    <td id="monthgrid-row{$rowNumber}" class="monthgrid-row{sp}{if $rowNumber == ($howManyBlocks - 1)}monthgrid-row-last{/if}"
         style="height:{$height}px;">
       <div class="mn-layers-cont">
         <div id="mn-dec-layer-row{$rowNumber}" class="mn-decoration-layer">
@@ -424,7 +474,7 @@
 /**
  * @param last Whether col is last.
  */
-{template .weekGridCol autoescape="false"}
+{template .monthGridCol autoescape="false"}
   <td class="weekgrid-col{sp}{if $last}weekgrid-col-last{/if}">&nbsp;</td>
 {/template}
 

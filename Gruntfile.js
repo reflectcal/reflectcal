@@ -376,11 +376,32 @@ module.exports = function(grunt) {
     execTask[fixJsStyleTaskName] = targetOptions;
   })();
 
+  const soyDirName = 'soy';
+
   (function(){
     var targetOptions = deepClone(execTaskTemplate);
 
-    targetOptions.command = ['python', 'bin/fixjsstyle.py',
-        '--strict', '-r', 'src/rflect'].join(' ');
+    targetOptions.command = [
+      'java',
+      '-jar',
+      'bin/SoyToJsSrcCompiler.jar',
+      '--shouldProvideRequireSoyNamespaces',
+      '--shouldGenerateJsdoc',
+      '--codeStyle',
+      'concat',
+      '--outputPathFormat',
+      'src/rflect/cal/ui/soy/{INPUT_FILE_NAME_NO_EXT}.soy.js',
+      '--srcs'
+    ].concat([(function(){
+      return fs.readdirSync(soyDirName).filter(function(aFileName){
+        return /\.soy$/.test(aFileName);
+      });
+    })().map(function(aFileName){
+      return soyDirName + '/' + aFileName;
+    }).join(',')]).join(' ');
+
+    console.log('targetOptions.command: ', targetOptions.command)
+
     execTask[compileSoyExecTaskName] = targetOptions;
   })();
 
@@ -803,7 +824,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('compile-less', compileLessTask);
 
-  grunt.registerTask('compile-soy', compileSoyTask);
+  grunt.registerTask('compile-soy', [
+    'exec:' + compileSoyExecTaskName
+  ]);
 
   grunt.registerTask('gjslinter', [
     'exec:' + gJsLintTaskName
@@ -812,4 +835,5 @@ module.exports = function(grunt) {
   grunt.registerTask('fixjstyle', [
     'exec:' + fixJsStyleTaskName
   ]);
+
 };
