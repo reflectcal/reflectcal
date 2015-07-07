@@ -121,10 +121,7 @@
  * @param monthGridColsHTML HTML of month grid cols.
  * @param monthGridRowsHTML HTML of month grid rows.
  * @param? monthZippiesHTML HTML of month zippies.
-<<<<<<< Updated upstream
-=======
  * @param firstBuild Whether this is a first build.
->>>>>>> Stashed changes
  */
 {template .mainPaneMonth autoescape="false"}
   {if $includeOuterHTML}
@@ -158,10 +155,7 @@
       {/if}
       <div id="main-pane-body-scrollable-mn" class="main-pane-body-scrollable-mn{sp}{if $monthPoolExpanded}mpbs-mn-scroll-vert-on{else}mpbs-mn-scroll-vert-off{/if}">
         <div id="grid-table-wrapper-outer" style="height:{$gridHeight}px;">
-<<<<<<< Updated upstream
-=======
           {if not $firstBuild}
->>>>>>> Stashed changes
           <div id="weeknum-cont">
             <table id="weeknums" cellpadding="0" cellspacing="0">
               <tbody>
@@ -187,10 +181,7 @@
               </tbody>
             </table>
           </div>
-<<<<<<< Updated upstream
-=======
           {/if}
->>>>>>> Stashed changes
         </div>
       </div>
     </div>
@@ -314,12 +305,8 @@
  */
 {template .weekGridCol autoescape="false"}
   <div id="weekgrid-col{$colNumber}" class="weekgrid-col
-<<<<<<< Updated upstream
-      {if $colNumber is ($howManyBlocks - 1)}weekgrid-col-last{/if}"
-=======
-      {if $colNumber == ($howManyBlocks - 1)}weekgrid-col-last{/if}"
->>>>>>> Stashed changes
-      style="margin-left:{$marginLeft}%;margin-right:{$marginRight}%;top:{$top}%">
+    {if $colNumber == ($howManyBlocks - 1)}weekgrid-col-last{/if}"
+    style="margin-left:{$marginLeft}%;margin-right:{$marginRight}%;top:{$top}%">
     <div id="wk-dec-layer-in-col{$colNumber}" class="wk-decoration-layer">
       {if $horizontalExpandEnabled}
         {$weekExpandSignsHTML}
