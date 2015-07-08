@@ -164,7 +164,7 @@ rflect.cal.ui.ControlPane.prototype.decorateInternal = function(aElement,
  * @protected
  */
 rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
-  aSb.append(rflect.cal.ui.soy.controlpane({
+  aSb.append(rflect.cal.ui.soy.controlpane.controlPane({
     isSmallScreen: this.navigator_.isSmallScreen(),
     includeOuterHTML: false,
     timePeriodLabel: this.getDateHeader(),

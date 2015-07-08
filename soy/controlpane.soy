@@ -1,4 +1,4 @@
-{namespace rflect.cal.ui.soy}
+{namespace rflect.cal.ui.soy.controlpane}
 
 /**
  * @param? isSmallScreen Whether screen is small.
@@ -6,7 +6,7 @@
  * @param timePeriodLabel Whether to include outer html of element.
  * @param sidePaneMovable Whether side pane is movable.
  */
-{template .controlpane autoescape="false"}
+{template .controlPane autoescape="false"}
   {if not $isSmallScreen}
     {if $includeOuterHTML}
     <div id="top-pane" class="control-pane">

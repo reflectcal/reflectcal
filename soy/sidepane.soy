@@ -3,6 +3,9 @@
 /**
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param? isSmallScreen Whether screen is small.
+ * @param monthSelectorHTML HTML of month selector.
+ * @param calSelectorMyHTML HTML of cal selector for user's calendars.
+ * @param calSelectorOtherHTML HTML of cal selector for other calendars.
  */
 {template .sidePane autoescape="false"}
   {if $includeOuterHTML}
@@ -13,7 +16,11 @@
         {call .sidePaneMenu /}
       {/if}
     </ul>
-    <div id="month-selector"></div>
+    <div id="month-selector">
+      {$monthSelectorHTML}
+    </div>
+    {$calSelectorMyHTML}
+    {$calSelectorOtherHTML}
   {if $includeOuterHTML}
   </div>
   {/if}

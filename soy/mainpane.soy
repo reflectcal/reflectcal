@@ -357,7 +357,7 @@
  * @param index Index of day cell.
  * @param isCurrentDay Whether it's current day cell.
  */
-{template .dayCell}
+{template .dayCell autoescape="false"}
   <td class="daycell">
     <div class="daycell-decoration-cont">
       {if $isCurrentDay}

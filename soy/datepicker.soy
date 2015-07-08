@@ -3,6 +3,7 @@
 /**
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param dateLabel Label of cal selector.
+ * @param weekDaysHTML Week days HTML.
  * @param gridRowsHTML HTML of rows.
  */
 {template .datePicker autoescape="false"}
@@ -28,7 +29,7 @@
       </thead>
       <tbody id="minical-grid" role="grid">
         <tr>
-          {$dateLabel}
+          {$weekDaysHTML}
         </tr>
         {$gridRowsHTML}
       </tbody>
