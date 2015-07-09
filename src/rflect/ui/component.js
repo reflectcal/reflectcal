@@ -66,7 +66,7 @@ rflect.ui.Component.prototype.decorateInternal = function(aElement,
   rflect.ui.Component.superClass_.decorateInternal.call(this, aElement);
   // Build body.
   if (!opt_doNotBuildBody) {
-    this.getElement().innerHTML = this.build();
+    this.updateByRedraw();
   }
 };
 
@@ -106,10 +106,19 @@ rflect.ui.Component.prototype.buildInternal = function(aSb) {
  * @protected
  */
 rflect.ui.Component.prototype.buildHTML = function(opt_outerHTML) {
+  var str = '';
   if (opt_outerHTML) {
-    return '<div></div>';
+    str += '<div>';
   }
-  return '';
+  this.forEachChild(aChild => {
+    if (aChild.buildHTML) {
+      str += aChild.buildHTML(true);
+    }
+  });
+  if (opt_outerHTML) {
+    str += '</div>';
+  }
+  return str;
 };
 
 
@@ -134,20 +143,11 @@ rflect.ui.Component.prototype.updateBeforeRedraw =
 /**
  * Updates body of component by redraw. This is a second and final part of
  * component update sequence.
- * @param {boolean=} opt_deep Whether to update children.
  * @see {rflect.cal.ui.MainBody#updateBeforeRedraw}.
  */
 rflect.ui.Component.prototype.updateByRedraw =
-    function(opt_deep) {
-  // Propagate call to child components that have a DOM, if any.
-  if (opt_deep){
-    this.forEachChild(function(aChild) {
-      if (aChild.updateByRedraw && aChild.isInDocument() &&
-          aChild.getElement()) {
-        aChild.updateByRedraw(opt_deep);
-      }
-    });
-  }
+    function() {
+  this.getElement().innerHTML = this.buildHTML(false);
 };
 
 
@@ -159,7 +159,7 @@ rflect.ui.Component.prototype.updateByRedraw =
 rflect.ui.Component.prototype.update =
     function(opt_deep) {
   this.updateBeforeRedraw(opt_deep);
-  this.updateByRedraw(opt_deep);
+  this.updateByRedraw();
 };
 
 

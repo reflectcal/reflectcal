@@ -543,7 +543,6 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
       this.mainBody_.getSidePane().updateBeforeRedraw();
       this.mainBody_.getMainPane().updateBeforeRedraw();
 
-      this.mainBody_.updateByRedraw();
       this.mainBody_.getTopPane().updateByRedraw();
       this.mainBody_.getSidePane().updateByRedraw();
       this.mainBody_.getMainPane().updateByRedraw();
@@ -558,7 +557,6 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
         this.mainBody_.getSidePane().getMiniCal().updateBeforeRedraw();
       }
 
-      this.mainBody_.updateByRedraw();
       this.mainBody_.getMainPane().updateByRedraw();
       this.mainBody_.getTopPane().updateByRedraw();
       this.mainBody_.getSidePane().updateByRedraw();

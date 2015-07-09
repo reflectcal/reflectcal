@@ -305,40 +305,19 @@ rflect.cal.ui.MainBody.prototype.decorateInternal = function(aElement,
 
 /**
  * Builds body of component.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @return {string}
  * @see rflect.ui.Component#build
  * @protected
+ * @override
  */
-rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
-  var parts = rflect.cal.ui.MainBody.HTML_PARTS_;
-
-  // Form html. From index 1, because 0 is the html of outer container, which
-  // we don't create in that method but just decorate.
-  for (var counter = 1, length = parts.length - 1;
-       counter < length; counter++) {
-    aSb.append(parts[counter]);
-    switch (counter) {
-      // Include top pane in common buffer.
-      case 1: {
-        this.topPane_.build(aSb);
-      };break;
-      case 4: {
-        aSb.append(this.sidePane_.showBehavior.isVisible() ?
-            'slide-pane-left-visible' : '');
-      };break;
-      case 5: {
-        this.sidePane_.build(aSb);
-      };break;
-      // Include main pane in common buffer.
-      case 7: {
-        this.mainPane_.build(aSb);
-      };break;
-
-      default: break;
-    }
-  }
-
+rflect.cal.ui.MainBody.prototype.buildHTML = function(opt_outerHTML) {
+  return rflect.cal.ui.soy.mainbody.mainBody({
+    includeOuterHTML: opt_outerHTML,
+    topPaneHTML: this.topPane_.buildHTML(true),
+    sidePaneHTML: this.sidePane_.buildHTML(true),
+    mainPaneHTML: this.mainPane_.buildHTML(true)
+  });
 };
 
 

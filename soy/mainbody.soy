@@ -1,12 +1,20 @@
-{namespace rflect.cal.ui.soy}
+{namespace rflect.cal.ui.soy.mainbody}
 
 /**
  * @param? includeOuterHTML Whether to include outer html of element.
+ * @param topPaneHTML HTML of top pane.
+ * @param sidePaneHTML HTML of side pane.
+ * @param mainPaneHTML HTML of main pane.
  */
-{template .mainbody autoescape="false"}
+{template .mainBody autoescape="false"}
   {if $includeOuterHTML}
   <div id="main-body" class="main-body">
   {/if}
+    {$topPaneHTML}
+    <div id="main-pane-cont" class="main-pane-cont">
+      {$sidePaneHTML}
+      {$mainPaneHTML}
+    </div>
   {if $includeOuterHTML}
   </div>
   {/if}
