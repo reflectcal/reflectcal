@@ -166,7 +166,6 @@ rflect.cal.ui.TimeMarker.prototype.stop = function() {
 
 /**
  * Builds head point of time marker.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @return {string}
  */
 rflect.cal.ui.TimeMarker.prototype.buildHead = function() {
@@ -178,10 +177,9 @@ rflect.cal.ui.TimeMarker.prototype.buildHead = function() {
 
 /**
  * Builds time marker line in today block.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @return {string}
  */
-rflect.cal.ui.TimeMarker.prototype.buildLine = function(aSb) {
+rflect.cal.ui.TimeMarker.prototype.buildLine = function() {
   return rflect.cal.ui.soy.timemarker.timeMarkerHead({
     top: this.getPosition(false)
   });

@@ -27,6 +27,7 @@ goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.cal.ui.ViewButtonUpdater');
+goog.require('rflect.cal.ui.soy.sidepane');
 
 
 
@@ -279,7 +280,6 @@ rflect.cal.ui.SidePane.prototype.getTaskSelector = function() {
  * Builds body of component.
  * @see rflect.ui.Component#build
  * @param {boolean=} opt_outerHTML Whether to build outer html.
- * @protected
  * @override
  * @return {string}
  */
@@ -289,7 +289,7 @@ rflect.cal.ui.SidePane.prototype.buildHTML = function(opt_outerHTML) {
   return rflect.cal.ui.soy.sidepane.sidePane({
     includeOuterHTML: opt_outerHTML,
     isSmallScreen: isSmallScreen,
-    visible: this.sidePane_.showBehavior.isVisible(),
+    visible: this.showBehavior.isVisible(),
     monthSelectorHTML: !isSmallScreen ? this.miniCal_.buildHTML(true) : '',
     calSelectorMyHTML: this.calSelectorMy_.buildHTML(true),
     calSelectorOtherHTML: this.calSelectorOther_.buildHTML(true)

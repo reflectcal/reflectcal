@@ -31,6 +31,7 @@ goog.require('rflect.cal.ui.SettingsPane');
 goog.require('rflect.cal.ui.SettingsPane.EventTypes');
 goog.require('rflect.cal.ui.SidePane');
 goog.require('rflect.ui.Component');
+goog.require('rflect.cal.ui.soy.mainbody');
 
 
 
@@ -308,7 +309,6 @@ rflect.cal.ui.MainBody.prototype.decorateInternal = function(aElement,
  * @param {boolean=} opt_outerHTML Whether to build outer html.
  * @return {string}
  * @see rflect.ui.Component#build
- * @protected
  * @override
  */
 rflect.cal.ui.MainBody.prototype.buildHTML = function(opt_outerHTML) {

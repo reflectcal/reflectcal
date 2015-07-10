@@ -10,6 +10,7 @@
 goog.provide('rflect.cal.ui.DatePickerBuilder');
 
 goog.require('goog.i18n.DateTimeSymbols');
+goog.require('rflect.cal.ui.soy.datepicker');
 
 
 
@@ -39,7 +40,6 @@ rflect.cal.ui.DatePickerBuilder = function(aMiniCal, aTimeManager) {
 /**
  * Builds body of component.
  * @param {boolean=} opt_outerHTML Whether to build outer html.
- * @protected
  * @return {string}
  */
 rflect.cal.ui.DatePickerBuilder.prototype.buildHTML = function(opt_outerHTML) {
@@ -58,7 +58,7 @@ rflect.cal.ui.DatePickerBuilder.prototype.buildHTML = function(opt_outerHTML) {
  * @return {string}
  */
 rflect.cal.ui.DatePickerBuilder.prototype.buildMonthName_ = function() {
-  this.timeManager_.basis.getYear() + '&nbsp;' +
+  return this.timeManager_.basis.getYear() + '&nbsp;' +
       goog.i18n.DateTimeSymbols.MONTHS[this.timeManager_.basis.getMonth()];
 };
 
@@ -76,7 +76,7 @@ rflect.cal.ui.DatePickerBuilder.prototype.buildDayNames_ = function() {
     // We need to shift position by 1 because array of weekdays starts from
     // sunday and WEEKDAY gives weekday number starting from monday.
     dayNameNumber = (dayNamesFirstNumber + counter + 1) % 7;
-    str += return rflect.cal.ui.soy.datepicker({
+    str += rflect.cal.ui.soy.datepicker.weekDay({
       weekDay: goog.i18n.DateTimeSymbols.NARROWWEEKDAYS[dayNameNumber]
     });
   }

@@ -775,9 +775,9 @@ rflect.cal.ui.MainPane.prototype.restoreOffsetsOfScrollables_ =
  * Builds body of component.
  * @param {boolean=} opt_outerHTML Whether to build outer html.
  * @return {string} HTML of component.
- * @protected
+ * @override
  */
-rflect.ui.Component.prototype.buildHTML = function(opt_outerHTML) {
+rflect.cal.ui.MainPane.prototype.buildHTML = function(opt_outerHTML) {
   var firstBuild;
   if (this.viewManager_.isInMonthMode()) {
     firstBuild = this.getParent().firstBuildMn;

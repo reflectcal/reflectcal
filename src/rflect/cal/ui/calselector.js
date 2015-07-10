@@ -18,6 +18,7 @@ goog.require('rflect.ui.Component');
 goog.require('rflect.ui.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.string');
+goog.require('rflect.cal.ui.soy.calselector');
 
 
 
@@ -195,7 +196,6 @@ rflect.cal.ui.CalSelector.prototype.isMyCalendars = false;
 /**
  * Builds body of component.
  * @param {boolean=} opt_outerHTML Whether to build outer html.
- * @protected
  * @override
  * @see {rflect.cal.ui.MainPaneBuilder#buildBodyWeek}
  * @return {string}
@@ -295,7 +295,7 @@ rflect.cal.ui.CalSelector.prototype.buildContent = function() {
   var str = '';
   this.eventManager_.forEachCalendar(function(calendar, calendarId) {
     if (calendar.own == this.isMyCalendars){
-      srt += rflect.cal.ui.soy.calselector.calSelectorItem({
+      str += rflect.cal.ui.soy.calselector.calSelectorItem({
         calendarId: calendarId,
         calendarName: calendar.getUIName()
       });

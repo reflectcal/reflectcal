@@ -179,14 +179,13 @@ rflect.cal.ui.DatePicker.prototype.updateByRedraw = function() {
 
 /**
  * Builds body of component.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
- * @see rflect.ui.Component#build
- * @protected
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @return {string} HTML of component.
+ * @override
  */
-rflect.cal.ui.DatePicker.prototype.buildInternal = function(aSb) {
-  this.miniCalBuilder_.buildInternal(aSb);
-};
+rflect.cal.ui.DatePicker.prototype.buildHTML = function(opt_outerHTML) {
+  return this.miniCalBuilder_.buildHTML(opt_outerHTML);
+}
 
 
 /**

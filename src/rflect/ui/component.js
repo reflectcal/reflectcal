@@ -103,7 +103,6 @@ rflect.ui.Component.prototype.buildInternal = function(aSb) {
  * Builds body of component.
  * @param {boolean=} opt_outerHTML Whether to build outer html.
  * @return {string} HTML of component.
- * @protected
  */
 rflect.ui.Component.prototype.buildHTML = function(opt_outerHTML) {
   var str = '';

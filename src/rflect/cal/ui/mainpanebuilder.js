@@ -647,7 +647,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyMonth = function(aFirstBuild,
  * @return {string}
  */
 rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesWeek_ =
-    function(aSb, aOffset) {
+    function() {
   var daySeries = this.timeManager_.daySeries;
   var prevColsCumulativeSize = 0;
   var gridWidth = this.blockPoolWeek_.gridSize.width;
@@ -660,7 +660,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesWeek_ =
     var data = {
       colNumber: colCounter,
       marginLeft: rflect.math.pixelToPercent(prevColsCumulativeSize,
-          gridWidth).toFixed(4);
+          gridWidth).toFixed(4),
       top: -100 * colCounter,
       howManyBlocks: blocksNumber,
       horizontalExpandEnabled: rflect.HORIZONTAL_EXPAND_ENABLED,
@@ -727,7 +727,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGridAdCols_ =
         gridWidth).toFixed(4),
       top: -100 * colCounter,
       adChipsHTML: rflect.cal.ui.MainPaneBuilder.buildAdBlockChips_(
-          sparseArrays[colCounter], this.eventManager_);
+          sparseArrays[colCounter], this.eventManager_)
     };
 
     prevColsCumulativeSize += this.blockPoolWeek_.blocks[colCounter].size;
@@ -880,11 +880,11 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekExpandSigns_ =
 
   // Expand signs build.
   for (var counter = 0; counter <
-      rflect.cal.predefined.WEEK_EXPAND_SIGNS_NUMBER;
-      counter++) {
+      rflect.cal.predefined.WEEK_EXPAND_SIGNS_NUMBER; counter++) {
     str += rflect.cal.ui.soy.mainpane.weekExpandSign({
       block: block
     });
+  }
 };
 
 
@@ -957,7 +957,7 @@ rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip_ =
     width -= widthQuant * rflect.cal.predefined.chips.OVERLAPPING_DEGREE;
   }
 
-  str += rflect.cal.ui.soy.weekChip({
+  str += rflect.cal.ui.soy.mainpane.weekChip({
     chip: aChip,
     event: event,
     eventIsInProgress: aEventManager.eventIsInProgress(aChip.eventId),
@@ -970,12 +970,10 @@ rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip_ =
     zIndex: aStartCol,
     timeLabel:
         // Start time.
-        rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip,
-            true) +
+        rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_(aChip, true) +
         ' - ' +
         // End time.
-        rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_(aSb, aChip,
-            false),
+        rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_(aChip, false),
     top: pixelStart,
     height: pixelHeight -
         (aChip.startIsCut ? 0 : rflect.cal.predefined.DEFAULT_BORDER_WIDTH) -
@@ -1005,7 +1003,7 @@ rflect.cal.ui.MainPaneBuilder.buildMonthBlockChip_ =
     chip: aChip,
     event: aEventManager.getEventById(aChip.eventId),
     eventIsInProgress: aEventManager.eventIsInProgress(aChip.eventId),
-    startCol: startCol,
+    startCol: aStartCol,
     opt_allDay: opt_allDay
   });
 }
@@ -1017,8 +1015,8 @@ rflect.cal.ui.MainPaneBuilder.buildMonthBlockChip_ =
  * @param {boolean} aStart Whether label is for start.
  * @private
  */
-rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_ =
-    function(aChip, aStart) {
+rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_ = function(aChip,
+    aStart) {
   var edgeIsCut = aStart && aChip.startIsCut || !aStart && aChip.endIsCut;
   var totalMins = aStart ? aChip.start : aChip.end;
   var  str = '';
@@ -1075,8 +1073,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildMonthBlockChips_ =
  * @return {string} Built chips.
  * @private
  */
-rflect.cal.ui.MainPaneBuilder.buildChips_ =
-    function(aEventManager, aBlock, aChipBuilder) {
+rflect.cal.ui.MainPaneBuilder.buildChips_ = function(aEventManager, aBlock,
+    aChipBuilder) {
   var blobs = aBlock.blobs;
   var str = '';
 
@@ -1109,14 +1107,15 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGridRows_ = function() {
   for (var rowCounter = 0, rowsNumber = this.blockPoolMonth_.getBlocksNumber();
       rowCounter < rowsNumber;
       rowCounter++) {
+    let block = this.blockPoolMonth_.blocks[rowCounter];
     rflect.cal.ui.soy.mainpane.monthGridRow({
       rowNumber: rowCounter,
       howManyBlocks: rowsNumber,
-      height: this.blockPoolMonth_.blocks[rowCounter].size -
+      height: block.size -
           // Actual block height doesn't include border width.
           rflect.cal.predefined.MONTHGRID_ROW_BORDER_WIDTH,
       dayCellsHTML: this.buildDayCells_(rowCounter),
-      monthChipsHTML: this.buildMonthBlockChips_(rowCounter),
+      monthChipsHTML: this.buildMonthBlockChips_(block),
       verticalExpandEnabled: rflect.VERTICAL_EXPAND_ENABLED,
     });
   }
