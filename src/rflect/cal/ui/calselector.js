@@ -221,7 +221,7 @@ rflect.cal.ui.CalSelector.prototype.buildHTML = function(opt_outerHTML) {
  * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @private
  *
- *'<div id="calendars-selector" class="' + goog.getCssName('list-selector') + '">',
+ *'<div id="calendars-selector-my" class="' + goog.getCssName('list-selector') + '">',
  * '<div id="calendars-label-cont" class="' + goog.getCssName('list-label-cont') + '">' +
  *     '<div id="calendars-label" class="' + goog.getCssName('list-label') + '">',
  *  List selector label (calendars). 
@@ -352,7 +352,7 @@ rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
     this.scrollableEl = null;
 
     this.disposeCheckboxes();
-    this.getElement().innerHTML = this.build();
+    this.getElement().innerHTML = this.buildHTML();
     this.enterDocumentForCheckboxes();
 
     // Save reference to scrollable element.

@@ -158,18 +158,17 @@ rflect.cal.ui.ControlPane.prototype.decorateInternal = function(aElement,
 
 /**
  * Builds body of component.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
- * @see rflect.ui.Component#build
- * @protected
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @return {string}
+ * @override
  */
-rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
-  aSb.append(rflect.cal.ui.soy.controlpane.controlPane({
+rflect.cal.ui.ControlPane.prototype.buildHTML = function(opt_outerHTML) {
+  return rflect.cal.ui.soy.controlpane.controlPane({
     isSmallScreen: this.navigator_.isSmallScreen(),
-    includeOuterHTML: false,
+    includeOuterHTML: opt_outerHTML,
     timePeriodLabel: this.getDateHeader(),
     sidePaneMovable: rflect.SIDE_PANE_MOVABLE
-  }));
+  });
 }
 
 

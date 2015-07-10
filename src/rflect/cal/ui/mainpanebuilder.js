@@ -912,6 +912,10 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGridCols_ = function() {
       horizontalExpandEnabled: rflect.HORIZONTAL_EXPAND_ENABLED,
       weekExpandSignsHTML: rflect.HORIZONTAL_EXPAND_ENABLED ?
          rflect.cal.ui.soy.mainpane.weekExpandSign(block) : '',
+      timeMarkerLineHTML:
+          this.timeManager_.isCurrentDay(
+              this.timeManager_.daySeries[colCounter]) ?
+          this.timeMarker_.buildLine() : '',
       weekChipsHTML: this.buildWeekBlockChips_(block)
     };
 

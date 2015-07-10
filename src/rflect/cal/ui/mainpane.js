@@ -715,7 +715,7 @@ rflect.cal.ui.MainPane.prototype.updateBlockManager = function() {
  */
 rflect.cal.ui.MainPane.prototype.updateByRedraw = function(opt_deep,
     opt_doNotAddMomentumScroller) {
-  this.getElement().innerHTML = this.build();
+  this.getElement().innerHTML = this.buildHTML();
 
   if (this.getParent().firstBuildWk && this.viewManager_.isInWeekMode()) {
     this.getParent().rebuildMainPaneWithSizes();

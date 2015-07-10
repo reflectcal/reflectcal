@@ -483,9 +483,12 @@ rflect.cal.ui.MainBody.prototype.measureLeftPaneStaticSizes = function() {
 
   var topPaneSize = goog.style.getSize(dom.getElement('top-pane'));
   var minicalSize = goog.style.getSize(dom.getElement('month-selector'));
+
+
   var calSelectorSize =
-      goog.style.getSize(dom.getElement('calendars-selector'));
-  var taskSelectorSize = goog.style.getSize(dom.getElement('tasks-selector'));
+      goog.style.getSize(dom.getElement('calendars-selector-my'));
+  var taskSelectorSize =
+      goog.style.getSize(dom.getElement('calendars-selector-other'));
 
   var totalHeight = calContainerMB.top + calContainerMB.bottom +
       calContainerBB.top + calContainerBB.bottom +

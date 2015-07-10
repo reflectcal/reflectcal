@@ -126,7 +126,9 @@ module.exports = function(grunt) {
   function compileTask() {
     setGlobals(true);
 
-    var task = getCompileLessTask().concat(getCompileJsTask());
+    var task = getCompileLessTask().concat([
+      'exec:' + compileSoyExecTaskName
+    ]).concat(getCompileJsTask());
 
     grunt.task.run(task);
   }

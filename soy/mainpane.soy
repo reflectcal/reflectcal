@@ -301,6 +301,7 @@
  * @param top Top position.
  * @param horizontalExpandEnabled Whether horizontal expand is enabled.
  * @param weekExpandSignsHTML Expand signs html.
+ * @param timeMarkerLineHTML Time marker line HTML.
  * @param weekChipsHTML Week chips HTML.
  */
 {template .weekGridCol autoescape="false"}
@@ -313,6 +314,7 @@
       {/if}
     </div>
     <div id="wk-events-layer-col{$colNumber}" class="wk-events-layer">
+      {$timeMarkerLineHTML}
       {$weekChipsHTML}
     </div>
   </div>

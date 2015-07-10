@@ -304,9 +304,9 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
   var isSmallScreen = this.navigator_.isSmallScreen();
 
   this.calSelectorMy_.decorateInternal(
-      this.getDomHelper().getElement('calendars-selector'), true);
+      this.getDomHelper().getElement('calendars-selector-my'), true);
   this.calSelectorOther_.decorateInternal(
-      this.getDomHelper().getElement('tasks-selector'), true);
+      this.getDomHelper().getElement('calendars-selector-other'), true);
 
   if (isSmallScreen){
     this.buttonBack_.decorate(this.getDomHelper().getElement(

@@ -180,7 +180,7 @@ rflect.cal.ui.TimeMarker.prototype.buildHead = function() {
  * @return {string}
  */
 rflect.cal.ui.TimeMarker.prototype.buildLine = function() {
-  return rflect.cal.ui.soy.timemarker.timeMarkerHead({
+  return rflect.cal.ui.soy.timemarker.timeMarkerLine({
     top: this.getPosition(false)
   });
 }

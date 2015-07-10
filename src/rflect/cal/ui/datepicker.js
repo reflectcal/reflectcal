@@ -170,14 +170,6 @@ rflect.cal.ui.DatePicker.prototype.setBasis = function(aDate) {
 
 
 /**
- * Redraws mini cal with new data.
- */
-rflect.cal.ui.DatePicker.prototype.updateByRedraw = function() {
-  this.getElement().innerHTML = this.build();
-};
-
-
-/**
  * Builds body of component.
  * @param {boolean=} opt_outerHTML Whether to build outer html.
  * @return {string} HTML of component.
