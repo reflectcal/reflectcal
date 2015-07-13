@@ -72,34 +72,6 @@ rflect.ui.Component.prototype.decorateInternal = function(aElement,
 
 
 /**
- * Builds body of component. We could use either given string buffer and append
- * parts to it, or use one that belongs to this particular component and, in
- * that case, return ready string.
- * @param {goog.string.StringBuffer=} aSb String buffer to append HTML parts
- * to.
- * @return {string|undefined} HTML of component or none.
- */
-rflect.ui.Component.prototype.build = function(aSb) {
-  var sb = aSb || new goog.string.StringBuffer();
-  this.buildInternal(sb);
-  if (!aSb) {
-    return sb.toString();
-  }
-};
-
-
-/**
- * Builds body of component.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to. Must be overridden.
- * @protected
- */
-rflect.ui.Component.prototype.buildInternal = function(aSb) {
-  goog.abstractMethod();
-};
-
-
-/**
  * Builds body of component.
  * @param {boolean=} opt_outerHTML Whether to build outer html.
  * @return {string} HTML of component.

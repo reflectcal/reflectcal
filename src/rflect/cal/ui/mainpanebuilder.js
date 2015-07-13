@@ -779,10 +779,10 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildMnRowZippies_ =
     function() {
   var str = '';
 
-  for (var rowCounter = 0, blocksNumber =
+  for (let rowCounter = 0, blocksNumber =
       this.blockPoolMonth_.getBlocksNumber(); rowCounter < blocksNumber;
       rowCounter++) {
-    let block = this.blockPoolMonth_.blocks[rowCounter].size
+    let block = this.blockPoolMonth_.blocks[rowCounter]
     str += rflect.cal.ui.soy.mainpane.monthZippy({
       index: rowCounter,
       block: block
@@ -914,7 +914,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGridCols_ = function() {
       top: -100 * colCounter,
       horizontalExpandEnabled: rflect.HORIZONTAL_EXPAND_ENABLED,
       weekExpandSignsHTML: rflect.HORIZONTAL_EXPAND_ENABLED ?
-         rflect.cal.ui.soy.mainpane.weekExpandSign(block) : '',
+         rflect.cal.ui.soy.mainpane.weekExpandSign({block: block}) : '',
       timeMarkerLineHTML:
           this.timeManager_.isCurrentDay(
               this.timeManager_.daySeries[colCounter]) ?
