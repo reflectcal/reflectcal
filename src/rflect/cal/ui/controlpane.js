@@ -286,6 +286,7 @@ rflect.cal.ui.ControlPane.prototype.updateBeforeRedraw = goog.nullFunction;
 
 /**
  * Updates top pane by setting new date header.
+ * @override
  */
 rflect.cal.ui.ControlPane.prototype.updateByRedraw = function() {
   if (!this.timeLabel_)

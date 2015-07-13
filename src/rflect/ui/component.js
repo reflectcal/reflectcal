@@ -142,7 +142,6 @@ rflect.ui.Component.prototype.updateBeforeRedraw =
 /**
  * Updates body of component by redraw. This is a second and final part of
  * component update sequence.
- * @see {rflect.cal.ui.MainBody#updateBeforeRedraw}.
  */
 rflect.ui.Component.prototype.updateByRedraw =
     function() {

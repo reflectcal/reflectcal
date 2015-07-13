@@ -26,12 +26,13 @@
 /**
  * @param calendarId
  * @param calendarName
+ * @param colorClass
  */
 {template .calSelectorItem autoescape="false"}
   <div class="listitem-cont-outer">
     <div title="{$calendarName}" class="listitem-cont calitem-label-active"
          id="calitem-label-item{$calendarId}">
-      <div class="goog-checkbox calitem-color-cont cal-checkbox-blue goog-checkbox-checked"
+      <div class="goog-checkbox calitem-color-cont{sp}{$colorClass}{sp}goog-checkbox-checked"
           id="calitem-color-item{$calendarId}">
       </div>
       <div class="listitem-label">{$calendarName}</div>

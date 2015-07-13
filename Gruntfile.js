@@ -402,8 +402,6 @@ module.exports = function(grunt) {
       return soyDirName + '/' + aFileName;
     }).join(',')]).join(' ');
 
-    console.log('targetOptions.command: ', targetOptions.command)
-
     execTask[compileSoyExecTaskName] = targetOptions;
   })();
 

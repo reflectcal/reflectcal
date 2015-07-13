@@ -297,7 +297,8 @@ rflect.cal.ui.CalSelector.prototype.buildContent = function() {
     if (calendar.own == this.isMyCalendars){
       str += rflect.cal.ui.soy.calselector.calSelectorItem({
         calendarId: calendarId,
-        calendarName: calendar.getUIName()
+        calendarName: calendar.getUIName(),
+        colorClass: calendar.colorCode ? calendar.colorCode.checkboxClass : ''
       });
     }
   }, this);

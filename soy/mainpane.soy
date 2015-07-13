@@ -15,7 +15,7 @@
  * @param weekGridAdColsHTML HTML of all-day cols.
  * @param timeMarkerHeadHTML HTML of time marker.
  * @param hourRowsHTML HTML of hour rows.
- * @param gridTableRowsHTML HTML of grid rows.
+ * @param weekGridRowsHTML HTML of grid rows.
  * @param weekGridColsHTML HTML of week cols.
  * @param firstBuild Whether this is a first build.
  */
@@ -62,9 +62,9 @@
         <div id="grid-table-wrapper-wk">
           <div id="grid-rows-container" class="wk-grid-rows-cont"
                style="width:{$gridWidth}%">
-            {$gridTableRowsHTML}
+            {$weekGridRowsHTML}
           </div>
-          <div class="grid-table-wk-outer" style="{$gridWidth}:100%">
+          <div class="grid-table-wk-outer" style="width:{$gridWidth}%">
             <div id="grid-table-wk" class="grid-table-wk">
               <div id="wk-mask-cnt"></div>
               {$weekGridColsHTML}
@@ -120,7 +120,7 @@
  * @param weekNumsHTML HTML of week numbers.
  * @param monthGridColsHTML HTML of month grid cols.
  * @param monthGridRowsHTML HTML of month grid rows.
- * @param? monthZippiesHTML HTML of month zippies.
+ * @param monthZippiesHTML HTML of month zippies.
  * @param firstBuild Whether this is a first build.
  */
 {template .mainPaneMonth autoescape="false"}

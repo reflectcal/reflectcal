@@ -304,9 +304,11 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
   var isSmallScreen = this.navigator_.isSmallScreen();
 
   this.calSelectorMy_.decorateInternal(
-      this.getDomHelper().getElement('calendars-selector-my'), true);
+      this.getDomHelper().getDocument().
+      querySelector('#calendars-selector-my > .list-selector'), true);
   this.calSelectorOther_.decorateInternal(
-      this.getDomHelper().getElement('calendars-selector-other'), true);
+      this.getDomHelper().getDocument().
+      querySelector('#calendars-selector-other > .list-selector'), true);
 
   if (isSmallScreen){
     this.buttonBack_.decorate(this.getDomHelper().getElement(
@@ -320,7 +322,8 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
         rflect.cal.predefined.BUTTON_SETTINGS_ID));
   } else {
     this.miniCal_.decorateInternal(
-        this.getDomHelper().getElement('month-selector'), true);
+        this.getDomHelper().getDocument().
+        querySelector('#month-selector > .goog-date-picker'), true);
   }
 
   rflect.cal.ui.SidePane.superClass_.enterDocument.call(this);

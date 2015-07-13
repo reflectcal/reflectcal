@@ -563,6 +563,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
     allDayGridWidth: rflect.math.pixelToPercent(gridWidth,
         this.blockPoolAllDay_.gridContainerSize.width).toFixed(4),
     allDayGridHeight: this.blockPoolAllDay_.gridSize.height,
+    gridContainerHeight: this.blockPoolWeek_.gridContainerSize.height,
     gridWidth: rflect.math.pixelToPercent(this.blockPoolWeek_.gridSize.width,
         this.blockPoolWeek_.gridContainerSize.width),
     navigatorScrollBarWidth: this.navigator_.getScrollbarWidth(),
@@ -572,7 +573,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
     weekGridAdColsHTML: this.buildWeekGridAdCols_(),
     timeMarkerHeadHTML: this.timeMarker_.buildHead(),
     hourRowsHTML: this.buildHourRows_(),
-    gridRowsHTML: this.buildGridRows_(),
+    weekGridRowsHTML: this.buildGridRows_(),
     weekGridColsHTML: this.buildWeekGridCols_()
   });
 };
@@ -625,9 +626,9 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyMonth = function(aFirstBuild,
   return rflect.cal.ui.soy.mainpane.mainPaneMonth({
     includeOuterHTML: opt_outerHTML,
     firstBuild: aFirstBuild,
-    monthPoolExpanded: this.blockPoolWeek_.expanded,
-    gridWidth: rflect.math.pixelToPercent(this.blockPoolWeek_.gridSize.width,
-        this.blockPoolWeek_.gridContainerSize.width),
+    monthPoolExpanded: this.blockPoolMonth_.expanded,
+    gridWidth: rflect.math.pixelToPercent(this.blockPoolMonth_.gridSize.width,
+        this.blockPoolMonth_.gridContainerSize.width),
     gridContainerHeight: this.blockPoolMonth_.gridContainerSize.height,
     gridHeight: this.blockPoolMonth_.gridSize.height,
     navigatorScrollBarWidth: this.navigator_.getScrollbarWidth(),
@@ -653,18 +654,20 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesWeek_ =
   var gridWidth = this.blockPoolWeek_.gridSize.width;
 
   var str = '';
-  for (var colCounter = 0, blocksNumber = this.blockPoolWeek_.getBlocksNumber();
+  for (let colCounter = 0, blocksNumber = this.blockPoolWeek_.getBlocksNumber();
       colCounter < blocksNumber;
       colCounter++) {
 
-    var data = {
+    let data = {
       colNumber: colCounter,
       marginLeft: rflect.math.pixelToPercent(prevColsCumulativeSize,
           gridWidth).toFixed(4),
       top: -100 * colCounter,
       howManyBlocks: blocksNumber,
       horizontalExpandEnabled: rflect.HORIZONTAL_EXPAND_ENABLED,
-      dayZippyExpanded: this.blockPoolWeek_.blocks[colCounter].expanded
+      dayZippyExpanded: this.blockPoolWeek_.blocks[colCounter].expanded,
+      dayNameFormatted: this.weekDayNameFormatWeek_.format(
+          daySeries[colCounter]),
     };
 
     prevColsCumulativeSize += this.blockPoolWeek_.blocks[colCounter].size;
@@ -694,7 +697,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesMonth_ = function() {
 
     str += rflect.cal.ui.soy.mainpane.dayNameEntryMonth({
       colNumber: counter,
-      label: this.navigator_.isSmallScreen() ?
+      dayName: this.navigator_.isSmallScreen() ?
           goog.i18n.DateTimeSymbols.SHORTWEEKDAYS[dayNameNumber] :
           goog.i18n.DateTimeSymbols.WEEKDAYS[dayNameNumber]
     });
@@ -806,7 +809,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekNumbers_ =
     str += rflect.cal.ui.soy.mainpane.weekNum({
       rowNumber: rowCounter,
       height: this.blockPoolMonth_.blocks[rowCounter].size,
-      label: this.timeManager_.daySeries[rowCounter * 7]
+      label: this.timeManager_.daySeries[rowCounter * 7].getWeekNumber()
     });
 
   }
@@ -1108,11 +1111,11 @@ rflect.cal.ui.MainPaneBuilder.buildChips_ = function(aEventManager, aBlock,
 rflect.cal.ui.MainPaneBuilder.prototype.buildMonthGridRows_ = function() {
   var str = '';
 
-  for (var rowCounter = 0, rowsNumber = this.blockPoolMonth_.getBlocksNumber();
+  for (let rowCounter = 0, rowsNumber = this.blockPoolMonth_.getBlocksNumber();
       rowCounter < rowsNumber;
       rowCounter++) {
     let block = this.blockPoolMonth_.blocks[rowCounter];
-    rflect.cal.ui.soy.mainpane.monthGridRow({
+    str += rflect.cal.ui.soy.mainpane.monthGridRow({
       rowNumber: rowCounter,
       howManyBlocks: rowsNumber,
       height: block.size -
