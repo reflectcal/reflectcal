@@ -785,6 +785,19 @@ module.exports = function(grunt) {
       }
     });
   });
+  
+  //Deletes goog.require('soy'), goog.require('soydata') statements.
+  grunt.registerTask('deleteSoyRequires', function() {
+    var soyDir = 'src/rflect/cal/ui/soy';
+    var files = fs.readdirSync(soyDir);
+    files.forEach(function(aFileName) {
+      var contents = fs.readFileSync(aFileName, {encoding: 'utf-8'});
+      contents = contents.
+          replace(/goog\.require\\(\\'soy\\'\\)/, '').
+          replace(/goog\.require\\(\\'soydata\\'\\)/, '');
+      fs.writeFileSync(aFileName, contents);
+    })
+  });
 
 
   // Load plugins.
@@ -825,7 +838,8 @@ module.exports = function(grunt) {
   grunt.registerTask('compile-less', compileLessTask);
 
   grunt.registerTask('compile-soy', [
-    'exec:' + compileSoyExecTaskName
+    'exec:' + compileSoyExecTaskName,
+    'deleteSoyRequires'
   ]);
 
   grunt.registerTask('gjslinter', [

@@ -356,6 +356,9 @@ rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
     this.getElement().innerHTML = this.buildHTML();
     this.enterDocumentForCheckboxes();
 
+    if (goog.DEBUG)
+      console.log('this.getElement(): ', this.getElement());
+
     // Save reference to scrollable element.
     if (!isSmallScreen)
       this.scrollableEl = goog.dom.getChildren(this.getElement())[1];

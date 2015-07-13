@@ -792,10 +792,8 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
   this.getCalSelector().redrawIsNeeded = true;
   this.getTaskSelector().redrawIsNeeded = true;
 
-  this.sidePane_.update();
   this.sidePane_.getCalSelector().update();
   this.sidePane_.getTaskSelector().update();
-
 
   this.getMainPane().updateBeforeRedraw();
   //Do not attach momentum scroller, we will do it on page change.
