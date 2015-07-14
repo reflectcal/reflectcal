@@ -126,9 +126,8 @@ module.exports = function(grunt) {
   function compileTask() {
     setGlobals(true);
 
-    var task = getCompileLessTask().concat([
-      'exec:' + compileSoyExecTaskName
-    ]).concat(getCompileJsTask());
+    var task = getCompileLessTask().concat(['compile-soy']).
+        concat(getCompileJsTask());
 
     grunt.task.run(task);
   }
@@ -791,11 +790,12 @@ module.exports = function(grunt) {
     var soyDir = 'src/rflect/cal/ui/soy';
     var files = fs.readdirSync(soyDir);
     files.forEach(function(aFileName) {
-      var contents = fs.readFileSync(aFileName, {encoding: 'utf-8'});
+      var fullFileName = soyDir + '/' + aFileName;
+      var contents = fs.readFileSync(fullFileName, {encoding: 'utf-8'});
       contents = contents.
-          replace(/goog\.require\\(\\'soy\\'\\)/, '').
-          replace(/goog\.require\\(\\'soydata\\'\\)/, '');
-      fs.writeFileSync(aFileName, contents);
+          replace(/goog\.require\(\'soy\'\);\s/, '').
+          replace(/goog\.require\(\'soydata\'\);\s\s/, '');
+      fs.writeFileSync(fullFileName, contents);
     })
   });
 
