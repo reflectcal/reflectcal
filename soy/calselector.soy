@@ -3,20 +3,23 @@
 /**
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param? isSmallScreen Whether screen is small.
+ * @param? hasCalendars Whether calendar selector has calendars.
  * @param? label Label of cal selector.
  * @param? height Height of cal selector.
  * @param? calSelectorItemsHTML Items.
  */
 {template .calSelector autoescape="false"}
   {if $includeOuterHTML}
-  <div class="list-selector">
+  <div class="list-selector"{sp}{if not $hasCalendars}style="display:none"{/if}>
   {/if}
+  {if $hasCalendars}
     <div id="calendars-label-cont" class="list-label-cont">
       <div id="calendars-label" class="list-label">{$label}</div>
     </div>
-    <div id="calendars-body" class="list-body " style="height:{if $isSmallScreen}{$height}{/if}px;">
+    <div id="calendars-body" class="list-body " style="height:{if not $isSmallScreen}{$height}{/if}px;">
       {$calSelectorItemsHTML}
     </div>
+  {/if}
   {if $includeOuterHTML}
   </div>
   {/if}

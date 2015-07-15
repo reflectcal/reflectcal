@@ -203,11 +203,15 @@ rflect.cal.ui.CalSelector.prototype.isMyCalendars = false;
 rflect.cal.ui.CalSelector.prototype.buildHTML = function(opt_outerHTML) {
   if (!this.isMyCalendars && !this.eventManager_.hasNonOwnerCalendars()) {
     //Do not draw empty 'other calendars'.
-    return '';
+    return rflect.cal.ui.soy.calselector.calSelector({
+      includeOuterHTML: opt_outerHTML,
+      hasCalendars: false
+    });
   } else {
     return rflect.cal.ui.soy.calselector.calSelector({
       includeOuterHTML: opt_outerHTML,
       isSmallScreen: this.navigator_.isSmallScreen(),
+      hasCalendars: true,
       label: this.label,
       height: this.scrollableSize_.height,
       calSelectorItemsHTML: this.buildContent()
@@ -353,11 +357,11 @@ rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
     this.scrollableEl = null;
 
     this.disposeCheckboxes();
+    if (goog.DEBUG)
+      console.log('this.getElement(): ', this.getElement());
     this.getElement().innerHTML = this.buildHTML();
     this.enterDocumentForCheckboxes();
 
-    if (goog.DEBUG)
-      console.log('this.getElement(): ', this.getElement());
 
     // Save reference to scrollable element.
     if (!isSmallScreen)

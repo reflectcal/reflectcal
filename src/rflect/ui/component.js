@@ -45,10 +45,15 @@ rflect.ui.Component.componentIsInExclusions = function(aContainer, aComponent) {
 
 
 /**
- * Creates component on an empty div element.
+ * Creates component on an empty <temp> element.
  */
 rflect.ui.Component.prototype.createDom = function() {
-  this.decorateInternal(this.getDomHelper().createDom('div'));
+  var tempElement = this.getDomHelper().createElement('temp');
+
+  tempElement.innerHTML = this.buildHTML(true);
+
+  this.setElementInternal(this.getDomHelper().
+      getFirstElementChild(tempElement));
 };
 
 
