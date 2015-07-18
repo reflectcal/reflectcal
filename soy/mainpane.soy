@@ -1,6 +1,7 @@
 {namespace rflect.cal.ui.soy.mainpane}
 
 /**
+ * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param allDayExpanded Whether to include outer html of element.
  * @param weekPoolExpanded Whether at least one of the week blocks is expanded.
@@ -21,7 +22,7 @@
  */
 {template .mainPaneWeek autoescape="false"}
   {if $includeOuterHTML}
-  <div id="main-pane" class="main-pane">
+  <div id="{$id}" class="main-pane">
   {/if}
     <div id="main-pane-header">
       <div id="daynames-prefix-wk">
@@ -110,6 +111,7 @@
 
 
 /**
+ * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param monthPoolExpanded Whether at least one of the week blocks is expanded.
  * @param gridContainerHeight Height of month grid container.
@@ -125,7 +127,7 @@
  */
 {template .mainPaneMonth autoescape="false"}
   {if $includeOuterHTML}
-  <div id="main-pane" class="main-pane">
+  <div id="{$id}" class="main-pane">
   {/if}
     <div id="main-pane-header">
       <div id="daynames-prefix-mn"></div>

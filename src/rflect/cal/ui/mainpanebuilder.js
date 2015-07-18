@@ -555,6 +555,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
   var gridWidth = this.blockPoolWeek_.gridSize.width;
 
   return rflect.cal.ui.soy.mainpane.mainPaneWeek({
+    id: this.mainPane_.getId(),
     firstBuild: aFirstBuild,
     includeOuterHTML: opt_outerHTML,
     allDayExpanded: this.blockPoolAllDay_.expanded,
@@ -624,6 +625,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyMonth = function(aFirstBuild,
   var gridWidth = this.blockPoolWeek_.gridSize.width;
 
   return rflect.cal.ui.soy.mainpane.mainPaneMonth({
+    id: this.mainPane_.getId(),
     includeOuterHTML: opt_outerHTML,
     firstBuild: aFirstBuild,
     monthPoolExpanded: this.blockPoolMonth_.expanded,

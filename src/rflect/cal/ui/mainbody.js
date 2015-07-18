@@ -280,31 +280,6 @@ rflect.cal.ui.MainBody.prototype.getMiniCal = function() {
 
 
 /**
- * Creates main body on an empty div element.
- */
-rflect.cal.ui.MainBody.prototype.createDom = function() {
-  this.decorateInternal(this.getDomHelper().createElement('div'));
-};
-
-
-/**
- * Decorates an existing html div element as a Main Body.
- * @override
- */
-rflect.cal.ui.MainBody.prototype.decorateInternal = function(aElement,
-                                                          opt_doNotBuildBody) {
-  // Set this.element_ and build component.
-  rflect.cal.ui.MainBody.superClass_.decorateInternal.call(this, aElement,
-      opt_doNotBuildBody);
-
-  if (!opt_doNotBuildBody) {
-    this.getElement().id = 'main-body';
-    this.getElement().className = goog.getCssName('main-body');
-  }
-};
-
-
-/**
  * Builds body of component.
  * @param {boolean=} opt_outerHTML Whether to build outer html.
  * @return {string}
@@ -313,6 +288,7 @@ rflect.cal.ui.MainBody.prototype.decorateInternal = function(aElement,
  */
 rflect.cal.ui.MainBody.prototype.buildHTML = function(opt_outerHTML) {
   return rflect.cal.ui.soy.mainbody.mainBody({
+    id: this.getId(),
     includeOuterHTML: opt_outerHTML,
     topPaneHTML: this.topPane_.buildHTML(true),
     sidePaneHTML: this.sidePane_.buildHTML(true),
@@ -351,12 +327,9 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
   // We could decorate children right after superclass decorateInternal call,
   // but to preserve pattern (that if we want reliable presence of component in
   // DOM, we should address it in enterDocument), we do it here.
-  this.topPane_.decorateInternal(this.getDomHelper().getElement('top-pane'),
-      true);
-  this.mainPane_.decorateInternal(this.getDomHelper().getElement('main-pane'),
-      true);
-  this.sidePane_.decorateInternal(this.getDomHelper().getElement('side-pane'),
-      true);
+  this.topPane_.setElementById(this.topPane_.getId());
+  this.mainPane_.setElementById(this.mainPane_.getId());
+  this.sidePane_.setElementById(this.sidePane_.getId());
 
   // Propagate call to children.
   rflect.cal.ui.MainBody.superClass_.enterDocument.call(this);
@@ -429,7 +402,7 @@ rflect.cal.ui.MainBody.prototype.rebuildLeftPaneWithSizes = function() {
  */
 rflect.cal.ui.MainBody.prototype.measureStaticSizes = function() {
   var dom = this.getDomHelper();
-  var totalSize = goog.style.getSize(dom.getElement('main-body'));
+  var totalSize = goog.style.getSize(dom.getElement(this.getId()));
 
   if (this.viewManager_.isInWeekMode()) {
 
@@ -475,20 +448,24 @@ rflect.cal.ui.MainBody.prototype.measureLeftPaneStaticSizes = function() {
   var dom = this.getDomHelper();
 
   var calContainerMB =
-      goog.style.getMarginBox(dom.getElement('main-body'));
+      goog.style.getMarginBox(dom.getElement(this.getId()));
   var calContainerBB =
-      goog.style.getBorderBox(dom.getElement('main-body'));
+      goog.style.getBorderBox(dom.getElement(this.getId()));
   var calContainerPB =
-      goog.style.getPaddingBox(dom.getElement('main-body'));
+      goog.style.getPaddingBox(dom.getElement(this.getId()));
 
-  var topPaneSize = goog.style.getSize(dom.getElement('top-pane'));
-  var minicalSize = goog.style.getSize(dom.getElement('month-selector'));
+  var topPaneSize = goog.style.getSize(dom.getElement(this.getTopPane().
+      getId()));
+  var minicalSize = goog.style.getSize(dom.getElement(this.getSidePane().
+      getMiniCal().getId()));
 
 
   var calSelectorSize =
-      goog.style.getSize(dom.getElement('calendars-selector-my'));
+      goog.style.getSize(dom.getElement(this.getSidePane().getCalSelector().
+      getId()));
   var taskSelectorSize =
-      goog.style.getSize(dom.getElement('calendars-selector-other'));
+      goog.style.getSize(dom.getElement(this.getSidePane().getTaskSelector().
+      getId()));
 
   var totalHeight = calContainerMB.top + calContainerMB.bottom +
       calContainerBB.top + calContainerBB.bottom +

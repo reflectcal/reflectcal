@@ -204,11 +204,13 @@ rflect.cal.ui.CalSelector.prototype.buildHTML = function(opt_outerHTML) {
   if (!this.isMyCalendars && !this.eventManager_.hasNonOwnerCalendars()) {
     //Do not draw empty 'other calendars'.
     return rflect.cal.ui.soy.calselector.calSelector({
+      id: this.getId(),
       includeOuterHTML: opt_outerHTML,
       hasCalendars: false
     });
   } else {
     return rflect.cal.ui.soy.calselector.calSelector({
+      id: this.getId(),
       includeOuterHTML: opt_outerHTML,
       isSmallScreen: this.navigator_.isSmallScreen(),
       hasCalendars: true,
@@ -357,8 +359,6 @@ rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
     this.scrollableEl = null;
 
     this.disposeCheckboxes();
-    if (goog.DEBUG)
-      console.log('this.getElement(): ', this.getElement());
     this.getElement().innerHTML = this.buildHTML();
     this.enterDocumentForCheckboxes();
 
@@ -385,18 +385,6 @@ rflect.cal.ui.CalSelector.prototype.disposeCheckboxes = function () {
 
   this.removeChildren();
 }
-
-
-/**
- * Decorates an existing html div element as a list selector.
- * @override
- */
-rflect.cal.ui.CalSelector.prototype.decorateInternal = function(aElement,
-    opt_doNotBuildBody) {
-  // Set this.element_.
-  rflect.cal.ui.CalSelector.superClass_.decorateInternal.call(this, aElement,
-      opt_doNotBuildBody);
-};
 
 
 /**

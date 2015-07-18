@@ -137,26 +137,6 @@ rflect.cal.ui.ControlPane.prototype.getButtonNow = function(){
 
 
 /**
- * Creates Top Pane on an empty div element.
- */
-rflect.cal.ui.ControlPane.prototype.createDom = function() {
-  this.decorateInternal(this.dom_.createElement('div'));
-};
-
-
-/**
- * Decorates an existing html div element as a Top Pane.
- * @override
- */
-rflect.cal.ui.ControlPane.prototype.decorateInternal = function(aElement,
-                                                         opt_doNotBuildBody) {
-  // Set this.element_.
-  rflect.cal.ui.ControlPane.superClass_.decorateInternal.call(this, aElement,
-      opt_doNotBuildBody);
-};
-
-
-/**
  * Builds body of component.
  * @param {boolean=} opt_outerHTML Whether to build outer html.
  * @return {string}
@@ -164,6 +144,7 @@ rflect.cal.ui.ControlPane.prototype.decorateInternal = function(aElement,
  */
 rflect.cal.ui.ControlPane.prototype.buildHTML = function(opt_outerHTML) {
   return rflect.cal.ui.soy.controlpane.controlPane({
+    id: this.getId(),
     isSmallScreen: this.navigator_.isSmallScreen(),
     includeOuterHTML: opt_outerHTML,
     timePeriodLabel: this.getDateHeader(),

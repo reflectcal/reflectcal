@@ -241,18 +241,6 @@ rflect.cal.ui.SidePane.prototype.getButtonNow = function(){
 
 
 /**
- * Decorates an existing html div element as a Top Pane.
- * @override
- */
-rflect.cal.ui.SidePane.prototype.decorateInternal = function(aElement,
-                                                         opt_doNotBuildBody) {
-  // Set this.element_.
-  rflect.cal.ui.SidePane.superClass_.decorateInternal.call(this, aElement,
-      opt_doNotBuildBody);
-};
-
-
-/**
  * @return {goog.ui.Component}
  */
 rflect.cal.ui.SidePane.prototype.getMiniCal = function() {
@@ -287,6 +275,7 @@ rflect.cal.ui.SidePane.prototype.buildHTML = function(opt_outerHTML) {
   var isSmallScreen = this.navigator_.isSmallScreen();
 
   return rflect.cal.ui.soy.sidepane.sidePane({
+    id: this.getId(),
     includeOuterHTML: opt_outerHTML,
     isSmallScreen: isSmallScreen,
     visible: this.showBehavior.isVisible(),
@@ -303,12 +292,8 @@ rflect.cal.ui.SidePane.prototype.buildHTML = function(opt_outerHTML) {
 rflect.cal.ui.SidePane.prototype.enterDocument = function() {
   var isSmallScreen = this.navigator_.isSmallScreen();
 
-  this.calSelectorMy_.decorateInternal(
-      this.getDomHelper().getDocument().
-      querySelector('#calendars-selector-my > .list-selector'), true);
-  this.calSelectorOther_.decorateInternal(
-      this.getDomHelper().getDocument().
-      querySelector('#calendars-selector-other > .list-selector'), true);
+  this.calSelectorMy_.setElementById(this.calSelectorMy_.getId());
+  this.calSelectorOther_.setElementById(this.calSelectorOther_.getId());
 
   if (isSmallScreen){
     this.buttonBack_.decorate(this.getDomHelper().getElement(
@@ -321,9 +306,7 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
         this.getDomHelper().getElement(
         rflect.cal.predefined.BUTTON_SETTINGS_ID));
   } else {
-    this.miniCal_.decorateInternal(
-        this.getDomHelper().getDocument().
-        querySelector('#month-selector > .goog-date-picker'), true);
+    this.miniCal_.setElementById(this.miniCal_.getId());
   }
 
   rflect.cal.ui.SidePane.superClass_.enterDocument.call(this);

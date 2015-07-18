@@ -181,18 +181,6 @@ rflect.cal.ui.DatePicker.prototype.buildHTML = function(opt_outerHTML) {
 
 
 /**
- * Decorates an existing html div element as a Main Pane.
- * @override
- */
-rflect.cal.ui.DatePicker.prototype.decorateInternal = function(aElement,
-    opt_doNotBuildBody) {
-  // Set this.element_.
-  rflect.cal.ui.DatePicker.superClass_.decorateInternal.call(this, aElement,
-      opt_doNotBuildBody);
-};
-
-
-/**
  * @inheritDoc
  */
 rflect.cal.ui.DatePicker.prototype.enterDocument = function() {

@@ -32,20 +32,17 @@ goog.inherits(rflect.ui.Component, goog.ui.Component);
 
 
 /**
- * @param {Array.<goog.ui.Component>|undefined} aContainer Array to test index presence in.
- * @param {goog.ui.Component} aComponent Index to test.
- * @return {boolean} Whether index is within array of indexes to be excluded
- * from update.
+ * @return {string} Unique id.
+ * @override
  */
-rflect.ui.Component.componentIsInExclusions = function(aContainer, aComponent) {
-  return !!aContainer &&
-      !!aContainer.length &&
-      goog.array.contains(aContainer, aComponent)
+rflect.ui.Component.prototype.getId = function() {
+  return 'ui-component' + rflect.ui.Component.superClass_.getId.call(this);
 }
 
 
 /**
  * Creates component on an empty <temp> element.
+ * @override
  */
 rflect.ui.Component.prototype.createDom = function() {
   var tempElement = this.getDomHelper().createElement('temp');
@@ -58,21 +55,27 @@ rflect.ui.Component.prototype.createDom = function() {
 
 
 /**
- * Decorates an existing html div element as a component.
- * TODO(alexk): for public use, we may rename this method to something else,
- * 'cause original decorateInternal is protected. Something like
- * decorateByBuild.
+ * Decorates an existing html element as a component.
  * @param {Element} aElement The div element to decorate.
- * @param {boolean=} opt_doNotBuildBody Whether to build body or not.
+ * @protected
+ * @override
  */
-rflect.ui.Component.prototype.decorateInternal = function(aElement,
-                                                           opt_doNotBuildBody) {
+rflect.ui.Component.prototype.decorateInternal = function(aElement) {
   // Set this.element_.
   rflect.ui.Component.superClass_.decorateInternal.call(this, aElement);
   // Build body.
-  if (!opt_doNotBuildBody) {
-    this.updateByRedraw();
-  }
+  this.updateByRedraw();
+};
+
+
+/**
+ * Sets element searching by its id in DOM.
+ * @param {string} aId The div element to decorate.
+ */
+rflect.ui.Component.prototype.setElementById = function(aId) {
+  // Set this.element_.
+  rflect.ui.Component.superClass_.decorateInternal.call(this,
+      this.getDomHelper().getElement(aId));
 };
 
 

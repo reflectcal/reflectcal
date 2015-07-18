@@ -1,6 +1,7 @@
 {namespace rflect.cal.ui.soy.calselector}
 
 /**
+ * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param? isSmallScreen Whether screen is small.
  * @param? hasCalendars Whether calendar selector has calendars.
@@ -10,7 +11,7 @@
  */
 {template .calSelector autoescape="false"}
   {if $includeOuterHTML}
-  <div class="list-selector"{sp}{if not $hasCalendars}style="display:none"{/if}>
+  <div id="{$id}" class="list-selector"{sp}{if not $hasCalendars}style="display:none"{/if}>
   {/if}
   {if $hasCalendars}
     <div id="calendars-label-cont" class="list-label-cont">

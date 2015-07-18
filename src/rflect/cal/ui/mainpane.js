@@ -889,22 +889,9 @@ rflect.cal.ui.MainPane.prototype.updateAfterSave_ = function() {
 
 
 /**
- * Decorates an existing html div element as a Main Pane.
- * @override
- */
-rflect.cal.ui.MainPane.prototype.decorateInternal = function(aElement,
-    opt_doNotBuildBody) {
-  // Set this.element_.
-  rflect.cal.ui.MainPane.superClass_.decorateInternal.call(this, aElement,
-      opt_doNotBuildBody);
-};
-
-
-/**
  * @inheritDoc
  */
 rflect.cal.ui.MainPane.prototype.enterDocument = function() {
-
   rflect.cal.ui.MainPane.superClass_.enterDocument.call(this);
 
   if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {

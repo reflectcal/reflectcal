@@ -1,6 +1,7 @@
 {namespace rflect.cal.ui.soy.sidepane}
 
 /**
+ * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param? isSmallScreen Whether screen is small.
  * @param visible Whether sidepane is visible.
@@ -10,7 +11,7 @@
  */
 {template .sidePane autoescape="false"}
   {if $includeOuterHTML}
-  <div id="side-pane" class="side-pane slide-pane-left{sp}{if $visible}slide-pane-left-visible{/if}">
+  <div id="{$id}" class="side-pane slide-pane-left{sp}{if $visible}slide-pane-left-visible{/if}">
   {/if}
     <ul class="side-pane-menu">
       {if $isSmallScreen}

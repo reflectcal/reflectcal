@@ -44,6 +44,7 @@ rflect.cal.ui.DatePickerBuilder = function(aMiniCal, aTimeManager) {
  */
 rflect.cal.ui.DatePickerBuilder.prototype.buildHTML = function(opt_outerHTML) {
   return rflect.cal.ui.soy.datepicker.datePicker({
+    id: this.miniCal_.getId(),
     includeOuterHTML: opt_outerHTML,
     dateLabel: this.buildMonthName_(),
     weekDaysHTML: this.buildDayNames_(),
