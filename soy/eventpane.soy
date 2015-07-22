@@ -1,0 +1,199 @@
+{namespace rflect.cal.ui.soy.eventpane}
+
+/**
+ * @param id Unique id.
+ * @param? includeOuterHTML Whether to include outer html of element.
+ * @param? isSmallScreen Whether screen is small.
+ * @param visible Whether sidepane is visible.
+ * @param monthSelectorHTML HTML of month selector.
+ * @param calSelectorMyHTML HTML of cal selector for user's calendars.
+ * @param calSelectorOtherHTML HTML of cal selector for other calendars.
+ */
+{template .eventPane autoescape="false"}
+  {if $includeOuterHTML}
+  <div id="{$id}" class="settings-pane">
+  {/if}
+    <div class="control-pane-external">
+      <div class="pane-right">
+        <div title="" class="goog-inline-block goog-flat-button cal-menu-button emphasis-button">
+          {rflect.cal.i18n.Symbols.SAVE}
+        </div>
+      </div>
+      <div class="pane-left">
+        <div title="" class="goog-inline-block goog-flat-button cal-menu-button">
+          <span>
+            <i class="octicon icon-button octicon-chevron-left"></i>
+            {rflect.cal.i18n.Symbols.TO_CALENDAR}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-body-outer">
+      <div class="settings-body">
+
+        <div class="event-name-input-cont event-pane-cont-first event-pane-cont">
+          <input placeholder="{rflect.cal.i18n.Symbols.EVENT_NAME}"
+              class="ep-event-name-input"
+              id="ep-event-name-input" type="text">
+        </div>
+
+        <div class="description-cont event-pane-cont" id="all-day-label">
+          <span id="all-day-label-sub-cont">
+            <label class="goog-inline-block event-pane-label all-day-label"
+            for="event-all-day">{rflect.cal.i18n.Symbols.ALL_DAY_EVENT}</label>
+          </span>
+        </div>
+
+        {if $isNativeTimeInput}
+
+        <div class="date-input-cont event-pane-cont">
+          <div class="pane-left goog-inline-block">
+            <label for="event-start-date" class="label-fluid event-pane-label">
+              {rflect.cal.i18n.Symbols.START}
+            </label>
+          </div>
+          <div class="pane-right goog-inline-block">
+            <input class="event-date-input" id="event-start-date" type="text"/>
+            <input aria-haspopup="true" class="event-time-input" id="event-start-time" type="text"/>
+          </div>
+          <div class="pane-center goog-inline-block">
+            <div class="spacer">s</div>
+          </div>
+        </div>
+
+        <div class="date-input-cont event-pane-cont">
+          <div class="pane-left goog-inline-block">
+          <label for="event-end-date" class="label-fluid event-pane-label">
+            {rflect.cal.i18n.Symbols.END}
+          </label>
+          </div>
+          <div class="pane-right goog-inline-block">
+            <input class="event-date-input" id="event-end-date" type="text"/>
+            <input aria-haspopup="true" class="event-time-input" id="event-end-time" type="text"/>
+          </div>
+          <div class="pane-center goog-inline-block">
+            <div class="spacer">s</div>
+          </div>
+        </div>
+
+        {else}
+
+        <div class="date-input-cont event-pane-cont">
+          <div class="pane-left goog-inline-block">
+            <label for="event-start-date" class="label-fluid event-pane-label">
+              {rflect.cal.i18n.Symbols.START}
+            </label>
+          </div>
+          <div class="pane-right goog-inline-block">
+            <input class="event-date-input" id="event-start-date" type="text"/>
+            <input aria-haspopup="true" class="event-time-input" id="event-start-time" type="text"/>
+          </div>
+          <div class="pane-center goog-inline-block">
+            <div class="spacer">s</div>
+          </div>
+        </div>
+
+        <div class="date-input-cont event-pane-cont">
+          <div class="pane-left goog-inline-block">
+          <label for="event-end-date" class="label-fluid event-pane-label">
+            {rflect.cal.i18n.Symbols.END}
+          </label>
+          </div>
+          <div class="pane-right goog-inline-block">
+            <input class="event-date-input" id="event-end-date" type="text"/>
+            <input aria-haspopup="true" class="event-time-input" id="event-end-time" type="text"/>
+          </div>
+          <div class="pane-center goog-inline-block">
+            <div class="spacer">s</div>
+          </div>
+        </div>
+
+        {/if}
+
+        <div class="event-pane-cont">
+          <label class="label-fluid event-pane-label event-pane-calendars-label"
+            for="event-calendars">
+            {rflect.cal.i18n.Symbols.CALENDAR}
+          </label>
+
+          <div class="button dropdown settings-pane-select">
+            <select id="event-calendars">
+              {foreach $uid in $key.uids}
+                <div class="{e2e.ext.constants.CssClass.KEY_UID}">
+                  {$uid}
+                </div>
+                <option value="elwH1n5H6oS7iR4dwXfL1CPA6SSdKhRI">Blue calendar
+                </option>
+              {/foreach}
+
+              <option value="elwH1n5Ai_BcO0D2simX92nQraz7e8H9">Red calendar</option>
+              <option
+                  value="eAAZ-D8sX9sOn3vmSBMfAteQfukTdz_nPBLBf7g2GmE9RhPSppZdvfrm8enxaamx">
+                Green calendar
+              </option>
+              <option value="e053556e4e463bb9d4b146c5">Mail Calendar</option>
+              <option
+                  value="eAjy653l5WK1G4klZhTcgYIuUKnrvDgi57el7bUGFwGkMHbRYlThEf8YNdKKiwB5">
+                Red calendar
+              </option>
+              <option
+                  value="eAscUC7dApOhcxFhI_Vt3y30_6fbjIIY19QD8aW7aWXxaklJIzzKH6Y1HqLrA5Ug">
+                Blue calendar
+              </option>
+              <option
+                  value="eAzgk76kvCphY6AhCl_Ujapr8nRGb3MSO-Nzzi3fnlnFEmeS7LneChuiG4sFZVix">
+                Red calendar
+              </option>
+              <option
+                  value="eAzttN3ZbfexU82LY1wjA1Q41hNjd6s6zw9SpwY6T4dZJiByWXUQksed3f-zvwZh">
+                Red calendar
+              </option>
+              <option
+                  value="eAAYnb6kDujbDFuNUtYmnYACk5xDU8WP2UBMxFKAbGAaaoYPHa4WyypTRne7KzHu">
+                Red calendar
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="description-cont event-pane-cont event-pane-cont-last">
+          <label class="label-fluid event-pane-label event-description-label"
+            for="event-description">
+            {rflect.cal.i18n.Symbols.DESCRIPTION}
+          </label>
+          <textarea class="event-description" placeholder="{rflect.cal.i18n.Symbols.ENTER_DESCRIPTION}"
+            id="event-description">
+          </textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="control-pane-external">
+      <div class="pane-right">
+        <div title=""
+             class="goog-inline-block goog-flat-button cal-menu-button emphasis-button">
+          {rflect.cal.i18n.Symbols.SAVE}
+        </div>
+      </div>
+      <div class="pane-left">
+        <div title=""
+             class="goog-inline-block goog-flat-button cal-menu-button"><span><i
+            class="octicon icon-button octicon-chevron-left"></i>
+          {rflect.cal.i18n.Symbols.TO_CALENDAR}
+             </span>
+        </div>
+      </div>
+      <div class="pane-center">
+        <div aria-hidden="true" style="-moz-user-select: none; display: none;"
+             role="button" title=""
+             class="goog-inline-block goog-flat-button event-pane-button-delete">
+          {rflect.cal.i18n.Symbols.DELETE}
+        </div>
+      </div>
+    </div>
+  {if $includeOuterHTML}
+  </div>
+  {/if}
+{/template}

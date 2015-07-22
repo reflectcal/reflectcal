@@ -37,7 +37,15 @@ rflect.cal.i18n.Symbols_en = {
   CANCEL: 'Cancel',
   DELETE: 'Delete',
   EDIT: 'Edit',
-  SETTINGS: 'Settings'
+  SETTINGS: 'Settings',
+
+  EVENT_NAME: 'Event name',
+  ALL_DAY_EVENT: 'All-day event',
+  START: 'Start',
+  END: 'End',
+  CALENDAR: 'Calendar',
+  DESCRIPTION: 'Description',
+  ENTER_DESCRIPTION: 'Enter description'
 };
 
 

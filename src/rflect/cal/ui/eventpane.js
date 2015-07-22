@@ -68,6 +68,9 @@ rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
     this.inputDatePicker_ = new rflect.cal.ui.InputDatePicker(this.viewManager,
         rflect.cal.ui.EventPane.getDateFormatString());
   }
+
+  this.selectCalendars_ = new rflect.cal.ui.CalendarsSelect(selectCalendarsEl,
+        this.eventManager);
 };
 goog.inherits(rflect.cal.ui.EventPane, rflect.cal.ui.ExternalPane);
 
@@ -265,6 +268,23 @@ rflect.cal.ui.EventPane.prototype.isVisible = function() {
 
 
 /**
+ * Builds body of component.
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @override
+ * @see {rflect.cal.ui.MainPaneBuilder#buildBodyWeek}
+ * @return {string}
+ */
+rflect.cal.ui.EventPane.prototype.buildHTML = function(opt_outerHTML) {
+  return rflect.cal.ui.soy.eventpane.eventPane({
+    id: this.getId(),
+    includeOuterHTML: opt_outerHTML,
+    calendarsSelectHTML: this.selectCalendars_.buildHTML(true),
+    isNativeTimeInput: this.navigator_.isNativeTimeInput()
+  });
+};
+
+
+/**
  * @override
  */
 rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
@@ -345,6 +365,74 @@ rflect.cal.ui.EventPane.prototype.createBody = function(aDom) {
   return body = aDom.createDom('div', goog.getCssName('settings-body'),
       nameCont, allDayCont, timeInputConts, calendarsCont, descCont);
 }
+
+
+/**
+ * @override
+ */
+rflect.cal.ui.EventPane.prototype.enterDocument = function() {
+  rflect.cal.ui.EventPane.superClass_.enterDocument.call(this);
+
+  this.inputName_ = this.getDomHelper().getElement('ep-event-name-input');
+
+  var allDaySubCont = this.getDomHelper().getElement('all-day-label-sub-cont');
+  this.checkboxAllDay_.setLabel(allDaySubCont);
+  this.checkboxAllDay_.getElement().className += ' aligned-checkbox';
+
+  this.textAreaDesc_ = this.getDomHelper().getElement('event-description');
+
+
+  var isNativeTimeInput = this.navigator_.isNativeTimeInput();
+
+  // Menu commands.
+  this.getHandler().listen(this.buttonBack1,
+      goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
+      .listen(this.buttonBack2, goog.ui.Component.EventType.ACTION,
+      this.onCancel_, false, this)
+      .listen(this.buttonSave1,
+      goog.ui.Component.EventType.ACTION, this.onSave_, false, this)
+      .listen(this.buttonSave2, goog.ui.Component.EventType.ACTION,
+      this.onSave_, false, this)
+      .listen(this.buttonDelete_,
+      goog.ui.Component.EventType.ACTION, this.onDelete_, false, this)
+      .listen(this.checkboxAllDay_,
+      goog.ui.Component.EventType.CHANGE, this.onCheck_, false, this)
+
+      .listen(this.inputStartDate_,
+      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
+      .listen(this.inputEndDate_,
+      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
+
+      .listen(document,
+      goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this);
+
+  if (isNativeTimeInput) {
+    this.getHandler()
+        .listen(this.inputStartDateTime_, goog.events.EventType.FOCUS,
+        this.onInputFocus_, false, this)
+        .listen(this.inputEndDateTime_, goog.events.EventType.FOCUS,
+        this.onInputFocus_, false, this)
+
+  } else {
+    this.getHandler()
+        .listen(this.inputStartTime_, goog.events.EventType.MOUSEDOWN,
+        this.onTimeInputMouseDown_, false, this)
+        .listen(this.inputEndTime_, goog.events.EventType.MOUSEDOWN,
+        this.onTimeInputMouseDown_, false, this)
+        .listen(this.inputStartTime_, goog.events.EventType.FOCUS,
+        this.onInputFocus_, false, this)
+        .listen(this.inputEndTime_, goog.events.EventType.FOCUS,
+        this.onInputFocus_, false, this)
+  }
+
+  //Show/hide actions.
+  this.getHandler().listen(this.viewManager.getScreenManager(),
+      rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
+      this.onBeforePageChange_, false, this)
+      .listen(this.viewManager.getScreenManager(),
+      rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE, this.onPageChange_,
+      false, this);
+};
 
 
 /**
@@ -491,65 +579,6 @@ rflect.cal.ui.EventPane.prototype.updateLabels_ = function(aAllDay){
     this.labelEnd_.htmlFor = 'event-end-date';
   }
 }
-
-
-/**
- * @override
- */
-rflect.cal.ui.EventPane.prototype.enterDocument = function() {
-  var isNativeTimeInput = this.navigator_.isNativeTimeInput();
-
-  rflect.cal.ui.EventPane.superClass_.enterDocument.call(this);
-
-  // Menu commands.
-  this.getHandler().listen(this.buttonBack1,
-      goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
-      .listen(this.buttonBack2, goog.ui.Component.EventType.ACTION,
-      this.onCancel_, false, this)
-      .listen(this.buttonSave1,
-      goog.ui.Component.EventType.ACTION, this.onSave_, false, this)
-      .listen(this.buttonSave2, goog.ui.Component.EventType.ACTION,
-      this.onSave_, false, this)
-      .listen(this.buttonDelete_,
-      goog.ui.Component.EventType.ACTION, this.onDelete_, false, this)
-      .listen(this.checkboxAllDay_,
-      goog.ui.Component.EventType.CHANGE, this.onCheck_, false, this)
-
-      .listen(this.inputStartDate_,
-      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
-      .listen(this.inputEndDate_,
-      goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
-
-      .listen(document,
-      goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this);
-
-  if (isNativeTimeInput) {
-    this.getHandler()
-        .listen(this.inputStartDateTime_, goog.events.EventType.FOCUS,
-        this.onInputFocus_, false, this)
-        .listen(this.inputEndDateTime_, goog.events.EventType.FOCUS,
-        this.onInputFocus_, false, this)
-
-  } else {
-    this.getHandler()
-        .listen(this.inputStartTime_, goog.events.EventType.MOUSEDOWN,
-        this.onTimeInputMouseDown_, false, this)
-        .listen(this.inputEndTime_, goog.events.EventType.MOUSEDOWN,
-        this.onTimeInputMouseDown_, false, this)
-        .listen(this.inputStartTime_, goog.events.EventType.FOCUS,
-        this.onInputFocus_, false, this)
-        .listen(this.inputEndTime_, goog.events.EventType.FOCUS,
-        this.onInputFocus_, false, this)
-  }
-
-  //Show/hide actions.
-  this.getHandler().listen(this.viewManager.getScreenManager(),
-      rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
-      this.onBeforePageChange_, false, this)
-      .listen(this.viewManager.getScreenManager(),
-      rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE, this.onPageChange_,
-      false, this);
-};
 
 
 /**

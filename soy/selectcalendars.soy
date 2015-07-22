@@ -1,0 +1,22 @@
+{namespace rflect.cal.ui.soy.selectcalendars}
+
+
+/**
+ * @param? includeOuterHTML Whether to include outer html of element.
+ * @param calendars List of calendars.
+ */
+{template .selectCalendars autoescape="false"}
+  {if $includeOuterHTML}
+  <div class="button dropdown settings-pane-select">
+    <select id="event-calendars">
+  {/if}
+    {foreach $calendar in $calendars}
+      <option value="{$calendar.id}">
+        {$calendar.name}
+      </option>
+    {/foreach}
+  {if $includeOuterHTML}
+    </select>
+  </div>
+  {/if}
+{/template}

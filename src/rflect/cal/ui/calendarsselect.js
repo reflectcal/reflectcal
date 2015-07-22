@@ -12,6 +12,7 @@ goog.provide('rflect.cal.ui.CalendarsSelect');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.Disposable');
+goog.require('rflect.cal.ui.soy.selectcalendars');
 
 
 
@@ -81,6 +82,25 @@ rflect.cal.ui.CalendarsSelect.prototype.setCalendarId = function (aCalendarId) {
 
 
 /**
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @return {string}.
+ */
+rflect.cal.ui.CalendarsSelect.prototype.buildHTML = function(opt_outerHTML) {
+  var calendars = [];
+  this.eventManager_.forEachCalendar((calendar, calendarId) => {
+    calendars.push({
+      id: calendarId,
+      name: calendar.getUIName()
+    })
+  });
+  return rflect.cal.ui.soy.selectcalendars.selectCalendars({
+    includeOuterHTML: opt_outerHTML,
+    calendars: calendars
+  });
+}
+
+
+/**
  * Populates calendars select. Generic function.
  */
 rflect.cal.ui.CalendarsSelect.prototype.update = function() {
@@ -88,10 +108,7 @@ rflect.cal.ui.CalendarsSelect.prototype.update = function() {
 
   goog.dom.removeChildren(this.select_);
 
-  this.eventManager_.forEachCalendar(function(calendar, calendarId){
-    this.select_.appendChild(goog.dom.createDom('option', {value: calendarId},
-        calendar.getUIName()));
-  }, this);
+  this.select_.innerHTML = this.buildHTML(false);
 
   this.recallSelectedOption_();
 }
