@@ -794,7 +794,8 @@ module.exports = function(grunt) {
       var contents = fs.readFileSync(fullFileName, {encoding: 'utf-8'});
       contents = contents.
           replace(/goog\.require\(\'soy\'\);\s/, '').
-          replace(/goog\.require\(\'soydata\'\);\s\s/, '');
+          replace(/goog\.require\(\'soydata\'\);\s\s/, '').
+          replace(/goog\.require\(\'soydata\'\);/, '');
       fs.writeFileSync(fullFileName, contents);
     })
   });

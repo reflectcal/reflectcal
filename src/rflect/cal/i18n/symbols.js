@@ -33,6 +33,9 @@ rflect.cal.i18n.Symbols_en = {
   CALENDAR_POSTFIX: ' calendar',
   TO_CALENDAR: ' Calendar',
 
+  BACK: ' Back',
+  NEW: ' New',
+
   SAVE: 'Save',
   CANCEL: 'Cancel',
   DELETE: 'Delete',
@@ -66,11 +69,22 @@ rflect.cal.i18n.Symbols_ru = {
   CALENDAR_POSTFIX: ' календарь',
   TO_CALENDAR: ' Календарь',
 
+  BACK: ' Назад',
+  NEW: ' Новый',
+
   SAVE: 'Сохранить',
   CANCEL: 'Отмена',
   DELETE: 'Удалить',
   EDIT: 'Правка',
-  SETTINGS: 'Настройки'
+  SETTINGS: 'Настройки',
+
+  EVENT_NAME: 'Имя события',
+  ALL_DAY_EVENT: 'Весь день',
+  START: 'Начало',
+  END: 'Конец',
+  CALENDAR: 'Календарь',
+  DESCRIPTION: 'Описание',
+  ENTER_DESCRIPTION: 'Ввести описание'
 };
 
 
@@ -91,11 +105,22 @@ rflect.cal.i18n.Symbols_by = {
   CALENDAR_POSTFIX: ' каляндар',
   TO_CALENDAR: ' Каляндар',
 
+  BACK: ' Назад',
+  NEW: ' Новы',
+
   SAVE: 'Захаваць',
   CANCEL: 'Адмена',
   DELETE: 'Выдаліць',
   EDIT: 'Праўка',
-  SETTINGS: 'Налады'
+  SETTINGS: 'Налады',
+
+  EVENT_NAME: 'Імя падзеі',
+  ALL_DAY_EVENT: 'Ўвесь дзень',
+  START: 'Пачатак',
+  END: 'Канец',
+  CALENDAR: 'Каляндар',
+  DESCRIPTION: 'Апісанне',
+  ENTER_DESCRIPTION: 'Ўвядзіце апісанне'
 };
 
 
@@ -116,11 +141,22 @@ rflect.cal.i18n.Symbols_fr = {
   CALENDAR_POSTFIX: ' calendrier',
   TO_CALENDAR: ' Сalendrier',
 
+  BACK: ' Retour',
+  NEW: ' Nouvel',
+
   SAVE: 'Enregistrer',
   CANCEL: 'Annuler',
   DELETE: 'Supprimer',
   EDIT: 'Modifier',
-  SETTINGS: 'Préférences'
+  SETTINGS: 'Préférences',
+
+  EVENT_NAME: 'Nom de l\'événement',
+  ALL_DAY_EVENT: 'Toute la journée',
+  START: 'Start',
+  END: 'Fin',
+  CALENDAR: 'Сalendrier',
+  DESCRIPTION: 'Description',
+  ENTER_DESCRIPTION: 'Entrez description'
 };
 
 

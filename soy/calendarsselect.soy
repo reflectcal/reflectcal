@@ -2,21 +2,22 @@
 
 
 /**
+ * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param calendars List of calendars.
  */
-{template .selectCalendars autoescape="false"}
+{template .calendarsSelect autoescape="false"}
   {if $includeOuterHTML}
-  <div class="button dropdown settings-pane-select">
-    <select id="event-calendars">
+  <div id="{$id}" class="button dropdown settings-pane-select">
   {/if}
+    <select class="event-calendars">
     {foreach $calendar in $calendars}
       <option value="{$calendar.id}">
         {$calendar.name}
       </option>
     {/foreach}
-  {if $includeOuterHTML}
     </select>
+  {if $includeOuterHTML}
   </div>
   {/if}
 {/template}

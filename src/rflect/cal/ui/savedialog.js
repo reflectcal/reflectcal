@@ -46,6 +46,9 @@ rflect.cal.ui.SaveDialog = function (opt_class,
   this.setBackgroundElementOpacity(0);
   this.setButtonSet(rflect.cal.ui.SaveDialog.createButtonSet());
   this.setContent(rflect.cal.ui.SaveDialog.HTML_PARTS_);
+
+  this.addChild(this.select_ = new rflect.cal.ui.CalendarsSelect(
+      this.eventManager_));
 };
 goog.inherits(rflect.cal.ui.SaveDialog, rflect.ui.DialogMouseMissBehavior);
 
@@ -144,8 +147,7 @@ rflect.cal.ui.SaveDialog.prototype.enterDocument = function () {
 
   var selectEl = dom.getElement('dialog-event-calendars');
 
-  this.select_ = new rflect.cal.ui.CalendarsSelect(selectEl,
-      this.eventManager_);
+  this.select_.decorate(selectEl);
 
   rflect.cal.ui.SaveDialog.superClass_.enterDocument.call(this);
 }
@@ -195,7 +197,6 @@ rflect.cal.ui.SaveDialog.prototype.setVisible = function (aVisible) {
  */
 rflect.cal.ui.SaveDialog.prototype.disposeInternal = function () {
   this.input_ = null;
-  this.select_ && this.select_.dispose();
   rflect.cal.ui.SaveDialog.superClass_.disposeInternal.call(this);
 
 }
