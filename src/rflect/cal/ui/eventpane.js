@@ -67,7 +67,7 @@ rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
         rflect.cal.ui.EventPane.getDateFormatString());
   }
 
-  this.addChild(this.selectCalendars_ = new rflect.cal.ui.CalendarsSelect(
+  this.addChild(this.calendarsSelect_ = new rflect.cal.ui.CalendarsSelect(
       this.eventManager));
 };
 goog.inherits(rflect.cal.ui.EventPane, rflect.cal.ui.ExternalPane);
@@ -246,7 +246,7 @@ rflect.cal.ui.EventPane.prototype.labelEnd_;
  * @type {rflect.cal.ui.CalendarsSelect}
  * @private
  */
-rflect.cal.ui.EventPane.prototype.selectCalendars_;
+rflect.cal.ui.EventPane.prototype.calendarsSelect_;
 
 
 /**
@@ -264,7 +264,7 @@ rflect.cal.ui.EventPane.prototype.buildHTML = function(opt_outerHTML) {
   return rflect.cal.ui.soy.eventpane.eventPane({
     id: this.getId(),
     includeOuterHTML: opt_outerHTML,
-    calendarsSelectHTML: this.selectCalendars_.buildHTML(true),
+    calendarsSelectHTML: this.calendarsSelect_.buildHTML(true),
     isNativeTimeInput: this.navigator_.isNativeTimeInput()
   });
 };
@@ -275,6 +275,8 @@ rflect.cal.ui.EventPane.prototype.buildHTML = function(opt_outerHTML) {
  */
 rflect.cal.ui.EventPane.prototype.enterDocument = function() {
   var isNativeTimeInput = this.navigator_.isNativeTimeInput();
+  
+  this.calendarsSelect_.setElementById(this.calendarsSelect_.getId());
 
   rflect.cal.ui.EventPane.superClass_.enterDocument.call(this);
 
@@ -626,8 +628,8 @@ rflect.cal.ui.EventPane.prototype.displayValues = function() {
 
   this.checkboxAllDay_.setChecked(eh.getAllDay());
 
-  this.selectCalendars_.update();
-  this.selectCalendars_.setCalendarId(eh.getCalendarId());
+  this.calendarsSelect_.update();
+  this.calendarsSelect_.setCalendarId(eh.getCalendarId());
 
   this.showTimeInputs_(!eh.getAllDay());
   this.updateLabels_(eh.getAllDay());
@@ -736,7 +738,7 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
 
   eh.setDescription(this.textAreaDesc_.value);
 
-  eh.setCalendarId(this.selectCalendars_.getCalendarId());
+  eh.setCalendarId(this.calendarsSelect_.getCalendarId());
 
   if (this.navigator_.isNativeTimeInput()){
     var dateScanResult = this.scanDatesNative_();
