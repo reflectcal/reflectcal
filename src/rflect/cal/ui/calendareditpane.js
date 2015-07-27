@@ -328,9 +328,9 @@ rflect.cal.ui.CalendarEditPane.prototype.enterDocument = function() {
       goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
       .listen(this.buttonBack2, goog.ui.Component.EventType.ACTION,
       this.onCancel_, false, this)
-      .listen(this.buttonSave1, goog.ui.Component.EventType.ACTION,
+      .listen(this.buttonPrimary1, goog.ui.Component.EventType.ACTION,
       this.onSaveCalendar_, false, this)
-      .listen(this.buttonSave2, goog.ui.Component.EventType.ACTION,
+      .listen(this.buttonPrimary2, goog.ui.Component.EventType.ACTION,
       this.onSaveCalendar_, false, this)
       .listen(this.buttonDeleteCalendar_,
       goog.ui.Component.EventType.ACTION, this.onDeleteCalendarAction_, false,

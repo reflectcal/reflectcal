@@ -1,0 +1,72 @@
+{namespace rflect.cal.ui.soy.calendarspane}
+
+/**
+ * @param id Unique id.
+ * @param? includeOuterHTML Whether to include outer html of element.
+ * @param calendarCollections
+ */
+{template .calendarsPane autoescape="false"}
+  {if $includeOuterHTML}
+  <div id="{$id}" class="settings-pane">
+  {/if}
+    {call rflect.cal.ui.soy.externalpane.controlPane}
+      {param backButtonLabel: rflect.cal.i18n.Symbols.TO_SETTINGS /}
+      {param showDeleteButton: false /}
+      {param showNewButton: true /}
+      {param showSaveButton: false /}
+    {/call}
+
+    <div class="settings-body-outer">
+      <div class="settings-body">
+      {call .calendarsPaneBody}
+        {param calendarCollections: $calendarCollections /}
+      {/call}
+      </div>
+    </div>
+
+    {call rflect.cal.ui.soy.externalpane.controlPane}
+      {param backButtonLabel: rflect.cal.i18n.Symbols.TO_SETTINGS /}
+      {param showDeleteButton: false /}
+      {param showNewButton: true /}
+      {param showSaveButton: false /}
+    {/call}
+  {if $includeOuterHTML}
+  </div>
+  {/if}
+{/template}
+
+
+/**
+ * @param calendarCollections
+ */
+{template .calendarsPaneBody autoescape="false"}
+  {foreach $calendarCollection in $calendarCollections}
+  <div class="event-pane-cont calendars-outer-cont event-pane-cont-last">
+    <label>
+      {if index($calendarCollection) == 0}
+      {rflect.cal.i18n.Symbols.CALENDAR_LABELS_MY}
+      {else}
+      {rflect.cal.i18n.Symbols.CALENDAR_LABELS_OTHER}
+      {/if}
+    </label>
+    <div class="calendars-cont">
+      <table class="calendars-table">
+        <tbody>
+        {foreach $calendar in $calendarCollection}
+          <tr class="calendar-row">
+            <td class="listitem-cont name-cell">
+              <button id="cal-listelwf3a5upDSNIcZ0OvSr6lm-CLES9duG"
+                  class="settings-link cal-link">Blue calendar
+              </button>
+            </td>
+            <td class="color-cell">
+              <div class="calitem-color-cont calendar-color event-rect-blue"></div>
+            </td>
+          </tr>
+        {/foreach}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {/foreach}
+{/template}

@@ -65,11 +65,11 @@ rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
 
   this.addChild(this.buttonBack1 = new goog.ui.Button(null,
       goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.buttonSave1 = new goog.ui.Button(null,
+  this.addChild(this.buttonPrimary1 = new goog.ui.Button(null,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonBack2 = new goog.ui.Button(null,
       goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.buttonSave2 = new goog.ui.Button(null,
+  this.addChild(this.buttonPrimary2 = new goog.ui.Button(null,
       goog.ui.FlatButtonRenderer.getInstance()));
 
   if (this.isButtonDeleteEnabled()) {
@@ -116,14 +116,14 @@ rflect.cal.ui.ExternalPane.prototype.buttonBack2;
  * @type {goog.ui.Button}
  * @protected
  */
-rflect.cal.ui.ExternalPane.prototype.buttonSave1;
+rflect.cal.ui.ExternalPane.prototype.buttonPrimary1;
 
 
 /**
  * @type {goog.ui.Button}
  * @protected
  */
-rflect.cal.ui.ExternalPane.prototype.buttonSave2;
+rflect.cal.ui.ExternalPane.prototype.buttonPrimary2;
 
 
 /**
@@ -161,11 +161,11 @@ rflect.cal.ui.ExternalPane.prototype.enterDocument = function() {
 
   this.buttonBack1.decorate(controlPane1.querySelector(
       '.pane-left > .goog-flat-button'));
-  this.buttonSave1.decorate(controlPane1.querySelector(
+  this.buttonPrimary1.decorate(controlPane1.querySelector(
       '.pane-right > .goog-flat-button'));
   this.buttonBack2.decorate(controlPane2.querySelector(
       '.pane-left > .goog-flat-button'));
-  this.buttonSave2.decorate(controlPane2.querySelector(
+  this.buttonPrimary2.decorate(controlPane2.querySelector(
       '.pane-right > .goog-flat-button'));
   if (this.isButtonDeleteEnabled()) {
     this.buttonDelete.decorate(controlPane2.querySelector(

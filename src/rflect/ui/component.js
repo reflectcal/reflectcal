@@ -64,7 +64,7 @@ rflect.ui.Component.prototype.decorateInternal = function(aElement) {
   // Set this.element_.
   rflect.ui.Component.superClass_.decorateInternal.call(this, aElement);
   // Build body.
-  this.updateByRedraw();
+  this.getElement().innerHTML = this.buildHTML(false);
 };
 
 

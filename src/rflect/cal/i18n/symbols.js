@@ -31,7 +31,10 @@ rflect.cal.i18n.Symbols_en = {
   TASKS_LABEL: 'Tasks',
   NO_NAME_EVENT: '(Untitled)',
   CALENDAR_POSTFIX: ' calendar',
+
   TO_CALENDAR: ' Calendar',
+  TO_SETTINGS: ' Settings',
+  TO_CALENDARS: ' Calendars',
 
   BACK: ' Back',
   NEW: ' New',
@@ -48,7 +51,13 @@ rflect.cal.i18n.Symbols_en = {
   END: 'End',
   CALENDAR: 'Calendar',
   DESCRIPTION: 'Description',
-  ENTER_DESCRIPTION: 'Enter description'
+  ENTER_DESCRIPTION: 'Enter description',
+
+  LANGUAGES: 'Languages',
+  DEBUG_MODE: 'Debug mode',
+  LOGGED_IN_AS: 'Logged in as',
+  GUEST: 'guest',
+  LOGOUT: 'Logout'
 };
 
 
@@ -67,7 +76,10 @@ rflect.cal.i18n.Symbols_ru = {
   TASKS_LABEL: 'Задачи',
   NO_NAME_EVENT: '(Без имени)',
   CALENDAR_POSTFIX: ' календарь',
+
   TO_CALENDAR: ' Календарь',
+  TO_SETTINGS: ' Настройки',
+  TO_CALENDARS: ' Календари',
 
   BACK: ' Назад',
   NEW: ' Новый',
@@ -84,7 +96,13 @@ rflect.cal.i18n.Symbols_ru = {
   END: 'Конец',
   CALENDAR: 'Календарь',
   DESCRIPTION: 'Описание',
-  ENTER_DESCRIPTION: 'Ввести описание'
+  ENTER_DESCRIPTION: 'Ввести описание',
+
+  LANGUAGES: 'Языки',
+  DEBUG_MODE: 'Режим отладки',
+  LOGGED_IN_AS: 'Вошел как',
+  GUEST: 'гость',
+  LOGOUT: 'Выйти'
 };
 
 
@@ -103,7 +121,10 @@ rflect.cal.i18n.Symbols_by = {
   TASKS_LABEL: 'Задачы',
   NO_NAME_EVENT: '(Без імя)',
   CALENDAR_POSTFIX: ' каляндар',
+
   TO_CALENDAR: ' Каляндар',
+  TO_SETTINGS: ' Налады',
+  TO_CALENDARS: ' Календары',
 
   BACK: ' Назад',
   NEW: ' Новы',
@@ -120,7 +141,13 @@ rflect.cal.i18n.Symbols_by = {
   END: 'Канец',
   CALENDAR: 'Каляндар',
   DESCRIPTION: 'Апісанне',
-  ENTER_DESCRIPTION: 'Ўвядзіце апісанне'
+  ENTER_DESCRIPTION: 'Ўвядзіце апісанне',
+
+  LANGUAGES: 'Мовы',
+  DEBUG_MODE: 'Рэжим адладкi',
+  LOGGED_IN_AS: 'Зайшоу як',
+  GUEST: 'госць',
+  LOGOUT: 'Выйсцi'
 };
 
 
@@ -139,7 +166,10 @@ rflect.cal.i18n.Symbols_fr = {
   TASKS_LABEL: 'Tâches',
   NO_NAME_EVENT: '(pas de nom)',
   CALENDAR_POSTFIX: ' calendrier',
+
   TO_CALENDAR: ' Сalendrier',
+  TO_SETTINGS: ' Préférences',
+  TO_CALENDARS: ' Сalendriers',
 
   BACK: ' Retour',
   NEW: ' Nouvel',
@@ -156,7 +186,13 @@ rflect.cal.i18n.Symbols_fr = {
   END: 'Fin',
   CALENDAR: 'Сalendrier',
   DESCRIPTION: 'Description',
-  ENTER_DESCRIPTION: 'Entrez description'
+  ENTER_DESCRIPTION: 'Entrez description',
+
+  LANGUAGES: 'Langues',
+  DEBUG_MODE: 'Mode débogage',
+  LOGGED_IN_AS: 'Connecté en tant',
+  GUEST: 'qu\'invité',
+  LOGOUT: 'Se Déconnecter'
 };
 
 

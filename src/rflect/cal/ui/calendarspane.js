@@ -58,12 +58,18 @@ rflect.cal.ui.CalendarsPane = function(aViewManager, aTimeManager, aEventManager
   rflect.cal.ui.ExternalPane.call(this, aViewManager, aTimeManager,
       aEventManager, aParentElement, aTransport);
 
-  this.addChild(this.buttonNewCalendar1 = new goog.ui.Button('New',
+  this.addChild(this.buttonPrimary1 = new goog.ui.Button('New',
       goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.buttonNewCalendar2 = new goog.ui.Button('New',
+  this.addChild(this.buttonPrimary2 = new goog.ui.Button('New',
       goog.ui.FlatButtonRenderer.getInstance()));
 };
 goog.inherits(rflect.cal.ui.CalendarsPane, rflect.cal.ui.ExternalPane);
+
+
+/**
+ * @typedef {{id: string, name: string, colorClass: string}}
+ */
+rflect.cal.ui.CalendarsPane.DisplayableCalendar;
 
 
 /**
@@ -121,6 +127,14 @@ rflect.cal.ui.CalendarsPane.PageIndexes = {
 
 
 /**
+ * @override
+ */
+rflect.cal.ui.CalendarsPane.prototype.isButtonDeleteEnabled = function() {
+  return false;
+};
+
+
+/**
  * Element in which event pane will be rendered.
  * @type {Element}
  * @private
@@ -158,10 +172,10 @@ rflect.cal.ui.CalendarsPane.prototype.createSettingsPaneButtonsUpper =
     function(aDom) {
   rflect.cal.ui.common.setBackButtonContent(this.buttonBack1);
   this.getPaneUpperLeft().appendChild(this.buttonBack1.getElement());
-  this.getPaneUpperRight().appendChild(this.buttonNewCalendar1.getElement());
-  /*this.buttonNewCalendar1.getElement().appendChild(aDom.createDom('i', ['icon',
+  this.getPaneUpperRight().appendChild(this.buttonPrimary1.getElement());
+  /*this.buttonPrimary1.getElement().appendChild(aDom.createDom('i', ['icon',
       'icon-plus']));*/
-  goog.dom.classes.add(this.buttonNewCalendar1.getElement(), 'emphasis-button');
+  goog.dom.classes.add(this.buttonPrimary1.getElement(), 'emphasis-button');
 }
 
 
@@ -172,10 +186,10 @@ rflect.cal.ui.CalendarsPane.prototype.createSettingsPaneButtonsLower =
     function(aDom) {
   rflect.cal.ui.common.setBackButtonContent(this.buttonBack2);
   this.getPaneLowerLeft().appendChild(this.buttonBack2.getElement());
-  this.getPaneLowerRight().appendChild(this.buttonNewCalendar2.getElement());
-  /*this.buttonNewCalendar2.getElement().appendChild(aDom.createDom('i', ['icon',
+  this.getPaneLowerRight().appendChild(this.buttonPrimary2.getElement());
+  /*this.buttonPrimary2.getElement().appendChild(aDom.createDom('i', ['icon',
       'icon-plus']));*/
-  goog.dom.classes.add(this.buttonNewCalendar2.getElement(), 'emphasis-button');
+  goog.dom.classes.add(this.buttonPrimary2.getElement(), 'emphasis-button');
 }
 
 
@@ -315,6 +329,44 @@ rflect.cal.ui.CalendarsPane.prototype.createCalendarsTable_ =
 
 
 /**
+ * @return {Array.<Array.<rflect.cal.ui.CalendarsPane.DisplayableCalendar>>}
+ * Calendars list table
+ * @private
+ */
+rflect.cal.ui.CalendarsPane.prototype.getCalendarCollections =
+    function() {
+  var calendarCollections = [];
+  //Calendars pane may not yet exist.
+  var currentCalendar = this.calendarEditPane_ &&
+      this.calendarEditPane_.getCurrentCalendar();
+
+  this.eventManager.forEachCalendar(calendar => {
+    var tmpCalendar = {};
+    //Use updated version of calendar if we were editing it.
+    if (currentCalendar && currentCalendar.id == calendar.id) {
+      tmpCalendar = currentCalendar;
+    } else {
+      tmpCalendar = calendar;
+    }
+
+    if (tmpCalendar.own) {
+      if (!calendarCollections[0]) {
+        calendarCollections[0] = [];
+      }
+      calendarCollections[0].push(tmpCalendar);
+    } else {
+      if (!calendarCollections[1]) {
+        calendarCollections[1] = [];
+      }
+      calendarCollections[1].push(tmpCalendar);
+    }
+  });
+
+  return calendarCollections;
+}
+
+
+/**
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @param {Array.<rflect.cal.events.Calendar>} aCalendars Corresponding
  * calendars list.
@@ -369,6 +421,32 @@ rflect.cal.ui.CalendarsPane.createCalendarsTd_ =
 /**
  * @override
  */
+rflect.cal.ui.CalendarsPane.prototype.updateByRedraw =
+    function() {
+  this.getElement().querySelector('.settings-body').innerHTML =
+      rflect.cal.ui.soy.calendarspane.calendarsPane({
+    id: this.getId(),
+    includeOuterHTML: opt_outerHTML,
+    calendarCollections: this.getCalendarCollections()
+  });
+};
+
+
+/**
+ * @override
+ */
+rflect.cal.ui.CalendarsPane.prototype.buildHTML = function(opt_outerHTML) {
+  return rflect.cal.ui.soy.calendarspane.calendarsPane({
+    id: this.getId(),
+    includeOuterHTML: opt_outerHTML,
+    calendarCollections: this.getCalendarCollections()
+  });
+};
+
+
+/**
+ * @override
+ */
 rflect.cal.ui.CalendarsPane.prototype.enterDocument = function() {
   rflect.cal.ui.CalendarsPane.superClass_.enterDocument.call(this);
 
@@ -377,10 +455,10 @@ rflect.cal.ui.CalendarsPane.prototype.enterDocument = function() {
       goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
       .listen(this.buttonBack2, goog.ui.Component.EventType.ACTION,
       this.onCancel_, false, this)
-      .listen(this.buttonNewCalendar1,
+      .listen(this.buttonPrimary1,
       goog.ui.Component.EventType.ACTION, this.onNewCalendarAction_, false,
       this)
-      .listen(this.buttonNewCalendar2,
+      .listen(this.buttonPrimary2,
       goog.ui.Component.EventType.ACTION, this.onNewCalendarAction_, false,
       this)
       .listen(document,

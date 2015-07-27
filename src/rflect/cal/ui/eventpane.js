@@ -307,9 +307,9 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
       goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
       .listen(this.buttonBack2, goog.ui.Component.EventType.ACTION,
       this.onCancel_, false, this)
-      .listen(this.buttonSave1,
+      .listen(this.buttonPrimary1,
       goog.ui.Component.EventType.ACTION, this.onSave_, false, this)
-      .listen(this.buttonSave2, goog.ui.Component.EventType.ACTION,
+      .listen(this.buttonPrimary2, goog.ui.Component.EventType.ACTION,
       this.onSave_, false, this)
       .listen(this.buttonDelete,
       goog.ui.Component.EventType.ACTION, this.onDelete_, false, this)
