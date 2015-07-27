@@ -55,12 +55,13 @@
         {foreach $calendar in $calendarCollection}
           <tr class="calendar-row">
             <td class="listitem-cont name-cell">
-              <button id="cal-listelwf3a5upDSNIcZ0OvSr6lm-CLES9duG"
-                  class="settings-link cal-link">Blue calendar
+              <button id="{rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX}{$calendar.id}"
+                  class="settings-link cal-link{sp}{if $calendar.isInProgress}cal-link-in-progress{/if}">
+                {$calendar.name}
               </button>
             </td>
             <td class="color-cell">
-              <div class="calitem-color-cont calendar-color event-rect-blue"></div>
+              <div class="calitem-color-cont calendar-color{sp}{$calendar.colorClass}"></div>
             </td>
           </tr>
         {/foreach}

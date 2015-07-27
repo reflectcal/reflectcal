@@ -57,7 +57,10 @@ rflect.cal.i18n.Symbols_en = {
   DEBUG_MODE: 'Debug mode',
   LOGGED_IN_AS: 'Logged in as',
   GUEST: 'guest',
-  LOGOUT: 'Logout'
+  LOGOUT: 'Logout',
+
+  CALENDAR_NAME: 'Name',
+  CALENDAR_COLORS: 'Colors'
 };
 
 
@@ -102,7 +105,10 @@ rflect.cal.i18n.Symbols_ru = {
   DEBUG_MODE: 'Режим отладки',
   LOGGED_IN_AS: 'Вошел как',
   GUEST: 'гость',
-  LOGOUT: 'Выйти'
+  LOGOUT: 'Выйти',
+
+  CALENDAR_NAME: 'Имя',
+  CALENDAR_COLORS: 'Цвета'
 };
 
 
@@ -147,7 +153,10 @@ rflect.cal.i18n.Symbols_by = {
   DEBUG_MODE: 'Рэжим адладкi',
   LOGGED_IN_AS: 'Зайшоу як',
   GUEST: 'госць',
-  LOGOUT: 'Выйсцi'
+  LOGOUT: 'Выйсцi',
+
+  CALENDAR_NAME: 'Імя',
+  CALENDAR_COLORS: 'Колеры'
 };
 
 
@@ -192,7 +201,10 @@ rflect.cal.i18n.Symbols_fr = {
   DEBUG_MODE: 'Mode débogage',
   LOGGED_IN_AS: 'Connecté en tant',
   GUEST: 'qu\'invité',
-  LOGOUT: 'Se Déconnecter'
+  LOGOUT: 'Se Déconnecter',
+
+  CALENDAR_NAME: 'Nom',
+  CALENDAR_COLORS: 'Couleurs'
 };
 
 

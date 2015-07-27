@@ -67,7 +67,7 @@ goog.inherits(rflect.cal.ui.CalendarsPane, rflect.cal.ui.ExternalPane);
 
 
 /**
- * @typedef {{id: string, name: string, colorClass: string}}
+ * @typedef {{id: string, name: string, colorClass: string, isInProgress: boolean}}
  */
 rflect.cal.ui.CalendarsPane.DisplayableCalendar;
 
@@ -344,9 +344,18 @@ rflect.cal.ui.CalendarsPane.prototype.getCalendarCollections =
     var tmpCalendar = {};
     //Use updated version of calendar if we were editing it.
     if (currentCalendar && currentCalendar.id == calendar.id) {
-      tmpCalendar = currentCalendar;
+      tmpCalendar.id = currentCalendar.id;
+      tmpCalendar.name = currentCalendar.getUIName();
+      tmpCalendar.colorClass = currentCalendar.colorCode.eventClass;
+      tmpCalendar.isInProgress = !currentCalendar.id || aEventManager.
+          calendarIsInProgress(currentCalendar.id)
+
     } else {
-      tmpCalendar = calendar;
+      tmpCalendar.id = calendar.id;
+      tmpCalendar.name = calendar.getUIName();
+      tmpCalendar.colorClass = calendar.colorCode.eventClass;
+      tmpCalendar.isInProgress = !calendar.id || aEventManager.
+          calendarIsInProgress(calendar.id)
     }
 
     if (tmpCalendar.own) {
@@ -436,9 +445,7 @@ rflect.cal.ui.CalendarsPane.prototype.updateByRedraw =
  * @override
  */
 rflect.cal.ui.CalendarsPane.prototype.buildHTML = function(opt_outerHTML) {
-  return rflect.cal.ui.soy.calendarspane.calendarsPane({
-    id: this.getId(),
-    includeOuterHTML: opt_outerHTML,
+  return rflect.cal.ui.soy.calendarspane.calendarsPaneBody({
     calendarCollections: this.getCalendarCollections()
   });
 };
