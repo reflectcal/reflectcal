@@ -21,11 +21,11 @@
         <div class="event-name-input-cont event-pane-cont">
           <label class="goog-inline-block event-pane-label label-fluid"
             for="sp-calendar-name-input">
-            rflect.cal.i18n.Symbols.CALENDAR_NAME
+            {rflect.cal.i18n.Symbols.CALENDAR_NAME}
           </label>
 
           <div class="control-wrapper">
-            <input placeholder="Red calendar" class="ep-event-name-input"
+            <input placeholder="" class="ep-event-name-input"
                 id="sp-calendar-name-input" type="text"/>
           </div>
         </div>
@@ -33,20 +33,19 @@
         <div class="event-name-input-cont event-pane-cont event-pane-cont-last">
           <label class="goog-inline-block event-pane-label label-fluid calendar-colors-label"
               for="calendar-colors">
-            rflect.cal.i18n.Symbols.CALENDAR_COLORS
+            {rflect.cal.i18n.Symbols.CALENDAR_COLORS}
           </label>
-          <table id="calendar-colors"
-                 class="calendar-colors-table goog-inline-block">
+          <table id="calendar-colors" class="calendar-colors-table goog-inline-block">
             <tbody>
             {foreach $colorRow in $colorRows}
-            <tr>
-              {foreach $colorCell in $colorRow}
-              <td>
-                <button class="calitem-color-cont calendar-color{sp}{$colorCell}"
-                    id="calendar-color{index($colorRow) + index($colorCell)}"></button>
-              </td>
-              {/foreach}
-            </tr>
+              <tr>
+                {foreach $colorCell in $colorRow}
+                <td>
+                  <button class="calitem-color-cont calendar-color{sp}{$colorCell.eventClass}"
+                      id="calendar-color{index($colorRow) + index($colorCell)}"></button>
+                </td>
+                {/foreach}
+              </tr>
             {/foreach}
             </tbody>
           </table>

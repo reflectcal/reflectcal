@@ -18,8 +18,11 @@
 
     <div class="settings-body-outer">
       <div class="settings-body">
-      {call .calendarsPaneBody}
-        {param calendarCollections: $calendarCollections /}
+      {call .calendarsPaneEntry}
+        {param calendarCollection: $calendarCollections[0] /}
+      {/call}
+      {call .calendarsPaneEntry}
+        {param calendarCollection: $calendarCollections[1] /}
       {/call}
       </div>
     </div>
@@ -37,22 +40,18 @@
 
 
 /**
- * @param calendarCollections
+ * @param calendarCollection
  */
-{template .calendarsPaneBody autoescape="false"}
-  {foreach $calendarCollection in $calendarCollections}
+{template .calendarsPaneEntry autoescape="false"}
+  {if length($calendarCollection.calendars) != 0}
   <div class="event-pane-cont calendars-outer-cont event-pane-cont-last">
     <label>
-      {if index($calendarCollection) == 0}
-      {rflect.cal.i18n.Symbols.CALENDAR_LABELS_MY}
-      {else}
-      {rflect.cal.i18n.Symbols.CALENDAR_LABELS_OTHER}
-      {/if}
+      {$calendarCollection.label}
     </label>
     <div class="calendars-cont">
       <table class="calendars-table">
         <tbody>
-        {foreach $calendar in $calendarCollection}
+        {foreach $calendar in $calendarCollection.calendars}
           <tr class="calendar-row">
             <td class="listitem-cont name-cell">
               <button id="{rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX}{$calendar.id}"
@@ -69,5 +68,20 @@
       </table>
     </div>
   </div>
-  {/foreach}
+  {/if}
 {/template}
+
+
+/**
+ * @param calendarCollections
+ */
+{template .calendarsPaneBody autoescape="false"}
+  {call .calendarsPaneEntry}
+    {param calendarCollection: $calendarCollections[0] /}
+  {/call}
+  {call .calendarsPaneEntry}
+    {param calendarCollection: $calendarCollections[1] /}
+  {/call}
+{/template}
+
+

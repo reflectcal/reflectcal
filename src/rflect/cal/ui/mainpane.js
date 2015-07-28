@@ -1937,7 +1937,7 @@ rflect.cal.ui.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
 rflect.cal.ui.MainPane.prototype.onSaveEvent_ = function(aEvent) {
   var eventId = aEvent.eventId;
 
-  var mp = this.getDomHelper().getElement('main-pane');
+  var mp = this.getDomHelper().getElement(this.getId());
   mp && goog.array.forEach(mp.querySelectorAll('.' +
       rflect.cal.predefined.chips.CHIP_EVENT_CLASS + eventId), function(el) {
     goog.dom.classes.remove(el, goog.getCssName('event-in-progress'));

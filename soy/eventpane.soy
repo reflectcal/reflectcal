@@ -5,6 +5,7 @@
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param isNativeTimeInput Whether to include outer html of element.
  * @param calendarsSelectHTML Calendars select HTML.
+ * @param calendarsSelectId Calendars select id.
  */
 {template .eventPane autoescape="false"}
   {if $includeOuterHTML}
@@ -39,7 +40,7 @@
 
         <div class="event-pane-cont">
           <label class="label-fluid event-pane-label event-pane-calendars-label"
-            for="event-calendars">
+            for="{$calendarsSelectId}">
             {rflect.cal.i18n.Symbols.CALENDAR}
           </label>
 
@@ -81,7 +82,7 @@
 
   <div class="date-input-cont event-pane-cont">
     <div class="pane-left goog-inline-block">
-      <label for="event-start-date" class="label-fluid event-pane-label">
+      <label id="label-start" for="event-start-date" class="label-fluid event-pane-label">
         {rflect.cal.i18n.Symbols.START}
       </label>
     </div>
@@ -96,7 +97,7 @@
 
   <div class="date-input-cont event-pane-cont">
     <div class="pane-left goog-inline-block">
-      <label for="event-end-date" class="label-fluid event-pane-label">
+      <label id="label-end" for="event-end-date" class="label-fluid event-pane-label">
         {rflect.cal.i18n.Symbols.END}
       </label>
     </div>
@@ -113,7 +114,7 @@
 
   <div class="date-input-cont event-pane-cont">
     <div class="pane-left goog-inline-block">
-      <label for="event-start-date" class="label-fluid event-pane-label">
+      <label id="label-start" for="event-start-date" class="label-fluid event-pane-label">
         {rflect.cal.i18n.Symbols.START}
       </label>
     </div>
@@ -128,7 +129,7 @@
 
   <div class="date-input-cont event-pane-cont">
     <div class="pane-left goog-inline-block">
-      <label for="event-end-date" class="label-fluid event-pane-label">
+      <label id="label-end" for="event-end-date" class="label-fluid event-pane-label">
         {rflect.cal.i18n.Symbols.END}
       </label>
     </div>

@@ -26,6 +26,7 @@ goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.ExternalPane');
 goog.require('rflect.cal.ui.PageRequestEvent');
+goog.require('rflect.cal.ui.soy.calendareditpane');
 goog.require('rflect.cal.ui.ScreenManager.EventTypes');
 goog.require('rflect.dom');
 goog.require('rflect.string');
@@ -121,6 +122,33 @@ rflect.cal.ui.CalendarEditPane.PageIndexes = {
 
 
 /**
+ * @return {Array.<Array.<rflect.cal.events.ColorCode>>} Decorated calendars
+ * table td.
+ */
+rflect.cal.ui.CalendarEditPane.getCalendarColorRows = function() {
+
+  var colorRows = [];
+
+  for( var rowIndex = 0; rowIndex <
+      rflect.cal.ui.CalendarEditPane.PALETTE_ROWS_NUMBER; rowIndex++) {
+    for( var colIndex = 0; colIndex <
+        rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER; colIndex++) {
+      var colorCodeIndex = rowIndex *
+          rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER + colIndex;
+
+      if (!colorRows[rowIndex]) {
+        colorRows[rowIndex] = [];
+      }
+      var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[colorCodeIndex];
+      colorRows[rowIndex].push(colorCode);
+    }
+  }
+
+  return colorRows;
+}
+
+
+/**
  * Whether we're creating new calendar.
  * @type {boolean}
  * @private
@@ -150,6 +178,14 @@ rflect.cal.ui.CalendarEditPane.prototype.parentEl;
  * @private
  */
 rflect.cal.ui.CalendarEditPane.prototype.viewIndex_;
+
+
+/**
+ * @override
+ */
+rflect.cal.ui.CalendarEditPane.prototype.isButtonDeleteEnabled = function() {
+  return true;
+};
 
 
 /**
@@ -190,136 +226,22 @@ rflect.cal.ui.CalendarEditPane.prototype.getNewCalendars = function() {
 /**
  * @override
  */
-rflect.cal.ui.CalendarEditPane.prototype.createBody =
-    function(aDom) {
-  goog.dom.classes.add(this.buttonDeleteCalendar_.getElement(),
-      rflect.cal.ui.CalendarEditPane.BUTTON_CLASS_NAME,
-      goog.getCssName('event-pane-button-delete'));
-  rflect.cal.ui.common.setDeleteButtonContent(this.buttonDeleteCalendar_);
-
-  this.getPaneLowerCenter().appendChild(
-      this.buttonDeleteCalendar_.getElement());
-
-  var labelName = aDom.createDom('label', {
-    'for': 'sp-calendar-name-input',
-    className: rflect.cal.ui.CalendarEditPane.LABEL_CLASS_NAME
-  }, 'Name');
-  this.inputCalendarName_ = aDom.createDom('input', {
-    'type': 'text',
-    id: 'sp-calendar-name-input',
-    className: goog.getCssName('ep-event-name-input'),
-    placeholder: rflect.cal.i18n.Symbols.NO_NAME_EVENT
+rflect.cal.ui.CalendarEditPane.prototype.buildHTML = function(opt_outerHTML) {
+  return rflect.cal.ui.soy.calendareditpane.calendarEditPane({
+    id: this.getId(),
+    includeOuterHTML: opt_outerHTML,
+    colorRows: rflect.cal.ui.CalendarEditPane.getCalendarColorRows()
   });
-  var nameCont = aDom.createDom('div',
-      [goog.getCssName('event-name-input-cont'),
-        goog.getCssName('event-pane-cont')],
-      labelName, rflect.dom.wrapControl(this.inputCalendarName_));
-
-  var labelColor = aDom.createDom('label', {
-    'for': 'calendar-colors',
-    className: rflect.cal.ui.CalendarEditPane.LABEL_CLASS_NAME + ' ' +
-        goog.getCssName('calendar-colors-label')
-  }, 'Colors');
-  var colorPaletteTable = this.createColorsTable_(aDom);
-  var colorsCont = aDom.createDom('div',
-      ['event-name-input-cont', 'event-pane-cont', 'event-pane-cont-last'],
-      labelColor, colorPaletteTable);
-
-  return aDom.createDom('div', goog.getCssName('settings-body'), nameCont,
-      colorsCont);
-}
-
-
-/**
- * Generates table.
- * @param {goog.dom.DomHelper} aDom Dom helper.
- * @param {string|null} aTableId Table id.
- * @param {string} aTableClassName Table class.
- * @param {number} aRowsN Rows number.
- * @param {number} aColsN Cols number.
- * @param {string|null} aRowClassName Class for each row.
- * @param {function(goog.dom.DomHelper, Element, number, number):Element} aTdMakerFn Function that
- * takes td and decorates it.
- * @return {Element} Table.
- * @private
- */
-rflect.cal.ui.CalendarEditPane.prototype.createTable_ = function(aDom, aTableId,
-                                                             aTableClassName,
-                                                             aRowsN, aColsN,
-                                                             aRowClassName,
-                                                             aTdMakerFn) {
-
-  var tableParams = {
-    className: aTableClassName
-  };
-  if (aTableId) tableParams.id = aTableId;
-
-  var tbody = aDom.createDom('tbody');
-
-  var table = aDom.createDom('table', tableParams, tbody);
-
-  for (var rowCounter = 0; rowCounter < aRowsN; rowCounter++) {
-    var tr = aDom.createDom('tr');
-    if (aRowClassName) tr.className = aRowClassName;
-    tbody.appendChild(tr);
-
-    for (var colCounter = 0; colCounter < aColsN; colCounter++) {
-      var td = aDom.createDom('td');
-      tr.appendChild(goog.bind(aTdMakerFn, this, aDom, td, rowCounter,
-          colCounter)());
-    }
-  }
-
-  return table;
-}
-
-
-/**
- * @param {goog.dom.DomHelper} aDom Dom helper.
- * @return {Element} Calendars list table
- * @private
- */
-rflect.cal.ui.CalendarEditPane.prototype.createColorsTable_ =
-    function(aDom) {
-  return this.createTable_(aDom, 'calendar-colors',
-      goog.getCssName('calendar-colors-table') + ' ' +
-          goog.getCssName('goog-inline-block'),
-      rflect.cal.ui.CalendarEditPane.PALETTE_ROWS_NUMBER,
-      rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER,
-      null, rflect.cal.ui.CalendarEditPane.createColorsTd_);
- }
-
-
-/**
- * @param {goog.dom.DomHelper} aDom Dom helper.
- * @param {Element} aTd Td to decorate.
- * @param {number} aRowIndex Td row index.
- * @param {number} aColIndex Td col index.
- * @return {Element} Decorated calendars table td.
- * @private
- */
-rflect.cal.ui.CalendarEditPane.createColorsTd_ = function(aDom, aTd, aRowIndex,
-                                                      aColIndex) {
-  var colorCodeIndex = aRowIndex *
-      rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER + aColIndex;
-
-  var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[colorCodeIndex];
-
-  var colorLink = aDom.createDom('button', {
-    id: 'calendar-color' + colorCodeIndex,
-    className: goog.getCssName('calitem-color-cont') + ' ' +
-        goog.getCssName('calendar-color') + ' ' + colorCode.eventClass
-  });
-  aTd.appendChild(colorLink);
-
-  return aTd;
-}
+};
 
 
 /**
  * @override
  */
 rflect.cal.ui.CalendarEditPane.prototype.enterDocument = function() {
+  this.inputCalendarName_ = this.getDomHelper().
+      getElement('sp-calendar-name-input');
+
   rflect.cal.ui.CalendarEditPane.superClass_.enterDocument.call(this);
 
   // Menu commands.

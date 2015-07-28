@@ -80,6 +80,15 @@ rflect.cal.ui.CalendarsSelect.prototype.setCalendarId = function (aCalendarId) {
 
 
 /**
+ * @return {string} Select element id.
+ */
+rflect.cal.ui.CalendarsSelect.prototype.getSelectId = function() {
+  return this.getId() + '-select';
+}
+
+
+
+/**
  * @param {boolean=} opt_outerHTML Whether to build outer html.
  * @return {string}.
  * @override
@@ -94,6 +103,7 @@ rflect.cal.ui.CalendarsSelect.prototype.buildHTML = function(opt_outerHTML) {
   });
   return rflect.cal.ui.soy.selectcalendars.calendarsSelect({
     id: this.getId(),
+    selectId: this.getSelectId(),
     includeOuterHTML: opt_outerHTML,
     calendars: calendars
   });

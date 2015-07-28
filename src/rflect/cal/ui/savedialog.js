@@ -14,6 +14,7 @@ goog.require('goog.dom');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.ui.DialogMouseMissBehavior');
 goog.require('rflect.cal.ui.CalendarsSelect');
+goog.require('rflect.cal.ui.soy.savedialogcontent');
 
 
 
@@ -41,14 +42,18 @@ rflect.cal.ui.SaveDialog = function (opt_class,
   this.eventManager_ = /**@type {rflect.cal.events.EventManager}*/
       (opt_eventManager);
 
+  this.select_ = new rflect.cal.ui.CalendarsSelect(this.eventManager_);
+
   this.setTitle('New event');
   this.setModal(false);
   this.setBackgroundElementOpacity(0);
   this.setButtonSet(rflect.cal.ui.SaveDialog.createButtonSet());
-  this.setContent(rflect.cal.ui.SaveDialog.HTML_PARTS_);
+  this.setContent(rflect.cal.ui.soy.savedialogcontent.saveDialogContent({
+    calendarsSelectHTML: this.select_.buildHTML(true),
+    calendarsSelectId: this.select_.getSelectId()
+  }));
 
-  this.addChild(this.select_ = new rflect.cal.ui.CalendarsSelect(
-      this.eventManager_));
+  this.addChild(this.select_);
 };
 goog.inherits(rflect.cal.ui.SaveDialog, rflect.ui.DialogMouseMissBehavior);
 
@@ -105,26 +110,6 @@ rflect.cal.ui.SaveDialog.prototype.select_;
 
 
 /**
- * Content for dialog.
- * @type {string}
- * @const
- * @private
- */
-rflect.cal.ui.SaveDialog.HTML_PARTS_ = [
-  '<div class="event-name-input-cont event-pane-cont-first event-pane-cont">',
-    '<input placeholder="Event name" class="ep-event-name-input" id="event-name" type="text">',
-  '</div>',
-  '<div class="event-pane-cont">',
-    '<label class="label-fluid event-pane-label event-pane-calendars-label" for="dialog-event-calendars">Calendar</label>',
-    '<div class="button dropdown settings-pane-select">',
-      '<select id="dialog-event-calendars">',
-      '</select>',
-    '</div>',
-  '</div>'
-].join('');
-
-
-/**
  * Focuses the dialog contents and the default dialog button if there is one.
  * @override
  */
@@ -144,10 +129,7 @@ rflect.cal.ui.SaveDialog.prototype.focus = function () {
 rflect.cal.ui.SaveDialog.prototype.enterDocument = function () {
   var dom = this.getDomHelper();
   this.input_ = dom.getElement('event-name');
-
-  var selectEl = dom.getElement('dialog-event-calendars');
-
-  this.select_.decorate(selectEl);
+  this.select_.setElementById(this.select_.getId());
 
   rflect.cal.ui.SaveDialog.superClass_.enterDocument.call(this);
 }

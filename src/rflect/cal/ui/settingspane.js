@@ -37,6 +37,7 @@ goog.require('rflect.cal.ui.ExternalPane');
 goog.require('rflect.cal.ui.PageRequestEvent');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
+goog.require('rflect.cal.ui.soy.settingspane');
 goog.require('rflect.dom');
 goog.require('rflect.string');
 goog.require('rflect.ui.Checkbox');
@@ -132,7 +133,7 @@ rflect.cal.ui.SettingsPane.PageIndexes = {
 /**
  * @override
  */
-rflect.cal.ui.ExternalPane.prototype.isButtonDeleteEnabled = function() {
+rflect.cal.ui.SettingsPane.prototype.isButtonDeleteEnabled = function() {
   return false;
 };
 
@@ -468,7 +469,10 @@ rflect.cal.ui.SettingsPane.prototype.buildHTML = function(opt_outerHTML) {
 rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
   this.buttonCalendars_.decorate(this.getDomHelper().getElement('button-to-calendars'));
 
+  this.selectLanguages_ = this.getDomHelper().getElement('settings-languages');
+
   var checkboxDebugSubCont = this.getDomHelper().getElement('settings-debug-mode-sub-cont');
+  this.checkboxDebug_.render(checkboxDebugSubCont);
   this.checkboxDebug_.setLabel(checkboxDebugSubCont);
   this.checkboxDebug_.getElement().className += ' aligned-checkbox';
 
@@ -604,9 +608,6 @@ rflect.cal.ui.SettingsPane.prototype.onSaveUser_ = function() {
  * Displays settings in form.
  */
 rflect.cal.ui.SettingsPane.prototype.displayValues = function() {
-
-  if (goog.DEBUG)
-    console.log('this.getUserSettings(): ', this.getUserSettings());
 
   this.selectLanguages_.value = this.getUserSettings()['language'] ||
       goog.LOCALE;

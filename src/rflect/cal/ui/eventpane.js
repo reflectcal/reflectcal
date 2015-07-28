@@ -250,6 +250,14 @@ rflect.cal.ui.EventPane.prototype.calendarsSelect_;
 
 
 /**
+ * @override
+ */
+rflect.cal.ui.EventPane.prototype.isButtonDeleteEnabled = function() {
+  return true;
+};
+
+
+/**
  * @return {boolean} Whether the component is visible.
  */
 rflect.cal.ui.EventPane.prototype.isVisible = function() {
@@ -265,7 +273,8 @@ rflect.cal.ui.EventPane.prototype.buildHTML = function(opt_outerHTML) {
     id: this.getId(),
     includeOuterHTML: opt_outerHTML,
     calendarsSelectHTML: this.calendarsSelect_.buildHTML(true),
-    isNativeTimeInput: this.navigator_.isNativeTimeInput()
+    isNativeTimeInput: this.navigator_.isNativeTimeInput(),
+    calendarsSelectId: this.calendarsSelect_.getSelectId()
   });
 };
 
@@ -283,6 +292,7 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
   this.inputName_ = this.getDomHelper().getElement('ep-event-name-input');
 
   var allDaySubCont = this.getDomHelper().getElement('all-day-label-sub-cont');
+  this.checkboxAllDay_.render(allDaySubCont);
   this.checkboxAllDay_.setLabel(allDaySubCont);
   this.checkboxAllDay_.getElement().className += ' aligned-checkbox';
 
@@ -299,6 +309,9 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
     this.inputDatePicker_.addInput(this.inputStartDate_);
     this.inputDatePicker_.addInput(this.inputEndDate_);
   }
+
+  this.labelStart_ = this.getDomHelper().getElement('label-start');
+  this.labelEnd_ = this.getDomHelper().getElement('label-end');
 
   this.textAreaDesc_ = this.getDomHelper().getElement('event-description');
 
