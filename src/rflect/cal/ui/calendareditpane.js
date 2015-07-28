@@ -59,10 +59,6 @@ rflect.cal.ui.CalendarEditPane = function(aViewManager, aTimeManager, aEventMana
    * @private
    */
   this.newCalendars_ = [];
-
-  this.addChild(this.buttonDeleteCalendar_ = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
-
 };
 goog.inherits(rflect.cal.ui.CalendarEditPane, rflect.cal.ui.ExternalPane);
 
@@ -254,7 +250,7 @@ rflect.cal.ui.CalendarEditPane.prototype.enterDocument = function() {
       this.onSaveCalendar_, false, this)
       .listen(this.buttonPrimary2, goog.ui.Component.EventType.ACTION,
       this.onSaveCalendar_, false, this)
-      .listen(this.buttonDeleteCalendar_,
+      .listen(this.buttonDelete,
       goog.ui.Component.EventType.ACTION, this.onDeleteCalendarAction_, false,
       this)
 
@@ -443,13 +439,11 @@ rflect.cal.ui.CalendarEditPane.prototype.onDeleteCalendarResponse_ =
  * Displays calendar properties in form.
  */
 rflect.cal.ui.CalendarEditPane.prototype.displayValues = function() {
-  //this.buttonDeleteCalendar_.setVisible(!this.newCalendarMode_);
-
   this.inputCalendarName_.value = this.currentCalendar_.name;
   this.inputCalendarName_.placeholder = this.currentCalendar_.colorCode
       .getFullName();
 
-  this.buttonDeleteCalendar_.setVisible(!this.newCalendarMode_);
+  this.buttonDelete.setVisible(!this.newCalendarMode_);
   this.displayCalendarColor_(this.currentCalendar_.colorCode.id);
 };
 
