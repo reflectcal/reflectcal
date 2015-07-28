@@ -137,16 +137,18 @@ rflect.cal.ui.ExternalPane.prototype.buttonDelete;
  * @param {boolean} aShowButtonDelete Whether to show button delete.
  * @param {boolean} aShowButtonNew Whether to show button new.
  * @param {boolean} aShowButtonSave Whether to show button save.
+ * @param {boolean} aUpper Whether pane is upper.
  * @return {string} HTML of upper or lower control pane.
  * @private
  */
 rflect.cal.ui.ExternalPane.prototype.buildControlPane = function(
-    aShowButtonDelete, aShowButtonNew, aShowButtonSave) {
+    aShowButtonDelete, aShowButtonNew, aShowButtonSave, aUpper) {
   return rflect.cal.ui.soy.externalpane.controlPane({
     backButtonLabel: this.getBackButtonLabel(),
     showButtonDelete: this.isButtonDeleteEnabled() && aShowButtonDelete,
     showButtonNew: aShowButtonNew,
     showButtonSave: aShowButtonSave,
+    upper: aUpper
   });
 }
 

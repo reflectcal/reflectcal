@@ -127,27 +127,6 @@ goog.inherits(rflect.cal.ui.MainBody, rflect.ui.Component);
 
 
 /**
- * Main body html parts, used by renderer.
- * @type {Array.<string>}
- * @const
- * @private
- */
-rflect.cal.ui.MainBody.HTML_PARTS_ = [
-  '<div id="main-body" class="main-body">',
-  '<div id="top-pane" class="control-pane">',
-  '</div>',
-  '<div id="main-pane-cont" class="main-pane-cont">',
-  '<div id="side-pane" class="side-pane slide-pane-left ',
-  '">',
-  '</div>',
-  '<div id="main-pane" class="main-pane">',
-  '</div>',
-  '</div>',
-  '</div>'
-];
-
-
-/**
  * Accumulated difference in size between dynamic element (scrollables) and
  * their surroundings - top pane, side pane.
  * This version is for week mode.

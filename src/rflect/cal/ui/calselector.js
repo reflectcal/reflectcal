@@ -209,15 +209,18 @@ rflect.cal.ui.CalSelector.prototype.buildHTML = function(opt_outerHTML) {
       hasCalendars: false
     });
   } else {
-    return rflect.cal.ui.soy.calselector.calSelector({
+    var data = {
       id: this.getId(),
       includeOuterHTML: opt_outerHTML,
       isSmallScreen: this.navigator_.isSmallScreen(),
       hasCalendars: true,
       label: this.label,
-      height: this.scrollableSize_.height,
       calSelectorItemsHTML: this.buildContent()
-    })
+    };
+    if (!this.navigator_.isSmallScreen()) {
+      data.height = this.scrollableSize_.height;
+    }
+    return rflect.cal.ui.soy.calselector.calSelector(data);
   }
 };
 

@@ -44,8 +44,8 @@
 }
 
 .settings-body-outer {
-  border-top: 1px solid #e5e5e5;
-  border-bottom: 1px solid #e5e5e5;
+  box-sizing: border-box;
+  min-height: ~"calc(100% - 126px)";
 }
 
 .settings-body {
@@ -70,12 +70,15 @@
 }
 
 .calendars-outer-cont {
+  text-align: center;
   margin-bottom: 0;
 }
 
 .calendars-table {
   table-layout: fixed;
   border-collapse:collapse;
+  width: 100%;
+  text-align: left;
 }
 
 .calendar-row {
