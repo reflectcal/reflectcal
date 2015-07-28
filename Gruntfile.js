@@ -303,7 +303,7 @@ module.exports = function(grunt) {
         closure_entry_point: 'rflect.cal.Loader',
         language_in: 'ECMASCRIPT6',
         language_out: 'ECMASCRIPT5',
-        output_wrapper: '(function(){%output%})();',
+        output_wrapper: ';(function(){%output%})();',
 
         externs: ['src/externs.js']
       }
