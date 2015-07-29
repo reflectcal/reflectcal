@@ -250,7 +250,7 @@ rflect.cal.ui.ScreenManager.prototype.render = function(opt_element){
   var parentElement = opt_element || document.body;
   var element = document.createElement('div');
   element.id = 'screen-manager';
-  element.className = 'screen-manager';
+  element.className = 'screen-manager-base';
   parentElement.appendChild(element);
   this.element_ = element;
 }
@@ -410,6 +410,10 @@ rflect.cal.ui.ScreenManager.prototype.finishScreenChange_ = function() {
   var currentComponent = /**@type {goog.ui.Component}*/
       (goog.array.peek(this.pageStack_));
 
+  this.pageStack_.forEach(component => {
+    (component != currentComponent) &&
+        goog.style.showElement(component.getElement(), false);
+  })
   this.componentsToHide_.forEach(component => {
     (component != currentComponent) &&
         goog.style.showElement(component.getElement(), false);

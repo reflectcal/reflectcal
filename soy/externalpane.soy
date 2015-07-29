@@ -1,0 +1,47 @@
+{namespace rflect.cal.ui.soy.externalpane}
+
+/**
+ * @param backButtonLabel Label for back button.
+ * @param showDeleteButton Whether to show delete button.
+ * @param showNewButton Whether to show new button.
+ * @param showSaveButton Whether to show save button.
+ * @param upper Whether this pane is in upper configuration.
+ */
+{template .controlPane autoescape="false"}
+  <div class="control-pane-external-outer{sp}control-pane-external-outer-{if $upper}upper{else}lower{/if}">
+    <div class="control-pane-external">
+      <div class="pane-right">
+        <div class="goog-inline-block goog-flat-button cal-menu-button emphasis-button">
+         {if $showSaveButton}
+         {rflect.cal.i18n.Symbols.SAVE}
+         {/if}
+         {if $showNewButton}
+         <span>
+          <i class="octicon icon-button octicon-plus"></i>
+          {rflect.cal.i18n.Symbols.NEW}
+         </span>
+         {/if}
+        </div>
+      </div>
+      <div class="pane-left">
+        <div class="goog-inline-block goog-flat-button cal-menu-button">
+          <span>
+            <i class="octicon icon-button octicon-chevron-left"></i>
+            {if $backButtonLabel}
+            {$backButtonLabel}
+            {else}
+            {rflect.cal.i18n.Symbols.BACK}
+            {/if}
+           </span>
+        </div>
+      </div>
+      <div class="pane-center">
+        {if $showDeleteButton}
+        <div aria-hidden="true" style="display: none;" class="goog-inline-block goog-flat-button event-pane-button-delete">
+          {rflect.cal.i18n.Symbols.DELETE}
+        </div>
+       {/if}
+      </div>
+    </div>
+  </div>
+{/template}

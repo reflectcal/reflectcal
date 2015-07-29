@@ -1,0 +1,72 @@
+{namespace rflect.cal.ui.soy.settingspane}
+
+/**
+ * @param id Unique id.
+ * @param? includeOuterHTML Whether to include outer html of element.
+ */
+{template .settingsPane autoescape="false"}
+  {if $includeOuterHTML}
+  <div id="{$id}" class="settings-pane">
+  {/if}
+    {call rflect.cal.ui.soy.externalpane.controlPane}
+      {param backButtonLabel: rflect.cal.i18n.Symbols.TO_CALENDAR /}
+      {param showDeleteButton: false /}
+      {param showNewButton: false /}
+      {param showSaveButton: true /}
+      {param upper: true /}
+    {/call}
+
+    <div class="settings-body-outer">
+      <div class="settings-body">
+        <div class="event-pane-cont">
+          <label class="goog-inline-block event-pane-label label-fluid event-pane-calendars-label"
+              for="settings-languages">
+            {rflect.cal.i18n.Symbols.LANGUAGES}
+          </label>
+          <div class="button dropdown settings-pane-select">
+            <select id="settings-languages">
+              {foreach $language in LANGUAGE_NAMES}
+              <option value="{$language[0]}" class="" id="lang-{$language[0]}">{$language[1]}</option>
+              {/foreach}
+            </select>
+          </div>
+        </div>
+        <div class="event-pane-cont">
+          <div id="button-to-calendars" class="goog-inline-block goog-flat-button button-next-pane button-minimal">
+            {rflect.cal.i18n.Symbols.CALENDARS_LABEL}
+            <i class="octicon icon-button octicon-chevron-right icon-next-pane"></i>
+          </div>
+        </div>
+
+        <div class="event-pane-cont" id="settings-debug-mode">
+          <span id="settings-debug-mode-sub-cont">
+            <label class="goog-inline-block event-pane-label"
+            for="settings-debug-mode">{rflect.cal.i18n.Symbols.DEBUG_MODE}</label>
+          </span>
+        </div>
+
+        <div class="event-pane-cont event-pane-cont-last">
+          <label class="goog-inline-block event-pane-label label-fluid event-pane-calendars-label logged-label"
+              for="settings-logout">
+            {rflect.cal.i18n.Symbols.LOGGED_IN_AS}{sp}
+            <b>{USER.username}</b>
+          </label>
+          <a class="goog-inline-block goog-flat-button cal-menu-button settings-pane-control"
+              href="/logout" id="settings-logout">
+            {rflect.cal.i18n.Symbols.LOGOUT}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {call rflect.cal.ui.soy.externalpane.controlPane}
+      {param backButtonLabel: rflect.cal.i18n.Symbols.TO_CALENDAR /}
+      {param showDeleteButton: false /}
+      {param showNewButton: false /}
+      {param showSaveButton: true /}
+      {param upper: false /}
+    {/call}
+  {if $includeOuterHTML}
+  </div>
+  {/if}
+{/template}

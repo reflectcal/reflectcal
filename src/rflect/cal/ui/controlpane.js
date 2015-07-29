@@ -23,6 +23,7 @@ goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.ui.ViewButtonUpdater');
+goog.require('rflect.cal.ui.soy.controlpane');
 
 
 
@@ -136,154 +137,20 @@ rflect.cal.ui.ControlPane.prototype.getButtonNow = function(){
 
 
 /**
- * Creates Top Pane on an empty div element.
- */
-rflect.cal.ui.ControlPane.prototype.createDom = function() {
-  this.decorateInternal(this.dom_.createElement('div'));
-};
-
-
-/**
- * Decorates an existing html div element as a Top Pane.
+ * Builds body of component.
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @return {string}
  * @override
  */
-rflect.cal.ui.ControlPane.prototype.decorateInternal = function(aElement,
-                                                         opt_doNotBuildBody) {
-  // Set this.element_.
-  rflect.cal.ui.ControlPane.superClass_.decorateInternal.call(this, aElement,
-      opt_doNotBuildBody);
-};
-
-
-/**
- * Builds body of component.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
- * @see rflect.ui.Component#build
- * @protected
- */
-rflect.cal.ui.ControlPane.prototype.buildInternal = function(aSb) {
-  if (this.navigator_.isSmallScreen()) {
-
-    var parts = [
-      '<nav id="top-pane">',
-      '<div class="pane-left">',
-      '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
-          'id="' + rflect.cal.predefined.BUTTON_MENU_ID + '">' +
-          '<span class="octicon icon-button octicon-three-bars"></span>',
-      '</div>',
-      '</div>',
-      '<div class="pane-right">',
-      '<div class="cal-menu-button-new-event emphasis-button cal-menu-button goog-flat-button goog-inline-block"',
-      'id="' + rflect.cal.predefined.BUTTON_NEW_EVENT_ID + '">',
-      '<span class="octicon icon-button octicon-plus"></span>',
-      '</div>',
-      '</div>',
-
-      '<div class="pane-center pane-center-nav">',
-      '<div id="time-period-label" class="time-period-label">',
-      this.getDateHeader(),
-      '</div>',
-      '<div class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"',
-      'id="' + rflect.cal.predefined.BUTTON_NOW_ID + '">',
-      rflect.cal.i18n.Symbols.NOW,
-      '</div>',
-      '<div class="goog-flat-button-collapse-left goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"',
-      'id="' + rflect.cal.predefined.BUTTON_PREV_ID + '">',
-      '<span class="octicon icon-button octicon-triangle-left"></span>',
-      '</div>',
-      '<div class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"',
-      'id="' + rflect.cal.predefined.BUTTON_NEXT_ID + '">',
-      '<span class="octicon icon-button octicon-triangle-right"></span>',
-      '</div>',
-      '</div>',
-
-      '</nav>'
-    ];
-
-  } else {
-
-    parts = [
-      '<div id="top-pane" class="control-pane">',
-      '<div id="sidebar-controls">'
-    ];
-    if (rflect.SIDE_PANE_MOVABLE) {
-      parts = parts.concat([
-        // First button container.
-        // 'Menu' button.
-        '<div class="cal-menu-button goog-flat-button goog-inline-block"' +
-            'id="' + rflect.cal.predefined.BUTTON_MENU_ID + '">' +
-            '<span class="octicon icon-button octicon-three-bars"></span>',
-        '</div>'
-      ]);
-    }
-    parts = parts.concat([
-      // 'Now' button.
-      '<div id="' + rflect.cal.predefined.BUTTON_NOW_ID +
-          '" class="' + goog.getCssName('goog-flat-button-collapse-right') + ' ',
-      goog.getCssName('cal-menu-leftmost-button') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-right'),
-      ' ' + goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-now') + '">',
-      rflect.cal.i18n.Symbols.NOW,
-      '</div>',
-
-      // Back button.
-      '<div id="' + rflect.cal.predefined.BUTTON_PREV_ID +
-          '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
-      goog.getCssName('goog-flat-button-collapse-right') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-both') + ' ',
-      goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-back') + '"><span class="octicon icon-button octicon-triangle-left"></span></div>',
-
-      // Forward button.
-      '<div id="' + rflect.cal.predefined.BUTTON_NEXT_ID + '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ',
-      goog.getCssName('cal-menu-rightmost-button') + ' ' + goog.getCssName('goog-flat-button-bord-rad-collapse-left') + ' ',
-      goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-forward') + '"><span class="octicon icon-button octicon-triangle-right"></span></div></div>',
-
-      '<div id="main-pane-controls"><div id="main-pane-controls-right">',
-      '<div style="margin-right: 0px;" class="' + goog.getCssName('goog-inline-block') + '">',
-      // Day button.
-      '<div id="' + rflect.cal.predefined.BUTTON_DAY_ID + '" class="' + goog.getCssName('goog-flat-button-collapse-right') + ' ' + goog.getCssName('goog-toggle-button') + ' ',
-      goog.getCssName('goog-flat-button-bord-rad-collapse-right') + ' ' + goog.getCssName('cal-menu-button') + '">',
-      rflect.cal.i18n.Symbols.DAY,
-      '</div>',
-      // Week button.
-      '<div id="' + rflect.cal.predefined.BUTTON_WEEK_ID + '" class="' + goog.getCssName('goog-flat-button-collapse-left') + ' ' + goog.getCssName('goog-toggle-button') + ' ',
-      goog.getCssName('goog-flat-button-collapse-right') + ' ',
-      goog.getCssName('goog-flat-button-bord-rad-collapse-both') + ' ' + goog.getCssName('cal-menu-button') + '">',
-      rflect.cal.i18n.Symbols.WEEK,
-      '</div>',
-      // Month button.
-      '<div id="' + rflect.cal.predefined.BUTTON_MONTH_ID + '" class="' + goog.getCssName('goog-flat-button') + ' ' + goog.getCssName('goog-flat-button-collapse-left') + ' ' + goog.getCssName('goog-toggle-button') + ' ',
-      goog.getCssName('goog-flat-button-bord-rad-collapse-left') + ' ' + goog.getCssName('cal-menu-button') + ' ',
-      goog.getCssName('cal-menu-button-month-view') + '">',
-      rflect.cal.i18n.Symbols.MONTH,
-      '</div></div>',
-      // Options button.
-      '<div id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '" class="' + goog.getCssName('goog-flat-button') + ' ' + goog.getCssName('cal-menu-rightmost-button') + ' ' + goog.getCssName('cal-menu-button') + ' ',
-      goog.getCssName('cal-menu-button-options') + '">',
-      '<span class="octicon icon-button octicon-gear"></span>',
-      '</div></div>',
-      '<div id="main-pane-controls-left"><div id="main-pane-controls-left-left">',
-      // New event button.
-      '<div id="' + rflect.cal.predefined.BUTTON_NEW_EVENT_ID + '" class="' + goog.getCssName('cal-menu-button') + ' ' + goog.getCssName('cal-menu-button-new-event') + ' ' + goog.getCssName('emphasis-button'),
-      '">',
-      '<span class="octicon icon-button octicon-plus"></span>&nbsp;&nbsp;' +
-          rflect.cal.i18n.Symbols.NEW_EVENT,
-      '</div></div>',
-      '<div id="main-pane-controls-left-right">',
-      // Time period label.
-      '<div id="time-period-label" class="time-period-label">',
-      this.getDateHeader(),
-      '</div></div>',
-      '</div></div>',
-      '</div>'
-    ]);
-  }
-
-  // Form html. From index 1, because 0 is the html of outer container, which
-  // we don't create in that method but just decorate.
-  for (var counter = 1, length = parts.length - 1;
-       counter < length; counter++) {
-    aSb.append(parts[counter]);
-  }
+rflect.cal.ui.ControlPane.prototype.buildHTML = function(opt_outerHTML) {
+  return rflect.cal.ui.soy.controlpane.
+  controlPane({
+    id: this.getId(),
+    isSmallScreen: this.navigator_.isSmallScreen(),
+    includeOuterHTML: opt_outerHTML,
+    timePeriodLabel: this.getDateHeader(),
+    sidePaneMovable: rflect.SIDE_PANE_MOVABLE
+  });
 }
 
 
@@ -401,6 +268,7 @@ rflect.cal.ui.ControlPane.prototype.updateBeforeRedraw = goog.nullFunction;
 
 /**
  * Updates top pane by setting new date header.
+ * @override
  */
 rflect.cal.ui.ControlPane.prototype.updateByRedraw = function() {
   if (!this.timeLabel_)

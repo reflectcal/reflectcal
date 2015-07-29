@@ -15,6 +15,7 @@ goog.require('goog.ui.Component.EventType');
 goog.require('rflect.ui.DialogMouseMissBehavior');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.SaveDialog');
+goog.require('rflect.cal.ui.soy.editdialogcontent');
 
 
 
@@ -36,7 +37,8 @@ rflect.cal.ui.EditDialog = function(opt_class, opt_useIframeMask,
   this.setModal(false);
   this.setBackgroundElementOpacity(0);
   this.setButtonSet(rflect.cal.ui.EditDialog.createButtonSet());
-  this.setContent(rflect.cal.ui.EditDialog.HTML_PARTS_);
+
+  this.setContent(rflect.cal.ui.soy.editdialogcontent.editDialogContent());
 };
 goog.inherits(rflect.cal.ui.EditDialog, rflect.ui.DialogMouseMissBehavior);
 
@@ -98,24 +100,6 @@ rflect.cal.ui.EditDialog.prototype.eventTimeCont_;
  * @private
  */
 rflect.cal.ui.EditDialog.prototype.eventNameLink_;
-
-
-/**
- * Content for dialog.
- * @type {string}
- * @const
- * @private
- */
-rflect.cal.ui.EditDialog.HTML_PARTS_ = [
-  '<div class="event-pane-cont">',
-  '<span id="ed-event-time" class="event-time">',
-  '</span>',
-  '</div>',
-  '<div class="event-pane-cont">',
-  '<button id="ed-event-edit" class="event-edit-link">',
-  '</button>',
-  '</div>'
-].join('');
 
 
 /**
