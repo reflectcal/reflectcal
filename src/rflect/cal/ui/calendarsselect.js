@@ -12,18 +12,19 @@ goog.provide('rflect.cal.ui.CalendarsSelect');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.Disposable');
+goog.require('rflect.cal.ui.soy.selectcalendars');
+goog.require('rflect.ui.Component');
 
 
 
 /**
  * Main class for calendars select.
- * @param {Element} aSelect Select element to enhance.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @constructor
- * @extends {goog.Disposable}
+ * @extends {rflect.ui.Component}
  */
-rflect.cal.ui.CalendarsSelect = function(aSelect, aEventManager) {
-  goog.Disposable.call(this);
+rflect.cal.ui.CalendarsSelect = function(aEventManager) {
+  rflect.ui.Component.call(this);
 
   /**
    * Link to event manager.
@@ -31,10 +32,8 @@ rflect.cal.ui.CalendarsSelect = function(aSelect, aEventManager) {
    * @private
    */
   this.eventManager_ = aEventManager;
-
-  this.select_ = aSelect;
 };
-goog.inherits(rflect.cal.ui.CalendarsSelect, goog.Disposable);
+goog.inherits(rflect.cal.ui.CalendarsSelect, rflect.ui.Component);
 
 
 /**
@@ -81,19 +80,59 @@ rflect.cal.ui.CalendarsSelect.prototype.setCalendarId = function (aCalendarId) {
 
 
 /**
- * Populates calendars select. Generic function.
+ * @return {string} Select element id.
  */
-rflect.cal.ui.CalendarsSelect.prototype.update = function() {
+rflect.cal.ui.CalendarsSelect.prototype.getSelectId = function() {
+  return this.getId() + '-select';
+}
+
+
+
+/**
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @return {string}.
+ * @override
+ */
+rflect.cal.ui.CalendarsSelect.prototype.buildHTML = function(opt_outerHTML) {
+  var calendars = [];
+  this.eventManager_.forEachCalendar((calendar, calendarId) => {
+    calendars.push({
+      id: calendarId,
+      name: calendar.getUIName()
+    })
+  });
+  return rflect.cal.ui.soy.selectcalendars.calendarsSelect({
+    id: this.getId(),
+    selectId: this.getSelectId(),
+    includeOuterHTML: opt_outerHTML,
+    calendars: calendars
+  });
+}
+
+
+/**
+ * @override
+ */
+rflect.cal.ui.CalendarsSelect.prototype.updateBeforeRedraw = function() {
   this.saveSelectedOption_();
+}
 
-  goog.dom.removeChildren(this.select_);
 
-  this.eventManager_.forEachCalendar(function(calendar, calendarId){
-    this.select_.appendChild(goog.dom.createDom('option', {value: calendarId},
-        calendar.getUIName()));
-  }, this);
-
+/**
+ * @override
+ */
+rflect.cal.ui.CalendarsSelect.prototype.updateByRedraw = function() {
+  this.getElement().innerHTML = this.buildHTML(false);
+  this.select_ = this.getElement().querySelector('.event-calendars');
   this.recallSelectedOption_();
+}
+
+
+/**
+ * @override
+ */
+rflect.cal.ui.CalendarsSelect.prototype.enterDocument = function() {
+  this.select_ = this.getElement().querySelector('.event-calendars');
 }
 
 

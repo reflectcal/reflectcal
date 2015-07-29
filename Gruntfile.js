@@ -70,7 +70,7 @@ module.exports = function(grunt) {
     // targets is product of array lengths.
     var LOCALES = !global.DEV_COMPILATION ? appConfig.LOCALES : ['en'];
     var DEBUG = !global.DEV_COMPILATION ? [true, false] : [true];
-    var UI_TYPE = !global.DEV_COMPILATION ? ['', 'MOBILE'] : [''];
+    var UI_TYPE = !global.DEV_COMPILATION ? ['', 'MOBILE'] : ['MOBILE'];
     // Empty string means that user agent is not specified.
     var USER_AGENT = !global.DEV_COMPILATION ?
         ['', 'IE', 'GECKO', 'WEBKIT', 'OPERA'] : [''];
@@ -126,7 +126,8 @@ module.exports = function(grunt) {
   function compileTask() {
     setGlobals(true);
 
-    var task = getCompileLessTask().concat(getCompileJsTask());
+    var task = getCompileLessTask().concat(['compile-soy']).
+        concat(getCompileJsTask());
 
     grunt.task.run(task);
   }
@@ -302,7 +303,7 @@ module.exports = function(grunt) {
         closure_entry_point: 'rflect.cal.Loader',
         language_in: 'ECMASCRIPT6',
         language_out: 'ECMASCRIPT5',
-        output_wrapper: '(function(){%output%})();',
+        output_wrapper: ';(function(){%output%})();',
 
         externs: ['src/externs.js']
       }
@@ -357,6 +358,7 @@ module.exports = function(grunt) {
 
   var gJsLintTaskName = 'gjslinter';
   var fixJsStyleTaskName = 'fixjsstyle';
+  var compileSoyExecTaskName = 'compile-soy';
 
   //Creating linter tasks;
   (function(){
@@ -373,6 +375,33 @@ module.exports = function(grunt) {
     targetOptions.command = ['python', 'bin/fixjsstyle.py',
         '--strict', '-r', 'src/rflect'].join(' ');
     execTask[fixJsStyleTaskName] = targetOptions;
+  })();
+
+  const soyDirName = 'soy';
+
+  (function(){
+    var targetOptions = deepClone(execTaskTemplate);
+
+    targetOptions.command = [
+      'java',
+      '-jar',
+      'bin/SoyToJsSrcCompiler.jar',
+      '--shouldProvideRequireSoyNamespaces',
+      '--shouldGenerateJsdoc',
+      '--codeStyle',
+      'concat',
+      '--outputPathFormat',
+      'src/rflect/cal/ui/soy/{INPUT_FILE_NAME_NO_EXT}.soy.js',
+      '--srcs'
+    ].concat([(function(){
+      return fs.readdirSync(soyDirName).filter(function(aFileName){
+        return /\.soy$/.test(aFileName);
+      });
+    })().map(function(aFileName){
+      return soyDirName + '/' + aFileName;
+    }).join(',')]).join(' ');
+
+    execTask[compileSoyExecTaskName] = targetOptions;
   })();
 
 
@@ -462,10 +491,12 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     clean: {
       build: ['build/*'],
-      temp: ['build/**/_temp*', 'js/**/*compiled*', 'css/**/*compiled*'],
+      temp: ['build/**/_temp*', 'js/**/*compiled*', 'css/**/*compiled*',
+          'src/**/*.soy.js'],
       allExceptPack: ['build/*', '!build/*.tgz'],
       allExceptCompiled: ['build/*', '!build/js', '!build/css', '!build/font'],
       css: ['css/*compiled*'],
+      soy: ['src/**/*.soy.js'],
       js: ['js/*compiled*'],
       static: ['static/*']
     },
@@ -753,6 +784,21 @@ module.exports = function(grunt) {
       }
     });
   });
+  
+  //Deletes goog.require('soy'), goog.require('soydata') statements.
+  grunt.registerTask('deleteSoyRequires', function() {
+    var soyDir = 'src/rflect/cal/ui/soy';
+    var files = fs.readdirSync(soyDir);
+    files.forEach(function(aFileName) {
+      var fullFileName = soyDir + '/' + aFileName;
+      var contents = fs.readFileSync(fullFileName, {encoding: 'utf-8'});
+      contents = contents.
+          replace(/goog\.require\(\'soy\'\);\s/, '').
+          replace(/goog\.require\(\'soydata\'\);\s\s/, '').
+          replace(/goog\.require\(\'soydata\'\);/, '');
+      fs.writeFileSync(fullFileName, contents);
+    })
+  });
 
 
   // Load plugins.
@@ -792,6 +838,11 @@ module.exports = function(grunt) {
 
   grunt.registerTask('compile-less', compileLessTask);
 
+  grunt.registerTask('compile-soy', [
+    'exec:' + compileSoyExecTaskName,
+    'deleteSoyRequires'
+  ]);
+
   grunt.registerTask('gjslinter', [
     'exec:' + gJsLintTaskName
   ]);
@@ -799,4 +850,5 @@ module.exports = function(grunt) {
   grunt.registerTask('fixjstyle', [
     'exec:' + fixJsStyleTaskName
   ]);
+
 };

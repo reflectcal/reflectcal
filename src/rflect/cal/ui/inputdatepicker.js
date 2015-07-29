@@ -228,8 +228,8 @@ rflect.cal.ui.InputDatePicker.prototype.onDateChanged_ = function (aEvent) {
  * @override
  */
 rflect.cal.ui.InputDatePicker.prototype.createDom = function () {
-  var cont = this.getDomHelper().createDom('div', 'rflect-input-datepicker');
-  this.decorateInternal(cont);
+  rflect.cal.ui.InputDatePicker.superClass_.createDom.call(this);
+  this.getElement().className += ' rflect-input-datepicker';
 };
 
 
