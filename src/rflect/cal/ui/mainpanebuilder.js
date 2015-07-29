@@ -148,11 +148,13 @@ rflect.cal.ui.MainPaneBuilder.CACHE_KEY_GRID_ROWS = 2;
 rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
     opt_outerHTML) {
   var gridWidth = this.blockPoolWeek_.gridSize.width;
+  var isSmallScreen = this.navigator_.isSmallScreen();
 
   return rflect.cal.ui.soy.mainpane.mainPaneWeek({
     id: this.mainPane_.getId(),
     firstBuild: aFirstBuild,
     includeOuterHTML: opt_outerHTML,
+    isSmallScreen: this.navigator_.isSmallScreen(),
     allDayExpanded: this.blockPoolAllDay_.expanded,
     weekPoolExpanded: this.blockPoolWeek_.expanded,
     allDayGridContainerHeight: this.blockPoolAllDay_.gridContainerSize.height,
@@ -165,8 +167,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
     navigatorScrollBarWidth: this.navigator_.getScrollbarWidth(),
     verticalExpandEnabled: rflect.VERTICAL_EXPAND_ENABLED,
     horizontalExpandEnabled: rflect.HORIZONTAL_EXPAND_ENABLED,
-    dayNamesHTML: this.buildDayNamesWeek_(),
-    weekGridAdColsHTML: this.buildWeekGridAdCols_(),
+    dayNamesHTML: isSmallScreen ? '' : this.buildDayNamesWeek_(),
+    weekGridAdColsHTML: isSmallScreen? '' : this.buildWeekGridAdCols_(),
     timeMarkerHeadHTML: this.timeMarker_.buildHead(),
     hourRowsHTML: this.buildHourRows_(),
     weekGridRowsHTML: this.buildGridRows_(),

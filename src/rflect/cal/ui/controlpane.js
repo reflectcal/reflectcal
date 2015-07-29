@@ -143,8 +143,7 @@ rflect.cal.ui.ControlPane.prototype.getButtonNow = function(){
  * @override
  */
 rflect.cal.ui.ControlPane.prototype.buildHTML = function(opt_outerHTML) {
-  return rflect.cal.ui.soy.controlpane.
-  controlPane({
+  return rflect.cal.ui.soy.controlpane.controlPane({
     id: this.getId(),
     isSmallScreen: this.navigator_.isSmallScreen(),
     includeOuterHTML: opt_outerHTML,

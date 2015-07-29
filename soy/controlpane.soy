@@ -69,28 +69,28 @@
     {/if}
   {else}
     {if $includeOuterHTML}
-    <div id="top-pane" class="control-pane">
+    <div id="{$id}" class="control-pane">
     {/if}
       <div class="pane-left">
-        <div class="cal-menu-button goog-flat-button goog-inline-block" id="nb9">
+        <div class="cal-menu-button goog-flat-button goog-inline-block" id="{rflect.cal.predefined.BUTTON_MENU_ID}">
           <span class="octicon icon-button octicon-three-bars"></span></div>
       </div>
       <div class="pane-right">
         <div class="cal-menu-button-new-event emphasis-button cal-menu-button goog-flat-button goog-inline-block"
-             id="nb7"><span class="octicon icon-button octicon-plus"></span></div>
+             id="{rflect.cal.predefined.BUTTON_NEW_EVENT_ID}"><span class="octicon icon-button octicon-plus"></span></div>
       </div>
       <div class="pane-center pane-center-nav">
         <div id="time-period-label" class="time-period-label">
           {$timePeriodLabel}
         </div>
         <div class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav goog-flat-button-checked"
-             id="nb1">
+             id="{rflect.cal.predefined.BUTTON_NOW_ID}">
           {rflect.cal.i18n.Symbols.NOW}
         </div>
         <div class="goog-flat-button-collapse-left goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"
-             id="nb2"><span class="octicon icon-button octicon-triangle-left"></span></div>
+             id="{rflect.cal.predefined.BUTTON_PREV_ID}"><span class="octicon icon-button octicon-triangle-left"></span></div>
         <div class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"
-             id="nb3"><span class="octicon icon-button octicon-triangle-right"></span></div>
+             id="{rflect.cal.predefined.BUTTON_NEXT_ID}"><span class="octicon icon-button octicon-triangle-right"></span></div>
       </div>
     {if $includeOuterHTML}
     </div>

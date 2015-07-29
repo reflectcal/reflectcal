@@ -3,6 +3,7 @@
 /**
  * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
+ * @param isSmallScreen Whether screen is small.
  * @param allDayExpanded Whether to include outer html of element.
  * @param weekPoolExpanded Whether at least one of the week blocks is expanded.
  * @param allDayGridContainerHeight Height of all-day grid container.
@@ -24,6 +25,7 @@
   {if $includeOuterHTML}
   <div id="{$id}" class="main-pane">
   {/if}
+    {if not $isSmallScreen}
     <div id="main-pane-header">
       <div id="daynames-prefix-wk">
         {if $verticalExpandEnabled}
@@ -52,6 +54,7 @@
         </div>
       </div>
     </div>
+    {/if}
     <div id="main-pane-body-scrollable-wk" style="height:{$gridContainerHeight}px"
          class="{if $weekPoolExpanded}mpbs-wk-scroll-horz-on{else}mpbs-wk-scroll-horz-off{/if}">
       {if not $firstBuild}
