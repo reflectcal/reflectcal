@@ -41,9 +41,3 @@ var LANGUAGE_NAMES;
  * @type {Object}
  */
 var USER;
-
-
-/**
- * @type {string}
- */
-USER.prototype.username;

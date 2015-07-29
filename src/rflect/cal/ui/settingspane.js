@@ -37,7 +37,6 @@ goog.require('rflect.cal.ui.ExternalPane');
 goog.require('rflect.cal.ui.PageRequestEvent');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
-goog.require('rflect.cal.ui.soy.settingspane');
 goog.require('rflect.dom');
 goog.require('rflect.string');
 goog.require('rflect.ui.Checkbox');
@@ -68,7 +67,8 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
    */
   this.viewsElements_ = [];
 
-  this.addChild(this.buttonCalendars_ = new goog.ui.Button(null,
+  this.addChild(this.buttonCalendars_ = new goog.ui.Button(
+      'Calendars',
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.checkboxDebug_ = new rflect.ui.Checkbox());
 
@@ -131,14 +131,6 @@ rflect.cal.ui.SettingsPane.PageIndexes = {
 
 
 /**
- * @override
- */
-rflect.cal.ui.SettingsPane.prototype.isButtonDeleteEnabled = function() {
-  return false;
-};
-
-
-/**
  * Element in which event pane will be rendered.
  * @type {Element}
  * @private
@@ -174,6 +166,28 @@ rflect.cal.ui.SettingsPane.prototype.reloadIsNeeded_ = false;
  */
 rflect.cal.ui.SettingsPane.prototype.getUserSettings = function() {
   return this.viewManager.user['settings'];
+}
+
+
+/**
+ * @override
+ */
+rflect.cal.ui.SettingsPane.prototype.createBody =
+    function(aDom) {
+
+  var body = aDom.createDom('div', goog.getCssName('settings-body'));
+
+  var languagesCont = this.createLanguageCont_(aDom);
+  var debugCont = this.createDebugCont_(aDom);
+  var buttonCont = this.createButtonCont_(aDom);
+  var logoutCont = this.createLogoutCont_(aDom);
+
+  body.appendChild(languagesCont);
+  body.appendChild(buttonCont);
+  body.appendChild(debugCont);
+  body.appendChild(logoutCont);
+
+  return body;
 }
 
 
@@ -455,27 +469,7 @@ rflect.cal.ui.SettingsPane.prototype.createDebugCont_ = function(aDom) {
 /**
  * @override
  */
-rflect.cal.ui.SettingsPane.prototype.buildHTML = function(opt_outerHTML) {
-  return rflect.cal.ui.soy.settingspane.settingsPane({
-    id: this.getId(),
-    includeOuterHTML: opt_outerHTML
-  });
-};
-
-
-/**
- * @override
- */
 rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
-  this.buttonCalendars_.decorate(this.getDomHelper().getElement('button-to-calendars'));
-
-  this.selectLanguages_ = this.getDomHelper().getElement('settings-languages');
-
-  var checkboxDebugSubCont = this.getDomHelper().getElement('settings-debug-mode-sub-cont');
-  this.checkboxDebug_.render(checkboxDebugSubCont);
-  this.checkboxDebug_.setLabel(checkboxDebugSubCont);
-  this.checkboxDebug_.getElement().className += ' aligned-checkbox';
-
   rflect.cal.ui.SettingsPane.superClass_.enterDocument.call(this);
 
   // Menu commands.
@@ -483,9 +477,9 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
       goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
       .listen(this.buttonBack2, goog.ui.Component.EventType.ACTION,
       this.onCancel_, false, this)
-      .listen(this.buttonPrimary1, goog.ui.Component.EventType.ACTION,
+      .listen(this.buttonSave1, goog.ui.Component.EventType.ACTION, 
       this.onSaveUser_, false, this)
-      .listen(this.buttonPrimary2, goog.ui.Component.EventType.ACTION,
+      .listen(this.buttonSave2, goog.ui.Component.EventType.ACTION,
       this.onSaveUser_, false, this)
       .listen(this.buttonCalendars_,
       goog.ui.Component.EventType.ACTION, this.onShowCalendarsAction_, false,
@@ -609,6 +603,9 @@ rflect.cal.ui.SettingsPane.prototype.onSaveUser_ = function() {
  */
 rflect.cal.ui.SettingsPane.prototype.displayValues = function() {
 
+  if (goog.DEBUG)
+    console.log('this.getUserSettings(): ', this.getUserSettings());
+
   this.selectLanguages_.value = this.getUserSettings()['language'] ||
       goog.LOCALE;
 
@@ -641,6 +638,8 @@ rflect.cal.ui.SettingsPane.prototype.scanValues = function() {
  * @protected
  */
 rflect.cal.ui.SettingsPane.prototype.disposeInternal = function() {
+  this.tabContents2_ = null;
+
   rflect.cal.ui.SettingsPane.superClass_.disposeInternal.call(this);
 };
 

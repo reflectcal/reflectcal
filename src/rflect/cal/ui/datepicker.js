@@ -170,14 +170,35 @@ rflect.cal.ui.DatePicker.prototype.setBasis = function(aDate) {
 
 
 /**
+ * Redraws mini cal with new data.
+ */
+rflect.cal.ui.DatePicker.prototype.updateByRedraw = function() {
+  this.getElement().innerHTML = this.build();
+};
+
+
+/**
  * Builds body of component.
- * @param {boolean=} opt_outerHTML Whether to build outer html.
- * @return {string} HTML of component.
+ * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
+ * to.
+ * @see rflect.ui.Component#build
+ * @protected
+ */
+rflect.cal.ui.DatePicker.prototype.buildInternal = function(aSb) {
+  this.miniCalBuilder_.buildInternal(aSb);
+};
+
+
+/**
+ * Decorates an existing html div element as a Main Pane.
  * @override
  */
-rflect.cal.ui.DatePicker.prototype.buildHTML = function(opt_outerHTML) {
-  return this.miniCalBuilder_.buildHTML(opt_outerHTML);
-}
+rflect.cal.ui.DatePicker.prototype.decorateInternal = function(aElement,
+    opt_doNotBuildBody) {
+  // Set this.element_.
+  rflect.cal.ui.DatePicker.superClass_.decorateInternal.call(this, aElement,
+      opt_doNotBuildBody);
+};
 
 
 /**

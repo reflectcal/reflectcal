@@ -16,7 +16,6 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('rflect.browser.pagevisibility');
 goog.require('rflect.date');
-goog.require('rflect.cal.ui.soy.timemarker');
 
 
 
@@ -166,23 +165,31 @@ rflect.cal.ui.TimeMarker.prototype.stop = function() {
 
 /**
  * Builds head point of time marker.
- * @return {string}
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ *
+ * '<div style="top:',
+ * Position of marker head, in pixels (200).
+ * 'px;" class="' + goog.getCssName('time-marker-head') + '"></div>',
  */
-rflect.cal.ui.TimeMarker.prototype.buildHead = function() {
-  return rflect.cal.ui.soy.timemarker.timeMarkerHead({
-    top: this.getPosition(true)
-  });
+rflect.cal.ui.TimeMarker.prototype.buildHead = function(aSb) {
+  aSb.append(rflect.cal.ui.TimeMarker.HEAD_PARTS_[0]);
+  aSb.append(this.getPosition(true));
+  aSb.append(rflect.cal.ui.TimeMarker.HEAD_PARTS_[1]);
 }
 
 
 /**
  * Builds time marker line in today block.
- * @return {string}
+ * @param {goog.string.StringBuffer} aSb Passed string buffer.
+ *
+ * '<div style="top:',
+ * /*Position of marker line, in pixels (200).
+ * 'px;" class="' + goog.getCssName('time-marker') + '"></div>'
  */
-rflect.cal.ui.TimeMarker.prototype.buildLine = function() {
-  return rflect.cal.ui.soy.timemarker.timeMarkerLine({
-    top: this.getPosition(false)
-  });
+rflect.cal.ui.TimeMarker.prototype.buildLine = function(aSb) {
+  aSb.append(rflect.cal.ui.TimeMarker.HEAD_PARTS_[2]);
+  aSb.append(this.getPosition(false));
+  aSb.append(rflect.cal.ui.TimeMarker.HEAD_PARTS_[3]);
 }
 
 

@@ -32,72 +32,70 @@ goog.inherits(rflect.ui.Component, goog.ui.Component);
 
 
 /**
- * @return {string} Unique id.
- * @override
+ * @param {Array.<goog.ui.Component>|undefined} aContainer Array to test index presence in.
+ * @param {goog.ui.Component} aComponent Index to test.
+ * @return {boolean} Whether index is within array of indexes to be excluded
+ * from update.
  */
-rflect.ui.Component.prototype.getId = function() {
-  return 'ui-component' + rflect.ui.Component.superClass_.getId.call(this);
+rflect.ui.Component.componentIsInExclusions = function(aContainer, aComponent) {
+  return !!aContainer &&
+      !!aContainer.length &&
+      goog.array.contains(aContainer, aComponent)
 }
 
 
 /**
- * Creates component on an empty <temp> element.
- * @override
+ * Creates component on an empty div element.
  */
 rflect.ui.Component.prototype.createDom = function() {
-  var tempElement = this.getDomHelper().createElement('temp');
-
-  tempElement.innerHTML = this.buildHTML(true);
-
-  this.setElementInternal(this.getDomHelper().
-      getFirstElementChild(tempElement));
+  this.decorateInternal(this.getDomHelper().createDom('div'));
 };
 
 
 /**
- * Decorates an existing html element as a component.
+ * Decorates an existing html div element as a component.
+ * TODO(alexk): for public use, we may rename this method to something else,
+ * 'cause original decorateInternal is protected. Something like
+ * decorateByBuild.
  * @param {Element} aElement The div element to decorate.
- * @protected
- * @override
+ * @param {boolean=} opt_doNotBuildBody Whether to build body or not.
  */
-rflect.ui.Component.prototype.decorateInternal = function(aElement) {
+rflect.ui.Component.prototype.decorateInternal = function(aElement,
+                                                           opt_doNotBuildBody) {
   // Set this.element_.
   rflect.ui.Component.superClass_.decorateInternal.call(this, aElement);
   // Build body.
-  this.getElement().innerHTML = this.buildHTML(false);
+  if (!opt_doNotBuildBody) {
+    this.getElement().innerHTML = this.build();
+  }
 };
 
 
 /**
- * Sets element searching by its id in DOM.
- * @param {string} aId The div element to decorate.
+ * Builds body of component. We could use either given string buffer and append
+ * parts to it, or use one that belongs to this particular component and, in
+ * that case, return ready string.
+ * @param {goog.string.StringBuffer=} aSb String buffer to append HTML parts
+ * to.
+ * @return {string|undefined} HTML of component or none.
  */
-rflect.ui.Component.prototype.setElementById = function(aId) {
-  // Set this.element_.
-  rflect.ui.Component.superClass_.decorateInternal.call(this,
-      this.getDomHelper().getElement(aId));
+rflect.ui.Component.prototype.build = function(aSb) {
+  var sb = aSb || new goog.string.StringBuffer();
+  this.buildInternal(sb);
+  if (!aSb) {
+    return sb.toString();
+  }
 };
 
 
 /**
  * Builds body of component.
- * @param {boolean=} opt_outerHTML Whether to build outer html.
- * @return {string} HTML of component.
+ * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
+ * to. Must be overridden.
+ * @protected
  */
-rflect.ui.Component.prototype.buildHTML = function(opt_outerHTML) {
-  var str = '';
-  if (opt_outerHTML) {
-    str += '<div>';
-  }
-  this.forEachChild(aChild => {
-    if (aChild.buildHTML) {
-      str += aChild.buildHTML(true);
-    }
-  });
-  if (opt_outerHTML) {
-    str += '</div>';
-  }
-  return str;
+rflect.ui.Component.prototype.buildInternal = function(aSb) {
+  goog.abstractMethod();
 };
 
 
@@ -122,10 +120,20 @@ rflect.ui.Component.prototype.updateBeforeRedraw =
 /**
  * Updates body of component by redraw. This is a second and final part of
  * component update sequence.
+ * @param {boolean=} opt_deep Whether to update children.
+ * @see {rflect.cal.ui.MainBody#updateBeforeRedraw}.
  */
 rflect.ui.Component.prototype.updateByRedraw =
-    function() {
-  this.getElement().innerHTML = this.buildHTML(false);
+    function(opt_deep) {
+  // Propagate call to child components that have a DOM, if any.
+  if (opt_deep){
+    this.forEachChild(function(aChild) {
+      if (aChild.updateByRedraw && aChild.isInDocument() &&
+          aChild.getElement()) {
+        aChild.updateByRedraw(opt_deep);
+      }
+    });
+  }
 };
 
 
@@ -137,7 +145,7 @@ rflect.ui.Component.prototype.updateByRedraw =
 rflect.ui.Component.prototype.update =
     function(opt_deep) {
   this.updateBeforeRedraw(opt_deep);
-  this.updateByRedraw();
+  this.updateByRedraw(opt_deep);
 };
 
 

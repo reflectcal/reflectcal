@@ -31,7 +31,6 @@ goog.require('rflect.cal.ui.SettingsPane');
 goog.require('rflect.cal.ui.SettingsPane.EventTypes');
 goog.require('rflect.cal.ui.SidePane');
 goog.require('rflect.ui.Component');
-goog.require('rflect.cal.ui.soy.mainbody');
 
 
 
@@ -124,6 +123,27 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
   }
 };
 goog.inherits(rflect.cal.ui.MainBody, rflect.ui.Component);
+
+
+/**
+ * Main body html parts, used by renderer.
+ * @type {Array.<string>}
+ * @const
+ * @private
+ */
+rflect.cal.ui.MainBody.HTML_PARTS_ = [
+  '<div id="main-body" class="main-body">',
+  '<div id="top-pane" class="control-pane">',
+  '</div>',
+  '<div id="main-pane-cont" class="main-pane-cont">',
+  '<div id="side-pane" class="side-pane slide-pane-left ',
+  '">',
+  '</div>',
+  '<div id="main-pane" class="main-pane">',
+  '</div>',
+  '</div>',
+  '</div>'
+];
 
 
 /**
@@ -259,20 +279,66 @@ rflect.cal.ui.MainBody.prototype.getMiniCal = function() {
 
 
 /**
- * Builds body of component.
- * @param {boolean=} opt_outerHTML Whether to build outer html.
- * @return {string}
- * @see rflect.ui.Component#build
+ * Creates main body on an empty div element.
+ */
+rflect.cal.ui.MainBody.prototype.createDom = function() {
+  this.decorateInternal(this.getDomHelper().createElement('div'));
+};
+
+
+/**
+ * Decorates an existing html div element as a Main Body.
  * @override
  */
-rflect.cal.ui.MainBody.prototype.buildHTML = function(opt_outerHTML) {
-  return rflect.cal.ui.soy.mainbody.mainBody({
-    id: this.getId(),
-    includeOuterHTML: opt_outerHTML,
-    topPaneHTML: this.topPane_.buildHTML(true),
-    sidePaneHTML: this.sidePane_.buildHTML(true),
-    mainPaneHTML: this.mainPane_.buildHTML(true)
-  });
+rflect.cal.ui.MainBody.prototype.decorateInternal = function(aElement,
+                                                          opt_doNotBuildBody) {
+  // Set this.element_ and build component.
+  rflect.cal.ui.MainBody.superClass_.decorateInternal.call(this, aElement,
+      opt_doNotBuildBody);
+
+  if (!opt_doNotBuildBody) {
+    this.getElement().id = 'main-body';
+    this.getElement().className = goog.getCssName('main-body');
+  }
+};
+
+
+/**
+ * Builds body of component.
+ * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
+ * to.
+ * @see rflect.ui.Component#build
+ * @protected
+ */
+rflect.cal.ui.MainBody.prototype.buildInternal = function(aSb) {
+  var parts = rflect.cal.ui.MainBody.HTML_PARTS_;
+
+  // Form html. From index 1, because 0 is the html of outer container, which
+  // we don't create in that method but just decorate.
+  for (var counter = 1, length = parts.length - 1;
+       counter < length; counter++) {
+    aSb.append(parts[counter]);
+    switch (counter) {
+      // Include top pane in common buffer.
+      case 1: {
+        this.topPane_.build(aSb);
+      };break;
+      case 4: {
+        aSb.append(this.sidePane_.showBehavior.isVisible() ?
+            'slide-pane-left-visible' : '');
+      };break;
+      case 5: {
+        this.sidePane_.build(aSb);
+      };break;
+      // Include main pane in common buffer.
+      case 7: {
+        this.mainPane_.build(aSb);
+      };break;
+
+      default: break;
+    }
+  }
+
 };
 
 
@@ -306,9 +372,12 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
   // We could decorate children right after superclass decorateInternal call,
   // but to preserve pattern (that if we want reliable presence of component in
   // DOM, we should address it in enterDocument), we do it here.
-  this.topPane_.setElementById(this.topPane_.getId());
-  this.mainPane_.setElementById(this.mainPane_.getId());
-  this.sidePane_.setElementById(this.sidePane_.getId());
+  this.topPane_.decorateInternal(this.getDomHelper().getElement('top-pane'),
+      true);
+  this.mainPane_.decorateInternal(this.getDomHelper().getElement('main-pane'),
+      true);
+  this.sidePane_.decorateInternal(this.getDomHelper().getElement('side-pane'),
+      true);
 
   // Propagate call to children.
   rflect.cal.ui.MainBody.superClass_.enterDocument.call(this);
@@ -381,7 +450,7 @@ rflect.cal.ui.MainBody.prototype.rebuildLeftPaneWithSizes = function() {
  */
 rflect.cal.ui.MainBody.prototype.measureStaticSizes = function() {
   var dom = this.getDomHelper();
-  var totalSize = goog.style.getSize(dom.getElement(this.getId()));
+  var totalSize = goog.style.getSize(dom.getElement('main-body'));
 
   if (this.viewManager_.isInWeekMode()) {
 
@@ -427,24 +496,17 @@ rflect.cal.ui.MainBody.prototype.measureLeftPaneStaticSizes = function() {
   var dom = this.getDomHelper();
 
   var calContainerMB =
-      goog.style.getMarginBox(dom.getElement(this.getId()));
+      goog.style.getMarginBox(dom.getElement('main-body'));
   var calContainerBB =
-      goog.style.getBorderBox(dom.getElement(this.getId()));
+      goog.style.getBorderBox(dom.getElement('main-body'));
   var calContainerPB =
-      goog.style.getPaddingBox(dom.getElement(this.getId()));
+      goog.style.getPaddingBox(dom.getElement('main-body'));
 
-  var topPaneSize = goog.style.getSize(dom.getElement(this.getTopPane().
-      getId()));
-  var minicalSize = goog.style.getSize(dom.getElement(this.getSidePane().
-      getMiniCal().getId()));
-
-
+  var topPaneSize = goog.style.getSize(dom.getElement('top-pane'));
+  var minicalSize = goog.style.getSize(dom.getElement('month-selector'));
   var calSelectorSize =
-      goog.style.getSize(dom.getElement(this.getSidePane().getCalSelector().
-      getId()));
-  var taskSelectorSize =
-      goog.style.getSize(dom.getElement(this.getSidePane().getTaskSelector().
-      getId()));
+      goog.style.getSize(dom.getElement('calendars-selector'));
+  var taskSelectorSize = goog.style.getSize(dom.getElement('tasks-selector'));
 
   var totalHeight = calContainerMB.top + calContainerMB.bottom +
       calContainerBB.top + calContainerBB.bottom +
@@ -748,8 +810,10 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
   this.getCalSelector().redrawIsNeeded = true;
   this.getTaskSelector().redrawIsNeeded = true;
 
+  this.sidePane_.update();
   this.sidePane_.getCalSelector().update();
   this.sidePane_.getTaskSelector().update();
+
 
   this.getMainPane().updateBeforeRedraw();
   //Do not attach momentum scroller, we will do it on page change.
