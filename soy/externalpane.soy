@@ -8,7 +8,7 @@
  * @param upper Whether this pane is in upper configuration.
  */
 {template .controlPane autoescape="false"}
-  <div class="control-pane-external-outer{sp}control-pane-external-outer-{if $upper}upper{else}lower{/if}">
+  <nav class="control-pane-external-outer{sp}control-pane-external-outer-{if $upper}upper{else}lower{/if}">
     <div class="control-pane-external">
       <div class="pane-right">
         <div class="goog-inline-block goog-flat-button cal-menu-button emphasis-button">
@@ -43,5 +43,5 @@
        {/if}
       </div>
     </div>
-  </div>
+  </nav>
 {/template}
