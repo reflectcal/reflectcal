@@ -92,7 +92,8 @@ module.exports = function(grunt) {
 
     var task = [
       'clean:build'
-    ].concat(getCompileLessTask()).concat(getCompileJsTask()).concat([
+    ].concat(getCompileLessTask()).concat(getCompileSoyTask()).
+        concat(getCompileJsTask()).concat([
       'mkdir:js',
       'mkdir:css',
       'copy:jsToBuild',
@@ -126,7 +127,7 @@ module.exports = function(grunt) {
   function compileTask() {
     setGlobals(true);
 
-    var task = getCompileLessTask().concat(['compile-soy']).
+    var task = getCompileLessTask().concat(getCompileSoyTask()).
         concat(getCompileJsTask());
 
     grunt.task.run(task);
@@ -154,6 +155,14 @@ module.exports = function(grunt) {
     ].concat([
       'closureBuilder'
     ]);
+  }
+
+  function getCompileSoyTask() {
+    return [
+      'clean:soy',
+      'exec:' + compileSoyExecTaskName,
+      'deleteSoyRequires'
+    ];
   }
 
   function getCompileLessTask() {
@@ -838,10 +847,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('compile-less', compileLessTask);
 
-  grunt.registerTask('compile-soy', [
-    'exec:' + compileSoyExecTaskName,
-    'deleteSoyRequires'
-  ]);
+  grunt.registerTask('compile-soy', getCompileSoyTask());
 
   grunt.registerTask('gjslinter', [
     'exec:' + gJsLintTaskName
