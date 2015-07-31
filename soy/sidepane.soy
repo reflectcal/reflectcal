@@ -13,6 +13,9 @@
   {if $includeOuterHTML}
   <div id="{$id}" class="side-pane slide-pane-left{sp}{if $visible}slide-pane-left-visible{/if}">
   {/if}
+    {if not $isSmallScreen}
+    <div class="side-pane-spacer"></div>
+    {/if}
     <ul class="side-pane-menu">
       {if $isSmallScreen}
         {call .sidePaneMenu /}
