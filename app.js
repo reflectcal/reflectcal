@@ -46,6 +46,7 @@ app.use(connect.compress());
 app.use(express.methodOverride());
 app.use(express.cookieParser(
     'rflectevents_sdfjwioy2379ugd8syg38wyio-asdfh728t9284fdsfjs'));
+app.use(connect.session({ cookie: { maxAge: 3600000 * 24 * 365 * 3 }}));
 app.use(express.session());
 app.use(flash());
 app.use(passport.initialize());
