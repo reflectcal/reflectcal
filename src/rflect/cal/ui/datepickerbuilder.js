@@ -10,6 +10,7 @@
 goog.provide('rflect.cal.ui.DatePickerBuilder');
 
 goog.require('goog.i18n.DateTimeSymbols');
+goog.require('rflect.cal.ui.soy.datepicker');
 
 
 
@@ -37,256 +38,96 @@ rflect.cal.ui.DatePickerBuilder = function(aMiniCal, aTimeManager) {
 
 
 /**
- * String parts for builder.
- * @type {Array.<string>}
- * @private
- * @const
- */
-rflect.cal.ui.DatePickerBuilder.HTML_PARTS_ = [
-  '<div id="month-selector">',
-  '<div class="' + goog.getCssName('goog-date-picker'),
-  /*
-  * Date picker classname ().
-  */
-  '"><div id="minical-mask-cnt">',
-  /* Mask. */
-  '</div><table class="' + goog.getCssName('minical-table') + '" cellspacing="0" cellpadding="0">' +
-      '<thead><tr class="' + goog.getCssName('goog-date-picker-head'),
-  /*
-  * Date picker head classname ().
-  */
-  '"><td colspan="7">' + '<div class="' +
-      'goog-date-picker-buttons">' +
-      '<div class="goog-date-picker-btn ' +
-      'octicon octicon-triangle-left ' +
-      'month-sel-btn ' +
-      'month-sel-btn-back' +
-      '">&nbsp;</div>' +
-      '<div class="goog-date-picker-btn ' +
-      'octicon octicon-triangle-right ' +
-      'month-sel-btn ' +
-      'month-sel-btn-forward' +
-      '">&nbsp;</div></div>',
-  '<div class="' + goog.getCssName('goog-date-picker-month') + '">',
-  /*
-  * Month and year name (2013&nbsp;August).
-  */
-  '</div></td></tr></thead>',
-  '<tbody id="minical-grid" role="grid"><tr>',
-  // Individual dayname.
-  '<th role="columnheader" class="' + goog.getCssName('goog-date-picker-wday') +
-      '">',
-  /* Dayname (S). */
-  // End of individual dayname.
-  '</th>',
-  '</tr>',
-  // Individual monthgrid row.
-  '<tr>',
-  // Individual grid cell.
-  '<td id="goog-dp-',
-  /* Grid cell id (42). */
-  '" role="gridcell" class="' +
-      goog.getCssName('goog-date-picker-date') + ' ',
-  /* Day cell class (). */
-  '">',
-  /* Day number (1). */
-  // End of individual grid cell.
-  '</td>',
-  // End of individual monthgrid row.
-  '</tr>',
-  '</tbody></table></div>',
-  '</div>'
-];
-
-
-/**
  * Builds body of component.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
- * @see {rflect.cal.ui.MainPaneBuilder#buildBodyInternalWeek_}
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @return {string}
  */
-rflect.cal.ui.DatePickerBuilder.prototype.buildInternal = function(aSb) {
-  var offset = 0;
-  var length = rflect.cal.ui.DatePickerBuilder.HTML_PARTS_.length;
-  while (++offset < length - 1) {
-    aSb.append(rflect.cal.ui.DatePickerBuilder.HTML_PARTS_[offset]);
-    switch (offset) {
-      case 1: {
-        this.buildMainClassName_(aSb);
-      };break;
-      case 3: {
-        this.buildHeader_(aSb);
-      };break;
-      case 5: {
-        this.buildMonthName_(aSb);
-      };break;
-      case 8: {
-        this.buildDayNames_(aSb, offset);
-        offset++;
-      };break;
-      case 11: {
-        this.buildMonthGridRows_(aSb, offset);
-        offset += 5;
-      };break;
-      default: break;
-    }
-  }
-};
-
-
-/**
- * Builds mini cal main class name.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
- * @private
- *
- * '<div class="' + goog.getCssName('goog-date-picker'),
- *  
- *  * Date picker classname ().
- *  
- */
-rflect.cal.ui.DatePickerBuilder.prototype.buildMainClassName_ = function(aSb) {
-  if (this.miniCal_.hovered)
-    aSb.append(goog.getCssName('goog-datepicker-hover'));
-};
-
-
-/**
- * Builds mini cal header.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
- * @private
- *
- *'"><table cellspacing="0" cellpadding="0">' +
- *     '<thead><tr class="' + goog.getCssName('goog-date-picker-head'),
- *
- * Date picker head classname ().
- *
- */
-rflect.cal.ui.DatePickerBuilder.prototype.buildHeader_ = function(aSb) {
-  if (this.miniCal_.hovered)
-    aSb.append(goog.getCssName('goog-datepicker-hover'));
+rflect.cal.ui.DatePickerBuilder.prototype.buildHTML = function(opt_outerHTML) {
+  return rflect.cal.ui.soy.datepicker.datePicker({
+    id: this.miniCal_.getId(),
+    includeOuterHTML: opt_outerHTML,
+    dateLabel: this.buildMonthName_(),
+    weekDaysHTML: this.buildDayNames_(),
+    gridRowsHTML: this.buildMonthGridRows_()
+  });
 };
 
 
 /**
  * Builds month and year name.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @private
- *
- *'<div class="' + goog.getCssName('goog-date-picker-month') + '">',
- *
- * Month and year name (2013&nbsp;August).
+ * @return {string}
  */
-rflect.cal.ui.DatePickerBuilder.prototype.buildMonthName_ = function(aSb) {
-  aSb.append(this.timeManager_.basis.getYear());
-  aSb.append('&nbsp;');
-  aSb.append(goog.i18n.DateTimeSymbols.MONTHS[
-      this.timeManager_.basis.getMonth()]);
+rflect.cal.ui.DatePickerBuilder.prototype.buildMonthName_ = function() {
+  return this.timeManager_.basis.getYear() + '&nbsp;' +
+      goog.i18n.DateTimeSymbols.MONTHS[this.timeManager_.basis.getMonth()];
 };
 
 
 /**
  * Builds day names abbreviations.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
- * @param {number} aOffset Passed offset.
  * @private
- *
- * // Individual dayname.
- * '<th role="columnheader" class="' +
- * goog.getCssName('goog-date-picker-wday') + '">',
- *  Dayname (S). 
- * // End of individual dayname.
- * '</th>',
+ * @return {string}
  */
-rflect.cal.ui.DatePickerBuilder.prototype.buildDayNames_ = function(aSb, aOffset) {
+rflect.cal.ui.DatePickerBuilder.prototype.buildDayNames_ = function() {
   var dayNamesFirstNumber = goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK;
   var dayNameNumber = 0;
-  
+  var str = '';
   for (var counter = 0; counter < 7; counter++) {
-    if (counter > 0)
-      aSb.append(rflect.cal.ui.DatePickerBuilder.HTML_PARTS_[aOffset]);
     // We need to shift position by 1 because array of weekdays starts from
     // sunday and WEEKDAY gives weekday number starting from monday.
     dayNameNumber = (dayNamesFirstNumber + counter + 1) % 7;
-    aSb.append(goog.i18n.DateTimeSymbols.WEEKDAYS[dayNameNumber].charAt(0)
-        .toUpperCase());
-    aSb.append(rflect.cal.ui.DatePickerBuilder.HTML_PARTS_[aOffset + 1]);
+    str += rflect.cal.ui.soy.datepicker.weekDay({
+      weekDay: goog.i18n.DateTimeSymbols.NARROWWEEKDAYS[dayNameNumber]
+    });
   }
+  return str;
 };
 
 
 /**
  * Builds month grid rows.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
  * @private
- *
- * Individual monthgrid row.
- *  '<tr>',
- *  // Individual grid cell.
- *  '<td id="goog-dp-',
- *   Grid cell id (42). 
- *  '" role="gridcell" class="' +
- *      goog.getCssName('goog-date-picker-date') + ' ',
- *   Day cell class (). 
- *  '">',
- *   Day number (1). 
- *  // End of individual grid cell.
- *  '</td>',
- *  // End of individual monthgrid row.
- *  '</tr>',
+ * @return {string}
  */
 rflect.cal.ui.DatePickerBuilder.prototype.buildMonthGridRows_ =
-    function(aSb, aOffset) {
+    function() {
   var daysNumber = this.timeManager_.daySeries.length;
   var rowsNumber = daysNumber / 7;
+  var str = '';
   for (var rowCounter = 0; rowCounter < rowsNumber; rowCounter++) {
-    if (rowCounter > 0)
-      aSb.append(rflect.cal.ui.DatePickerBuilder.HTML_PARTS_[aOffset]);
-    // Build day cells containing expand signs and day numbers.
-    this.buildDayCells_(aSb, aOffset + 1, rowCounter);
-    aSb.append(rflect.cal.ui.DatePickerBuilder.HTML_PARTS_[aOffset + 5]);
+    str += rflect.cal.ui.soy.datepicker.gridRow({
+      // Build day cells containing expand signs and day numbers.
+      gridCellsHTML: this.buildDayCells_(rowCounter)
+    });
   }
+  return str;
 };
 
 
 /**
  * Builds month grid rows.
- * @param {goog.string.StringBuffer} aSb Passed string buffer.
- * @param {number} aOffset Passed offset.
  * @param {number} aRowCounter Row number.
  * @private
- *
- *  // Individual grid cell.
- *  '<td id="goog-dp-',
- *   Grid cell id (42).
- *  '" role="gridcell" class="' +
- *      goog.getCssName('goog-date-picker-date') + ' ',
- *   Day cell class ().
- *  '">',
- *   Day number (1).
- *  // End of individual grid cell.
- *  '</td>',
+ * @return {string}
  */
-rflect.cal.ui.DatePickerBuilder.prototype.buildDayCells_ = function(aSb, aOffset,
-    aRowCounter) {
+rflect.cal.ui.DatePickerBuilder.prototype.buildDayCells_ =
+    function(aRowCounter) {
+  var str = '';
   var daySeries = this.timeManager_.daySeries;
-  var id = 0;
-  var day;
 
-  for (var colCounter = 0; colCounter < 7; colCounter++) {
-    aSb.append(rflect.cal.ui.DatePickerBuilder.HTML_PARTS_[aOffset]);
-    aSb.append(id = aRowCounter * 7 + colCounter);
-    aSb.append(rflect.cal.ui.DatePickerBuilder.HTML_PARTS_[aOffset + 1]);
-    // Show days from another month differently.
-    if (this.timeManager_.basis.getMonth() != (day = daySeries[id]).getMonth())
-      aSb.append(goog.getCssName('dl-other-month'));
-    if (id == this.miniCal_.basisIndex)
-      aSb.append(' ' + goog.getCssName('goog-date-picker-selected-pre'));
-    if (id >= this.miniCal_.startSelectionIndex &&
-        id <= this.miniCal_.endSelectionIndex)
-      aSb.append(' ' + goog.getCssName('goog-date-picker-selected-pre'));
-    aSb.append(rflect.cal.ui.DatePickerBuilder.HTML_PARTS_[aOffset + 2]);
-    // Build daycell day number.
-    aSb.append(day.getDate());
-    aSb.append(rflect.cal.ui.DatePickerBuilder.HTML_PARTS_[aOffset + 3]);
+  for (let colCounter = 0; colCounter < 7; colCounter++) {
+    let id = aRowCounter * 7 + colCounter;
+    let day = daySeries[id];
+    str += rflect.cal.ui.soy.datepicker.gridCell({
+      index: id,
+      label: day.getDate(),
+      // Show days from another month differently.
+      inOtherMonth: this.timeManager_.basis.getMonth() != day.getMonth(),
+      selected: id == this.miniCal_.basisIndex || (id >= this.miniCal_.
+          startSelectionIndex && id <= this.miniCal_.endSelectionIndex)
+    });
   }
+
+  return str;
 };

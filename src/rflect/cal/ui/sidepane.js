@@ -27,6 +27,7 @@ goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.cal.ui.ViewButtonUpdater');
+goog.require('rflect.cal.ui.soy.sidepane');
 
 
 
@@ -240,18 +241,6 @@ rflect.cal.ui.SidePane.prototype.getButtonNow = function(){
 
 
 /**
- * Decorates an existing html div element as a Top Pane.
- * @override
- */
-rflect.cal.ui.SidePane.prototype.decorateInternal = function(aElement,
-                                                         opt_doNotBuildBody) {
-  // Set this.element_.
-  rflect.cal.ui.SidePane.superClass_.decorateInternal.call(this, aElement,
-      opt_doNotBuildBody);
-};
-
-
-/**
  * @return {goog.ui.Component}
  */
 rflect.cal.ui.SidePane.prototype.getMiniCal = function() {
@@ -276,96 +265,24 @@ rflect.cal.ui.SidePane.prototype.getTaskSelector = function() {
 
 
 /**
- * Builds menu of side pane.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
- * @see rflect.ui.Component#build
- * @private
- */
-rflect.cal.ui.SidePane.prototype.buildMenu_ = function(aSb) {
-
-  var parts = [
-    '<li class="side-pane-menu-item">',
-    // Back button.
-    '<div id="' + rflect.cal.predefined.BUTTON_TO_CALENDAR_ID + '" class="button-minimal">',
-    rflect.cal.i18n.Symbols.TO_CALENDAR,
-    '</div>',
-    '</li>',
-    '<li class="side-pane-menu-item">',
-    // Day button.
-    '<div id="' + rflect.cal.predefined.BUTTON_DAY_ID + '" class="button-minimal">',
-    rflect.cal.i18n.Symbols.DAY,
-    '</div>',
-    '</li>',
-    '<li class="side-pane-menu-item">',
-    // Month button.
-    '<div id="' + rflect.cal.predefined.BUTTON_MONTH_ID + '" class="button-minimal">',
-    rflect.cal.i18n.Symbols.MONTH,
-    '</div>',
-    '</li>',
-    '<li class="side-pane-menu-item">',
-    // Options button.
-    '<div id="' + rflect.cal.predefined.BUTTON_SETTINGS_ID + '" class="button-minimal">',
-    '<span class="octicon icon-button octicon-gear icon-settings icon-in-button"></span>',
-    '&nbsp;',
-    rflect.cal.i18n.Symbols.SETTINGS,
-    '</div>',
-    '</li>'
-  ];
-
-
-  for (var counter = 0, length = parts.length;
-       counter < length; counter++) {
-    aSb.append(parts[counter]);
-  }
-}
-
-
-/**
  * Builds body of component.
- * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
- * to.
  * @see rflect.ui.Component#build
- * @protected
+ * @param {boolean=} opt_outerHTML Whether to build outer html.
+ * @override
+ * @return {string}
  */
-rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
+rflect.cal.ui.SidePane.prototype.buildHTML = function(opt_outerHTML) {
   var isSmallScreen = this.navigator_.isSmallScreen();
 
-  var parts = [
-    '<nav id="side-pane" class="side-pane slide-pane-left">',
-    '<ul class="side-pane-menu">',
-    '</ul>',
-    '<div id="month-selector">',
-    '</div>',
-    '<div id="calendars-selector" class="list-selector">',
-    '</div>',
-    '<div id="tasks-selector" class="list-selector">',
-    '</div>',
-    '</nav>'
-  ];
-
-  // Form html. From index 1, because 0 is the html of outer container, which
-  // we don't create in that method but just decorate.
-  for (var counter = 1, length = parts.length - 1;
-       counter < length; counter++) {
-    aSb.append(parts[counter]);
-    switch (counter) {
-      // Include top pane in common buffer.
-      case 1: {
-        if (isSmallScreen) this.buildMenu_(aSb);
-      };break;
-      case 3: {
-        if (!isSmallScreen) this.miniCal_.build(aSb);
-      };break;
-      case 5: {
-        this.calSelectorMy_.build(aSb);
-      };break;
-      case 7: {
-        this.calSelectorOther_.build(aSb);
-      };break;
-      default: break;
-    }
-  }
+  return rflect.cal.ui.soy.sidepane.sidePane({
+    id: this.getId(),
+    includeOuterHTML: opt_outerHTML,
+    isSmallScreen: isSmallScreen,
+    visible: this.showBehavior.isVisible(),
+    monthSelectorHTML: !isSmallScreen ? this.miniCal_.buildHTML(true) : '',
+    calSelectorMyHTML: this.calSelectorMy_.buildHTML(true),
+    calSelectorOtherHTML: this.calSelectorOther_.buildHTML(true)
+  })
 }
 
 
@@ -375,10 +292,8 @@ rflect.cal.ui.SidePane.prototype.buildInternal = function(aSb) {
 rflect.cal.ui.SidePane.prototype.enterDocument = function() {
   var isSmallScreen = this.navigator_.isSmallScreen();
 
-  this.calSelectorMy_.decorateInternal(
-      this.getDomHelper().getElement('calendars-selector'), true);
-  this.calSelectorOther_.decorateInternal(
-      this.getDomHelper().getElement('tasks-selector'), true);
+  this.calSelectorMy_.setElementById(this.calSelectorMy_.getId());
+  this.calSelectorOther_.setElementById(this.calSelectorOther_.getId());
 
   if (isSmallScreen){
     this.buttonBack_.decorate(this.getDomHelper().getElement(
@@ -391,8 +306,7 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
         this.getDomHelper().getElement(
         rflect.cal.predefined.BUTTON_SETTINGS_ID));
   } else {
-    this.miniCal_.decorateInternal(
-        this.getDomHelper().getElement('month-selector'), true);
+    this.miniCal_.setElementById(this.miniCal_.getId());
   }
 
   rflect.cal.ui.SidePane.superClass_.enterDocument.call(this);
