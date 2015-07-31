@@ -45,10 +45,6 @@ body when (@UI_TYPE = 'MOBILE') {
   background-color: #fff;
 }
 
-#month-selector {
-  padding-top: 20px;
-}
-
 #daynames-prefix-wk {
   width: 61px;
   position: relative;
@@ -59,12 +55,25 @@ body when (@UI_TYPE = 'MOBILE') {
   margin-left: 61px; /*+1 pixel to match #grid-table border*/
 }
 
-#main-pane-header-wk-daynames {
+.main-pane-header-daynames {
   position: relative;
   overflow: hidden;
   height: 20px;
   line-height: 20px;
-  margin-right: 19px; /*to compensate 17px scrollbar + 2px from borders of upper table*/
+  padding-left: 61px; /*+1 pixel to match #grid-table border*/
+
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: -1px;
+  background-color: rgb(246, 246, 246);
+  padding-right: 19px; /*to compensate 17px scrollbar + 2px from borders of upper table*/
+}
+
+.main-pane-header-wk-daynames {
+  margin-left: -61px;
+}
+
+.main-pane-header-mn-daynames {
+  margin-left: -45px;
 }
 
 #weekmode-daynames-table {
