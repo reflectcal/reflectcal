@@ -1,4 +1,3 @@
-# Ignore everything in this directory
-# Except these files:
 *compiled*.css
 *compiled*.map
+login.css

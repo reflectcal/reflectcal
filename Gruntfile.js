@@ -51,6 +51,12 @@ module.exports = function(grunt) {
     'less/combined.less'
   ];
 
+  var LESS_LOGIN_FILE_NAME = [
+    'less/login.less'
+  ];
+
+  var CSS_LOGIN_FILE_NAME = 'css/login.css';
+
   /**
    * @typedef {{locale:String, debug:boolean, uiType:string, userAgent:string,
    *    jsCompDefines:Array.<string>, lessDefines:Array.<string>,
@@ -173,7 +179,7 @@ module.exports = function(grunt) {
       // must place them all explicitly by name, to not interfere with other exec
       // tasks.
       /*exec:lessForTarget-1*/
-      global.lessTaskNames);
+      ['exec:' + compileLessForLoginTaskName].concat(global.lessTaskNames));
   }
 
   function fillCompileTargetsWithDefines(aTargets) {
@@ -368,6 +374,7 @@ module.exports = function(grunt) {
   var gJsLintTaskName = 'gjslinter';
   var fixJsStyleTaskName = 'fixjsstyle';
   var compileSoyExecTaskName = 'compile-soy';
+  var compileLessForLoginTaskName = 'less-for-login';
 
   //Creating linter tasks;
   (function(){
@@ -384,6 +391,19 @@ module.exports = function(grunt) {
     targetOptions.command = ['python', 'bin/fixjsstyle.py',
         '--strict', '-r', 'src/rflect'].join(' ');
     execTask[fixJsStyleTaskName] = targetOptions;
+  })();
+
+
+  (function(){
+    var targetOptions = deepClone(execTaskTemplate);
+
+     var command = ['lessc', '--verbose'].
+        concat(global.DEV_COMPILATION ? [] : ['--compress']).
+        concat(LESS_LOGIN_FILE_NAME).concat(['>', CSS_LOGIN_FILE_NAME]).
+        join(' ');
+
+    targetOptions.command = command;
+    execTask[compileLessForLoginTaskName] = targetOptions;
   })();
 
   const soyDirName = 'soy';
@@ -501,10 +521,10 @@ module.exports = function(grunt) {
     clean: {
       build: ['build/*'],
       temp: ['build/**/_temp*', 'js/**/*compiled*', 'css/**/*compiled*',
-          'src/**/*.soy.js'],
+          'src/**/*.soy.js', 'css/login.css'],
       allExceptPack: ['build/*', '!build/*.tgz'],
       allExceptCompiled: ['build/*', '!build/js', '!build/css', '!build/font'],
-      css: ['css/*compiled*'],
+      css: ['css/*compiled*', 'css/login.css'],
       soy: ['src/**/*.soy.js'],
       js: ['js/*compiled*'],
       static: ['static/*']

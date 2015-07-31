@@ -47,3 +47,9 @@ var USER;
  * @type {string}
  */
 USER.prototype.username;
+
+
+/**
+ * @type {boolean}
+ */
+USER.prototype.guest;

@@ -137,7 +137,8 @@ exports.checkGuestMode = function(aAuthenticateFn) {
           function(aUserNameUnique) {
         var user = merge(DEFAULT_USER, {
           username: aUserNameUnique,
-          password: 'pass_' + aUserNameUnique
+          password: 'pass_' + aUserNameUnique,
+          guest: true
         });
         setUpLocalUser(user, function(){
           userDAO.saveUserAsync(user, function() {
