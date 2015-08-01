@@ -49,7 +49,7 @@
           <label class="goog-inline-block event-pane-label label-fluid event-pane-calendars-label logged-label"
               for="settings-logout">
             {rflect.cal.i18n.Symbols.LOGGED_IN_AS}{sp}
-            <b>{USER.username}</b>
+            <b>{if USER.guest}{rflect.cal.i18n.Symbols.GUEST}{else}{USER.username}{/if}</b>
           </label>
           <a class="goog-inline-block goog-flat-button cal-menu-button settings-pane-control"
               href="/logout" id="settings-logout">
