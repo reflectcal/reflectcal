@@ -209,6 +209,14 @@ rflect.cal.ui.SidePane.prototype.buttonNow_;
 
 
 /**
+ * @return {boolean}
+ */
+rflect.cal.ui.SidePane.prototype.isGlassPaneEnabled = function() {
+  return this.glassPaneIsEnabled_;
+};
+
+
+/**
  * @return {goog.ui.ToggleButton}
  */
 rflect.cal.ui.SidePane.prototype.getButtonDay = function(){
