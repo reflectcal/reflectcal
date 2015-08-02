@@ -524,6 +524,10 @@ rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
     // instead which fires directly on button press.
     if (rflect.SIDE_PANE_MOVABLE)
       this.mainPane_.expandElement(true);
+
+    if (this.getSidePane().isGlassPaneEnabled()) {
+      this.getMainPane().setScrollEnabled(true);
+    }
   }
   if (!aEvent.start && !aEvent.showing) {
     if (rflect.SIDE_PANE_MOVABLE)
@@ -532,6 +536,9 @@ rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
   if (aEvent.start && aEvent.showing) {
     if (rflect.SIDE_PANE_MOVABLE)
       this.mainPane_.expandElement(false);
+    if (this.getSidePane().isGlassPaneEnabled()) {
+      this.getMainPane().setScrollEnabled(false);
+    }
   }
   if (!aEvent.start && aEvent.showing) {
     if (rflect.SIDE_PANE_MOVABLE)

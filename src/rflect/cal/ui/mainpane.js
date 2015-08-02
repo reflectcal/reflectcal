@@ -345,6 +345,46 @@ rflect.cal.ui.MainPane.prototype.updateByNavigation_;
 
 
 /**
+ * Whether scroll is enabled for elements of main pane.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.scrollIsEnabled_ = true;
+
+
+/**
+ * @param {boolean} aEnabled
+ */
+rflect.cal.ui.MainPane.prototype.setScrollEnabled = function(aEnabled) {
+  this.scrollIsEnabled_ = aEnabled;
+
+  var frameElements = [];
+
+  if (this.viewManager_.isInWeekMode()) {
+    frameElements.push(this.getDomHelper().
+        getElement('main-pane-header-scrollable'));
+    frameElements.push(this.getDomHelper().
+        getElement('main-pane-body-scrollable-wk'));
+  } else if (this.viewManager_.isInMonthMode()) {
+    frameElements.push(this.getDomHelper().
+        getElement('main-pane-body-scrollable-mn'));
+  }
+
+  frameElements.filter(el => !!el).forEach(el => {
+    el.style.overflow = aEnabled ? '' : 'hidden'
+  })
+};
+
+
+/**
+ * @return {boolean} aEnabled
+ */
+rflect.cal.ui.MainPane.prototype.isScrollEnabled = function() {
+  return this.scrollIsEnabled_;
+};
+
+
+/**
  * @return {number} Width of scrollbar below allday scrollable.
  */
 rflect.cal.ui.MainPane.prototype.getScrollbarWidthBelowAllday = function() {

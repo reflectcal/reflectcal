@@ -4,6 +4,7 @@
  * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param isSmallScreen Whether screen is small.
+ * @param isScrollEnabled Whether scroll is enabled.
  * @param allDayExpanded Whether to include outer html of element.
  * @param weekPoolExpanded Whether at least one of the week blocks is expanded.
  * @param allDayGridContainerHeight Height of all-day grid container.
@@ -42,7 +43,9 @@
         </div>
         <div id="main-pane-header-scrollable"
              class="{if $allDayExpanded}mphs-scroll-vert-on{else}mphs-scroll-vert-off{/if}{sp}{if $weekPoolExpanded}mphs-scroll-horz-on{else}mphs-scroll-horz-off{/if}"
-             style="height:{$allDayGridContainerHeight}px;margin-right:{if $allDayExpanded}0{else}{$navigatorScrollBarWidth - 1}{/if}px">
+             style="
+             {if not $isScrollEnabled}overflow:hidden;{/if}
+             height:{$allDayGridContainerHeight}px;margin-right:{if $allDayExpanded}0{else}{$navigatorScrollBarWidth - 1}{/if}px">
           <div id="alldayevents-grid-wrapper">
             <div id="alldayevents-grid" style="height:{$allDayGridHeight}px;width:{$allDayGridWidth}%">
               {if not $firstBuild}
@@ -55,8 +58,10 @@
       </div>
     </div>
     {/if}
-    <div id="main-pane-body-scrollable-wk" style="height:{$gridContainerHeight}px"
-         class="{if $weekPoolExpanded}mpbs-wk-scroll-horz-on{else}mpbs-wk-scroll-horz-off{/if}">
+    <div id="main-pane-body-scrollable-wk" style="
+        {if not $isScrollEnabled}overflow:hidden;{/if}
+        height:{$gridContainerHeight}px"
+        class="{if $weekPoolExpanded}mpbs-wk-scroll-horz-on{else}mpbs-wk-scroll-horz-off{/if}">
       {if not $firstBuild}
       <div id="grid-table-cont">
         <div id="hours-container">
@@ -116,6 +121,7 @@
 /**
  * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
+ * @param isScrollEnabled Whether scroll is enabled.
  * @param monthPoolExpanded Whether at least one of the week blocks is expanded.
  * @param gridContainerHeight Height of month grid container.
  * @param navigatorScrollBarWidth Width of system scroll bar.
@@ -158,7 +164,10 @@
         </table>
       </div>
       {/if}
-      <div id="main-pane-body-scrollable-mn" class="main-pane-body-scrollable-mn{sp}{if $monthPoolExpanded}mpbs-mn-scroll-vert-on{else}mpbs-mn-scroll-vert-off{/if}">
+      <div id="main-pane-body-scrollable-mn"
+          class="main-pane-body-scrollable-mn{sp}{if $monthPoolExpanded}mpbs-mn-scroll-vert-on{else}mpbs-mn-scroll-vert-off{/if}"
+          style="{if not $isScrollEnabled}overflow:hidden;{/if}">
+
         <div id="grid-table-wrapper-outer" style="height:{$gridHeight}px;">
           {if not $firstBuild}
           <div id="weeknum-cont">
