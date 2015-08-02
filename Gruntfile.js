@@ -91,6 +91,21 @@ module.exports = function(grunt) {
     global.TARGETS.forEach(targetToJsFileMapper);
 
     global.TARGETS.forEach(targetToCssFileMapper);
+    makeCompileLessForLoginTask();
+  }
+
+  function makeCompileLessForLoginTask() {
+
+    var targetOptions = deepClone(execTaskTemplate);
+
+    var command = ['lessc', '--verbose'].
+        concat(global.DEV_COMPILATION ? [] : ['--compress']).
+        concat(LESS_LOGIN_FILE_NAME).concat(['>', CSS_LOGIN_FILE_NAME]).
+        join(' ');
+
+    targetOptions.command = command;
+    execTask[compileLessForLoginTaskName] = targetOptions;
+
   }
 
   function buildTask() {
@@ -171,6 +186,10 @@ module.exports = function(grunt) {
     ];
   }
 
+  function getCompileLessForLoginTask() {
+    return ['exec:' + compileLessForLoginTaskName];
+  }
+
   function getCompileLessTask() {
     return [
       'clean:css'
@@ -179,8 +198,9 @@ module.exports = function(grunt) {
       // must place them all explicitly by name, to not interfere with other exec
       // tasks.
       /*exec:lessForTarget-1*/
-      ['exec:' + compileLessForLoginTaskName].concat(global.lessTaskNames));
+      getCompileLessForLoginTask().concat(global.lessTaskNames));
   }
+
 
   function fillCompileTargetsWithDefines(aTargets) {
     var targets = [];
@@ -391,19 +411,6 @@ module.exports = function(grunt) {
     targetOptions.command = ['python', 'bin/fixjsstyle.py',
         '--strict', '-r', 'src/rflect'].join(' ');
     execTask[fixJsStyleTaskName] = targetOptions;
-  })();
-
-
-  (function(){
-    var targetOptions = deepClone(execTaskTemplate);
-
-     var command = ['lessc', '--verbose'].
-        concat(global.DEV_COMPILATION ? [] : ['--compress']).
-        concat(LESS_LOGIN_FILE_NAME).concat(['>', CSS_LOGIN_FILE_NAME]).
-        join(' ');
-
-    targetOptions.command = command;
-    execTask[compileLessForLoginTaskName] = targetOptions;
   })();
 
   const soyDirName = 'soy';
