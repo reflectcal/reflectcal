@@ -1031,10 +1031,13 @@ rflect.cal.ui.MainPane.prototype.onClick_ = function(aEvent) {
         this.blockManager_.blockPoolMonth.scrollTop = 0;
 
       zippyClicked = true;
-    } else if (this.isDaynumLabel_(className))
+    } else if (!rflect.TOUCH_INTERFACE_ENABLED &&
+        this.isDaynumLabel_(className)) {
       this.onDaynumLabelClick_(id);
-    else if (this.isWeeknumLabel_(className))
+    } else if (!rflect.TOUCH_INTERFACE_ENABLED &&
+        this.isWeeknumLabel_(className)) {
       this.onWeeknumLabelClick_(target.parentNode.id);
+    }
 
   } else if (this.viewManager_.isInWeekMode()) {
     // We clicked on week zippy.
@@ -1053,8 +1056,10 @@ rflect.cal.ui.MainPane.prototype.onClick_ = function(aEvent) {
       this.blockManager_.blockPoolAllDay.toggleBlock(0);
 
       zippyClicked = true;
-    } else if (this.isDaynumLabel_(className))
+    } else if (!rflect.TOUCH_INTERFACE_ENABLED &&
+        this.isDaynumLabel_(className)) {
       this.onDaynumLabelClick_(target.parentNode.id);
+    }
   }
 
   if (zippyClicked) {
