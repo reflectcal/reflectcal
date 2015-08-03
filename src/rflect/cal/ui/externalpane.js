@@ -76,6 +76,10 @@ rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
     this.addChild(this.buttonDelete = new goog.ui.Button(null,
         goog.ui.FlatButtonRenderer.getInstance()));
   }
+
+  //Enabling touch-only interface.
+  this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
+  this.enableMouseInterface(!rflect.TOUCH_INTERFACE_ENABLED, true);
 };
 goog.inherits(rflect.cal.ui.ExternalPane, rflect.ui.Component);
 

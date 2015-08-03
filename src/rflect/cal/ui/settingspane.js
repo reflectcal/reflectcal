@@ -72,6 +72,10 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.checkboxDebug_ = new rflect.ui.Checkbox());
 
+  //Enabling touch-only interface.
+  this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
+  this.enableMouseInterface(!rflect.TOUCH_INTERFACE_ENABLED, true);
+
 };
 goog.inherits(rflect.cal.ui.SettingsPane, rflect.cal.ui.ExternalPane);
 

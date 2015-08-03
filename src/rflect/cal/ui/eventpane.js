@@ -69,6 +69,11 @@ rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
 
   this.addChild(this.calendarsSelect_ = new rflect.cal.ui.CalendarsSelect(
       this.eventManager));
+
+  //Enabling touch-only interface.
+  this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
+  this.enableMouseInterface(!rflect.TOUCH_INTERFACE_ENABLED, true);
+
 };
 goog.inherits(rflect.cal.ui.EventPane, rflect.cal.ui.ExternalPane);
 
