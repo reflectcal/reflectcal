@@ -326,7 +326,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGridAdCols_ =
 
     var data = {
       colNumber: colCounter,
-      blocksNumber: blocksNumber,
+      howManyBlocks: blocksNumber,
       marginLeft: rflect.math.pixelToPercent(prevColsCumulativeSize,
         gridWidth).toFixed(4),
       top: -100 * colCounter,

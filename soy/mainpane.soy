@@ -35,7 +35,8 @@
         {/if}
       </div>
       <div id="main-pane-header-container" class="main-pane-header-container-wk">
-        <div class="main-pane-header-daynames main-pane-header-wk-daynames">
+        <div class="main-pane-header-daynames main-pane-header-wk-daynames"
+            style="padding-right:{$navigatorScrollBarWidth + 2 * rflect.cal.predefined.DEFAULT_BORDER_WIDTH}px">
           <div id="weekmode-daynames-table" style="width:{$allDayGridWidth}%; left: 0px;">
             // From .dayNameEntry template.
             {$dayNamesHTML}
@@ -141,7 +142,13 @@
     <div id="main-pane-header">
       <div id="daynames-prefix-mn"></div>
       <div id="main-pane-header-container" class="main-pane-header-container-mn">
-        <div class="main-pane-header-daynames main-pane-header-mn-daynames" style="
+        <div class="main-pane-header-daynames{sp}
+            {if rflect.VERTICAL_EXPAND_ENABLED}
+            main-pane-header-mn-daynames-with-zippies
+            {else}
+            main-pane-header-mn-daynames
+            {/if}
+            " style="
             padding-right:{if $monthPoolExpanded}{$navigatorScrollBarWidth + 2 * rflect.cal.predefined.DEFAULT_BORDER_WIDTH}
             {else}{2 * rflect.cal.predefined.DEFAULT_BORDER_WIDTH}{/if}px">
           <table id="weekmode-daynames-table" cellpadding="0" cellspacing="0">

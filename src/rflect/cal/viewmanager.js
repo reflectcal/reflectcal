@@ -598,7 +598,10 @@ rflect.cal.ViewManager.prototype.showNext_ = function(aDirection) {
   this.mainBody_.updateBeforeRedraw(true, true);
   this.mainBody_.getMainPane().updateByRedraw();
   this.mainBody_.getTopPane().updateByRedraw();
-  this.mainBody_.getSidePane().getMiniCal().updateByRedraw();
+  var miniCal = this.mainBody_.getSidePane().getMiniCal();
+  if (miniCal) {
+    miniCal.updateByRedraw();
+  }
 
   this.transport_.loadEventsAsync();
   //  if (goog.DEBUG) _perf('next interval');
@@ -615,7 +618,10 @@ rflect.cal.ViewManager.prototype.showNow = function() {
   this.mainBody_.updateBeforeRedraw(true, true);
   this.mainBody_.getMainPane().updateByRedraw();
   this.mainBody_.getTopPane().updateByRedraw();
-  this.mainBody_.getSidePane().getMiniCal().updateByRedraw();
+  var miniCal = this.mainBody_.getSidePane().getMiniCal();
+  if (miniCal) {
+    miniCal.updateByRedraw();
+  }
 
   this.transport_.loadEventsAsync();
 };
