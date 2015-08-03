@@ -45,6 +45,7 @@ rflect.cal.i18n.Symbols_en = {
   EDIT: 'Edit',
   SETTINGS: 'Settings',
 
+  EVENT: 'Event',
   EVENT_NAME: 'Event name',
   ALL_DAY_EVENT: 'All-day event',
   START: 'Start',
@@ -93,6 +94,7 @@ rflect.cal.i18n.Symbols_ru = {
   EDIT: 'Правка',
   SETTINGS: 'Настройки',
 
+  EVENT: 'Событие',
   EVENT_NAME: 'Имя события',
   ALL_DAY_EVENT: 'Весь день',
   START: 'Начало',
@@ -141,6 +143,7 @@ rflect.cal.i18n.Symbols_by = {
   EDIT: 'Праўка',
   SETTINGS: 'Налады',
 
+  EVENT: 'Падзея',
   EVENT_NAME: 'Імя падзеі',
   ALL_DAY_EVENT: 'Ўвесь дзень',
   START: 'Пачатак',
@@ -189,6 +192,7 @@ rflect.cal.i18n.Symbols_fr = {
   EDIT: 'Modifier',
   SETTINGS: 'Préférences',
 
+  EVENT: 'Evénement',
   EVENT_NAME: 'Nom de l\'événement',
   ALL_DAY_EVENT: 'Toute la journée',
   START: 'Start',

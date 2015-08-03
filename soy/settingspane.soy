@@ -11,9 +11,11 @@
     {call rflect.cal.ui.soy.externalpane.controlPane}
       {param backButtonLabel: rflect.cal.i18n.Symbols.TO_CALENDAR /}
       {param showDeleteButton: false /}
+      {param showBackButton: true /}
       {param showNewButton: false /}
       {param showSaveButton: true /}
       {param upper: true /}
+      {param header: rflect.cal.i18n.Symbols.SETTINGS /}
     {/call}
 
     <div class="settings-body-outer">
@@ -59,13 +61,6 @@
       </div>
     </div>
 
-    {call rflect.cal.ui.soy.externalpane.controlPane}
-      {param backButtonLabel: rflect.cal.i18n.Symbols.TO_CALENDAR /}
-      {param showDeleteButton: false /}
-      {param showNewButton: false /}
-      {param showSaveButton: true /}
-      {param upper: false /}
-    {/call}
   {if $includeOuterHTML}
   </div>
   {/if}

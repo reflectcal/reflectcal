@@ -13,13 +13,20 @@
   background-color: rgb(246,246,246);
 }
 
+.control-pane-external-outer-sticky {
+  position: -webkit-sticky;
+  position: -moz-sticky;
+  position: sticky;
+  top: 0;
+}
+
 .control-pane-external-outer {
-  position: relative;
   box-sizing: border-box;
   width: 100%;
   background-color: rgb(246,246,246);
   border-top: 1px solid #e5e5e5;
   border-bottom: 1px solid #e5e5e5;
+  z-index: 1;
 }
 
 .control-pane-external-outer-upper {

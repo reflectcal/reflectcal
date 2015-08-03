@@ -1,17 +1,20 @@
 {namespace rflect.cal.ui.soy.externalpane}
 
 /**
+ * @param showBackButton Whether to show back button.
  * @param backButtonLabel Label for back button.
  * @param showDeleteButton Whether to show delete button.
  * @param showNewButton Whether to show new button.
  * @param showSaveButton Whether to show save button.
  * @param upper Whether this pane is in upper configuration.
+ * @param? header Header text.
  */
 {template .controlPane autoescape="false"}
-  <nav class="control-pane-external-outer{sp}control-pane-external-outer-{if $upper}upper{else}lower{/if}">
+  <nav class="control-pane-external-outer{sp}control-pane-external-outer-{if $upper}upper{else}lower{/if}{sp}{if $upper}control-pane-external-outer-sticky{/if}">
     <div class="control-pane-external">
       <div class="pane-right">
-        <div class="goog-inline-block goog-flat-button cal-menu-button emphasis-button">
+       {if $showSaveButton or $showNewButton}
+        <div class="goog-inline-block goog-flat-button cal-menu-button emphasis-button external-pane-button">
          {if $showSaveButton}
          {rflect.cal.i18n.Symbols.SAVE}
          {/if}
@@ -22,9 +25,11 @@
          </span>
          {/if}
         </div>
+       {/if}
       </div>
       <div class="pane-left">
-        <div class="goog-inline-block goog-flat-button cal-menu-button">
+        {if $showBackButton}
+        <div class="goog-inline-block goog-flat-button cal-menu-button external-pane-button">
           <span>
             <i class="octicon icon-button octicon-chevron-left"></i>
             {if $backButtonLabel}
@@ -34,13 +39,19 @@
             {/if}
            </span>
         </div>
+        {/if}
       </div>
       <div class="pane-center">
         {if $showDeleteButton}
         <div aria-hidden="true" style="display: none;" class="goog-inline-block goog-flat-button event-pane-button-delete">
           {rflect.cal.i18n.Symbols.DELETE}
         </div>
-       {/if}
+        {/if}
+        {if $upper}
+          <h3 class="pane-header">
+            {$header}
+          </h3>
+        {/if}
       </div>
     </div>
   </nav>

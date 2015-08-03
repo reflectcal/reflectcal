@@ -69,6 +69,11 @@ rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
 
   this.addChild(this.calendarsSelect_ = new rflect.cal.ui.CalendarsSelect(
       this.eventManager));
+
+  //Enabling touch-only interface.
+  this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
+  this.enableMouseInterface(!rflect.TOUCH_INTERFACE_ENABLED, true);
+
 };
 goog.inherits(rflect.cal.ui.EventPane, rflect.cal.ui.ExternalPane);
 
@@ -318,12 +323,9 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
   // Menu commands.
   this.getHandler().listen(this.buttonBack1,
       goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
-      .listen(this.buttonBack2, goog.ui.Component.EventType.ACTION,
-      this.onCancel_, false, this)
       .listen(this.buttonPrimary1,
       goog.ui.Component.EventType.ACTION, this.onSave_, false, this)
-      .listen(this.buttonPrimary2, goog.ui.Component.EventType.ACTION,
-      this.onSave_, false, this)
+
       .listen(this.buttonDelete,
       goog.ui.Component.EventType.ACTION, this.onDelete_, false, this)
       .listen(this.checkboxAllDay_,
@@ -632,6 +634,8 @@ rflect.cal.ui.EventPane.prototype.displayValues = function() {
   var eh = this.eventManager.eventHolder;
 
   this.buttonDelete.setVisible(!this.newEventMode_);
+  goog.style.showElement(this.buttonDelete.getElement().parentElement.
+      parentElement.parentElement, !this.newEventMode_);
 
   this.displayDates_();
 

@@ -76,6 +76,10 @@ rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
     this.addChild(this.buttonDelete = new goog.ui.Button(null,
         goog.ui.FlatButtonRenderer.getInstance()));
   }
+
+  //Enabling touch-only interface.
+  this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
+  this.enableMouseInterface(!rflect.TOUCH_INTERFACE_ENABLED, true);
 };
 goog.inherits(rflect.cal.ui.ExternalPane, rflect.ui.Component);
 
@@ -164,10 +168,6 @@ rflect.cal.ui.ExternalPane.prototype.enterDocument = function() {
   this.buttonBack1.decorate(controlPane1.querySelector(
       '.pane-left > .goog-flat-button'));
   this.buttonPrimary1.decorate(controlPane1.querySelector(
-      '.pane-right > .goog-flat-button'));
-  this.buttonBack2.decorate(controlPane2.querySelector(
-      '.pane-left > .goog-flat-button'));
-  this.buttonPrimary2.decorate(controlPane2.querySelector(
       '.pane-right > .goog-flat-button'));
   if (this.isButtonDeleteEnabled()) {
     this.buttonDelete.decorate(controlPane2.querySelector(
