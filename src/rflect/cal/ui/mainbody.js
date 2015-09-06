@@ -21,6 +21,7 @@ goog.require('rflect.cal.ui.CalSelector.EventType');
 goog.require('rflect.cal.ui.ControlPane');
 goog.require('rflect.cal.ui.EventPane');
 goog.require('rflect.cal.ui.EventPane.EventTypes');
+goog.require('rflect.cal.ui.MainBodyAdaptiveSizeHelper');
 goog.require('rflect.cal.ui.MainPane');
 goog.require('rflect.cal.ui.MiniCal');
 goog.require('rflect.cal.ui.PageRequestEvent');
@@ -30,8 +31,8 @@ goog.require('rflect.cal.ui.ScreenManager.EventTypes');
 goog.require('rflect.cal.ui.SettingsPane');
 goog.require('rflect.cal.ui.SettingsPane.EventTypes');
 goog.require('rflect.cal.ui.SidePane');
-goog.require('rflect.ui.Component');
 goog.require('rflect.cal.ui.soy.mainbody');
+goog.require('rflect.ui.Component');
 
 
 
@@ -101,13 +102,30 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
    */
   this.navigator_ = aNavigator;
 
+  /**
+   * Whether main pane cont is expanded.
+   * @type {boolean}
+   * @private
+   */
+  this.expanded_ = rflect.SIDE_PANE_MOVABLE && this.containerSizeMonitor_.
+      isSizeCategoryOrLower(rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE);
+
+
+  /**
+   * @type {rflect.cal.ui.MainBodyAdaptiveSizeHelper}
+   */
+  this.adaptiveSizeHelper = new rflect.cal.ui.MainBodyAdaptiveSizeHelper(
+      this.viewManager_, this, this.containerSizeMonitor_);
+
   // Add child components in order for them to be included in propagation of
   // string building and updating.
   this.addChild(this.topPane_ = new rflect.cal.ui.ControlPane(
-      this.viewManager_, this.timeManager_, this.navigator_));
+      this.viewManager_, this.timeManager_, this.containerSizeMonitor_,
+      this.navigator_));
   this.addChild(this.mainPane_ = new rflect.cal.ui.MainPane(this.viewManager_,
       this.timeManager_, this.eventManager_, this.containerSizeMonitor_,
-      this.blockManager_, this.transport_, this.navigator_));
+      this.blockManager_, this.transport_, this.navigator_,
+      this.adaptiveSizeHelper));
 
   this.addChild(this.sidePane_ = new rflect.cal.ui.SidePane(
       this.viewManager_, this.timeManager_, this.eventManager_,
@@ -124,6 +142,14 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
   }
 };
 goog.inherits(rflect.cal.ui.MainBody, rflect.ui.Component);
+
+
+/**
+ * Whether expand/collapse transition will change state in the end.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.ui.MainBody.prototype.allowedToChangeExpandState_;
 
 
 /**
@@ -171,6 +197,12 @@ rflect.cal.ui.MainBody.prototype.firstBuildLeftPane = true;
 
 
 /**
+ * @type {goog.events.Key}
+ */
+rflect.cal.ui.MainBody.prototype.mainPaneContainerTransitionEndKey_;
+
+
+/**
  * Event pane.
  * @type {rflect.cal.ui.EventPane}
  * @private
@@ -192,14 +224,6 @@ rflect.cal.ui.MainBody.prototype.settingsPane_;
  * @private
  */
 rflect.cal.ui.MainBody.prototype.sidePane_;
-
-
-/**
- * Whether main pane is expanded.
- * @type {boolean}
- * @private
- */
-rflect.cal.ui.MainBody.prototype.mainPaneExpanded_;
 
 
 /**
@@ -269,6 +293,8 @@ rflect.cal.ui.MainBody.prototype.buildHTML = function(opt_outerHTML) {
   return rflect.cal.ui.soy.mainbody.mainBody({
     id: this.getId(),
     includeOuterHTML: opt_outerHTML,
+    isSmallScreen: this.containerSizeMonitor_.isSmallScreen(),
+    isExpanded: this.isExpanded(),
     topPaneHTML: this.topPane_.buildHTML(true),
     sidePaneHTML: this.sidePane_.buildHTML(true),
     mainPaneHTML: this.mainPane_.buildHTML(true)
@@ -281,10 +307,13 @@ rflect.cal.ui.MainBody.prototype.buildHTML = function(opt_outerHTML) {
  * @param {boolean=} opt_deep Whether to update children.
  * @param {boolean=} opt_updateByNavigation Whether this update initiated by
  * buttons of top pane or minical.
+ * @param {boolean=} opt_sizeCategoryChanged Whether size category changed.
  * @override
  */
 rflect.cal.ui.MainBody.prototype.updateBeforeRedraw = function(opt_deep,
-    opt_updateByNavigation) {
+    opt_updateByNavigation, opt_sizeCategoryChanged) {
+  this.allowedToChangeExpandState_ = false;
+
   if (opt_deep){
     this.forEachChild(function(aChild) {
       if (aChild.updateBeforeRedraw && aChild != this.mainPane_)
@@ -296,7 +325,36 @@ rflect.cal.ui.MainBody.prototype.updateBeforeRedraw = function(opt_deep,
     // We will update main pane separately to pass params.
     this.mainPane_.updateBeforeRedraw(false, undefined, opt_updateByNavigation);
   }
+
+  if (opt_sizeCategoryChanged) {
+    this.sizeCategoryChanged_ = !!opt_sizeCategoryChanged;
+  }
 };
+
+
+/**
+ * @override
+ */
+rflect.cal.ui.MainBody.prototype.updateByRedraw = function() {
+  if (this.sizeCategoryChanged_) {
+    this.allowedToChangeExpandState_ = false;
+    this.sizeCategoryChanged_ = false;
+
+    let mainPaneCont = this.getElement().querySelector('#main-pane-cont');
+
+    if (this.containerSizeMonitor_.isSmallScreen()) {
+      //Expand main pane.
+      this.getElement().appendChild(this.getSidePane().getElement());
+      this.setExpandedForBigScreen(true);
+    } else {
+      //Restore expanded state
+      mainPaneCont.insertBefore(
+          this.getSidePane().getElement(),
+          this.getMainPane().getElement());
+      this.setExpandedForBigScreen(this.isExpanded());
+    }
+  }
+}
 
 
 /**
@@ -309,6 +367,8 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
   this.topPane_.setElementById(this.topPane_.getId());
   this.mainPane_.setElementById(this.mainPane_.getId());
   this.sidePane_.setElementById(this.sidePane_.getId());
+
+  this.getSidePane().updateScrollableSizesAndDom();
 
   // Propagate call to children.
   rflect.cal.ui.MainBody.superClass_.enterDocument.call(this);
@@ -325,6 +385,8 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
       this.onSidePaneSlide_, false, this)
       .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
       this.onSidePaneAction_, false, this)
+      .listen(this.sidePane_, rflect.cal.ui.SidePane.EventTypes.CANCEL,
+      this.onSidePaneCancel_, false, this)
       .listen(this.viewManager_.getScreenManager(),
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this)
@@ -338,9 +400,10 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
 
   this.rebuildMainPaneWithSizes();
 
-  if (!this.navigator_.isSmallScreen())
+  if (!this.containerSizeMonitor_.isSmallScreen()) {
     //Mobile UI's left pane doesn't affect main pane width.
-    this.rebuildLeftPaneWithSizes();
+    //this.rebuildLeftPaneWithSizes();
+  }
 };
 
 
@@ -385,7 +448,7 @@ rflect.cal.ui.MainBody.prototype.measureStaticSizes = function() {
 
   if (this.viewManager_.isInWeekMode()) {
 
-    var allDayPaneSize = this.navigator_.isSmallScreen() ?
+    var allDayPaneSize = this.containerSizeMonitor_.isSmallScreen() ?
         new goog.math.Size(0, 0) :
         goog.style.getSize(dom.getElement('main-pane-header-scrollable'));
     var weekPaneSize = goog.style.getSize(
@@ -489,7 +552,7 @@ rflect.cal.ui.MainBody.prototype.onControlPaneAction_ = function(aEvent) {
       this.showSettingsPane(true);
     };break;
     case rflect.cal.predefined.BUTTON_MENU_ID: {
-      this.toggleSidePane();
+      this.toggleExpanded();
     };break;
     default:break;
   }
@@ -507,42 +570,6 @@ rflect.cal.ui.MainBody.prototype.onSidePaneAction_ = function(aEvent) {
   if (id == rflect.cal.predefined.BUTTON_SETTINGS_ID) {
     this.showSidePane(false);
     this.showSettingsPane(true);
-  }
-}
-
-
-/**
- * Side pane slide handler.
- * @param {rflect.cal.ui.PaneShowBehavior.SlideEvent} aEvent Event object.
- * @private
- */
-rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
-  var isSmallScreen = this.navigator_.isSmallScreen();
-
-  if (aEvent.start && !aEvent.showing) {
-    //NOTE(alexk): we can use rflect.cal.ui.MainBody.prototype.toggleSidePane
-    // instead which fires directly on button press.
-    if (rflect.SIDE_PANE_MOVABLE)
-      this.mainPane_.expandElement(true);
-
-    if (this.getSidePane().isGlassPaneEnabled()) {
-      this.getMainPane().setScrollEnabled(true);
-    }
-  }
-  if (!aEvent.start && !aEvent.showing) {
-    if (rflect.SIDE_PANE_MOVABLE)
-      this.measureStaticSizes();
-  }
-  if (aEvent.start && aEvent.showing) {
-    if (rflect.SIDE_PANE_MOVABLE)
-      this.mainPane_.expandElement(false);
-    if (this.getSidePane().isGlassPaneEnabled()) {
-      this.getMainPane().setScrollEnabled(false);
-    }
-  }
-  if (!aEvent.start && aEvent.showing) {
-    if (rflect.SIDE_PANE_MOVABLE)
-      this.measureStaticSizes();
   }
 }
 
@@ -612,22 +639,118 @@ rflect.cal.ui.MainBody.prototype.showSidePane = function(aShow) {
 
 
 /**
+ * @return {boolean}
+ */
+rflect.cal.ui.MainBody.prototype.isExpanded = function() {
+  return this.expanded_;
+}
+
+
+/**
+ * Side pane slide handler.
+ * @param {rflect.cal.ui.PaneShowBehavior.SlideEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
+  if (goog.DEBUG)
+    console.log('aEvent.start: ', aEvent.start);
+  if (goog.DEBUG)
+    console.log('aEvent.showing: ', aEvent.showing);
+  if (goog.DEBUG)
+    console.log('this.expanded_: ', this.expanded_);
+
+  var isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
+
+  if (aEvent.start && !aEvent.showing) {
+    //NOTE(alexk): we can use rflect.cal.ui.MainBody.prototype.toggleExpanded
+    // instead which fires directly on button press.
+
+    if (this.getSidePane().isGlassPaneEnabled()) {
+      this.getMainPane().setScrollEnabled(true);
+    }
+  }
+  if (!aEvent.start && !aEvent.showing) {
+    this.expanded_ = true;
+  }
+  if (aEvent.start && aEvent.showing) {
+
+    if (this.getSidePane().isGlassPaneEnabled()) {
+      this.getMainPane().setScrollEnabled(false);
+    }
+  }
+  if (!aEvent.start && aEvent.showing) {
+    this.expanded_ = false;
+  }
+}
+
+
+/**
+ * @param {boolean} aAllowedToChangeExpandState
+ */
+rflect.cal.ui.MainBody.prototype.setAllowedToChangeExpandState =
+    function(aAllowedToChangeExpandState) {
+  this.allowedToChangeExpandState_ = aAllowedToChangeExpandState;
+}
+
+
+/**
+ * @param {goog.events.Event} aEvent
+ */
+rflect.cal.ui.MainBody.prototype.onSidePaneCancel_ = function(aEvent) {
+  if (goog.DEBUG)
+    console.log('onSidePaneCancel_: ');
+  this.allowedToChangeExpandState_ = true;
+}
+
+
+/**
  * Toggles side pane.
  */
-rflect.cal.ui.MainBody.prototype.toggleSidePane = function() {
-  if (this.navigator_.isSmallScreen()) {
-    this.sidePane_.showBehavior.setVisible(
-        !this.sidePane_.showBehavior.isVisible());
+rflect.cal.ui.MainBody.prototype.toggleExpanded = function() {
+  this.setExpanded(!this.isExpanded());
+}
+
+
+/**
+ * @param {boolean} aExpanded
+ */
+rflect.cal.ui.MainBody.prototype.setExpanded = function(aExpanded) {
+  if (this.expanded_ == aExpanded)
+    return;
+
+  this.allowedToChangeExpandState_ = true;
+
+  if (this.containerSizeMonitor_.isSmallScreen()) {
+    this.getSidePane().showBehavior.setSlidingIsEnabled(true);
+    this.getSidePane().showBehavior.setVisible(!aExpanded);
   } else {
-    var movable = this.getElement().querySelector('#main-pane-cont');
-    if (this.mainPaneExpanded_) {
-      this.getSidePane().getElement().style.display = '';
-      this.getMainPane().getElement().style.width = 'auto'
-      goog.dom.classes.remove(movable, 'main-pane-cont-expanded');
-    } else {
-      this.getMainPane().getElement().style.width = '100%'
-      goog.dom.classes.add(movable, 'main-pane-cont-expanded');
-    }
+    this.getSidePane().showBehavior.setSlidingIsEnabled(false);
+    this.getSidePane().showBehavior.setVisible(true);
+    this.setExpandedForBigScreen(aExpanded, true);
+  }
+}
+
+
+/**
+ * @param {boolean} aExpanded
+ * @param {boolean=} opt_withTransition
+ */
+rflect.cal.ui.MainBody.prototype.setExpandedForBigScreen =
+    function(aExpanded, opt_withTransition) {
+  var movable = this.getElement().querySelector('#main-pane-cont');
+  if (aExpanded == goog.dom.classes.has(movable, 'main-pane-cont-expanded'))
+    return;
+
+  if (opt_withTransition) {
+    goog.dom.classes.add(movable, 'main-pane-cont-transition');
+  }
+
+  if (!aExpanded) {
+    this.getMainPane().getElement().style.width = 'auto'
+    goog.dom.classes.remove(movable, 'main-pane-cont-expanded');
+  } else {
+    this.getMainPane().getElement().style.width = '100%'
+    goog.dom.classes.add(movable, 'main-pane-cont-expanded');
   }
 }
 
@@ -639,18 +762,21 @@ rflect.cal.ui.MainBody.prototype.toggleSidePane = function() {
 rflect.cal.ui.MainBody.prototype.onMainBodyTransitionEnd = function(aEvent) {
   var movable = this.getElement().querySelector('#main-pane-cont');
 
-  if (aEvent.target != movable)
-    return;
-
-  if (!this.mainPaneExpanded_) {
-    this.getSidePane().getElement().style.display = 'none'
-  } else {
+  if (aEvent.target == movable) {
+    goog.dom.classes.remove(movable, 'main-pane-cont-transition');
+    this.finalizeExpandedForBigScreen();
   }
-
-  this.mainPaneExpanded_ = !this.mainPaneExpanded_;
 }
 
 
+rflect.cal.ui.MainBody.prototype.finalizeExpandedForBigScreen = function() {
+  this.expanded_ = !this.expanded_;
+  if (this.expanded_) {
+    this.getSidePane().showBehavior.setSlidingIsEnabled(false);
+    this.getSidePane().showBehavior.setVisible(false);
+  }
+  this.getMainPane().updateScrollableSizesAndDom();
+}
 
 
 /**
@@ -785,6 +911,8 @@ rflect.cal.ui.MainBody.prototype.updateMainPane_ = function() {
  */
 rflect.cal.ui.MainBody.prototype.disposeInternal = function() {
   rflect.cal.ui.MainBody.superClass_.disposeInternal.call(this);
+
+  goog.events.unlistenByKey(this.mainPaneContainerTransitionEndKey_);
 
   this.topPane_ = null;
   this.bottomPane_ = null;

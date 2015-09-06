@@ -7,7 +7,12 @@
 /* Styles for control pane and its buttons. */
 
 /* Navigation panels. */
+
+@controlPaneHeight: 63px;
+@controlPaneHeightHigher: 63px * 2;
+
 .control-pane {
+  .box-sizing();
   padding: 8px 0;
   overflow: hidden;
   background-color: rgb(246,246,246);
@@ -170,13 +175,10 @@
   text-align: center;
 }
 
-@media (max-width: 640px) and (orientation: portrait), (max-width: 832px) and
-    (orientation: landscape) {
-  .time-period-label {
-    line-height: 25px;
-    min-height: 50px;
-    padding: 2px;
-  }
+.time-period-label-narrow {
+  line-height: 46px;
+  min-height: 50px;
+  padding: 2px;
 }
 
 #sidebar-controls {

@@ -56,12 +56,19 @@ rflect.cal.ViewManager = function(aMainInstance) {
   this.timeManager = new rflect.cal.TimeManager();
 
   /**
+   * Navigator.
+   * @type {rflect.cal.Navigator}
+   * @private
+   */
+  this.navigator_ = new rflect.cal.Navigator(window);
+
+  /**
    * Container size monitor.
    * @type {rflect.cal.ContainerSizeMonitor}
    */
   this.containerSizeMonitor_ = new rflect.cal.ContainerSizeMonitor(this,
       //TODO(alexk): Implement configuration options.
-      document.body);
+      document.body, this.navigator_);
 
   /**
    * Event manager.
@@ -86,13 +93,6 @@ rflect.cal.ViewManager = function(aMainInstance) {
    */
   this.blockManager_ = new rflect.cal.blocks.BlockManager(this, this.timeManager,
       this.eventManager_);
-
-  /**
-   * Navigator.
-   * @type {rflect.cal.Navigator}
-   * @private
-   */
-  this.navigator_ = new rflect.cal.Navigator(window);
 
   /**
    * Main body component.
@@ -140,7 +140,7 @@ rflect.cal.ViewManager = function(aMainInstance) {
     _inspect('transport_', this.transport_);
 
   // Set initial view.
-  this.currentView = this.navigator_.isSmallScreen() ?
+  this.currentView = this.containerSizeMonitor_.isSmallScreen() ?
       rflect.cal.ViewType.DAY : rflect.cal.ViewType.WEEK;
   this.showView(this.currentView);
 };
@@ -253,18 +253,23 @@ rflect.cal.ViewManager.prototype.typeIsMonth = function(aType) {
 
 /**
  * Viewport resize handler.
+ * @param {rflect.cal.ContainerSizeMonitor.ResizeEvent} aEvent
  * @private
  */
-rflect.cal.ViewManager.prototype.onViewportResize_ = function() {
-  this.mainBody_.updateBeforeRedraw();
+rflect.cal.ViewManager.prototype.onViewportResize_ = function(aEvent) {
+  this.mainBody_.updateBeforeRedraw(false, false,
+      aEvent.sizeCategoryChanged);
+  this.mainBody_.updateByRedraw();
+
+  this.mainBody_.getTopPane().updateBeforeRedraw(false,
+      aEvent.sizeCategoryChanged);
+  this.mainBody_.getTopPane().updateByRedraw();
+  this.mainBody_.getSidePane().updateBeforeRedraw(false,
+      aEvent.sizeCategoryChanged);
+  this.mainBody_.getSidePane().updateByRedraw();
   this.mainBody_.getMainPane().updateBeforeRedraw();
-  this.mainBody_.getSidePane().updateBeforeRedraw();
-  this.mainBody_.getSidePane().getCalSelector().updateBeforeRedraw();
-  this.mainBody_.getSidePane().getTaskSelector().updateBeforeRedraw();
-  
   this.mainBody_.getMainPane().updateByRedraw();
-  this.mainBody_.getSidePane().getCalSelector().updateByRedraw();
-  this.mainBody_.getSidePane().getTaskSelector().updateByRedraw();
+
 };
 
 
@@ -294,18 +299,22 @@ rflect.cal.ViewManager.prototype.onMainBodyAction_ = function(aEvent){
           rflect.cal.EventType.MENU_COMMAND_NEW_EVENT))
         this.onMenuCommandNewEvent_();break;
     case rflect.cal.predefined.BUTTON_DAY_ID:
+    case rflect.cal.predefined.BUTTON_SIDE_PANE_DAY_ID:
       if (goog.events.dispatchEvent(this.mainBody_,
           rflect.cal.EventType.MENU_COMMAND_DAY))
         this.onMenuCommandDay_();break;
     case rflect.cal.predefined.BUTTON_WEEK_ID:
+    case rflect.cal.predefined.BUTTON_SIDE_PANE_WEEK_ID:
       if (goog.events.dispatchEvent(this.mainBody_,
           rflect.cal.EventType.MENU_COMMAND_WEEK))
         this.onMenuCommandWeek_();break;
     case rflect.cal.predefined.BUTTON_MONTH_ID:
+    case rflect.cal.predefined.BUTTON_SIDE_PANE_MONTH_ID:
       if (goog.events.dispatchEvent(this.mainBody_,
           rflect.cal.EventType.MENU_COMMAND_MONTH))
         this.onMenuCommandMonth_();break;
     case rflect.cal.predefined.BUTTON_SETTINGS_ID:
+    case rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID:
       if (goog.events.dispatchEvent(this.mainBody_,
           rflect.cal.EventType.MENU_COMMAND_OPTIONS))
         this.onMenuCommandOptions_();break;
@@ -510,6 +519,7 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
   var calledExternally = opt_caller != undefined;
   var miniCal = this.mainBody_.getSidePane().getMiniCal();
   var calledByMiniCal = calledExternally && opt_caller == miniCal;
+  var miniCalElement = this.mainBody_.getSidePane().getMiniCal().getElement();
 
   if (viewHasChanged || calledExternally || this.isOnStartup_){
 
@@ -525,6 +535,7 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
       this.transport_.loadCalendars();
 
       this.mainBody_.updateBeforeRedraw(true, true);
+      this.mainBody_.getSidePane().getMiniCal().updateBeforeRedraw();
       this.screenManager_.render();
       // Render main body and places it in screen manager element.
       this.screenManager_.showScreen(this.mainBody_, true);
@@ -550,14 +561,12 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
       this.mainBody_.getMainPane().updateBeforeRedraw(false, false, true);
       this.mainBody_.getTopPane().updateBeforeRedraw();
       this.mainBody_.getSidePane().updateBeforeRedraw();
-      if (miniCal){
-        this.mainBody_.getSidePane().getMiniCal().updateBeforeRedraw();
-      }
+      this.mainBody_.getSidePane().getMiniCal().updateBeforeRedraw();
 
       this.mainBody_.getMainPane().updateByRedraw();
       this.mainBody_.getTopPane().updateByRedraw();
       this.mainBody_.getSidePane().updateByRedraw();
-      if (miniCal){
+      if (miniCalElement){
         this.mainBody_.getSidePane().getMiniCal().updateByRedraw();
       }
     }
@@ -595,11 +604,14 @@ rflect.cal.ViewManager.prototype.showNext_ = function(aDirection) {
   this.timeManager.shift(aDirection);
   this.eventManager_.run();
 
-  this.mainBody_.updateBeforeRedraw(true, true);
+  this.mainBody_.getMainPane().updateBeforeRedraw(false, false, true);
   this.mainBody_.getMainPane().updateByRedraw();
+  this.mainBody_.getTopPane().updateBeforeRedraw();
   this.mainBody_.getTopPane().updateByRedraw();
+
   var miniCal = this.mainBody_.getSidePane().getMiniCal();
-  if (miniCal) {
+  if (miniCal.getElement()) {
+    miniCal.updateBeforeRedraw();
     miniCal.updateByRedraw();
   }
 
