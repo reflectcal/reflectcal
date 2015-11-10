@@ -8,7 +8,6 @@
  */
 
 goog.provide('rflect.cal.Navigator');
-goog.provide('rflect.cal.Navigator.SIZE_CATEGORY');
 
 goog.require('goog.events.EventTarget');
 goog.require('goog.dom');
@@ -42,37 +41,6 @@ goog.inherits(rflect.cal.Navigator, goog.events.EventTarget);
 
 /**
  * Query to detect small screens.
- * @enum {number}
- */
-rflect.cal.Navigator.SIZE_CATEGORY = {
-  UNDEFINED: 0,
-  IPHONE5_PORTRAIT: 1,
-  IPHONE6_PORTRAIT: 2,
-  IPHONE6_LANDSCAPE: 3,
-  IPAD_PORTRAIT: 4,
-  IPAD_LANDSCAPE: 5,
-  WIDE: 6
-}
-
-
-/**
- * Query to detect small screens.
- * @type {Object.<number, string>}
- * @const
- */
-rflect.cal.Navigator.SIZE_CATEGORY_QUERY = {
-  [rflect.cal.Navigator.SIZE_CATEGORY.UNDEFINED]: '',
-  [rflect.cal.Navigator.SIZE_CATEGORY.IPHONE5_PORTRAIT]: '(max-width: 374px)',
-  [rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_PORTRAIT]: '(min-width: 375px) and (max-width: 599px)',
-  [rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_LANDSCAPE]: '(min-width: 600px) and (max-width: 699px)',
-  [rflect.cal.Navigator.SIZE_CATEGORY.IPAD_PORTRAIT]: '(min-width: 700px) and (max-width: 949px)',
-  [rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE]: '(min-width: 950px) and (max-width: 1199px)',
-  [rflect.cal.Navigator.SIZE_CATEGORY.WIDE]: '(min-width: 1200px)',
-}
-
-
-/**
- * Query to detect small screens.
  * @type {string}
  */
 rflect.cal.Navigator.SMALL_SCREEN_QUERY =
@@ -102,22 +70,15 @@ rflect.cal.Navigator.prototype.scrollbarWidth_ = -1;
 
 
 /**
- * @return {rflect.cal.Navigator.SIZE_CATEGORY<number>} Current size category.
+ * @return {boolean} Whether screen is small according to media query.
  */
-rflect.cal.Navigator.prototype.detectSizeCategory = function() {
-  var sizeCategory = rflect.cal.Navigator.SIZE_CATEGORY.UNDEFINED;
-
-  for (let currentSizeCategory in rflect.cal.Navigator.SIZE_CATEGORY_QUERY) {
-    if (rflect.cal.Navigator.SIZE_CATEGORY.UNDEFINED != currentSizeCategory &&
-        this.window.matchMedia && this.window.matchMedia(
-        rflect.cal.Navigator.SIZE_CATEGORY_QUERY[+currentSizeCategory]).
-        matches) {
-      sizeCategory = currentSizeCategory;
-      break;
-    }
+rflect.cal.Navigator.prototype.isSmallScreen = function() {
+  if (this.window.matchMedia &&
+      this.window.matchMedia(rflect.cal.Navigator.SMALL_SCREEN_QUERY).matches) {
+    return true;
+  } else {
+    return false;
   }
-
-  return /**@type rflect.cal.Navigator.SIZE_CATEGORY<number>*/(+sizeCategory);
 }
 
 

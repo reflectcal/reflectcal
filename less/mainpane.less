@@ -6,10 +6,37 @@
 
 /* Styles for main pane. */
 
+@mainPaneSideMargin: 280px;
+
 .main-pane {
   float: none;
   width: auto;
   cursor: default; /*IE7 shows text cursor.*/
   transition: margin .2s;
   margin-left: @mainPaneSideMargin;
+}
+
+.main-pane-cont {
+  transition: transform, .3s;
+  -webkit-transition: -webkit-transform, .3s;
+}
+
+.main-pane-cont-expanded {
+  transform: translate3d(-@mainPaneSideMargin, 0px, 0px);
+  -webkit-transform: translate3d(-@mainPaneSideMargin, 0px, 0px);
+}
+
+@media (max-width: 640px) and (orientation: portrait), (max-width: 832px) and
+    (orientation: landscape) {
+  .main-pane {
+    margin-left: 0;
+  }
+}
+
+.main-pane-expanded {
+  margin-left: 0;
+}
+
+#main-pane-header {
+  /*width: 100%;*/
 }

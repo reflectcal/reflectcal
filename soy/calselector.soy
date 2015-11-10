@@ -5,20 +5,19 @@
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param? isSmallScreen Whether screen is small.
  * @param? hasCalendars Whether calendar selector has calendars.
- * @param height Height of list body.
  * @param? label Label of cal selector.
+ * @param? height Height of cal selector.
  * @param? calSelectorItemsHTML Items.
  */
 {template .calSelector autoescape="false"}
   {if $includeOuterHTML}
-  <div id="{$id}" class="list-selector"{sp}
-      {if not $hasCalendars}style="display:none"{/if}>
+  <div id="{$id}" class="list-selector"{sp}{if not $hasCalendars}style="display:none"{/if}>
   {/if}
   {if $hasCalendars}
     <div id="calendars-label-cont" class="list-label-cont">
       <div id="calendars-label" class="list-label">{$label}</div>
     </div>
-    <div id="calendars-body" class="list-body" {if not $isSmallScreen}style="height:{$height}px"{/if}>
+    <div id="calendars-body" class="list-body " style="height:{if not $isSmallScreen}{$height}{/if}px;">
       {$calSelectorItemsHTML}
     </div>
   {/if}
@@ -32,14 +31,12 @@
  * @param calendarId
  * @param calendarName
  * @param colorClass
- * @param active
  */
 {template .calSelectorItem autoescape="false"}
   <div class="listitem-cont-outer">
     <div title="{$calendarName}" class="listitem-cont calitem-label-active"
          id="calitem-label-item{$calendarId}">
-      <div class="goog-checkbox calitem-color-cont{sp}{$colorClass}{sp}
-          {if $active}goog-checkbox-checked{/if}"
+      <div class="goog-checkbox calitem-color-cont{sp}{$colorClass}{sp}goog-checkbox-checked"
           id="calitem-color-item{$calendarId}">
         <div></div>
       </div>

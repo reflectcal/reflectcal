@@ -3,8 +3,6 @@
 /**
  * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
- * @param isExpanded Whether main pane cont is expanded.
- * @param isSmallScreen Whether the screen is small.
  * @param topPaneHTML HTML of top pane.
  * @param sidePaneHTML HTML of side pane.
  * @param mainPaneHTML HTML of main pane.
@@ -14,24 +12,10 @@
   <div id="{$id}" class="main-body">
   {/if}
     {$topPaneHTML}
-    <div id="main-pane-cont" class="main-pane-cont{sp}
-        {if $isExpanded}main-pane-cont-expanded{/if}{sp}
-        ">
-
-      {if not $isSmallScreen}
-        {$sidePaneHTML}
-      {/if}
-
-      {$mainPaneHTML}
-
-    </div>
-
-    //For small screen, side pane is not positioned above when placed in translated container, so place it here.
-    // TODO(alexk): fix it.
-    {if $isSmallScreen}
+    <div id="main-pane-cont" class="main-pane-cont">
       {$sidePaneHTML}
-    {/if}
-
+      {$mainPaneHTML}
+    </div>
   {if $includeOuterHTML}
   </div>
   {/if}

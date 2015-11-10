@@ -97,6 +97,8 @@ class NotificationManager extends goog.events.EventTarget {
       return aEvent.alerts.some(aAlert => {
         var intervalStart = aNowTime + aAlert.interval;
         var intervalEnd = intervalStart + 1000 * 60;
+        if (goog.DEBUG)
+          console.log('intervalStart: ', new Date(intervalStart).toISOString());
         return aType == aAlert.type && eventStartTime >= intervalStart &&
             eventStartTime < intervalEnd;
       });
@@ -165,6 +167,8 @@ class NotificationManager extends goog.events.EventTarget {
             rflect.cal.events.Alert.AlertType.SOUND)
     );
     var groupedEvents = this.groupEventsByStartDate(upcomingEvents);
+    if (goog.DEBUG)
+      console.log('playSound: ', playSound);
     if (playSound) {
       this.playSoundNotification();
     }
@@ -212,6 +216,9 @@ class NotificationManager extends goog.events.EventTarget {
   showAlert_(aUpcomingEvents) {
     var alertText = aUpcomingEvents.map(this.upcomingEventsEntryToText).
         filter(alertText => !!alertText).join('\n');
+
+    if (goog.DEBUG)
+      console.log('alertText: ', alertText);
 
     if (alertText) {
       this.showSystemNotification(alertText);

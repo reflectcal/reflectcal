@@ -195,10 +195,10 @@ rflect.cal.ui.PaneShowBehavior.prototype.setVisible = function(visible) {
     if (visible) {
       if (this.dispatchEvent(new goog.events.Event(
           rflect.cal.ui.PaneShowBehavior.EventTypes.BEFORE_SHOW))) {
-        this.showElementWithClasses_(visible);
+        this.showElement_(visible);
       }
     } else
-      this.showElementWithClasses_(visible);
+      this.showElement_(visible);
     if (visible)
       this.dispatchEvent(new goog.events.Event(
           rflect.cal.ui.PaneShowBehavior.EventTypes.AFTER_SHOW));
@@ -246,24 +246,6 @@ rflect.cal.ui.PaneShowBehavior.prototype.setAfterVisibleAction =
  */
 rflect.cal.ui.PaneShowBehavior.prototype.showElement_ = function(visible) {
   goog.style.showElement(this.component.getElement(), visible);
-};
-
-
-/**
- * Shows or hides the pane element and adds appropriate classes.
- * @param {boolean} visible Shows the element if true, hides if false.
- * @private
- */
-rflect.cal.ui.PaneShowBehavior.prototype.showElementWithClasses_ =
-    function(visible) {
-  this.showElement_(visible);
-  if (visible) {
-    goog.dom.classes.add(this.component.getElement(),
-        'slide-pane-left-visible');
-  } else {
-    goog.dom.classes.remove(this.component.getElement(),
-        'slide-pane-left-visible');
-  }
 };
 
 

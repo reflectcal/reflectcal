@@ -32,6 +32,13 @@ rflect.MOBILE = rflect.UI_TYPE == 'MOBILE';
 
 
 /**
+ * Feature flag - whether side pane can be hidden for big screen.
+ * @type {boolean}
+ */
+rflect.SIDE_PANE_MOVABLE = rflect.MOBILE;
+
+
+/**
  * Feature flag - whether horizontal expand is possible through UI.
  * @define {boolean}
  */
@@ -43,13 +50,6 @@ rflect.HORIZONTAL_EXPAND_ENABLED = false;
  * @define {boolean}
  */
 rflect.VERTICAL_EXPAND_ENABLED = false;
-
-
-/**
- * Feature flag - whether side pane can be hidden for big screen.
- * @type {boolean}
- */
-rflect.SIDE_PANE_MOVABLE = !rflect.HORIZONTAL_EXPAND_ENABLED && true;
 
 
 /**
@@ -599,38 +599,6 @@ rflect.cal.predefined.BUTTON_MENU_ID = 'nb9';
  * @const
  */
 rflect.cal.predefined.BUTTON_TO_CALENDAR_ID = 'nb10';
-
-
-/**
- * Day button id for side pane.
- * @type {string}
- * @const
- */
-rflect.cal.predefined.BUTTON_SIDE_PANE_DAY_ID = 'nb11';
-
-
-/**
- * Week button id for side pane.
- * @type {string}
- * @const
- */
-rflect.cal.predefined.BUTTON_SIDE_PANE_WEEK_ID = 'nb12';
-
-
-/**
- * Month button id for side pane.
- * @type {string}
- * @const
- */
-rflect.cal.predefined.BUTTON_SIDE_PANE_MONTH_ID = 'nb13';
-
-
-/**
- * Options button id for side pane.
- * @type {string}
- * @const
- */
-rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID = 'nb14';
 
 
 /**

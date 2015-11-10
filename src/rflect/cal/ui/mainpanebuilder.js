@@ -148,15 +148,14 @@ rflect.cal.ui.MainPaneBuilder.CACHE_KEY_GRID_ROWS = 2;
 rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
     opt_outerHTML) {
   var gridWidth = this.blockPoolWeek_.gridSize.width;
-  var isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
+  var isSmallScreen = this.navigator_.isSmallScreen();
 
   return rflect.cal.ui.soy.mainpane.mainPaneWeek({
     id: this.mainPane_.getId(),
     firstBuild: aFirstBuild,
     includeOuterHTML: opt_outerHTML,
-    expanded: this.mainPane_.getParent().isExpanded(),
     isScrollEnabled: this.mainPane_.isScrollEnabled(),
-    isSmallScreen: this.containerSizeMonitor_.isSmallScreen(),
+    isSmallScreen: this.navigator_.isSmallScreen(),
     allDayExpanded: this.blockPoolAllDay_.expanded,
     weekPoolExpanded: this.blockPoolWeek_.expanded,
     allDayGridContainerHeight: this.blockPoolAllDay_.gridContainerSize.height,
@@ -226,7 +225,6 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyMonth = function(aFirstBuild,
   return rflect.cal.ui.soy.mainpane.mainPaneMonth({
     id: this.mainPane_.getId(),
     includeOuterHTML: opt_outerHTML,
-    expanded: this.mainPane_.getParent().isExpanded(),
     firstBuild: aFirstBuild,
     isScrollEnabled: this.mainPane_.isScrollEnabled(),
     monthPoolExpanded: this.blockPoolMonth_.expanded,
@@ -300,7 +298,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildDayNamesMonth_ = function() {
 
     str += rflect.cal.ui.soy.mainpane.dayNameEntryMonth({
       colNumber: counter,
-      dayName: this.containerSizeMonitor_.isSmallScreen() ?
+      dayName: this.navigator_.isSmallScreen() ?
           goog.i18n.DateTimeSymbols.SHORTWEEKDAYS[dayNameNumber] :
           goog.i18n.DateTimeSymbols.WEEKDAYS[dayNameNumber]
     });

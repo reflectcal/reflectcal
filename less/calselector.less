@@ -6,10 +6,10 @@
 
 /* Styles for calendar selector. */
 
-@listLabelContHeight: 46px;
 
-.list-selector {
-  .box-sizing();
+.list-selector, #calendars-selector-my, #calendars-selector-other {
+  padding: 2px 1px 5px 0;
+  padding-top: 12px;
   color: #2c2c2c;
 }
 
@@ -18,20 +18,15 @@
 }
 
 .list-label-cont, #calendars-label-cont, #tasks-label-cont {
-  .box-sizing();
-  padding-top: 27px;
-  padding-bottom: 3px;
-  padding-left: 8px;
-  padding-right: 1px;
   position: relative;
   line-height: 17px;
 }
 
 .list-label, #calendars-label, #tasks-label {
+  padding: 3px 1px 3px 8px;
 }
 
 .list-body {
-  .box-sizing();
   overflow-x: hidden;
   overflow-y: auto;
   .overflow-scrolling();

@@ -11,11 +11,6 @@
  * @author arv@google.com (Erik Arvidsson)
  */
 
-@datePickerWidth: 210px;
-@datePickerHeight: 215px;
-@inputDatePickerWidth: 260px;
-@inputDatePickerHeight: 265px;
-
 .goog-date-picker,
 .goog-date-picker th,
 .goog-date-picker td {
@@ -24,9 +19,8 @@
 }
 
 .goog-date-picker {
-  .box-sizing();
-  width: @datePickerWidth;
-  height: @datePickerHeight; /*default size 146px, other - depends on font*/
+  width: 210px;
+  height: 215px; /*default size 146px, other - depends on font*/
   position: relative;
   border: 1px solid #e5e5e5;
   /*float: left;*/
@@ -226,7 +220,7 @@ td.goog-date-picker-selected, td.goog-date-picker-selected-pre{
 
 .rflect-input-datepicker {
   position: absolute;
-  width: @inputDatePickerWidth;
-  height: @inputDatePickerHeight;
+  width: 260px;
+  height: 265px;
   z-index: 11;/*To be on top of .settings-pane.*/
 }
