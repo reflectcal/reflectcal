@@ -567,7 +567,8 @@ rflect.cal.ui.MainBody.prototype.onControlPaneAction_ = function(aEvent) {
 rflect.cal.ui.MainBody.prototype.onSidePaneAction_ = function(aEvent) {
   var id = aEvent.target.getId();
 
-  if (id == rflect.cal.predefined.BUTTON_SETTINGS_ID) {
+  if (id == rflect.cal.predefined.BUTTON_SETTINGS_ID ||
+      id == rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID) {
     this.showSidePane(false);
     this.showSettingsPane(true);
   }
@@ -707,7 +708,11 @@ rflect.cal.ui.MainBody.prototype.onSidePaneCancel_ = function(aEvent) {
  * Toggles side pane.
  */
 rflect.cal.ui.MainBody.prototype.toggleExpanded = function() {
-  this.setExpanded(!this.isExpanded());
+  if (this.containerSizeMonitor_.isSmallScreen()) {
+    this.setExpanded(false);
+  } else {
+    this.setExpanded(!this.isExpanded());
+  }
 }
 
 
