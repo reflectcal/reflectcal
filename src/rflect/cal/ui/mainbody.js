@@ -376,17 +376,13 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
   this.getHandler().listen(this.topPane_, goog.ui.Component.EventType.ACTION,
       this.onControlPaneAction_, false, this)
       .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
-      this.onControlPaneAction_, false, this)
+      this.onSidePaneAction_, false, this)
       .listen(this.sidePane_,
       rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
       this.onCalendarSwitch_, false, this)
       .listen(this.sidePane_.showBehavior,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
       this.onSidePaneSlide_, false, this)
-      .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
-      this.onSidePaneAction_, false, this)
-      .listen(this.sidePane_, rflect.cal.ui.SidePane.EventTypes.CANCEL,
-      this.onSidePaneCancel_, false, this)
       .listen(this.viewManager_.getScreenManager(),
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this)
@@ -567,10 +563,12 @@ rflect.cal.ui.MainBody.prototype.onControlPaneAction_ = function(aEvent) {
 rflect.cal.ui.MainBody.prototype.onSidePaneAction_ = function(aEvent) {
   var id = aEvent.target.getId();
 
-  if (id == rflect.cal.predefined.BUTTON_SETTINGS_ID ||
-      id == rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID) {
-    this.showSidePane(false);
-    this.showSettingsPane(true);
+  switch(id) {
+    case rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID: {
+      this.showSidePane(false);
+      this.showSettingsPane(true);
+    };break;
+    default:break;
   }
 }
 
@@ -691,16 +689,6 @@ rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
 rflect.cal.ui.MainBody.prototype.setAllowedToChangeExpandState =
     function(aAllowedToChangeExpandState) {
   this.allowedToChangeExpandState_ = aAllowedToChangeExpandState;
-}
-
-
-/**
- * @param {goog.events.Event} aEvent
- */
-rflect.cal.ui.MainBody.prototype.onSidePaneCancel_ = function(aEvent) {
-  if (goog.DEBUG)
-    console.log('onSidePaneCancel_: ');
-  this.allowedToChangeExpandState_ = true;
 }
 
 

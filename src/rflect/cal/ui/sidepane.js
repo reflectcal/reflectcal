@@ -312,25 +312,14 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
 
 
 /**
- * Settings click listener.
- */
-rflect.cal.ui.SidePane.prototype.onSettingsClick_ = function() {
-  this.getParent().showSettingsPane(true);
-  this.showBehavior.setVisible(false);
-}
-
-
-/**
  * Cancel action listener.
  * Default action is to hide pane.
  */
 rflect.cal.ui.SidePane.prototype.onCancel_ = function() {
-  if (!this.getParent().isExpanded()) {
     if (this.dispatchEvent(new goog.events.Event(
         rflect.cal.ui.SidePane.EventTypes.CANCEL))) {
       this.showBehavior.setVisible(false);
     }
-  }
 }
 
 
