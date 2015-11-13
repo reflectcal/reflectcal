@@ -697,6 +697,10 @@ rflect.cal.ui.MainPane.prototype.updateByRedraw = function(opt_deep,
  * @return {goog.math.Size} Static sizes.
  */
 rflect.cal.ui.MainPane.prototype.getStaticSize = function() {
+
+  if (goog.DEBUG)
+    console.log('this.adaptiveSizeHelper.getStaticSizeForView(): ', this.adaptiveSizeHelper.getStaticSizeForView());
+
   if (!this.adaptiveSizeHelper.getStaticSizeForView()) {
     let firstScrollable;
     if (this.viewManager_.isInWeekMode()) {

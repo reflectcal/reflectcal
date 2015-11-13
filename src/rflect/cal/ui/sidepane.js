@@ -126,6 +126,10 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
       this.viewManager_, this.containerSizeMonitor_, this.eventManager_,
       this.navigator_, rflect.cal.i18n.Symbols.CALENDARS_LABEL_OTHER, false));
 
+  if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
+    this.momentumScroller_ = new rflect.ui.MomentumScroller();
+  }
+
   if (goog.DEBUG) {
     _inspect('miniCal_', this.miniCal_);
     _inspect('calSelectorMy_', this.calSelectorMy_);
@@ -312,6 +316,46 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
 
 
 /**
+ * Removes scroll listeners on each update.
+ */
+rflect.cal.ui.SidePane.prototype.addMomentumScroller = function() {
+  if (this.momentumScroller_ && this.containerSizeMonitor_.isSmallScreen()) {
+    var element = this.getElement().querySelector('.side-pane-external-body');
+    var frameElement = this.getElement();
+
+    if (element && frameElement) {
+      this.momentumScroller_.setElements(element, frameElement);
+      this.momentumScroller_.enable(true);
+    }
+  }
+};
+
+
+/**
+ * Removes scroll listeners on each update.
+ */
+rflect.cal.ui.SidePane.prototype.removeMomentumScroller = function() {
+  if (!this.momentumScroller_) {
+    return;
+  }
+
+  this.momentumScroller_.enable(false);
+};
+
+
+/***/
+rflect.cal.ui.SidePane.prototype.resetMomentumScroller = function() {
+  if (!this.momentumScroller_) {
+    return;
+  }
+
+  this.removeMomentumScroller();
+  this.addMomentumScroller();
+  this.momentumScroller_.animateWithinBounds(0);
+}
+
+
+/**
  * Cancel action listener.
  * Default action is to hide pane.
  */
@@ -361,8 +405,12 @@ rflect.cal.ui.SidePane.prototype.onSlideBreak_ = function(aEvent) {
     if (aEvent.showing && aEvent.start){
       this.addGlassPane();
     }
+    if (aEvent.showing && aEvent.start){
+      this.addMomentumScroller();
+    }
     if (!aEvent.showing && aEvent.start){
       goog.dom.classes.remove(this.getGlassElement_(), 'glass-pane-opaque');
+      this.removeMomentumScroller();
     }
     if (!aEvent.showing && !aEvent.start){
       goog.dom.removeNode(this.getGlassElement_());
@@ -433,6 +481,7 @@ rflect.cal.ui.SidePane.prototype.updateBeforeRedraw = function(opt_deep,
     opt_sizeCategoryChanged) {
   this.sizeCategoryChanged_ = !!opt_sizeCategoryChanged;
   this.resetChildren();
+  this.removeMomentumScroller();
 
   if (this.adaptiveSizeHelper.getSizeWasAdaptedForView()) {
     this.updateScrollableSizes();
@@ -474,6 +523,9 @@ rflect.cal.ui.SidePane.prototype.updateByRedraw = function() {
   }
 
   this.updateScrollableSizesAndDom();
+  if (!this.getParent().isExpanded()) {
+    this.addMomentumScroller();
+  }
 };
 
 
@@ -567,6 +619,7 @@ rflect.cal.ui.SidePane.prototype.disposeInternal = function() {
   this.miniCal_ = null;
   this.calSelectorMy_ = null;
   this.calSelectorOther_ = null;
+  this.momentumScroller_.dispose();
 
   rflect.cal.ui.SidePane.superClass_.disposeInternal.call(this);
 };

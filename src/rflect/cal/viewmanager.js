@@ -627,11 +627,14 @@ rflect.cal.ViewManager.prototype.showNow = function() {
   this.timeManager.shiftToNow();
   this.eventManager_.run();
 
-  this.mainBody_.updateBeforeRedraw(true, true);
+  this.mainBody_.getMainPane().updateBeforeRedraw(false, false, true);
   this.mainBody_.getMainPane().updateByRedraw();
+  this.mainBody_.getTopPane().updateBeforeRedraw();
   this.mainBody_.getTopPane().updateByRedraw();
+
   var miniCal = this.mainBody_.getSidePane().getMiniCal();
-  if (miniCal) {
+  if (miniCal.getElement()) {
+    miniCal.updateBeforeRedraw();
     miniCal.updateByRedraw();
   }
 

@@ -651,13 +651,6 @@ rflect.cal.ui.MainBody.prototype.isExpanded = function() {
  * @private
  */
 rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
-  if (goog.DEBUG)
-    console.log('aEvent.start: ', aEvent.start);
-  if (goog.DEBUG)
-    console.log('aEvent.showing: ', aEvent.showing);
-  if (goog.DEBUG)
-    console.log('this.expanded_: ', this.expanded_);
-
   var isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
 
   if (aEvent.start && !aEvent.showing) {
@@ -782,7 +775,7 @@ rflect.cal.ui.MainBody.prototype.showEventPane = function(aShow,
   if (!this.eventPane_) {
     this.eventPane_ = new rflect.cal.ui.EventPane(this.viewManager_,
         this.timeManager_, this.eventManager_,
-        this.getDomHelper().getElement('main-container'), this.transport_,
+        this.containerSizeMonitor_, this.transport_,
         this.navigator_);
     this.addChild(this.eventPane_);
 
@@ -809,7 +802,7 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
   if (!this.settingsPane_) {
     this.settingsPane_ = new rflect.cal.ui.SettingsPane(this.viewManager_,
         this.timeManager_, this.eventManager_,
-        this.getDomHelper().getElement('main-container'), this.transport_);
+        this.containerSizeMonitor_, this.transport_);
     this.addChild(this.settingsPane_);
 
     // Save settings handler is in view manager.

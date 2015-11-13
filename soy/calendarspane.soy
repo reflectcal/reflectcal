@@ -19,14 +19,16 @@
       {param header: rflect.cal.i18n.Symbols.CALENDARS_LABEL /}
     {/call}
 
-    <div class="settings-body-outer">
+    <div class="settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">
       <div class="settings-body">
-      {call .calendarsPaneEntry}
-        {param calendarCollection: $calendarCollections[0] /}
-      {/call}
-      {call .calendarsPaneEntry}
-        {param calendarCollection: $calendarCollections[1] /}
-      {/call}
+        <div class="settings-body-inner">
+        {call .calendarsPaneEntry}
+          {param calendarCollection: $calendarCollections[0] /}
+        {/call}
+        {call .calendarsPaneEntry}
+          {param calendarCollection: $calendarCollections[1] /}
+        {/call}
+        </div>
       </div>
     </div>
 

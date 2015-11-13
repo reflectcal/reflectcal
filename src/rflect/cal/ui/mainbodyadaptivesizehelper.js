@@ -12,6 +12,7 @@
 goog.provide('rflect.cal.ui.MainBodyAdaptiveSizeHelper');
 
 goog.require('rflect.cal.ui.AdaptiveSizeHelper');
+goog.require('rflect.cal.Navigator.SIZE_CATEGORY');
 
 
 
@@ -54,9 +55,14 @@ class MainBodyAdaptiveSizeHelper extends rflect.cal.ui.AdaptiveSizeHelper {
    * @return {string}
    */
   getConfigurationKey() {
+    var sizeCategory = this.containerSizeMonitor_.getSizeCategory();
     return this.viewManager_.currentView + '-' +
-        this.containerSizeMonitor_.getSizeCategory() + '-' +
-        String(this.mainBody_.isExpanded());
+        sizeCategory +
+        //If size category assumes external side pane, it doesn't really matter
+        //whether mainbody is expanded or not.
+        (sizeCategory <= rflect.cal.Navigator.SIZE_CATEGORY.IPAD_PORTRAIT ? '' :
+            '-' + String(this.mainBody_.isExpanded()));
+
   }
 
 
@@ -64,7 +70,10 @@ class MainBodyAdaptiveSizeHelper extends rflect.cal.ui.AdaptiveSizeHelper {
    * @return {goog.math.Size}
    */
   getStaticSizeForView() {
-    return this.getStaticSize(this.getConfigurationKey());
+    var configurationKey = this.getConfigurationKey();
+    if (goog.DEBUG)
+      console.log('configurationKey: ', configurationKey);
+    return this.getStaticSize(configurationKey);
   };
 
 
