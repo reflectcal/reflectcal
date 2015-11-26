@@ -63,8 +63,8 @@ rflect.cal.Navigator.SIZE_CATEGORY = {
 rflect.cal.Navigator.SIZE_CATEGORY_QUERY = {
   [rflect.cal.Navigator.SIZE_CATEGORY.UNDEFINED]: '',
   [rflect.cal.Navigator.SIZE_CATEGORY.IPHONE5_PORTRAIT]: '(max-width: 374px)',
-  [rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_PORTRAIT]: '(min-width: 375px) and (max-width: 599px)',
-  [rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_LANDSCAPE]: '(min-width: 600px) and (max-width: 699px)',
+  [rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_PORTRAIT]: '(min-width: 375px) and (max-width: 579px)',
+  [rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_LANDSCAPE]: '(min-width: 580px) and (max-width: 699px)',
   [rflect.cal.Navigator.SIZE_CATEGORY.IPAD_PORTRAIT]: '(min-width: 700px) and (max-width: 949px)',
   [rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE]: '(min-width: 950px) and (max-width: 1199px)',
   [rflect.cal.Navigator.SIZE_CATEGORY.WIDE]: '(min-width: 1200px)',
