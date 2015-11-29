@@ -600,6 +600,18 @@ rflect.cal.ui.MainPane.prototype.removeMomentumScroller = function() {
 };
 
 
+/***/
+rflect.cal.ui.MainPane.prototype.resetMomentumScroller = function() {
+  if (!this.momentumScroller_) {
+    return;
+  }
+
+  this.removeMomentumScroller();
+  this.addMomentumScroller();
+  this.momentumScroller_.animateWithinBounds(0);
+};
+
+
  /**
   * @param {Element} aElement Scroller content element.
   * @return {number} Position of scroller content.
@@ -1065,7 +1077,10 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
       .listen(this.editDialog_, rflect.ui.Dialog.EventType.SELECT,
       this.onEditDialogButtonSelect_, false, this)
       .listen(this.transport_, rflect.cal.Transport.EventTypes.SAVE_EVENT,
-      this.onSaveEvent_, false, this);
+      this.onSaveEvent_, false, this)
+      .listen(this.viewManager_.getScreenManager(),
+      rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
+      this.onBeforePageChange_, false, this);
 
   this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
       this.onClick_, false, this);
@@ -1092,6 +1107,18 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
   this.timeMarker_.start();
 };
 
+
+/**
+ * Page change handler.
+ * @param {rflect.cal.ui.ScreenManager.BeforePageChangeEvent} aEvent Event
+ * object.
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.onBeforePageChange_ = function(aEvent) {
+  if (aEvent.currentScreen == this.getParent()){
+    this.resetMomentumScroller();
+  }
+}
 
 
 /**
