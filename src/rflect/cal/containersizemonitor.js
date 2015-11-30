@@ -9,10 +9,12 @@
  */
 
 goog.provide('rflect.cal.ContainerSizeMonitor');
+goog.provide('rflect.cal.ContainerSizeMonitor.ResizeEvent');
 
 goog.require('goog.dom');
 goog.require('rflect.dom.ViewportSizeMonitor');
 goog.require('rflect.cal.predefined');
+goog.require('rflect.cal.Navigator.SIZE_CATEGORY');
 
 
 
@@ -22,13 +24,14 @@ goog.require('rflect.cal.predefined');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {Element|string} aContainer Container which size is to monitor or its
  * id.
+ * @param {rflect.cal.Navigator} aNavigator Link to navigator.
  * @param {Window=} opt_window The window to monitor; defaults to the window in
  *    which this code is executing.
  * @constructor
  * @extends {rflect.dom.ViewportSizeMonitor}
  * @see {rflect.dom.ViewportSizeMonitor}
  */
-rflect.cal.ContainerSizeMonitor = function(aViewManager, aContainer,
+rflect.cal.ContainerSizeMonitor = function(aViewManager, aContainer, aNavigator,
     opt_window) {
   rflect.dom.ViewportSizeMonitor.call(this, opt_window);
 
@@ -39,6 +42,13 @@ rflect.cal.ContainerSizeMonitor = function(aViewManager, aContainer,
    */
   this.container_ = goog.dom.getElement(aContainer);
 
+  /**
+   * Navigator.
+   * @type {rflect.cal.Navigator}
+   * @private
+   */
+  this.navigator_ = aNavigator;
+
   if (goog.isString(this.container_))
     this.containerId_ = /**@type {string}*/ (aContainer);
 
@@ -48,8 +58,27 @@ rflect.cal.ContainerSizeMonitor = function(aViewManager, aContainer,
    * @private
    */
   this.containerSize_ = this.getContainerSize_();
+
+  /**
+   * @type {rflect.cal.Navigator.SIZE_CATEGORY<number>}
+   */
+  this.sizeCategory_ = this.navigator_.detectSizeCategory();
 };
 goog.inherits(rflect.cal.ContainerSizeMonitor, rflect.dom.ViewportSizeMonitor);
+
+
+class ResizeEvent {
+  constructor(aSizeCategoryChanged) {
+    this.type = goog.events.EventType.RESIZE;
+    this.sizeCategoryChanged = aSizeCategoryChanged;
+  }
+}
+
+
+/**
+ * @typedef {ResizeEvent}
+ */
+rflect.cal.ContainerSizeMonitor.ResizeEvent = ResizeEvent;
 
 
 /**
@@ -66,6 +95,65 @@ rflect.cal.ContainerSizeMonitor.prototype.containerId_;
  * @private
  */
 rflect.cal.ContainerSizeMonitor.prototype.windowSizePollTimeout_ = 0;
+
+
+/**
+ * @return {rflect.cal.Navigator.SIZE_CATEGORY<number>}
+ */
+rflect.cal.ContainerSizeMonitor.prototype.getSizeCategory = function() {
+  return this.sizeCategory_;
+}
+
+
+/**
+ * @param {rflect.cal.Navigator.SIZE_CATEGORY<number>} aCategory
+ * @return {boolean} Whether current screen size is of given category
+ */
+rflect.cal.ContainerSizeMonitor.prototype.isSizeCategory = function(aCategory) {
+  return this.sizeCategory_ == aCategory;
+}
+
+
+/**
+ * @param {rflect.cal.Navigator.SIZE_CATEGORY<number>} aCategory
+ * @return {boolean} Whether current screen size is of given category or lower.
+ */
+rflect.cal.ContainerSizeMonitor.prototype.isSizeCategoryOrLower =
+    function(aCategory) {
+  return this.sizeCategory_ <= aCategory;
+}
+
+
+/**
+ * @return {boolean} Whether screen size is
+ * of rflect.cal.Navigator.SIZE_CATEGORY.IPAD_PORTRAIT or lower.
+ */
+rflect.cal.ContainerSizeMonitor.prototype.isSmallScreen =
+    function() {
+  return this.isSizeCategoryOrLower(
+      rflect.cal.Navigator.SIZE_CATEGORY.IPAD_PORTRAIT);
+}
+
+
+/**
+ * @return {boolean} Whether screen size is
+ * of rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_PORTRAIT or lower.
+ */
+rflect.cal.ContainerSizeMonitor.prototype.isPhoneScreen =
+    function() {
+  return this.isSizeCategoryOrLower(
+      rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_PORTRAIT);
+}
+
+
+/**
+ * @param {rflect.cal.Navigator.SIZE_CATEGORY<number>} aCategory
+ * @return {boolean} Whether current screen size is of given category or higher.
+ */
+rflect.cal.ContainerSizeMonitor.prototype.isSizeCategoryOrHigher =
+    function(aCategory) {
+  return this.sizeCategory_ >= aCategory;
+}
 
 
 /**
@@ -132,7 +220,15 @@ rflect.cal.ContainerSizeMonitor.prototype.checkForContainerSizeChange_ =
   var containerSize = this.getContainerSize_();
   if (!goog.math.Size.equals(containerSize, this.containerSize_)) {
     this.containerSize_ = containerSize;
-    this.dispatchEvent(goog.events.EventType.RESIZE);
+    let navigatorSizeCategory = this.navigator_.detectSizeCategory();
+    if (goog.DEBUG)
+      console.log('navigatorSizeCategory: ', navigatorSizeCategory);
+    let sizeCategoryChanged = this.sizeCategory_ != navigatorSizeCategory;
+    if (sizeCategoryChanged) {
+      this.sizeCategory_ = navigatorSizeCategory;
+    }
+    this.dispatchEvent(new rflect.cal.ContainerSizeMonitor.ResizeEvent(
+        sizeCategoryChanged));
   }
 };
 

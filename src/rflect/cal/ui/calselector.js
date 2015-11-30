@@ -57,7 +57,7 @@ rflect.cal.ui.CalSelector = function(aViewManager, aContainerSizeMonitor,
    * Size of list selector scrollable, the only part that could vary in size.
    * @type {goog.math.Size}
    */
-  this.scrollableSize_ = null;
+  this.scrollableSize_ = new goog.math.Size(0, 0);
 
   /**
    * Mouse over registry for whole component.
@@ -209,18 +209,16 @@ rflect.cal.ui.CalSelector.prototype.buildHTML = function(opt_outerHTML) {
       hasCalendars: false
     });
   } else {
-    var data = {
+    return rflect.cal.ui.soy.calselector.calSelector({
       id: this.getId(),
       includeOuterHTML: opt_outerHTML,
-      isSmallScreen: this.navigator_.isSmallScreen(),
+      isFullSize: !this.eventManager_.hasNonOwnerCalendars(),
+      isSmallScreen: this.containerSizeMonitor_.isSmallScreen(),
       hasCalendars: true,
       label: this.label,
-      calSelectorItemsHTML: this.buildContent()
-    };
-    if (!this.navigator_.isSmallScreen()) {
-      data.height = this.scrollableSize_.height;
-    }
-    return rflect.cal.ui.soy.calselector.calSelector(data);
+      calSelectorItemsHTML: this.buildContent(),
+      height: this.getScrollableSize().height
+    });
   }
 };
 
@@ -288,7 +286,7 @@ rflect.cal.ui.CalSelector.prototype.buildListBodyClass_ = function(aSb) {
  *
  */
 rflect.cal.ui.CalSelector.prototype.buildScrollableHeight_ = function(aSb) {
-  if (this.navigator_.isSmallScreen())
+  if (this.containerSizeMonitor_.isSmallScreen())
     aSb.append('');
   else
     aSb.append(this.scrollableSize_.height);
@@ -307,7 +305,8 @@ rflect.cal.ui.CalSelector.prototype.buildContent = function() {
       str += rflect.cal.ui.soy.calselector.calSelectorItem({
         calendarId: calendarId,
         calendarName: calendar.getUIName(),
-        colorClass: calendar.colorCode ? calendar.colorCode.checkboxClass : ''
+        colorClass: calendar.colorCode ? calendar.colorCode.checkboxClass : '',
+        active: calendar.visible,
       });
     }
   }, this);
@@ -320,31 +319,6 @@ rflect.cal.ui.CalSelector.prototype.buildContent = function() {
  * @param {boolean=} opt_deep Whether to update children.
  */
 rflect.cal.ui.CalSelector.prototype.updateBeforeRedraw = function(opt_deep) {
-  if (!this.navigator_.isSmallScreen()) {
-
-    // Whether we building left pane fist time as a hollow elements. We do so to
-    // measure their sizes.
-    var firstBuildLeftPane = this.getParent().getParent().firstBuildLeftPane;
-
-    // Take current viewport size.
-    this.scrollableSize_ = this.containerSizeMonitor_.getSize();
-
-    if (firstBuildLeftPane){
-      this.scrollableSize_.height = 0;
-    } else {
-      var staticSizes = this.getParent().getParent().staticSizesLeftPane;
-      this.scrollableSize_.height -= staticSizes.height;
-    }
-
-    // Default behaviour is to have two selectors in a column, so divide height
-    // by 2.
-    if (this.eventManager_.hasNonOwnerCalendars()) {
-      this.scrollableSize_.height /= 2;
-    } else if (!this.isMyCalendars) {
-      this.scrollableSize_.height = 0;
-    } // Else leave scroll size as is.
-
-  }
 };
 
 
@@ -353,7 +327,7 @@ rflect.cal.ui.CalSelector.prototype.updateBeforeRedraw = function(opt_deep) {
  * @override
  */
 rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
-  var isSmallScreen = this.navigator_.isSmallScreen();
+  var isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
 
   if (this.redrawIsNeeded) {
     this.redrawIsNeeded = false;
@@ -371,11 +345,24 @@ rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
       this.scrollableEl = goog.dom.getChildren(this.getElement())[1];
 
   }
-
-  if (!isSmallScreen && this.scrollableEl) {
-    this.scrollableEl.style.height = this.scrollableSize_.height + 'px';
-  }
 };
+
+
+/**
+ * @return {goog.math.Size}
+ */
+rflect.cal.ui.CalSelector.prototype.getScrollableSize = function() {
+  return this.scrollableSize_.clone();
+
+}
+
+
+/**
+ * @param {goog.math.Size} aSize
+ */
+rflect.cal.ui.CalSelector.prototype.setScrollableSize = function(aSize) {
+  this.scrollableSize_ = aSize;
+}
 
 
 /**
@@ -408,6 +395,17 @@ rflect.cal.ui.CalSelector.prototype.enterDocument = function() {
   this.enterDocumentForCheckboxes();
 
 };
+
+
+/**
+ * @inheritDoc
+ */
+rflect.cal.ui.CalSelector.prototype.exitDocument = function() {
+  rflect.cal.ui.CalSelector.superClass_.exitDocument.call(this);
+  this.scrollableEl = null;
+
+  this.disposeCheckboxes();
+}
 
 
 /**

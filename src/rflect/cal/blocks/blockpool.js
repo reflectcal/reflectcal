@@ -37,6 +37,19 @@ rflect.cal.blocks.BlockPool = function(aIsHorizontal, aEventManager) {
    * @type {Array.<rflect.cal.blocks.Block>}
    */
   this.blocks = [];
+
+  /**
+   * Size of grid in which blocks are placed.
+   * @type {goog.math.Size}
+   */
+  this.gridSize = new goog.math.Size(0, 0);
+
+
+  /**
+   * Size of container in which grid is placed.
+   * @type {goog.math.Size}
+   */
+  this.gridContainerSize = new goog.math.Size(0, 0);
 };
 
 
@@ -82,20 +95,6 @@ rflect.cal.blocks.BlockPool.prototype.blocksNumber_ = 0;
  * @type {boolean}
  */
 rflect.cal.blocks.BlockPool.prototype.expanded = false;
-
-
-/**
- * Size of grid in which blocks are placed.
- * @type {goog.math.Size}
- */
-rflect.cal.blocks.BlockPool.prototype.gridSize = null;
-
-
-/**
- * Size of container in which grid is placed.
- * @type {goog.math.Size}
- */
-rflect.cal.blocks.BlockPool.prototype.gridContainerSize = null;
 
 
 /**

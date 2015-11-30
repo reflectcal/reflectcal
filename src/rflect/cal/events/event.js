@@ -136,12 +136,8 @@ rflect.cal.events.Event.fromJSON = function(aArray) {
   // chips.
   var startDate = rflect.date.createDateShimFromTimestamp(
       +aArray[rflect.cal.events.Event.FIELD_START_DATE], true);
-  if (goog.DEBUG)
-    _log('startDate', startDate);
   var endDate = rflect.date.createDateShimFromTimestamp(
       +aArray[rflect.cal.events.Event.FIELD_END_DATE], true);
-  if (goog.DEBUG)
-    _log('endDate', endDate);
   var summary = aArray[rflect.cal.events.Event.FIELD_SUMMARY];
   var description = aArray[rflect.cal.events.Event.FIELD_DESCRIPTION];
   var allDay = aArray[rflect.cal.events.Event.FIELD_ALL_DAY];

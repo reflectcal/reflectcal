@@ -4,6 +4,7 @@
  * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param? isSmallScreen Whether screen is small.
+ * @param sizeCategory Size category.
  * @param visible Whether sidepane is visible.
  * @param monthSelectorHTML HTML of month selector.
  * @param calSelectorMyHTML HTML of cal selector for user's calendars.
@@ -11,57 +12,70 @@
  */
 {template .sidePane autoescape="false"}
   {if $includeOuterHTML}
-  <div id="{$id}" class="side-pane slide-pane-left{sp}{if $visible}slide-pane-left-visible{/if}">
+  <div id="{$id}" class="side-pane{sp}slide-pane-left{sp}
+      {if $isSmallScreen}side-pane-external{/if}{sp}
+      {if $visible}slide-pane-left-visible{/if}
+      ">
   {/if}
     {if not $isSmallScreen}
     <div class="side-pane-spacer"></div>
     {/if}
+    <div id="month-selector">
+      {if not $isSmallScreen}
+        {$monthSelectorHTML}
+      {/if}
+    </div>
     <ul class="side-pane-menu">
       {if $isSmallScreen}
-        {call .sidePaneMenu /}
+        {call .sidePaneMenu}
+          {param sizeCategory: $sizeCategory /}
+        {/call}
       {/if}
     </ul>
-    <div id="month-selector">
-      {$monthSelectorHTML}
-    </div>
-    <div id="calendars-selector-my">
     {$calSelectorMyHTML}
-    </div>
-    <div id="calendars-selector-other">
     {$calSelectorOtherHTML}
-    </div>
+
   {if $includeOuterHTML}
   </div>
   {/if}
 {/template}
 
 
-/***/
+/**
+ * @param sizeCategory
+ */
 {template .sidePaneMenu autoescape="false"}
-  <li class="side-pane-menu-item">
-    // Calendar button.
-    <div id="{rflect.cal.predefined.BUTTON_TO_CALENDAR_ID}" class="button-minimal">
-      {rflect.cal.i18n.Symbols.TO_CALENDAR}
-    </div>
-  </li>
-  <li class="side-pane-menu-item">
-    // Day button.
-    <div id="{rflect.cal.predefined.BUTTON_DAY_ID}" class="button-minimal">
-      {rflect.cal.i18n.Symbols.DAY}
-    </div>
-  </li>
-  <li class="side-pane-menu-item">
-    // Month button.
-    <div id="{rflect.cal.predefined.BUTTON_MONTH_ID}" class="button-minimal">
-      {rflect.cal.i18n.Symbols.MONTH}
-    </div>
-  </li>
-  <li class="side-pane-menu-item">
-    // Options button.
-    <div id="{rflect.cal.predefined.BUTTON_SETTINGS_ID}" class="button-minimal">
-      <span class="octicon icon-button octicon-gear icon-settings icon-in-button"></span>
-      &nbsp;
-      {rflect.cal.i18n.Symbols.SETTINGS}
-    </div>
-  </li>
+  {switch $sizeCategory}
+    {case rflect.cal.Navigator.SIZE_CATEGORY.IPHONE5_PORTRAIT,
+                  rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_PORTRAIT,
+                  rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_LANDSCAPE,
+                  rflect.cal.Navigator.SIZE_CATEGORY.IPAD_PORTRAIT}
+    <li class="side-pane-menu-item">
+      // Calendar button.
+      <div id="{rflect.cal.predefined.BUTTON_TO_CALENDAR_ID}" class="button-minimal">
+        {rflect.cal.i18n.Symbols.TO_CALENDAR}
+      </div>
+    </li>
+    <li class="side-pane-menu-item">
+      // Day button.
+      <div id="{rflect.cal.predefined.BUTTON_SIDE_PANE_DAY_ID}" class="button-minimal">
+        {rflect.cal.i18n.Symbols.DAY}
+      </div>
+    </li>
+    <li class="side-pane-menu-item">
+      // Month button.
+      <div id="{rflect.cal.predefined.BUTTON_SIDE_PANE_MONTH_ID}" class="button-minimal">
+        {rflect.cal.i18n.Symbols.MONTH}
+      </div>
+    </li>
+    {default}
+  {/switch}
+    <li class="side-pane-menu-item">
+      // Options button.
+      <div id="{rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID}" class="button-minimal">
+        <span class="octicon icon-button octicon-gear icon-settings icon-in-button"></span>
+        &nbsp;
+        {rflect.cal.i18n.Symbols.SETTINGS}
+      </div>
+    </li>
 {/template}

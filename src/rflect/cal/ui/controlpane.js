@@ -31,11 +31,14 @@ goog.require('rflect.cal.ui.soy.controlpane');
  * Control pane main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
+ * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
+ * container size monitor.
  * @param {rflect.cal.Navigator} aNavigator Link to navigator.
  * @constructor
  * @extends {rflect.ui.Component}
  */
-rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, aNavigator) {
+rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager,
+    aContainerSizeMonitor, aNavigator) {
   rflect.ui.Component.call(this);
 
   /**
@@ -53,6 +56,13 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, aNavigator) {
   this.timeManager_ = aTimeManager;
 
   /**
+   * Link to container size monitor.
+   * @type {rflect.cal.ContainerSizeMonitor}
+   * @private
+   */
+  this.containerSizeMonitor_ = aContainerSizeMonitor;
+
+  /**
    * Link to navigator.
    * @type {rflect.cal.Navigator}
    * @private
@@ -67,13 +77,12 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, aNavigator) {
   this.viewButtonUpdater_ = new rflect.cal.ui.ViewButtonUpdater(this,
       this.viewManager_, this.timeManager_);
 
-  var isSmallScreen = this.navigator_.isSmallScreen();
+  var isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
 
-  // Add buttons. No need for captions or content here, because we've decorated
+  // Add buttons. No need for captions or content here, because we'll decorate
   // them.
-  if (rflect.SIDE_PANE_MOVABLE || isSmallScreen)
-    this.addChild(this.buttonMenu_ = new goog.ui.Button(null,
-        goog.ui.FlatButtonRenderer.getInstance()));
+  this.addChild(this.buttonMenu_ = new goog.ui.Button(null,
+      goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonNow_ = new goog.ui.ToggleButton(null,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonPrev_ = new goog.ui.Button(null,
@@ -82,16 +91,15 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager, aNavigator) {
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonNewEvent_ = new goog.ui.Button(null,
       goog.ui.FlatButtonRenderer.getInstance()));
-  if (!isSmallScreen){
-    this.addChild(this.buttonDay_ = new goog.ui.ToggleButton(null,
-        goog.ui.FlatButtonRenderer.getInstance()));
-    this.addChild(this.buttonWeek_ = new goog.ui.ToggleButton(null,
-        goog.ui.FlatButtonRenderer.getInstance()));
-    this.addChild(this.buttonMonth_ = new goog.ui.ToggleButton(null,
-        goog.ui.FlatButtonRenderer.getInstance()));
-    this.addChild(this.buttonOptions_ = new goog.ui.Button(null,
-        goog.ui.FlatButtonRenderer.getInstance()));
-  }
+  this.addChild(this.buttonDay_ = new goog.ui.ToggleButton(null,
+      goog.ui.FlatButtonRenderer.getInstance()));
+  this.addChild(this.buttonWeek_ = new goog.ui.ToggleButton(null,
+      goog.ui.FlatButtonRenderer.getInstance()));
+  this.addChild(this.buttonMonth_ = new goog.ui.ToggleButton(null,
+      goog.ui.FlatButtonRenderer.getInstance()));
+  this.addChild(this.buttonOptions_ = new goog.ui.Button(null,
+      goog.ui.FlatButtonRenderer.getInstance()));
+
 };
 goog.inherits(rflect.cal.ui.ControlPane, rflect.ui.Component);
 
@@ -102,6 +110,14 @@ goog.inherits(rflect.cal.ui.ControlPane, rflect.ui.Component);
  * @private
  */
 rflect.cal.ui.ControlPane.prototype.timeLabel_ = null;
+
+
+/**
+ * Whether size category was changed.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.ui.ControlPane.prototype.sizeCategoryChanged_ = false;
 
 
 /**
@@ -145,10 +161,17 @@ rflect.cal.ui.ControlPane.prototype.getButtonNow = function(){
 rflect.cal.ui.ControlPane.prototype.buildHTML = function(opt_outerHTML) {
   return rflect.cal.ui.soy.controlpane.controlPane({
     id: this.getId(),
-    isSmallScreen: this.navigator_.isSmallScreen(),
     includeOuterHTML: opt_outerHTML,
     timePeriodLabel: this.getDateHeader(),
-    sidePaneMovable: rflect.SIDE_PANE_MOVABLE
+    sizeCategory: this.containerSizeMonitor_.getSizeCategory()
+  });
+}
+
+
+/***/
+rflect.cal.ui.ControlPane.prototype.resetChildren = function() {
+  this.forEachChild(button => {
+    button.exitDocument();
   });
 }
 
@@ -156,32 +179,70 @@ rflect.cal.ui.ControlPane.prototype.buildHTML = function(opt_outerHTML) {
 /**
  * Decorates buttons, attaches event handlers for them.
  */
-rflect.cal.ui.ControlPane.prototype.enterDocument = function() {
-  var isSmallScreen = this.navigator_.isSmallScreen();
-
-  if (!isSmallScreen) {
-    this.buttonOptions_.decorate(this.dom_.getElement(
-        rflect.cal.predefined.BUTTON_SETTINGS_ID));
-    this.buttonDay_.decorate(this.dom_.getElement(
-        rflect.cal.predefined.BUTTON_DAY_ID));
-    this.buttonWeek_.decorate(this.dom_.getElement(
-        rflect.cal.predefined.BUTTON_WEEK_ID));
-    this.buttonMonth_.decorate(this.dom_.getElement(
-        rflect.cal.predefined.BUTTON_MONTH_ID));
+rflect.cal.ui.ControlPane.prototype.initChildren = function() {
+  
+  var buttonSettingsElement = this.dom_.getElement(
+      rflect.cal.predefined.BUTTON_SETTINGS_ID);
+  if (buttonSettingsElement) {
+    this.buttonOptions_.decorate(buttonSettingsElement);
   }
 
-  this.buttonPrev_.decorate(this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_PREV_ID));
-  this.buttonNext_.decorate(this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_NEXT_ID));
-  this.buttonNow_.decorate(this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_NOW_ID));
-  this.buttonNewEvent_.decorate(this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_NEW_EVENT_ID));
+  var buttonDayElement = this.dom_.getElement(
+      rflect.cal.predefined.BUTTON_DAY_ID);
+  if (buttonDayElement) {
+    this.buttonDay_.decorate(buttonDayElement);
+  }
 
-  if (isSmallScreen || rflect.SIDE_PANE_MOVABLE)
-    this.buttonMenu_.decorate(this.dom_.getElement(
-        rflect.cal.predefined.BUTTON_MENU_ID));
+  var buttonWeekElement = this.dom_.getElement(
+      rflect.cal.predefined.BUTTON_WEEK_ID);
+  if (buttonWeekElement) {
+    this.buttonWeek_.decorate(buttonWeekElement);
+  }
+
+  var buttonMonthElement = this.dom_.getElement(
+      rflect.cal.predefined.BUTTON_MONTH_ID);
+  if (buttonMonthElement) {
+    this.buttonMonth_.decorate(buttonMonthElement);
+  }
+
+  var buttonPrevElement = this.dom_.getElement(
+      rflect.cal.predefined.BUTTON_PREV_ID);
+  if (buttonPrevElement) {
+    this.buttonPrev_.decorate(buttonPrevElement);
+  }
+
+  var buttonNextElement = this.dom_.getElement(
+      rflect.cal.predefined.BUTTON_NEXT_ID);
+  if (buttonNextElement) {
+    this.buttonNext_.decorate(buttonNextElement);
+  }
+
+  var buttonNowElement = this.dom_.getElement(
+      rflect.cal.predefined.BUTTON_NOW_ID);
+  if (buttonNowElement) {
+    this.buttonNow_.decorate(buttonNowElement);
+  }
+
+  var buttonNewEventElement = this.dom_.getElement(
+      rflect.cal.predefined.BUTTON_NEW_EVENT_ID);
+  if (buttonNewEventElement) {
+    this.buttonNewEvent_.decorate(buttonNewEventElement);
+  }
+
+  var buttonMenuElement = this.dom_.getElement(
+      rflect.cal.predefined.BUTTON_MENU_ID);
+  if (buttonMenuElement) {
+    this.buttonMenu_.decorate(buttonMenuElement);
+  }
+}
+
+
+/**
+ * Decorates buttons, attaches event handlers for them.
+ */
+rflect.cal.ui.ControlPane.prototype.enterDocument = function() {
+
+  this.initChildren();
 
   rflect.cal.ui.ControlPane.superClass_.enterDocument.call(this);
 
@@ -189,13 +250,12 @@ rflect.cal.ui.ControlPane.prototype.enterDocument = function() {
   this.viewButtonUpdater_.updateButtons();
 
   // Attaching event handlers.
-  if (!isSmallScreen) {
-    this.getHandler().listen(this.buttonNewEvent_,
-        goog.ui.Component.EventType.ACTION, function(aEvent) {
-      this.dispatchEvent(rflect.cal.EventType.MENU_COMMAND_NEW_EVENT);
-      aEvent.target.setFocused(false);
-    }, false, this);
-  }
+  this.getHandler().listen(this.buttonNewEvent_,
+      goog.ui.Component.EventType.ACTION, function(aEvent) {
+    this.dispatchEvent(rflect.cal.EventType.MENU_COMMAND_NEW_EVENT);
+    aEvent.target.setFocused(false);
+  }, false, this);
+
 };
 
 
@@ -245,7 +305,15 @@ rflect.cal.ui.ControlPane.prototype.getDateHeader = function() {
   } else {
 
     // Single day case.
-    if (this.navigator_.isSmallScreen()){
+    if (this.containerSizeMonitor_.isSizeCategory(
+        rflect.cal.Navigator.SIZE_CATEGORY.IPHONE5_PORTRAIT)) {
+      formatStart = new goog.i18n.DateTimeFormat('EEE, MMM dd');
+    } else if (this.containerSizeMonitor_.isSizeCategory(
+        rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_PORTRAIT) ||
+        this.containerSizeMonitor_.isSizeCategory(
+        rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_LANDSCAPE)/*||
+        this.containerSizeMonitor_.isSizeCategory(
+        rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE)*/) {
       formatStart = new goog.i18n.DateTimeFormat('EEE, MMM dd, yyyy');
     } else {
       formatStart = new goog.i18n.DateTimeFormat('EEEE, ' +
@@ -259,10 +327,15 @@ rflect.cal.ui.ControlPane.prototype.getDateHeader = function() {
 
 
 /**
- * No-op is used in order not to allow updateBeforeRedraw to be called on
- * buttons which don't have it.
+ * @param {boolean=} opt_deep Whether to update children.
  */
-rflect.cal.ui.ControlPane.prototype.updateBeforeRedraw = goog.nullFunction;
+rflect.cal.ui.ControlPane.prototype.updateBeforeRedraw = function(opt_deep,
+    opt_sizeCategoryChanged) {
+  this.sizeCategoryChanged_ = !!opt_sizeCategoryChanged;
+  if (this.sizeCategoryChanged_) {
+    this.resetChildren();
+  }
+};
 
 
 /**
@@ -270,11 +343,20 @@ rflect.cal.ui.ControlPane.prototype.updateBeforeRedraw = goog.nullFunction;
  * @override
  */
 rflect.cal.ui.ControlPane.prototype.updateByRedraw = function() {
-  if (!this.timeLabel_)
-    this.timeLabel_ = this.dom_.getElement('time-period-label');
-  this.timeLabel_ && (this.timeLabel_.innerHTML = this.getDateHeader());
-  // Update buttons.
-  this.viewButtonUpdater_.updateButtons();
+  if (this.sizeCategoryChanged_) {
+    this.getElement().innerHTML = this.buildHTML(false);
+    this.initChildren();
+
+    this.sizeCategoryChanged_ = false;
+
+  } else {
+    if (!this.timeLabel_) {
+      this.timeLabel_ = this.dom_.getElement('time-period-label');
+    }
+    this.timeLabel_ && (this.timeLabel_.innerHTML = this.getDateHeader());
+    // Update buttons.
+    this.viewButtonUpdater_.updateButtons();
+  }
 };
 
 
