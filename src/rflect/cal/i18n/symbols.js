@@ -81,9 +81,9 @@ rflect.cal.i18n.Symbols_ru = {
   NO_NAME_EVENT: '(Без имени)',
   CALENDAR_POSTFIX: ' календарь',
 
-  TO_CALENDAR: ' Календарь',
-  TO_SETTINGS: ' Настройки',
-  TO_CALENDARS: ' Календари',
+  TO_CALENDAR: ' Назад',
+  TO_SETTINGS: ' Назад',
+  TO_CALENDARS: ' Назад',
 
   BACK: ' Назад',
   NEW: ' Новый',
@@ -130,9 +130,9 @@ rflect.cal.i18n.Symbols_by = {
   NO_NAME_EVENT: '(Без імя)',
   CALENDAR_POSTFIX: ' каляндар',
 
-  TO_CALENDAR: ' Каляндар',
-  TO_SETTINGS: ' Налады',
-  TO_CALENDARS: ' Календары',
+  TO_CALENDAR: ' Назад',
+  TO_SETTINGS: ' Назад',
+  TO_CALENDARS: ' Назад',
 
   BACK: ' Назад',
   NEW: ' Новы',
@@ -179,9 +179,9 @@ rflect.cal.i18n.Symbols_fr = {
   NO_NAME_EVENT: '(pas de nom)',
   CALENDAR_POSTFIX: ' calendrier',
 
-  TO_CALENDAR: ' Сalendrier',
-  TO_SETTINGS: ' Préférences',
-  TO_CALENDARS: ' Сalendriers',
+  TO_CALENDAR: ' Retour',
+  TO_SETTINGS: ' Retour',
+  TO_CALENDARS: ' Retour',
 
   BACK: ' Retour',
   NEW: ' Nouvel',
