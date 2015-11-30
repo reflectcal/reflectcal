@@ -51,15 +51,16 @@ goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
- * @param {Element} aParentElement Element in which pane will be rendered.
+ * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
+ * container size monitor.
  * @param {rflect.cal.Transport} aTransport Link to transport.
  * @constructor
  * @extends {rflect.cal.ui.ExternalPane}
  */
 rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
-    aParentElement, aTransport) {
+    aContainerSizeMonitor, aTransport) {
   rflect.cal.ui.ExternalPane.call(this, aViewManager, aTimeManager, 
-      aEventManager, aParentElement, aTransport);
+      aEventManager, aContainerSizeMonitor, aTransport);
 
   /**
    * Views elements, pages.
@@ -513,6 +514,7 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
 rflect.cal.ui.SettingsPane.prototype.onBeforePageChange_ = function(aEvent) {
   if (aEvent.currentScreen == this){
     this.displayValues();
+    this.resetMomentumScroller();
   }
 }
 
@@ -525,8 +527,8 @@ rflect.cal.ui.SettingsPane.prototype.onBeforePageChange_ = function(aEvent) {
 rflect.cal.ui.SettingsPane.prototype.showCalendarsPane = function(aShow) {
   if (!this.calendarsPane_) {
     this.calendarsPane_ = new rflect.cal.ui.CalendarsPane(this.viewManager,
-        this.timeManager, this.eventManager,
-        this.getDomHelper().getElement('main-container'), this.transport);
+        this.timeManager, this.eventManager, this.containerSizeMonitor,
+        this.transport);
     this.addChild(this.calendarsPane_);
   }
 

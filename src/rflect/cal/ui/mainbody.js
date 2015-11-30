@@ -376,17 +376,13 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
   this.getHandler().listen(this.topPane_, goog.ui.Component.EventType.ACTION,
       this.onControlPaneAction_, false, this)
       .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
-      this.onControlPaneAction_, false, this)
+      this.onSidePaneAction_, false, this)
       .listen(this.sidePane_,
       rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
       this.onCalendarSwitch_, false, this)
       .listen(this.sidePane_.showBehavior,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
       this.onSidePaneSlide_, false, this)
-      .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
-      this.onSidePaneAction_, false, this)
-      .listen(this.sidePane_, rflect.cal.ui.SidePane.EventTypes.CANCEL,
-      this.onSidePaneCancel_, false, this)
       .listen(this.viewManager_.getScreenManager(),
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this)
@@ -567,9 +563,12 @@ rflect.cal.ui.MainBody.prototype.onControlPaneAction_ = function(aEvent) {
 rflect.cal.ui.MainBody.prototype.onSidePaneAction_ = function(aEvent) {
   var id = aEvent.target.getId();
 
-  if (id == rflect.cal.predefined.BUTTON_SETTINGS_ID) {
-    this.showSidePane(false);
-    this.showSettingsPane(true);
+  switch(id) {
+    case rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID: {
+      this.showSidePane(false);
+      this.showSettingsPane(true);
+    };break;
+    default:break;
   }
 }
 
@@ -652,13 +651,6 @@ rflect.cal.ui.MainBody.prototype.isExpanded = function() {
  * @private
  */
 rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
-  if (goog.DEBUG)
-    console.log('aEvent.start: ', aEvent.start);
-  if (goog.DEBUG)
-    console.log('aEvent.showing: ', aEvent.showing);
-  if (goog.DEBUG)
-    console.log('this.expanded_: ', this.expanded_);
-
   var isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
 
   if (aEvent.start && !aEvent.showing) {
@@ -694,20 +686,14 @@ rflect.cal.ui.MainBody.prototype.setAllowedToChangeExpandState =
 
 
 /**
- * @param {goog.events.Event} aEvent
- */
-rflect.cal.ui.MainBody.prototype.onSidePaneCancel_ = function(aEvent) {
-  if (goog.DEBUG)
-    console.log('onSidePaneCancel_: ');
-  this.allowedToChangeExpandState_ = true;
-}
-
-
-/**
  * Toggles side pane.
  */
 rflect.cal.ui.MainBody.prototype.toggleExpanded = function() {
-  this.setExpanded(!this.isExpanded());
+  if (this.containerSizeMonitor_.isSmallScreen()) {
+    this.setExpanded(false);
+  } else {
+    this.setExpanded(!this.isExpanded());
+  }
 }
 
 
@@ -789,7 +775,7 @@ rflect.cal.ui.MainBody.prototype.showEventPane = function(aShow,
   if (!this.eventPane_) {
     this.eventPane_ = new rflect.cal.ui.EventPane(this.viewManager_,
         this.timeManager_, this.eventManager_,
-        this.getDomHelper().getElement('main-container'), this.transport_,
+        this.containerSizeMonitor_, this.transport_,
         this.navigator_);
     this.addChild(this.eventPane_);
 
@@ -816,7 +802,7 @@ rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
   if (!this.settingsPane_) {
     this.settingsPane_ = new rflect.cal.ui.SettingsPane(this.viewManager_,
         this.timeManager_, this.eventManager_,
-        this.getDomHelper().getElement('main-container'), this.transport_);
+        this.containerSizeMonitor_, this.transport_);
     this.addChild(this.settingsPane_);
 
     // Save settings handler is in view manager.

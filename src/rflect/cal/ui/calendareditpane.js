@@ -41,15 +41,16 @@ goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
- * @param {Element} aParentElement Element in which pane will be rendered.
+ * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
+ * container size monitor.
  * @param {rflect.cal.Transport} aTransport Link to transport.
  * @constructor
  * @extends {rflect.cal.ui.ExternalPane}
  */
 rflect.cal.ui.CalendarEditPane = function(aViewManager, aTimeManager, aEventManager,
-    aParentElement, aTransport) {
+    aContainerSizeMonitor, aTransport) {
   rflect.cal.ui.ExternalPane.call(this, aViewManager, aTimeManager, 
-      aEventManager, aParentElement, aTransport);
+      aEventManager, aContainerSizeMonitor, aTransport);
 
   /**
    * List of user's newly created calendars, without id.
@@ -289,6 +290,7 @@ rflect.cal.ui.CalendarEditPane.prototype.onBeforePageChange_ =
     function(aEvent) {
   if (aEvent.currentScreen == this){
     this.displayValues();
+    this.resetMomentumScroller();
   }
 }
 
@@ -444,8 +446,8 @@ rflect.cal.ui.CalendarEditPane.prototype.onDeleteCalendarResponse_ =
  */
 rflect.cal.ui.CalendarEditPane.prototype.displayValues = function() {
   this.buttonDelete.setVisible(!this.newCalendarMode_);
-  goog.style.showElement(this.buttonDelete.getElement().parentElement.
-      parentElement.parentElement, !this.newCalendarMode_);
+  goog.style.showElement(this.buttonDelete.getElement().parentElement,
+      !this.newCalendarMode_);
 
   this.inputCalendarName_.value = this.currentCalendar_.name;
   this.inputCalendarName_.placeholder = this.currentCalendar_.colorCode

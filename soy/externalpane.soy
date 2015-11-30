@@ -10,7 +10,7 @@
  * @param? header Header text.
  */
 {template .controlPane autoescape="false"}
-  <nav class="control-pane-external-outer{sp}control-pane-external-outer-{if $upper}upper{else}lower{/if}{sp}{if $upper}control-pane-external-outer-sticky{/if}">
+  <nav class="control-pane-external-outer{sp}control-pane-external-outer-{if $upper}upper{else}lower{/if}{sp}">
     <div class="control-pane-external">
       <div class="pane-right">
        {if $showSaveButton or $showNewButton}
@@ -54,5 +54,18 @@
         {/if}
       </div>
     </div>
+  </nav>
+{/template}
+
+/**
+ * @param showDeleteButton Whether to show delete button.
+ */
+{template .stickyBottomPane autoescape="false"}
+  <nav class="pane-sticky-bottom pane-center">
+  {if $showDeleteButton}
+    <div class="goog-inline-block goog-flat-button event-pane-button-delete">
+      {rflect.cal.i18n.Symbols.DELETE}
+    </div>
+  {/if}
   </nav>
 {/template}

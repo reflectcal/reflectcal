@@ -13,28 +13,35 @@
 {template .sidePane autoescape="false"}
   {if $includeOuterHTML}
   <div id="{$id}" class="side-pane{sp}slide-pane-left{sp}
-      {if $isSmallScreen}side-pane-external{/if}{sp}
+      {if $isSmallScreen}side-pane-external{sp}
+        {if rflect.ARTIFICIAL_SCROLLER_ENABLED}side-pane-external-artificial-scroll{else}side-pane-external-native-scroll{/if}
+      {/if}{sp}
       {if $visible}slide-pane-left-visible{/if}
       ">
   {/if}
-    {if not $isSmallScreen}
-    <div class="side-pane-spacer"></div>
+    {if $isSmallScreen}
+    <div class="side-pane-external-body">
     {/if}
-    <div id="month-selector">
       {if not $isSmallScreen}
-        {$monthSelectorHTML}
+      <div class="side-pane-spacer"></div>
       {/if}
+      <div id="month-selector">
+        {if not $isSmallScreen}
+          {$monthSelectorHTML}
+        {/if}
+      </div>
+      <ul class="side-pane-menu">
+        {if $isSmallScreen}
+          {call .sidePaneMenu}
+            {param sizeCategory: $sizeCategory /}
+          {/call}
+        {/if}
+      </ul>
+      {$calSelectorMyHTML}
+      {$calSelectorOtherHTML}
+    {if $isSmallScreen}
     </div>
-    <ul class="side-pane-menu">
-      {if $isSmallScreen}
-        {call .sidePaneMenu}
-          {param sizeCategory: $sizeCategory /}
-        {/call}
-      {/if}
-    </ul>
-    {$calSelectorMyHTML}
-    {$calSelectorOtherHTML}
-
+    {/if}
   {if $includeOuterHTML}
   </div>
   {/if}

@@ -26,13 +26,14 @@ goog.require('rflect.cal.ui.PaneShowBehavior');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
- * @param {Element} aParentElement Element in which pane will be rendered.
+ * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
+ * container size monitor.
  * @param {rflect.cal.Transport} aTransport Link to transport.
  * @constructor
  * @extends {rflect.ui.Component}
  */
 rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
-    aParentElement, aTransport) {
+    aContainerSizeMonitor, aTransport) {
   rflect.ui.Component.call(this);
 
   /**
@@ -57,6 +58,13 @@ rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
   this.eventManager = aEventManager;
 
   /**
+   * Link to container size monitor.
+   * @type {rflect.cal.ContainerSizeMonitor}
+   * @protected
+   */
+  this.containerSizeMonitor = aContainerSizeMonitor;
+
+  /**
    * Link to transport.
    * @type {rflect.cal.Transport}
    * @protected
@@ -75,6 +83,10 @@ rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
   if (this.isButtonDeleteEnabled()) {
     this.addChild(this.buttonDelete = new goog.ui.Button(null,
         goog.ui.FlatButtonRenderer.getInstance()));
+  }
+
+  if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
+    this.momentumScroller = new rflect.ui.MomentumScroller();
   }
 
   //Enabling touch-only interface.
@@ -100,6 +112,13 @@ rflect.cal.ui.ExternalPane.prototype.getBackButtonLabel = function() {
 rflect.cal.ui.ExternalPane.prototype.isButtonDeleteEnabled = function() {
   return true;
 };
+
+
+/**
+ * @type {rflect.ui.MomentumScroller}
+ * @protected
+ */
+rflect.cal.ui.ExternalPane.prototype.momentumScroller;
 
 
 /**
@@ -162,7 +181,7 @@ rflect.cal.ui.ExternalPane.prototype.buildControlPane = function(
  */
 rflect.cal.ui.ExternalPane.prototype.enterDocument = function() {
 
-  var [controlPane1, controlPane2] = this.getElement().querySelectorAll(
+  var controlPane1 = this.getElement().querySelector(
       '.control-pane-external');
 
   this.buttonBack1.decorate(controlPane1.querySelector(
@@ -170,12 +189,71 @@ rflect.cal.ui.ExternalPane.prototype.enterDocument = function() {
   this.buttonPrimary1.decorate(controlPane1.querySelector(
       '.pane-right > .goog-flat-button'));
   if (this.isButtonDeleteEnabled()) {
-    this.buttonDelete.decorate(controlPane2.querySelector(
-        '.pane-center > .goog-flat-button'));
+    this.buttonDelete.decorate(this.getElement().querySelector(
+        '.pane-sticky-bottom > .goog-flat-button'));
   }
+
+  this.getHandler().listen(this.containerSizeMonitor,
+      goog.events.EventType.RESIZE, this.onViewportResize_, false, this);
 
   rflect.cal.ui.ExternalPane.superClass_.enterDocument.call(this);
 }
+
+
+/**
+ * Viewport resize handler.
+ * @param {rflect.cal.ContainerSizeMonitor.ResizeEvent} aEvent
+ * @private
+ */
+rflect.cal.ui.ExternalPane.prototype.onViewportResize_ = function(aEvent) {
+  this.resetMomentumScroller();
+};
+
+
+/**
+ * Removes scroll listeners on each update.
+ * @protected
+ */
+rflect.cal.ui.ExternalPane.prototype.addMomentumScroller = function() {
+  if (!this.momentumScroller) {
+    return;
+  }
+
+  var element = this.getElement().querySelector('.settings-body');
+  var frameElement = this.getElement().querySelector('.settings-body-outer');
+
+  if (element && frameElement) {
+    this.momentumScroller.setElements(element, frameElement);
+    this.momentumScroller.enable(true);
+  }
+};
+
+
+/**
+ * Removes scroll listeners on each update.
+ * @protected
+ */
+rflect.cal.ui.ExternalPane.prototype.removeMomentumScroller = function() {
+  if (!this.momentumScroller) {
+    return;
+  }
+
+  this.momentumScroller.enable(false);
+};
+
+
+/**
+ * @protected
+ */
+rflect.cal.ui.ExternalPane.prototype.resetMomentumScroller = function() {
+  if (!this.momentumScroller) {
+    return;
+  }
+
+  this.removeMomentumScroller();
+  this.addMomentumScroller();
+  this.momentumScroller.animateWithinBounds(0);
+};
 
 
 /**
@@ -184,6 +262,8 @@ rflect.cal.ui.ExternalPane.prototype.enterDocument = function() {
  * @protected
  */
 rflect.cal.ui.ExternalPane.prototype.disposeInternal = function() {
+  this.momentumScroller && this.momentumScroller.dispose();
+
   rflect.cal.ui.ExternalPane.superClass_.disposeInternal.call(this);
 };
 

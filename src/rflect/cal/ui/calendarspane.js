@@ -49,15 +49,16 @@ goog.require('rflect.ui.Dialog.DefaultButtonCaptions');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
- * @param {Element} aParentElement Element in which pane will be rendered.
+ * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
+ * container size monitor.
  * @param {rflect.cal.Transport} aTransport Link to transport.
  * @constructor
  * @extends {rflect.cal.ui.ExternalPane}
  */
 rflect.cal.ui.CalendarsPane = function(aViewManager, aTimeManager, aEventManager,
-    aParentElement, aTransport) {
+    aContainerSizeMonitor, aTransport) {
   rflect.cal.ui.ExternalPane.call(this, aViewManager, aTimeManager,
-      aEventManager, aParentElement, aTransport);
+      aEventManager, aContainerSizeMonitor, aTransport);
 
   //Enabling touch-only interface.
   this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
@@ -317,8 +318,27 @@ rflect.cal.ui.CalendarsPane.prototype.enterDocument = function() {
       .listen(document,
       goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
       .listen(this.getElement(),
-      goog.events.EventType.CLICK, this.onCalendarLinkClick_, false, this);
+      goog.events.EventType.CLICK, this.onCalendarLinkClick_, false, this)
+
+      //Show/hide actions.
+      .listen(this.viewManager.getScreenManager(),
+      rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
+      this.onBeforePageChange_, false, this);
 };
+
+
+/**
+ * Page change handler.
+ * @param {rflect.cal.ui.ScreenManager.BeforePageChangeEvent} aEvent Event
+ * object.
+ * @private
+ */
+rflect.cal.ui.CalendarsPane.prototype.onBeforePageChange_ =
+    function(aEvent) {
+  if (aEvent.currentScreen == this){
+    this.resetMomentumScroller();
+  }
+}
 
 
 /**
@@ -335,7 +355,7 @@ rflect.cal.ui.CalendarsPane.prototype.showCalendarEditPane = function(aShow,
   if (!this.calendarEditPane_) {
     this.calendarEditPane_ = new rflect.cal.ui.CalendarEditPane(
         this.viewManager, this.timeManager, this.eventManager,
-        this.getDomHelper().getElement('main-container'), this.transport);
+        this.containerSizeMonitor, this.transport);
     this.addChild(this.calendarEditPane_);
 
     // Save settings handler is in view manager.
@@ -362,6 +382,7 @@ rflect.cal.ui.CalendarsPane.prototype.showCalendarEditPane = function(aShow,
 rflect.cal.ui.CalendarsPane.prototype.onCalendarUpdate_ =
     function(aEvent) {
   this.updateByRedraw();
+  this.resetMomentumScroller();
 }
 
 

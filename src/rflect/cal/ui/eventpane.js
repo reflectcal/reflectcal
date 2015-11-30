@@ -41,16 +41,17 @@ goog.require('rflect.ui.Checkbox');
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
- * @param {Element} aParentElement Element in which pane will be rendered.
+ * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
+ * container size monitor.
  * @param {rflect.cal.Transport} aTransport Link to transport.
  * @param {rflect.cal.Navigator} aNavigator Link to navigator.
  * @constructor
  * @extends {rflect.cal.ui.ExternalPane}
  */
 rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
-    aParentElement, aTransport, aNavigator) {
+    aContainerSizeMonitor, aTransport, aNavigator) {
   rflect.cal.ui.ExternalPane.call(this, aViewManager, aTimeManager,
-      aEventManager, aParentElement, aTransport);
+      aEventManager, aContainerSizeMonitor, aTransport);
 
   this.addChild(this.checkboxAllDay_ = new rflect.ui.Checkbox());
 
@@ -623,6 +624,7 @@ rflect.cal.ui.EventPane.prototype.showTimeInputs_ = function(aShow) {
 rflect.cal.ui.EventPane.prototype.onBeforePageChange_ = function(aEvent) {
   if (aEvent.currentScreen == this){
     this.displayValues();
+    this.resetMomentumScroller();
   }
 }
 
@@ -634,8 +636,8 @@ rflect.cal.ui.EventPane.prototype.displayValues = function() {
   var eh = this.eventManager.eventHolder;
 
   this.buttonDelete.setVisible(!this.newEventMode_);
-  goog.style.showElement(this.buttonDelete.getElement().parentElement.
-      parentElement.parentElement, !this.newEventMode_);
+  goog.style.showElement(this.buttonDelete.getElement().parentElement,
+      !this.newEventMode_);
 
   this.displayDates_();
 

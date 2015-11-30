@@ -46,12 +46,28 @@
 .settings-body-outer {
   background-color: #fff;
   box-sizing: border-box;
-  min-height: ~"calc(100% - 133px)";
+  height: ~"calc(100% - 71px)";
+}
+
+.settings-body-outer-native-scroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+}
+
+.settings-body-outer-artificial-scroll {
+  overflow-y: hidden;
 }
 
 .settings-body {
+  position: relative;
+  box-sizing: border-box;
+  padding-bottom: 71px;
+  min-height: 100%;
+}
+
+.settings-body-inner {
   max-width: 700px;
-  min-height: 100px;
   margin: 0 auto;
 }
 
@@ -210,4 +226,6 @@
 
 .external-pane-button {
   width: 90px;
+  overflow: hidden;
+  white-space: nowrap;
 }

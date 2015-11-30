@@ -299,11 +299,29 @@ rflect.ui.MomentumScroller.prototype.isEnabled = function() {
  */
 rflect.ui.MomentumScroller.prototype.enterDocument = function() {
   this.listen(this.element, goog.events.EventType.TOUCHSTART,
-      this.onTouchStart);
+      (aEvent) => {
+    aEvent.preventDefault();
+  });
+  this.listen(this.element, goog.events.EventType.TOUCHSTART,
+      this.onTouchStart, true);
   this.listen(this.element, goog.events.EventType.TOUCHMOVE,
       this.onTouchMove);
   this.listen(this.element, goog.events.EventType.TOUCHEND,
-      this.onTouchEnd);
+      this.onTouchEnd, true);
+
+  this.listen(this.element, goog.events.EventType.TOUCHSTART, (aEvent) => {
+    if (goog.DEBUG)
+      console.log('onTouchStart in capturing');
+  }, true);
+  this.listen(this.element, goog.events.EventType.TOUCHSTART, (aEvent) => {
+    if (goog.DEBUG)
+    console.log('onTouchStart in capturing');
+  }, true);
+  this.listen(this.element, goog.events.EventType.CLICK, (aEvent) => {
+    if (goog.DEBUG)
+      console.log('onClick');
+  })
+
   this.listen(this.element,
       rflect.browser.transitionend.VENDOR_TRANSITION_END_NAMES,
       this.onTransitionEnd);
@@ -356,10 +374,17 @@ rflect.ui.MomentumScroller.onDocumentTouchMove_ = function(aEvent) {
  * @param {goog.events.Event} aEvent Event object.
  */
 rflect.ui.MomentumScroller.prototype.onTouchStart = function(aEvent) {
+  if (goog.DEBUG)
+    console.log('onTouchStart');
   // This will be shown in part 4.
   this.stopMomentum();
+  if (this.isDecelerating()) {
+    aEvent.stopPropagation();
+    aEvent.preventDefault();
+  }
 
   this.startTouchY = aEvent.getBrowserEvent().touches[0].clientY;
+  this.startTouchX = aEvent.getBrowserEvent().touches[0].clientX;
   this.contentStartOffsetY = this.contentOffsetY;
 
   this.previousPoint_ = this.currentPoint_ = this.startTouchY;
@@ -373,6 +398,8 @@ rflect.ui.MomentumScroller.prototype.onTouchStart = function(aEvent) {
  * @param {goog.events.Event} aEvent Event object.
  */
 rflect.ui.MomentumScroller.prototype.onTouchMove = function(aEvent) {
+  if (goog.DEBUG)
+    console.log('onTouchMove');
   if (this.isDragging()) {
     var currentY = aEvent.getBrowserEvent().touches[0].clientY;
     var deltaY = currentY - this.startTouchY;
@@ -393,6 +420,8 @@ rflect.ui.MomentumScroller.prototype.onTouchMove = function(aEvent) {
  * @param {Event} aEvent object.
  */
 rflect.ui.MomentumScroller.prototype.onTouchEnd = function(aEvent) {
+  if (goog.DEBUG)
+    console.log('onTouchEnd');
   if (this.isDragging()) {
 
     if (this.shouldStartMomentum()) {
@@ -404,16 +433,76 @@ rflect.ui.MomentumScroller.prototype.onTouchEnd = function(aEvent) {
 
   }
 
+
+  if (this.stopPropagationOnTouchEnd_ || (Math.abs(this.currentPoint_ -
+      this.startTouchY) >= rflect.ui.MomentumScroller.DRAG_THRESHOLD)) {
+    //Prevent accidental selection of chips on main pane.
+    aEvent.stopPropagation();
+    aEvent.preventDefault();
+
+    this.stopPropagationOnTouchEnd_ = false;
+  } else {
+    this.synthesizeClick(this.startTouchX, this.startTouchY);
+  }
+
   this.previousPoint_ = this.previousMoment_ = this.currentPoint_ =
       this.currentMoment_ = 0;
   this.startTouchY = 0;
+  this.startTouchX = 0;
   this.isDragging_ = false;
+}
 
-  if (this.stopPropagationOnTouchEnd_) {
-    //Prevent accidental selection of chips on main pane.
-    aEvent.stopPropagation();
 
-    this.stopPropagationOnTouchEnd_ = false;
+rflect.ui.MomentumScroller.prototype.synthesizeClick = function(aClientX,
+    aClientY) {
+  var evt = document.createEvent('MouseEvents');
+  evt.initMouseEvent('click', true, false, window,
+     0, 0, 0, aClientX, aClientY, false, false, false, false, 0, null);
+  var element = document.elementFromPoint(aClientX, aClientY);
+  var canceled = !element.dispatchEvent(evt);
+  this.focusIfNeeded(element);
+}
+
+
+/**
+ * @param {Element} aElement
+ */
+rflect.ui.MomentumScroller.prototype.focusIfNeeded = function(aElement) {
+  if (rflect.ui.MomentumScroller.needsFocus(aElement)) {
+		let length;
+    if (aElement.setSelectionRange && aElement.type.indexOf('date') !== 0 &&
+        aElement.type !== 'time' && aElement.type !== 'month') {
+			length = aElement.value.length;
+			aElement.setSelectionRange(length, length);
+		} else {
+			aElement.focus();
+		}
+	}
+}
+
+/**
+ * @param {Element} aElement
+ * @return {boolean} Whether focus is needed.
+ */
+rflect.ui.MomentumScroller.needsFocus = function(aElement) {
+  switch (aElement.nodeName.toLowerCase()) {
+    case 'textarea':
+      return true;
+    case 'select':
+      return true;
+    case 'input':
+      switch (aElement.type) {
+      case 'button':
+      case 'checkbox':
+      case 'file':
+      case 'image':
+      case 'radio':
+      case 'submit':
+        return false;
+      }
+      // No point in attempting to focus disabled inputs
+      return !aElement.disabled && !aElement.readOnly;
+    default: return false;
   }
 }
 
@@ -422,6 +511,10 @@ rflect.ui.MomentumScroller.prototype.onTouchEnd = function(aEvent) {
  * @param {Event} aEvent object.
  */
 rflect.ui.MomentumScroller.prototype.onTransitionEnd = function(aEvent) {
+
+  if (aEvent.target != this.element) {
+    return;
+  }
 
   switch (this.queuedTransitionStage_) {
     case rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE.NONE:{

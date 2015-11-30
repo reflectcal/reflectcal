@@ -4,6 +4,7 @@
 
 html {
   height: 100%;
+  overflow: hidden;
 }
 
 /*
@@ -19,7 +20,7 @@ body {
   margin: 0;
   .default-font();
   /*Note(alexk): It's responsibility of container to provide width/height restrictions.*/
-  min-width: 500px;
+  min-width: 320px;
   min-height: 376px; /* -8px of .main-body margin-top.*/
   background-color: rgb(246,246,246);
 }
@@ -31,14 +32,6 @@ body when (@UI_TYPE = 'MOBILE') {
   -webkit-user-select: none;
   -webkit-highlight: none;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
-
-@media (max-width: 640px) and (orientation: portrait), (max-width: 832px) and
-    (orientation: landscape) {
-  body {
-    min-width: 320px;
-    min-height: 400px;
-  }
 }
 
 .main-body {
