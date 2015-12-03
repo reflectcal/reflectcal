@@ -28,11 +28,16 @@ goog.require('rflect.cal.ui.SelectionMask');
  * @param {rflect.cal.blocks.BlockPool=} opt_blockPoolWeek Link to week block pool.
  * @param {rflect.cal.blocks.BlockPool=} opt_blockPoolAllday Link to allday block pool.
  * @param {rflect.cal.blocks.BlockPool=} opt_blockPoolMonth Link to month block pool.
+ * @param {rflect.ui.MomentumScroller=} opt_momentumScroller Link to momentum
+ * scroller.
+ * @param {boolean=} opt_virtual Whether mask serves only for
+ * calculations and won't draw anything.
  * @extends {rflect.cal.ui.SelectionMask}
  * @constructor
  */
 rflect.cal.ui.MainPaneSelectionMask = function(aViewManager, aMainPane, aTimeManager,
-    opt_blockPoolWeek, opt_blockPoolAllday, opt_blockPoolMonth) {
+    opt_blockPoolWeek, opt_blockPoolAllday, opt_blockPoolMonth,
+    opt_momentumScroller, opt_virtual) {
 
   rflect.cal.ui.SelectionMask.call(this, aViewManager, aMainPane, aTimeManager);
 
@@ -57,6 +62,20 @@ rflect.cal.ui.MainPaneSelectionMask = function(aViewManager, aMainPane, aTimeMan
    */
   this.blockPoolMonth_ = opt_blockPoolMonth;
 
+  /**
+   * Link to momentum scroller.
+   * @type {rflect.ui.MomentumScroller|undefined}
+   * @private
+   */
+  this.momentumScroller_ = opt_momentumScroller;
+
+  /**
+   * Whether mask is virtual.
+   * @type {boolean}
+   * @private
+   */
+  this.virtual_ = !!opt_virtual;
+
   this.additionalClassNames = goog.getCssName('mainpane-mask');
 
 };
@@ -68,6 +87,7 @@ goog.inherits(rflect.cal.ui.MainPaneSelectionMask, rflect.cal.ui.SelectionMask);
  * @enum {number}
  */
 rflect.cal.ui.MainPaneSelectionMask.Configuration = {
+  NONE: 0,
   ALLDAY: 1,
   WEEK: 2,
   MONTH: 3
@@ -206,9 +226,8 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.isWeek = function() {
 
 /**
  * @return {boolean} Whether mask is allday or week.
- * @private
  */
-rflect.cal.ui.MainPaneSelectionMask.prototype.isWeekOrAllday_ = function() {
+rflect.cal.ui.MainPaneSelectionMask.prototype.isWeekOrAllDay = function() {
   return this.isWeek() || this.isAllDay();
 };
 
@@ -218,7 +237,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.isWeekOrAllday_ = function() {
  * @protected
  */
 rflect.cal.ui.MainPaneSelectionMask.prototype.isHorizontal =
-    rflect.cal.ui.MainPaneSelectionMask.prototype.isWeekOrAllday_
+    rflect.cal.ui.MainPaneSelectionMask.prototype.isWeekOrAllDay
 
 
 /**
@@ -248,10 +267,19 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.isDragType = function() {
 
 
 /**
+ * @param {boolean} aShow Whether to show element.
+ */
+rflect.cal.ui.MainPaneSelectionMask.prototype.showMaskElement = function(
+    aShow) {
+  !this.virtual_ && goog.style.showElement(this.maskEl, aShow);
+}
+
+
+/**
  * Clears mask state.
  */
 rflect.cal.ui.MainPaneSelectionMask.prototype.close = function() {
-  goog.style.showElement(this.maskEl, false);
+  this.showMaskElement(false);
   this.initialized = false;
   this.calendarEvent_ = null;
   this.initialMove_ = false;
@@ -286,7 +314,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.init = function(aConfiguration,
                                                            opt_resizingByEnd) {
   rflect.cal.ui.SelectionMask.prototype.init.call(this, aConfiguration);
 
-  var eventCoordinate = this.getEventCoordinate_(opt_event);
+  var eventCoordinate = this.getEventCoordinate(opt_event);
   if (!eventCoordinate)
     return;
 
@@ -299,7 +327,6 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.init = function(aConfiguration,
 
     this.initSelection_(eventCoordinate);
   }
-
 };
 
 
@@ -308,11 +335,11 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.init = function(aConfiguration,
  */
 rflect.cal.ui.MainPaneSelectionMask.prototype.initSelection_ = function(
     aEventCoordinate) {
-  this.startCoordinate = this.getCellCoordinate_(aEventCoordinate, true,
+  this.startCoordinate = this.getCellCoordinate(aEventCoordinate, true,
       false);
   this.currentCoordinate = this.startCoordinate.clone();
 
-  goog.style.showElement(this.maskEl, true);
+  this.showMaskElement(true);
 
   this.initialized = true;
 
@@ -331,7 +358,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.initDrag_ = function(
     aEventCoordinate, aCalendarEvent, opt_resizingByStart, opt_resizingByEnd) {
   this.currentCoordinate = new goog.math.Coordinate(aEventCoordinate.x,
       aEventCoordinate.y);
-  this.currentCellCoordinate_ = this.getCellCoordinate_(
+  this.currentCellCoordinate_ = this.getCellCoordinate(
       aEventCoordinate, true, true);
 
   this.calendarEvent_ = aCalendarEvent;
@@ -387,7 +414,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.update = function (aEvent) {
  */
 rflect.cal.ui.MainPaneSelectionMask.prototype.updateSelection_ = function (
     aEventCoordinate) {
-  var currentCellCoord = this.getCellCoordinate_(aEventCoordinate, true, false);
+  var currentCellCoord = this.getCellCoordinate(aEventCoordinate, true, false);
 
   if (!goog.math.Coordinate.equals(
       this.snapCoordinate_(this.currentCoordinate, true),
@@ -406,7 +433,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.updateSelection_ = function (
  */
 rflect.cal.ui.MainPaneSelectionMask.prototype.updateDrag_ = function (
     aEventCoordinate) {
-  var currentCellCoord = this.getCellCoordinate_(aEventCoordinate, true,
+  var currentCellCoord = this.getCellCoordinate(aEventCoordinate, true,
       true);
   var distance = goog.math.Coordinate.distance(
       /**@type {!goog.math.Coordinate}*/(aEventCoordinate),
@@ -467,7 +494,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.updateDrag_ = function (
         endCoordinate = this.snapCoordinate_(endCoordinate, false);
     }
 
-    goog.style.showElement(this.maskEl, true);
+    this.showMaskElement(true);
     this.updateInternal(startCoordinate, endCoordinate);
   }  
 }
@@ -501,7 +528,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.coordinateToRelativeTs_ =
   var coord;
 
   if (this.isHorizontal()) {
-    coord = this.snapCoordinate_(this.getCellCoordinate_(aCoordinate, true,
+    coord = this.snapCoordinate_(this.getCellCoordinate(aCoordinate, true,
         false), true);
     // This is minutes.
     return coord.x * rflect.cal.predefined.MINS_IN_DAY *
@@ -510,7 +537,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.coordinateToRelativeTs_ =
         coord.y * pixelToTimeK;
   }
 
-  coord = this.getCellCoordinate_(aCoordinate, true, true);
+  coord = this.getCellCoordinate(aCoordinate, true, true);
   return coord.x * rflect.cal.predefined.MINS_IN_DAY *
       rflect.cal.predefined.MILLIS_IN_MINUTE + coord.y * 7 *
       rflect.cal.predefined.MINS_IN_DAY *
@@ -530,12 +557,12 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.coordinateToPixelPosition_ =
   var coord;
 
   if (this.isHorizontal()) {
-    coord = this.snapCoordinate_(this.getCellCoordinate_(aCoordinate, true,
+    coord = this.snapCoordinate_(this.getCellCoordinate(aCoordinate, true,
         false), true);
     return coord.x * size + coord.y;
   }
 
-  coord = this.getCellCoordinate_(aCoordinate, true, true);
+  coord = this.getCellCoordinate(aCoordinate, true, true);
   return coord.y * size + coord.x * step;
 }
 
@@ -554,7 +581,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.pixelPositionToCoordinate_ =
   var coordinate = this.isHorizontal() ? new goog.math.Coordinate(
       primaryComponent, secondaryComponent) :
       new goog.math.Coordinate(secondaryComponent, primaryComponent);
-  return this.getCellCoordinate_(coordinate, false, false);
+  return this.getCellCoordinate(coordinate, false, false);
 }
 
 
@@ -562,7 +589,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.pixelPositionToCoordinate_ =
  * @param {goog.events.Event=} opt_event Event object.
  * @return {goog.math.Coordinate} Coordinate of event.
  */
-rflect.cal.ui.MainPaneSelectionMask.prototype.getEventCoordinate_ =
+rflect.cal.ui.MainPaneSelectionMask.prototype.getEventCoordinate =
     function(opt_event) {
 
   if (!opt_event)
@@ -580,12 +607,14 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.getEventCoordinate_ =
 
   this.elementOffset_ = new goog.math.Coordinate(0, 0);
 
-  if (this.isWeekOrAllday_()) {
+  if (this.isWeekOrAllDay()) {
 
     if (this.isAllDay()) {
 
       //TODO(alexk): shorten this method, enclose repeating parts in function.
-      this.scrollableEl_ = goog.dom.getElement('main-pane-header-scrollable');
+      this.scrollableEl_ = goog.dom.getElement(
+          rflect.cal.predefined.MainPane.ELEMENT_ID.
+          MAIN_PANE_HEADER_SCROLLABLE);
       this.maskEl = goog.dom.getElement('wk-ad-mask-cnt');
       this.elementOffset_ = goog.style.getRelativePosition(
           this.scrollableEl_, document.documentElement);
@@ -594,7 +623,9 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.getEventCoordinate_ =
     } else {
 
       this.scrollableEl_ =
-          goog.dom.getElement('main-pane-body-scrollable-wk');
+          goog.dom.getElement(
+              rflect.cal.predefined.MainPane.ELEMENT_ID.
+              MAIN_PANE_BODY_SCROLLABLE_WK);
       this.maskEl = goog.dom.getElement('wk-mask-cnt');
       this.elementOffset_ = goog.style.getRelativePosition(
           this.scrollableEl_, document.documentElement);
@@ -621,7 +652,9 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.getEventCoordinate_ =
       this.elementOffset_.y;
 
   coordX = coordXWithoutScroll + this.scrollableEl_.scrollLeft;
-  coordY = coordYWithoutScroll + this.scrollableEl_.scrollTop;
+  coordY = coordYWithoutScroll + this.scrollableEl_.scrollTop +
+      //Momentum scroller offset is negative.
+      (this.momentumScroller_ ? -this.momentumScroller_.contentOffsetY : 0);
   // Safe check for IE7.
   if (coordYWithoutScroll >= this.scrollableEl_.offsetHeight ||
       coordYWithoutScroll < 0)
@@ -645,7 +678,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.getEventCoordinate_ =
  * block-independent component of coordinate.
  * @return {goog.math.Coordinate} Cell position.
  */
-rflect.cal.ui.MainPaneSelectionMask.prototype.getCellCoordinate_ =
+rflect.cal.ui.MainPaneSelectionMask.prototype.getCellCoordinate =
     function(aCoordinate, aChangePrimaryComponent, aChangeSecondaryComponent) {
 
   var coord = aCoordinate.clone();
@@ -724,7 +757,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.normalizeCoordinate_ =
  * upper bound. Or if it's lesser than cell lower bound, change it to lower
  * bound.
  *
- * @see {rflect.cal.ui.MainPaneSelectionMask.prototype.getCellCoordinate_}
+ * @see {rflect.cal.ui.MainPaneSelectionMask.prototype.getCellCoordinate}
  * @param {goog.math.Coordinate} aCoord Coordinate object.
  * @param {boolean} aUp Whether to snap up, down otherwise.
  * @return {goog.math.Coordinate} Cell position.
@@ -839,7 +872,7 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.getCurrentCellSecondaryCoord_ =
 rflect.cal.ui.MainPaneSelectionMask.prototype.getComponent_ = function(
     aCellOrIndex, aBlockDependent) {
   var coord = 0;
-  if (this.isWeekOrAllday_())
+  if (this.isWeekOrAllDay())
     coord = aBlockDependent ? aCellOrIndex.x : aCellOrIndex.y;
   else
     coord = aBlockDependent ? aCellOrIndex.y : aCellOrIndex.x;
@@ -857,10 +890,10 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.getComponent_ = function(
  */
 rflect.cal.ui.MainPaneSelectionMask.prototype.getBlockPositionOrSize_ = function(
     aCellOrIndex, aPosition) {
-  var blockPool = this.isWeekOrAllday_() ? this.blockPoolWeek_ :
+  var blockPool = this.isWeekOrAllDay() ? this.blockPoolWeek_ :
       this.blockPoolMonth_;
   var index = typeof aCellOrIndex == 'number' ? aCellOrIndex :
-      (this.isWeekOrAllday_() ? aCellOrIndex.x : aCellOrIndex.y);
+      (this.isWeekOrAllDay() ? aCellOrIndex.x : aCellOrIndex.y);
   var block = blockPool.blocks[index];
   return aPosition ? block.position : block.size;
 };
@@ -1078,7 +1111,9 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.updateInternal = function(aStartCo
     }
   }
 
-  this.maskEl.innerHTML = this.build();
+  if (!this.virtual_) {
+    this.maskEl.innerHTML = this.build();
+  }
   this.calculateDates(startCoordForDate, endCoordForDate);
 
 };
@@ -1089,7 +1124,6 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.updateInternal = function(aStartCo
  * @param {goog.math.Coordinate|number} aMinCell Lesser of cells.
  * @param {goog.math.Coordinate|number=} opt_maxCell Greater of cells.
  * @param {boolean=} opt_hours Whether to treat cells as hours.
- * @protected
  * @override
  */
 rflect.cal.ui.MainPaneSelectionMask.prototype.calculateDates = function(aMinCell,
@@ -1111,9 +1145,9 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.calculateDates = function(aMinCell
     this.endDate.setTime(endEventTs);
 
   } else {
-    var minCell = this.getCellCoordinate_(
+    var minCell = this.getCellCoordinate(
         /**@type {goog.math.Coordinate}*/(aMinCell), false, true);
-    var maxCell = this.getCellCoordinate_(
+    var maxCell = this.getCellCoordinate(
         /**@type {goog.math.Coordinate}*/(opt_maxCell), false, true);
 
     rflect.cal.ui.MainPaneSelectionMask.superClass_.calculateDates
@@ -1121,3 +1155,19 @@ rflect.cal.ui.MainPaneSelectionMask.prototype.calculateDates = function(aMinCell
   }
 
 }
+
+
+/**
+ * @override
+ */
+rflect.cal.ui.MainPaneSelectionMask.prototype.disposeInternal = function() {
+  rflect.cal.ui.MainPaneSelectionMask.superClass_.disposeInternal.call(this);
+
+  this.initialized = false;
+  this.calendarEvent_ = null;
+  this.initialMove_ = false;
+  this.resizingByStart_ = false;
+  this.resizingByEnd_ = false;
+
+  this.maskEl = null;
+};

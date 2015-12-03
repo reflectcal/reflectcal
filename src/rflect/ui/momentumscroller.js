@@ -386,7 +386,7 @@ rflect.ui.MomentumScroller.prototype.onTouchStart = function(aEvent) {
     console.log('onTouchStart');
   // This will be shown in part 4.
   this.stopMomentum();
-  if (this.isDecelerating()) {
+  if (this.stopPropagationOnTouchEnd_) {
     aEvent.stopPropagation();
     aEvent.preventDefault();
   }

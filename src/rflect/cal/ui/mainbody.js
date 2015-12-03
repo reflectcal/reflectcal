@@ -446,9 +446,11 @@ rflect.cal.ui.MainBody.prototype.measureStaticSizes = function() {
 
     var allDayPaneSize = this.containerSizeMonitor_.isSmallScreen() ?
         new goog.math.Size(0, 0) :
-        goog.style.getSize(dom.getElement('main-pane-header-scrollable'));
+        goog.style.getSize(dom.getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE));
     var weekPaneSize = goog.style.getSize(
-        dom.getElement('main-pane-body-scrollable-wk'));
+        dom.getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_WK));
     //TODO(alexk): fix these pixels in layout
     var additionalPixelsWeek = 0;
 
@@ -769,9 +771,11 @@ rflect.cal.ui.MainBody.prototype.finalizeExpandedForBigScreen = function() {
  * Shows event pane when possible and lazily instantiates it at the first time.
  * @param {boolean} aShow Whether to show event pane.
  * @param {boolean=} opt_creatingNewEvent Whether we're creating new event.
+ * @param {boolean=} opt_creatingByTouchHold Whether we're creating event by
+ * touch hold.
  */
 rflect.cal.ui.MainBody.prototype.showEventPane = function(aShow,
-    opt_creatingNewEvent) {
+    opt_creatingNewEvent, opt_creatingByTouchHold) {
   if (!this.eventPane_) {
     this.eventPane_ = new rflect.cal.ui.EventPane(this.viewManager_,
         this.timeManager_, this.eventManager_,
@@ -787,6 +791,7 @@ rflect.cal.ui.MainBody.prototype.showEventPane = function(aShow,
   }
 
   this.eventPane_.setNewEventMode(opt_creatingNewEvent);
+  this.eventPane_.setTouchHoldMode(opt_creatingByTouchHold);
 
   this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this.eventPane_,
       aShow));

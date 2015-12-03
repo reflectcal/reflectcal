@@ -24,9 +24,12 @@ goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.predefined.chips');
 goog.require('rflect.cal.Transport.EventTypes');
 goog.require('rflect.cal.ui.TimeMarker');
+goog.require('rflect.cal.ui.TouchHoldEventCreator');
 goog.require('rflect.cal.ui.EditDialog');
 goog.require('rflect.cal.ui.SaveDialog');
 goog.require('rflect.cal.ui.VMAdaptiveSizeHelper');
+goog.require('rflect.events.TouchHoldHelper');
+goog.require('rflect.events.TouchHoldHelper.EventType');
 goog.require('rflect.string');
 goog.require('rflect.ui.Component');
 goog.require('rflect.ui.MomentumScroller');
@@ -111,6 +114,20 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
   this.timeMarker_ = new rflect.cal.ui.TimeMarker(aViewManager, aTimeManager);
 
   /**
+   * Touch hold helper.
+   * @type {rflect.events.TouchHoldHelper}
+   * @private
+   */
+  this.touchHoldHelper_ = new rflect.events.TouchHoldHelper();
+  this.touchHoldHelper_.addListenableElementId(rflect.cal.predefined.MainPane.
+      ELEMENT_ID.TOUCH_HOLD_WRAPPER_WK);
+  this.touchHoldHelper_.addListenableElementId(rflect.cal.predefined.MainPane.
+      ELEMENT_ID.TOUCH_HOLD_WRAPPER_MN);
+  this.touchHoldHelper_.addListenableElementId(rflect.cal.predefined.MainPane.
+      ELEMENT_ID.TOUCH_HOLD_WRAPPER_AD);
+
+
+  /**
    * Main pane builder.
    * @type {rflect.cal.ui.MainPaneBuilder}
    * @private
@@ -121,18 +138,6 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
       this.containerSizeMonitor_, this.navigator_, this.timeMarker_);
   if (goog.DEBUG)
     _inspect('mainPaneBuilder', this.mainPaneBuilder_);
-
-
-  /**
-   * Selection mask.
-   * @type {rflect.cal.ui.MainPaneSelectionMask}
-   * @private
-   */
-  this.selectionMask_ = new rflect.cal.ui.MainPaneSelectionMask(aViewManager, this,
-      aTimeManager, this.blockManager_.blockPoolWeek,
-      this.blockManager_.blockPoolAllDay, this.blockManager_.blockPoolMonth);
-  if (goog.DEBUG)
-    _inspect('selectionMask', this.selectionMask_);
 
   /**
    * @type {rflect.cal.ui.MainBodyAdaptiveSizeHelper}
@@ -181,7 +186,7 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
    * @private
    */
   this.scrollListenersKeys_ = [];
-  
+
   /**
    * Mouse over registry.
    * @type {rflect.ui.MouseOverRegistry}
@@ -215,12 +220,34 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
   if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
     this.momentumScroller_ = new rflect.ui.MomentumScroller();
   }
+
+  /**
+   * Selection mask.
+   * @type {rflect.cal.ui.MainPaneSelectionMask}
+   * @private
+   */
+  this.selectionMask_ = new rflect.cal.ui.MainPaneSelectionMask(aViewManager,
+      this, aTimeManager, this.blockManager_.blockPoolWeek,
+      this.blockManager_.blockPoolAllDay, this.blockManager_.blockPoolMonth,
+      this.momentumScroller_, false);
+  if (goog.DEBUG)
+    _inspect('selectionMask', this.selectionMask_);
+
+  /**
+   * Touch hold event creator.
+   * @type {rflect.cal.ui.TouchHoldEventCreator}
+   * @private
+   */
+  this.touchHoldEventCreator_ = new rflect.cal.ui.TouchHoldEventCreator(
+      this.viewManager_, aTimeManager, this, this.eventManager_,
+      this.blockManager_.blockPoolWeek, this.blockManager_.blockPoolAllDay,
+      this.blockManager_.blockPoolMonth, this.momentumScroller_);
 };
 goog.inherits(rflect.cal.ui.MainPane, rflect.ui.Component);
 
 
 /**
- * Distance that is allowed to be event chip and trigger click on it, which 
+ * Distance that is allowed to be event chip and trigger click on it, which
  * shows event pane.
  * @type {number}
  */
@@ -381,9 +408,11 @@ rflect.cal.ui.MainPane.prototype.setScrollEnabled = function(aEnabled) {
 
   if (this.viewManager_.isInWeekMode()) {
     frameElements.push(this.getDomHelper().
-        getElement('main-pane-header-scrollable'));
+        getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE));
     frameElements.push(this.getDomHelper().
-        getElement('main-pane-body-scrollable-wk'));
+        getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_WK));
   } else if (this.viewManager_.isInMonthMode()) {
     frameElements.push(this.getDomHelper().
         getElement('main-pane-body-scrollable-mn'));
@@ -507,6 +536,8 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
     this.removeMomentumScroller();
   }
 
+  this.touchHoldHelper_.dispose();
+
   if (opt_updateByNavigation && !rflect.TOUCH_INTERFACE_ENABLED){
     var scrollTop = this.getHandyScrollTopPosition_();
     this.blockManager_.blockPoolWeek.scrollTop =
@@ -547,13 +578,16 @@ rflect.cal.ui.MainPane.prototype.addScrollListeners_ = function() {
   if (this.viewManager_.isInWeekMode()) {
 
     this.scrollListenersKeys_.push(goog.events.listen(
-        this.getDomHelper().getElement('main-pane-body-scrollable-wk'),
+        this.getDomHelper().getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_WK),
         goog.events.EventType.SCROLL, this.onMainPaneScrollableScroll_, false,
         this));
     if (!this.containerSizeMonitor_.isSmallScreen() &&
         this.blockManager_.blockPoolAllDay.expanded)
       this.scrollListenersKeys_.push(goog.events.listen(
-          this.getDomHelper().getElement('main-pane-header-scrollable'),
+          this.getDomHelper().getElement(
+          rflect.cal.predefined.MainPane.ELEMENT_ID.
+              MAIN_PANE_HEADER_SCROLLABLE),
           goog.events.EventType.SCROLL, this.onMainPaneScrollableScroll_, false,
           this));
   } else if (this.viewManager_.isInMonthMode()) {
@@ -585,7 +619,8 @@ rflect.cal.ui.MainPane.prototype.removeScrollListeners_ = function() {
  * Removes scroll listeners on each update.
  */
 rflect.cal.ui.MainPane.prototype.removeMomentumScroller = function() {
-  var elementWk = this.getDomHelper().getElement('grid-table-cont');
+  var elementWk = this.getDomHelper().getElement(
+      rflect.cal.predefined.MainPane.ELEMENT_ID.GRID_TABLE_CONT);
   var elementMn = this.getDomHelper().getElement('grid-table-wrapper-outer');
 
   if (this.viewManager_.isInWeekMode() && elementWk){
@@ -645,9 +680,11 @@ rflect.cal.ui.MainPane.prototype.addMomentumScroller = function() {
   var scrollTop = this.getHandyScrollTopPosition_();
 
   if (this.viewManager_.isInWeekMode()) {
-    element = this.getDomHelper().getElement('grid-table-cont');
+    element = this.getDomHelper().getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.GRID_TABLE_CONT);
     frameElement = this.getDomHelper()
-        .getElement('main-pane-body-scrollable-wk');
+        .getElement(
+            rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_WK);
   } else if (this.viewManager_.isInMonthMode()) {
     element = this.getDomHelper().getElement('grid-table-wrapper-outer');
     frameElement = this.getDomHelper()
@@ -701,7 +738,7 @@ rflect.cal.ui.MainPane.prototype.updateByRedraw = function(opt_deep,
   if (rflect.ARTIFICIAL_SCROLLER_ENABLED && !opt_doNotAddMomentumScroller) {
     this.addMomentumScroller();
   }
-
+  this.touchHoldHelper_.handleTouchEvents();
 };
 
 
@@ -717,7 +754,8 @@ rflect.cal.ui.MainPane.prototype.getStaticSize = function() {
     let firstScrollable;
     if (this.viewManager_.isInWeekMode()) {
       firstScrollable = this.getDomHelper().
-          getElement('main-pane-header-scrollable');
+          getElement(rflect.cal.predefined.MainPane.ELEMENT_ID.
+              MAIN_PANE_HEADER_SCROLLABLE);
 
       if (!firstScrollable) {
         firstScrollable = this.getDomHelper().
@@ -759,7 +797,8 @@ rflect.cal.ui.MainPane.prototype.updateScrollableSizes = function() {
     this.gridSize.height =
         rflect.cal.predefined.WEEK_SCROLLABLE_DEFAULT_SIZE.height;
 
-    this.alldayGridContainerSize.height = this.containerSizeMonitor_.isSmallScreen() ?
+    this.alldayGridContainerSize.height =
+        this.containerSizeMonitor_.isSmallScreen() ?
         0 : rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE.height;
     this.alldayGridSize = this.alldayGridContainerSize.clone();
 
@@ -824,13 +863,15 @@ rflect.cal.ui.MainPane.prototype.updateScrollableSizesAndDom = function() {
     if (this.viewManager_.isInWeekMode()) {
 
       let headerScrollable = this.getDomHelper().
-          getElement('main-pane-header-scrollable');
+          getElement(rflect.cal.predefined.MainPane.ELEMENT_ID.
+              MAIN_PANE_HEADER_SCROLLABLE);
       let allDayEventsGrid = this.getDomHelper().
           getElement('alldayevents-grid');
       let weekmodeDaynamesTable = this.getDomHelper().
           getElement('weekmode-daynames-table');
       let mainScrollable = this.getDomHelper().
-          getElement('main-pane-body-scrollable-wk');
+          getElement(rflect.cal.predefined.MainPane.ELEMENT_ID.
+              MAIN_PANE_BODY_SCROLLABLE_WK);
 
       if (headerScrollable) {
         headerScrollable.style.height = this.alldayGridContainerSize.height +
@@ -916,9 +957,11 @@ rflect.cal.ui.MainPane.prototype.restoreOffsetsOfScrollables_ =
   // Return to previous scrollTop, scrollLeft values, if any.
   if (this.viewManager_.isInWeekMode()) {
     var headerScrollable =
-        this.getDomHelper().getElement('main-pane-header-scrollable');
+        this.getDomHelper().getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE);
     var mainScrollable =
-        this.getDomHelper().getElement('main-pane-body-scrollable-wk');
+        this.getDomHelper().getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_WK);
 
     if (this.blockManager_.blockPoolWeek.expanded)
       mainScrollable.scrollLeft =
@@ -1082,8 +1125,13 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this);
 
-  this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
-      this.onClick_, false, this);
+  this.getHandler().
+      listen(this.getElement(), goog.events.EventType.CLICK,
+      this.onClick_, false, this).
+      listen(this.getElement(), rflect.events.TouchHoldHelper.EventType.
+      TOUCHHOLD, this.onTouchHold_, false, this).
+      listen(this.getElement(), rflect.events.TouchHoldHelper.EventType.
+      TOUCHHOLDEND, this.onTouchHoldEnd_, false, this);
 
   //Mouse events.
   if (!rflect.TOUCH_INTERFACE_ENABLED) {
@@ -1209,7 +1257,8 @@ rflect.cal.ui.MainPane.prototype.onClick_ = function(aEvent) {
     this.updateByRedraw();
 
   } else if ((this.isChipOrChild_(className) || this.isGrip_(className)) &&
-      !this.selectionMask_.wasDragged()) {
+      !this.selectionMask_.wasDragged() &&
+      !this.touchHoldHelper_.getTouchHoldWasFired()) {
 
     this.showEventEditComponent_(target, className,
         rflect.TOUCH_INTERFACE_ENABLED);
@@ -1235,19 +1284,53 @@ rflect.cal.ui.MainPane.prototype.onTouchStart_ = function(aEvent) {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.onTouchEnd_ = function(aEvent) {
+  if (!this.touchHoldHelper_.getTouchHoldWasFired()) {
+    this.onTouchEndInternal_(aEvent);
+  }
+};
+
+
+rflect.cal.ui.MainPane.prototype.onTouchEndInternal_ = function(aEvent) {
   var target = /** @type {Element}*/ (aEvent.target);
   var id = target.id;
   var className = target.className;
-
-//  rflect.ui.clickBuster.preventGhostClick(aEvent);
-
+          if (goog.DEBUG)
+            console.log('className: ', className);
   if ((this.isChipOrChild_(className) || this.isGrip_(className)) &&
       !this.selectionMask_.wasDragged() && !this.touchWasMoved(aEvent)) {
 
     this.showEventEditComponent_(target, className, true);
 
   }
-};
+}
+
+
+/**
+ * Main pane touch hold handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.onTouchHold_ = function(aEvent) {
+  if (goog.DEBUG)
+    console.log('onTouchHold_ called');
+  this.touchHoldEventCreator_.onTouchHoldDelegate(aEvent);
+  this.removeMomentumScroller();
+}
+
+
+/**
+ * Main pane touch hold end handler.
+ * @param {goog.events.Event} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.onTouchHoldEnd_ = function(aEvent) {
+  if (goog.DEBUG)
+      console.log('onTouchHoldEnd_ called');
+  if (this.eventManager_.eventHolder.isInProgress()) {
+    this.getParent().showEventPane(true, true, true);
+  }
+}
+
 
 
 /**
@@ -1649,11 +1732,10 @@ rflect.cal.ui.MainPane.prototype.switchView_ = function(aDate, aType) {
 /**
  * @param {string} aClassName Class name of element to test whether it indicates
  * of week grid.
- * @private
  * @return {boolean} For week mode, whether class name indicates that this is a
  * week grid.
  */
-rflect.cal.ui.MainPane.prototype.isWeekGrid_ = function(aClassName) {
+rflect.cal.ui.MainPane.prototype.isWeekGrid = function(aClassName) {
   var weekGridRe_ = this.weekGridRe_ || (this.weekGridRe_ =
       rflect.string.buildClassNameRe(goog.getCssName('wk-events-layer'),
       goog.getCssName('expand-sign-wk-cont'),
@@ -1671,11 +1753,10 @@ rflect.cal.ui.MainPane.prototype.isWeekGrid_ = function(aClassName) {
 /**
  * @param {string} aClassName Class name of element to test whether it indicates
  * of allday grid.
- * @private
  * @return {boolean} For week mode, whether class name indicates that this is an
  * allday grid.
  */
-rflect.cal.ui.MainPane.prototype.isAlldayGrid_ = function(aClassName) {
+rflect.cal.ui.MainPane.prototype.isAlldayGrid = function(aClassName) {
   var alldayGridRe_ = this.alldayGridRe_ || (this.alldayGridRe_ =
       rflect.string.buildClassNameRe(
       goog.getCssName('wk-ad-events-layer'),
@@ -1689,10 +1770,9 @@ rflect.cal.ui.MainPane.prototype.isAlldayGrid_ = function(aClassName) {
 
 /**
  * @param {string} aClassName Class name of element.
- * @private
  * @return {boolean} Whether this is a month grid.
  */
-rflect.cal.ui.MainPane.prototype.isMonthGrid_ = function(aClassName) {
+rflect.cal.ui.MainPane.prototype.isMonthGrid = function(aClassName) {
   var monthGridRe_ = this.monthGridRe_ || (this.monthGridRe_ =
       rflect.string.buildClassNameRe(
       goog.getCssName('mn-events-layer'),
@@ -1922,7 +2002,7 @@ rflect.cal.ui.MainPane.prototype.onMouseDown_ = function(aEvent) {
   var preventDefaultIsNeeded = false;
   var maskConfiguration;
   // Whether we clicked on hollow space.
-  if (this.isWeekGrid_(className)) {
+  if (this.isWeekGrid(className)) {
 
     this.selectionMask_.init(
         maskConfiguration = /**@type {number}*/
@@ -1931,7 +2011,7 @@ rflect.cal.ui.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
     preventDefaultIsNeeded = true;
 
-  } else if (this.isAlldayGrid_(className)) {
+  } else if (this.isAlldayGrid(className)) {
 
     this.selectionMask_.init(
         maskConfiguration = /**@type {number}*/
@@ -1940,7 +2020,7 @@ rflect.cal.ui.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
     preventDefaultIsNeeded = true;
 
-  } else if (this.isMonthGrid_(className)) {
+  } else if (this.isMonthGrid(className)) {
 
     if (!this.isDaynumLabel_(className))
       this.selectionMask_.init(
@@ -2056,9 +2136,10 @@ rflect.cal.ui.MainPane.prototype.endChipDrag_ = function() {
       this.selectionMask_.startDate);
   this.eventManager_.eventHolder.setEndDate(
       this.selectionMask_.endDate);
-  this.eventManager_.eventHolder.endWithEdit();
-  this.transport_.saveEventAsync(
-      this.eventManager_.eventHolder.getCurrentEvent());
+  this.eventManager_.setLastUsedCalendarId(
+      this.eventManager_.eventHolder.getCurrentEvent().calendarId);
+
+  this.transport_.saveEventAsync(this.eventManager_.eventHolder.endWithEdit());
   this.updateAfterSave_();
 }
 
@@ -2072,8 +2153,8 @@ rflect.cal.ui.MainPane.prototype.onSelectStart_ = function(aEvent) {
   var className = aEvent.target.className;
 
   // Whether we clicked on grid space.
-  if (this.isWeekGrid_(className) || this.isAlldayGrid_(className) ||
-      this.isMonthGrid_(className))
+  if (this.isWeekGrid(className) || this.isAlldayGrid(className) ||
+      this.isMonthGrid(className))
     aEvent.preventDefault();
 };
 
@@ -2104,9 +2185,10 @@ rflect.cal.ui.MainPane.prototype.onSaveDialogButtonSelect_ = function(aEvent) {
         this.saveDialog_.getEventName());
     this.eventManager_.eventHolder.setCalendarId(
         this.saveDialog_.getCalendarId());
-    this.eventManager_.eventHolder.endWithAdd();
-    this.transport_.saveEventAsync(
-        this.eventManager_.eventHolder.getCurrentEvent());
+    this.eventManager_.setLastUsedCalendarId(
+        this.eventManager_.eventHolder.getCurrentEvent().calendarId);
+
+    this.transport_.saveEventAsync(this.eventManager_.eventHolder.endWithAdd());
     this.updateAfterSave_();
   } else if (aEvent.key != this.saveDialog_.getButtonSet().getCancel()) {
     //Edit button.
@@ -2139,10 +2221,8 @@ rflect.cal.ui.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
   } else if (aEvent.key != this.editDialog_.getButtonSet().getCancel()) {
     // The only spare button - delete.
 
-    this.eventManager_.eventHolder.endWithDelete();
-
     this.transport_.deleteEventAsync(
-        this.eventManager_.eventHolder.getBackUpEvent());
+        this.eventManager_.eventHolder.endWithDelete());
 
     this.updateAfterDelete_();
   }
@@ -2182,7 +2262,7 @@ rflect.cal.ui.MainPane.prototype.onMainPaneScrollableScroll_ =
     scrollTop = scrollable.scrollTop;
 
     if (scrollable ==
-        this.getDomHelper().getElement('main-pane-header-scrollable')) {
+        this.getDomHelper().getElement(rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE)) {
 
       this.blockManager_.blockPoolAllDay.scrollTop = scrollTop;
 
@@ -2196,7 +2276,8 @@ rflect.cal.ui.MainPane.prototype.onMainPaneScrollableScroll_ =
 
         this.getDomHelper().getElement('weekmode-daynames-table').style.left =
             '-' + scrollLeft + 'px';
-        this.getDomHelper().getElement('main-pane-header-scrollable')
+        this.getDomHelper().getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE)
             .scrollLeft = scrollLeft;
       }
     }
@@ -2236,6 +2317,8 @@ rflect.cal.ui.MainPane.prototype.disposeInternal = function() {
 
   if (rflect.TOUCH_INTERFACE_ENABLED)
     this.momentumScroller_.dispose();
+
+  this.touchHoldHelper_.dispose();
 
   rflect.cal.ui.MainPane.superClass_.disposeInternal.call(this);
 };

@@ -218,6 +218,7 @@
     background-position: 300px;
   }
 }
+
 @keyframes background-move {
   from {
     background-position: 0;
@@ -226,4 +227,104 @@
   to {
     background-position: 300px;
   }
+}
+
+@keyframes bounce-appearance-wk {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.06);
+  }
+
+  50% {
+    transform: scale(0.94);
+  }
+
+  75% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@-webkit-keyframes bounce-appearance-wk {
+  0% {
+    -webkit-transform: scale(1);
+  }
+
+  25% {
+    -webkit-transform: scale(1.06);
+  }
+
+  50% {
+    -webkit-transform: scale(0.94);
+  }
+
+  75% {
+    -webkit-transform: scale(1.02);
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes bounce-appearance-mn {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.5);
+  }
+
+  50% {
+    transform: scale(0.94);
+  }
+
+  75% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@-webkit-keyframes bounce-appearance-mn {
+  0% {
+    -webkit-transform: scale(1);
+  }
+
+  25% {
+    -webkit-transform: scale(1.5);
+  }
+
+  50% {
+    -webkit-transform: scale(0.94);
+  }
+
+  75% {
+    -webkit-transform: scale(1.2);
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+  }
+}
+
+.event-appearance-wk {
+  z-index: 10000;
+  -webkit-animation: bounce-appearance-wk 400ms linear 1;
+  animation: bounce-appearance-wk 400ms linear 1;
+}
+
+.event-appearance-mn {
+  z-index: 10000;
+  -webkit-animation: bounce-appearance-mn 400ms linear 1;
+  animation: bounce-appearance-mn 400ms linear 1;
 }
