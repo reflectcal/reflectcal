@@ -19,6 +19,7 @@ goog.require('goog.style');
 goog.require('rflect.browser.transitionend');
 goog.require('rflect.browser.cssmatrix');
 goog.require('rflect.browser.css');
+goog.require('rflect.math');
 
 
 
@@ -73,6 +74,13 @@ rflect.ui.MomentumScroller.QUEUED_TRANSITION_STAGE = {
   BOUNCED_OUT: 1,
   BOUNCED_BACK: 2
 };
+
+
+/**
+ * Maximum velocity for momentum.
+ * @type {number}
+ */
+rflect.ui.MomentumScroller.MAXIMUM_VELOCITY = 3.5;
 
 
 /**
@@ -378,7 +386,7 @@ rflect.ui.MomentumScroller.prototype.onTouchStart = function(aEvent) {
     console.log('onTouchStart');
   // This will be shown in part 4.
   this.stopMomentum();
-  if (this.isDecelerating()) {
+  if (this.stopPropagationOnTouchEnd_) {
     aEvent.stopPropagation();
     aEvent.preventDefault();
   }
@@ -403,6 +411,17 @@ rflect.ui.MomentumScroller.prototype.onTouchMove = function(aEvent) {
   if (this.isDragging()) {
     var currentY = aEvent.getBrowserEvent().touches[0].clientY;
     var deltaY = currentY - this.startTouchY;
+
+    if (goog.DEBUG)
+      console.log('deltaY before: ', deltaY);
+    if (goog.DEBUG)
+        console.log('this.isOutOfBounds(): ', this.isOutOfBounds());
+    if (this.isOutOfBounds()) {
+      deltaY /= Math.exp(Math.abs(deltaY/550))
+    }
+    if (goog.DEBUG)
+      console.log('deltaY: after', deltaY);
+
     var newY = deltaY + this.contentStartOffsetY;
 
     this.previousPoint_ = this.currentPoint_;
@@ -827,7 +846,26 @@ rflect.ui.MomentumScroller.prototype.stopMomentum = function() {
 rflect.ui.MomentumScroller.prototype.getEndVelocity = function() {
   var velocity = (this.currentPoint_ - this.previousPoint_) / (
       this.currentMoment_ - this.previousMoment_);
-  return isNaN(velocity) ? 0 : velocity;
+  if (goog.DEBUG)
+    console.log('previousMoment_: ', this.previousMoment_);
+  if (goog.DEBUG)
+        console.log('currentMoment_: ', this.currentMoment_);
+  if (goog.DEBUG)
+        console.log('velocity: ', velocity);
+  var velocitySign = rflect.math.sign(this.currentPoint_ - this.previousPoint_);
+  if (goog.DEBUG)
+    console.log('velocitySign: ', velocitySign);
+  var cappedVelocity = Math.abs(velocity) >
+      rflect.ui.MomentumScroller.MAXIMUM_VELOCITY ? velocitySign *
+      rflect.ui.MomentumScroller.MAXIMUM_VELOCITY :
+      velocity;
+  if (goog.DEBUG)
+        console.log('cappedVelocity: ', cappedVelocity);
+  return isNaN(velocity) ? velocitySign *
+      rflect.ui.MomentumScroller.MAXIMUM_VELOCITY : (Math.abs(velocity) >
+          rflect.ui.MomentumScroller.MAXIMUM_VELOCITY ? velocitySign *
+          rflect.ui.MomentumScroller.MAXIMUM_VELOCITY :
+          velocity);
 }
 
 
@@ -848,4 +886,5 @@ rflect.ui.MomentumScroller.prototype.disposeInternal = function() {
   this.enable(false);
 
   rflect.ui.MomentumScroller.superClass_.disposeInternal.call(this);
+
 };

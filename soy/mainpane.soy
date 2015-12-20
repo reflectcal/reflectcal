@@ -43,42 +43,46 @@
             {$dayNamesHTML}
           </div>
         </div>
-        <div id="main-pane-header-scrollable"
+        <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE}"
              class="{if $allDayExpanded}mphs-scroll-vert-on{else}mphs-scroll-vert-off{/if}{sp}{if $weekPoolExpanded}mphs-scroll-horz-on{else}mphs-scroll-horz-off{/if}"
              style="
              {if not $isScrollEnabled}overflow:hidden;{/if}
              height:{$allDayGridContainerHeight}px;margin-right:{if $allDayExpanded}0{else}{$navigatorScrollBarWidth - 1}{/if}px">
-          <div id="alldayevents-grid-wrapper">
-            <div id="alldayevents-grid" style="height:{$allDayGridHeight}px;width:{$allDayGridWidth}%">
-              {if not $firstBuild}
-              <div id="wk-ad-mask-cnt"></div>
-                {$weekGridAdColsHTML}
-              {/if}
+          <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.ALL_DAY_EVENTS_GRID_WRAPPER}">
+            <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.TOUCH_HOLD_WRAPPER_AD}" class="touch-hold-wrapper">
+              <div id="alldayevents-grid" style="height:{$allDayGridHeight}px;width:{$allDayGridWidth}%">
+                {if not $firstBuild}
+                <div id="wk-ad-mask-cnt"></div>
+                  {$weekGridAdColsHTML}
+                {/if}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
     {/if}
-    <div id="main-pane-body-scrollable-wk" style="
+    <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_WK}" style="
         {if not $isScrollEnabled}overflow:hidden;{/if}
         height:{$gridContainerHeight}px"
         class="{if $weekPoolExpanded}mpbs-wk-scroll-horz-on{else}mpbs-wk-scroll-horz-off{/if}">
       {if not $firstBuild}
-      <div id="grid-table-cont">
-        <div id="hours-container">
-          {$timeMarkerHeadHTML}
-          {$hourRowsHTML}
-        </div>
-        <div id="grid-table-wrapper-wk">
-          <div id="grid-rows-container" class="wk-grid-rows-cont"
-               style="width:{$gridWidth}%">
-            {$weekGridRowsHTML}
+      <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.GRID_TABLE_CONT}">
+        <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.TOUCH_HOLD_WRAPPER_WK}" class="touch-hold-wrapper">
+          <div id="hours-container">
+            {$timeMarkerHeadHTML}
+            {$hourRowsHTML}
           </div>
-          <div class="grid-table-wk-outer" style="width:{$gridWidth}%">
-            <div id="grid-table-wk" class="grid-table-wk">
-              <div id="wk-mask-cnt"></div>
-              {$weekGridColsHTML}
+          <div id="grid-table-wrapper-wk">
+            <div id="grid-rows-container" class="wk-grid-rows-cont"
+                 style="width:{$gridWidth}%">
+              {$weekGridRowsHTML}
+            </div>
+            <div class="grid-table-wk-outer" style="width:{$gridWidth}%">
+              <div id="grid-table-wk" class="grid-table-wk">
+                <div id="wk-mask-cnt"></div>
+                {$weekGridColsHTML}
+              </div>
             </div>
           </div>
         </div>
@@ -173,38 +177,40 @@
         </table>
       </div>
       {/if}
-      <div id="main-pane-body-scrollable-mn"
+      <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_MN}"
           class="main-pane-body-scrollable-mn{sp}{if $monthPoolExpanded}mpbs-mn-scroll-vert-on{else}mpbs-mn-scroll-vert-off{/if}"
           style="{if not $isScrollEnabled}overflow:hidden;{/if}">
 
-        <div id="grid-table-wrapper-outer" style="height:{$gridHeight}px;">
-          {if not $firstBuild}
-          <div id="weeknum-cont">
-            <table id="weeknums" cellpadding="0" cellspacing="0">
-              <tbody>
-                {$weekNumsHTML}
-              </tbody>
-            </table>
-          </div>
-          <div id="grid-table-wrapper-mn">
-            <div id="mn-mask-cnt"></div>
-            <div id="grid-cols-container" class="mn-grid-cols-cont">
-              <table id="grid-cols-cont-inner" cellpadding="0" cellspacing="0">
+        <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.GRID_TABLE_WRAPPER_OUTER}" style="height:{$gridHeight}px;">
+          <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.TOUCH_HOLD_WRAPPER_MN}" class="touch-hold-wrapper">
+            {if not $firstBuild}
+            <div id="weeknum-cont">
+              <table id="weeknums" cellpadding="0" cellspacing="0">
                 <tbody>
-                <tr>
-                  {$monthGridColsHTML}
-                </tr>
+                  {$weekNumsHTML}
                 </tbody>
               </table>
             </div>
-            <table id="grid-table-mn" class="grid-table-mn" cellpadding="0"
-                   cellspacing="0">
-              <tbody>
-                {$monthGridRowsHTML}
-              </tbody>
-            </table>
+            <div id="grid-table-wrapper-mn">
+              <div id="mn-mask-cnt"></div>
+              <div id="grid-cols-container" class="mn-grid-cols-cont">
+                <table id="grid-cols-cont-inner" cellpadding="0" cellspacing="0">
+                  <tbody>
+                  <tr>
+                    {$monthGridColsHTML}
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <table id="grid-table-mn" class="grid-table-mn" cellpadding="0"
+                     cellspacing="0">
+                <tbody>
+                  {$monthGridRowsHTML}
+                </tbody>
+              </table>
+            </div>
+            {/if}
           </div>
-          {/if}
         </div>
       </div>
     </div>

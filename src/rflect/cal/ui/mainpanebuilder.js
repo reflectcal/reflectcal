@@ -365,7 +365,7 @@ rflect.cal.ui.MainPaneBuilder.buildAdBlockChips_ =
       chipCounter++) {
     if (chip = aChips[chipCounter]) {
       // Zero parameters because they are currently irrelevant for month chip.
-      str += rflect.cal.ui.MainPaneBuilder.buildMonthBlockChip_(
+      str += rflect.cal.ui.MainPaneBuilder.buildMonthBlockChip(
           aEventManager, chip, 0, chipCounter, 0, true);
     }
   }
@@ -544,10 +544,9 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekGridCols_ = function() {
  * @param {number} aTotalCols How many cols are in this chip's blob.
  * @param {number} aStartCol In which col chip starts.
  * @param {number} aColSpan How many cols chip spans.
- * @private
  * @return {string}
  */
-rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip_ =
+rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip =
     function(aEventManager, aChip, aTotalCols, aStartCol,
     aColSpan) {
   var pixelStart = aChip.start * rflect.cal.predefined.HOUR_ROW_HEIGHT / 30;
@@ -603,10 +602,9 @@ rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip_ =
  * @param {number} aStartCol In which col chip starts.
  * @param {number} aColSpan How many cols chip spans.
  * @param {boolean=} opt_allDay Whether this is all-day chip.
- * @private
  * @return {string}
  */
-rflect.cal.ui.MainPaneBuilder.buildMonthBlockChip_ =
+rflect.cal.ui.MainPaneBuilder.buildMonthBlockChip =
     function(aEventManager, aChip, aTotalCols, aStartCol,
     aColSpan, opt_allDay) {
   return rflect.cal.ui.soy.mainpane.monthChip({
@@ -656,7 +654,7 @@ rflect.cal.ui.MainPaneBuilder.buildWeekChipsTimeLabel_ = function(aChip,
 rflect.cal.ui.MainPaneBuilder.prototype.buildWeekBlockChips_ =
     function(aBlock) {
   return rflect.cal.ui.MainPaneBuilder.buildChips_(this.eventManager_, aBlock,
-      rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip_);
+      rflect.cal.ui.MainPaneBuilder.buildWeekBlockChip);
 }
 
 
@@ -669,7 +667,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildWeekBlockChips_ =
 rflect.cal.ui.MainPaneBuilder.prototype.buildMonthBlockChips_ =
     function(aBlock) {
   return rflect.cal.ui.MainPaneBuilder.buildChips_(this.eventManager_, aBlock,
-      rflect.cal.ui.MainPaneBuilder.buildMonthBlockChip_);
+      rflect.cal.ui.MainPaneBuilder.buildMonthBlockChip);
 }
 
 

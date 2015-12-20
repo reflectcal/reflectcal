@@ -242,35 +242,63 @@ rflect.cal.events.EventHolder.prototype.getCurrentEvent =
 
 
 /**
+ * @return {boolean} Whether we're doing some operation.
+ */
+rflect.cal.events.EventHolder.prototype.isInProgress =
+    function() {
+  return !!this.newTemporaryEvent_;
+}
+
+
+/**
  * Ends event creation with adding new event.
+ * @return {rflect.cal.events.Event}
  */
 rflect.cal.events.EventHolder.prototype.endWithAdd = function() {
   this.eventManager_.addEvent(this.newTemporaryEvent_);
   //TODO(alexk): use back up id here
+  return this.getAndNullifyTemporaryEvent_();
 }
 
 
 /**
  * Ends event creation.
+ * @return {rflect.cal.events.Event}
  */
 rflect.cal.events.EventHolder.prototype.endWithEdit = function() {
   if (this.backUpEvent_) {
     this.eventManager_.deleteEvent(this.backUpEvent_);
     this.eventManager_.addEvent(this.newTemporaryEvent_);
-  } else
-  // Edit without specifying event at the beginning is effectively equals to
-  // add.
-    this.endWithAdd();
+    return this.getAndNullifyTemporaryEvent_();
+  } else {
+    // Edit without specifying event at the beginning is effectively equals to
+    // add.
+    return this.endWithAdd();
+  }
 }
 
 
 /**
  * Ends event creation.
+ * @return {rflect.cal.events.Event}
  */
 rflect.cal.events.EventHolder.prototype.endWithDelete = function() {
   if (this.backUpEvent_) {
     this.eventManager_.deleteEvent(this.backUpEvent_);
+    let backUpEvent = this.backUpEvent_;
+    this.backUpEvent_ = null;
+    return backUpEvent;
   }
+  return null;
 }
 
 
+/**
+ * @return {rflect.cal.events.Event}
+ */
+rflect.cal.events.EventHolder.prototype.getAndNullifyTemporaryEvent_ =
+    function() {
+  let newTemporaryEvent = this.newTemporaryEvent_;
+  this.newTemporaryEvent_ = null;
+  return newTemporaryEvent;
+}

@@ -14,6 +14,7 @@ goog.require('goog.math.Size');
 
 goog.provide('rflect.cal.predefined');
 goog.provide('rflect.cal.predefined.chips');
+goog.provide('rflect.cal.predefined.MainPane.ELEMENT_ID');
 
 
 //TODO(alexk): much of this file will go to cfg
@@ -842,3 +843,22 @@ rflect.cal.predefined.CALENDAR_COLOR_CHECKBOX_PREFIX = 'calitem-color-item';
  * @const
  */
 rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX = 'cal-list';
+
+
+/**
+ * @enum {string}
+ */
+rflect.cal.predefined.MainPane.ELEMENT_ID = {
+  //Week grid.
+  MAIN_PANE_BODY_SCROLLABLE_WK: 'main-pane-body-scrollable-wk',
+  GRID_TABLE_CONT: 'grid-table-cont',
+  TOUCH_HOLD_WRAPPER_WK: 'touch-hold-wrapper-wk',
+  //Month grid.
+  MAIN_PANE_BODY_SCROLLABLE_MN: 'main-pane-body-scrollable-mn',
+  GRID_TABLE_WRAPPER_OUTER: 'grid-table-wrapper-outer',
+  TOUCH_HOLD_WRAPPER_MN: 'touch-hold-wrapper-mn',
+  //All-day grid.
+  MAIN_PANE_HEADER_SCROLLABLE: 'main-pane-header-scrollable',
+  ALL_DAY_EVENTS_GRID_WRAPPER: 'alldayevents-grid-wrapper',
+  TOUCH_HOLD_WRAPPER_AD: 'touch-hold-wrapper-ad'
+}

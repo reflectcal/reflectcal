@@ -9,6 +9,7 @@
 
 goog.provide('rflect.cal.ui.SelectionMask');
 
+goog.require('goog.Disposable');
 goog.require('goog.functions');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Rect');
@@ -24,8 +25,11 @@ goog.require('rflect.cal.predefined');
  * that owns selection mask.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @constructor
+ * @extends {goog.Disposable}
  */
 rflect.cal.ui.SelectionMask = function(aViewManager, aComponent, aTimeManager) {
+  goog.Disposable.call(this);
+
   /**
    * Link to view manager.
    * @type {rflect.cal.ViewManager}
@@ -54,6 +58,7 @@ rflect.cal.ui.SelectionMask = function(aViewManager, aComponent, aTimeManager) {
    */
   this.rects = [];
 };
+goog.inherits(rflect.cal.ui.SelectionMask, goog.Disposable);
 
 
 /**
@@ -183,7 +188,6 @@ rflect.cal.ui.SelectionMask.prototype.compareCells_ = function(aCellA, aCellB){
  * @param {goog.math.Coordinate} aCellA First cell to compare.
  * @param {goog.math.Coordinate} aCellB Second cell to compare.
  * @return {goog.math.Coordinate} Maximal of given cells.
- * @protected
  */
 rflect.cal.ui.SelectionMask.prototype.getMaxCoordinate = function(aCellA, aCellB){
   return this.compareCells_(aCellA, aCellB) == 1 ? aCellA : aCellB;
@@ -194,7 +198,6 @@ rflect.cal.ui.SelectionMask.prototype.getMaxCoordinate = function(aCellA, aCellB
  * @param {goog.math.Coordinate} aCellA First cell to compare.
  * @param {goog.math.Coordinate} aCellB Second cell to compare.
  * @return {goog.math.Coordinate} Minimal of given cells.
- * @protected
  */
 rflect.cal.ui.SelectionMask.prototype.getMinCoordinate = function(aCellA, aCellB){
   return this.compareCells_(aCellA, aCellB) == -1 ? aCellA : aCellB;
@@ -207,7 +210,6 @@ rflect.cal.ui.SelectionMask.prototype.getMinCoordinate = function(aCellA, aCellB
  * @param {goog.math.Coordinate|number=} opt_maxCell Greater of cells or
  * indexes.
  * @param {boolean=} opt_hours Whether to treat cells as hours.
- * @protected
  */
 rflect.cal.ui.SelectionMask.prototype.calculateDates = function(aMinCell,
     opt_maxCell, opt_hours) {

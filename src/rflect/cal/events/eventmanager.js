@@ -246,6 +246,12 @@ rflect.cal.events.EventManager.eventByStartDateComparator = function(aEventA,
 
 
 /**
+ * @type {string}
+ */
+rflect.cal.events.EventManager.prototype.lastUsedCalendarId_;
+
+
+/**
  * Returns map of year -> {dayOfYear -> chip}.
  * @return {Object.<number, Object.<number, Array.<rflect.cal.events.Chip>>>}
  */
@@ -897,4 +903,35 @@ rflect.cal.events.EventManager.prototype.setCalendarIsInProgress =
 rflect.cal.events.EventManager.prototype.calendarIsInProgress =
     function(aCalendarId) {
   return this.calendarsInProgress_[aCalendarId];
+}
+
+
+/**
+ * @param {string} aCalendarId Calendar id.
+ */
+rflect.cal.events.EventManager.prototype.setLastUsedCalendarId =
+    function(aCalendarId) {
+  this.lastUsedCalendarId_ = aCalendarId;
+}
+
+
+/**
+ * @return {string} Calendar id.
+ */
+rflect.cal.events.EventManager.prototype.getLastUsedCalendarId =
+    function() {
+  let calendars = this.calendars;
+  if (this.lastUsedCalendarId_ && calendars[this.lastUsedCalendarId_].visible) {
+    return this.lastUsedCalendarId_;
+  } else {
+    for (let calendarId in calendars) {
+      if (calendars[calendarId].visible) {
+        return calendarId;
+      }
+    }
+    for (let calendarId in calendars) {
+      return calendarId;
+    }
+    return '';
+  }
 }

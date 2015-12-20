@@ -168,6 +168,14 @@ rflect.cal.ui.EventPane.prototype.newEventMode_ = false;
 
 
 /**
+ * Whether we're creating event by touch hold gesture.
+ * @type {boolean}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.touchHoldMode_ = false;
+
+
+/**
  * Start time ac.
  * @type {rflect.cal.ui.ac.TimeAutoComplete}
  * @private
@@ -464,6 +472,16 @@ rflect.cal.ui.EventPane.prototype.setNewEventMode = function(
 
 
 /**
+ * @param {boolean=} opt_touchHoldMode Whether we're creating event by touch
+ * hold gesture.
+ */
+rflect.cal.ui.EventPane.prototype.setTouchHoldMode = function(
+    opt_touchHoldMode) {
+  this.touchHoldMode_ = !!opt_touchHoldMode;
+}
+
+
+/**
  * Component key listener.
  * @param {goog.events.Event} aEvent Event object.
  * @private
@@ -547,6 +565,10 @@ rflect.cal.ui.EventPane.prototype.updateAC_ = function(aAC) {
  * Default action is to hide pane.
  */
 rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
+  if (this.touchHoldMode_) {
+    this.eventManager.eventHolder.endWithDelete();
+    this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.DELETE);
+  }
   this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
 }
 
@@ -556,9 +578,10 @@ rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
  */
 rflect.cal.ui.EventPane.prototype.onSave_ = function() {
   if (this.scanValues()) {
-    this.eventManager.eventHolder.endWithEdit();
-    this.transport.saveEventAsync(
-        this.eventManager.eventHolder.getCurrentEvent());
+    this.eventManager.setLastUsedCalendarId(
+        this.eventManager.eventHolder.getCurrentEvent().calendarId);
+
+    this.transport.saveEventAsync(this.eventManager.eventHolder.endWithEdit());
     this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.SAVE);
     this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
   }
@@ -570,10 +593,8 @@ rflect.cal.ui.EventPane.prototype.onSave_ = function() {
  * @param {goog.events.Event} aEvent Event object.
  */
 rflect.cal.ui.EventPane.prototype.onDelete_ = function(aEvent) {
-  this.eventManager.eventHolder.endWithDelete();
-
   this.transport.deleteEventAsync(
-      this.eventManager.eventHolder.getBackUpEvent());
+      this.eventManager.eventHolder.endWithDelete());
 
   this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.DELETE);
   this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));

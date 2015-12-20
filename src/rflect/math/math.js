@@ -63,3 +63,11 @@ rflect.math.getScaledValue = function(aScale, aScale1, aScale2, aBoundary1,
   var increment = (aBoundary2 - aBoundary1) / (aScale2 - aScale1);
   return (aScale - aScale1) * increment + aBoundary1;
 };
+
+
+/**
+ * Returns the sign of a number as per the "sign" or "signum" function.
+ * @param {number} x The number to take the sign of.
+ * @return {number} -1 when negative, 1 when positive, 0 when 0.
+ */
+rflect.math.sign = Math.sign ? Math.sign : x => x == 0 ? 0 : (x < 0 ? -1 : 1);
