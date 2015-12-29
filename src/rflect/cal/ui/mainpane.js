@@ -742,16 +742,27 @@ rflect.cal.ui.MainPane.prototype.updateByRedraw = function(opt_deep,
 };
 
 
+
+/**
+ * @param {string} aElementId Element id.
+ * @return {goog.math.Size} Size of scrollable offsets for this element.
+ */
+rflect.cal.ui.MainPane.prototype.getScrollOffsetSize = function(aElementId) {
+  let scrollOffset = new goog.math.Size(0, 0);
+  scrollOffset.width = this.getDomHelper().getElement(aElementId).scrollLeft;
+  scrollOffset.height = this.getDomHelper().getElement(aElementId).scrollTop;
+  return scrollOffset;
+}
+
+
 /**
  * @return {goog.math.Size} Static sizes.
  */
 rflect.cal.ui.MainPane.prototype.getStaticSize = function() {
 
-  if (goog.DEBUG)
-    console.log('this.adaptiveSizeHelper.getStaticSizeForView(): ', this.adaptiveSizeHelper.getStaticSizeForView());
-
   if (!this.adaptiveSizeHelper.getStaticSizeForView()) {
     let firstScrollable;
+    let scrollOffset = new goog.math.Size(0, 0);
     if (this.viewManager_.isInWeekMode()) {
       firstScrollable = this.getDomHelper().
           getElement(rflect.cal.predefined.MainPane.ELEMENT_ID.
@@ -760,13 +771,18 @@ rflect.cal.ui.MainPane.prototype.getStaticSize = function() {
       if (!firstScrollable) {
         firstScrollable = this.getDomHelper().
             getElement('grid-table-wrapper-wk');
+        scrollOffset = this.getScrollOffsetSize(rflect.cal.predefined.MainPane.
+                  ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_WK);
       }
 
     } else if (this.viewManager_.isInMonthMode()) {
       firstScrollable = this.getDomHelper().getElement('grid-table-mn');
+      scrollOffset = this.getScrollOffsetSize(rflect.cal.predefined.MainPane.
+          ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_MN);
     }
     let {top, left} = firstScrollable.getBoundingClientRect();
-    let staticSize = new goog.math.Size(left, top);
+    let staticSize = new goog.math.Size(left + scrollOffset.width, top +
+        scrollOffset.height);
     this.adaptiveSizeHelper.setStaticSizeForView(staticSize);
   }
 
@@ -913,9 +929,9 @@ rflect.cal.ui.MainPane.prototype.updateScrollableSizesAndDom = function() {
       let blocks = this.getElement().querySelectorAll('.monthgrid-row');
 
       mainScrollable.style.height =
-          this.gridContainerSize.height + 'px';
+          this.blockManager_.blockPoolMonth.gridContainerSize.height + 'px';
       grid.style.height =
-          this.gridSize.height + 'px';
+          this.blockManager_.blockPoolMonth.gridSize.height + 'px';
       goog.array.forEach(blocks, (block, index) => {
         block.style.height = this.blockManager_.blockPoolMonth.blocks[index].
             size + 'px';
@@ -1295,8 +1311,6 @@ rflect.cal.ui.MainPane.prototype.onTouchEndInternal_ = function(aEvent) {
   var target = /** @type {Element}*/ (aEvent.target);
   var id = target.id;
   var className = target.className;
-          if (goog.DEBUG)
-            console.log('className: ', className);
   if ((this.isChipOrChild_(className) || this.isGrip_(className)) &&
       !this.selectionMask_.wasDragged() && !this.touchWasMoved(aEvent)) {
 
@@ -1312,8 +1326,6 @@ rflect.cal.ui.MainPane.prototype.onTouchEndInternal_ = function(aEvent) {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.onTouchHold_ = function(aEvent) {
-  if (goog.DEBUG)
-    console.log('onTouchHold_ called');
   this.touchHoldEventCreator_.onTouchHoldDelegate(aEvent);
   this.removeMomentumScroller();
 }
@@ -1325,8 +1337,6 @@ rflect.cal.ui.MainPane.prototype.onTouchHold_ = function(aEvent) {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.onTouchHoldEnd_ = function(aEvent) {
-  if (goog.DEBUG)
-      console.log('onTouchHoldEnd_ called');
   if (this.eventManager_.eventHolder.isInProgress()) {
     this.getParent().showEventPane(true, true, true);
   }
