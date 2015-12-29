@@ -1077,10 +1077,11 @@ rflect.cal.ui.MainPane.prototype.updateConditionally_ = function(
 
 /**
  * Redraws component after event was deleted.
+ * @param {rflect.cal.events.Event} aDeletedEvent Deleted event.
  * @private
  */
-rflect.cal.ui.MainPane.prototype.updateAfterDelete_ = function() {
-  var allDay = this.eventManager_.eventHolder.getBackUpEvent().allDay;
+rflect.cal.ui.MainPane.prototype.updateAfterDelete_ = function(aDeletedEvent) {
+  var allDay = aDeletedEvent.allDay;
 
   this.updateConditionally_(allDay, !allDay, true);
 }
@@ -2221,10 +2222,10 @@ rflect.cal.ui.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
   } else if (aEvent.key != this.editDialog_.getButtonSet().getCancel()) {
     // The only spare button - delete.
 
-    this.transport_.deleteEventAsync(
-        this.eventManager_.eventHolder.endWithDelete());
+    let deletedEvent = this.eventManager_.eventHolder.endWithDelete();
+    this.transport_.deleteEventAsync(deletedEvent);
 
-    this.updateAfterDelete_();
+    this.updateAfterDelete_(deletedEvent);
   }
 }
 
