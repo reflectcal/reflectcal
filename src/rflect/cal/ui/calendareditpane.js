@@ -101,14 +101,7 @@ rflect.cal.ui.CalendarEditPane.BUTTON_CLASS_NAME =
  * @type {number}
  * @const
  */
-rflect.cal.ui.CalendarEditPane.PALETTE_ROWS_NUMBER = 1;
-
-
-/**
- * @type {number}
- * @const
- */
-rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER = 3;
+rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER = 4;
 
 
 /**
@@ -130,18 +123,22 @@ rflect.cal.ui.CalendarEditPane.getCalendarColorRows = function() {
 
   var colorRows = [];
 
-  for( var rowIndex = 0; rowIndex <
-      rflect.cal.ui.CalendarEditPane.PALETTE_ROWS_NUMBER; rowIndex++) {
+  var paletteRowsNumber = Math.ceil(
+      rflect.cal.i18n.PREDEFINED_COLOR_CODES.length /
+      rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER);
+  for( var rowIndex = 0; rowIndex < paletteRowsNumber; rowIndex++) {
     for( var colIndex = 0; colIndex <
         rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER; colIndex++) {
       var colorCodeIndex = rowIndex *
           rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER + colIndex;
+      var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[colorCodeIndex];
 
       if (!colorRows[rowIndex]) {
         colorRows[rowIndex] = [];
       }
-      var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[colorCodeIndex];
-      colorRows[rowIndex].push(colorCode);
+      if (goog.isDef(colorCode)) {
+        colorRows[rowIndex].push(colorCode);
+      }
     }
   }
 

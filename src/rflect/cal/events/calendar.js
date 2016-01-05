@@ -226,7 +226,8 @@ rflect.cal.events.Calendar.fromJSON = function(aCalArray) {
   var pickIndex = goog.isDef(colorCodeIndex) ? colorCodeIndex :
       Math.floor(Math.random() * rflect.cal.i18n.PREDEFINED_COLOR_CODES.length);
 
-  var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[pickIndex];
+  var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[pickIndex] ||
+      rflect.cal.i18n.PREDEFINED_COLOR_CODES[0];
 
   return new rflect.cal.events.Calendar(id, name, colorCode, visible, readOnly,
       own, owner);
