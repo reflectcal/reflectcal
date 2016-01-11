@@ -7,147 +7,485 @@
  *
  * @author alexeykofficial@gmail.com (Alex K)
  */
+
+@textWhite: #fff;
+ 
+@textBlack: #000; 
+
 /* Blue */
+@blueLight: rgba(112, 177, 229, .5);
+
+@blueDark: rgba(112, 177, 229, 1);
+
 .cal-checkbox-blue {
-  border-color: #6699EE;
+  border-color: @blueDark;
 }
 
 .goog-checkbox-checked.cal-checkbox-blue {
-  box-shadow: 0 0 6px 1px #6699EE;
+  box-shadow: 0 0 6px 1px @blueDark;
   /* @alternate */
-  background: #6699EE;
+  background: @blueDark;
   /* @alternate */
-  background: -webkit-linear-gradient(top, rgba(102, 153, 238, 0.5) 0px, #6699EE 50%, rgba(102, 153, 238, 0.5) 100%);
+  background: -webkit-linear-gradient(top, @blueLight 0px,
+      @blueDark 50%,
+      @blueLight 100%);
   /* @alternate */
-  background: -o-linear-gradient(to bottom, rgba(102, 153, 238, 0.5) 0px, #6699EE 50%, rgba(102, 153, 238, 0.5) 100%);
+  background: -o-linear-gradient(to bottom, @blueLight 0px, @blueDark 50%, @blueLight 100%);
   /* @alternate */
-  background: linear-gradient(to bottom, rgba(102, 153, 238, 0.5) 0px, #6699EE 50%, rgba(102, 153, 238, 0.5) 100%);
+  background: linear-gradient(to bottom, @blueLight 0px, @blueDark 50%, @blueLight 100%);
 }
 
 .goog-checkbox-active.cal-checkbox-blue {
-  border-color: #6699EE !important;
+  border-color: @blueDark !important;
 }
 
 .event-rect-blue {
-  background-color: #6699ee;
-  color: #fff;
+  background-color: @blueDark;
+  color: @textBlack;
 }
 
 .event-in-progress-blue {
-  background-color: #A3C2F5;
+  background-color: @blueLight;
   /* @alternate */
   background-image: -webkit-linear-gradient(45deg,
       transparent 25%,
-      #6699EE  25%,
-      #6699EE  50%,
+      @blueDark  25%,
+      @blueDark  50%,
       transparent 50%,
       transparent 75%,
-      #6699EE  75%,
-      #6699EE  100%);
+      @blueDark  75%,
+      @blueDark  100%);
   /* @alternate */
   background-image: linear-gradient(45deg,
       transparent 25%,
-      #6699EE 25%,
-      #6699EE 50%,
+      @blueDark 25%,
+      @blueDark 50%,
       transparent 50%,
       transparent 75%,
-      #6699EE 75%,
-      #6699EE 100%);
+      @blueDark 75%,
+      @blueDark 100%);
 }
 
 /* Red */
+@redLight: rgba(221, 93, 93, .5);
+
+@redDark: rgba(221, 93, 93, 1);
+
 .cal-checkbox-red {
-  border-color: #f44050;
+  border-color: @redDark;
 }
 
 .goog-checkbox-checked.cal-checkbox-red {
-  box-shadow: 0 0 6px 1px #f44050;
+  box-shadow: 0 0 6px 1px @redDark;
   /* @alternate */
-  background: #f44050;
+  background: @redDark;
   /* @alternate */
-  background: -webkit-linear-gradient(top, #fecdce 0px, #f44050 50%, #fecdce 100%);
+  background: -webkit-linear-gradient(top, @redLight 0px, @redDark 50%, @redLight 100%);
   /* @alternate */
-  background: -o-linear-gradient(to bottom, #fecdce 0px, #f44050 50%, #fecdce 100%);
+  background: -o-linear-gradient(to bottom, @redLight 0px, @redDark 50%, @redLight 100%);
   /* @alternate */
-  background: linear-gradient(to bottom, #fecdce 0px, #f44050 50%, #fecdce 100%);
+  background: linear-gradient(to bottom, @redLight 0px, @redDark 50%, @redLight 100%);
 }
 
 .goog-checkbox-active.cal-checkbox-red {
-  border-color: #f44050 !important;
+  border-color: @redDark !important;
 }
 
 .event-rect-red {
-  background-color: #f44050;
-  color: #fff;
+  background-color: @redDark;
+  color: @textBlack;
 }
 
 .event-in-progress-red {
-  background-color: #fecdce;
+  background-color: @redLight;
   /* @alternate */
   background-image: -webkit-linear-gradient(45deg,
       transparent 25%,
-      #f44050 25%,
-      #f44050 50%,
+      @redDark 25%,
+      @redDark 50%,
       transparent 50%,
       transparent 75%,
-      #f44050 75%,
-      #f44050 100%);
+      @redDark 75%,
+      @redDark 100%);
   /* @alternate */
   background-image: linear-gradient(45deg,
       transparent 25%,
-      #f44050 25%,
-      #f44050 50%,
+      @redDark 25%,
+      @redDark 50%,
       transparent 50%,
       transparent 75%,
-      #f44050 75%,
-      #f44050 100%);
+      @redDark 75%,
+      @redDark 100%);
 }
 
 /* Green */
+@greenDark: rgba(81, 183, 73, 1);
+
+@greenLight: rgba(81, 183, 73, .5);
+
 .cal-checkbox-green {
-  border-color: #51be32;
+  border-color: @greenDark;
 }
 
 .goog-checkbox-checked.cal-checkbox-green {
-  box-shadow: 0 0 6px 1px #51be32;
+  box-shadow: 0 0 6px 1px @greenDark;
   /* @alternate */
-  background: #51be32;
+  background: @greenDark;
   /* @alternate */
-  background: -webkit-linear-gradient(top, #96f481 0px, #51be32 50%, #96f481 100%);
+  background: -webkit-linear-gradient(top, @greenLight 0px, @greenDark 50%, @greenLight 100%);
   /* @alternate */
-  background: -o-linear-gradient(to bottom, #96f481 0px, #51be32 50%, #96f481 100%);
+  background: -o-linear-gradient(to bottom, @greenLight 0px, @greenDark 50%, @greenLight 100%);
   /* @alternate */
-  background: linear-gradient(to bottom, #96f481 0px, #51be32 50%, #96f481 100%);
+  background: linear-gradient(to bottom, @greenLight 0px, @greenDark 50%, @greenLight 100%);
 }
 
 .goog-checkbox-active.cal-checkbox-green {
-  border-color: #51be32 !important;
+  border-color: @greenDark !important;
 }
 
 .event-rect-green {
-  background-color: #51be32;
-  color: #fff;
+  background-color: @greenDark;
+  color: @textBlack;
 }
 
 .event-in-progress-green {
-  background-color: #96f481;
+  background-color: @greenLight;
   /* @alternate */
   background-image: -webkit-linear-gradient(45deg,
       transparent 25%,
-      #51be32 25%,
-      #51be32 50%,
+      @greenDark 25%,
+      @greenDark 50%,
       transparent 50%,
       transparent 75%,
-      #51be32 75%,
-      #51be32 100%);
+      @greenDark 75%,
+      @greenDark 100%);
   /* @alternate */
   background-image: linear-gradient(45deg,
+      transparent 25%,
+      @greenDark 25%,
+      @greenDark 50%,
+      transparent 50%,
+      transparent 75%,
+      @greenDark 75%,
+      @greenDark 100%);
+  /*background-image: linear-gradient(45deg,
       rgba(0,0,0,0) 25%,
       rgba(0,0,0,.1) 25%,
       rgba(0,0,0,.1) 50%,
       rgba(0,0,0,0) 50%,
       rgba(0,0,0,0) 75%,
       rgba(0,0,0,.1) 75%,
-      rgba(0,0,0,.1) 100%);
+      rgba(0,0,0,.1) 100%);*/
 }
 
+/* Yellow */
+@yellowLight: rgba(251, 215, 91, .5);
+
+@yellowDark: rgba(251, 215, 91, 1);
+
+.cal-checkbox-yellow {
+  border-color: @yellowDark;
+}
+
+.goog-checkbox-checked.cal-checkbox-yellow {
+  box-shadow: 0 0 6px 1px @yellowDark;
+  /* @alternate */
+  background: @yellowDark;
+  /* @alternate */
+  background: -webkit-linear-gradient(top, @yellowLight 0px, @yellowDark 50%, @yellowLight 100%);
+  /* @alternate */
+  background: -o-linear-gradient(to bottom, @yellowLight 0px, @yellowDark 50%, @yellowLight 100%);
+  /* @alternate */
+  background: linear-gradient(to bottom, @yellowLight 0px, @yellowDark 50%, @yellowLight 100%);
+}
+
+.goog-checkbox-active.cal-checkbox-yellow {
+  border-color: @yellowDark !important;
+}
+
+.event-rect-yellow {
+  background-color: @yellowDark;
+  color: @textBlack;
+}
+
+.event-in-progress-yellow {
+  background-color: @yellowLight;
+  /* @alternate */
+  background-image: -webkit-linear-gradient(45deg,
+      transparent 25%,
+      @yellowDark 25%,
+      @yellowDark 50%,
+      transparent 50%,
+      transparent 75%,
+      @yellowDark 75%,
+      @yellowDark 100%);
+  /* @alternate */
+  background-image: linear-gradient(45deg,
+      transparent 25%,
+      @yellowDark 25%,
+      @yellowDark 50%,
+      transparent 50%,
+      transparent 75%,
+      @yellowDark 75%,
+      @yellowDark 100%);
+}
+
+/* Pink */
+@pinkLight: rgba(241, 188, 201, .5);
+
+@pinkDark: rgba(241, 188, 201, 1);
+
+.cal-checkbox-pink {
+  border-color: @pinkDark;
+}
+
+.goog-checkbox-checked.cal-checkbox-pink {
+  box-shadow: 0 0 6px 1px @pinkDark;
+  /* @alternate */
+  background: @pinkDark;
+  /* @alternate */
+  background: -webkit-linear-gradient(top, @pinkLight 0px, @pinkDark 50%, @pinkLight 100%);
+  /* @alternate */
+  background: -o-linear-gradient(to bottom, @pinkLight 0px, @pinkDark 50%, @pinkLight 100%);
+  /* @alternate */
+  background: linear-gradient(to bottom, @pinkLight 0px, @pinkDark 50%, @pinkLight 100%);
+}
+
+.goog-checkbox-active.cal-checkbox-pink {
+  border-color: @pinkDark !important;
+}
+
+.event-rect-pink {
+  background-color: @pinkDark;
+  color: @textBlack;
+}
+
+.event-in-progress-pink {
+  background-color: @pinkLight;
+  /* @alternate */
+  background-image: -webkit-linear-gradient(45deg,
+      transparent 25%,
+      @pinkDark 25%,
+      @pinkDark 50%,
+      transparent 50%,
+      transparent 75%,
+      @pinkDark 75%,
+      @pinkDark 100%);
+  /* @alternate */
+  background-image: linear-gradient(45deg,
+      transparent 25%,
+      @pinkDark 25%,
+      @pinkDark 50%,
+      transparent 50%,
+      transparent 75%,
+      @pinkDark 75%,
+      @pinkDark 100%);
+}
+
+/* Violet */
+@violetLight: rgba(190, 150, 187, .5);
+
+@violetDark: rgba(190, 150, 187, 1);
+
+.cal-checkbox-violet {
+  border-color: @violetDark;
+}
+
+.goog-checkbox-checked.cal-checkbox-violet {
+  box-shadow: 0 0 6px 1px @violetDark;
+  /* @alternate */
+  background: @violetDark;
+  /* @alternate */
+  background: -webkit-linear-gradient(top, @violetLight 0px, @violetDark 50%, @violetLight 100%);
+  /* @alternate */
+  background: -o-linear-gradient(to bottom, @violetLight 0px, @violetDark 50%, @violetLight 100%);
+  /* @alternate */
+  background: linear-gradient(to bottom, @violetLight 0px, @violetDark 50%, @violetLight 100%);
+}
+
+.goog-checkbox-active.cal-checkbox-violet {
+  border-color: @violetDark !important;
+}
+
+.event-rect-violet {
+  background-color: @violetDark;
+  color: @textBlack;
+}
+
+.event-in-progress-violet {
+  background-color: @violetLight;
+  /* @alternate */
+  background-image: -webkit-linear-gradient(45deg,
+      transparent 25%,
+      @violetDark 25%,
+      @violetDark 50%,
+      transparent 50%,
+      transparent 75%,
+      @violetDark 75%,
+      @violetDark 100%);
+  /* @alternate */
+  background-image: linear-gradient(45deg,
+      transparent 25%,
+      @violetDark 25%,
+      @violetDark 50%,
+      transparent 50%,
+      transparent 75%,
+      @violetDark 75%,
+      @violetDark 100%);
+}
+
+/* Emerald */
+@emeraldLight: rgba(72, 191, 190, .5);
+
+@emeraldDark: rgba(72, 191, 190, 1);
+
+.cal-checkbox-emerald {
+  border-color: @emeraldDark;
+}
+
+.goog-checkbox-checked.cal-checkbox-emerald {
+  box-shadow: 0 0 6px 1px @emeraldDark;
+  /* @alternate */
+  background: @emeraldDark;
+  /* @alternate */
+  background: -webkit-linear-gradient(top, @emeraldLight 0px, @emeraldDark 50%, @emeraldLight 100%);
+  /* @alternate */
+  background: -o-linear-gradient(to bottom, @emeraldLight 0px, @emeraldDark 50%, @emeraldLight 100%);
+  /* @alternate */
+  background: linear-gradient(to bottom, @emeraldLight 0px, @emeraldDark 50%, @emeraldLight 100%);
+}
+
+.goog-checkbox-active.cal-checkbox-emerald {
+  border-color: @emeraldDark !important;
+}
+
+.event-rect-emerald {
+  background-color: @emeraldDark;
+  color: @textBlack;
+}
+
+.event-in-progress-emerald {
+  background-color: @emeraldLight;
+  /* @alternate */
+  background-image: -webkit-linear-gradient(45deg,
+      transparent 25%,
+      @emeraldDark 25%,
+      @emeraldDark 50%,
+      transparent 50%,
+      transparent 75%,
+      @emeraldDark 75%,
+      @emeraldDark 100%);
+  /* @alternate */
+  background-image: linear-gradient(45deg,
+      transparent 25%,
+      @emeraldDark 25%,
+      @emeraldDark 50%,
+      transparent 50%,
+      transparent 75%,
+      @emeraldDark 75%,
+      @emeraldDark 100%);
+}
+
+/* Canary */
+@canaryLight: rgba(242, 237, 182, .5);
+
+@canaryDark: rgba(242, 237, 182, 1);
+
+.cal-checkbox-canary {
+  border-color: @canaryDark;
+}
+
+.goog-checkbox-checked.cal-checkbox-canary {
+  box-shadow: 0 0 6px 1px @canaryDark;
+  /* @alternate */
+  background: @canaryDark;
+  /* @alternate */
+  background: -webkit-linear-gradient(top, @canaryLight 0px, @canaryDark 50%, @canaryLight 100%);
+  /* @alternate */
+  background: -o-linear-gradient(to bottom, @canaryLight 0px, @canaryDark 50%, @canaryLight 100%);
+  /* @alternate */
+  background: linear-gradient(to bottom, @canaryLight 0px, @canaryDark 50%, @canaryLight 100%);
+}
+
+.goog-checkbox-active.cal-checkbox-canary {
+  border-color: @canaryDark !important;
+}
+
+.event-rect-canary {
+  background-color: @canaryDark;
+  color: @textBlack;
+}
+
+.event-in-progress-canary {
+  background-color: @canaryLight;
+  /* @alternate */
+  background-image: -webkit-linear-gradient(45deg,
+      transparent 25%,
+      @canaryDark 25%,
+      @canaryDark 50%,
+      transparent 50%,
+      transparent 75%,
+      @canaryDark 75%,
+      @canaryDark 100%);
+  /* @alternate */
+  background-image: linear-gradient(45deg,
+      transparent 25%,
+      @canaryDark 25%,
+      @canaryDark 50%,
+      transparent 50%,
+      transparent 75%,
+      @canaryDark 75%,
+      @canaryDark 100%);
+}
+
+/* Pancho */
+@panchoLight: rgba(241, 209, 181, .5);
+
+@panchoDark: rgba(241, 209, 181, 1);
+
+.cal-checkbox-pancho {
+  border-color: @panchoDark;
+}
+
+.goog-checkbox-checked.cal-checkbox-pancho {
+  box-shadow: 0 0 6px 1px @panchoDark;
+  /* @alternate */
+  background: @panchoDark;
+  /* @alternate */
+  background: -webkit-linear-gradient(top, @panchoLight 0px, @panchoDark 50%, @panchoLight 100%);
+  /* @alternate */
+  background: -o-linear-gradient(to bottom, @panchoLight 0px, @panchoDark 50%, @panchoLight 100%);
+  /* @alternate */
+  background: linear-gradient(to bottom, @panchoLight 0px, @panchoDark 50%, @panchoLight 100%);
+}
+
+.goog-checkbox-active.cal-checkbox-pancho {
+  border-color: @panchoDark !important;
+}
+
+.event-rect-pancho {
+  background-color: @panchoDark;
+  color: @textBlack;
+}
+
+.event-in-progress-pancho {
+  background-color: @panchoLight;
+  /* @alternate */
+  background-image: -webkit-linear-gradient(45deg,
+      transparent 25%,
+      @panchoDark 25%,
+      @panchoDark 50%,
+      transparent 50%,
+      transparent 75%,
+      @panchoDark 75%,
+      @panchoDark 100%);
+  /* @alternate */
+  background-image: linear-gradient(45deg,
+      transparent 25%,
+      @panchoDark 25%,
+      @panchoDark 50%,
+      transparent 50%,
+      transparent 75%,
+      @panchoDark 75%,
+      @panchoDark 100%);
+}

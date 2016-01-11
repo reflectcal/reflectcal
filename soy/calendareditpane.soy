@@ -46,7 +46,7 @@
                   {foreach $colorCell in $colorRow}
                   <td>
                     <button class="calitem-color-cont calendar-color{sp}{$colorCell.eventClass}"
-                        id="calendar-color{index($colorRow) + index($colorCell)}"></button>
+                        id="calendar-color{index($colorRow) * rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER + index($colorCell)}"></button>
                   </td>
                   {/foreach}
                 </tr>
