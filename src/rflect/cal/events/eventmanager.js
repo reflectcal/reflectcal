@@ -916,6 +916,55 @@ rflect.cal.events.EventManager.prototype.setLastUsedCalendarId =
 
 
 /**
+ * @param {Object.<string, rflect.cal.events.Calendar>} aCalendars Calendars.
+ * @return {rflect.cal.events.Calendar} Calendar.
+ */
+rflect.cal.events.EventManager.getFirstVisibleCalendar = function(aCalendars) {
+  for (let calendarId in aCalendars) {
+    let calendar = aCalendars[calendarId];
+    if (calendar.visible) {
+      return calendar;
+    }
+  }
+  return null;
+}
+
+
+/**
+ * @param {Object.<string, rflect.cal.events.Calendar>} aCalendars Calendars.
+ * @return {rflect.cal.events.Calendar} Calendar.
+ */
+rflect.cal.events.EventManager.getFirstVisibleCalendarWithEarliestColorCode =
+    function(aCalendars) {
+  for (let colorCodeIndex = 0, length =
+      rflect.cal.i18n.PREDEFINED_COLOR_CODES.length; colorCodeIndex < length;
+      colorCodeIndex++) {
+    let colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[colorCodeIndex];
+    for (let calendarId in aCalendars) {
+      let calendar = aCalendars[calendarId];
+      if (calendar.visible && calendar.colorCode.id == colorCode.id) {
+        return calendar;
+      }
+    }
+  }
+  return null;
+}
+
+
+/**
+ * @param {Object.<string, rflect.cal.events.Calendar>} aCalendars Calendars.
+ * @return {rflect.cal.events.Calendar} Calendar.
+ */
+rflect.cal.events.EventManager.getFirstCalendar = function(aCalendars) {
+  for (let calendarId in aCalendars) {
+    let calendar = aCalendars[calendarId];
+    return calendar;
+  }
+  return null;
+}
+
+
+/**
  * @return {string} Calendar id.
  */
 rflect.cal.events.EventManager.prototype.getLastUsedCalendarId =
@@ -924,14 +973,16 @@ rflect.cal.events.EventManager.prototype.getLastUsedCalendarId =
   if (this.lastUsedCalendarId_ && calendars[this.lastUsedCalendarId_].visible) {
     return this.lastUsedCalendarId_;
   } else {
-    for (let calendarId in calendars) {
-      if (calendars[calendarId].visible) {
-        return calendarId;
-      }
+    let calendar = rflect.cal.events.EventManager.
+        getFirstVisibleCalendarWithEarliestColorCode(this.calendars);
+    if (!calendar) {
+      calendar = rflect.cal.events.EventManager.getFirstVisibleCalendar(this.
+          calendars);
     }
-    for (let calendarId in calendars) {
-      return calendarId;
+    if (!calendar) {
+      calendar = rflect.cal.events.EventManager.getFirstCalendar(this.
+          calendars);
     }
-    return '';
+    return calendar ? (calendar.id || '') : '';
   }
 }
