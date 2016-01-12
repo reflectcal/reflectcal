@@ -279,7 +279,7 @@ rflect.cal.ui.CalendarsPane.createCalendarsTd_ =
  */
 rflect.cal.ui.CalendarsPane.prototype.updateByRedraw =
     function() {
-  this.getElement().querySelector('.settings-body').innerHTML =
+  this.getElement().querySelector('.settings-body-inner').innerHTML =
       rflect.cal.ui.soy.calendarspane.calendarsPaneBody({
     calendarCollections: this.getCalendarCollections()
   });
