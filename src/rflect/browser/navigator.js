@@ -51,7 +51,8 @@ rflect.cal.Navigator.SIZE_CATEGORY = {
   IPHONE6_LANDSCAPE: 3,
   IPAD_PORTRAIT: 4,
   IPAD_LANDSCAPE: 5,
-  WIDE: 6
+  WIDE: 6,
+  VERY_WIDE: 7
 }
 
 
@@ -67,7 +68,8 @@ rflect.cal.Navigator.SIZE_CATEGORY_QUERY = {
   [rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_LANDSCAPE]: '(min-width: 580px) and (max-width: 699px)',
   [rflect.cal.Navigator.SIZE_CATEGORY.IPAD_PORTRAIT]: '(min-width: 700px) and (max-width: 949px)',
   [rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE]: '(min-width: 950px) and (max-width: 1199px)',
-  [rflect.cal.Navigator.SIZE_CATEGORY.WIDE]: '(min-width: 1200px)',
+  [rflect.cal.Navigator.SIZE_CATEGORY.WIDE]: '(min-width: 1200px) and (max-width: 1919px)',
+  [rflect.cal.Navigator.SIZE_CATEGORY.VERY_WIDE]: '(min-width: 1920px)'
 }
 
 

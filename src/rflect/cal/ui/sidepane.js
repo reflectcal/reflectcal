@@ -40,11 +40,12 @@ goog.require('rflect.cal.ui.soy.sidepane');
  * @param {rflect.cal.ContainerSizeMonitor} aContainerSizeMonitor Link to
  * container size monitor.
  * @param {rflect.cal.Navigator} aNavigator Link to navigator.
+ * @param {rflect.cal.ui.MainBody} aMainBody Link to main body.
  * @constructor
  * @extends {rflect.ui.Component}
  */
 rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
-    aContainerSizeMonitor, aNavigator) {
+    aContainerSizeMonitor, aNavigator, aMainBody) {
   rflect.ui.Component.call(this);
 
   /**
@@ -105,8 +106,7 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
   this.showBehavior = new rflect.cal.ui.PaneShowBehavior(this,
       this.getDomHelper().getElement('main-container'));
   this.showBehavior.setSlidingIsEnabled(isSmallScreen);
-  this.showBehavior.setVisibleWithoutRender(!this.containerSizeMonitor_.
-      isSizeCategoryOrLower(rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE));
+  this.showBehavior.setVisibleWithoutRender(!aMainBody.isExpanded());
 
   this.addChild(this.buttonBack_ = new goog.ui.Button(null,
       goog.ui.FlatButtonRenderer.getInstance()));
