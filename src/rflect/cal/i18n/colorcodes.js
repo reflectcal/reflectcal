@@ -30,20 +30,15 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_EN = [
   new rflect.cal.events.ColorCode(1, 'Red',
     goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'),
     goog.getCssName('event-in-progress-red')),
-  new rflect.cal.events.ColorCode(2, 'Green',
-    goog.getCssName('event-rect-green'), goog.getCssName('cal-checkbox-green'),
-    goog.getCssName('event-in-progress-green')),
-  new rflect.cal.events.ColorCode(3, 'Canary', 'event-rect-canary',
-      'cal-checkbox-canary', 'event-in-progress-canary'),
-  new rflect.cal.events.ColorCode(4, 'Pink', 'event-rect-pink',
-      'cal-checkbox-pink', 'event-in-progress-pink'),
-  new rflect.cal.events.ColorCode(5, 'Violet', 'event-rect-violet',
-      'cal-checkbox-violet', 'event-in-progress-violet'),
-  new rflect.cal.events.ColorCode(6, 'Emerald', 'event-rect-emerald',
+  new rflect.cal.events.ColorCode(2, 'Emerald', 'event-rect-emerald',
       'cal-checkbox-emerald', 'event-in-progress-emerald'),
-  new rflect.cal.events.ColorCode(7, 'Pancho', 'event-rect-pancho',
-      'cal-checkbox-pancho', 'event-in-progress-pancho')
-      
+  new rflect.cal.events.ColorCode(3, 'Violet', 'event-rect-violet',
+      'cal-checkbox-violet', 'event-in-progress-violet'),
+  new rflect.cal.events.ColorCode(4, 'Orange', 'event-rect-orange',
+      'cal-checkbox-orange', 'event-in-progress-orange'),
+  new rflect.cal.events.ColorCode(5, 'Green',
+    goog.getCssName('event-rect-green'), goog.getCssName('cal-checkbox-green'),
+    goog.getCssName('event-in-progress-green'))
 ];
 
 
@@ -54,25 +49,21 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_EN = [
  */
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_RU = [
   new rflect.cal.events.ColorCode(0, 'Синий',
-    goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'),
-    goog.getCssName('event-in-progress-blue')),
+      goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'),
+      goog.getCssName('event-in-progress-blue')),
   new rflect.cal.events.ColorCode(1, 'Красный',
       goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'),
       goog.getCssName('event-in-progress-red')),
-  new rflect.cal.events.ColorCode(2, 'Зеленый',
+  new rflect.cal.events.ColorCode(2, 'Изумрудный', 'event-rect-emerald',
+      'cal-checkbox-emerald', 'event-in-progress-emerald'),
+  new rflect.cal.events.ColorCode(3, 'Фиолетовый', 'event-rect-violet',
+      'cal-checkbox-violet', 'event-in-progress-violet'),
+  new rflect.cal.events.ColorCode(4, 'Оранжевый', 'event-rect-orange',
+      'cal-checkbox-orange', 'event-in-progress-orange'),
+  new rflect.cal.events.ColorCode(5, 'Зеленый',
       goog.getCssName('event-rect-green'),
       goog.getCssName('cal-checkbox-green'),
-      goog.getCssName('event-in-progress-green')),
-  new rflect.cal.events.ColorCode(3, 'Желтый', 'event-rect-canary',
-      'cal-checkbox-canary', 'event-in-progress-canary'),
-  new rflect.cal.events.ColorCode(4, 'Розовый', 'event-rect-pink',
-      'cal-checkbox-pink', 'event-in-progress-pink'),
-  new rflect.cal.events.ColorCode(5, 'Фиолетовый', 'event-rect-violet',
-      'cal-checkbox-violet', 'event-in-progress-violet'),
-  new rflect.cal.events.ColorCode(6, 'Изумрудный', 'event-rect-emerald',
-      'cal-checkbox-emerald', 'event-in-progress-emerald'),
-  new rflect.cal.events.ColorCode(7, 'Панчо', 'event-rect-pancho',
-      'cal-checkbox-pancho', 'event-in-progress-pancho')
+      goog.getCssName('event-in-progress-green'))
 ];
 
 
@@ -83,25 +74,21 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_RU = [
  */
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_BY = [
   new rflect.cal.events.ColorCode(0, 'Сiнi',
-    goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'),
-    goog.getCssName('event-in-progress-blue')),
+        goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'),
+        goog.getCssName('event-in-progress-blue')),
   new rflect.cal.events.ColorCode(1, 'Чырвоны',
       goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'),
       goog.getCssName('event-in-progress-red')),
-  new rflect.cal.events.ColorCode(2, 'Зялены',
+  new rflect.cal.events.ColorCode(2, 'Ізумрудны', 'event-rect-emerald',
+      'cal-checkbox-emerald', 'event-in-progress-emerald'),
+  new rflect.cal.events.ColorCode(3, 'Фіялетавы', 'event-rect-violet',
+      'cal-checkbox-violet', 'event-in-progress-violet'),
+  new rflect.cal.events.ColorCode(4, 'Аранжавы', 'event-rect-orange',
+      'cal-checkbox-orange', 'event-in-progress-orange'),
+  new rflect.cal.events.ColorCode(5, 'Зялены',
       goog.getCssName('event-rect-green'),
       goog.getCssName('cal-checkbox-green'),
-      goog.getCssName('event-in-progress-green')),
-  new rflect.cal.events.ColorCode(3, 'Жоўты', 'event-rect-canary',
-      'cal-checkbox-canary', 'event-in-progress-canary'),
-  new rflect.cal.events.ColorCode(4, 'Ружовы', 'event-rect-pink',
-        'cal-checkbox-pink', 'event-in-progress-pink'),
-  new rflect.cal.events.ColorCode(5, 'Фіялетавы', 'event-rect-violet',
-      'cal-checkbox-violet', 'event-in-progress-violet'),
-  new rflect.cal.events.ColorCode(6, 'Ізумрудны', 'event-rect-emerald',
-      'cal-checkbox-emerald', 'event-in-progress-emerald'),
-  new rflect.cal.events.ColorCode(7, 'Панчо', 'event-rect-pancho',
-      'cal-checkbox-pancho', 'event-in-progress-pancho')
+      goog.getCssName('event-in-progress-green'))
 ];
 
 
@@ -112,25 +99,21 @@ rflect.cal.i18n.PREDEFINED_COLOR_CODES_BY = [
  */
 rflect.cal.i18n.PREDEFINED_COLOR_CODES_FR = [
   new rflect.cal.events.ColorCode(0, 'Bleu',
-    goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'),
-    goog.getCssName('event-in-progress-blue')),
+      goog.getCssName('event-rect-blue'), goog.getCssName('cal-checkbox-blue'),
+      goog.getCssName('event-in-progress-blue')),
   new rflect.cal.events.ColorCode(1, 'Rouge',
       goog.getCssName('event-rect-red'), goog.getCssName('cal-checkbox-red'),
       goog.getCssName('event-in-progress-red')),
-  new rflect.cal.events.ColorCode(2, 'Vert',
+  new rflect.cal.events.ColorCode(2, 'Émeraude', 'event-rect-emerald',
+      'cal-checkbox-emerald', 'event-in-progress-emerald'),
+  new rflect.cal.events.ColorCode(3, 'Violet', 'event-rect-violet',
+      'cal-checkbox-violet', 'event-in-progress-violet'),
+  new rflect.cal.events.ColorCode(4, 'Orange', 'event-rect-orange',
+      'cal-checkbox-orange', 'event-in-progress-orange'),
+  new rflect.cal.events.ColorCode(5, 'Vert',
       goog.getCssName('event-rect-green'),
       goog.getCssName('cal-checkbox-green'),
-      goog.getCssName('event-in-progress-green')),
-  new rflect.cal.events.ColorCode(3, 'Jaune', 'event-rect-canary',
-      'cal-checkbox-canary', 'event-in-progress-canary'),
-  new rflect.cal.events.ColorCode(4, 'Rose', 'event-rect-pink',
-      'cal-checkbox-pink', 'event-in-progress-pink'),
-  new rflect.cal.events.ColorCode(5, 'Violet', 'event-rect-violet',
-      'cal-checkbox-violet', 'event-in-progress-violet'),
-  new rflect.cal.events.ColorCode(6, 'Émeraude', 'event-rect-emerald',
-      'cal-checkbox-emerald', 'event-in-progress-emerald'),
-  new rflect.cal.events.ColorCode(7, 'Pancho', 'event-rect-pancho',
-      'cal-checkbox-pancho', 'event-in-progress-pancho')
+      goog.getCssName('event-in-progress-green'))
 ];
 
 
