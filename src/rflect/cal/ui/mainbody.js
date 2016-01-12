@@ -108,7 +108,7 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
    * @private
    */
   this.expanded_ = rflect.SIDE_PANE_MOVABLE && this.containerSizeMonitor_.
-      isSizeCategoryOrLower(rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE);
+      isSizeCategoryOrLower(rflect.cal.Navigator.SIZE_CATEGORY.WIDE);
 
 
   /**
@@ -129,7 +129,7 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
 
   this.addChild(this.sidePane_ = new rflect.cal.ui.SidePane(
       this.viewManager_, this.timeManager_, this.eventManager_,
-      this.containerSizeMonitor_, this.navigator_));
+      this.containerSizeMonitor_, this.navigator_, this));
 
   //Enabling touch-only interface.
   this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
