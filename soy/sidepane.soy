@@ -30,13 +30,9 @@
           {$monthSelectorHTML}
         {/if}
       </div>
-      <ul class="side-pane-menu">
-        {if $isSmallScreen}
-          {call .sidePaneMenu}
-            {param sizeCategory: $sizeCategory /}
-          {/call}
-        {/if}
-      </ul>
+      {call .sidePaneMenu}
+        {param sizeCategory: $sizeCategory /}
+      {/call}
       {$calSelectorMyHTML}
       {$calSelectorOtherHTML}
     {if $isSmallScreen}
@@ -52,6 +48,7 @@
  * @param sizeCategory
  */
 {template .sidePaneMenu autoescape="false"}
+  <ul class="side-pane-menu">
   {switch $sizeCategory}
     {case rflect.cal.Navigator.SIZE_CATEGORY.IPHONE5_PORTRAIT,
                   rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_PORTRAIT,
@@ -75,8 +72,6 @@
         {rflect.cal.i18n.Symbols.MONTH}
       </div>
     </li>
-    {default}
-  {/switch}
     <li class="side-pane-menu-item">
       // Options button.
       <div id="{rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID}" class="button-minimal">
@@ -85,4 +80,15 @@
         {rflect.cal.i18n.Symbols.SETTINGS}
       </div>
     </li>
+    {case rflect.cal.Navigator.SIZE_CATEGORY.WIDE,
+          rflect.cal.Navigator.SIZE_CATEGORY.VERY_WIDE}
+    <li class="side-pane-menu-item">
+      // Options button.
+      <div id="{rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID}" class="button-minimal button-settings-under-month-sel">
+        {rflect.cal.i18n.Symbols.SETTINGS}
+      </div>
+    </li>
+    {default}
+  {/switch}
+  </ul>
 {/template}

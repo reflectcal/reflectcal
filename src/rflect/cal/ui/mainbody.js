@@ -567,7 +567,9 @@ rflect.cal.ui.MainBody.prototype.onSidePaneAction_ = function(aEvent) {
 
   switch(id) {
     case rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID: {
-      this.showSidePane(false);
+      if (this.containerSizeMonitor_.isSmallScreen()) {
+        this.showSidePane(false);
+      }
       this.showSettingsPane(true);
     };break;
     default:break;
