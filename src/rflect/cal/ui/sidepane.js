@@ -514,7 +514,8 @@ rflect.cal.ui.SidePane.prototype.updateBeforeRedraw = function(opt_deep,
   this.resetChildren();
   this.removeMomentumScroller();
 
-  if (this.adaptiveSizeHelper.getSizeWasAdaptedForView()) {
+  if (this.adaptiveSizeHelper.getSizeWasAdaptedForView() &&
+      !this.getParent().isExpanded()) {
     this.updateScrollableSizes();
   }
 };
@@ -553,8 +554,8 @@ rflect.cal.ui.SidePane.prototype.updateByRedraw = function() {
     this.viewButtonUpdater_.updateButtons();
   }
 
-  this.updateScrollableSizesAndDom();
   if (!this.getParent().isExpanded()) {
+    this.updateScrollableSizesAndDom();
     this.addMomentumScroller();
   }
 };

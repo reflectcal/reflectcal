@@ -764,6 +764,10 @@ rflect.cal.ui.MainBody.prototype.finalizeExpandedForBigScreen = function() {
   if (this.expanded_) {
     this.getSidePane().showBehavior.setSlidingIsEnabled(false);
     this.getSidePane().showBehavior.setVisible(false);
+    this.getSidePane().removeMomentumScroller();
+  } else {
+    this.getSidePane().updateScrollableSizesAndDom();
+    this.getSidePane().resetMomentumScroller();
   }
   this.getMainPane().updateScrollableSizesAndDom();
 }
