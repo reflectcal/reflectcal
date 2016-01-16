@@ -9,6 +9,7 @@
  * @param monthSelectorHTML HTML of month selector.
  * @param calSelectorMyHTML HTML of cal selector for user's calendars.
  * @param calSelectorOtherHTML HTML of cal selector for other calendars.
+ * @param scrollableSize Size of scrollable.
  */
 {template .sidePane autoescape="false"}
   {if $includeOuterHTML}
@@ -30,11 +31,27 @@
           {$monthSelectorHTML}
         {/if}
       </div>
-      {call .sidePaneMenu}
-        {param sizeCategory: $sizeCategory /}
-      {/call}
-      {$calSelectorMyHTML}
-      {$calSelectorOtherHTML}
+      {if $isSmallScreen}
+        {call .sidePaneMenu}
+          {param sizeCategory: $sizeCategory /}
+        {/call}
+      {/if}
+      <div class="side-pane-scrollable{sp}
+          {if rflect.ARTIFICIAL_SCROLLER_ENABLED}side-pane-scrollable-artificial-scroll
+          {else}side-pane-scrollable-native-scroll{/if}"
+          {if not $isSmallScreen}
+          style="height:{$scrollableSize.height}px"
+          {/if}>
+        <div class="side-pane-scrollable-content">
+          {$calSelectorMyHTML}
+          {$calSelectorOtherHTML}
+        </div>
+      </div>
+      {if not $isSmallScreen}
+        {call .sidePaneMenu}
+          {param sizeCategory: $sizeCategory /}
+        {/call}
+      {/if}
     {if $isSmallScreen}
     </div>
     {/if}
@@ -80,7 +97,8 @@
         {rflect.cal.i18n.Symbols.SETTINGS}
       </div>
     </li>
-    {case rflect.cal.Navigator.SIZE_CATEGORY.WIDE,
+    {case rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE,
+          rflect.cal.Navigator.SIZE_CATEGORY.WIDE,
           rflect.cal.Navigator.SIZE_CATEGORY.VERY_WIDE}
     <li class="side-pane-menu-item">
       // Options button.

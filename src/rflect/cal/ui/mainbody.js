@@ -368,7 +368,6 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
   this.mainPane_.setElementById(this.mainPane_.getId());
   this.sidePane_.setElementById(this.sidePane_.getId());
 
-  this.getSidePane().updateScrollableSizesAndDom();
 
   // Propagate call to children.
   rflect.cal.ui.MainBody.superClass_.enterDocument.call(this);
@@ -395,6 +394,7 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
       this);
 
   this.rebuildMainPaneWithSizes();
+  this.getSidePane().update();
 
   if (!this.containerSizeMonitor_.isSmallScreen()) {
     //Mobile UI's left pane doesn't affect main pane width.
@@ -764,6 +764,10 @@ rflect.cal.ui.MainBody.prototype.finalizeExpandedForBigScreen = function() {
   if (this.expanded_) {
     this.getSidePane().showBehavior.setSlidingIsEnabled(false);
     this.getSidePane().showBehavior.setVisible(false);
+    this.getSidePane().removeMomentumScroller();
+  } else {
+    this.getSidePane().updateScrollableSizesAndDom();
+    this.getSidePane().resetMomentumScroller();
   }
   this.getMainPane().updateScrollableSizesAndDom();
 }

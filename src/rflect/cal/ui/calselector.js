@@ -213,11 +213,9 @@ rflect.cal.ui.CalSelector.prototype.buildHTML = function(opt_outerHTML) {
       id: this.getId(),
       includeOuterHTML: opt_outerHTML,
       isFullSize: !this.eventManager_.hasNonOwnerCalendars(),
-      isSmallScreen: this.containerSizeMonitor_.isSmallScreen(),
       hasCalendars: true,
       label: this.label,
-      calSelectorItemsHTML: this.buildContent(),
-      height: this.getScrollableSize().height
+      calSelectorItemsHTML: this.buildContent()
     });
   }
 };

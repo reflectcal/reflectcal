@@ -3,9 +3,7 @@
 /**
  * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
- * @param? isSmallScreen Whether screen is small.
  * @param? hasCalendars Whether calendar selector has calendars.
- * @param height Height of list body.
  * @param? label Label of cal selector.
  * @param? calSelectorItemsHTML Items.
  */
@@ -18,7 +16,7 @@
     <div id="calendars-label-cont" class="list-label-cont">
       <div id="calendars-label" class="list-label">{$label}</div>
     </div>
-    <div id="calendars-body" class="list-body" {if not $isSmallScreen}style="height:{$height}px"{/if}>
+    <div id="calendars-body" class="list-body">
       {$calSelectorItemsHTML}
     </div>
   {/if}
