@@ -334,7 +334,8 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
  * @private
  */
 rflect.cal.ui.SidePane.prototype.onBeforePageChange_ = function(aEvent) {
-  if (aEvent.currentScreen == this.getParent()) {
+  if (aEvent.currentScreen == this.getParent() &&
+      !this.containerSizeMonitor_.isSmallScreen()) {
     this.resetMomentumScroller();
   }
 }
