@@ -306,7 +306,7 @@ rflect.ui.MomentumScroller.prototype.isEnabled = function() {
  * Attaches all listeners to implement mouse miss behavior.
  */
 rflect.ui.MomentumScroller.prototype.enterDocument = function() {
-  this.listen(this.element, goog.events.EventType.TOUCHSTART,
+  this.listen(this.frameElement, goog.events.EventType.TOUCHSTART,
       (aEvent) => {
     aEvent.preventDefault();
   });
@@ -316,19 +316,6 @@ rflect.ui.MomentumScroller.prototype.enterDocument = function() {
       this.onTouchMove);
   this.listen(this.element, goog.events.EventType.TOUCHEND,
       this.onTouchEnd, true);
-
-  this.listen(this.element, goog.events.EventType.TOUCHSTART, (aEvent) => {
-    if (goog.DEBUG)
-      console.log('onTouchStart in capturing');
-  }, true);
-  this.listen(this.element, goog.events.EventType.TOUCHSTART, (aEvent) => {
-    if (goog.DEBUG)
-    console.log('onTouchStart in capturing');
-  }, true);
-  this.listen(this.element, goog.events.EventType.CLICK, (aEvent) => {
-    if (goog.DEBUG)
-      console.log('onClick');
-  })
 
   this.listen(this.element,
       rflect.browser.transitionend.VENDOR_TRANSITION_END_NAMES,
