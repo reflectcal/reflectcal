@@ -100,6 +100,13 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
   var isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
 
   /**
+   * Size of side pane scrollable.
+   * @type {goog.math.Size}
+   * @private
+   */
+  this.scrollableSize_ = new goog.math.Size(0, 0);
+
+  /**
    * Pane show behavior.
    * @type {rflect.cal.ui.PaneShowBehavior}
    */
@@ -281,7 +288,8 @@ rflect.cal.ui.SidePane.prototype.buildHTML = function(opt_outerHTML) {
     sizeCategory: this.containerSizeMonitor_.getSizeCategory(),
     monthSelectorHTML: !isSmallScreen ? this.miniCal_.buildHTML(true) : '',
     calSelectorMyHTML: this.calSelectorMy_.buildHTML(true),
-    calSelectorOtherHTML: this.calSelectorOther_.buildHTML(true)
+    calSelectorOtherHTML: this.calSelectorOther_.buildHTML(true),
+    scrollableSize: this.scrollableSize_
   })
 }
 
@@ -309,19 +317,42 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
 
   this.showBehavior.assignEvents();
 
-  this.getHandler().listen(this.showBehavior,
+  this.getHandler().
+      listen(this.showBehavior,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
-      this.onSlideBreak_, false, this);
+      this.onSlideBreak_, false, this).
+      listen(this.viewManager_.getScreenManager(),
+      rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
+      this.onBeforePageChange_, false, this);
 };
+
+
+/**
+ * Page change handler.
+ * @param {rflect.cal.ui.ScreenManager.BeforePageChangeEvent} aEvent Event
+ * object.
+ * @private
+ */
+rflect.cal.ui.SidePane.prototype.onBeforePageChange_ = function(aEvent) {
+  if (aEvent.currentScreen == this.getParent()) {
+    this.resetMomentumScroller();
+  }
+}
 
 
 /**
  * Removes scroll listeners on each update.
  */
 rflect.cal.ui.SidePane.prototype.addMomentumScroller = function() {
-  if (this.momentumScroller_ && this.containerSizeMonitor_.isSmallScreen()) {
-    var element = this.getElement().querySelector('.side-pane-external-body');
-    var frameElement = this.getElement();
+  if (this.momentumScroller_) {
+    var element = this.getElement().querySelector(
+        this.containerSizeMonitor_.isSmallScreen() ?
+        '.side-pane-external-body' :
+        '.side-pane-scrollable-content');
+
+    var frameElement = this.containerSizeMonitor_.isSmallScreen() ?
+        this.getElement() : this.getElement().
+        querySelector('.side-pane-scrollable');
 
     if (element && frameElement) {
       this.momentumScroller_.setElements(element, frameElement);
@@ -535,10 +566,9 @@ rflect.cal.ui.SidePane.prototype.updateByRedraw = function() {
 rflect.cal.ui.SidePane.prototype.getStaticSize = function() {
   if (!this.adaptiveSizeHelper.getStaticSizeForView()) {
     let staticSize = new goog.math.Size(0, 0);
-    let [firstListSelector] = this.getElement().
-        querySelectorAll('.list-selector');
-    let {top} = firstListSelector.getBoundingClientRect();
-
+    let sidePaneBody = this.getElement().querySelector('.side-pane-scrollable');
+    //let labelSize = this.getMenuSize_();
+    let {top} = sidePaneBody.getBoundingClientRect();
     this.adaptiveSizeHelper.setStaticSizeForView(new goog.math.Size(0, top));
   }
 
@@ -550,23 +580,12 @@ rflect.cal.ui.SidePane.prototype.getStaticSize = function() {
  * Updates child calendar selectors.
  */
 rflect.cal.ui.SidePane.prototype.updateScrollableSizes = function() {
-  var staticSize = this.getStaticSize();
-  var docSize = this.containerSizeMonitor_.getSize();
-  var labelSize = this.getLabelSize_();
-  var calSelectorLabelSize = this.getLabelSize_();
-
-  if (!this.eventManager_.hasNonOwnerCalendars()) {
-    let height = docSize.height - staticSize.height - labelSize.height;
-
-    this.getCalSelector().setScrollableSize(new goog.math.Size(0, height));
-    this.getTaskSelector().setScrollableSize(new goog.math.Size(0, 0));
-  } else {
-    let height = Math.floor((docSize.height - staticSize.height -
-        labelSize.height * 2) / 2);
-
-    this.getCalSelector().setScrollableSize(new goog.math.Size(0, height));
-    this.getTaskSelector().setScrollableSize(new goog.math.Size(0, height));
-  }
+  let staticSize = this.getStaticSize();
+  let docSize = this.containerSizeMonitor_.getSize();
+  let menuSize = this.getMenuSize_();
+  let height = docSize.height - staticSize.height - menuSize.height;
+  this.scrollableSize_.height = height;
+  
 }
 
 
@@ -578,15 +597,9 @@ rflect.cal.ui.SidePane.prototype.updateScrollableSizesAndDom = function() {
       getSizeWasAdaptedForView()) {
     this.updateScrollableSizes();
 
-    var [listBody1, listBody2] = this.getElement().
-        querySelectorAll('.list-body');
-    listBody1.style.height = this.getCalSelector().getScrollableSize().height +
-        'px';
-    if (listBody2) {
-      listBody2.style.height = this.getTaskSelector().getScrollableSize().
-          height + 'px';
-    }
-
+    var sidePaneBody = this.getElement().querySelector('.side-pane-scrollable');
+    sidePaneBody.style.height = this.scrollableSize_.height + 'px';
+    
     this.adaptiveSizeHelper.setSizeWasAdaptedForView(true);
   }
 }
@@ -595,13 +608,13 @@ rflect.cal.ui.SidePane.prototype.updateScrollableSizesAndDom = function() {
 /**
  * @return {goog.math.Size}
  */
-rflect.cal.ui.SidePane.prototype.getLabelSize_ = function() {
-  if (!this.labelSize_) {
-    let label = this.getElement().querySelector('.list-label-cont');
+rflect.cal.ui.SidePane.prototype.getMenuSize_ = function() {
+  if (!this.menuSize_) {
+    let label = this.getElement().querySelector('.side-pane-menu');
     let {right, left, bottom, top} = label.getBoundingClientRect();
-    this.labelSize_ = new goog.math.Size(right - left, bottom - top);
+    this.menuSize_ = new goog.math.Size(right - left, bottom - top);
   }
-  return this.labelSize_.clone();
+  return this.menuSize_.clone();
 }
 
 
