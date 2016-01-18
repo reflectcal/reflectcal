@@ -9,13 +9,15 @@
 @spacerHeight: 20px;
 @monthSelectorHeight: 265px;
 @monthSelectorWidth: 260px;
+@sidePaneColor: rgb(250,250,250);
 
 .side-pane {
   .box-sizing();
   position: absolute;
-  width: 280px;
+  width: @monthSelectorWidth;
   margin: 0;
-  margin-right: 20px;
+  border-right: 1px solid #e5e5e5;
+  background-color: @sidePaneColor;
 }
 
 .side-pane-spacer {
@@ -93,6 +95,10 @@
   list-style-type: none;
 }
 
+.side-pane-menu-with-border {
+  border-top: 1px solid #e5e5e5;
+}
+
 .side-pane-menu-item {
 }
 
@@ -162,6 +168,7 @@
   height: @monthSelectorHeight;/*For Roboto, 150px for arial*/
   width: @monthSelectorWidth;
   padding: 0;
+  background-color: @sidePaneColor;
 }
 
 

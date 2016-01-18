@@ -99,6 +99,7 @@ body when (@UI_TYPE = 'MOBILE') {
 
 #main-pane-header-scrollable {
   border: 1px solid #e5e5e5;
+  border-left: none;
   border-bottom-width: 0;
   /*we need this for ie7 as nested relative positioned elements
   don't get affected by overflow without it*/
@@ -246,6 +247,7 @@ body when (@UI_TYPE = 'MOBILE') {
 #main-pane-body-scrollable-wk() {
   /*overflow-x: visible;*/
   border: 1px solid #e5e5e5;
+  border-left: none;
   border-right: none;
   height: 400px;
   position: relative;
@@ -280,8 +282,7 @@ body when (@UI_TYPE = 'MOBILE') {
 #hours-container {
   float: left;
   position: absolute;
-  width: 60px;
-  border-right: 1px solid #e5e5e5;
+  width: 62px;
   margin: 0;
   left: 0; /*This will be set to scrollable scrollLeft in expanded mode*/
 }
@@ -328,6 +329,10 @@ body when (@UI_TYPE = 'MOBILE') {
   height: 35px;
 }
 
+.grid-table-row-empty-border {
+  border-bottom: 1px solid transparent;
+}
+
 .grid-table-row-odd {
   border-bottom: 1px solid #e5e5e5;
   /*border-bottom: 1px dotted rgba(213,213,213,0.9);*/
@@ -341,7 +346,7 @@ body when (@UI_TYPE = 'MOBILE') {
   text-align: right;
   padding-right: 2px;
   color: #2c2c2c;
-  line-height: 23px;
+  line-height: 35px;
 }
 
 .hl-odd {
@@ -488,6 +493,7 @@ body when (@UI_TYPE = 'MOBILE') {
 .main-pane-body-scrollable-mn {
   overflow-x: hidden;
   border: 1px solid #e5e5e5;
+  border-left: none;
   position: relative;
   height: 100%;
 }
@@ -518,7 +524,7 @@ body when (@UI_TYPE = 'MOBILE') {
 
 #weeknum-cont {
   float: left;
-  width: 15px;
+  width: 17px;
   height: 100%;
   border-right: 1px solid #e5e5e5;
 }
@@ -527,13 +533,13 @@ body when (@UI_TYPE = 'MOBILE') {
   table-layout: fixed;
   height: 100%;
   margin-right: 1px;
-  width: 14px;
+  width: 16px;
   color: #aaaaaa;
 }
 
 .weeknum-label {
   vertical-align: middle;
-  text-align: right;
+  text-align: center;
 }
 
 .weeknum-label-inner {

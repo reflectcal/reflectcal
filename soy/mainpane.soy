@@ -475,7 +475,7 @@
  * @param label Time label.
  */
 {template .hourRow autoescape="false"}
-  <div class="grid-table-row{sp}{if $even}grid-table-row-even{else}grid-table-row-odd{/if}">
+  <div class="grid-table-row grid-table-row-empty-border">
     <div class="hour-label{sp}{if $even}hl-even{else}hl-odd{/if}">{$label}</div>
   </div>
 {/template}
