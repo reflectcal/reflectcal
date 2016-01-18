@@ -170,6 +170,11 @@ rflect.cal.ui.SaveDialog.prototype.setVisible = function (aVisible) {
     this.input_ && this.input_.blur();
   else
     this.select_.update();
+  if (aVisible) {
+    goog.dom.classes.add(this.getElement(), 'dialog-appearance');
+  } else {
+    goog.dom.classes.remove(this.getElement(), 'dialog-appearance');
+  }
 }
 
 

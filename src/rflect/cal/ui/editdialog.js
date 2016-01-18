@@ -150,6 +150,19 @@ rflect.cal.ui.EditDialog.prototype.onEditClick_ = function (aEvent) {
 
 
 /**
+ * @override
+ */
+rflect.cal.ui.EditDialog.prototype.setVisible = function (aVisible) {
+  rflect.cal.ui.SaveDialog.superClass_.setVisible.call(this, aVisible);
+  if (aVisible) {
+    goog.dom.classes.add(this.getElement(), 'dialog-appearance');
+  } else {
+    goog.dom.classes.remove(this.getElement(), 'dialog-appearance');
+  }
+}
+
+
+/**
  * Keydown listener.
  * @param {goog.events.Event} aEvent Event object.
  * @private
