@@ -96,12 +96,13 @@
   }
 
   75% {
-    transform: scale(1.1);
-    opacity: 1;
+    transform: scale(1.2);
+    opacity: .75;
   }
 
   100% {
     transform: scale(1);
+    opacity: 1;
   }
 }
 
@@ -112,16 +113,17 @@
  }
 
  75% {
-   -webkit-transform: scale(1.1);
-   opacity: 1;
+   -webkit-transform: scale(1.2);
+   opacity: .75;
  }
 
  100% {
    -webkit-transform: scale(1);
+   opacity: 1;
  }
 }
 
 .dialog-appearance {
-  -webkit-animation: bounce-appearance-dialog 200ms linear 1;
-  animation: bounce-appearance-dialog 200ms linear 1;
+  -webkit-animation: bounce-appearance-dialog 200ms ease-out 1;
+  animation: bounce-appearance-dialog 200ms ease-out 1;
 }
