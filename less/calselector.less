@@ -149,20 +149,21 @@
   top: 0;
   width: 20px;
   height: 100%;
-  background: rgba(246,246,246,1);
+  background: @sidePaneColor;
   /* @alternate */
-  background: -moz-linear-gradient(center right, rgba(246,246,246,1) 0, rgba(246,246,246,0) 100%);
+  background: -moz-linear-gradient(center right, @sidePaneColor 0, @sidePaneColorTransparent 100%);
   /* @alternate */
-  background: -webkit-gradient(linear, center right, center left, from(rgba(246,246,246,1)), to(rgba(255,255,255,0)));
+  background: -webkit-gradient(linear, center right, center left,
+      from(@sidePaneColor), to(@sidePaneColorTransparent));
   /* @alternate */
-  background: -ms-linear-gradient(center right, rgba(246,246,246,1) 0, rgba(246,246,246,0) 100%);
+  background: -ms-linear-gradient(center right, @sidePaneColor 0, @sidePaneColorTransparent 100%);
 
   /* @alternate */
-  background: -webkit-linear-gradient(right, rgba(246,246,246,1) 0, rgba(246,246,246,0) 100%);
+  background: -webkit-linear-gradient(right, @sidePaneColor 0, @sidePaneColorTransparent 100%);
   /* @alternate */
-  background: -o-linear-gradient(to left, rgba(246,246,246,1) 0, rgba(246,246,246,0) 100%);
+  background: -o-linear-gradient(to left, @sidePaneColor 0, @sidePaneColorTransparent 100%);
   /* @alternate */
-  background: linear-gradient(to left, rgba(246,246,246,1) 0, rgba(246,246,246,0) 100%);
+  background: linear-gradient(to left, @sidePaneColor 0, @sidePaneColorTransparent 100%);
 }
 
 .listitem-opt {
