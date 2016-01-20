@@ -48,6 +48,20 @@
             </span>
           </div>
 
+          <div class="event-pane-cont">
+            <label class="goog-inline-block event-pane-label label-fluid event-pane-calendars-label"
+                for="settings-themes">
+              {rflect.cal.i18n.Symbols.VISUAL_THEME}
+            </label>
+            <div class="button dropdown settings-pane-select">
+              <select id="settings-themes">
+                {foreach $themeName in rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES}
+                <option value="{$themeName[0]}" class="" id="theme-{$themeName[0]}">{$themeName[1]}</option>
+                {/foreach}
+              </select>
+            </div>
+          </div>
+
           <div class="event-pane-cont event-pane-cont-last">
             <label class="goog-inline-block event-pane-label label-fluid event-pane-calendars-label logged-label"
                 for="settings-logout">

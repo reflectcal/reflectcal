@@ -461,10 +461,13 @@ rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
  * @private
  */
 rflect.cal.ViewManager.prototype.onSaveUserImmediate_ = function(aEvent) {
-  if (aEvent.userChanged) {
-    this.eventManager_.run();
-    this.mainBody_.update();
+  if (aEvent.user['settings']['visualTheme'] !== aEvent.changedUser['settings']
+      ['visualTheme']) {
+    this.mainBody_.changeVisualTheme(aEvent.changedUser['settings']
+        ['visualTheme']);
   }
+  //Save new user.
+  this.user = aEvent.changedUser;
 }
 
 

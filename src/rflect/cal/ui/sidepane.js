@@ -289,7 +289,9 @@ rflect.cal.ui.SidePane.prototype.buildHTML = function(opt_outerHTML) {
     monthSelectorHTML: !isSmallScreen ? this.miniCal_.buildHTML(true) : '',
     calSelectorMyHTML: this.calSelectorMy_.buildHTML(true),
     calSelectorOtherHTML: this.calSelectorOther_.buildHTML(true),
-    scrollableSize: this.scrollableSize_
+    scrollableSize: this.scrollableSize_,
+    visualThemeClassName: this.viewManager_.user['settings']['visualTheme'] +
+        '-theme'
   })
 }
 

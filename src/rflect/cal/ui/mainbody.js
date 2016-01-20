@@ -888,6 +888,21 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
 }
 
 
+
+/**
+ * @param {string} aThemeName Theme name.
+ */
+rflect.cal.ui.MainBody.prototype.changeVisualTheme = function(aThemeName) {
+  let themeClassName = rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES[1][0] +
+      '-theme';
+  if (aThemeName == rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES[1][0]) {
+    goog.dom.classes.add(this.getSidePane().getElement(), themeClassName);
+  } else {
+    goog.dom.classes.remove(this.getSidePane().getElement(), themeClassName);
+  }
+}
+
+
 /**
  * Updates just main pane.
  */

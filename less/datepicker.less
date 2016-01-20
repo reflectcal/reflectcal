@@ -35,6 +35,12 @@
   cursor: default;
 }
 
+.dark-theme .goog-date-picker {
+  background-color: @sidePaneColorDark;
+  border: 1px solid @sidePaneBorderColorDark;
+  color: #fff;
+}
+
 #minical-mask-cnt {
   position:relative;
   top: 36px;
@@ -86,6 +92,10 @@
   background: #ccf;
 }
 
+.dark-theme .goog-date-picker-menu-selected {
+  background-color: rgb(84,84,84);
+}
+
 .goog-date-picker th {
   font-size: .9em;
 }
@@ -109,6 +119,10 @@
   color: #2c2c2c;
   font-weight: normal;
   background: transparent;
+}
+
+.dark-theme .goog-date-picker-btn {
+  color: #fff;
 }
 
 .goog-date-picker-head {
@@ -173,6 +187,11 @@
   border: 0 solid #f0f0f0;
 }
 
+.dark-theme .goog-date-picker-week,
+.dark-theme .goog-date-picker-wday {
+  border-color: @sidePaneBorderColorDark;
+}
+
 .goog-date-picker-week {
   border-right-width: 1px;
 }
@@ -215,6 +234,11 @@ td.goog-date-picker-none-cont {
 /** Use td.className instead of !important */
 td.goog-date-picker-selected, td.goog-date-picker-selected-pre{
   background: #e6e6e6;
+}
+
+.dark-theme td.goog-date-picker-selected,
+    .dark-theme td.goog-date-picker-selected-pre{
+  background: rgb(64, 64, 64);
 }
 
 .goog-date-picker-today {

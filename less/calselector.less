@@ -13,8 +13,17 @@
   color: #2c2c2c;
 }
 
+.dark-theme .list-selector {
+  color: #fff;
+}
+
 .list-label-cont-highlighted, .list-selector-item-highlighted {
   background-color: #e5e5e5;
+}
+
+.dark-theme .list-label-cont-highlighted,
+    .dark-theme .list-selector-item-highlighted {
+  background-color: rgb(84,84,84);
 }
 
 .list-label-cont, #calendars-label-cont, #tasks-label-cont {
@@ -125,6 +134,10 @@
   line-height: 18px;
 }
 
+.dark-theme .listitem-label {
+  color: #fff;
+}
+
 .calitem-label-active {
   color: #2c2c2c;
 }
@@ -164,6 +177,24 @@
   background: -o-linear-gradient(to left, @sidePaneColor 0, @sidePaneColorTransparent 100%);
   /* @alternate */
   background: linear-gradient(to left, @sidePaneColor 0, @sidePaneColorTransparent 100%);
+}
+
+.dark-theme .listitem-opt-cont {
+  background: @sidePaneColorDark;
+  /* @alternate */
+  background: -moz-linear-gradient(center right, @sidePaneColorDark 0, @sidePaneColorDarkTransparent 100%);
+  /* @alternate */
+  background: -webkit-gradient(linear, center right, center left,
+      from(@sidePaneColorDark), to(@sidePaneColorDarkTransparent));
+  /* @alternate */
+  background: -ms-linear-gradient(center right, @sidePaneColorDark 0, @sidePaneColorDarkTransparent 100%);
+
+  /* @alternate */
+  background: -webkit-linear-gradient(right, @sidePaneColorDark 0, @sidePaneColorDarkTransparent 100%);
+  /* @alternate */
+  background: -o-linear-gradient(to left, @sidePaneColorDark 0, @sidePaneColorDarkTransparent 100%);
+  /* @alternate */
+  background: linear-gradient(to left, @sidePaneColorDark 0, @sidePaneColorDarkTransparent 100%);
 }
 
 .listitem-opt {

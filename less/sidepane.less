@@ -13,6 +13,8 @@
 @sidePaneColorTransparent: rgba(255,255,255,0);
 @sidePaneColorDark: rgba(73,73,73,1);
 @sidePaneColorDarkTransparent: rgba(73,73,73,0);
+@sidePaneBorderColor: #e5e5e5;
+@sidePaneBorderColorDark: rgb(108,108,108);
 
 .side-pane {
   .box-sizing();
@@ -21,6 +23,11 @@
   margin: 0;
   border-right: 1px solid #e5e5e5;
   background-color: @sidePaneColor;
+}
+
+.side-pane.dark-theme {
+  background-color: @sidePaneColorDark;
+  border-color: @sidePaneColorDark;
 }
 
 .side-pane-spacer {
@@ -45,6 +52,10 @@
 
   -webkit-overflow-scrolling: touch;
   overflow-scrolling: touch;
+}
+
+.side-pane-external.dark-theme {
+  background-color: @sidePaneColorDark;
 }
 
 .side-pane-external-native-scroll {
@@ -102,9 +113,14 @@
   border-top: 1px solid #e5e5e5;
 }
 
+.dark-theme .side-pane-menu-with-border {
+  border-top: 1px solid @sidePaneBorderColorDark;
+}
+
 .side-pane-menu-item {
 }
 
+/* Button minimal. */
 .button-minimal {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Fira Sans", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Open Sans", "Helvetica Neue", arial, sans-serif;
   .box-sizing();
@@ -120,15 +136,30 @@
   font-weight: normal;
 }
 
+.button-minimal.goog-flat-button-hover {
+  box-shadow: none !important;
+}
+
 .button-minimal.goog-flat-button-active,
 .button-minimal.goog-flat-button-selected,
 .button-minimal.goog-flat-button-checked {
   background: none;
-  box-shadow: none;
+  box-shadow: none !important;
   color: #0f0f0f;
   .gradient(#e9e9e9, #e0e0e0);
 }
 
+.dark-theme .button-minimal {
+  color: #fff;
+}
+
+.dark-theme .button-minimal.goog-flat-button-active,
+.dark-theme .button-minimal.goog-flat-button-selected,
+.dark-theme .button-minimal.goog-flat-button-checked {
+  background: rgb(30, 30, 30);
+}
+
+/* Settings button on the side pane. */
 .button-settings-under-month-sel {
   color: rgba(43, 131, 201, 1);
   width: 260px;
@@ -137,7 +168,6 @@
 
 .button-settings-under-month-sel.goog-flat-button-hover {
   background: none;
-  box-shadow: none;
   color: rgba(43, 131, 201, 1);
 }
 
@@ -145,8 +175,22 @@
 .button-settings-under-month-sel.goog-flat-button-selected,
 .button-settings-under-month-sel.goog-flat-button-checked {
   background: none;
-  box-shadow: none !important;
   color: rgba(43, 131, 201, .5);
+}
+
+.dark-theme .button-settings-under-month-sel {
+  color: rgba(255, 255, 255, 1);
+}
+
+.dark-theme  .button-settings-under-month-sel.goog-flat-button-hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.dark-theme .button-settings-under-month-sel.goog-flat-button-active,
+.dark-theme .button-settings-under-month-sel.goog-flat-button-selected,
+.dark-theme .button-settings-under-month-sel.goog-flat-button-checked {
+  background: none;
+  color: rgba(255, 255, 255, .5);
 }
 
 .glass-pane {
@@ -166,12 +210,16 @@
   .opacity(0.5);
 }
 
-#month-selector .goog-date-picker {
+.side-pane .goog-date-picker {
   border-left: none;
   height: @monthSelectorHeight;/*For Roboto, 150px for arial*/
   width: @monthSelectorWidth;
   padding: 0;
   background-color: @sidePaneColor;
+}
+
+.side-pane.dark-theme .goog-date-picker {
+  background-color: @sidePaneColorDark;
 }
 
 

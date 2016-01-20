@@ -93,16 +93,16 @@ rflect.cal.ui.SettingsPane.EventTypes = {
 
 /**
  * Event that is fired after saving of user.
- * @param {Object} aUser User object.
- * @param {boolean} aChanged Whether user was changed.
+ * @param {Object} aUser Original user object.
+ * @param {Object} aChangedUser Changed user object.
  * @extends {goog.events.Event}
  * @constructor
  */
-rflect.cal.ui.SettingsPane.SaveUserEvent = function(aUser, aChanged) {
+rflect.cal.ui.SettingsPane.SaveUserEvent = function(aUser, aChangedUser) {
   goog.events.Event.call(this, rflect.cal.ui.SettingsPane.EventTypes.SAVE);
 
   this.user = aUser;
-  this.userChanged = aChanged;
+  this.changedUser = aChangedUser;
 }
 goog.inherits(rflect.cal.ui.SettingsPane.SaveUserEvent, goog.events.Event);
 
@@ -175,10 +175,10 @@ rflect.cal.ui.SettingsPane.prototype.reloadIsNeeded_ = false;
 
 
 /**
- * @return {Object} Shortcut for user settings.
+ * @return {Object} User object.
  */
-rflect.cal.ui.SettingsPane.prototype.getUserSettings = function() {
-  return this.viewManager.user['settings'];
+rflect.cal.ui.SettingsPane.prototype.getUser = function() {
+  return this.viewManager.user;
 }
 
 
@@ -475,6 +475,7 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
   this.buttonCalendars_.decorate(this.getDomHelper().getElement('button-to-calendars'));
 
   this.selectLanguages_ = this.getDomHelper().getElement('settings-languages');
+  this.selectThemes_ = this.getDomHelper().getElement('settings-themes');
 
   var checkboxDebugSubCont = this.getDomHelper().getElement('settings-debug-mode-sub-cont');
   this.checkboxDebug_.render(checkboxDebugSubCont);
@@ -600,11 +601,16 @@ rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
  * Save settings action listener.
  */
 rflect.cal.ui.SettingsPane.prototype.onSaveUser_ = function() {
-
-  if (this.scanValues()) {
-    this.transport.saveUserAsync(this.viewManager.user, this.reloadIsNeeded_);
+  let {
+    valid,
+    reloadIsNeeded,
+    originalUser,
+    changedUser
+  } = this.scanValues();
+  if (valid) {
+    this.transport.saveUserAsync(changedUser, reloadIsNeeded);
     this.dispatchEvent(new rflect.cal.ui.SettingsPane.SaveUserEvent(
-        this.viewManager.user, false));
+        originalUser, changedUser));
     this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
   }
 }
@@ -614,30 +620,39 @@ rflect.cal.ui.SettingsPane.prototype.onSaveUser_ = function() {
  * Displays settings in form.
  */
 rflect.cal.ui.SettingsPane.prototype.displayValues = function() {
-
-  this.selectLanguages_.value = this.getUserSettings()['language'] ||
+  this.selectLanguages_.value = this.getUser()['settings']['language'] ||
       goog.LOCALE;
-
-  this.checkboxDebug_.setChecked(this.getUserSettings()['debug']);
+  this.checkboxDebug_.setChecked(this.getUser()['settings']['debug']);
+  this.selectThemes_.value = this.getUser()['settings']['visualTheme'] ||
+      rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES[1][0];
 };
 
 
 /**
  * Scans settings from form.
- * @return {boolean} Whether input is valid.
+ * @return {Object} Whether input is valid.
  */
 rflect.cal.ui.SettingsPane.prototype.scanValues = function() {
   var valid = true;
+  var reloadIsNeeded = false;
+  var changedUser = goog.object.unsafeClone(this.getUser());
   if (valid) {
-    this.getUserSettings()['language'] = this.selectLanguages_.value;
-    this.getUserSettings()['debug'] = this.checkboxDebug_.isChecked();
+    changedUser['settings']['language'] = this.selectLanguages_.value;
+    changedUser['settings']['debug'] = this.checkboxDebug_.isChecked();
+    changedUser['settings']['visualTheme'] = this.selectThemes_.value;
 
-    this.reloadIsNeeded_ = this.getUserSettings()['language'] !=
-        USER['settings']['language'] || this.getUserSettings()['debug'] !=
-        USER['settings']['debug'];
+    reloadIsNeeded = this.getUser()['settings']['language'] !=
+        changedUser['settings']['language'] ||
+        this.getUser()['settings']['debug'] !=
+        changedUser['settings']['debug'];
   }
 
-  return valid;
+  return {
+    valid: valid,
+    reloadIsNeeded: reloadIsNeeded,
+    originalUser: this.getUser(),
+    changedUser: changedUser
+  }
 };
 
 

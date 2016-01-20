@@ -411,11 +411,13 @@ rflect.cal.Transport.prototype.loadEventsAsync = function() {
     paramsVector.push(cal.id);
   });
 
+//  setTimeout(() => {
   goog.net.XhrIo.send(rflect.cal.Transport.OperationUrls.LOAD_EVENT,
       goog.bind(this.onLoadEvents_, this, interval),
       'POST',
       rflect.cal.Transport.serialize(paramsVector),
       rflect.cal.Transport.DEFAULT_POST_HEADERS);
+//  }, 10000);
 };
 
 

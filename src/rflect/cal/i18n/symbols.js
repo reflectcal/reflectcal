@@ -56,6 +56,11 @@ rflect.cal.i18n.Symbols_en = {
 
   LANGUAGES: 'Languages',
   DEBUG_MODE: 'Debug mode',
+  VISUAL_THEME: 'Visual theme',
+  VISUAL_THEME_NAMES: [
+    ['light', 'Light'],
+    ['dark', 'Dark']
+  ],
   LOGGED_IN_AS: 'Logged in as',
   GUEST: 'guest',
   LOGOUT: 'Logout',
@@ -105,6 +110,11 @@ rflect.cal.i18n.Symbols_ru = {
 
   LANGUAGES: 'Языки',
   DEBUG_MODE: 'Режим отладки',
+  VISUAL_THEME: 'Тема оформления',
+  VISUAL_THEME_NAMES: [
+    ['light', 'Светлая'],
+    ['dark', 'Темная']
+  ],
   LOGGED_IN_AS: 'Вошел как',
   GUEST: 'гость',
   LOGOUT: 'Выйти',
@@ -154,6 +164,11 @@ rflect.cal.i18n.Symbols_by = {
 
   LANGUAGES: 'Мовы',
   DEBUG_MODE: 'Рэжим адладкi',
+  VISUAL_THEME: 'Тэма афармлення',
+  VISUAL_THEME_NAMES: [
+    ['light', 'Светлая'],
+    ['dark', 'Цемная']
+  ],
   LOGGED_IN_AS: 'Зайшоу як',
   GUEST: 'госць',
   LOGOUT: 'Выйсцi',
@@ -203,6 +218,11 @@ rflect.cal.i18n.Symbols_fr = {
 
   LANGUAGES: 'Langues',
   DEBUG_MODE: 'Mode débogage',
+  VISUAL_THEME: 'Thème visuel',
+  VISUAL_THEME_NAMES: [
+    ['light', 'Lumière'],
+    ['dark', 'Sombre']
+  ],
   LOGGED_IN_AS: 'Connecté en tant',
   GUEST: 'qu\'invité',
   LOGOUT: 'Se Déconnecter',

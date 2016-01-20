@@ -10,6 +10,7 @@
  * @param calSelectorMyHTML HTML of cal selector for user's calendars.
  * @param calSelectorOtherHTML HTML of cal selector for other calendars.
  * @param scrollableSize Size of scrollable.
+ * @param visualThemeClassName Theme class name.
  */
 {template .sidePane autoescape="false"}
   {if $includeOuterHTML}
@@ -17,7 +18,8 @@
       {if $isSmallScreen}side-pane-external{sp}
         {if rflect.ARTIFICIAL_SCROLLER_ENABLED}side-pane-external-artificial-scroll{else}side-pane-external-native-scroll{/if}
       {/if}{sp}
-      {if $visible}slide-pane-left-visible{/if}
+      {if $visible}slide-pane-left-visible{/if}{sp}
+      {$visualThemeClassName}
       ">
   {/if}
     {if $isSmallScreen}

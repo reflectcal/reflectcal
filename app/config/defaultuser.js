@@ -22,6 +22,7 @@ exports.DEFAULT_USER = {
     // Currently used language. If unspecified, language from Accept-Language
     // header will be used.
     language: '',
-    debug: false
+    debug: false,
+    visualTheme: 'dark'
   }
 };
