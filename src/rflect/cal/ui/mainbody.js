@@ -32,6 +32,7 @@ goog.require('rflect.cal.ui.SettingsPane');
 goog.require('rflect.cal.ui.SettingsPane.EventTypes');
 goog.require('rflect.cal.ui.SidePane');
 goog.require('rflect.cal.ui.soy.mainbody');
+goog.require('rflect.string');
 goog.require('rflect.ui.Component');
 
 
@@ -738,6 +739,8 @@ rflect.cal.ui.MainBody.prototype.setExpandedForBigScreen =
   if (!aExpanded) {
     this.getMainPane().getElement().style.width = 'auto'
     goog.dom.classes.remove(movable, 'main-pane-cont-expanded');
+    this.getSidePane().updateScrollableSizesAndDom();
+    this.getSidePane().resetMomentumScroller();
   } else {
     this.getMainPane().getElement().style.width = '100%'
     goog.dom.classes.add(movable, 'main-pane-cont-expanded');
@@ -765,9 +768,6 @@ rflect.cal.ui.MainBody.prototype.finalizeExpandedForBigScreen = function() {
     this.getSidePane().showBehavior.setSlidingIsEnabled(false);
     this.getSidePane().showBehavior.setVisible(false);
     this.getSidePane().removeMomentumScroller();
-  } else {
-    this.getSidePane().updateScrollableSizesAndDom();
-    this.getSidePane().resetMomentumScroller();
   }
   this.getMainPane().updateScrollableSizesAndDom();
 }
@@ -888,17 +888,16 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
 }
 
 
-
 /**
  * @param {string} aThemeName Theme name.
  */
 rflect.cal.ui.MainBody.prototype.changeVisualTheme = function(aThemeName) {
-  let themeClassName = rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES[1][0] +
-      '-theme';
-  if (aThemeName == rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES[1][0]) {
-    goog.dom.classes.add(this.getSidePane().getElement(), themeClassName);
-  } else {
+  let themeClassName = rflect.string.getVisualThemeClassName(
+      rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES[1][0]);
+  if (aThemeName == rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES[0][0]) {
     goog.dom.classes.remove(this.getSidePane().getElement(), themeClassName);
+  } else {
+    goog.dom.classes.add(this.getSidePane().getElement(), themeClassName);
   }
 }
 

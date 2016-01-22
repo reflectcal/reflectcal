@@ -102,3 +102,11 @@ rflect.string.getNumericIndexWithoutPrefix = function(aStr, aPrefix) {
 rflect.string.getIdWithoutPrefix = function(aStr, aPrefix) {
   return aStr.substring(aPrefix.length);
 }
+
+
+/**
+ * @return {string} Theme class name.
+ */
+rflect.string.getVisualThemeClassName = function(aThemeName) {
+  return aThemeName + '-theme';
+}

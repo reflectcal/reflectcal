@@ -248,3 +248,7 @@ if (goog.LOCALE == 'en') {
   rflect.cal.i18n.Symbols = rflect.cal.i18n.Symbols_en;
 }
 
+
+rflect.cal.i18n.Symbols.isLightTheme = function(aThemeName) {
+  return aThemeName == rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES[0][0];
+}

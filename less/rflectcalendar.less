@@ -54,7 +54,6 @@ body when (@UI_TYPE = 'MOBILE') {
   overflow: hidden;
   height: 20px;
   line-height: 20px;
-  padding-left: 61px; /*+1 pixel to match #grid-table border*/
 
   border-bottom: 1px solid #e5e5e5;
   margin-bottom: -1px;
@@ -63,11 +62,13 @@ body when (@UI_TYPE = 'MOBILE') {
 }
 
 .main-pane-header-wk-daynames {
-  margin-left: -61px;
+  margin-left: -81px;
+  padding-left: 81px;
 }
 
 .main-pane-header-mn-daynames {
-  margin-left: -45px;
+  margin-left: -20px;
+  padding-left: 38px;
 }
 
 .main-pane-header-mn-daynames-with-zippies {
@@ -484,10 +485,6 @@ body when (@UI_TYPE = 'MOBILE') {
   position: relative;
   height: 100%;
   float: left;
-}
-
-.main-pane-header-container-mn when (@UI_TYPE = '') {
-  margin-left: 28px; /*11+ 1 pixels from zippies, 15 + 1 pixels from weeknums*/
 }
 
 .main-pane-body-scrollable-mn {

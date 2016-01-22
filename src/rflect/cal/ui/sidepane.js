@@ -29,6 +29,7 @@ goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.cal.ui.ViewButtonUpdater');
 goog.require('rflect.cal.ui.VMAdaptiveSizeHelper');
 goog.require('rflect.cal.ui.soy.sidepane');
+goog.require('rflect.string');
 
 
 
@@ -290,8 +291,8 @@ rflect.cal.ui.SidePane.prototype.buildHTML = function(opt_outerHTML) {
     calSelectorMyHTML: this.calSelectorMy_.buildHTML(true),
     calSelectorOtherHTML: this.calSelectorOther_.buildHTML(true),
     scrollableSize: this.scrollableSize_,
-    visualThemeClassName: this.viewManager_.user['settings']['visualTheme'] +
-        '-theme'
+    visualThemeClassName: rflect.string.getVisualThemeClassName(
+        this.viewManager_.user['settings']['visualTheme'])
   })
 }
 
@@ -415,9 +416,12 @@ rflect.cal.ui.SidePane.prototype.getGlassElement_ = function() {
 rflect.cal.ui.SidePane.prototype.addGlassPane = function() {
   this.getDomHelper().getElement('screen-manager')
       .appendChild(this.getGlassElement_());
-  setTimeout(() => {
-    goog.dom.classes.add(this.getGlassElement_(), 'glass-pane-opaque');
-  }, 0);
+  if (rflect.cal.i18n.Symbols.isLightTheme(
+      this.viewManager_.user['settings']['visualTheme'])) {
+    setTimeout(() => {
+      goog.dom.classes.add(this.getGlassElement_(), 'glass-pane-opaque');
+    }, 0);
+  }
 }
 
 
@@ -425,7 +429,10 @@ rflect.cal.ui.SidePane.prototype.addGlassPane = function() {
  */
 rflect.cal.ui.SidePane.prototype.removeGlassPane = function() {
   goog.dom.removeNode(this.getGlassElement_());
-  goog.dom.classes.remove(this.getGlassElement_(), 'glass-pane-opaque');
+  if (rflect.cal.i18n.Symbols.isLightTheme(
+      this.viewManager_.user['settings']['visualTheme'])) {
+    goog.dom.classes.remove(this.getGlassElement_(), 'glass-pane-opaque');
+  }
 }
 
 
@@ -443,7 +450,10 @@ rflect.cal.ui.SidePane.prototype.onSlideBreak_ = function(aEvent) {
       this.addMomentumScroller();
     }
     if (!aEvent.showing && aEvent.start){
-      goog.dom.classes.remove(this.getGlassElement_(), 'glass-pane-opaque');
+      if (rflect.cal.i18n.Symbols.isLightTheme(
+            this.viewManager_.user['settings']['visualTheme'])) {
+        goog.dom.classes.remove(this.getGlassElement_(), 'glass-pane-opaque');
+      }
       this.removeMomentumScroller();
     }
     if (!aEvent.showing && !aEvent.start){
