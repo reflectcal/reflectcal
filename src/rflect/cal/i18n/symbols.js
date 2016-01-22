@@ -163,7 +163,7 @@ rflect.cal.i18n.Symbols_by = {
   ENTER_DESCRIPTION: 'Ўвядзіце апісанне',
 
   LANGUAGES: 'Мовы',
-  DEBUG_MODE: 'Рэжим адладкi',
+  DEBUG_MODE: 'Рэжым адладкi',
   VISUAL_THEME: 'Тэма афармлення',
   VISUAL_THEME_NAMES: [
     ['light', 'Светлая'],
