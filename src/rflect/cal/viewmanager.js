@@ -110,7 +110,7 @@ rflect.cal.ViewManager = function(aMainInstance) {
    */
 
   this.screenManager_ = new rflect.cal.ui.ScreenManager(this);
-  this.screenManager_.setSlidingIsEnabled(rflect.TOUCH_INTERFACE_ENABLED);
+  this.screenManager_.setSlidingIsEnabled(true);
 
    /**
    * Notification manager.
@@ -461,13 +461,16 @@ rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
  * @private
  */
 rflect.cal.ViewManager.prototype.onSaveUserImmediate_ = function(aEvent) {
-  if (aEvent.user['settings']['visualTheme'] !== aEvent.changedUser['settings']
-      ['visualTheme']) {
-    this.mainBody_.changeVisualTheme(aEvent.changedUser['settings']
-        ['visualTheme']);
+  //Listen for user change events from settings pane only.
+  if (aEvent.target == this.mainBody_.getSettingsPane()) {
+    if (aEvent.user['settings']['visualTheme'] !==
+        aEvent.changedUser['settings']['visualTheme']) {
+      this.mainBody_.changeVisualTheme(aEvent.changedUser['settings']
+          ['visualTheme']);
+    }
+    //Save new user.
+    this.user = aEvent.changedUser;
   }
-  //Save new user.
-  this.user = aEvent.changedUser;
 }
 
 

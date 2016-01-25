@@ -284,6 +284,14 @@ rflect.cal.ui.MainBody.prototype.getMiniCal = function() {
 
 
 /**
+ * @return {goog.ui.Component}
+ */
+rflect.cal.ui.MainBody.prototype.getSettingsPane = function() {
+  return this.settingsPane_;
+};
+
+
+/**
  * Builds body of component.
  * @param {boolean=} opt_outerHTML Whether to build outer html.
  * @return {string}
