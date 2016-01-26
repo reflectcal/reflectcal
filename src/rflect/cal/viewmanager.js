@@ -110,7 +110,7 @@ rflect.cal.ViewManager = function(aMainInstance) {
    */
 
   this.screenManager_ = new rflect.cal.ui.ScreenManager(this);
-  this.screenManager_.setSlidingIsEnabled(true);
+  this.screenManager_.setSlidingIsEnabled(rflect.TOUCH_INTERFACE_ENABLED);
 
    /**
    * Notification manager.
