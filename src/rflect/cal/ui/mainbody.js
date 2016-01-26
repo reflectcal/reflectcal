@@ -666,25 +666,27 @@ rflect.cal.ui.MainBody.prototype.isExpanded = function() {
 rflect.cal.ui.MainBody.prototype.onSidePaneSlide_ = function(aEvent) {
   var isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
 
-  if (aEvent.start && !aEvent.showing) {
-    //NOTE(alexk): we can use rflect.cal.ui.MainBody.prototype.toggleExpanded
-    // instead which fires directly on button press.
+  if (isSmallScreen) {
+    if (aEvent.start && !aEvent.showing) {
+      //NOTE(alexk): we can use rflect.cal.ui.MainBody.prototype.toggleExpanded
+      // instead which fires directly on button press.
 
-    if (this.getSidePane().isGlassPaneEnabled()) {
-      this.getMainPane().setScrollEnabled(true);
+      if (this.getSidePane().isGlassPaneEnabled()) {
+        this.getMainPane().setScrollEnabled(true);
+      }
     }
-  }
-  if (!aEvent.start && !aEvent.showing) {
-    this.expanded_ = true;
-  }
-  if (aEvent.start && aEvent.showing) {
+    if (!aEvent.start && !aEvent.showing) {
+      this.expanded_ = true;
+    }
+    if (aEvent.start && aEvent.showing) {
 
-    if (this.getSidePane().isGlassPaneEnabled()) {
-      this.getMainPane().setScrollEnabled(false);
+      if (this.getSidePane().isGlassPaneEnabled()) {
+        this.getMainPane().setScrollEnabled(false);
+      }
     }
-  }
-  if (!aEvent.start && aEvent.showing) {
-    this.expanded_ = false;
+    if (!aEvent.start && aEvent.showing) {
+      this.expanded_ = false;
+    }
   }
 }
 
