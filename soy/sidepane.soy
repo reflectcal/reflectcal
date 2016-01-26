@@ -9,7 +9,6 @@
  * @param monthSelectorHTML HTML of month selector.
  * @param calSelectorMyHTML HTML of cal selector for user's calendars.
  * @param calSelectorOtherHTML HTML of cal selector for other calendars.
- * @param scrollableSize Size of scrollable.
  * @param visualThemeClassName Theme class name.
  */
 {template .sidePane autoescape="false"}
@@ -42,9 +41,7 @@
       <div class="side-pane-scrollable{sp}
           {if rflect.ARTIFICIAL_SCROLLER_ENABLED}side-pane-scrollable-artificial-scroll
           {else}side-pane-scrollable-native-scroll{/if}"
-          {if not $isSmallScreen}
-          style="height:{$scrollableSize.height}px"
-          {/if}>
+          >
         <div class="side-pane-scrollable-content">
           {$calSelectorMyHTML}
           {$calSelectorOtherHTML}

@@ -23,6 +23,7 @@
   margin: 0;
   border-right: 1px solid #e5e5e5;
   background-color: @sidePaneColor;
+  height: 100%;
 }
 
 .side-pane.dark-theme {
@@ -74,6 +75,8 @@
 
 .side-pane-scrollable {
   margin-top: 20px;
+  height: ~"calc(100% - 355px)";
+  transition: height .3s;
 }
 
 .side-pane-scrollable-native-scroll {

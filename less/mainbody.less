@@ -6,13 +6,48 @@
 
 /* Styles for main body. */
 
-main-body {
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+/*
+  This is a class for <html> element.
+  To prevent appearance of scrollbar in IE10+.
+*/
+.overflow-vertical-protected {
+  overflow-y: hidden;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  .default-font();
+  /*Note(alexk): It's responsibility of container to provide width/height restrictions.*/
+  min-width: 320px;
+  min-height: 376px; /* -8px of .main-body margin-top.*/
+  background-color: rgb(246,246,246);
+}
+
+body when (@UI_TYPE = 'MOBILE') {
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-highlight: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.main-body {
   .box-sizing();
   height: 100%;
+  background-color: #fff;
 }
 
 .main-pane-cont {
   .box-sizing();
+  position: relative;
+  height: ~"calc(100% - 63px)";
 }
 
 .main-pane-cont-expanded {

@@ -747,7 +747,6 @@ rflect.cal.ui.MainBody.prototype.setExpandedForBigScreen =
   if (!aExpanded) {
     this.getMainPane().getElement().style.width = 'auto'
     goog.dom.classes.remove(movable, 'main-pane-cont-expanded');
-    this.getSidePane().updateScrollableSizesAndDom();
     this.getSidePane().resetMomentumScroller();
   } else {
     this.getMainPane().getElement().style.width = '100%'
