@@ -927,14 +927,19 @@ rflect.cal.ui.MainPane.prototype.updateScrollableSizesAndDom = function() {
       let grid = this.getDomHelper().
           getElement('grid-table-wrapper-outer');
       let blocks = this.getElement().querySelectorAll('.monthgrid-row');
+      let weekNumLabels = this.getElement().querySelectorAll('.weeknum-label');
 
       mainScrollable.style.height =
           this.blockManager_.blockPoolMonth.gridContainerSize.height + 'px';
       grid.style.height =
           this.blockManager_.blockPoolMonth.gridSize.height + 'px';
       goog.array.forEach(blocks, (block, index) => {
-        block.style.height = this.blockManager_.blockPoolMonth.blocks[index].
-            size + 'px';
+        block.style.height =
+            this.blockManager_.blockPoolMonth.blocks[index].size + 'px';
+      });
+      goog.array.forEach(weekNumLabels, (weekNumLabel, index) => {
+        weekNumLabel.style.height =
+            this.blockManager_.blockPoolMonth.blocks[index].size + 'px';
       });
 
     }
