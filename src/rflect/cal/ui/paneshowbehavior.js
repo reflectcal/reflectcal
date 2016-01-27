@@ -90,6 +90,13 @@ rflect.cal.ui.PaneShowBehavior.prototype.visible_ = false;
 
 
 /**
+ * @type {goog.events.Key}
+ * @private
+ */
+rflect.cal.ui.PaneShowBehavior.prototype.transitionEndKey_;
+
+
+/**
  * Function that will run before visibility change.
  * @type {function()}
  * @private
@@ -129,6 +136,11 @@ rflect.cal.ui.PaneShowBehavior.prototype.isVisible = function() {
 rflect.cal.ui.PaneShowBehavior.prototype.setSlidingIsEnabled =
     function(aSlidingIsEnabled) {
   this.slidingIsEnabled_ = aSlidingIsEnabled;
+  if (aSlidingIsEnabled) {
+    this.assignEvents();
+  } else {
+    this.unassignEvents();
+  }
 }
 
 
@@ -151,13 +163,26 @@ rflect.cal.ui.PaneShowBehavior.prototype.setVisibleWithoutRender =
  */
 rflect.cal.ui.PaneShowBehavior.prototype.assignEvents =
     function() {
-  if (this.slidingIsEnabled_ && !this.transitionEndKey_){
+  if (this.component.isInDocument() && !this.transitionEndKey_ &&
+      this.slidingIsEnabled_) {
+    goog.events.unlistenByKey(this.transitionEndKey_);
     this.transitionEndKey_ = goog.events.listen(
         this.component.getElement(),
         rflect.browser.transitionend.VENDOR_TRANSITION_END_NAMES,
         this.onSlideEnd_, false, this);
   }
 }
+
+
+/**
+ * Unassign transition end event listener.
+ */
+rflect.cal.ui.PaneShowBehavior.prototype.unassignEvents =
+    function() {
+  goog.events.unlistenByKey(this.transitionEndKey_);
+  this.transitionEndKey_ = null;
+}
+
 
 /**
  * Sets the visibility of the pane. Lazily renders the component if needed.
@@ -312,5 +337,5 @@ rflect.cal.ui.PaneShowBehavior.prototype.onSlideEnd_ = function(aEvent) {
 rflect.cal.ui.PaneShowBehavior.prototype.disposeInternal = function() {
   rflect.cal.ui.PaneShowBehavior.superClass_.disposeInternal.call(this);
 
-  goog.events.unlistenByKey(this.transitionEndKey_);
+  this.unassignEvents();
 };

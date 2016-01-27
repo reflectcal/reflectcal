@@ -304,8 +304,6 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
       .listen(this.buttonMonth_,
       goog.ui.Component.EventType.ACTION, this.onCancel_, false, this);
 
-  this.showBehavior.assignEvents();
-
   this.getHandler().
       listen(this.showBehavior,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
