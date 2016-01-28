@@ -47,6 +47,12 @@ body when (@UI_TYPE = 'MOBILE') {
 .main-pane-cont {
   .box-sizing();
   position: relative;
+}
+
+/*Main container must have height in order to allow child elements use percent
+  height. Child elements, like side pane, use percent height only in big screen
+  mode.*/
+.main-pane-cont-big-screen {
   height: ~"calc(100% - 63px)";
 }
 
