@@ -139,11 +139,26 @@
   font-weight: normal;
 }
 
-.button-minimal.goog-flat-button-hover {
-  box-shadow: none !important;
+.button-minimal-goog-flat-button-hover() {
+  box-shadow: none;
+}
+
+.button-minimal.goog-flat-button:hover when (@UI_TYPE = '') {
+  .button-minimal-goog-flat-button-hover();
+}
+
+.button-minimal.goog-flat-button-hover when (@UI_TYPE = '') {
+  .button-minimal-goog-flat-button-hover();
+}
+
+/* State: focused. */
+.button-minimal.goog-flat-button:focus,
+.button-minimal.goog-flat-button-focused {
+  border: none;
 }
 
 .button-minimal.goog-flat-button-active,
+.button-minimal.goog-flat-button:active,
 .button-minimal.goog-flat-button-selected,
 .button-minimal.goog-flat-button-checked {
   background: none;
@@ -157,9 +172,11 @@
 }
 
 .dark-theme .button-minimal.goog-flat-button-active,
+.dark-theme .button-minimal.goog-flat-button:active,
 .dark-theme .button-minimal.goog-flat-button-selected,
 .dark-theme .button-minimal.goog-flat-button-checked {
   background: rgb(30, 30, 30);
+  color: #fff;
 }
 
 /* Settings button on the side pane. */
@@ -169,12 +186,13 @@
   text-align: center;
 }
 
-.button-settings-under-month-sel.goog-flat-button-hover {
+.button-settings-under-month-sel.goog-flat-button-hover when (@UI_TYPE = '') {
   background: none;
   color: rgba(43, 131, 201, 1);
 }
 
 .button-settings-under-month-sel.goog-flat-button-active,
+.button-settings-under-month-sel.goog-flat-button:active,
 .button-settings-under-month-sel.goog-flat-button-selected,
 .button-settings-under-month-sel.goog-flat-button-checked {
   background: none;
@@ -185,11 +203,12 @@
   color: rgba(255, 255, 255, 1);
 }
 
-.dark-theme  .button-settings-under-month-sel.goog-flat-button-hover {
+.dark-theme  .button-settings-under-month-sel.goog-flat-button-hover when (@UI_TYPE = '') {
   color: rgba(255, 255, 255, 1);
 }
 
 .dark-theme .button-settings-under-month-sel.goog-flat-button-active,
+.dark-theme .button-settings-under-month-sel.goog-flat-button:active,
 .dark-theme .button-settings-under-month-sel.goog-flat-button-selected,
 .dark-theme .button-settings-under-month-sel.goog-flat-button-checked {
   background: none;
