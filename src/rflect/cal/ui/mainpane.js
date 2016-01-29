@@ -893,31 +893,36 @@ rflect.cal.ui.MainPane.prototype.updateScrollableSizesAndDom = function() {
         headerScrollable.style.height = this.alldayGridContainerSize.height +
             'px';
         allDayEventsGrid.style.width =
-            //weekmodeDaynamesTable.style.width =
+            weekmodeDaynamesTable.style.width =
             rflect.math.pixelToPercent(
             this.blockManager_.blockPoolAllDay.gridSize.width,
             this.blockManager_.blockPoolAllDay.gridContainerSize.width).
             toFixed(4) + '%';
+        allDayEventsGrid.style.height =
+            this.blockManager_.blockPoolAllDay.gridSize.height + 'px';
 
-        if (rflect.HORIZONTAL_EXPAND_ENABLED) {
-          this.updateHorizontalBlocks(this.blockManager_.blockPoolWeek,
-              headerScrollable.querySelectorAll('.weekgrid-col'));
-        }
-      }
-      if (rflect.HORIZONTAL_EXPAND_ENABLED) {
-        let gridWidth = rflect.math.pixelToPercent(
-            this.blockManager_.blockPoolWeek.gridSize.width,
-            this.blockManager_.blockPoolWeek.gridContainerSize.width)
-        let gridRowsContainer = this.getDomHelper().
-            getElement('grid-rows-container');
-        let gridTable = this.getElement().
-            querySelector('.grid-table-wk-outer');
-
-        gridRowsContainer.style.width = gridWidth + '%';
-        gridTable.style.width = gridWidth + '%';
         this.updateHorizontalBlocks(this.blockManager_.blockPoolWeek,
-            mainScrollable.querySelectorAll('.weekgrid-col'));
+            headerScrollable.querySelectorAll('.weekgrid-col'));
+        this.updateHorizontalBlocks(this.blockManager_.blockPoolWeek,
+            this.getDomHelper().getElement('weekmode-daynames-table').
+            querySelectorAll('.dayname-wk'));
+
       }
+      let gridWidth = rflect.math.pixelToPercent(
+          this.blockManager_.blockPoolWeek.gridSize.width,
+          this.blockManager_.blockPoolWeek.gridContainerSize.width)
+      let gridRowsContainer = this.getDomHelper().
+          getElement('grid-rows-container');
+      let gridTable = this.getElement().
+          querySelector('.grid-table-wk-outer');
+      if (goog.DEBUG)
+        console.log('gridWidth: ', gridWidth);
+
+      gridRowsContainer.style.width = gridWidth + '%';
+      gridTable.style.width = gridWidth + '%';
+      this.updateHorizontalBlocks(this.blockManager_.blockPoolWeek,
+          mainScrollable.querySelectorAll('.weekgrid-col'));
+
       mainScrollable.style.height = this.gridContainerSize.height + 'px';
 
     } else if (this.viewManager_.isInMonthMode()) {
@@ -961,7 +966,7 @@ rflect.cal.ui.MainPane.prototype.updateHorizontalBlocks = function(
   
     prevColsCumulativeSize += aBlockPoolWeek.blocks[index].size;
   
-    block.marginRight = (100 -
+    block.style.marginRight = (100 -
         rflect.math.pixelToPercent(prevColsCumulativeSize, gridWidth)).
         toFixed(4) + '%';
   });
