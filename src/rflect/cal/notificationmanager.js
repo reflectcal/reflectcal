@@ -320,7 +320,7 @@ class NotificationManager extends goog.events.EventTarget {
    * @override
    */
   disposeInternal() {
-    super.disposeInternal();
+    goog.events.EventTarget.superClass_.disposeInternal.call(this);
     this.exitNotificationsWatching();
   }
 }

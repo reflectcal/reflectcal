@@ -570,7 +570,9 @@ rflect.cal.ui.SidePane.prototype.disposeInternal = function() {
   this.miniCal_ = null;
   this.calSelectorMy_ = null;
   this.calSelectorOther_ = null;
-  this.momentumScroller_.dispose();
+  if (this.momentumScroller_) {
+    this.momentumScroller_.dispose();
+  }
 
   rflect.cal.ui.SidePane.superClass_.disposeInternal.call(this);
 };
