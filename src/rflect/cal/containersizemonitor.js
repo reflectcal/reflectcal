@@ -68,9 +68,11 @@ goog.inherits(rflect.cal.ContainerSizeMonitor, rflect.dom.ViewportSizeMonitor);
 
 
 class ResizeEvent {
-  constructor(aSizeCategoryChanged) {
+  constructor(aSizeCategoryChanged, aNewSizeCategory, aOldSizeCategory) {
     this.type = goog.events.EventType.RESIZE;
     this.sizeCategoryChanged = aSizeCategoryChanged;
+    this.newSizeCategory = aNewSizeCategory;
+    this.oldSizeCategory = aOldSizeCategory;
   }
 }
 
@@ -224,11 +226,13 @@ rflect.cal.ContainerSizeMonitor.prototype.checkForContainerSizeChange_ =
     if (goog.DEBUG)
       console.log('navigatorSizeCategory: ', navigatorSizeCategory);
     let sizeCategoryChanged = this.sizeCategory_ != navigatorSizeCategory;
+    let newSizeCategory = navigatorSizeCategory;
+    let oldSizeCategory = this.sizeCategory_;
     if (sizeCategoryChanged) {
       this.sizeCategory_ = navigatorSizeCategory;
     }
     this.dispatchEvent(new rflect.cal.ContainerSizeMonitor.ResizeEvent(
-        sizeCategoryChanged));
+        sizeCategoryChanged, newSizeCategory, oldSizeCategory));
   }
 };
 

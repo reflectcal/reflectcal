@@ -231,6 +231,14 @@ rflect.cal.ViewManager.prototype.isInMonthMode = function() {
 
 
 /**
+ * @return {boolean} Whether we're in single day mode.
+ */
+rflect.cal.ViewManager.prototype.isInSingleDayMode = function() {
+  return rflect.cal.ViewType.DAY == this.currentView;
+};
+
+
+/**
  * @param {rflect.cal.ViewType} aType View type to test.
  * @return {boolean} Whether type is week.
  */
@@ -257,18 +265,22 @@ rflect.cal.ViewManager.prototype.typeIsMonth = function(aType) {
  * @private
  */
 rflect.cal.ViewManager.prototype.onViewportResize_ = function(aEvent) {
-  this.mainBody_.updateBeforeRedraw(false, false,
-      aEvent.sizeCategoryChanged);
-  this.mainBody_.updateByRedraw();
+  if (this.isInWeekMode() && aEvent.sizeCategoryChanged) {
 
-  this.mainBody_.getTopPane().updateBeforeRedraw(false,
-      aEvent.sizeCategoryChanged);
-  this.mainBody_.getTopPane().updateByRedraw();
-  this.mainBody_.getSidePane().updateBeforeRedraw(false,
-      aEvent.sizeCategoryChanged);
-  this.mainBody_.getSidePane().updateByRedraw();
-  this.mainBody_.getMainPane().updateBeforeRedraw();
-  this.mainBody_.getMainPane().updateByRedraw();
+  } else {
+    this.mainBody_.updateBeforeRedraw(false, false,
+        aEvent.sizeCategoryChanged);
+    this.mainBody_.updateByRedraw();
+
+    this.mainBody_.getTopPane().updateBeforeRedraw(false,
+        aEvent.sizeCategoryChanged);
+    this.mainBody_.getTopPane().updateByRedraw();
+    this.mainBody_.getSidePane().updateBeforeRedraw(false,
+        aEvent.sizeCategoryChanged);
+    this.mainBody_.getSidePane().updateByRedraw();
+    this.mainBody_.getMainPane().updateBeforeRedraw();
+    this.mainBody_.getMainPane().updateByRedraw();
+  }
 
 };
 

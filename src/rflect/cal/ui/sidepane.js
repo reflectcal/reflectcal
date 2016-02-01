@@ -272,6 +272,7 @@ rflect.cal.ui.SidePane.prototype.buildHTML = function(opt_outerHTML) {
     id: this.getId(),
     includeOuterHTML: opt_outerHTML,
     isSmallScreen: isSmallScreen,
+    isInDayMode: this.viewManager_.isInSingleDayMode(),
     visible: !this.getParent().isExpanded(),
     sizeCategory: this.containerSizeMonitor_.getSizeCategory(),
     monthSelectorHTML: !isSmallScreen ? this.miniCal_.buildHTML(true) : '',
