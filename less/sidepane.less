@@ -79,6 +79,10 @@
   transition: height .3s;
 }
 
+.side-pane-scrollable-no-spacer {
+  height: %(~"calc(100% - 355px + %d)", @spacerHeight);
+}
+
 .side-pane-scrollable-native-scroll {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;

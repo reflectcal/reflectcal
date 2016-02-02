@@ -41,8 +41,10 @@
       {/if}
       <div class="side-pane-scrollable{sp}
           {if rflect.ARTIFICIAL_SCROLLER_ENABLED}side-pane-scrollable-artificial-scroll
-          {else}side-pane-scrollable-native-scroll{/if}"
-          >
+          {else}side-pane-scrollable-native-scroll{/if}{sp}
+          {if not $isSmallScreen and not $isInDayMode}side-pane-scrollable-no-spacer
+          {/if}
+          ">
         <div class="side-pane-scrollable-content">
           {$calSelectorMyHTML}
           {$calSelectorOtherHTML}
