@@ -33,7 +33,7 @@ goog.require('rflect.cal.ui.SettingsPane.EventTypes');
 goog.require('rflect.cal.ui.SidePane');
 goog.require('rflect.cal.ui.soy.mainbody');
 goog.require('rflect.string');
-goog.require('rflect.ui.Component');
+goog.require('rflect.ui.UpdatableComponent');
 
 
 
@@ -48,11 +48,11 @@ goog.require('rflect.ui.Component');
  * @param {rflect.cal.Transport} aTransport Link to transport.
  * @param {rflect.cal.Navigator} aNavigator Link to navigator.
  * @constructor
- * @extends {rflect.ui.Component}
+ * @extends {rflect.ui.UpdatableComponent}
  */
 rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
     aContainerSizeMonitor, aBlockManager, aTransport, aNavigator) {
-  rflect.ui.Component.call(this);
+  rflect.ui.UpdatableComponent.call(this);
 
   /**
    * Link to view manager.
@@ -142,7 +142,7 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
     _inspect('sidePane_', this.sidePane_);
   }
 };
-goog.inherits(rflect.cal.ui.MainBody, rflect.ui.Component);
+goog.inherits(rflect.cal.ui.MainBody, rflect.ui.UpdatableComponent);
 
 
 /**
@@ -295,7 +295,7 @@ rflect.cal.ui.MainBody.prototype.getSettingsPane = function() {
  * Builds body of component.
  * @param {boolean=} opt_outerHTML Whether to build outer html.
  * @return {string}
- * @see rflect.ui.Component#build
+ * @see rflect.ui.UpdatableComponent#build
  * @override
  */
 rflect.cal.ui.MainBody.prototype.buildHTML = function(opt_outerHTML) {
@@ -312,57 +312,22 @@ rflect.cal.ui.MainBody.prototype.buildHTML = function(opt_outerHTML) {
 
 
 /**
- * Redirects parameter to main pane, other children are updated normally.
- * @param {boolean=} opt_deep Whether to update children.
- * @param {boolean=} opt_updateByNavigation Whether this update initiated by
- * buttons of top pane or minical.
- * @param {boolean=} opt_sizeCategoryChanged Whether size category changed.
  * @override
  */
-rflect.cal.ui.MainBody.prototype.updateBeforeRedraw = function(opt_deep,
-    opt_updateByNavigation, opt_sizeCategoryChanged) {
-  this.allowedToChangeExpandState_ = false;
-
-  if (opt_deep){
-    this.forEachChild(function(aChild) {
-      if (aChild.updateBeforeRedraw && aChild != this.mainPane_)
-        aChild.updateBeforeRedraw(opt_deep);
-    });
-  }
-
-  if (opt_deep){
-    // We will update main pane separately to pass params.
-    this.mainPane_.updateBeforeRedraw(false, undefined, opt_updateByNavigation);
-  }
-
-  if (opt_sizeCategoryChanged) {
-    this.sizeCategoryChanged_ = !!opt_sizeCategoryChanged;
-  }
-};
-
-
-/**
- * @override
- */
-rflect.cal.ui.MainBody.prototype.updateByRedraw = function() {
-  if (this.sizeCategoryChanged_) {
-    this.allowedToChangeExpandState_ = false;
-    this.sizeCategoryChanged_ = false;
-
-    let mainPaneCont = this.getElement().querySelector('#main-pane-cont');
-
-    if (this.containerSizeMonitor_.isSmallScreen()) {
-      //Expand main pane.
-      this.getElement().appendChild(this.getSidePane().getElement());
-      this.setExpandedForBigScreen(true);
-    } else {
-      //Restore expanded state
-      mainPaneCont.insertBefore(
-          this.getSidePane().getElement(),
-          this.getMainPane().getElement());
-      this.setExpandedForBigScreen(this.isExpanded());
-    }
-  }
+rflect.cal.ui.MainBody.prototype.update = function({
+    updateByNavigation = false,
+    updateByModeSwitch = false }) {
+  this.getTopPane().update({
+    updateByNavigation: updateByNavigation,
+    updateByModeSwitch: updateByModeSwitch
+  });
+  this.getSidePane().update({
+    updateByNavigation: updateByNavigation,
+    updateByModeSwitch: updateByModeSwitch
+  });
+  this.getMainPane().update({
+    updateByNavigation: updateByNavigation
+  });
 }
 
 
@@ -370,14 +335,6 @@ rflect.cal.ui.MainBody.prototype.updateByRedraw = function() {
  * Decorates child components.
  */
 rflect.cal.ui.MainBody.prototype.enterDocument = function() {
-  // We could decorate children right after superclass decorateInternal call,
-  // but to preserve pattern (that if we want reliable presence of component in
-  // DOM, we should address it in enterDocument), we do it here.
-  this.topPane_.setElementById(this.topPane_.getId());
-  this.mainPane_.setElementById(this.mainPane_.getId());
-  this.sidePane_.setElementById(this.sidePane_.getId());
-
-
   // Propagate call to children.
   rflect.cal.ui.MainBody.superClass_.enterDocument.call(this);
 
@@ -401,14 +358,6 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
   this.getHandler().listen(this.transport_,
       rflect.cal.Transport.EventTypes.LOAD_EVENT, this.onLoadEvents_, false,
       this);
-
-  this.rebuildMainPaneWithSizes();
-  this.getSidePane().update();
-
-  if (!this.containerSizeMonitor_.isSmallScreen()) {
-    //Mobile UI's left pane doesn't affect main pane width.
-    //this.rebuildLeftPaneWithSizes();
-  }
 };
 
 
@@ -422,8 +371,7 @@ rflect.cal.ui.MainBody.prototype.rebuildMainPaneWithSizes = function() {
   if (this.viewManager_.isInMonthMode())
     this.firstBuildMn = false;
 
-  this.mainPane_.updateBeforeRedraw();
-  this.mainPane_.updateByRedraw();
+  this.mainPane_.update();
 
 }
 
@@ -436,10 +384,8 @@ rflect.cal.ui.MainBody.prototype.rebuildLeftPaneWithSizes = function() {
 
   this.firstBuildLeftPane = false;
 
-  this.getCalSelector().updateBeforeRedraw();
-  this.getCalSelector().updateByRedraw();
-  this.getTaskSelector().updateBeforeRedraw();
-  this.getTaskSelector().updateByRedraw();
+  this.getCalSelector().update();
+  this.getTaskSelector().update();
 
 }
 
@@ -625,8 +571,7 @@ rflect.cal.ui.MainBody.prototype.onCalendarSwitch_ = function(aEvent) {
 
   this.eventManager_.setVisibleCalendar(calendarId, visible);
   this.eventManager_.run();
-  this.mainPane_.updateBeforeRedraw();
-  this.mainPane_.updateByRedraw();
+  this.mainPane_.update();
 }
 
 
@@ -880,18 +825,14 @@ rflect.cal.ui.MainBody.prototype.onSettingsPaneCancel_ = function() {
  */
 rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
     function(aEvent) {
-
   this.eventManager_.run();
-  this.getCalSelector().redrawIsNeeded = true;
-  this.getTaskSelector().redrawIsNeeded = true;
-
-  this.sidePane_.getCalSelector().update();
-  this.sidePane_.getTaskSelector().update();
-
-  this.getMainPane().updateBeforeRedraw();
+  this.sidePane_.update({
+    updateCalendarsOnly: true
+  });
   //Do not attach momentum scroller, we will do it on page change.
-  this.getMainPane().updateByRedraw(false, true);
-
+  this.getMainPane().update({
+    doNotAddMomentumScroller: true
+  });
 }
 
 
@@ -915,9 +856,10 @@ rflect.cal.ui.MainBody.prototype.changeVisualTheme = function(aThemeName) {
 rflect.cal.ui.MainBody.prototype.updateMainPane_ = function() {
   this.eventManager_.run();
 
-  this.getMainPane().updateBeforeRedraw();
   //Do not attach momentum scroller, we will do it on page change.
-  this.getMainPane().updateByRedraw(false, true);
+  this.getMainPane().update({
+    doNotAddMomentumScroller: true
+  });
 }
 
 

@@ -14,7 +14,7 @@ goog.provide('rflect.cal.ui.CalSelector.EventType');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
-goog.require('rflect.ui.Component');
+goog.require('rflect.ui.UpdatableComponent');
 goog.require('rflect.ui.MouseOverRegistry');
 goog.require('rflect.cal.predefined');
 goog.require('rflect.string');
@@ -32,11 +32,11 @@ goog.require('rflect.cal.ui.soy.calselector');
  * @param {string} aLabel Widget label.
  * @param {boolean} aMyCalendars Whether component lists my calendars.
  * @constructor
- * @extends {rflect.ui.Component}
+ * @extends {rflect.ui.UpdatableComponent}
  */
 rflect.cal.ui.CalSelector = function(aViewManager, aContainerSizeMonitor,
     aEventManager, aNavigator, aLabel, aMyCalendars) {
-  rflect.ui.Component.call(this);
+  rflect.ui.UpdatableComponent.call(this);
 
   /**
    * Link to view manager.
@@ -92,7 +92,7 @@ rflect.cal.ui.CalSelector = function(aViewManager, aContainerSizeMonitor,
   this.isMyCalendars = aMyCalendars;
 
 };
-goog.inherits(rflect.cal.ui.CalSelector, rflect.ui.Component);
+goog.inherits(rflect.cal.ui.CalSelector, rflect.ui.UpdatableComponent);
 
 
 /**
@@ -176,14 +176,6 @@ rflect.cal.ui.CalSelector.prototype.headerRe_;
  * @private
  */
 rflect.cal.ui.CalSelector.prototype.buttonRe_;
-
-
-/**
- * Whether full redraw is needed when calling updateByRedraw.
- * @see {rflect.cal.ui.CalSelector#updateByRedraw}
- * @type {boolean}
- */
-rflect.cal.ui.CalSelector.prototype.redrawIsNeeded = false;
 
 
 /**
@@ -313,37 +305,13 @@ rflect.cal.ui.CalSelector.prototype.buildContent = function() {
 
 
 /**
- * Updates list selector with new data before redraw. Includes size adjustment.
- * @param {boolean=} opt_deep Whether to update children.
- */
-rflect.cal.ui.CalSelector.prototype.updateBeforeRedraw = function(opt_deep) {
-};
-
-
-/**
- * Redraws list selector. This default version changes scrollable size.
  * @override
  */
-rflect.cal.ui.CalSelector.prototype.updateByRedraw = function() {
-  var isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
-
-  if (this.redrawIsNeeded) {
-    this.redrawIsNeeded = false;
-
-    // Dereference scrollable element.
-    this.scrollableEl = null;
-
-    this.disposeCheckboxes();
-    this.getElement().innerHTML = this.buildHTML();
-    this.enterDocumentForCheckboxes();
-
-
-    // Save reference to scrollable element.
-    if (!isSmallScreen)
-      this.scrollableEl = goog.dom.getChildren(this.getElement())[1];
-
-  }
-};
+rflect.cal.ui.CalSelector.prototype.update = function(opt_options) {
+  this.disposeCheckboxes();
+  this.getElement().innerHTML = this.buildHTML(false);
+  this.enterDocumentForCheckboxes();
+}
 
 
 /**

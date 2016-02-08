@@ -15,7 +15,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('goog.userAgent');
-goog.require('rflect.ui.Component');
+goog.require('rflect.ui.UpdatableComponent');
 goog.require('rflect.cal.ui.MainPaneBuilder');
 goog.require('rflect.cal.ui.MainPaneSelectionMask');
 goog.require('rflect.ui.MouseOverRegistry');
@@ -39,11 +39,11 @@ goog.require('rflect.cal.ui.SaveDialog');
  * @param {rflect.cal.blocks.BlockManager} aBlockManager Link to block manager.
  * @param {rflect.cal.Transport} aTransport Link to transport.
  * @constructor
- * @extends {rflect.ui.Component}
+ * @extends {rflect.ui.UpdatableComponent}
  */
 rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
     aContainerSizeMonitor, aBlockManager, aTransport) {
-  rflect.ui.Component.call(this);
+  rflect.ui.UpdatableComponent.call(this);
 
   /**
    * Link to view manager.
@@ -191,7 +191,7 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
   this.addChild(this.editDialog_);
 
 };
-goog.inherits(rflect.cal.ui.MainPane, rflect.ui.Component);
+goog.inherits(rflect.cal.ui.MainPane, rflect.ui.UpdatableComponent);
 
 
 /**
@@ -608,7 +608,7 @@ rflect.cal.ui.MainPane.prototype.updateByRedraw = function() {
  * Builds body of component.
  * @param {goog.string.StringBuffer} aSb String buffer to append HTML parts
  * to.
- * @see rflect.ui.Component#build
+ * @see rflect.ui.UpdatableComponent#build
  * @protected
  */
 rflect.cal.ui.MainPane.prototype.buildInternal = function(aSb) {

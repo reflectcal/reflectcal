@@ -31,7 +31,7 @@ goog.require('rflect.cal.ui.VMAdaptiveSizeHelper');
 goog.require('rflect.events.TouchHoldHelper');
 goog.require('rflect.events.TouchHoldHelper.EventType');
 goog.require('rflect.string');
-goog.require('rflect.ui.Component');
+goog.require('rflect.ui.UpdatableComponent');
 goog.require('rflect.ui.MomentumScroller');
 goog.require('rflect.ui.MouseOverRegistry');
 
@@ -50,12 +50,12 @@ goog.require('rflect.ui.MouseOverRegistry');
  * @param {rflect.cal.ui.MainBodyAdaptiveSizeHelper} aAdaptiveSizeHelper Link to
  * size helper.
  * @constructor
- * @extends {rflect.ui.Component}
+ * @extends {rflect.ui.UpdatableComponent}
  */
 rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
     aContainerSizeMonitor, aBlockManager, aTransport, aNavigator,
     aAdaptiveSizeHelper) {
-  rflect.ui.Component.call(this);
+  rflect.ui.UpdatableComponent.call(this);
 
   /**
    * Link to view manager.
@@ -243,7 +243,7 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
       this.blockManager_.blockPoolWeek, this.blockManager_.blockPoolAllDay,
       this.blockManager_.blockPoolMonth, this.momentumScroller_);
 };
-goog.inherits(rflect.cal.ui.MainPane, rflect.ui.Component);
+goog.inherits(rflect.cal.ui.MainPane, rflect.ui.UpdatableComponent);
 
 
 /**
@@ -512,24 +512,47 @@ rflect.cal.ui.MainPane.prototype.isScrollableExpandedVer = function() {
 
 
 /**
- * Updates main pane with new data before redraw. Includes size adjustment.
- * @param {boolean=} opt_deep Whether to update children.
- * @param {boolean=} opt_doNotRemoveScrollListeners Whether not to remove scroll
- * listeners.
- * @param {boolean=} opt_updateByNavigation Whether this update initiated by
- * buttons of top pane or minical.
- * @param {boolean=} opt_sizeCategoryChanged Whether size category was changed.
+ * @override
  */
-rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
-    opt_doNotRemoveScrollListeners, opt_updateByNavigation,
-    opt_sizeCategoryChanged) {
+rflect.cal.ui.MainPane.prototype.update = function(opt_options) {
+  let {
+    updateAllDay = false,
+    updateWeek = false,
+    updateMonth = false
+  } = opt_options;
+
+  if (updateAllDay) {
+    this.updateBeforeRedraw();
+    this.updateByRedrawAllDayGrid_();
+  } else if (updateWeek) {
+    this.updateBeforeRedraw();
+    this.updateByRedrawWeekGrid_();
+  } else if (updateMonth) {
+    this.updateBeforeRedraw();
+    this.updateByRedrawMonthGrid_();
+  } else {
+    rflect.cal.ui.MainPane.superClass_.update.call(this, opt_options);
+  }
+}
+
+
+/**
+ * Updates main pane with new data before redraw. Includes size adjustment.
+ * @override
+ */
+rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function({
+  // Whether not to remove scroll listeners.
+  doNotRemoveScrollListeners = false,
+  // Whether this update initiated by buttons of top pane or minical.
+  updateByNavigation = false
+}) {
   if (this.adaptiveSizeHelper.getSizeWasAdaptedForView()) {
     this.updateScrollableSizes();
   } else {
     this.updateBlockManager();
   }
 
-  if (!opt_doNotRemoveScrollListeners)
+  if (!doNotRemoveScrollListeners)
     this.removeScrollListeners_();
 
   if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
@@ -538,15 +561,36 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function(opt_deep,
 
   this.touchHoldHelper_.dispose();
 
-  if (opt_updateByNavigation && !rflect.TOUCH_INTERFACE_ENABLED){
+  if (updateByNavigation && !rflect.TOUCH_INTERFACE_ENABLED){
     var scrollTop = this.getHandyScrollTopPosition_();
     this.blockManager_.blockPoolWeek.scrollTop =
         scrollTop;
   }
 
-  this.updateByNavigation_ = !!opt_updateByNavigation;
+  //TODO(alexk): remove, change to argument.
+  this.updateByNavigation_ = !!updateByNavigation;
 
-  //this.sizeCategoryChanged_ = !!opt_sizeCategoryChanged;
+  //this.sizeCategoryChanged_ = !!sizeCategoryChanged;
+};
+
+
+/**
+ * @override
+ */
+rflect.cal.ui.MainPane.prototype.updateAfterRedraw = function({
+  doNotAddMomentumScroller = false
+}) {
+  this.updateScrollableSizesAndDom();
+
+  // We add scroll listeners on freshly built content.
+  if (!rflect.TOUCH_INTERFACE_ENABLED) {
+    this.addScrollListeners_();
+    this.restoreOffsetsOfScrollables_();
+  }
+  if (rflect.ARTIFICIAL_SCROLLER_ENABLED && !doNotAddMomentumScroller) {
+    this.addMomentumScroller();
+  }
+  this.touchHoldHelper_.handleTouchEvents();
 };
 
 
@@ -716,31 +760,6 @@ rflect.cal.ui.MainPane.prototype.updateBlockManager = function() {
       this.alldayGridSize, this.alldayGridContainerSize);
   this.blockManager_.update();
 };
-
-
-/**
- * Redraws main pane with new data.
- * @param {boolean=} opt_deep Whether to update children.
- * @param {boolean=} opt_doNotAddMomentumScroller Whether to omit adding of
- * momentum scroller.
- */
-rflect.cal.ui.MainPane.prototype.updateByRedraw = function(opt_deep,
-    opt_doNotAddMomentumScroller) {
-  this.getElement().innerHTML = this.buildHTML();
-
-  this.updateScrollableSizesAndDom();
-
-  // We add scroll listeners on freshly built content.
-  if (!rflect.TOUCH_INTERFACE_ENABLED) {
-    this.addScrollListeners_();
-    this.restoreOffsetsOfScrollables_();
-  }
-  if (rflect.ARTIFICIAL_SCROLLER_ENABLED && !opt_doNotAddMomentumScroller) {
-    this.addMomentumScroller();
-  }
-  this.touchHoldHelper_.handleTouchEvents();
-};
-
 
 
 /**
@@ -1076,28 +1095,19 @@ rflect.cal.ui.MainPane.prototype.updateConditionally_ = function(
 
   this.eventManager_.run();
 
-  this.updateBeforeRedraw();
-
-  if (this.viewManager_.isInWeekMode() &&
-      !this.blockManager_.blockPoolWeek.expanded &&
-      !this.blockManager_.blockPoolAllDay.expanded &&
-      !isIE9OrLower) {
-
-    if (aConditionToUpdateAllDay)
-      this.updateByRedrawAllDayGrid_();
-
-    if (aConditionToUpdateWeek)
-      this.updateByRedrawWeekGrid_();
-
-  } else if (this.viewManager_.isInMonthMode() &&
-      !this.blockManager_.blockPoolMonth.expanded && !isIE9OrLower) {
-
-    if (aConditionToUpdateMonth)
-      this.updateByRedrawMonthGrid_();
-
-  } else
-
-    this.updateByRedraw();
+  this.update({
+    updateAllDay: this.viewManager_.isInWeekMode() &&
+        !this.blockManager_.blockPoolWeek.expanded &&
+        !this.blockManager_.blockPoolAllDay.expanded &&
+        !isIE9OrLower && aConditionToUpdateAllDay,
+    updateWeek: this.viewManager_.isInWeekMode() &&
+        !this.blockManager_.blockPoolWeek.expanded &&
+        !this.blockManager_.blockPoolAllDay.expanded &&
+        !isIE9OrLower && aConditionToUpdateWeek,
+    updateMonth: this.viewManager_.isInMonthMode() &&
+        !this.blockManager_.blockPoolMonth.expanded && !isIE9OrLower &&
+        aConditionToUpdateMonth
+  });
 }
 
 
@@ -1280,8 +1290,7 @@ rflect.cal.ui.MainPane.prototype.onClick_ = function(aEvent) {
 
   if (zippyClicked) {
 
-    this.updateBeforeRedraw();
-    this.updateByRedraw();
+    this.update();
 
   } else if ((this.isChipOrChild_(className) || this.isGrip_(className)) &&
       !this.selectionMask_.wasDragged() &&
@@ -2016,8 +2025,12 @@ rflect.cal.ui.MainPane.prototype.isGrip_ = function(aClassName) {
  */
 rflect.cal.ui.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
+  //TODO(alexk): Check if this is needed.
   this.containerSizeMonitor_.checkForContainerSizeChange();
-  this.updateBeforeRedraw(false, true);
+  this.updateBeforeRedraw({
+    doNotRemoveScrollListeners: false,
+    updateByNavigation: true
+  });
 
   var className = aEvent.target.className;
   var preventDefaultIsNeeded = false;

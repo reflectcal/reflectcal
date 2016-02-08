@@ -12,7 +12,7 @@ goog.provide('rflect.cal.ui.DatePicker');
 goog.require('goog.array');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
-goog.require('rflect.ui.Component');
+goog.require('rflect.ui.UpdatableComponent');
 goog.require('rflect.cal.ui.DatePickerBuilder');
 goog.require('rflect.ui.MouseOverRegistry');
 goog.require('rflect.cal.TimeManager');
@@ -25,11 +25,11 @@ goog.require('rflect.string');
 /**
  * Date picker main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
- * @extends {rflect.ui.Component}
+ * @extends {rflect.ui.UpdatableComponent}
  * @constructor
  */
 rflect.cal.ui.DatePicker = function(aViewManager) {
-  rflect.ui.Component.call(this);
+  rflect.ui.UpdatableComponent.call(this);
 
   /**
    * Link to view manager.
@@ -63,7 +63,7 @@ rflect.cal.ui.DatePicker = function(aViewManager) {
   this.moRegistry_ = new rflect.ui.MouseOverRegistry();
 
 };
-goog.inherits(rflect.cal.ui.DatePicker, rflect.ui.Component);
+goog.inherits(rflect.cal.ui.DatePicker, rflect.ui.UpdatableComponent);
 
 
 /**
@@ -139,16 +139,17 @@ rflect.cal.ui.DatePicker.prototype.endSelectionIndex = -1;
  * Updates mini cal with new data before redraw.
  * If called parameterless, takes basis from external time manager, otherwise
  * we should use internal one.
- * @param {boolean=} opt_deep Whether to update children.
- * @param {boolean=} opt_internal Whether method was called internally.
- * @param {rflect.cal.TimeManager.Direction=} opt_direction Direction where to
- * shift basis when called
- * internally.
+ * @override
  */
-rflect.cal.ui.DatePicker.prototype.updateBeforeRedraw = function(opt_deep,
-    opt_internal, opt_direction) {
-  if (opt_internal && opt_direction){
-    this.timeManager.shift(opt_direction);
+rflect.cal.ui.DatePicker.prototype.updateBeforeRedraw = function({
+  // Whether method was called internally.
+  internal = false,
+  // Direction where to shift basis when called.
+  // internally.
+  direction = rflect.cal.TimeManager.Direction.NONE
+}) {
+  if (internal && direction) {
+    this.timeManager.shift(direction);
   } else {
     this.timeManager.shiftToPoint(this.basis_);
   }
@@ -219,8 +220,10 @@ rflect.cal.ui.DatePicker.prototype.onClick_ = function(aEvent) {
   }
 
   if (direction) {
-    this.updateBeforeRedraw(false, true, direction);
-    this.updateByRedraw();
+    this.update({
+      internal: true,
+      direction: direction
+    });
   }
 };
 

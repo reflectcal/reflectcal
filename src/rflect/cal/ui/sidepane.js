@@ -20,7 +20,7 @@ goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('goog.ui.ToggleButton');
-goog.require('rflect.ui.Component');
+goog.require('rflect.ui.UpdatableComponent');
 goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.predefined');
@@ -43,11 +43,11 @@ goog.require('rflect.string');
  * @param {rflect.cal.Navigator} aNavigator Link to navigator.
  * @param {rflect.cal.ui.MainBody} aMainBody Link to main body.
  * @constructor
- * @extends {rflect.ui.Component}
+ * @extends {rflect.ui.UpdatableComponent}
  */
 rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
     aContainerSizeMonitor, aNavigator, aMainBody) {
-  rflect.ui.Component.call(this);
+  rflect.ui.UpdatableComponent.call(this);
 
   /**
    * Link to view manager.
@@ -114,6 +114,11 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
   this.addChild(this.miniCal_ = new rflect.cal.ui.MiniCal(this.viewManager_,
       this.timeManager_));
 
+  this.buttonBack_.setId(rflect.cal.predefined.BUTTON_TO_CALENDAR_ID);
+  this.buttonDay_.setId(rflect.cal.predefined.BUTTON_SIDE_PANE_DAY_ID);
+  this.buttonMonth_.setId(rflect.cal.predefined.BUTTON_SIDE_PANE_MONTH_ID);
+  this.buttonOptions_.setId(rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID);
+
   this.addChild(this.calSelectorMy_ = new rflect.cal.ui.CalSelector(
       this.viewManager_, this.containerSizeMonitor_, this.eventManager_,
       this.navigator_, rflect.cal.i18n.Symbols.CALENDARS_LABEL_MY, true));
@@ -132,7 +137,7 @@ rflect.cal.ui.SidePane = function(aViewManager, aTimeManager, aEventManager,
   }
 
 };
-goog.inherits(rflect.cal.ui.SidePane, rflect.ui.Component);
+goog.inherits(rflect.cal.ui.SidePane, rflect.ui.UpdatableComponent);
 
 
 /**
@@ -260,7 +265,7 @@ rflect.cal.ui.SidePane.prototype.getTaskSelector = function() {
 
 /**
  * Builds body of component.
- * @see rflect.ui.Component#build
+ * @see rflect.ui.UpdatableComponent#build
  * @param {boolean=} opt_outerHTML Whether to build outer html.
  * @override
  * @return {string}
@@ -447,107 +452,87 @@ rflect.cal.ui.SidePane.prototype.onSlideBreak_ = function(aEvent) {
 }
 
 
-/***/
-rflect.cal.ui.SidePane.prototype.resetChildren = function() {
-  this.forEachChild(component => {
-    component.exitDocument();
-  });
-}
-
-
 /**
- * Decorates buttons, attaches event handlers for them.
+ * @param {boolean} aShow Whether to show spacer.
  */
-rflect.cal.ui.SidePane.prototype.initChildren = function() {
-  var buttonBackElement = this.getDomHelper().getElement(
-      rflect.cal.predefined.BUTTON_TO_CALENDAR_ID);
-  if (buttonBackElement) {
-    this.buttonBack_.decorate(buttonBackElement);
-  }
-
-  var buttonDayElement = this.getDomHelper().getElement(
-      rflect.cal.predefined.BUTTON_SIDE_PANE_DAY_ID);
-  if (buttonDayElement) {
-    this.buttonDay_.decorate(buttonDayElement);
-  }
-
-  var buttonMonthElement = this.getDomHelper().getElement(
-      rflect.cal.predefined.BUTTON_SIDE_PANE_MONTH_ID);
-  if (buttonMonthElement) {
-    this.buttonMonth_.decorate(buttonMonthElement);
-  }
-
-  var buttonSettingsElement = this.getDomHelper().getElement(
-      rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID);
-  if (buttonSettingsElement) {
-    this.buttonOptions_.decorate(buttonSettingsElement);
-  }
-
-  var miniCalElement = this.getDomHelper().getElement(this.miniCal_.getId());
-  if (miniCalElement) {
-    this.miniCal_.decorate(miniCalElement);
-  }
-
-  var calSelectorMyElement = this.getDomHelper().getElement(this.calSelectorMy_.
-      getId());
-  if (calSelectorMyElement) {
-    this.calSelectorMy_.decorate(calSelectorMyElement);
-  }
-
-  var calSelectorOtherElement = this.getDomHelper().getElement(
-      this.calSelectorOther_.getId());
-  if (calSelectorOtherElement) {
-    this.calSelectorOther_.decorate(calSelectorOtherElement);
+rflect.cal.ui.SidePane.prototype.showSpacer = function(aShow) {
+  let spacer = this.getElement().querySelector('.side-pane-spacer');
+  let scrollable = this.getElement().querySelector('.side-pane-scrollable');
+  if (aShow) {
+    goog.style.showElement(spacer, false);
+    goog.dom.classes.add(scrollable, 'side-pane-scrollable-no-spacer');
+  } else {
+    goog.style.showElement(spacer, true);
+    goog.dom.classes.remove(scrollable, 'side-pane-scrollable-no-spacer');
   }
 }
 
 
 /**
- * @param {boolean=} opt_deep Whether to update children.
+ * @override
  */
-rflect.cal.ui.SidePane.prototype.updateBeforeRedraw = function(opt_deep,
-    opt_sizeCategoryChanged) {
-  this.sizeCategoryChanged_ = !!opt_sizeCategoryChanged;
-  this.resetChildren();
-  this.removeMomentumScroller();
+rflect.cal.ui.SidePane.prototype.update = function(opt_options) {
+  let {
+    updateByModeSwitch = false,
+    updateByNavigation = false,
+    updateCalendarsOnly = false,
+    doNotUpdateMiniCal = false
+  } = opt_options;
+
+  if (updateByNavigation) {
+    this.getMiniCal().update();
+  } else if (updateByModeSwitch) {
+    if (!doNotUpdateMiniCal) {
+      this.getMiniCal().update();
+    }
+    this.showSpacer(this.viewManager_.isInSingleDayMode());
+    this.viewButtonUpdater_.updateButtons();
+  } else if (updateCalendarsOnly) {
+    this.removeMomentumScroller();
+    this.getCalSelector().update();
+    this.getTaskSelector().update();
+    this.addMomentumScroller();
+  } else {
+    rflect.cal.ui.SidePane.superClass_.update.call(this, opt_options);
+  }
+}
+
+
+/**
+ * @override
+ */
+rflect.cal.ui.SidePane.prototype.updateBeforeRedraw = function({
+  updateByNavigation = false
+}) {
+  if (!updateByNavigation) {
+    this.removeMomentumScroller();
+  }
 };
 
 
 /**
- * Updates top pane by setting new date header.
  * @override
  */
-rflect.cal.ui.SidePane.prototype.updateByRedraw = function() {
-  this.getElement().innerHTML = this.buildHTML(false);
+rflect.cal.ui.SidePane.prototype.updateAfterRedraw = function(opt_options) {
+  this.showBehavior.setSlidingIsEnabled(
+      this.containerSizeMonitor_.isSmallScreen());
 
-  this.initChildren();
-
-  if (this.sizeCategoryChanged_) {
-    this.sizeCategoryChanged_ = false;
-
-    this.showBehavior.setSlidingIsEnabled(
-        this.containerSizeMonitor_.isSmallScreen());
-
-    if (this.containerSizeMonitor_.isSmallScreen()) {
-      goog.dom.classes.add(this.getElement(), 'side-pane-external');
-    } else {
-      goog.dom.classes.remove(this.getElement(), 'side-pane-external');
-      goog.dom.classes.remove(this.getElement(),
-          'side-pane-external-artificial-scroll');
-      goog.dom.classes.remove(this.getElement(),
-          'side-pane-external-native-scroll');
-    }
-
-    if (this.containerSizeMonitor_.isSmallScreen() && !this.getParent().
-        isExpanded()) {
-      this.addGlassPane();
-    }
-    if (!this.containerSizeMonitor_.isSmallScreen()) {
-      this.removeGlassPane();
-    }
+  if (this.containerSizeMonitor_.isSmallScreen()) {
+    goog.dom.classes.add(this.getElement(), 'side-pane-external');
   } else {
-    // Update buttons.
-    this.viewButtonUpdater_.updateButtons();
+    goog.dom.classes.remove(this.getElement(), 'side-pane-external');
+    goog.dom.classes.remove(this.getElement(),
+        'side-pane-external-artificial-scroll');
+    goog.dom.classes.remove(this.getElement(),
+        'side-pane-external-native-scroll');
+  }
+
+  if (this.containerSizeMonitor_.isSmallScreen() && !this.getParent().
+      isExpanded()) {
+    this.addGlassPane();
+  }
+  if (!this.containerSizeMonitor_.isSmallScreen()) {
+    this.removeGlassPane();
   }
 
   if (!this.getParent().isExpanded()) {
