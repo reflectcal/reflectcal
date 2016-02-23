@@ -207,7 +207,7 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.updateInternal = function() {
 
     this.component.startSelectionIndex = minIndex;
     this.component.endSelectionIndex = maxIndex;
-    this.component.updateByRedraw();
+    this.component.update({ updateByMask: true });
     
     goog.events.dispatchEvent(this.component, {
       type: rflect.cal.EventType.DATE_DRAG,

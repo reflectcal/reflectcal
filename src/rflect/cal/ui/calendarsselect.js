@@ -121,8 +121,7 @@ rflect.cal.ui.CalendarsSelect.prototype.updateBeforeRedraw = function() {
 /**
  * @override
  */
-rflect.cal.ui.CalendarsSelect.prototype.updateByRedraw = function() {
-  this.getElement().innerHTML = this.buildHTML(false);
+rflect.cal.ui.CalendarsSelect.prototype.updateAfterRedraw = function() {
   this.select_ = this.getElement().querySelector('.event-calendars');
   this.recallSelectedOption_();
 }

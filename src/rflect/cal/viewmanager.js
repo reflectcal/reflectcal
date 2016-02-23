@@ -470,6 +470,11 @@ rflect.cal.ViewManager.prototype.onSaveUserResponse_ = function(aEvent) {
 }
 
 
+rflect.cal.ViewManager.prototype.isInSingleDayMode = function() {
+  return false;
+}
+
+
 /**
  * Date drag handler. On this event we must deduce configuration and set basis
  * depending on number of days selected.
@@ -583,8 +588,8 @@ rflect.cal.ViewManager.prototype.showNext_ = function(aDirection) {
   this.eventManager_.run();
 
   this.mainBody_.getMainPane().update({ updateByNavigation: true});
-  this.mainBody_.getTopPane().update();
-  this.mainBody_.getSidePane().update();
+  this.mainBody_.getTopPane().update({ updateByNavigation: true});
+  this.mainBody_.getSidePane().update({ updateByNavigation: true});
 
   this.transport_.loadEventsAsync();
   //  if (goog.DEBUG) _perf('next interval');
@@ -599,8 +604,8 @@ rflect.cal.ViewManager.prototype.showNow = function() {
   this.eventManager_.run();
 
   this.mainBody_.getMainPane().update({ updateByNavigation: true});
-  this.mainBody_.getTopPane().update();
-  this.mainBody_.getSidePane().update();
+  this.mainBody_.getTopPane().update({ updateByNavigation: true});
+  this.mainBody_.getSidePane().update({ updateByNavigation: true});
 
   this.transport_.loadEventsAsync();
 };

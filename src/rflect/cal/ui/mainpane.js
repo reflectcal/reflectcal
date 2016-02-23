@@ -196,6 +196,10 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
 
   /**
    * Popup save dialog.
+   *
+   * We're not adding dialog as a child because of problems with re-decorating
+   * after update.
+   *
    * @type {rflect.cal.ui.SaveDialog}
    * @private
    */
@@ -203,8 +207,6 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
       undefined, aEventManager);
   if (goog.DEBUG)
     _inspect('saveDialog_', this.saveDialog_);
-
-  this.addChild(this.saveDialog_);
 
   /**
    * Popup edit dialog.
@@ -214,8 +216,6 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
   this.editDialog_ = new rflect.cal.ui.EditDialog();
   if (goog.DEBUG)
     _inspect('editDialog_', this.editDialog_);
-
-  this.addChild(this.editDialog_);
 
   if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
     this.momentumScroller_ = new rflect.ui.MomentumScroller();
@@ -514,7 +514,14 @@ rflect.cal.ui.MainPane.prototype.isScrollableExpandedVer = function() {
 /**
  * @override
  */
-rflect.cal.ui.MainPane.prototype.update = function(opt_options) {
+rflect.cal.ui.MainPane.prototype.update = function(opt_options = {
+  updateAllDay: false,
+  updateWeek: false,
+  updateMonth: false,
+  doNotRemoveScrollListeners: false,
+  updateByNavigation: false,
+  doNotAddMomentumScroller: false
+}) {
   let {
     updateAllDay = false,
     updateWeek = false,
@@ -545,6 +552,9 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function({
   doNotRemoveScrollListeners = false,
   // Whether this update initiated by buttons of top pane or minical.
   updateByNavigation = false
+} = {
+  doNotRemoveScrollListeners: false,
+  updateByNavigation: false
 }) {
   if (this.adaptiveSizeHelper.getSizeWasAdaptedForView()) {
     this.updateScrollableSizes();
@@ -579,6 +589,8 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function({
  */
 rflect.cal.ui.MainPane.prototype.updateAfterRedraw = function({
   doNotAddMomentumScroller = false
+} = {
+  doNotAddMomentumScroller: false
 }) {
   this.updateScrollableSizesAndDom();
 
@@ -934,8 +946,6 @@ rflect.cal.ui.MainPane.prototype.updateScrollableSizesAndDom = function() {
           getElement('grid-rows-container');
       let gridTable = this.getElement().
           querySelector('.grid-table-wk-outer');
-      if (goog.DEBUG)
-        console.log('gridWidth: ', gridWidth);
 
       gridRowsContainer.style.width = gridWidth + '%';
       gridTable.style.width = gridWidth + '%';
@@ -2025,13 +2035,6 @@ rflect.cal.ui.MainPane.prototype.isGrip_ = function(aClassName) {
  */
 rflect.cal.ui.MainPane.prototype.onMouseDown_ = function(aEvent) {
 
-  //TODO(alexk): Check if this is needed.
-  this.containerSizeMonitor_.checkForContainerSizeChange();
-  this.updateBeforeRedraw({
-    doNotRemoveScrollListeners: false,
-    updateByNavigation: true
-  });
-
   var className = aEvent.target.className;
   var preventDefaultIsNeeded = false;
   var maskConfiguration;
@@ -2348,6 +2351,9 @@ rflect.cal.ui.MainPane.prototype.disposeInternal = function() {
   this.rightContMn_ = null;
   this.leftContAd_ = null;
   this.rightContAd_ = null;
+
+  this.editDialog_ && this.editDialog_.dispose();
+  this.saveDialog_ && this.saveDialog_.dispose();
 
   if (rflect.TOUCH_INTERFACE_ENABLED)
     this.momentumScroller_.dispose();

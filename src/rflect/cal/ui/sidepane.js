@@ -292,8 +292,6 @@ rflect.cal.ui.SidePane.prototype.buildHTML = function(opt_outerHTML) {
  * Decorates buttons, attaches event handlers for them.
  */
 rflect.cal.ui.SidePane.prototype.enterDocument = function() {
-  this.initChildren();
-
   rflect.cal.ui.SidePane.superClass_.enterDocument.call(this);
 
   // Update buttons.
@@ -471,7 +469,12 @@ rflect.cal.ui.SidePane.prototype.showSpacer = function(aShow) {
 /**
  * @override
  */
-rflect.cal.ui.SidePane.prototype.update = function(opt_options) {
+rflect.cal.ui.SidePane.prototype.update = function(opt_options = {
+  updateByModeSwitch: false,
+  updateByNavigation: false,
+  updateCalendarsOnly: false,
+  doNotUpdateMiniCal: false
+}) {
   let {
     updateByModeSwitch = false,
     updateByNavigation = false,
@@ -480,20 +483,25 @@ rflect.cal.ui.SidePane.prototype.update = function(opt_options) {
   } = opt_options;
 
   if (updateByNavigation) {
-    this.getMiniCal().update();
+
+    if (!doNotUpdateMiniCal) { this.getMiniCal().update(); }
+
   } else if (updateByModeSwitch) {
-    if (!doNotUpdateMiniCal) {
-      this.getMiniCal().update();
-    }
+
+    if (!doNotUpdateMiniCal) { this.getMiniCal().update(); }
     this.showSpacer(this.viewManager_.isInSingleDayMode());
     this.viewButtonUpdater_.updateButtons();
   } else if (updateCalendarsOnly) {
+
     this.removeMomentumScroller();
     this.getCalSelector().update();
     this.getTaskSelector().update();
     this.addMomentumScroller();
+
   } else {
+
     rflect.cal.ui.SidePane.superClass_.update.call(this, opt_options);
+
   }
 }
 
@@ -503,6 +511,8 @@ rflect.cal.ui.SidePane.prototype.update = function(opt_options) {
  */
 rflect.cal.ui.SidePane.prototype.updateBeforeRedraw = function({
   updateByNavigation = false
+} = {
+  updateByNavigation: false
 }) {
   if (!updateByNavigation) {
     this.removeMomentumScroller();

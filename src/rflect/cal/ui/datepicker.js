@@ -146,7 +146,10 @@ rflect.cal.ui.DatePicker.prototype.updateBeforeRedraw = function({
   internal = false,
   // Direction where to shift basis when called.
   // internally.
-  direction = rflect.cal.TimeManager.Direction.NONE
+  direction = /** @type {rflect.cal.TimeManager.Direction} */ (0)
+} = {
+  internal: false,
+  direction: /** @type {rflect.cal.TimeManager.Direction} */ (0)
 }) {
   if (internal && direction) {
     this.timeManager.shift(direction);

@@ -12,6 +12,7 @@ goog.provide('rflect.ui.UpdatableComponent');
 
 goog.require('goog.array');
 goog.require('goog.string.StringBuffer');
+goog.require('rflect.object');
 goog.require('rflect.ui.BuildableComponent');
 
 
@@ -25,8 +26,8 @@ class UpdatableComponent extends rflect.ui.BuildableComponent {
   /**
    * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
    */
-  constructor() {
-    super(this, opt_domHelper);
+  constructor(opt_domHelper) {
+    super(opt_domHelper);
   };
 
 
@@ -53,7 +54,7 @@ class UpdatableComponent extends rflect.ui.BuildableComponent {
    */
   decorateInternal(aElement) {
     // Set this.element_.
-    goog.ui.Component.decorateInternal.call(this, aElement);
+    goog.ui.Component.prototype.decorateInternal.call(this, aElement);
     this.updateBeforeRedraw();
     // Build body.
     this.getElement().innerHTML = this.buildHTML(false);
@@ -65,7 +66,7 @@ class UpdatableComponent extends rflect.ui.BuildableComponent {
    */
   enterDocument() {
     this.decorateChildren();
-    super.enterDocument.call(this);
+    UpdatableComponent.superClass_.enterDocument.call(this);
     this.updateAfterRedraw();
   }
   
@@ -85,8 +86,8 @@ class UpdatableComponent extends rflect.ui.BuildableComponent {
   
   /**
    * Updates component in whole update sequence.
-   * As argument is optional, calling <code>component.update()</code> on component
-   * should result in full redraw of its contents.
+   * As argument is optional, calling <code>component.update()</code>, without
+   * any args, on component should result in full redraw of its contents.
    *
    * If you're calling this method in subclass, and want to delegate call to
    * superclass version, be sure to pass <code>opt_options</code> to superclass
@@ -97,15 +98,18 @@ class UpdatableComponent extends rflect.ui.BuildableComponent {
    * @see {rflect.cal.ui.MainBody#updateAfterRedraw}.
    */
   update(opt_options) {
+    var immutableOptions = opt_options ?
+        rflect.object.createImmutableViewDeep(opt_options) : opt_options;
+
     this.forEachChild(aChild => {
       aChild.exitDocument();
     });
-    this.updateBeforeRedraw(opt_options);
+    this.updateBeforeRedraw(immutableOptions);
   
     this.getElement().innerHTML = this.buildHTML(false);
   
     this.decorateChildren();
-    this.updateAfterRedraw(opt_options);
+    this.updateAfterRedraw(immutableOptions);
   };
   
   
@@ -121,8 +125,8 @@ class UpdatableComponent extends rflect.ui.BuildableComponent {
   
   
   /**
-   * Updates component after redraw. Updates body of component by redraw. This
-   * is a second and final part of component update sequence.
+   * Updates component after redraw. This is a second and final part of
+   * component update sequence.
    * @param {Object.<string, *>=} opt_options Options for update.
    * @protected
    */
@@ -133,7 +137,7 @@ class UpdatableComponent extends rflect.ui.BuildableComponent {
    * @override
    */
   disposeInternal() {
-    super.disposeInternal.call(this);
+    UpdatableComponent.superClass_.disposeInternal.call(this);
   }
 }
 

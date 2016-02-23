@@ -19,15 +19,15 @@ goog.require('goog.ui.Component');
 /**
  * UI component class. Main difference with parent class is that it may use
  * string buffer to build html body.
-  * @unrestricted
+ * @unrestricted
  */
 class BuildableComponent extends goog.ui.Component {
 
   /**
    * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
    */
-  constructor() {
-    super(this, opt_domHelper);
+  constructor(opt_domHelper) {
+    super(opt_domHelper);
   };
 
   /**
@@ -35,7 +35,7 @@ class BuildableComponent extends goog.ui.Component {
    * @override
    */
   getId() {
-    return 'ui-component' + super.getId.call(this);
+    return 'ui-component' + BuildableComponent.superClass_.getId.call(this);
   }
 
   /**
@@ -60,7 +60,7 @@ class BuildableComponent extends goog.ui.Component {
    */
   decorateInternal(aElement) {
     // Set this.element_.
-    super.decorateInternal.call(this, aElement);
+    BuildableComponent.superClass_.decorateInternal.call(this, aElement);
     // Build body.
     this.getElement().innerHTML = this.buildHTML(false);
   };
@@ -72,7 +72,7 @@ class BuildableComponent extends goog.ui.Component {
    */
   setElementById(aId) {
     // Set this.element_.
-    super.decorateInternal.call(this,
+    BuildableComponent.superClass_.decorateInternal.call(this,
         this.getDomHelper().getElement(aId));
   };
 
@@ -137,7 +137,7 @@ class BuildableComponent extends goog.ui.Component {
    * @override
    */
   disposeInternal() {
-    super.disposeInternal.call(this);
+    BuildableComponent.superClass_.disposeInternal.call(this);
   }
 }
 

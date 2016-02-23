@@ -314,20 +314,50 @@ rflect.cal.ui.MainBody.prototype.buildHTML = function(opt_outerHTML) {
 /**
  * @override
  */
-rflect.cal.ui.MainBody.prototype.update = function({
+rflect.cal.ui.MainBody.prototype.update = function(opt_options = {
+  updateByNavigation: false,
+  updateByModeSwitch: false
+}) {
+  let {
     updateByNavigation = false,
-    updateByModeSwitch = false }) {
-  this.getTopPane().update({
-    updateByNavigation: updateByNavigation,
-    updateByModeSwitch: updateByModeSwitch
-  });
-  this.getSidePane().update({
-    updateByNavigation: updateByNavigation,
-    updateByModeSwitch: updateByModeSwitch
-  });
-  this.getMainPane().update({
-    updateByNavigation: updateByNavigation
-  });
+    updateByModeSwitch = false
+  } = opt_options;
+  if (updateByModeSwitch || updateByNavigation) {
+    this.getTopPane().update({
+      updateByNavigation: updateByNavigation,
+      updateByModeSwitch: updateByModeSwitch
+    });
+    this.getSidePane().update({
+      updateByNavigation: updateByNavigation,
+      updateByModeSwitch: updateByModeSwitch
+    });
+    this.getMainPane().update({
+      updateByNavigation: updateByNavigation
+    });
+  } else {
+    rflect.cal.ui.MainBody.superClass_.update.call(this, opt_options);
+  }
+}
+
+
+
+/**
+ * @override
+ */
+rflect.cal.ui.MainBody.prototype.updateAfterRedraw = function(opt_options) {
+  let mainPaneCont = this.getElement().querySelector('#main-pane-cont');
+
+  if (this.containerSizeMonitor_.isSmallScreen()) {
+    //Expand main pane.
+    this.getElement().appendChild(this.getSidePane().getElement());
+    this.setExpandedForBigScreen(true);
+  } else {
+    //Restore expanded state
+    mainPaneCont.insertBefore(
+        this.getSidePane().getElement(),
+        this.getMainPane().getElement());
+    this.setExpandedForBigScreen(this.isExpanded());
+  }
 }
 
 

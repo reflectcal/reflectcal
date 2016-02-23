@@ -247,13 +247,13 @@ rflect.cal.ui.InputDatePicker.prototype.setVisible = function (visible) {
   if (this.currentInput_)
     var parsed = this.parser_.parse(this.currentInput_.value, date);
   this.setBasis(date);
-  this.updateBeforeRedraw();
 
   // If the component hasn't been rendered yet, render it now.
   if (!this.isInDocument()) {
     this.render();
-  } else
-    this.updateByRedraw();
+  } else {
+    this.update();
+  }
 
   this.showElement_(visible);
   this.visible_ = visible;

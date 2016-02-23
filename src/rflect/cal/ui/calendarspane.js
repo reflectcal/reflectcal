@@ -277,18 +277,6 @@ rflect.cal.ui.CalendarsPane.createCalendarsTd_ =
 /**
  * @override
  */
-rflect.cal.ui.CalendarsPane.prototype.updateByRedraw =
-    function() {
-  this.getElement().querySelector('.settings-body-inner').innerHTML =
-      rflect.cal.ui.soy.calendarspane.calendarsPaneBody({
-    calendarCollections: this.getCalendarCollections()
-  });
-};
-
-
-/**
- * @override
- */
 rflect.cal.ui.CalendarsPane.prototype.buildHTML = function(opt_outerHTML) {
   return rflect.cal.ui.soy.calendarspane.calendarsPane({
     id: this.getId(),
@@ -381,7 +369,10 @@ rflect.cal.ui.CalendarsPane.prototype.showCalendarEditPane = function(aShow,
  */
 rflect.cal.ui.CalendarsPane.prototype.onCalendarUpdate_ =
     function(aEvent) {
-  this.updateByRedraw();
+  this.getElement().querySelector('.settings-body-inner').innerHTML =
+      rflect.cal.ui.soy.calendarspane.calendarsPaneBody({
+    calendarCollections: this.getCalendarCollections()
+  });
   this.resetMomentumScroller();
 }
 

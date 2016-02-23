@@ -116,14 +116,6 @@ goog.inherits(rflect.cal.ui.ControlPane, rflect.ui.UpdatableComponent);
 
 
 /**
- * Date header element.
- * @type {Element}
- * @private
- */
-rflect.cal.ui.ControlPane.prototype.timeLabel_ = null;
-
-
-/**
  * Whether size category was changed.
  * @type {boolean}
  * @private
@@ -266,16 +258,15 @@ rflect.cal.ui.ControlPane.prototype.getDateHeader = function() {
 /**
  * @override
  */
-rflect.cal.ui.ControlPane.prototype.update = function(opt_options) {
+rflect.cal.ui.ControlPane.prototype.update = function(opt_options = {
+  updateByNavigation: false
+}) {
   let {
     updateByNavigation = false
   } = opt_options;
-
   if (updateByNavigation) {
-    if (!this.timeLabel_) {
-      this.timeLabel_ = this.dom_.getElement('time-period-label');
-    }
-    this.timeLabel_ && (this.timeLabel_.innerHTML = this.getDateHeader());
+    let timeLabel = this.dom_.getElement('time-period-label');
+    timeLabel && (timeLabel.innerHTML = this.getDateHeader());
     this.viewButtonUpdater_.updateButtons();
   } else {
     rflect.cal.ui.ControlPane.superClass_.update.call(this, opt_options);
@@ -304,8 +295,6 @@ rflect.cal.ui.ControlPane.prototype.disposeInternal = function() {
   rflect.cal.ui.ControlPane.superClass_.disposeInternal.call(this);
 
   this.timeManager_ = null;
-
-  this.timeLabel_ = null;
 
   this.buttonNow_ = null;
   this.buttonPrev_ = null;
