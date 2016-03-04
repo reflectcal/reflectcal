@@ -109,7 +109,7 @@ rflect.cal.ui.MainBody = function(aViewManager, aTimeManager, aEventManager,
    * @private
    */
   this.expanded_ = rflect.SIDE_PANE_MOVABLE && this.containerSizeMonitor_.
-      isSizeCategoryOrLower(rflect.cal.Navigator.SIZE_CATEGORY.WIDE);
+      isSizeCategoryOrLower(rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE);
 
 
   /**
