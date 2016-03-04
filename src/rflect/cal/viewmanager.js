@@ -3,14 +3,14 @@
  */
 
 /**
- * @fileoverview View manager defines all views, screens and pages.
+ * @fileoverview View manager is the main component.
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
 goog.provide('rflect.cal.ViewManager');
 
 goog.require('goog.dom');
-goog.require('goog.events.EventHandler');
+goog.require('rflect.cal.ui.ScreenManager');
 goog.require('goog.events.EventType');
 goog.require('rflect.cal.blocks.BlockManager');
 goog.require('rflect.cal.ContainerSizeMonitor');
@@ -22,7 +22,10 @@ goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
 goog.require('rflect.cal.Transport');
+goog.require('rflect.cal.ui.EditDialog');
 goog.require('rflect.cal.ui.MainBody');
+goog.require('rflect.cal.ui.MainPane.EventTypes');
+goog.require('rflect.cal.ui.SaveDialog');
 goog.require('rflect.cal.ui.ScreenManager');
 goog.require('rflect.cal.ui.ScreenManager.EventTypes');
 goog.require('rflect.cal.ViewType');
@@ -33,11 +36,12 @@ goog.require('rflect.cal.ViewType');
  * View manager main class.
  * @param {rflect.cal.Main} aMainInstance Cal main instance passed to establish
  * link between modules.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
- * @extends {goog.events.EventHandler}
+ * @extends {rflect.cal.ui.ScreenManager}
  */
-rflect.cal.ViewManager = function(aMainInstance) {
-  goog.events.EventHandler.call(this);
+rflect.cal.ViewManager = function(aMainInstance, opt_domHelper) {
+  rflect.cal.ui.ScreenManager.call(this, opt_domHelper);
 
   /**
    * Main calendar instance saved for linkage to another modules.
@@ -102,15 +106,38 @@ rflect.cal.ViewManager = function(aMainInstance) {
   this.mainBody_ = new rflect.cal.ui.MainBody(this, this.timeManager,
       this.eventManager_, this.containerSizeMonitor_, this.blockManager_,
       this.transport_, this.navigator_);
+  this.addChild(this.mainBody_);
+
+  /**
+   * Popup save dialog.
+   *
+   * We're not adding dialog as a child because of problems with re-decorating
+   * after update.
+   *
+   * @type {rflect.cal.ui.SaveDialog}
+   * @private
+   */
+  this.saveDialog_ = new rflect.cal.ui.SaveDialog(undefined, undefined,
+      undefined, this.eventManager_);
+  this.addChild(this.saveDialog_);
+  if (goog.DEBUG)
+    _inspect('saveDialog_', this.saveDialog_);
+
+  /**
+   * Popup edit dialog.
+   * @type {rflect.cal.ui.EditDialog}
+   * @private
+   */
+  this.editDialog_ = new rflect.cal.ui.EditDialog();
+  this.addChild(this.editDialog_);
+  if (goog.DEBUG)
+    _inspect('editDialog_', this.editDialog_);
+
 
   /**
    * Pager.
-   * @type {rflect.cal.ui.ScreenManager}
-   * @private
    */
-
-  this.screenManager_ = new rflect.cal.ui.ScreenManager(this);
-  this.screenManager_.setSlidingIsEnabled(rflect.TOUCH_INTERFACE_ENABLED);
+  this.setSlidingIsEnabled(rflect.TOUCH_INTERFACE_ENABLED);
 
    /**
    * Notification manager.
@@ -144,7 +171,7 @@ rflect.cal.ViewManager = function(aMainInstance) {
       rflect.cal.ViewType.DAY : rflect.cal.ViewType.WEEK;
   this.showView(this.currentView);
 };
-goog.inherits(rflect.cal.ViewManager, goog.events.EventHandler);
+goog.inherits(rflect.cal.ViewManager, rflect.cal.ui.ScreenManager);
 
 
 /**
@@ -170,48 +197,259 @@ rflect.cal.ViewManager.prototype.containerSizeMonitor_ = null;
 
 
 /**
- * @return {rflect.cal.ui.ScreenManager}
+ * Event pane.
+ * @type {rflect.cal.ui.EventPane}
+ * @private
  */
-rflect.cal.ViewManager.prototype.getScreenManager = function(){
-  return this.screenManager_;
+rflect.cal.ViewManager.prototype.eventPane_;
+
+
+/**
+ * Settings pane.
+ * @type {rflect.cal.ui.SettingsPane}
+ * @private
+ */
+rflect.cal.ViewManager.prototype.settingsPane_;
+
+
+/**
+ * @return {goog.ui.Component}
+ */
+rflect.cal.ViewManager.prototype.getSettingsPane = function() {
+  return this.settingsPane_;
 };
 
 
 /**
- * Attaches event handlers.
+ * @override
  */
 rflect.cal.ViewManager.prototype.enterDocument = function() {
+  rflect.cal.ViewManager.superClass_.enterDocument.call(this);
+
+
+  // Listen immediate press on save settings button.
+  this.getHandler().
+      listen(this,
+      rflect.cal.ui.SettingsPane.EventTypes.SAVE, this.onSaveUserImmediate_,
+      false, this);
+
+  // Page change events.
+  this.getHandler().
+      listen(this, rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE,
+      this.onPageChange_, false, this).
+      listen(this, rflect.cal.ui.PAGE_REQUEST_EVENT,
+      this.onPageRequest_, false, this);
+
   // Container resize listener.
-  this.listen(this.containerSizeMonitor_, goog.events.EventType.RESIZE,
+  this.getHandler().
+      listen(this.containerSizeMonitor_,
+      goog.events.EventType.RESIZE,
       this.onViewportResize_, false, this);
 
   // Menu commands.
-  this.listen(this.mainBody_, goog.ui.Component.EventType.ACTION,
+  this.getHandler().
+      listen(this.mainBody_,
+      goog.ui.Component.EventType.ACTION,
       this.onMainBodyAction_, false, this);
 
-  this.listen(this.mainBody_, rflect.cal.EventType.DATE_SELECT,
-      this.onDateSelect_, false, this);
-  this.listen(this.mainBody_, rflect.cal.EventType.DATE_DRAG,
-      this.onDateDrag_, false, this);
-  this.listen(this.mainBody_, rflect.cal.EventType.DATE_DRAG_END,
+  // Date events.
+  this.getHandler().
+      listen(this.mainBody_, rflect.cal.EventType.DATE_SELECT,
+      this.onDateSelect_, false, this).
+      listen(this.mainBody_, rflect.cal.EventType.DATE_DRAG,
+      this.onDateDrag_, false, this).
+      listen(this.mainBody_, rflect.cal.EventType.DATE_DRAG_END,
       goog.nullFunction, false, this);
 
-  //Listen immediate press on save settings button.
-  this.listen(this.mainBody_,
-      rflect.cal.ui.SettingsPane.EventTypes.SAVE, this.onSaveUserImmediate_,
-      false, this);
-  //Listen specific case when save settings need a reload.
-  this.listen(this.transport_, rflect.cal.Transport.EventTypes.SAVE_USER,
+  // Listen specific case when save settings need a reload.
+  this.getHandler().
+      listen(this.transport_,
+      rflect.cal.Transport.EventTypes.SAVE_USER,
       this.onSaveUserResponse_, false, this);
-  this.listen(this.screenManager_,
-      rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE, this.onPageChange_,
-      false, this);
-  this.listen(this.mainBody_, rflect.cal.ui.PAGE_REQUEST_EVENT,
-      this.onPageRequest_, false, this);
 
-  this.screenManager_.assignEvents();
-
+  // Dialog events.
+  this.getHandler().
+      listen(this, rflect.cal.ui.MainPane.EventTypes.SAVE_DIALOG_SHOW,
+      this.onSaveDialogShow_, false, this).
+      listen(this, rflect.cal.ui.MainPane.EventTypes.EDIT_DIALOG_SHOW,
+      this.onEditDialogShow_, false, this).
+      listen(this, rflect.cal.ui.MainPane.EventTypes.EDIT_COMPONENT_SHOW,
+      this.onEditComponentShow_, false, this).
+      listen(this.saveDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
+      this.onEventEdit_, false, this).
+      listen(this.saveDialog_, rflect.ui.Dialog.EventType.SELECT,
+      this.onSaveDialogButtonSelect_, false, this).
+      listen(this.editDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
+      this.onEventEdit_, false, this).
+      listen(this.editDialog_, rflect.ui.Dialog.EventType.SELECT,
+      this.onEditDialogButtonSelect_, false, this);
 };
+
+
+/**
+ * Event edit listener. Called when edit link is clicked from save or edit
+ * dialog.
+ * @param {Event} aEvent Event object.
+ */
+rflect.cal.ViewManager.prototype.onEventEdit_ = function(aEvent) {
+  this.showEventPane(true, aEvent.target == this.saveDialog_);
+}
+
+
+/**
+ * Save dialog button listener.
+ * @param {rflect.ui.Dialog.Event} aEvent Event object.
+ */
+rflect.cal.ViewManager.prototype.onSaveDialogButtonSelect_ = function(aEvent) {
+  if (aEvent.key == this.saveDialog_.getButtonSet().getDefault()) {
+    this.eventManager_.eventHolder.setSummary(
+        this.saveDialog_.getEventName());
+    this.eventManager_.eventHolder.setCalendarId(
+        this.saveDialog_.getCalendarId());
+    this.eventManager_.setLastUsedCalendarId(
+        this.eventManager_.eventHolder.getCurrentEvent().calendarId);
+
+    this.transport_.saveEventAsync(this.eventManager_.eventHolder.endWithAdd());
+    this.mainBody_.getMainPane().updateAfterSave();
+  } else if (aEvent.key != this.saveDialog_.getButtonSet().getCancel()) {
+    //Edit button.
+    this.saveDialog_.dispatchEvent({type: rflect.cal.ui.SaveDialog.EVENT_EDIT});
+  }
+}
+
+
+/**
+ * Edit dialog button listener.
+ * @param {{type: string}} aEvent Event object.
+ */
+rflect.cal.ViewManager.prototype.onEditDialogButtonSelect_ = function(aEvent) {
+
+  if (aEvent.key == this.editDialog_.getButtonSet().getDefault()) {
+
+    this.editDialog_.dispatchEvent({type:
+        rflect.cal.ui.SaveDialog.EVENT_EDIT});
+
+  } else if (aEvent.key != this.editDialog_.getButtonSet().getCancel()) {
+    // The only spare button - delete.
+
+    let deletedEvent = this.eventManager_.eventHolder.endWithDelete();
+    this.transport_.deleteEventAsync(deletedEvent);
+
+    this.mainBody_.getMainPane().updateAfterDelete(deletedEvent);
+  }
+}
+
+
+/**
+ * Shows event pane when possible and lazily instantiates it at the first time.
+ * @param {boolean} aShow Whether to show event pane.
+ * @param {boolean=} opt_creatingNewEvent Whether we're creating new event.
+ * @param {boolean=} opt_creatingByTouchHold Whether we're creating event by
+ * touch hold.
+ */
+rflect.cal.ViewManager.prototype.showEventPane = function(aShow,
+    opt_creatingNewEvent, opt_creatingByTouchHold) {
+  if (!this.eventPane_) {
+    this.eventPane_ = new rflect.cal.ui.EventPane(this,
+        this.timeManager, this.eventManager_,
+        this.containerSizeMonitor_, this.transport_,
+        this.navigator_);
+    this.addChild(this.eventPane_);
+
+    this.getHandler().listen(this.eventPane_,
+        rflect.cal.ui.EventPane.EventTypes.SAVE, this.onEventPaneSave_,
+        false, this).listen(this.eventPane_,
+        rflect.cal.ui.EventPane.EventTypes.DELETE, this.onEventPaneDelete_,
+        false, this);
+  }
+
+  this.eventPane_.setNewEventMode(opt_creatingNewEvent);
+  this.eventPane_.setTouchHoldMode(opt_creatingByTouchHold);
+
+  this.showScreen(this.eventPane_, aShow);
+}
+
+
+/**
+ * Shows settings pane when possible and lazily instantiates it at the first
+ * time.
+ * @param {boolean} aShow Whether to show settings pane.
+ */
+rflect.cal.ViewManager.prototype.showSettingsPane = function(aShow) {
+  if (!this.settingsPane_) {
+    this.settingsPane_ = new rflect.cal.ui.SettingsPane(this,
+        this.timeManager, this.eventManager_,
+        this.containerSizeMonitor_, this.transport_);
+    this.addChild(this.settingsPane_);
+
+    // Save settings handler is in view manager.
+    this.getHandler().listen(this.settingsPane_,
+        rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
+        this.onSettingsPaneCalendarUpdate_, false, this);
+
+    if (goog.DEBUG) {
+      _inspect('settingsPane_', this.settingsPane_);
+    }
+  }
+
+  this.showScreen(this.settingsPane_, aShow);
+}
+
+
+/**
+ * Event pane save listener.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.ViewManager.prototype.onEventPaneSave_ = function(aEvent) {
+  this.updateMainPane_();
+}
+
+
+/**
+ * Event pane delete listener.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.ViewManager.prototype.onEventPaneDelete_ = function(aEvent) {
+  this.updateMainPane_();
+}
+
+
+/**
+ * Settings pane cancel listener.
+ */
+rflect.cal.ViewManager.prototype.onSettingsPaneCancel_ = function() {
+  this.showSettingsPane(false);
+}
+
+
+/**
+ * Settings pane calendar update listener.
+ * @param {goog.events.Event} aEvent Event object.
+ */
+rflect.cal.ViewManager.prototype.onSettingsPaneCalendarUpdate_ =
+    function(aEvent) {
+  this.eventManager_.run();
+  this.mainBody_.getSidePane().update({
+    updateCalendarsOnly: true
+  });
+  //Do not attach momentum scroller, we will do it on page change.
+  this.mainBody_.getMainPane().update({
+    doNotAddMomentumScroller: true
+  });
+}
+
+
+/**
+ * Updates just main pane.
+ */
+rflect.cal.ViewManager.prototype.updateMainPane_ = function() {
+  this.eventManager_.run();
+
+  //Do not attach momentum scroller, we will do it on page change.
+  this.mainBody_.getMainPane().update({
+    doNotAddMomentumScroller: true
+  });
+}
 
 
 /**
@@ -270,43 +508,89 @@ rflect.cal.ViewManager.prototype.onMainBodyAction_ = function(aEvent){
   var id = aEvent.target.getId();
 
   switch (id) {
-    case rflect.cal.predefined.BUTTON_NOW_ID:
-      if (goog.events.dispatchEvent(this.mainBody_,
-          rflect.cal.EventType.MENU_COMMAND_NOW))
-        this.onMenuCommandNow_();break;
-    case rflect.cal.predefined.BUTTON_PREV_ID:
-      if (goog.events.dispatchEvent(this.mainBody_,
-          rflect.cal.EventType.MENU_COMMAND_PREV))
-        this.onMenuCommandPrev_();break;
-    case rflect.cal.predefined.BUTTON_NEXT_ID:
-      if (goog.events.dispatchEvent(this.mainBody_,
-          rflect.cal.EventType.MENU_COMMAND_NEXT))
-        this.onMenuCommandNext_();break;
-    case rflect.cal.predefined.BUTTON_NEW_EVENT_ID:
-      if (goog.events.dispatchEvent(this.mainBody_,
-          rflect.cal.EventType.MENU_COMMAND_NEW_EVENT))
-        this.onMenuCommandNewEvent_();break;
+    case rflect.cal.predefined.BUTTON_NOW_ID: {
+      this.onMenuCommandNow_(); break;
+    }
+    case rflect.cal.predefined.BUTTON_PREV_ID: {
+      this.onMenuCommandPrev_(); break;
+    }
+    case rflect.cal.predefined.BUTTON_NEXT_ID: {
+      this.onMenuCommandNext_(); break;
+    }
+    case rflect.cal.predefined.BUTTON_NEW_EVENT_ID: {
+      this.onMenuCommandNewEvent_(); break;
+    }
     case rflect.cal.predefined.BUTTON_DAY_ID:
-    case rflect.cal.predefined.BUTTON_SIDE_PANE_DAY_ID:
-      if (goog.events.dispatchEvent(this.mainBody_,
-          rflect.cal.EventType.MENU_COMMAND_DAY))
-        this.onMenuCommandDay_();break;
+    case rflect.cal.predefined.BUTTON_SIDE_PANE_DAY_ID: {
+      this.onMenuCommandDay_(); break;
+    }
     case rflect.cal.predefined.BUTTON_WEEK_ID:
-    case rflect.cal.predefined.BUTTON_SIDE_PANE_WEEK_ID:
-      if (goog.events.dispatchEvent(this.mainBody_,
-          rflect.cal.EventType.MENU_COMMAND_WEEK))
-        this.onMenuCommandWeek_();break;
+    case rflect.cal.predefined.BUTTON_SIDE_PANE_WEEK_ID: {
+      this.onMenuCommandWeek_(); break;
+    }
     case rflect.cal.predefined.BUTTON_MONTH_ID:
-    case rflect.cal.predefined.BUTTON_SIDE_PANE_MONTH_ID:
-      if (goog.events.dispatchEvent(this.mainBody_,
-          rflect.cal.EventType.MENU_COMMAND_MONTH))
-        this.onMenuCommandMonth_();break;
-    case rflect.cal.predefined.BUTTON_SETTINGS_ID:
-    case rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID:
-      if (goog.events.dispatchEvent(this.mainBody_,
-          rflect.cal.EventType.MENU_COMMAND_OPTIONS))
-        this.onMenuCommandOptions_();break;
+    case rflect.cal.predefined.BUTTON_SIDE_PANE_MONTH_ID: {
+      this.onMenuCommandMonth_(); break;
+    }
+    case rflect.cal.predefined.BUTTON_SETTINGS_ID: {
+      break;
+    }
+    case rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID: {
+      this.onMenuCommandOptions_(); break;
+    }
+    case rflect.cal.predefined.BUTTON_MENU_ID: {
+      this.onMenuCommandMenu_(); break;
+    }
     default: break;
+  }
+}
+
+
+/**
+ * @param {rflect.cal.ui.MainPane.SaveDialogShowEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ViewManager.prototype.onSaveDialogShow_ = function(aEvent) {
+  this.saveDialog_.setVisible(true);
+  this.mainBody_.getMainPane().beginEventCreation();
+}
+
+
+/**
+ * @param {rflect.cal.ui.MainPane.EditDialogShowEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ViewManager.prototype.onEditDialogShow_ = function(aEvent) {
+}
+
+
+/**
+ * @param {rflect.cal.ui.MainPane.EditComponentShowEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ViewManager.prototype.onEditComponentShow_ = function(aEvent) {
+  let calendarEvent = aEvent.calendarEvent;
+  let showPane = aEvent.showPane;
+  let byTouchHold = aEvent.byTouchHold;
+
+  if (byTouchHold) {
+    if (this.eventManager_.eventHolder.isInProgress()) {
+      this.showEventPane(true, true, true);
+    }
+  } else if (!this.eventManager_.eventIsInProgress(calendarEvent.id)) {
+    this.eventManager_.eventHolder.openSession(calendarEvent);
+    if (calendarEvent) {
+      if (showPane) {
+        this.showEventPane(true);
+        this.editDialog_.setVisible(false);
+      } else {
+        this.editDialog_.setVisible(true);
+        this.editDialog_.setTitle(calendarEvent.summary ||
+            rflect.cal.i18n.Symbols.NO_NAME_EVENT);
+        this.editDialog_.setEventName(calendarEvent.summary);
+        this.editDialog_.setEventTimeString(calendarEvent.toHumanString());
+      }
+    }
   }
 }
 
@@ -326,7 +610,7 @@ rflect.cal.ViewManager.prototype.onPageChange_ = function(aEvent) {
  * @private
  */
 rflect.cal.ViewManager.prototype.onPageRequest_ = function(aEvent) {
-  this.screenManager_.showScreen(aEvent.component, aEvent.show);
+  this.showScreen(aEvent.component, aEvent.show);
 }
 
 
@@ -362,9 +646,8 @@ rflect.cal.ViewManager.prototype.onMenuCommandNext_ = function() {
  * @private
  */
 rflect.cal.ViewManager.prototype.onMenuCommandNewEvent_ = function() {
-  //TODO(alexk): add logic to load module.
-  // is moduleLoaded_ viewmanager just sets this variable to true, while main
-  // body actually shows pane when module loaded, showing alert if not.
+  this.eventManager_.startEventCreationSession();
+  this.showEventPane(true, true);
 };
 
 
@@ -414,6 +697,26 @@ rflect.cal.ViewManager.prototype.onMenuCommandYear_ = function() {
  * @private
  */
 rflect.cal.ViewManager.prototype.onMenuCommandOptions_ = function() {
+  if (this.containerSizeMonitor_.isSmallScreen()) {
+    this.mainBody_.showSidePane(false);
+  }
+  this.showSettingsPane(true);
+};
+
+
+/**
+ * @private
+ */
+rflect.cal.ViewManager.prototype.onMenuCommandOptionsSidePane_ = function() {
+  this.showSettingsPane(true);
+};
+
+
+/**
+ * @private
+ */
+rflect.cal.ViewManager.prototype.onMenuCommandMenu_ = function() {
+  this.mainBody_.toggleExpanded();
 };
 
 
@@ -446,7 +749,7 @@ rflect.cal.ViewManager.prototype.onDateSelect_ = function(aEvent) {
  */
 rflect.cal.ViewManager.prototype.onSaveUserImmediate_ = function(aEvent) {
   //Listen for user change events from settings pane only.
-  if (aEvent.target == this.mainBody_.getSettingsPane()) {
+  if (aEvent.target == this.getSettingsPane()) {
     if (aEvent.user['settings']['visualTheme'] !==
         aEvent.changedUser['settings']['visualTheme']) {
       this.mainBody_.changeVisualTheme(aEvent.changedUser['settings']
@@ -494,7 +797,7 @@ rflect.cal.ViewManager.prototype.onDateDrag_ = function(aEvent) {
 
 /**
  * @param {rflect.cal.ViewType} aType Type of view to show.
- * @return {boolean} Whether view mode has changed (like from any week mode to 
+ * @return {boolean} Whether view mode has changed (like from any week mode to
  * month).
  */
 rflect.cal.ViewManager.prototype.viewModeHasChanged = function(aType) {
@@ -529,10 +832,9 @@ rflect.cal.ViewManager.prototype.showView = function(aType, opt_caller) {
 
       this.transport_.loadCalendars();
 
-      this.screenManager_.render();
       // Render main body and places it in screen manager element.
-      this.screenManager_.showScreen(this.mainBody_, true);
-      this.enterDocument();
+      this.render();
+      this.showScreen(this.mainBody_, true);
       //this.transport_.enterNotificationsListening();
       this.notificationManager_.enterNotificationsWatching();
       this.isOnStartup_ = false;
@@ -619,14 +921,10 @@ rflect.cal.ViewManager.prototype.showNow = function() {
 rflect.cal.ViewManager.prototype.disposeInternal = function() {
 
   this.containerSizeMonitor_.dispose();
-  this.mainBody_.dispose();
   this.transport_.dispose();
   this.notificationManager_.dispose();
-  this.screenManager_.dispose();
-
 
   this.containerSizeMonitor_ = null;
-  this.mainBody_ = null;
   this.mainInstance_ = null;
   this.blockManager_ = null;
 

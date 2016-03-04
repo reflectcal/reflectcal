@@ -79,6 +79,7 @@ class BuildableComponent extends goog.ui.Component {
 
   /**
    * Builds body of component.
+   * Should be overridden by subclasses.
    * @param {boolean=} opt_outerHTML Whether to build outer html.
    * @return {string} HTML of component.
    */

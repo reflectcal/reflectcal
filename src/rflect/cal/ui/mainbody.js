@@ -204,22 +204,6 @@ rflect.cal.ui.MainBody.prototype.mainPaneContainerTransitionEndKey_;
 
 
 /**
- * Event pane.
- * @type {rflect.cal.ui.EventPane}
- * @private
- */
-rflect.cal.ui.MainBody.prototype.eventPane_;
-
-
-/**
- * Settings pane.
- * @type {rflect.cal.ui.SettingsPane}
- * @private
- */
-rflect.cal.ui.MainBody.prototype.settingsPane_;
-
-
-/**
  * Side pane.
  * @type {rflect.cal.ui.SidePane}
  * @private
@@ -280,14 +264,6 @@ rflect.cal.ui.MainBody.prototype.getTaskSelector = function() {
  */
 rflect.cal.ui.MainBody.prototype.getMiniCal = function() {
   return this.sidePane_.getMiniCal();
-};
-
-
-/**
- * @return {goog.ui.Component}
- */
-rflect.cal.ui.MainBody.prototype.getSettingsPane = function() {
-  return this.settingsPane_;
 };
 
 
@@ -368,17 +344,14 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
   // Propagate call to children.
   rflect.cal.ui.MainBody.superClass_.enterDocument.call(this);
 
-  this.getHandler().listen(this.topPane_, goog.ui.Component.EventType.ACTION,
-      this.onControlPaneAction_, false, this)
-      .listen(this.sidePane_, goog.ui.Component.EventType.ACTION,
-      this.onSidePaneAction_, false, this)
+  this.getHandler()
       .listen(this.sidePane_,
       rflect.cal.ui.CalSelector.EventType.CALENDAR_SWITCH,
       this.onCalendarSwitch_, false, this)
       .listen(this.sidePane_.showBehavior,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
       this.onSidePaneSlide_, false, this)
-      .listen(this.viewManager_.getScreenManager(),
+      .listen(this.viewManager_,
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this)
       .listen(this.getElement(),
@@ -515,50 +488,6 @@ rflect.cal.ui.MainBody.prototype.getMinimalSize = function() {
       rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE.height +
       rflect.cal.predefined.WEEK_SCROLLABLE_DEFAULT_SIZE.height,
       rflect.cal.predefined.MONTH_SCROLLABLE_DEFAULT_SIZE.height));
-}
-
-
-/**
- * Control pane action handler.
- * @param {goog.events.Event} aEvent Event object.
- * @private
- */
-rflect.cal.ui.MainBody.prototype.onControlPaneAction_ = function(aEvent) {
-  var id = aEvent.target.getId();
-
-  switch(id){
-    case rflect.cal.predefined.BUTTON_NEW_EVENT_ID: {
-      this.eventManager_.startEventCreationSession();
-      this.showEventPane(true, true);
-    };break;
-    case rflect.cal.predefined.BUTTON_SETTINGS_ID: {
-      this.showSettingsPane(true);
-    };break;
-    case rflect.cal.predefined.BUTTON_MENU_ID: {
-      this.toggleExpanded();
-    };break;
-    default:break;
-  }
-}
-
-
-/**
- * Side pane action handler.
- * @param {goog.events.Event} aEvent Event object.
- * @private
- */
-rflect.cal.ui.MainBody.prototype.onSidePaneAction_ = function(aEvent) {
-  var id = aEvent.target.getId();
-
-  switch(id) {
-    case rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID: {
-      if (this.containerSizeMonitor_.isSmallScreen()) {
-        this.showSidePane(false);
-      }
-      this.showSettingsPane(true);
-    };break;
-    default:break;
-  }
 }
 
 
@@ -756,117 +685,6 @@ rflect.cal.ui.MainBody.prototype.finalizeExpandedForBigScreen = function() {
 
 
 /**
- * Shows event pane when possible and lazily instantiates it at the first time.
- * @param {boolean} aShow Whether to show event pane.
- * @param {boolean=} opt_creatingNewEvent Whether we're creating new event.
- * @param {boolean=} opt_creatingByTouchHold Whether we're creating event by
- * touch hold.
- */
-rflect.cal.ui.MainBody.prototype.showEventPane = function(aShow,
-    opt_creatingNewEvent, opt_creatingByTouchHold) {
-  if (!this.eventPane_) {
-    this.eventPane_ = new rflect.cal.ui.EventPane(this.viewManager_,
-        this.timeManager_, this.eventManager_,
-        this.containerSizeMonitor_, this.transport_,
-        this.navigator_);
-    this.addChild(this.eventPane_);
-
-    this.getHandler().listen(this.eventPane_,
-        rflect.cal.ui.EventPane.EventTypes.SAVE, this.onEventPaneSave_,
-        false, this).listen(this.eventPane_,
-        rflect.cal.ui.EventPane.EventTypes.DELETE, this.onEventPaneDelete_,
-        false, this);
-  }
-
-  this.eventPane_.setNewEventMode(opt_creatingNewEvent);
-  this.eventPane_.setTouchHoldMode(opt_creatingByTouchHold);
-
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this.eventPane_,
-      aShow));
-}
-
-
-/**
- * Shows settings pane when possible and lazily instantiates it at the first
- * time.
- * @param {boolean} aShow Whether to show settings pane.
- */
-rflect.cal.ui.MainBody.prototype.showSettingsPane = function(aShow) {
-  if (!this.settingsPane_) {
-    this.settingsPane_ = new rflect.cal.ui.SettingsPane(this.viewManager_,
-        this.timeManager_, this.eventManager_,
-        this.containerSizeMonitor_, this.transport_);
-    this.addChild(this.settingsPane_);
-
-    // Save settings handler is in view manager.
-    this.getHandler().listen(this.settingsPane_,
-        rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
-        this.onSettingsPaneCalendarUpdate_, false, this);
-
-    if (goog.DEBUG) {
-      _inspect('settingsPane_', this.settingsPane_);
-    }
-  }
-
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this.settingsPane_,
-      aShow));
-}
-
-
-/**
- * @param {boolean} aShow Whether to show calendar element.
- * @private
- */
-rflect.cal.ui.MainBody.prototype.showCalendar_ = function(aShow) {
-  goog.style.showElement(this.getDomHelper().getElement('cal-container'),
-      aShow);
-}
-
-
-/**
- * Event pane save listener.
- * @param {goog.events.Event} aEvent Event object.
- */
-rflect.cal.ui.MainBody.prototype.onEventPaneSave_ = function(aEvent) {
-  this.updateMainPane_();
-}
-
-
-/**
- * Event pane delete listener.
- * @param {goog.events.Event} aEvent Event object.
- */
-rflect.cal.ui.MainBody.prototype.onEventPaneDelete_ = function(aEvent) {
-  this.updateMainPane_();
-}
-
-
-/**
- * Settings pane cancel listener.
- */
-rflect.cal.ui.MainBody.prototype.onSettingsPaneCancel_ = function() {
-  this.showSettingsPane(false);
-}
-
-
-/**
- * Settings pane calendar update listener.
- * @param {goog.events.Event} aEvent Event object.
- */
-rflect.cal.ui.MainBody.prototype.onSettingsPaneCalendarUpdate_ =
-    function(aEvent) {
-  this.eventManager_.run();
-  this.sidePane_.update({
-    updateCalendarsOnly: true
-  });
-  //Do not attach momentum scroller, we will do it on page change.
-  this.getMainPane().update({
-    doNotAddMomentumScroller: true
-  });
-}
-
-
-/**
  * @param {string} aThemeName Theme name.
  */
 rflect.cal.ui.MainBody.prototype.changeVisualTheme = function(aThemeName) {
@@ -878,20 +696,6 @@ rflect.cal.ui.MainBody.prototype.changeVisualTheme = function(aThemeName) {
     goog.dom.classes.add(this.getSidePane().getElement(), themeClassName);
   }
 }
-
-
-/**
- * Updates just main pane.
- */
-rflect.cal.ui.MainBody.prototype.updateMainPane_ = function() {
-  this.eventManager_.run();
-
-  //Do not attach momentum scroller, we will do it on page change.
-  this.getMainPane().update({
-    doNotAddMomentumScroller: true
-  });
-}
-
 
 
 /**

@@ -706,7 +706,7 @@ rflect.cal.ui.MainPane.prototype.updateConditionally_ = function(
  * Redraws component after event was deleted.
  * @private
  */
-rflect.cal.ui.MainPane.prototype.updateAfterDelete_ = function() {
+rflect.cal.ui.MainPane.prototype.updateAfterDelete = function() {
   var allDay = this.eventManager_.eventHolder.getBackUpEvent().allDay;
 
   this.updateConditionally_(allDay, !allDay, true);
@@ -717,7 +717,7 @@ rflect.cal.ui.MainPane.prototype.updateAfterDelete_ = function() {
  * Redraws component after event was added.
  * @private
  */
-rflect.cal.ui.MainPane.prototype.updateAfterSave_ = function() {
+rflect.cal.ui.MainPane.prototype.updateAfterSave = function() {
   this.updateConditionally_(
       this.selectionMask_.isAllDay(), this.selectionMask_.isWeek(),
       this.selectionMask_.isMonth());
@@ -1598,7 +1598,7 @@ rflect.cal.ui.MainPane.prototype.endChipDrag_ = function() {
   this.eventManager_.eventHolder.endWithEdit();
   this.transport_.saveEventAsync(
       this.eventManager_.eventHolder.getCurrentEvent());
-  this.updateAfterSave_();
+  this.updateAfterSave();
 }
 
 
@@ -1646,7 +1646,7 @@ rflect.cal.ui.MainPane.prototype.onSaveDialogButtonSelect_ = function(aEvent) {
     this.eventManager_.eventHolder.endWithAdd();
     this.transport_.saveEventAsync(
         this.eventManager_.eventHolder.getCurrentEvent());
-    this.updateAfterSave_();
+    this.updateAfterSave();
   }
 }
 
@@ -1680,7 +1680,7 @@ rflect.cal.ui.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
     this.transport_.deleteEventAsync(
         this.eventManager_.eventHolder.getBackUpEvent());
 
-    this.updateAfterDelete_();
+    this.updateAfterDelete();
   }
 }
 

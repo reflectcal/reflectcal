@@ -309,7 +309,7 @@ rflect.cal.ui.CalendarsPane.prototype.enterDocument = function() {
       goog.events.EventType.CLICK, this.onCalendarLinkClick_, false, this)
 
       //Show/hide actions.
-      .listen(this.viewManager.getScreenManager(),
+      .listen(this.viewManager,
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this);
 };
@@ -444,7 +444,7 @@ rflect.cal.ui.CalendarsPane.prototype.onNewCalendarAction_ =
  * @private
  */
 rflect.cal.ui.CalendarsPane.prototype.onKeyDown_ = function(aEvent) {
-  if (this.viewManager.getScreenManager().isVisible(this)) {
+  if (this.viewManager.isVisible(this)) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 

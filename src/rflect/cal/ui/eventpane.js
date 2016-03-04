@@ -368,10 +368,10 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
   }
 
   //Show/hide actions.
-  this.getHandler().listen(this.viewManager.getScreenManager(),
+  this.getHandler().listen(this.viewManager,
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this)
-      .listen(this.viewManager.getScreenManager(),
+      .listen(this.viewManager,
       rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE, this.onPageChange_,
       false, this);
 };
@@ -488,7 +488,7 @@ rflect.cal.ui.EventPane.prototype.setTouchHoldMode = function(
  */
 rflect.cal.ui.EventPane.prototype.onKeyDown_ = function(aEvent) {
 
-  if (this.viewManager.getScreenManager().isVisible(this) &&
+  if (this.viewManager.isVisible(this) &&
       !this.startTimeAC_.getRenderer().isVisible() &&
       !this.endTimeAC_.getRenderer().isVisible()) {
     // ESC key.

@@ -9,6 +9,7 @@
  */
 
 goog.provide('rflect.cal.ui.MainPane');
+goog.provide('rflect.cal.ui.MainPane.EventTypes');
 
 goog.require('goog.array');
 goog.require('goog.events');
@@ -25,8 +26,6 @@ goog.require('rflect.cal.predefined.chips');
 goog.require('rflect.cal.Transport.EventTypes');
 goog.require('rflect.cal.ui.TimeMarker');
 goog.require('rflect.cal.ui.TouchHoldEventCreator');
-goog.require('rflect.cal.ui.EditDialog');
-goog.require('rflect.cal.ui.SaveDialog');
 goog.require('rflect.cal.ui.VMAdaptiveSizeHelper');
 goog.require('rflect.events.TouchHoldHelper');
 goog.require('rflect.events.TouchHoldHelper.EventType');
@@ -194,29 +193,6 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
    */
   this.moRegistry_ = new rflect.ui.MouseOverRegistry();
 
-  /**
-   * Popup save dialog.
-   *
-   * We're not adding dialog as a child because of problems with re-decorating
-   * after update.
-   *
-   * @type {rflect.cal.ui.SaveDialog}
-   * @private
-   */
-  this.saveDialog_ = new rflect.cal.ui.SaveDialog(undefined, undefined,
-      undefined, aEventManager);
-  if (goog.DEBUG)
-    _inspect('saveDialog_', this.saveDialog_);
-
-  /**
-   * Popup edit dialog.
-   * @type {rflect.cal.ui.EditDialog}
-   * @private
-   */
-  this.editDialog_ = new rflect.cal.ui.EditDialog();
-  if (goog.DEBUG)
-    _inspect('editDialog_', this.editDialog_);
-
   if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
     this.momentumScroller_ = new rflect.ui.MomentumScroller();
   }
@@ -244,6 +220,71 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
       this.blockManager_.blockPoolMonth, this.momentumScroller_);
 };
 goog.inherits(rflect.cal.ui.MainPane, rflect.ui.UpdatableComponent);
+
+
+/**
+ * @enum {string}
+ */
+rflect.cal.ui.MainPane.EventTypes = {
+  SAVE_DIALOG_SHOW: 'saveDialogShow',
+  EDIT_DIALOG_SHOW: 'editDialogShow',
+  EDIT_COMPONENT_SHOW: 'editComponentShow'
+};
+
+
+/**
+ * Event that is fired when save dialog should be shown.
+ * @constructor
+ * @extends {goog.events.Event}
+ */
+rflect.cal.ui.MainPane.SaveDialogShowEvent = function() {
+  goog.events.Event.call(this, rflect.cal.ui.MainPane.EventTypes.
+      SAVE_DIALOG_SHOW);
+}
+goog.inherits(rflect.cal.ui.MainPane.SaveDialogShowEvent, goog.events.Event);
+
+
+/**
+ * Event that is fired when edit dialog should be shown.
+ * @constructor
+ * @extends {goog.events.Event}
+ */
+rflect.cal.ui.MainPane.EditDialogShowEvent = function() {
+  goog.events.Event.call(this, rflect.cal.ui.MainPane.EventTypes.
+      EDIT_DIALOG_SHOW);
+}
+goog.inherits(rflect.cal.ui.MainPane.EditDialogShowEvent, goog.events.Event);
+
+
+/**
+ * Event that is fired when edit component (dialog or pane) should be shown.
+ * @param {rflect.cal.events.Event} aCalendarEvent
+ * @param {boolean} aShowPane
+ * @param {boolean} aByTouchHold
+ * @constructor
+ * @extends {goog.events.Event}
+ */
+rflect.cal.ui.MainPane.EditComponentShowEvent = function(aCalendarEvent,
+    aShowPane, aByTouchHold) {
+  goog.events.Event.call(this, rflect.cal.ui.MainPane.EventTypes.
+      EDIT_COMPONENT_SHOW);
+
+  /**
+   * @type {rflect.cal.events.Event}
+   */
+  this.calendarEvent = aCalendarEvent;
+
+  /**
+   * @type {boolean}
+   */
+  this.showPane = aShowPane;
+
+  /**
+   * @type {boolean}
+   */
+  this.byTouchHold = aByTouchHold;
+}
+goog.inherits(rflect.cal.ui.MainPane.EditComponentShowEvent, goog.events.Event);
 
 
 /**
@@ -1124,9 +1165,8 @@ rflect.cal.ui.MainPane.prototype.updateConditionally_ = function(
 /**
  * Redraws component after event was deleted.
  * @param {rflect.cal.events.Event} aDeletedEvent Deleted event.
- * @private
  */
-rflect.cal.ui.MainPane.prototype.updateAfterDelete_ = function(aDeletedEvent) {
+rflect.cal.ui.MainPane.prototype.updateAfterDelete = function(aDeletedEvent) {
   var allDay = aDeletedEvent.allDay;
 
   this.updateConditionally_(allDay, !allDay, true);
@@ -1135,9 +1175,8 @@ rflect.cal.ui.MainPane.prototype.updateAfterDelete_ = function(aDeletedEvent) {
 
 /**
  * Redraws component after event was added.
- * @private
  */
-rflect.cal.ui.MainPane.prototype.updateAfterSave_ = function() {
+rflect.cal.ui.MainPane.prototype.updateAfterSave = function() {
   this.updateConditionally_(
       this.selectionMask_.isAllDay(), this.selectionMask_.isWeek(),
       this.selectionMask_.isMonth());
@@ -1158,17 +1197,9 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
   }
 
   this.getHandler()
-      .listen(this.saveDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
-      this.onEventEdit_, false, this)
-      .listen(this.saveDialog_, rflect.ui.Dialog.EventType.SELECT,
-      this.onSaveDialogButtonSelect_, false, this)
-      .listen(this.editDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
-      this.onEventEdit_, false, this)
-      .listen(this.editDialog_, rflect.ui.Dialog.EventType.SELECT,
-      this.onEditDialogButtonSelect_, false, this)
       .listen(this.transport_, rflect.cal.Transport.EventTypes.SAVE_EVENT,
       this.onSaveEvent_, false, this)
-      .listen(this.viewManager_.getScreenManager(),
+      .listen(this.viewManager_,
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this);
 
@@ -1366,11 +1397,9 @@ rflect.cal.ui.MainPane.prototype.onTouchHold_ = function(aEvent) {
  * @private
  */
 rflect.cal.ui.MainPane.prototype.onTouchHoldEnd_ = function(aEvent) {
-  if (this.eventManager_.eventHolder.isInProgress()) {
-    this.getParent().showEventPane(true, true, true);
-  }
+  this.dispatchEvent(new rflect.cal.ui.MainPane.EditComponentShowEvent(null,
+      true, true));
 }
-
 
 
 /**
@@ -1431,25 +1460,8 @@ rflect.cal.ui.MainPane.prototype.showEventEditComponent_ = function(aTarget,
 
   var event = this.getEventByTarget_(aTarget);
 
-  if (this.eventManager_.eventIsInProgress(event.id))
-    return;
-
-  this.eventManager_.eventHolder.openSession(event);
-
-  if (event) {
-
-    if (aShowPane) {
-      this.getParent().showEventPane(true);
-      this.editDialog_.setVisible(false);
-    } else {
-      this.editDialog_.setVisible(true);
-      this.editDialog_.setTitle(event.summary ||
-          rflect.cal.i18n.Symbols.NO_NAME_EVENT);
-      this.editDialog_.setEventName(event.summary);
-      this.editDialog_.setEventTimeString(event.toHumanString());
-    }
-
-  }
+  this.dispatchEvent(new rflect.cal.ui.MainPane.EditComponentShowEvent(event,
+      !!aShowPane, false));
 }
 
 
@@ -2109,8 +2121,10 @@ rflect.cal.ui.MainPane.prototype.onMouseUp_ = function (aEvent) {
         this.endChipDrag_();
       }
     } else {
-      this.saveDialog_.setVisible(true);
-      this.beginEventCreation_();
+      if (this.dispatchEvent(new rflect.cal.ui.MainPane.
+          SaveDialogShowEvent())) {
+        this.beginEventCreation();      
+      }
     }
 
     this.selectionMask_.close();
@@ -2177,7 +2191,7 @@ rflect.cal.ui.MainPane.prototype.endChipDrag_ = function() {
       this.eventManager_.eventHolder.getCurrentEvent().calendarId);
 
   this.transport_.saveEventAsync(this.eventManager_.eventHolder.endWithEdit());
-  this.updateAfterSave_();
+  this.updateAfterSave();
 }
 
 
@@ -2198,9 +2212,8 @@ rflect.cal.ui.MainPane.prototype.onSelectStart_ = function(aEvent) {
 
 /**
  * Begins phase of event creation.
- * @private
  */
-rflect.cal.ui.MainPane.prototype.beginEventCreation_ = function() {
+rflect.cal.ui.MainPane.prototype.beginEventCreation = function() {
 
   this.eventManager_.eventHolder.openSession();
   this.eventManager_.eventHolder.setStartDate(
@@ -2209,60 +2222,6 @@ rflect.cal.ui.MainPane.prototype.beginEventCreation_ = function() {
       this.selectionMask_.endDate);
   this.eventManager_.eventHolder.setAllDay(
       this.selectionMask_.isAllDay() || this.selectionMask_.isMonth());
-}
-
-
-/**
- * Save dialog button listener.
- * @param {rflect.ui.Dialog.Event} aEvent Event object.
- */
-rflect.cal.ui.MainPane.prototype.onSaveDialogButtonSelect_ = function(aEvent) {
-  if (aEvent.key == this.saveDialog_.getButtonSet().getDefault()) {
-    this.eventManager_.eventHolder.setSummary(
-        this.saveDialog_.getEventName());
-    this.eventManager_.eventHolder.setCalendarId(
-        this.saveDialog_.getCalendarId());
-    this.eventManager_.setLastUsedCalendarId(
-        this.eventManager_.eventHolder.getCurrentEvent().calendarId);
-
-    this.transport_.saveEventAsync(this.eventManager_.eventHolder.endWithAdd());
-    this.updateAfterSave_();
-  } else if (aEvent.key != this.saveDialog_.getButtonSet().getCancel()) {
-    //Edit button.
-    this.saveDialog_.dispatchEvent({type: rflect.cal.ui.SaveDialog.EVENT_EDIT});
-  }
-}
-
-
-/**
- * Event edit listener. Called when edit link is clicked from save or edit
- * dialog.
- * @param {Event} aEvent Event object.
- */
-rflect.cal.ui.MainPane.prototype.onEventEdit_ = function(aEvent) {
-  this.getParent().showEventPane(true, aEvent.target == this.saveDialog_);
-}
-
-
-/**
- * Edit dialog button listener.
- * @param {{type: string}} aEvent Event object.
- */
-rflect.cal.ui.MainPane.prototype.onEditDialogButtonSelect_ = function(aEvent) {
-
-  if (aEvent.key == this.editDialog_.getButtonSet().getDefault()) {
-
-    this.editDialog_.dispatchEvent({type:
-        rflect.cal.ui.SaveDialog.EVENT_EDIT});
-
-  } else if (aEvent.key != this.editDialog_.getButtonSet().getCancel()) {
-    // The only spare button - delete.
-
-    let deletedEvent = this.eventManager_.eventHolder.endWithDelete();
-    this.transport_.deleteEventAsync(deletedEvent);
-
-    this.updateAfterDelete_(deletedEvent);
-  }
 }
 
 
@@ -2351,9 +2310,6 @@ rflect.cal.ui.MainPane.prototype.disposeInternal = function() {
   this.rightContMn_ = null;
   this.leftContAd_ = null;
   this.rightContAd_ = null;
-
-  this.editDialog_ && this.editDialog_.dispose();
-  this.saveDialog_ && this.saveDialog_.dispose();
 
   if (rflect.TOUCH_INTERFACE_ENABLED)
     this.momentumScroller_.dispose();
