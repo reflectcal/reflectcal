@@ -500,7 +500,7 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
       .listen(document,
       goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
 
-      .listen(this.viewManager.getScreenManager(),
+      .listen(this.viewManager,
           rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
           this.onBeforePageChange_, false, this)
 }
@@ -570,7 +570,7 @@ rflect.cal.ui.SettingsPane.prototype.onShowCalendarsAction_ =
  * @private
  */
 rflect.cal.ui.SettingsPane.prototype.onKeyDown_ = function(aEvent) {
-  if (this.viewManager.getScreenManager().isVisible(this)) {
+  if (this.viewManager.isVisible(this)) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 

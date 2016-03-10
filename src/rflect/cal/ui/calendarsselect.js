@@ -13,7 +13,7 @@ goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.Disposable');
 goog.require('rflect.cal.ui.soy.selectcalendars');
-goog.require('rflect.ui.Component');
+goog.require('rflect.ui.UpdatableComponent');
 
 
 
@@ -21,10 +21,10 @@ goog.require('rflect.ui.Component');
  * Main class for calendars select.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
  * @constructor
- * @extends {rflect.ui.Component}
+ * @extends {rflect.ui.UpdatableComponent}
  */
 rflect.cal.ui.CalendarsSelect = function(aEventManager) {
-  rflect.ui.Component.call(this);
+  rflect.ui.UpdatableComponent.call(this);
 
   /**
    * Link to event manager.
@@ -33,7 +33,7 @@ rflect.cal.ui.CalendarsSelect = function(aEventManager) {
    */
   this.eventManager_ = aEventManager;
 };
-goog.inherits(rflect.cal.ui.CalendarsSelect, rflect.ui.Component);
+goog.inherits(rflect.cal.ui.CalendarsSelect, rflect.ui.UpdatableComponent);
 
 
 /**
@@ -121,8 +121,7 @@ rflect.cal.ui.CalendarsSelect.prototype.updateBeforeRedraw = function() {
 /**
  * @override
  */
-rflect.cal.ui.CalendarsSelect.prototype.updateByRedraw = function() {
-  this.getElement().innerHTML = this.buildHTML(false);
+rflect.cal.ui.CalendarsSelect.prototype.updateAfterRedraw = function() {
   this.select_ = this.getElement().querySelector('.event-calendars');
   this.recallSelectedOption_();
 }

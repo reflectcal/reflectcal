@@ -543,6 +543,14 @@ rflect.ui.Dialog.prototype.setDraggingEnabled_ = function(enabled) {
 };
 
 
+/**
+ * @return {string} Title element id.
+ */
+rflect.ui.Dialog.prototype.getTitleId = function() {
+  return 'title-' + this.getId();
+}
+
+
 /** @override */
 rflect.ui.Dialog.prototype.createDom = function() {
   rflect.ui.Dialog.superClass_.createDom.call(this);
@@ -550,8 +558,10 @@ rflect.ui.Dialog.prototype.createDom = function() {
   goog.asserts.assert(element, 'getElement() returns null');
 
   var dom = this.getDomHelper();
+  this.getElement().id = this.getId();
   this.titleEl_ = dom.createDom('div',
-      {'className': goog.getCssName(this.class_, 'title'), 'id': this.getId()},
+      {'className': goog.getCssName(this.class_, 'title'), 'id':
+          this.getTitleId()},
       this.titleTextEl_ = dom.createDom(
           'span', goog.getCssName(this.class_, 'title-text'), this.title_),
       this.titleCloseEl_ = dom.createDom(
@@ -585,10 +595,15 @@ rflect.ui.Dialog.prototype.createDom = function() {
 };
 
 
+
+
 /** @override */
 rflect.ui.Dialog.prototype.decorateInternal = function(element) {
   rflect.ui.Dialog.superClass_.decorateInternal.call(this, element);
   var dialogElement = this.getElement();
+  if (!dialogElement.id) {
+    dialogElement.id = this.getId();
+  }
   goog.asserts.assert(dialogElement,
       'The DOM element for dialog cannot be null.');
   // Decorate or create the content element.
@@ -621,13 +636,13 @@ rflect.ui.Dialog.prototype.decorateInternal = function(element) {
         null, titleCloseClass, this.titleEl_)[0];
     // Give the title an id if it doesn't already have one.
     if (!this.titleEl_.id) {
-      this.titleEl_.id = this.getId();
+      this.titleEl_.id = this.getTitleId();
     }
   } else {
     // Create the title bar element and insert it before the content area.
     // This is useful if the element to decorate only includes a content area.
     this.titleEl_ = this.getDomHelper().createDom('div',
-        {'className': titleClass, 'id': this.getId()});
+        {'className': titleClass, 'id': this.getTitleId()});
     dialogElement.insertBefore(this.titleEl_, this.contentEl_);
   }
   this.titleId_ = this.titleEl_.id;

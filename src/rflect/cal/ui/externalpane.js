@@ -12,7 +12,7 @@ goog.provide('rflect.cal.ui.ExternalPane');
 goog.require('goog.array');
 goog.require('goog.dom.classes');
 goog.require('goog.ui.Button');
-goog.require('rflect.ui.Component');
+goog.require('rflect.ui.BuildableComponent');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.common');
@@ -22,7 +22,6 @@ goog.require('rflect.cal.ui.PaneShowBehavior');
 
 /**
  * External pane main class.
- * TODO(alexk): Currently only creation through render is supported. Add decorate.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
@@ -30,11 +29,11 @@ goog.require('rflect.cal.ui.PaneShowBehavior');
  * container size monitor.
  * @param {rflect.cal.Transport} aTransport Link to transport.
  * @constructor
- * @extends {rflect.ui.Component}
+ * @extends {rflect.ui.BuildableComponent}
  */
 rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
     aContainerSizeMonitor, aTransport) {
-  rflect.ui.Component.call(this);
+  rflect.ui.BuildableComponent.call(this);
 
   /**
    * Link to view manager.
@@ -93,7 +92,7 @@ rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
   this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
   this.enableMouseInterface(!rflect.TOUCH_INTERFACE_ENABLED, true);
 };
-goog.inherits(rflect.cal.ui.ExternalPane, rflect.ui.Component);
+goog.inherits(rflect.cal.ui.ExternalPane, rflect.ui.BuildableComponent);
 
 
 /**
