@@ -230,7 +230,7 @@ rflect.cal.ui.ScreenManager.prototype.popFromStack = function(){
  */
 rflect.cal.ui.ScreenManager.prototype.createDom = function() {
   var element = document.createElement('div');
-  element.id = 'screen-manager' + this.getId();
+  element.id = 'screen-manager';
   element.className = 'screen-manager-base';
 
   this.setElementInternal(element);
@@ -243,7 +243,7 @@ rflect.cal.ui.ScreenManager.prototype.createDom = function() {
 rflect.cal.ui.ScreenManager.prototype.decorateInternal = function(aElement) {
   this.setElementInternal(aElement);
 
-  this.getElement().id = 'screen-manager' + this.getId();
+  this.getElement().id = 'screen-manager';
   this.getElement().className = 'screen-manager-base';
 }
 

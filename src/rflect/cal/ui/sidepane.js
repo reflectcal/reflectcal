@@ -482,14 +482,16 @@ rflect.cal.ui.SidePane.prototype.update = function(opt_options = {
     doNotUpdateMiniCal = false
   } = opt_options;
 
+  let isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
+
   if (updateByNavigation) {
 
-    if (!doNotUpdateMiniCal) { this.getMiniCal().update(); }
+    if (!doNotUpdateMiniCal && !isSmallScreen) { this.getMiniCal().update(); }
 
   } else if (updateByModeSwitch) {
 
-    if (!doNotUpdateMiniCal) { this.getMiniCal().update(); }
-    this.showSpacer(this.viewManager_.isInSingleDayMode());
+    if (!doNotUpdateMiniCal && !isSmallScreen) { this.getMiniCal().update(); }
+    //this.showSpacer(this.viewManager_.isInSingleDayMode());
     this.viewButtonUpdater_.updateButtons();
   } else if (updateCalendarsOnly) {
 
