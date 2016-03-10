@@ -18,7 +18,7 @@ goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('goog.ui.ToggleButton');
-goog.require('rflect.ui.Component');
+goog.require('rflect.ui.UpdatableComponent');
 goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.predefined');
@@ -35,11 +35,11 @@ goog.require('rflect.cal.ui.soy.controlpane');
  * container size monitor.
  * @param {rflect.cal.Navigator} aNavigator Link to navigator.
  * @constructor
- * @extends {rflect.ui.Component}
+ * @extends {rflect.ui.UpdatableComponent}
  */
 rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager,
     aContainerSizeMonitor, aNavigator) {
-  rflect.ui.Component.call(this);
+  rflect.ui.UpdatableComponent.call(this);
 
   /**
    * Link to view manager.
@@ -99,17 +99,20 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager,
       goog.ui.FlatButtonRenderer.getInstance()));
   this.addChild(this.buttonOptions_ = new goog.ui.Button(null,
       goog.ui.FlatButtonRenderer.getInstance()));
+      
+  this.buttonOptions_.setId(rflect.cal.predefined.BUTTON_SETTINGS_ID);
+  this.buttonDay_.setId(rflect.cal.predefined.BUTTON_DAY_ID);
+  this.buttonWeek_.setId(rflect.cal.predefined.BUTTON_WEEK_ID);
+  this.buttonMonth_.setId(rflect.cal.predefined.BUTTON_MONTH_ID);
+  this.buttonPrev_.setId(
+      rflect.cal.predefined.BUTTON_PREV_ID);
+  this.buttonNext_.setId(rflect.cal.predefined.BUTTON_NEXT_ID);
+  this.buttonNow_.setId(rflect.cal.predefined.BUTTON_NOW_ID);
+  this.buttonNewEvent_.setId(rflect.cal.predefined.BUTTON_NEW_EVENT_ID);
+  this.buttonMenu_.setId(rflect.cal.predefined.BUTTON_MENU_ID);
 
 };
-goog.inherits(rflect.cal.ui.ControlPane, rflect.ui.Component);
-
-
-/**
- * Date header element.
- * @type {Element}
- * @private
- */
-rflect.cal.ui.ControlPane.prototype.timeLabel_ = null;
+goog.inherits(rflect.cal.ui.ControlPane, rflect.ui.UpdatableComponent);
 
 
 /**
@@ -168,86 +171,12 @@ rflect.cal.ui.ControlPane.prototype.buildHTML = function(opt_outerHTML) {
 }
 
 
-/***/
-rflect.cal.ui.ControlPane.prototype.resetChildren = function() {
-  this.forEachChild(button => {
-    button.exitDocument();
-  });
-}
-
-
-/**
- * Decorates buttons, attaches event handlers for them.
- */
-rflect.cal.ui.ControlPane.prototype.initChildren = function() {
-  
-  var buttonSettingsElement = this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_SETTINGS_ID);
-  if (buttonSettingsElement) {
-    this.buttonOptions_.decorate(buttonSettingsElement);
-  }
-
-  var buttonDayElement = this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_DAY_ID);
-  if (buttonDayElement) {
-    this.buttonDay_.decorate(buttonDayElement);
-  }
-
-  var buttonWeekElement = this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_WEEK_ID);
-  if (buttonWeekElement) {
-    this.buttonWeek_.decorate(buttonWeekElement);
-  }
-
-  var buttonMonthElement = this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_MONTH_ID);
-  if (buttonMonthElement) {
-    this.buttonMonth_.decorate(buttonMonthElement);
-  }
-
-  var buttonPrevElement = this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_PREV_ID);
-  if (buttonPrevElement) {
-    this.buttonPrev_.decorate(buttonPrevElement);
-  }
-
-  var buttonNextElement = this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_NEXT_ID);
-  if (buttonNextElement) {
-    this.buttonNext_.decorate(buttonNextElement);
-  }
-
-  var buttonNowElement = this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_NOW_ID);
-  if (buttonNowElement) {
-    this.buttonNow_.decorate(buttonNowElement);
-  }
-
-  var buttonNewEventElement = this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_NEW_EVENT_ID);
-  if (buttonNewEventElement) {
-    this.buttonNewEvent_.decorate(buttonNewEventElement);
-  }
-
-  var buttonMenuElement = this.dom_.getElement(
-      rflect.cal.predefined.BUTTON_MENU_ID);
-  if (buttonMenuElement) {
-    this.buttonMenu_.decorate(buttonMenuElement);
-  }
-}
-
-
 /**
  * Decorates buttons, attaches event handlers for them.
  */
 rflect.cal.ui.ControlPane.prototype.enterDocument = function() {
 
-  this.initChildren();
-
   rflect.cal.ui.ControlPane.superClass_.enterDocument.call(this);
-
-  // Update buttons.
-  this.viewButtonUpdater_.updateButtons();
 
   // Attaching event handlers.
   this.getHandler().listen(this.buttonNewEvent_,
@@ -327,36 +256,30 @@ rflect.cal.ui.ControlPane.prototype.getDateHeader = function() {
 
 
 /**
- * @param {boolean=} opt_deep Whether to update children.
+ * @override
  */
-rflect.cal.ui.ControlPane.prototype.updateBeforeRedraw = function(opt_deep,
-    opt_sizeCategoryChanged) {
-  this.sizeCategoryChanged_ = !!opt_sizeCategoryChanged;
-  if (this.sizeCategoryChanged_) {
-    this.resetChildren();
+rflect.cal.ui.ControlPane.prototype.update = function(opt_options = {
+  updateByNavigation: false
+}) {
+  let {
+    updateByNavigation = false
+  } = opt_options;
+  if (updateByNavigation) {
+    let timeLabel = this.dom_.getElement('time-period-label');
+    timeLabel && (timeLabel.innerHTML = this.getDateHeader());
+    this.viewButtonUpdater_.updateButtons();
+  } else {
+    rflect.cal.ui.ControlPane.superClass_.update.call(this, opt_options);
   }
-};
+}
 
 
 /**
- * Updates top pane by setting new date header.
  * @override
  */
-rflect.cal.ui.ControlPane.prototype.updateByRedraw = function() {
-  if (this.sizeCategoryChanged_) {
-    this.getElement().innerHTML = this.buildHTML(false);
-    this.initChildren();
-
-    this.sizeCategoryChanged_ = false;
-
-  } else {
-    if (!this.timeLabel_) {
-      this.timeLabel_ = this.dom_.getElement('time-period-label');
-    }
-    this.timeLabel_ && (this.timeLabel_.innerHTML = this.getDateHeader());
-    // Update buttons.
-    this.viewButtonUpdater_.updateButtons();
-  }
+rflect.cal.ui.ControlPane.prototype.updateAfterRedraw = function(opt_options) {
+  // Update buttons.
+  this.viewButtonUpdater_.updateButtons();
 };
 
 
@@ -372,8 +295,6 @@ rflect.cal.ui.ControlPane.prototype.disposeInternal = function() {
   rflect.cal.ui.ControlPane.superClass_.disposeInternal.call(this);
 
   this.timeManager_ = null;
-
-  this.timeLabel_ = null;
 
   this.buttonNow_ = null;
   this.buttonPrev_ = null;

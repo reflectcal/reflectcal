@@ -13,7 +13,7 @@ goog.provide('rflect.cal.ui.ScreenManager.BeforePageChangeEvent');
 
 
 goog.require('goog.array');
-goog.require('goog.events.EventTarget');
+goog.require('goog.ui.Component');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
@@ -25,20 +25,12 @@ goog.require('rflect.browser.transitionend');
 
 /**
  * Pane show/hide behaviour main class.
- * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
- * @extends {goog.events.EventTarget}
+ * @extends {goog.ui.Component}
  */
-rflect.cal.ui.ScreenManager = function(aViewManager) {
-  goog.events.EventTarget.call(this);
-
-  /**
-   * Link to view manager.
-   * @type {rflect.cal.ViewManager}
-   * @private
-   */
-  this.viewManager_ = aViewManager;
-
+rflect.cal.ui.ScreenManager = function(opt_domHelper) {
+  goog.ui.Component.call(this, opt_domHelper);
 
   /**
    * Stack of pages. Empty stack means that default page is shown.
@@ -53,7 +45,7 @@ rflect.cal.ui.ScreenManager = function(aViewManager) {
    */
   this.componentsToHide_ = [];
 }
-goog.inherits(rflect.cal.ui.ScreenManager, goog.events.EventTarget);
+goog.inherits(rflect.cal.ui.ScreenManager, goog.ui.Component);
 
 
 /**
@@ -172,14 +164,6 @@ rflect.cal.ui.ScreenManager.translateElement = function(aElement,
 
 
 /**
- * Main element of screen manager.
- * @type {Element}
- * @private
- */
-rflect.cal.ui.ScreenManager.prototype.element_;
-
-
-/**
  * Whether sliding is enabled.
  * @type {boolean}
  * @private
@@ -242,17 +226,25 @@ rflect.cal.ui.ScreenManager.prototype.popFromStack = function(){
 
 
 /**
- * Shows page with given component.
- * @param {Element=} opt_element Element on which to render screen manager. Will
- * be <body> if absent.
+ * @override
  */
-rflect.cal.ui.ScreenManager.prototype.render = function(opt_element){
-  var parentElement = opt_element || document.body;
+rflect.cal.ui.ScreenManager.prototype.createDom = function() {
   var element = document.createElement('div');
   element.id = 'screen-manager';
   element.className = 'screen-manager-base';
-  parentElement.appendChild(element);
-  this.element_ = element;
+
+  this.setElementInternal(element);
+}
+
+
+/**
+ * @override
+ */
+rflect.cal.ui.ScreenManager.prototype.decorateInternal = function(aElement) {
+  this.setElementInternal(aElement);
+
+  this.getElement().id = 'screen-manager';
+  this.getElement().className = 'screen-manager-base';
 }
 
 
@@ -282,7 +274,7 @@ rflect.cal.ui.ScreenManager.prototype.showScreen = function(aComponent, aShow,
 
     // If the pane hasn't been rendered yet, render it now.
     if (!aComponent.isInDocument()) {
-      aComponent.render(this.element_);
+      aComponent.render(this.getElement());
     } else {
       goog.style.showElement(aComponent.getElement(), true);
     }
@@ -346,9 +338,9 @@ rflect.cal.ui.ScreenManager.prototype.dispatchBeforePageChangeEvent_ =
  */
 rflect.cal.ui.ScreenManager.prototype.applyTransition = function(aEnable) {
   if (aEnable)
-    goog.dom.classes.add(this.element_, 'screen-manager');
+    goog.dom.classes.add(this.getElement(), 'screen-manager');
   else
-    goog.dom.classes.remove(this.element_, 'screen-manager');
+    goog.dom.classes.remove(this.getElement(), 'screen-manager');
 }
 
 
@@ -360,7 +352,7 @@ rflect.cal.ui.ScreenManager.prototype.slideToPosition = function(aPosition){
   this.dispatchBeforePageChangeEvent_();
   //Container moves to the left.
   this.applyTransition(true);
-  rflect.cal.ui.ScreenManager.translateElement(this.element_,
+  rflect.cal.ui.ScreenManager.translateElement(this.getElement(),
       -100 * aPosition);
 }
 
@@ -375,13 +367,14 @@ rflect.cal.ui.ScreenManager.prototype.setSlidingIsEnabled =
 
 
 /**
- * Assign transition end event listener.
+ * @override
  */
-rflect.cal.ui.ScreenManager.prototype.assignEvents =
-    function() {
+rflect.cal.ui.ScreenManager.prototype.enterDocument = function() {
+  rflect.cal.ui.ScreenManager.superClass_.enterDocument.call(this);
+
   if (this.slidingIsEnabled_ && !this.transitionEndKey_){
     this.transitionEndKey_ = goog.events.listen(
-        this.element_,
+        this.getElement(),
         rflect.browser.transitionend.VENDOR_TRANSITION_END_NAMES,
         this.onSlideEnd_, false, this);
   }
@@ -394,7 +387,7 @@ rflect.cal.ui.ScreenManager.prototype.assignEvents =
  * @private
  */
 rflect.cal.ui.ScreenManager.prototype.onSlideEnd_ = function(aEvent) {
-  if (aEvent.target != this.element_)
+  if (aEvent.target != this.getElement())
     return;
 
   this.applyTransition(false);

@@ -21,7 +21,7 @@ goog.require('rflect.cal.predefined');
 /**
  * Selection mask base class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
- * @param {rflect.ui.Component} aComponent Link to component
+ * @param {rflect.ui.UpdatableComponent} aComponent Link to component
  * that owns selection mask.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @constructor
@@ -39,7 +39,7 @@ rflect.cal.ui.SelectionMask = function(aViewManager, aComponent, aTimeManager) {
 
   /**
    * Link to component that owns selection mask.
-   * @type {rflect.ui.Component}
+   * @type {rflect.ui.UpdatableComponent}
    * @protected
    */
   this.component = aComponent;

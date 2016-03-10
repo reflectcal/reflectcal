@@ -51,6 +51,7 @@ rflect.ui.Component.prototype.createDom = function() {
 
   this.setElementInternal(this.getDomHelper().
       getFirstElementChild(tempElement));
+  this.updateBeforeRedraw();
 };
 
 
@@ -63,6 +64,7 @@ rflect.ui.Component.prototype.createDom = function() {
 rflect.ui.Component.prototype.decorateInternal = function(aElement) {
   // Set this.element_.
   rflect.ui.Component.superClass_.decorateInternal.call(this, aElement);
+  this.updateBeforeRedraw();
   // Build body.
   this.getElement().innerHTML = this.buildHTML(false);
 };
@@ -102,43 +104,67 @@ rflect.ui.Component.prototype.buildHTML = function(opt_outerHTML) {
 
 
 /**
- * Updates component before redraw. This is used when some part of
- * component's update logic need to be separated from redraw. Propagates to
- * component's children by default. For custom behavior, should be overridden by
- * subclasses.
- * @param {boolean=} opt_deep Whether to update children.
+ * Decorates buttons, attaches event handlers for them.
  */
-rflect.ui.Component.prototype.updateBeforeRedraw =
-    function(opt_deep) {
-  if (opt_deep){
-    this.forEachChild(function(aChild) {
-      if (aChild.updateBeforeRedraw)
-        aChild.updateBeforeRedraw(opt_deep);
-    });
-  }
-};
+rflect.ui.Component.prototype.enterDocument = function() {
+  this.decorateChildren();
+  rflect.ui.Component.superClass_.enterDocument.call(this);
+  this.updateAfterRedraw();
+}
 
 
 /**
- * Updates body of component by redraw. This is a second and final part of
- * component update sequence.
+ * Initializes child components by invoking goog.ui.Component#decorate.
  */
-rflect.ui.Component.prototype.updateByRedraw =
-    function() {
-  this.getElement().innerHTML = this.buildHTML(false);
-};
+rflect.ui.Component.prototype.decorateChildren = function() {
+  this.forEachChild(aChild => {
+    var element = this.getDomHelper().getElement(aChild.getId());
+    if (element) {
+      aChild.decorate(element);
+    }
+  });
+}
 
 
 /**
  * Updates component in whole update sequence.
- * @param {boolean=} opt_deep Whether to update children.
+ * As argument is optional, calling <code>component.update()</code> on component
+ * should result in full redraw of its contents.
+ * @param {Object.<string, *>=} opt_options Options for update.
  * @see {rflect.cal.ui.MainBody#updateBeforeRedraw}.
+ * @see {rflect.cal.ui.MainBody#updateAfterRedraw}.
  */
-rflect.ui.Component.prototype.update =
-    function(opt_deep) {
-  this.updateBeforeRedraw(opt_deep);
-  this.updateByRedraw();
+rflect.ui.Component.prototype.update = function(opt_options) {
+  this.forEachChild(aChild => {
+    aChild.exitDocument();
+  });
+  this.updateBeforeRedraw(opt_options);
+
+  this.getElement().innerHTML = this.buildHTML(false);
+
+  this.decorateChildren();
+  this.updateAfterRedraw(opt_options);
 };
+
+
+/**
+ * Updates component before redraw, i.e. before any component changes will be
+ * reflected in DOM. This is used when some part of component's update logic
+ * need to be separated from redraw. For custom behavior, should be overridden
+ * by subclasses.
+ * @param {Object.<string, *>=} opt_options Options for update.
+ * @protected
+ */
+rflect.ui.Component.prototype.updateBeforeRedraw = function(opt_options) {};
+
+
+/**
+ * Updates component after redraw. Updates body of component by redraw. This is
+ * a second and final part of component update sequence.
+ * @param {Object.<string, *>=} opt_options Options for update.
+ * @protected
+ */
+rflect.ui.Component.prototype.updateAfterRedraw = function(opt_options) {};
 
 
 /**

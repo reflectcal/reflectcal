@@ -22,7 +22,7 @@ goog.require('rflect.cal.ui.SelectionMask');
 /**
  * Selection mask main class.
  * @param {rflect.cal.ViewManager} aViewManager Link to view manager.
- * @param {rflect.ui.Component} aMiniCal Link mini cal.
+ * @param {rflect.ui.UpdatableComponent} aMiniCal Link mini cal.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @extends {rflect.cal.ui.SelectionMask}
  * @constructor
@@ -207,7 +207,7 @@ rflect.cal.ui.MiniCalSelectionMask.prototype.updateInternal = function() {
 
     this.component.startSelectionIndex = minIndex;
     this.component.endSelectionIndex = maxIndex;
-    this.component.updateByRedraw();
+    this.component.update({ updateByMask: true });
     
     goog.events.dispatchEvent(this.component, {
       type: rflect.cal.EventType.DATE_DRAG,

@@ -75,19 +75,39 @@ rflect.cal.ui.MiniCal.prototype.fieldRe_;
 
 
 /**
+ * @override
+ */
+rflect.cal.ui.MiniCal.prototype.update = function(opt_options = {
+  updateByMask: false,
+  internal: false,
+  direction: /** @type {rflect.cal.TimeManager.Direction} */ (0)
+}) {
+  let {
+    updateByMask = false
+  } = opt_options;
+
+  if (updateByMask) {
+    this.getElement().innerHTML = this.buildHTML(false);
+  } else {
+    rflect.cal.ui.MiniCal.superClass_.update.call(this, opt_options);
+  }
+}
+
+
+/**
  * Updates mini cal with new data before redraw.
  * If called parameterless, takes basis from external time manager, otherwise
  * we should use internal one.
- * @param {boolean=} opt_deep Whether to update children.
- * @param {boolean=} opt_internal Whether method was called internally.
- * @param {rflect.cal.TimeManager.Direction=} opt_direction Direction where to
- * shift basis when called
- * internally.
  */
-rflect.cal.ui.MiniCal.prototype.updateBeforeRedraw = function(opt_deep,
-    opt_internal, opt_direction) {
-  if (opt_internal && opt_direction){
-    this.timeManager.shift(opt_direction);
+rflect.cal.ui.MiniCal.prototype.updateBeforeRedraw = function({
+  internal = false,
+  direction = /** @type {rflect.cal.TimeManager.Direction} */ (0)
+} = {
+  internal: false,
+  direction: /** @type {rflect.cal.TimeManager.Direction} */ (0)
+}) {
+  if (internal && direction){
+    this.timeManager.shift(direction);
   } else {
     this.timeManager.shiftToPoint(this.extTimeManager_.basis);
   }
