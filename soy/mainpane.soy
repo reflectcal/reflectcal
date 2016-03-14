@@ -3,6 +3,7 @@
 /**
  * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
+ * @param isSmallScreen Whether screen is small.
  * @param isInDayMode Whether is in day mode.
  * @param expanded Whether main pane is expanded.
  * @param isScrollEnabled Whether scroll is enabled.
@@ -27,6 +28,7 @@
   {if $includeOuterHTML}
   <div id="{$id}" class="main-pane" style="width:{if $expanded}100%{else}auto{/if}">
   {/if}
+    {if not $isSmallScreen}
     <div id="main-pane-header">
       <div id="daynames-prefix-wk">
         {if $verticalExpandEnabled}
@@ -36,7 +38,9 @@
       </div>
       <div id="main-pane-header-container" class="main-pane-header-container-wk">
         {if not $isInDayMode}
-        <div class="main-pane-header-daynames main-pane-header-wk-daynames"
+        <div class="main-pane-header-daynames main-pane-header-wk-daynames{sp}
+            {if $isSmallScreen}main-pane-header-wk-daynames-small-screen{/if}
+            "
             style="padding-right:{$navigatorScrollBarWidth + 2 * rflect.cal.predefined.DEFAULT_BORDER_WIDTH}px">
           <div id="weekmode-daynames-table" style="width:{$allDayGridWidth}%; left: 0px;">
             // From .dayNameEntry template.
@@ -45,7 +49,11 @@
         </div>
         {/if}
         <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE}"
-             class="{if $allDayExpanded}mphs-scroll-vert-on{else}mphs-scroll-vert-off{/if}{sp}{if $weekPoolExpanded}mphs-scroll-horz-on{else}mphs-scroll-horz-off{/if}"
+             class="main-pane-header-scrollable{sp}
+             {if $allDayExpanded}mphs-scroll-vert-on{else}mphs-scroll-vert-off{/if}{sp}
+             {if $weekPoolExpanded}mphs-scroll-horz-on{else}mphs-scroll-horz-off{/if}{sp}
+             {if $isSmallScreen}main-pane-header-scrollable-small-screen{/if}
+             "
              style="
              {if not $isScrollEnabled}overflow:hidden;{/if}
              height:{$allDayGridContainerHeight}px;margin-right:{if $allDayExpanded}0{else}{$navigatorScrollBarWidth - 1}{/if}px">
@@ -62,10 +70,13 @@
         </div>
       </div>
     </div>
+    {/if}
     <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_WK}" style="
         {if not $isScrollEnabled}overflow:hidden;{/if}
         height:{$gridContainerHeight}px"
-        class="{if $weekPoolExpanded}mpbs-wk-scroll-horz-on{else}mpbs-wk-scroll-horz-off{/if}">
+        class="main-pane-body-scrollable-wk{sp}
+            {if $weekPoolExpanded}mpbs-wk-scroll-horz-on{else}mpbs-wk-scroll-horz-off{/if}{sp}
+            {if $isSmallScreen}main-pane-body-scrollable-wk-small-screen{/if}">
       {if not $firstBuild}
       <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.GRID_TABLE_CONT}">
         <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.TOUCH_HOLD_WRAPPER_WK}" class="touch-hold-wrapper">

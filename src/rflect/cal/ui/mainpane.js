@@ -612,7 +612,7 @@ rflect.cal.ui.MainPane.prototype.updateBeforeRedraw = function({
 
   this.touchHoldHelper_.dispose();
 
-  if (updateByNavigation && !rflect.TOUCH_INTERFACE_ENABLED){
+  if (updateByNavigation && !rflect.TOUCH_INTERFACE_ENABLED) {
     var scrollTop = this.getHandyScrollTopPosition_();
     this.blockManager_.blockPoolWeek.scrollTop =
         scrollTop;
@@ -866,9 +866,15 @@ rflect.cal.ui.MainPane.prototype.getStaticSize = function() {
  * Updates child calendar selectors.
  */
 rflect.cal.ui.MainPane.prototype.updateScrollableSizes = function() {
+  if (goog.DEBUG)
+    console.log('updateScrollableSizes: ');
   // Take current viewport size.
   var containerSize = this.containerSizeMonitor_.getSize();
   var staticSizes = this.getStaticSize();
+  if (goog.DEBUG)
+      console.log('containerSize: ', containerSize);
+  if (goog.DEBUG)
+        console.log('staticSizes: ', staticSizes);
   // Begin size adjustment phase.
   if (this.viewManager_.isInWeekMode()) {
     this.scrollablesCombinedWkSize_ = containerSize.clone();
@@ -879,7 +885,8 @@ rflect.cal.ui.MainPane.prototype.updateScrollableSizes = function() {
 
     this.alldayGridContainerSize = this.scrollablesCombinedWkSize_.clone();
     this.gridContainerSize = this.scrollablesCombinedWkSize_.clone();
-
+    if (goog.DEBUG)
+      console.log('this.gridContainerSize: ', this.gridContainerSize);
     // By default, grid has the same size as scrollable but fixed height.
     this.gridSize = this.gridContainerSize.clone();
     this.gridSize.height =
@@ -945,6 +952,8 @@ rflect.cal.ui.MainPane.prototype.updateScrollableSizes = function() {
  * Updates child calendar selectors.
  */
 rflect.cal.ui.MainPane.prototype.updateScrollableSizesAndDom = function() {
+  if (goog.DEBUG)
+    console.log('updateScrollableSizesAndDom: ');
   if (!this.adaptiveSizeHelper.getSizeWasAdaptedForView()) {
     this.updateScrollableSizes();
 
@@ -964,22 +973,25 @@ rflect.cal.ui.MainPane.prototype.updateScrollableSizesAndDom = function() {
       if (headerScrollable) {
         headerScrollable.style.height = this.alldayGridContainerSize.height +
             'px';
-        allDayEventsGrid.style.width =
-            weekmodeDaynamesTable.style.width =
+        let allDayEventsGridWidth =
             rflect.math.pixelToPercent(
             this.blockManager_.blockPoolAllDay.gridSize.width,
             this.blockManager_.blockPoolAllDay.gridContainerSize.width).
             toFixed(4) + '%';
+
+        allDayEventsGrid.style.width = allDayEventsGridWidth;
         allDayEventsGrid.style.height =
             this.blockManager_.blockPoolAllDay.gridSize.height + 'px';
-
         this.updateHorizontalBlocks(this.blockManager_.blockPoolWeek,
             headerScrollable.querySelectorAll('.weekgrid-col'));
-        this.updateHorizontalBlocks(this.blockManager_.blockPoolWeek,
-            this.getDomHelper().getElement('weekmode-daynames-table').
-            querySelectorAll('.dayname-wk'));
 
+        if (weekmodeDaynamesTable) {
+          weekmodeDaynamesTable.style.width = allDayEventsGridWidth;
+          this.updateHorizontalBlocks(this.blockManager_.blockPoolWeek,
+              weekmodeDaynamesTable.querySelectorAll('.dayname-wk'));
+        }
       }
+
       let gridWidth = rflect.math.pixelToPercent(
           this.blockManager_.blockPoolWeek.gridSize.width,
           this.blockManager_.blockPoolWeek.gridContainerSize.width)
@@ -2050,6 +2062,12 @@ rflect.cal.ui.MainPane.prototype.onMouseDown_ = function(aEvent) {
   var className = aEvent.target.className;
   var preventDefaultIsNeeded = false;
   var maskConfiguration;
+  //TODO(alexk): Check if this is needed.
+  this.containerSizeMonitor_.checkForContainerSizeChange();
+  this.updateBeforeRedraw({
+    doNotRemoveScrollListeners: false,
+    updateByNavigation: true
+  });
   // Whether we clicked on hollow space.
   if (this.isWeekGrid(className)) {
 
@@ -2270,8 +2288,13 @@ rflect.cal.ui.MainPane.prototype.onMainPaneScrollableScroll_ =
       if (!this.containerSizeMonitor_.isSmallScreen()){
         this.blockManager_.blockPoolAllDay.scrollLeft = scrollLeft;
 
-        this.getDomHelper().getElement('weekmode-daynames-table').style.left =
-            '-' + scrollLeft + 'px';
+        let weekmodeDaynamesTable = this.getDomHelper().
+            getElement('weekmode-daynames-table');
+        if (weekmodeDaynamesTable) {
+          weekmodeDaynamesTable.style.left =
+              '-' + scrollLeft + 'px';
+        }
+
         this.getDomHelper().getElement(
         rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE)
             .scrollLeft = scrollLeft;
@@ -2283,8 +2306,12 @@ rflect.cal.ui.MainPane.prototype.onMainPaneScrollableScroll_ =
     scrollTop = scrollable.scrollTop;
     this.blockManager_.blockPoolMonth.scrollTop = scrollTop;
 
-    this.getDomHelper().getElement('monthmode-zippies-table').style.top = '-' +
-        scrollTop + 'px';
+    let monthModeZippiesTable = this.getDomHelper().
+        getElement('monthmode-zippies-table')
+    if (monthModeZippiesTable) {
+      monthModeZippiesTable.style.top = '-' +
+          scrollTop + 'px';
+    }
 
   }
 };

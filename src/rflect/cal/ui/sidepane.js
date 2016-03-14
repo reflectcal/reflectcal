@@ -455,14 +455,17 @@ rflect.cal.ui.SidePane.prototype.onSlideBreak_ = function(aEvent) {
  * @param {boolean} aShow Whether to show spacer.
  */
 rflect.cal.ui.SidePane.prototype.showSpacer = function(aShow) {
+  if (goog.DEBUG)
+    console.log('showSpacer: ');
   let spacer = this.getElement().querySelector('.side-pane-spacer');
-  let scrollable = this.getElement().querySelector('.side-pane-scrollable');
-  if (aShow) {
-    goog.style.showElement(spacer, false);
-    goog.dom.classes.add(scrollable, 'side-pane-scrollable-no-spacer');
-  } else {
-    goog.style.showElement(spacer, true);
-    goog.dom.classes.remove(scrollable, 'side-pane-scrollable-no-spacer');
+  if (goog.DEBUG)
+    console.log('spacer: ', spacer);
+  if (spacer) {
+    if (aShow) {
+      goog.dom.classes.add(spacer, 'side-pane-spacer-colored');
+    } else {
+      goog.dom.classes.remove(spacer, 'side-pane-spacer-colored');
+    }
   }
 }
 
@@ -492,7 +495,7 @@ rflect.cal.ui.SidePane.prototype.update = function(opt_options = {
   } else if (updateByModeSwitch) {
 
     if (!doNotUpdateMiniCal && !isSmallScreen) { this.getMiniCal().update(); }
-    //this.showSpacer(this.viewManager_.isInSingleDayMode());
+    this.showSpacer(this.viewManager_.isInSingleDayMode());
     this.viewButtonUpdater_.updateButtons();
   } else if (updateCalendarsOnly) {
 

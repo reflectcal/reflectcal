@@ -25,8 +25,8 @@
     {if $isSmallScreen}
     <div class="side-pane-external-body">
     {/if}
-      {if not $isSmallScreen and not $isInDayMode}
-      <div class="side-pane-spacer"></div>
+      {if not $isSmallScreen}
+      <div class="side-pane-spacer{if $isInDayMode}{sp}side-pane-spacer-colored{/if}"></div>
       {/if}
       <div id="month-selector">
         {if not $isSmallScreen}
@@ -42,8 +42,6 @@
       <div class="side-pane-scrollable{sp}
           {if rflect.ARTIFICIAL_SCROLLER_ENABLED}side-pane-scrollable-artificial-scroll
           {else}side-pane-scrollable-native-scroll{/if}{sp}
-          {if not $isSmallScreen and not $isInDayMode}side-pane-scrollable-no-spacer
-          {/if}
           ">
         <div class="side-pane-scrollable-content">
           {$calSelectorMyHTML}

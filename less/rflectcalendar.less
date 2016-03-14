@@ -9,7 +9,6 @@
 }
 
 .main-pane-header-container-wk {
-  margin-left: 61px; /*+1 pixel to match #grid-table border*/
 }
 
 .main-pane-header-daynames {
@@ -26,13 +25,16 @@
 }
 
 .main-pane-header-wk-daynames {
-  margin-left: -81px;
   padding-left: 81px;
 }
 
+.main-pane-cont-expanded .main-pane-header-wk-daynames,
+.main-pane-header-wk-daynames-small-screen {
+  padding-left: 81px - @mainPaneLeftMargin;
+}
+
 .main-pane-header-mn-daynames {
-  margin-left: -20px;
-  padding-left: 38px;
+  padding-left: 18px;
 }
 
 .main-pane-header-mn-daynames-with-zippies {
@@ -62,7 +64,8 @@
   text-decoration: underline;
 }
 
-#main-pane-header-scrollable {
+.main-pane-header-scrollable {
+  margin-left: 81px;
   border: 1px solid #e5e5e5;
   border-left: none;
   border-bottom-width: 0;
@@ -70,6 +73,12 @@
   don't get affected by overflow without it*/
   position: relative;
 }
+
+.main-pane-cont-expanded .main-pane-header-scrollable,
+.main-pane-header-scrollable-small-screen {
+  margin-left: 81px - @mainPaneLeftMargin;
+}
+
 
 /**
  * Helper classes for scroll manipulation.
@@ -209,11 +218,13 @@
   border-right: 0;
 }
 
-#main-pane-body-scrollable-wk() {
+.main-pane-body-scrollable-wk() {
   /*overflow-x: visible;*/
-  border: 1px solid #e5e5e5;
+  margin-left: 20px;
+  border-top: 1px solid #e5e5e5;
   border-left: none;
   border-right: none;
+  border-bottom: none;
   height: 400px;
   position: relative;
   overflow-y: scroll;
@@ -221,13 +232,13 @@
   overflow-scrolling: touch;
 }
 
-#main-pane-body-scrollable-wk when (@UI_TYPE = '') {
-  #main-pane-body-scrollable-wk();
+.main-pane-body-scrollable-wk {
+  .main-pane-body-scrollable-wk();
 }
 
-#main-pane-body-scrollable-wk when (@UI_TYPE = 'MOBILE') {
-  #main-pane-body-scrollable-wk();
-  z-index: 0;
+.main-pane-cont-expanded .main-pane-body-scrollable-wk,
+.main-pane-body-scrollable-wk-small-screen {
+  margin-left: 20px - @mainPaneLeftMargin;
 }
 
 #grid-table-outer-wrapper {

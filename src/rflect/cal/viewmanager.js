@@ -774,7 +774,7 @@ rflect.cal.ViewManager.prototype.onSaveUserResponse_ = function(aEvent) {
 
 
 rflect.cal.ViewManager.prototype.isInSingleDayMode = function() {
-  return false;
+  return rflect.cal.ViewType.DAY == this.currentView;
 }
 
 

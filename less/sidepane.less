@@ -33,11 +33,19 @@
 
 .side-pane-spacer {
   .box-sizing();
-  width: 300px;
+  width: 260px;
   height: @spacerHeight;
   border-bottom: 1px solid #e5e5e5;
   margin-bottom: -1px;
   background-color: rgb(246,246,246);
+}
+
+.side-pane-spacer-colored {
+  background-color: @sidePaneColor;
+}
+
+.dark-theme .side-pane-spacer-colored{
+  background-color: @sidePaneColorDark;
 }
 
 .side-pane-external {
