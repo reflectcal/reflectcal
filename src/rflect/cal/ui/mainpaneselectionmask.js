@@ -29,15 +29,16 @@ goog.require('rflect.cal.ui.SelectionMask');
  * @param {rflect.cal.blocks.BlockPool=} opt_blockPoolAllday Link to allday block pool.
  * @param {rflect.cal.blocks.BlockPool=} opt_blockPoolMonth Link to month block pool.
  * @param {rflect.ui.MomentumScroller=} opt_momentumScroller Link to momentum
- * scroller.
+ * @param {rflect.ui.MomentumScroller=} opt_momentumScrollerAllDay Link to
+ * momentum scroller for all-day header.
  * @param {boolean=} opt_virtual Whether mask serves only for
  * calculations and won't draw anything.
  * @extends {rflect.cal.ui.SelectionMask}
  * @constructor
  */
-rflect.cal.ui.MainPaneSelectionMask = function(aViewManager, aMainPane, aTimeManager,
-    opt_blockPoolWeek, opt_blockPoolAllday, opt_blockPoolMonth,
-    opt_momentumScroller, opt_virtual) {
+rflect.cal.ui.MainPaneSelectionMask = function(aViewManager, aMainPane,
+    aTimeManager, opt_blockPoolWeek, opt_blockPoolAllday, opt_blockPoolMonth,
+    opt_momentumScroller, opt_momentumScrollerAllDay, opt_virtual) {
 
   rflect.cal.ui.SelectionMask.call(this, aViewManager, aMainPane, aTimeManager);
 
@@ -68,6 +69,13 @@ rflect.cal.ui.MainPaneSelectionMask = function(aViewManager, aMainPane, aTimeMan
    * @private
    */
   this.momentumScroller_ = opt_momentumScroller;
+
+  /**
+   * Link to momentum scroller for all-day header.
+   * @type {rflect.ui.MomentumScroller|undefined}
+   * @private
+   */
+  this.momentumScrollerAllDay_ = opt_momentumScrollerAllDay;
 
   /**
    * Whether mask is virtual.

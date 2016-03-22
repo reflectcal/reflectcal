@@ -132,9 +132,10 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
    * @private
    */
   this.mainPaneBuilder_ = new rflect.cal.ui.MainPaneBuilder(this.viewManager_,
-      this, aTimeManager, this.eventManager_, this.blockManager_.blockPoolWeek,
-      this.blockManager_.blockPoolAllDay, this.blockManager_.blockPoolMonth,
-      this.containerSizeMonitor_, this.navigator_, this.timeMarker_);
+      this, aTimeManager, this.eventManager_, this.blockManager_,
+      this.blockManager_.blockPoolWeek, this.blockManager_.blockPoolAllDay,
+      this.blockManager_.blockPoolMonth, this.containerSizeMonitor_,
+      this.navigator_, this.timeMarker_);
   if (goog.DEBUG)
     _inspect('mainPaneBuilder', this.mainPaneBuilder_);
 
@@ -194,6 +195,7 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
   this.moRegistry_ = new rflect.ui.MouseOverRegistry();
 
   if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
+    this.momentumScrollerAllDay_ = new rflect.ui.MomentumScroller();
     this.momentumScroller_ = new rflect.ui.MomentumScroller();
   }
 
@@ -205,7 +207,7 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
   this.selectionMask_ = new rflect.cal.ui.MainPaneSelectionMask(aViewManager,
       this, aTimeManager, this.blockManager_.blockPoolWeek,
       this.blockManager_.blockPoolAllDay, this.blockManager_.blockPoolMonth,
-      this.momentumScroller_, false);
+      this.momentumScroller_, this.momentumScrollerAllDay_, false);
   if (goog.DEBUG)
     _inspect('selectionMask', this.selectionMask_);
 
@@ -217,7 +219,8 @@ rflect.cal.ui.MainPane = function(aViewManager, aTimeManager, aEventManager,
   this.touchHoldEventCreator_ = new rflect.cal.ui.TouchHoldEventCreator(
       this.viewManager_, aTimeManager, this, this.eventManager_,
       this.blockManager_.blockPoolWeek, this.blockManager_.blockPoolAllDay,
-      this.blockManager_.blockPoolMonth, this.momentumScroller_);
+      this.blockManager_.blockPoolMonth, this.momentumScroller_,
+      this.momentumScrollerAllDay_);
 };
 goog.inherits(rflect.cal.ui.MainPane, rflect.ui.UpdatableComponent);
 
@@ -405,6 +408,14 @@ rflect.cal.ui.MainPane.prototype.leftContMn_;
  * @private
  */
 rflect.cal.ui.MainPane.prototype.rightContMn_;
+
+
+/**
+ * Momentum scroller for all-day header.
+ * @type {rflect.ui.MomentumScroller}
+ * @private
+ */
+rflect.cal.ui.MainPane.prototype.momentumScrollerAllDay_;
 
 
 /**
@@ -729,18 +740,22 @@ rflect.cal.ui.MainPane.prototype.removeMomentumScroller = function() {
   } else this.scrollerContentPosition_ = 0;
 
   this.momentumScroller_.enable(false);
+  this.momentumScrollerAllDay_.enable(false);
 };
 
 
 /***/
 rflect.cal.ui.MainPane.prototype.resetMomentumScroller = function() {
-  if (!this.momentumScroller_) {
+  if (!(this.momentumScroller_ && this.momentumScrollerAllDay_)) {
     return;
   }
 
   this.removeMomentumScroller();
   this.addMomentumScroller();
   this.momentumScroller_.animateWithinBounds(0);
+  if (this.momentumScrollerAllDay_.element) {
+    this.momentumScrollerAllDay_.animateWithinBounds(0);
+  }
 };
 
 
@@ -782,6 +797,18 @@ rflect.cal.ui.MainPane.prototype.addMomentumScroller = function() {
     frameElement = this.getDomHelper()
         .getElement(
             rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_WK);
+
+    let allDayElement = this.getDomHelper().getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.ALL_DAY_EVENTS_GRID_WRAPPER);
+    let allDayFrameElement = this.getDomHelper().getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE);
+
+    if (allDayElement && allDayFrameElement) {
+      this.momentumScrollerAllDay_.setElements(allDayElement,
+          allDayFrameElement);
+      this.momentumScrollerAllDay_.enable(true);
+    }
+
   } else if (this.viewManager_.isInMonthMode()) {
     element = this.getDomHelper().getElement('grid-table-wrapper-outer');
     frameElement = this.getDomHelper()
@@ -917,7 +944,8 @@ rflect.cal.ui.MainPane.prototype.updateScrollableSizes = function() {
   if (this.viewManager_.isInWeekMode()) {
 
     // Case when either allday scrollable is expanded.
-    if (!this.containerSizeMonitor_.isSmallScreen() &&
+    if (!(this.containerSizeMonitor_.isSmallScreen() &&
+        this.blockManager_.isSparseArraysEmpty()) &&
         this.isAlldayScrollableExpandedVer()) {
       var alldayBlockMaxHeight = 0;
 
@@ -2338,8 +2366,10 @@ rflect.cal.ui.MainPane.prototype.disposeInternal = function() {
   this.leftContAd_ = null;
   this.rightContAd_ = null;
 
-  if (rflect.TOUCH_INTERFACE_ENABLED)
+  if (rflect.TOUCH_INTERFACE_ENABLED) {
     this.momentumScroller_.dispose();
+    this.momentumScrollerAllDay_.dispose();
+  }
 
   this.touchHoldHelper_.dispose();
 

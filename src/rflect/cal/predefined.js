@@ -233,7 +233,7 @@ rflect.cal.predefined.CONTAINER_AND_SCROLLABLE_WIDTH_DIFFERENCE_MONTH =
  * @const
  */
 rflect.cal.predefined.MN_EVENT_HEIGHT = rflect.TOUCH_INTERFACE_ENABLED ?
-    41 : 17;
+    27 : 17;
 
 
 /**

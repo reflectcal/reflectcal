@@ -27,6 +27,7 @@ goog.require('rflect.cal.ui.soy.mainpane');
  * @param {rflect.cal.ui.MainPane} aMainPane Link to main pane.
  * @param {rflect.cal.TimeManager} aTimeManager Link to time manager.
  * @param {rflect.cal.events.EventManager} aEventManager Link to event manager.
+ * @param {rflect.cal.blocks.BlockManager} aBlockManager Link to block manager.
  * @param {rflect.cal.blocks.BlockPool} aBlockPoolWeek Link to week block pool.
  * @param {rflect.cal.blocks.BlockPool} aBlockPoolAllday Link to allday block pool.
  * @param {rflect.cal.blocks.BlockPool} aBlockPoolMonth Link to month block pool.
@@ -37,8 +38,8 @@ goog.require('rflect.cal.ui.soy.mainpane');
  * @constructor
  */
 rflect.cal.ui.MainPaneBuilder = function(aViewManager, aMainPane, aTimeManager,
-    aEventManager, aBlockPoolWeek, aBlockPoolAllday, aBlockPoolMonth,
-    aContainerSizeMonitor, aNavigator, aTimeMarker) {
+    aEventManager, aBlockManager, aBlockPoolWeek, aBlockPoolAllday,
+    aBlockPoolMonth, aContainerSizeMonitor, aNavigator, aTimeMarker) {
   /**
    * Link to view manager.
    * @type {rflect.cal.ViewManager}
@@ -66,6 +67,13 @@ rflect.cal.ui.MainPaneBuilder = function(aViewManager, aMainPane, aTimeManager,
    * @private
    */
   this.eventManager_ = aEventManager;
+
+  /**
+   * Link to week block manager.
+   * @type {rflect.cal.blocks.BlockManager}
+   * @private
+   */
+  this.blockManager_ = aBlockManager;
 
   /**
    * Link to week block pool.
@@ -149,11 +157,17 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
     opt_outerHTML) {
   var gridWidth = this.blockPoolWeek_.gridSize.width;
   var isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
+  var isSparseArraysEmpty = this.blockManager_.isSparseArraysEmpty();
+  if (goog.DEBUG)
+        console.log('isSmallScreen: ', isSmallScreen);
+  if (goog.DEBUG)
+    console.log('isSparseArraysEmpty: ', isSparseArraysEmpty);
 
   return rflect.cal.ui.soy.mainpane.mainPaneWeek({
     id: this.mainPane_.getId(),
     firstBuild: aFirstBuild,
     includeOuterHTML: opt_outerHTML,
+    noAllDayEvents: isSparseArraysEmpty,
     expanded: this.mainPane_.getParent().isExpanded(),
     isInDayMode: this.viewManager_.isInSingleDayMode(),
     isScrollEnabled: this.mainPane_.isScrollEnabled(),
@@ -171,7 +185,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
     verticalExpandEnabled: rflect.VERTICAL_EXPAND_ENABLED,
     horizontalExpandEnabled: rflect.HORIZONTAL_EXPAND_ENABLED,
     dayNamesHTML: isSmallScreen ? '' : this.buildDayNamesWeek_(),
-    weekGridAdColsHTML: isSmallScreen? '' : this.buildWeekGridAdCols_(),
+    weekGridAdColsHTML: isSmallScreen && isSparseArraysEmpty ? '' :
+        this.buildWeekGridAdCols_(),
     timeMarkerHeadHTML: this.timeMarker_.buildHead(),
     hourRowsHTML: this.buildHourRows_(),
     weekGridRowsHTML: this.buildGridRows_(),
