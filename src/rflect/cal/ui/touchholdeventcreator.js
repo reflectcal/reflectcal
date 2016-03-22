@@ -39,9 +39,13 @@ class TouchHoldEventCreator extends goog.events.EventHandler {
    * pool.
    * @param {rflect.ui.MomentumScroller=} aMomentumScroller Link to momentum
    * scroller.
+   * @param {rflect.ui.MomentumScroller=} aMomentumScrollerAllDay Link to
+   * momentum
+   * scroller.
    */
   constructor(aViewManager, aTimeManager, aMainPane, aEventManager,
-      aBlockPoolWeek, aBlockPoolAllday, aBlockPoolMonth, aMomentumScroller) {
+      aBlockPoolWeek, aBlockPoolAllday, aBlockPoolMonth, aMomentumScroller,
+      aMomentumScrollerAllDay) {
     super(this);
 
     /**
@@ -99,6 +103,13 @@ class TouchHoldEventCreator extends goog.events.EventHandler {
      * @private
      */
     this.momentumScroller_ = aMomentumScroller;
+
+    /**
+     * Link to momentum scroller.
+     * @type {rflect.ui.MomentumScroller|undefined}
+     * @private
+     */
+    this.momentumScrollerAllDay_ = aMomentumScrollerAllDay;
   };
 
 
@@ -129,7 +140,8 @@ class TouchHoldEventCreator extends goog.events.EventHandler {
     var temporarySelectionMask = new rflect.cal.ui.MainPaneSelectionMask(
         this.viewManager_, this.mainPane_, this.timeManager_,
         this.blockPoolWeek_, this.blockPoolAllDay_,
-        this.blockPoolMonth_, this.momentumScroller_, true);
+        this.blockPoolMonth_, this.momentumScroller_,
+        this.momentumScrollerAllDay_, true);
     var configuration = this.classNameToConfiguration(className);
     temporarySelectionMask.init(configuration, aEvent);
   

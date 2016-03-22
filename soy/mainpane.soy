@@ -4,8 +4,11 @@
  * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param isSmallScreen Whether screen is small.
+ * @param hideAllDayWhenEmpty Whether to hide all-day se section when there's no
+ * all-day events.
  * @param isInDayMode Whether is in day mode.
  * @param expanded Whether main pane is expanded.
+ * @param noAllDayEvents Whether there's no all day events.
  * @param isScrollEnabled Whether scroll is enabled.
  * @param allDayExpanded Whether to include outer html of element.
  * @param weekPoolExpanded Whether at least one of the week blocks is expanded.
@@ -28,7 +31,6 @@
   {if $includeOuterHTML}
   <div id="{$id}" class="main-pane" style="width:{if $expanded}100%{else}auto{/if}">
   {/if}
-    {if not $isSmallScreen}
     <div id="main-pane-header">
       <div id="daynames-prefix-wk">
         {if $verticalExpandEnabled}
@@ -48,6 +50,7 @@
           </div>
         </div>
         {/if}
+        {if not ($hideAllDayWhenEmpty and $noAllDayEvents)}
         <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE}"
              class="main-pane-header-scrollable{sp}
              {if $allDayExpanded}mphs-scroll-vert-on{else}mphs-scroll-vert-off{/if}{sp}
@@ -68,15 +71,17 @@
             </div>
           </div>
         </div>
+        {/if}
       </div>
     </div>
-    {/if}
     <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_WK}" style="
         {if not $isScrollEnabled}overflow:hidden;{/if}
         height:{$gridContainerHeight}px"
         class="main-pane-body-scrollable-wk{sp}
             {if $weekPoolExpanded}mpbs-wk-scroll-horz-on{else}mpbs-wk-scroll-horz-off{/if}{sp}
-            {if $isSmallScreen}main-pane-body-scrollable-wk-small-screen{/if}">
+            {if $isSmallScreen}main-pane-body-scrollable-wk-small-screen{/if}{sp}
+            {if $hideAllDayWhenEmpty and $noAllDayEvents}main-pane-body-scrollable-wk-no-all-day-events{/if}
+            ">
       {if not $firstBuild}
       <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.GRID_TABLE_CONT}">
         <div id="{rflect.cal.predefined.MainPane.ELEMENT_ID.TOUCH_HOLD_WRAPPER_WK}" class="touch-hold-wrapper">

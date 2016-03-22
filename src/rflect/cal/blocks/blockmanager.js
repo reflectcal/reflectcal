@@ -144,3 +144,19 @@ rflect.cal.blocks.BlockManager.prototype.setSizes = function(aGridSize,
   }
 
 };
+
+
+/**
+ * @return {boolean}
+ */
+rflect.cal.blocks.BlockManager.prototype.isSparseArraysEmpty = function() {
+  var sparseArrays = this.blockPoolAllDay.blocks[0].sparseArrays;
+  for (let colCounter = 0, blocksNumber = this.blockPoolWeek.getBlocksNumber();
+      colCounter < blocksNumber; colCounter++) {
+    let length = sparseArrays[colCounter].length;
+    if (length) {
+      return false;
+    }        
+  }
+  return true;
+}
