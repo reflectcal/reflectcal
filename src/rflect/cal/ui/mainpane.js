@@ -2064,10 +2064,7 @@ rflect.cal.ui.MainPane.prototype.onMouseDown_ = function(aEvent) {
   var maskConfiguration;
   //TODO(alexk): Check if this is needed.
   this.containerSizeMonitor_.checkForContainerSizeChange();
-  this.updateBeforeRedraw({
-    doNotRemoveScrollListeners: false,
-    updateByNavigation: true
-  });
+  this.updateBeforeRedraw();
   // Whether we clicked on hollow space.
   if (this.isWeekGrid(className)) {
 
