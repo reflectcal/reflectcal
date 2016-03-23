@@ -157,6 +157,8 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
     opt_outerHTML) {
   var gridWidth = this.blockPoolWeek_.gridSize.width;
   var isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
+  var hideAllDayWhenEmpty = this.containerSizeMonitor_.isSizeCategoryOrLower(
+      rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE);
   var isSparseArraysEmpty = this.blockManager_.isSparseArraysEmpty();
   if (goog.DEBUG)
         console.log('isSmallScreen: ', isSmallScreen);
@@ -172,6 +174,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
     isInDayMode: this.viewManager_.isInSingleDayMode(),
     isScrollEnabled: this.mainPane_.isScrollEnabled(),
     isSmallScreen: this.containerSizeMonitor_.isSmallScreen(),
+    hideAllDayWhenEmpty: hideAllDayWhenEmpty,
     allDayExpanded: this.blockPoolAllDay_.expanded,
     weekPoolExpanded: this.blockPoolWeek_.expanded,
     allDayGridContainerHeight: this.blockPoolAllDay_.gridContainerSize.height,
@@ -185,7 +188,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
     verticalExpandEnabled: rflect.VERTICAL_EXPAND_ENABLED,
     horizontalExpandEnabled: rflect.HORIZONTAL_EXPAND_ENABLED,
     dayNamesHTML: isSmallScreen ? '' : this.buildDayNamesWeek_(),
-    weekGridAdColsHTML: isSmallScreen && isSparseArraysEmpty ? '' :
+    weekGridAdColsHTML: hideAllDayWhenEmpty && isSparseArraysEmpty ? '' :
         this.buildWeekGridAdCols_(),
     timeMarkerHeadHTML: this.timeMarker_.buildHead(),
     hourRowsHTML: this.buildHourRows_(),

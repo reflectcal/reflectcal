@@ -684,20 +684,19 @@ rflect.cal.ui.MainPane.prototype.getHandyScrollTopPosition_ = function() {
  */
 rflect.cal.ui.MainPane.prototype.addScrollListeners_ = function() {
   if (this.viewManager_.isInWeekMode()) {
+    const headerScrollable = this.getDomHelper().getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE);
 
     this.scrollListenersKeys_.push(goog.events.listen(
         this.getDomHelper().getElement(
         rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_WK),
         goog.events.EventType.SCROLL, this.onMainPaneScrollableScroll_, false,
         this));
-    if (!this.containerSizeMonitor_.isSmallScreen() &&
-        this.blockManager_.blockPoolAllDay.expanded)
-      this.scrollListenersKeys_.push(goog.events.listen(
-          this.getDomHelper().getElement(
-          rflect.cal.predefined.MainPane.ELEMENT_ID.
-              MAIN_PANE_HEADER_SCROLLABLE),
+    if (headerScrollable && this.blockManager_.blockPoolAllDay.expanded) {
+      this.scrollListenersKeys_.push(goog.events.listen(headerScrollable,
           goog.events.EventType.SCROLL, this.onMainPaneScrollableScroll_, false,
           this));
+    }
   } else if (this.viewManager_.isInMonthMode()) {
 
     if (this.blockManager_.blockPoolMonth.expanded)
@@ -920,7 +919,8 @@ rflect.cal.ui.MainPane.prototype.updateScrollableSizes = function() {
         rflect.cal.predefined.WEEK_SCROLLABLE_DEFAULT_SIZE.height;
 
     this.alldayGridContainerSize.height =
-        this.containerSizeMonitor_.isSmallScreen() ?
+        this.containerSizeMonitor_.isSizeCategoryOrLower(
+            rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE) ?
         0 : rflect.cal.predefined.ALLDAY_SCROLLABLE_DEFAULT_SIZE.height;
     this.alldayGridSize = this.alldayGridContainerSize.clone();
 
@@ -944,7 +944,8 @@ rflect.cal.ui.MainPane.prototype.updateScrollableSizes = function() {
   if (this.viewManager_.isInWeekMode()) {
 
     // Case when either allday scrollable is expanded.
-    if (!(this.containerSizeMonitor_.isSmallScreen() &&
+    if (!(this.containerSizeMonitor_.isSizeCategoryOrLower(
+        rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE) &&
         this.blockManager_.isSparseArraysEmpty()) &&
         this.isAlldayScrollableExpandedVer()) {
       var alldayBlockMaxHeight = 0;
@@ -1099,14 +1100,17 @@ rflect.cal.ui.MainPane.prototype.restoreOffsetsOfScrollables_ =
         this.getDomHelper().getElement(
         rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_BODY_SCROLLABLE_WK);
 
-    if (this.blockManager_.blockPoolWeek.expanded)
-      mainScrollable.scrollLeft =
-          headerScrollable.scrollLeft =
-          this.blockManager_.blockPoolWeek.scrollLeft;
-    if (!this.containerSizeMonitor_.isSmallScreen() &&
-        this.blockManager_.blockPoolAllDay.expanded)
+    if (this.blockManager_.blockPoolWeek.expanded) {
+      mainScrollable.scrollLeft = this.blockManager_.blockPoolWeek.scrollLeft;
+      if (headerScrollable) {
+        headerScrollable.scrollLeft =
+            this.blockManager_.blockPoolWeek.scrollLeft;
+      }
+    }
+    if (headerScrollable && this.blockManager_.blockPoolAllDay.expanded) {
       headerScrollable.scrollTop =
           this.blockManager_.blockPoolAllDay.scrollTop;
+    }
 
     mainScrollable.scrollTop =
         this.blockManager_.blockPoolWeek.scrollTop;
@@ -2296,12 +2300,15 @@ rflect.cal.ui.MainPane.prototype.onMainPaneScrollableScroll_ =
   var scrollTop = 0;
 
   if (this.viewManager_.isInWeekMode()) {
+    const headerScrollable = this.getDomHelper().getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE)
 
     scrollLeft = scrollable.scrollLeft;
     scrollTop = scrollable.scrollTop;
 
-    if (scrollable ==
-        this.getDomHelper().getElement(rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE)) {
+    if (scrollable == this.getDomHelper().getElement(
+        rflect.cal.predefined.MainPane.ELEMENT_ID.
+        MAIN_PANE_HEADER_SCROLLABLE)) {
 
       this.blockManager_.blockPoolAllDay.scrollTop = scrollTop;
 
@@ -2310,7 +2317,7 @@ rflect.cal.ui.MainPane.prototype.onMainPaneScrollableScroll_ =
       this.blockManager_.blockPoolWeek.scrollLeft = scrollLeft;
       this.blockManager_.blockPoolWeek.scrollTop = scrollTop;
 
-      if (!this.containerSizeMonitor_.isSmallScreen()){
+      if (headerScrollable) {
         this.blockManager_.blockPoolAllDay.scrollLeft = scrollLeft;
 
         let weekmodeDaynamesTable = this.getDomHelper().
@@ -2320,9 +2327,7 @@ rflect.cal.ui.MainPane.prototype.onMainPaneScrollableScroll_ =
               '-' + scrollLeft + 'px';
         }
 
-        this.getDomHelper().getElement(
-        rflect.cal.predefined.MainPane.ELEMENT_ID.MAIN_PANE_HEADER_SCROLLABLE)
-            .scrollLeft = scrollLeft;
+        headerScrollable.scrollLeft = scrollLeft;
       }
     }
 
