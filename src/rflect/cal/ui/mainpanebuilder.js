@@ -160,10 +160,9 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
   var hideAllDayWhenEmpty = this.containerSizeMonitor_.isSizeCategoryOrLower(
       rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE);
   var isSparseArraysEmpty = this.blockManager_.isSparseArraysEmpty();
+  var isInSingleDayMode = this.viewManager_.isInSingleDayMode();
   if (goog.DEBUG)
-        console.log('isSmallScreen: ', isSmallScreen);
-  if (goog.DEBUG)
-    console.log('isSparseArraysEmpty: ', isSparseArraysEmpty);
+    console.log('this.viewManager_.isInSingleDayMode(): ', this.viewManager_.isInSingleDayMode());
 
   return rflect.cal.ui.soy.mainpane.mainPaneWeek({
     id: this.mainPane_.getId(),
@@ -171,7 +170,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
     includeOuterHTML: opt_outerHTML,
     noAllDayEvents: isSparseArraysEmpty,
     expanded: this.mainPane_.getParent().isExpanded(),
-    isInDayMode: this.viewManager_.isInSingleDayMode(),
+    isInDayMode: isInSingleDayMode,
     isScrollEnabled: this.mainPane_.isScrollEnabled(),
     isSmallScreen: this.containerSizeMonitor_.isSmallScreen(),
     hideAllDayWhenEmpty: hideAllDayWhenEmpty,
@@ -187,7 +186,7 @@ rflect.cal.ui.MainPaneBuilder.prototype.buildBodyWeek = function(aFirstBuild,
     navigatorScrollBarWidth: this.navigator_.getScrollbarWidth(),
     verticalExpandEnabled: rflect.VERTICAL_EXPAND_ENABLED,
     horizontalExpandEnabled: rflect.HORIZONTAL_EXPAND_ENABLED,
-    dayNamesHTML: isSmallScreen ? '' : this.buildDayNamesWeek_(),
+    dayNamesHTML: isInSingleDayMode ? '' : this.buildDayNamesWeek_(),
     weekGridAdColsHTML: hideAllDayWhenEmpty && isSparseArraysEmpty ? '' :
         this.buildWeekGridAdCols_(),
     timeMarkerHeadHTML: this.timeMarker_.buildHead(),
