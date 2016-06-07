@@ -13,7 +13,7 @@ goog.require('goog.array');
 goog.require('goog.dom.classes');
 goog.require('goog.ui.Button');
 goog.require('rflect.ui.BuildableComponent');
-goog.require('goog.ui.FlatButtonRenderer');
+goog.require('goog.ui.NativeButtonRenderer');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.PaneShowBehavior');
@@ -71,17 +71,17 @@ rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
   this.transport = aTransport;
 
   this.addChild(this.buttonBack1 = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.NativeButtonRenderer.getInstance()));
   this.addChild(this.buttonPrimary1 = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.NativeButtonRenderer.getInstance()));
   this.addChild(this.buttonBack2 = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.NativeButtonRenderer.getInstance()));
   this.addChild(this.buttonPrimary2 = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.NativeButtonRenderer.getInstance()));
 
   if (this.isButtonDeleteEnabled()) {
     this.addChild(this.buttonDelete = new goog.ui.Button(null,
-        goog.ui.FlatButtonRenderer.getInstance()));
+        goog.ui.NativeButtonRenderer.getInstance()));
   }
 
   if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
@@ -181,15 +181,15 @@ rflect.cal.ui.ExternalPane.prototype.buildControlPane = function(
 rflect.cal.ui.ExternalPane.prototype.enterDocument = function() {
 
   var controlPane1 = this.getElement().querySelector(
-      '.control-pane-external');
+      '.navbar');
 
   this.buttonBack1.decorate(controlPane1.querySelector(
-      '.pane-left > .goog-flat-button'));
+      '.left > button'));
   this.buttonPrimary1.decorate(controlPane1.querySelector(
-      '.pane-right > .goog-flat-button'));
+      '.right > button'));
   if (this.isButtonDeleteEnabled()) {
     this.buttonDelete.decorate(this.getElement().querySelector(
-        '.pane-sticky-bottom > .goog-flat-button'));
+        'button.item-link'));
   }
 
   this.getHandler().listen(this.containerSizeMonitor,

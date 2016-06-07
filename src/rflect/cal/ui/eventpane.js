@@ -287,8 +287,7 @@ rflect.cal.ui.EventPane.prototype.buildHTML = function(opt_outerHTML) {
     id: this.getId(),
     includeOuterHTML: opt_outerHTML,
     calendarsSelectHTML: this.calendarsSelect_.buildHTML(true),
-    isNativeTimeInput: this.navigator_.isNativeTimeInput(),
-    calendarsSelectId: this.calendarsSelect_.getSelectId()
+    isNativeTimeInput: this.navigator_.isNativeTimeInput()
   });
 };
 
