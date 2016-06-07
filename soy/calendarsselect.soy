@@ -9,16 +9,24 @@
  */
 {template .calendarsSelect autoescape="false"}
   {if $includeOuterHTML}
-  <div id="{$id}" class="button dropdown settings-pane-select">
+  <li id="{$id}">
   {/if}
-    <select id="{$selectId}" class="event-calendars">
-    {foreach $calendar in $calendars}
-      <option value="{$calendar.id}">
-        {$calendar.name}
-      </option>
-    {/foreach}
-    </select>
+    <div class="item-content">
+      <div class="item-inner">
+        <div class="item-title label">{rflect.cal.i18n.Symbols.CALENDARS_LABEL}</div>
+        <div class="item-input">
+          <select id="{$selectId}">
+          {foreach $calendar in $calendars}
+            <option value="{$calendar.id}">
+              {$calendar.name}
+            </option>
+          {/foreach}
+          </select>
+        </div>
+      </div>
+    </div>
   {if $includeOuterHTML}
-  </div>
+  </li>
   {/if}
+
 {/template}

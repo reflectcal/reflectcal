@@ -31,6 +31,8 @@ rflect.cal.ui.InputDatePicker = function (aViewManager, aParseFormat) {
 
   this.parser_ = new goog.i18n.DateTimeParse(aParseFormat);
   this.formatter_ = new goog.i18n.DateTimeFormat(aParseFormat);
+
+  this.inputsAndContainers_ = [];
 };
 goog.inherits(rflect.cal.ui.InputDatePicker, rflect.cal.ui.DatePicker);
 
@@ -65,6 +67,15 @@ rflect.cal.ui.InputDatePicker.prototype.parser_;
  * @private
  */
 rflect.cal.ui.InputDatePicker.prototype.formatter_;
+
+
+
+/**
+ * List of inputs and corresponding containers.
+ * @type {Array.<Array.<Element, Element>>}
+ * @private
+ */
+rflect.cal.ui.InputDatePicker.prototype.inputsAndContainers_;
 
 
 /**
@@ -104,8 +115,14 @@ rflect.cal.ui.InputDatePicker.prototype.onMouseDown_ = function (aEvent) {
 /**
  * Adds one more input to track.
  * @param {Element} aInput Input to add.
+ * @param {Element} opt_container Where to render datepicker for this input,
+ * will render in document.body if not specified.
  */
-rflect.cal.ui.InputDatePicker.prototype.addInput = function (aInput) {
+rflect.cal.ui.InputDatePicker.prototype.addInput = function (aInput,
+                                                             opt_container) {
+
+  this.inputsAndContainers_.push([aInput, opt_container]);
+
   this.getHandler().listen(aInput, goog.events.EventType.FOCUS,
       this.onInputFocus_, false)
       .listen(aInput, goog.events.EventType.BLUR,
@@ -162,7 +179,7 @@ rflect.cal.ui.InputDatePicker.prototype.onInputMouseDown_ = function (aEvent) {
  * @param {Element} aInput Input that was interacted with.
  * @private
  */
-rflect.cal.ui.InputDatePicker.prototype.showDatePicker_ = function (aInput) {
+rflect.cal.ui.InputDatePicker.prototype.showDatePicker_ = function(aInput) {
   this.currentInput_ = aInput;
 
   var pos = goog.style.getClientPosition(aInput);
@@ -170,8 +187,13 @@ rflect.cal.ui.InputDatePicker.prototype.showDatePicker_ = function (aInput) {
 
   pos.y += size.height;
 
-  this.setVisible(true);
-  goog.style.setPosition(this.getElement(), pos.x, pos.y);
+  const container =
+      goog.array.find(this.inputsAndContainers_, inputAndContainer =>
+    inputAndContainer[0] == aInput)[1];
+  this.setVisible(true, container);
+  if (goog.DEBUG)
+      console.log('container: ', container);
+  //goog.style.setPosition(this.getElement(), pos.x, 0);
 }
 
 
@@ -236,8 +258,10 @@ rflect.cal.ui.InputDatePicker.prototype.createDom = function () {
 /**
  * Sets the visibility. Lazily renders the component if needed.
  * @param {boolean} visible Whether the component should be visible.
+ * @param {Element=} opt_parentNode Parent node to render into.
  */
-rflect.cal.ui.InputDatePicker.prototype.setVisible = function (visible) {
+rflect.cal.ui.InputDatePicker.prototype.setVisible = function(visible,
+                                                              opt_parentNode) {
 
   if (visible == this.visible_) {
     return;
@@ -250,8 +274,11 @@ rflect.cal.ui.InputDatePicker.prototype.setVisible = function (visible) {
 
   // If the component hasn't been rendered yet, render it now.
   if (!this.isInDocument()) {
-    this.render();
+    this.render(opt_parentNode);
   } else {
+    if (opt_parentNode) {
+      opt_parentNode.appendChild(this.getElement());
+    }
     this.update();
   }
 
@@ -275,5 +302,7 @@ rflect.cal.ui.InputDatePicker.prototype.showElement_ = function (visible) {
  * @override
  */
 rflect.cal.ui.InputDatePicker.prototype.disposeInternal = function () {
+  this.inputsAndContainers_.length = 0;
+
   rflect.cal.ui.InputDatePicker.superClass_.disposeInternal.call(this);
 }

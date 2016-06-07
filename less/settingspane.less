@@ -13,7 +13,6 @@
   width: 100%;
   height: 100%;
   z-index: 10;
-  background: #fff;
 }
 
 .settings-pane-header-cont {
@@ -44,9 +43,8 @@
 }
 
 .settings-body-outer {
-  background-color: #fff;
   box-sizing: border-box;
-  height: ~"calc(100% - 71px)";
+  height: ~"calc(100% - 44px)";
 }
 
 .settings-body-outer-native-scroll {
@@ -62,13 +60,27 @@
 .settings-body {
   position: relative;
   box-sizing: border-box;
-  padding-bottom: 71px;
   min-height: 100%;
+  overflow: hidden;
 }
 
 .settings-body-inner {
-  max-width: 700px;
+  max-width: 800px;
+  /*border-left: 1px solid #d5d5d5;
+  border-right: 1px solid #d5d5d5;*/
   margin: 0 auto;
+}
+
+.button-menu-edge-left {
+  padding-left: 0;
+}
+
+.button-menu-edge-right {
+  padding-right: 0;
+}
+
+.pane-title {
+  font-weight: bold;
 }
 
 .settings-tab-content {
@@ -131,7 +143,11 @@
   padding: 8px;
 }
 
-.calendar-color {
+.list-block .item-title.calendar-color {
+  position: absolute;
+}
+
+.calendar-color() {
   border-radius: 0;
   transition: opacity @transitionTime;
   border-width: 1px;
@@ -139,6 +155,19 @@
   .transition(-webkit-transform .3s);
   .transition(transform .3s);
   outline: none;
+
+  position: absolute;
+  right: 40px;
+}
+
+.calendar-color when (@UI_TYPE = '') {
+  .calendar-color();
+  top: calc((44px - (@colorContHeightSmall + 2px)) / 2);
+}
+
+.calendar-color when (@UI_TYPE = 'MOBILE') {
+  .calendar-color();
+  top: calc((44px - (@colorContHeightBig + 2px)) / 2);
 }
 
 .calendar-color:hover {
@@ -172,7 +201,7 @@
   text-align: left;
 }
 
-.cal-link-in-progress {
+.cal-link-in-progress .item-title {
   color: #888;
   text-decoration: none !important;
   cursor: default;

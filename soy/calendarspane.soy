@@ -7,26 +7,27 @@
  */
 {template .calendarsPane autoescape="false"}
   {if $includeOuterHTML}
-  <div id="{$id}" class="settings-pane">
+  <div id="{$id}" class="view settings-pane">
   {/if}
     {call rflect.cal.ui.soy.externalpane.controlPane}
       {param backButtonLabel: rflect.cal.i18n.Symbols.TO_SETTINGS /}
-      {param showDeleteButton: false /}
       {param showBackButton: true /}
       {param showNewButton: true /}
       {param showSaveButton: false /}
-      {param upper: true /}
       {param header: rflect.cal.i18n.Symbols.CALENDARS_LABEL /}
+      {param controlPaneIsInDialogAndFirstByIndex: false /}
     {/call}
 
-    <div class="settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">
-      <div class="settings-body">
-        <div class="settings-body-inner">
+    <div class="pages settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">
+      <div class="page settings-body">
+        <div class="page-content settings-body-inner">
         {call .calendarsPaneEntry}
           {param calendarCollection: $calendarCollections[0] /}
+          {param id: $id /}
         {/call}
         {call .calendarsPaneEntry}
           {param calendarCollection: $calendarCollections[1] /}
+          {param id: $id /}
         {/call}
         </div>
       </div>
@@ -40,46 +41,51 @@
 
 /**
  * @param calendarCollection
+ * @param id Unique id.
  */
 {template .calendarsPaneEntry autoescape="false"}
   {if length($calendarCollection.calendars) != 0}
-  <div class="event-pane-cont calendars-outer-cont event-pane-cont-last">
-    <label>
-      {$calendarCollection.label}
-    </label>
-    <div class="calendars-cont">
-      <table class="calendars-table">
-        <tbody>
-        {foreach $calendar in $calendarCollection.calendars}
-          <tr class="calendar-row">
-            <td class="listitem-cont name-cell">
-              <button id="{rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX}{$calendar.id}"
-                  class="settings-link cal-link{sp}{if $calendar.isInProgress}cal-link-in-progress{/if}">
-                {$calendar.name}
-              </button>
-            </td>
-            <td class="color-cell">
-              <div class="calitem-color-cont calendar-color{sp}{$calendar.colorClass}"></div>
-            </td>
-          </tr>
-        {/foreach}
-        </tbody>
-      </table>
-    </div>
+
+  <div class="content-block-title">
+    {$calendarCollection.label}
   </div>
+  <div class="list-block">
+    <ul>
+      {foreach $calendar in $calendarCollection.calendars}
+      <li>
+        <a /*href="/calendars-{$calendar.id}"*/
+            class="item-link{sp}{if $calendar.isInProgress}cal-link-in-progress{/if}"
+            id="{$id}{rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX}{$calendar.id}"
+            data-calendar-id="{$calendar.id}"
+            tabindex="0">
+          <div class="item-content">
+            <div class="item-inner">
+              <div class="item-title">{$calendar.name}</div>
+              <div class="calitem-color-cont calendar-color{sp}{$calendar.colorClass}"></div>
+            </div>
+          </div>
+        </a>
+      </li>
+      {/foreach}
+    </ul>
+  </div>
+
   {/if}
 {/template}
 
 
 /**
  * @param calendarCollections
+ * @param id Unique id.
  */
 {template .calendarsPaneBody autoescape="false"}
   {call .calendarsPaneEntry}
     {param calendarCollection: $calendarCollections[0] /}
+    {param id: $id /}
   {/call}
   {call .calendarsPaneEntry}
     {param calendarCollection: $calendarCollections[1] /}
+    {param id: $id /}
   {/call}
 {/template}
 

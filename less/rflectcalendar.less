@@ -18,9 +18,9 @@
   height: 20px;
   line-height: 20px;
 
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid transparent;
   margin-bottom: -1px;
-  background-color: rgb(246, 246, 246);
+  background-color: #fff;
   padding-right: 19px; /*to compensate 17px scrollbar + 2px from borders of upper table*/
 }
 
@@ -31,6 +31,11 @@
 .main-pane-cont-expanded .main-pane-header-wk-daynames,
 .main-pane-header-wk-daynames-small-screen {
   padding-left: 81px - @mainPaneLeftMargin;
+}
+
+.main-pane-header-wk-daynames-small-screen {
+  border-bottom: 1px solid #e5e5e5;
+  background-color: rgb(246, 246, 246);
 }
 
 .main-pane-header-mn-daynames {
@@ -65,13 +70,19 @@
 }
 
 .main-pane-header-scrollable {
+  .box-sizing();
   margin-left: 81px;
-  border: 1px solid #e5e5e5;
-  border-left: none;
-  border-bottom-width: 0;
   /*we need this for ie7 as nested relative positioned elements
   don't get affected by overflow without it*/
   position: relative;
+}
+
+.main-pane-header-scrollable:before {
+  position: absolute;
+  width: 100%;
+  content: '';
+  display:block;
+  border-top: 1px solid #e5e5e5;
 }
 
 .main-pane-cont-expanded .main-pane-header-scrollable,
@@ -219,6 +230,7 @@
 }
 
 .main-pane-body-scrollable-wk {
+  .box-sizing();
   /*overflow-x: visible;*/
   margin-left: 20px;
   border-top: 4px solid #e5e5e5;
@@ -463,11 +475,18 @@
 }
 
 .main-pane-body-scrollable-mn {
+  .box-sizing();
   overflow-x: hidden;
-  border: 1px solid #e5e5e5;
-  border-left: none;
   position: relative;
   height: 100%;
+}
+
+.main-pane-body-scrollable-mn:before {
+  position: absolute;
+  width: 100%;
+  content: '';
+  display: block;
+  border-top: 1px solid #e5e5e5;
 }
 
 .mpbs-mn-scroll-vert-on() {

@@ -34,7 +34,7 @@ goog.require('rflect.cal.ui.CalendarsPane.EventTypes');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.ExternalPane');
-goog.require('rflect.cal.ui.PageRequestEvent');
+goog.require('rflect.cal.ui.ScreenManager.PageRequestEvent');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.cal.ui.soy.settingspane');
@@ -70,8 +70,7 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
   this.viewsElements_ = [];
 
   this.addChild(this.buttonCalendars_ = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.checkboxDebug_ = new rflect.ui.Checkbox());
+      goog.ui.ButtonRenderer.getInstance()));
 
   //Enabling touch-only interface.
   this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
@@ -141,6 +140,13 @@ rflect.cal.ui.SettingsPane.PageIndexes = {
 rflect.cal.ui.SettingsPane.prototype.isButtonDeleteEnabled = function() {
   return false;
 };
+
+
+/**
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.SettingsPane.prototype.checkboxDebug_;
 
 
 /**
@@ -434,36 +440,14 @@ rflect.cal.ui.SettingsPane.createCalendarsTd_ =
 
 
 /**
- * @param {goog.dom.DomHelper} aDom Dom helper.
- * @return {Element} Debug container.
- * @private
- */
-rflect.cal.ui.SettingsPane.prototype.createDebugCont_ = function(aDom) {
-  var labelDebug = aDom.createDom('label', {
-    'for': 'settings-debug-mode',
-    className: 'goog-inline-block event-pane-label'
-  }, 'Debug mode');
-  var debugSubCont = aDom.createDom('span', null, labelDebug,
-      this.checkboxDebug_.getElement());
-  this.checkboxDebug_.setLabel(debugSubCont);
-  this.checkboxDebug_.getElement().className += ' aligned-checkbox';
-  var debugCont = aDom.createDom('div', {
-    id: 'settings-debug-mode',
-    className: 'event-pane-cont'
-  }, debugSubCont);
-
-
-  return debugCont;
-}
-
-
-/**
  * @override
  */
 rflect.cal.ui.SettingsPane.prototype.buildHTML = function(opt_outerHTML) {
   return rflect.cal.ui.soy.settingspane.settingsPane({
     id: this.getId(),
-    includeOuterHTML: opt_outerHTML
+    includeOuterHTML: opt_outerHTML,
+    controlPaneIsInDialogAndFirstByIndex:
+        this.controlPaneIsInDialogAndFirstByIndex()
   });
 };
 
@@ -472,16 +456,12 @@ rflect.cal.ui.SettingsPane.prototype.buildHTML = function(opt_outerHTML) {
  * @override
  */
 rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
-  this.buttonCalendars_.decorate(this.getDomHelper().getElement('button-to-calendars'));
+  this.buttonCalendars_.decorate(this.getDomHelper().getElement(`${this.getId()}button-to-calendars`));
 
-  this.selectLanguages_ = this.getDomHelper().getElement('settings-languages');
-  this.selectThemes_ = this.getDomHelper().getElement('settings-themes');
+  this.selectLanguages_ = this.getDomHelper().getElement(`${this.getId()}settings-languages`);
+  this.selectThemes_ = this.getDomHelper().getElement(`${this.getId()}settings-themes`);
 
-  var checkboxDebugSubCont = this.getDomHelper().getElement('settings-debug-mode-sub-cont');
-  this.checkboxDebug_.render(checkboxDebugSubCont);
-  this.checkboxDebug_.setLabel(checkboxDebugSubCont);
-  this.checkboxDebug_.getElement().className += ' aligned-checkbox';
-
+  this.checkboxDebug_ = this.getDomHelper().getElement(`${this.getId()}settings-debug-mode`);
   rflect.cal.ui.SettingsPane.superClass_.enterDocument.call(this);
 
   // Menu commands.
@@ -500,7 +480,7 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
       .listen(document,
       goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
 
-      .listen(this.viewManager,
+      .listen(this.getParent(),
           rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
           this.onBeforePageChange_, false, this)
 }
@@ -526,15 +506,9 @@ rflect.cal.ui.SettingsPane.prototype.onBeforePageChange_ = function(aEvent) {
  * @param {boolean} aShow Whether to show settings pane.
  */
 rflect.cal.ui.SettingsPane.prototype.showCalendarsPane = function(aShow) {
-  if (!this.calendarsPane_) {
-    this.calendarsPane_ = new rflect.cal.ui.CalendarsPane(this.viewManager,
-        this.timeManager, this.eventManager, this.containerSizeMonitor,
-        this.transport);
-    this.addChild(this.calendarsPane_);
-  }
-
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this.calendarsPane_,
-      aShow));
+  this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(
+      (/**@type {rflect.cal.ui.SettingsDialogScreenManager}*/(
+          this.getParent())).getCalendarsPane(), aShow));
 }
 
 
@@ -561,6 +535,7 @@ rflect.cal.ui.SettingsPane.prototype.onShowCalendarsAction_ =
 
   aEvent.target.setFocused(false);
 
+  aEvent.preventDefault();
 }
 
 
@@ -570,7 +545,7 @@ rflect.cal.ui.SettingsPane.prototype.onShowCalendarsAction_ =
  * @private
  */
 rflect.cal.ui.SettingsPane.prototype.onKeyDown_ = function(aEvent) {
-  if (this.viewManager.isVisible(this)) {
+  if (this.isVisible()) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 
@@ -593,7 +568,7 @@ rflect.cal.ui.SettingsPane.prototype.onKeyDown_ = function(aEvent) {
  * Default action is to hide pane.
  */
 rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+  this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
 }
 
 
@@ -611,7 +586,7 @@ rflect.cal.ui.SettingsPane.prototype.onSaveUser_ = function() {
     this.transport.saveUserAsync(changedUser, reloadIsNeeded);
     this.dispatchEvent(new rflect.cal.ui.SettingsPane.SaveUserEvent(
         originalUser, changedUser));
-    this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+    this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
   }
 }
 
@@ -622,7 +597,7 @@ rflect.cal.ui.SettingsPane.prototype.onSaveUser_ = function() {
 rflect.cal.ui.SettingsPane.prototype.displayValues = function() {
   this.selectLanguages_.value = this.getUser()['settings']['language'] ||
       goog.LOCALE;
-  this.checkboxDebug_.setChecked(this.getUser()['settings']['debug']);
+  this.checkboxDebug_.checked = !!this.getUser()['settings']['debug'];
   this.selectThemes_.value = this.getUser()['settings']['visualTheme'] ||
       rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES[1][0];
 };
@@ -638,7 +613,7 @@ rflect.cal.ui.SettingsPane.prototype.scanValues = function() {
   var changedUser = goog.object.unsafeClone(this.getUser());
   if (valid) {
     changedUser['settings']['language'] = this.selectLanguages_.value;
-    changedUser['settings']['debug'] = this.checkboxDebug_.isChecked();
+    changedUser['settings']['debug'] = this.checkboxDebug_.checked;
     changedUser['settings']['visualTheme'] = this.selectThemes_.value;
 
     reloadIsNeeded = this.getUser()['settings']['language'] !=
@@ -662,6 +637,8 @@ rflect.cal.ui.SettingsPane.prototype.scanValues = function() {
  * @protected
  */
 rflect.cal.ui.SettingsPane.prototype.disposeInternal = function() {
+  this.checkboxDebug_ = null;
+
   rflect.cal.ui.SettingsPane.superClass_.disposeInternal.call(this);
 };
 

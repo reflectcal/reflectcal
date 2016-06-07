@@ -1,0 +1,128 @@
+// Inputs
+
+.list-block {
+
+  input[type="text"], input[type="password"], input[type="search"],
+      input[type="email"], input[type="tel"], input[type="url"],
+      input[type="date"], input[type="datetime-local"], input[type="time"],
+      input[type="number"], select {
+    height: 44px;
+  }
+
+  input[type="text"]:focus when (@UI_TYPE = '') {
+    .default-focus();
+  }
+  input[type="password"]:focus when (@UI_TYPE = '') {
+    .default-focus();
+  }
+  input[type="search"]:focus when (@UI_TYPE = '') {
+    .default-focus();
+  }
+  input[type="email"]:focus when (@UI_TYPE = '') {
+    .default-focus();
+  }
+  input[type="tel"]:focus when (@UI_TYPE = '') {
+    .default-focus();
+  }
+  input[type="url"]:focus when (@UI_TYPE = '') {
+    .default-focus();
+  }
+  input[type="date"]:focus when (@UI_TYPE = '') {
+    .default-focus();
+  }
+  input[type="datetime-local"]:focus when (@UI_TYPE = '') {
+    .default-focus();
+  }
+  input[type="time"]:focus when (@UI_TYPE = '') {
+    .default-focus();
+  }
+  input[type="number"]:focus when (@UI_TYPE = '') {
+    .default-focus();
+  }
+  select:focus when (@UI_TYPE = '') {
+    .default-focus();
+  }
+  textarea:focus when (@UI_TYPE = '') {
+    .default-focus();
+  }
+
+  .item-title.label {
+    width: 35%;
+    min-width: 160px;
+    .flex-shrink(0);
+  }
+
+}
+
+//Switch
+.label-switch {
+
+  .checkbox {
+    transition: 200ms;
+    -webkit-transition: 200ms;
+    &:before {
+      transition: 200ms;
+      -webkit-transition: 200ms;
+    }
+    &:after {
+      transition: 200ms;
+      -webkit-transition: 200ms;
+    }
+  }
+
+  input[type="checkbox"] {
+    display: inline-block;
+    position:absolute;
+    opacity:0;
+
+    &:checked {
+      &+ .checkbox {
+        background: #4cd964;
+        &:before {
+          .transform(scale(0));
+        }
+        &:after {
+          .transform(translateX(20px));
+        }
+      }
+    }
+    &:focus {
+      &+ .checkbox {
+        &:after {
+          background: rgb(178,215,255);
+        }
+      }
+    }
+  }
+}
+
+// Checkboxes
+label.label-checkbox {
+  input[type="checkbox"], input[type="radio"] {
+    display: inline-block;
+    position:absolute;
+    opacity:0;
+  }
+}
+
+label.label-radio {
+  cursor: pointer;
+  input[type="checkbox"], input[type="radio"] {
+    display: inline-block;
+    position:absolute;
+    opacity:0;
+    &:focus ~ .item-inner {
+      .default-focus();
+    }
+  }
+}
+
+//Buttons
+.button {
+  transition: background-color .2s;
+  line-height: 25px;
+  &.active, &.goog-button-checked {
+    background: @themeColor;
+    color: #fff;
+  }
+}

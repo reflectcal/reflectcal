@@ -4,7 +4,6 @@
  * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param? isSmallScreen Whether screen is small.
- * @param isInDayMode Whether is in day mode.
  * @param sizeCategory Size category.
  * @param visible Whether sidepane is visible.
  * @param monthSelectorHTML HTML of month selector.
@@ -25,9 +24,6 @@
     {if $isSmallScreen}
     <div class="side-pane-external-body">
     {/if}
-      {if not $isSmallScreen}
-      <div class="side-pane-spacer{if $isInDayMode}{sp}side-pane-spacer-colored{/if}"></div>
-      {/if}
       <div id="month-selector">
         {if not $isSmallScreen}
           {$monthSelectorHTML}

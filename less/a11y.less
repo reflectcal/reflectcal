@@ -1,0 +1,23 @@
+/*
+ * Copyright (c) 2016. Rflect, Alex K.
+ */
+
+/*
+ * A11y helpers.
+ *
+ * @author alexeykofficial@gmail.com (Alex K)
+ */
+
+
+.default-focus() {
+  box-shadow: 0px 0px 0px 3px rgba(83, 151, 241, .5);
+}
+
+*:focus when (@UI_TYPE = '') {
+  outline: 0;
+  .default-focus();
+}
+
+::-moz-focus-inner when (@UI_TYPE = '') {
+  border:0;
+}

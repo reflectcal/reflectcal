@@ -3,58 +3,59 @@
 /**
  * @param showBackButton Whether to show back button.
  * @param backButtonLabel Label for back button.
- * @param showDeleteButton Whether to show delete button.
  * @param showNewButton Whether to show new button.
  * @param showSaveButton Whether to show save button.
- * @param upper Whether this pane is in upper configuration.
+ * @param controlPaneIsInDialogAndFirstByIndex Whether navbar belongs to
+ * the first page and is in dialog.
  * @param? header Header text.
  */
 {template .controlPane autoescape="false"}
-  <nav class="control-pane-external-outer{sp}control-pane-external-outer-{if $upper}upper{else}lower{/if}{sp}">
-    <div class="control-pane-external">
-      <div class="pane-right">
-       {if $showSaveButton or $showNewButton}
-        <div class="goog-inline-block goog-flat-button cal-menu-button emphasis-button external-pane-button">
-         {if $showSaveButton}
-         {rflect.cal.i18n.Symbols.SAVE}
-         {/if}
-         {if $showNewButton}
-         <span>
-          <i class="octicon icon-button octicon-plus"></i>
-          {rflect.cal.i18n.Symbols.NEW}
-         </span>
-         {/if}
-        </div>
-       {/if}
-      </div>
-      <div class="pane-left">
+
+  <nav class="navbar navbar-external-pane">
+    <div class="navbar-inner navbar-on-center">
+      <div class="left">
         {if $showBackButton}
-        <div class="goog-inline-block goog-flat-button cal-menu-button external-pane-button">
+        <a class="back link">
+          {if not $controlPaneIsInDialogAndFirstByIndex}
+          <i class="icon icon-back"></i>
+          {/if}
           <span>
-            <i class="octicon icon-button octicon-chevron-left"></i>
+          {if $controlPaneIsInDialogAndFirstByIndex}
+            {rflect.cal.i18n.Symbols.CANCEL}
+          {else}
             {if $backButtonLabel}
             {$backButtonLabel}
             {else}
             {rflect.cal.i18n.Symbols.BACK}
             {/if}
-           </span>
-        </div>
+          {/if}
+          </span>
+        </a>
         {/if}
       </div>
-      <div class="pane-center">
-        {if $showDeleteButton}
-        <div aria-hidden="true" style="display: none;" class="goog-inline-block goog-flat-button event-pane-button-delete">
-          {rflect.cal.i18n.Symbols.DELETE}
-        </div>
-        {/if}
-        {if $upper}
-          <h3 class="pane-header">
-            {$header}
-          </h3>
+      <div class="center">
+        <strong>
+          {$header}
+        </strong>
+      </div>
+      <div class="right">
+        {if $showSaveButton or $showNewButton}
+          {if $showSaveButton}
+        <button type="button" class="link icon-only open-panel button-menu-edge-right">
+          <strong>{rflect.cal.i18n.Symbols.SAVE}</strong>
+        </button>
+          {else}
+            {if $showNewButton}
+        <button type="button" class="link icon-only open-panel button-menu-edge-right">
+          <i class="icon icon-new icon-new-right"></i>
+        </button>
+            {/if}
+          {/if}
         {/if}
       </div>
     </div>
   </nav>
+
 {/template}
 
 /**

@@ -8,105 +8,120 @@
  */
 {template .controlPane autoescape="false"}
   {if $includeOuterHTML}
-  <div id="{$id}" class="control-pane">
+  <div id="{$id}">
   {/if}
   {switch $sizeCategory}
     //The same as $isPhoneScreen.
     {case rflect.cal.Navigator.SIZE_CATEGORY.IPHONE5_PORTRAIT,
         rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_PORTRAIT}
-    <div class="pane-left">
-      <div class="cal-menu-button goog-flat-button goog-inline-block" id="{rflect.cal.predefined.BUTTON_MENU_ID}">
-        <span class="octicon icon-button octicon-three-bars"></span></div>
-    </div>
-    <div class="pane-right">
-      <div class="cal-menu-button-new-event emphasis-button cal-menu-button goog-flat-button goog-inline-block"
-           id="{rflect.cal.predefined.BUTTON_NEW_EVENT_ID}"><span class="octicon icon-button octicon-plus"></span></div>
-    </div>
-    <div class="pane-center pane-center-nav">
-      <div id="time-period-label" class="time-period-label time-period-label-narrow">
-        {$timePeriodLabel}
-      </div>
-      <span style="white-space: nowrap;">
-        <div class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav goog-flat-button-checked"
-             id="{rflect.cal.predefined.BUTTON_NOW_ID}">
-          {rflect.cal.i18n.Symbols.NOW}
+    <nav class="navbar navbar-upper navbar-{$sizeCategory}">
+      <div class="navbar-inner navbar-on-center">
+        <div class="left">
+          <button type="button" class="link icon-only open-panel button-menu-edge-left" id="{rflect.cal.predefined.BUTTON_MENU_ID}">
+            <i class="icon icon-bars"></i>
+          </button>
         </div>
-        <div class="goog-flat-button-collapse-left goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"
-             id="{rflect.cal.predefined.BUTTON_PREV_ID}"><span class="octicon icon-button octicon-triangle-left"></span></div>
-        <div class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"
-             id="{rflect.cal.predefined.BUTTON_NEXT_ID}"><span class="octicon icon-button octicon-triangle-right"></span></div>
-      </span>
-    </div>
+        <div class="center">
+          <strong id="time-period-label" class="time-period-label">{$timePeriodLabel}</strong>
+        </div>
+        <div class="right">
+          <button type="button" class="link icon-only open-panel button-menu-edge-right" id="{rflect.cal.predefined.BUTTON_NEW_EVENT_ID}">
+            <i class="icon icon-new icon-new-right"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <nav class="navbar navbar-lower">
+      <div class="buttons-row buttons-navigation buttons-navigation-iphone-portrait-screen">
+        <button type="button" class="button" id="{rflect.cal.predefined.BUTTON_PREV_ID}">
+          <i class="icon icon-prev icon-centered"></i>
+        </button>
+        <button type="button" class="button" id="{rflect.cal.predefined.BUTTON_NOW_ID}">
+          {rflect.cal.i18n.Symbols.NOW}
+        </button>
+        <button type="button" class="button" id="{rflect.cal.predefined.BUTTON_NEXT_ID}">
+          <i class="icon icon-next icon-centered"></i>
+        </button>
+      </div>
+    </nav>
 
     {case rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_LANDSCAPE,
         rflect.cal.Navigator.SIZE_CATEGORY.IPAD_PORTRAIT}
-    <div class="pane-left">
-      <div class="cal-menu-button goog-flat-button goog-inline-block" id="{rflect.cal.predefined.BUTTON_MENU_ID}">
-        <span class="octicon icon-button octicon-three-bars"></span></div>
-    </div>
-    <div class="pane-right">
-      <span style="white-space: nowrap;">
-        <div class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav goog-flat-button-checked"
-             id="{rflect.cal.predefined.BUTTON_NOW_ID}">
-          {rflect.cal.i18n.Symbols.NOW}
+
+    <nav class="navbar navbar-{$sizeCategory}">
+      <div class="navbar-inner navbar-on-center">
+        <div class="left">
+          <button type="button" class="link icon-only open-panel button-menu-edge-left" id="{rflect.cal.predefined.BUTTON_MENU_ID}">
+            <i class="icon icon-bars"></i>
+          </button>
         </div>
-        <div class="goog-flat-button-collapse-left goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"
-             id="{rflect.cal.predefined.BUTTON_PREV_ID}"><span class="octicon icon-button octicon-triangle-left"></span></div>
-        <div class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav button-spacy-margin-right"
-             id="{rflect.cal.predefined.BUTTON_NEXT_ID}"><span class="octicon icon-button octicon-triangle-right"></span></div>
-      </span>
-      <div class="cal-menu-button-new-event emphasis-button cal-menu-button goog-flat-button goog-inline-block"
-           id="{rflect.cal.predefined.BUTTON_NEW_EVENT_ID}"><span class="octicon icon-button octicon-plus"></span></div>
-    </div>
-    <div class="pane-center pane-center-nav">
-      <div id="time-period-label" class="time-period-label">
-        {$timePeriodLabel}
+        <div class="center">
+          <strong id="time-period-label" class="time-period-label">{$timePeriodLabel}</strong>
+        </div>
+        <div class="right">
+          <div class="buttons-row buttons-navigation buttons-navigation-iphone-portrait-screen">
+            <button type="button" class="button" id="{rflect.cal.predefined.BUTTON_PREV_ID}">
+              <i class="icon icon-prev icon-centered"></i>
+            </button>
+            <button type="button" class="button" id="{rflect.cal.predefined.BUTTON_NOW_ID}">
+              {rflect.cal.i18n.Symbols.NOW}
+            </button>
+            <button type="button" class="button" id="{rflect.cal.predefined.BUTTON_NEXT_ID}">
+              <i class="icon icon-next icon-centered"></i>
+            </button>
+          </div>
+          <button type="button" class="link icon-only open-panel button-menu-edge-right" id="{rflect.cal.predefined.BUTTON_NEW_EVENT_ID}">
+            <i class="icon icon-new icon-new-right"></i>
+          </button>
+        </div>
       </div>
-    </div>
+    </nav>
 
     {case rflect.cal.Navigator.SIZE_CATEGORY.IPAD_LANDSCAPE,
         rflect.cal.Navigator.SIZE_CATEGORY.WIDE,
         rflect.cal.Navigator.SIZE_CATEGORY.VERY_WIDE}
-    <div class="pane-left">
-      {if rflect.SIDE_PANE_MOVABLE}
-      <div class="cal-menu-button goog-flat-button goog-inline-block button-spacy-margin-left" id="{rflect.cal.predefined.BUTTON_MENU_ID}">
-        <span class="octicon icon-button octicon-three-bars"></span></div>
-      {else}
-      {/if}
-      <span class="button-group">
-        <div id="{rflect.cal.predefined.BUTTON_DAY_ID}"
-             class="goog-flat-button-collapse-right goog-toggle-button goog-flat-button-bord-rad-collapse-right cal-menu-button goog-inline-block goog-flat-button button-spacy-margin-left">
-          {rflect.cal.i18n.Symbols.DAY}
+
+    <nav class="navbar navbar-{$sizeCategory}">
+      <div class="navbar-inner navbar-on-center">
+        <div class="left">
+          {if rflect.SIDE_PANE_MOVABLE}
+          <button type="button" class="link icon-only open-panel button-menu-edge-left" id="{rflect.cal.predefined.BUTTON_MENU_ID}">
+            <i class="icon icon-bars"></i>
+          </button>
+          {/if}
+          <div class="buttons-row buttons-navigation buttons-navigation-iphone-portrait-screen">
+            <button type="button" class="button" id="{rflect.cal.predefined.BUTTON_DAY_ID}">
+              {rflect.cal.i18n.Symbols.DAY}
+            </button>
+            <button type="button" class="button" id="{rflect.cal.predefined.BUTTON_WEEK_ID}">
+              {rflect.cal.i18n.Symbols.WEEK}
+            </button>
+            <button type="button" class="button" id="{rflect.cal.predefined.BUTTON_MONTH_ID}">
+              {rflect.cal.i18n.Symbols.MONTH}
+            </button>
+          </div>
         </div>
-        <div id="{rflect.cal.predefined.BUTTON_WEEK_ID}"
-             class="goog-flat-button-collapse-left goog-toggle-button goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button goog-inline-block goog-flat-button goog-flat-button-checked">
-          {rflect.cal.i18n.Symbols.WEEK}
+        <div class="center">
+          <strong id="time-period-label" class="time-period-label">{$timePeriodLabel}</strong>
         </div>
-        <div id="{rflect.cal.predefined.BUTTON_MONTH_ID}"
-             class="goog-flat-button goog-flat-button-collapse-left goog-toggle-button goog-flat-button-bord-rad-collapse-left cal-menu-button cal-menu-button-month-view goog-inline-block button-spacy-margin-right">
-          {rflect.cal.i18n.Symbols.MONTH}
+        <div class="right">
+          <div class="buttons-row buttons-navigation buttons-navigation-iphone-portrait-screen">
+            <button type="button" class="button" id="{rflect.cal.predefined.BUTTON_PREV_ID}">
+              <i class="icon icon-prev icon-centered"></i>
+            </button>
+            <button type="button" class="button" id="{rflect.cal.predefined.BUTTON_NOW_ID}">
+              {rflect.cal.i18n.Symbols.NOW}
+            </button>
+            <button type="button" class="button" id="{rflect.cal.predefined.BUTTON_NEXT_ID}">
+              <i class="icon icon-next icon-centered"></i>
+            </button>
+          </div>
+          <button type="button" class="link icon-only open-panel button-menu-edge-right" id="{rflect.cal.predefined.BUTTON_NEW_EVENT_ID}">
+            <i class="icon icon-new icon-new-right"></i>
+          </button>
         </div>
-      </span>
-    </div>
-    <div class="pane-right">
-      <span class="button-group">
-        <div class="goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-right cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav goog-flat-button-checked button-spacy-margin-left"
-             id="{rflect.cal.predefined.BUTTON_NOW_ID}">
-          {rflect.cal.i18n.Symbols.NOW}
-        </div>
-        <div class="goog-flat-button-collapse-left goog-flat-button-collapse-right goog-flat-button-bord-rad-collapse-both cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav"
-             id="{rflect.cal.predefined.BUTTON_PREV_ID}"><span class="octicon icon-button octicon-triangle-left button-spacy-margin-left"></span></div>
-        <div class="goog-flat-button-collapse-left goog-flat-button-bord-rad-collapse-left cal-menu-button goog-flat-button goog-inline-block cal-menu-button-nav button-spacy-margin-right"
-             id="{rflect.cal.predefined.BUTTON_NEXT_ID}"><span class="octicon icon-button octicon-triangle-right"></span></div>
-      </span>
-      <div class="cal-menu-button-new-event emphasis-button cal-menu-button goog-flat-button goog-inline-block button-spacy-margin-right"
-           id="{rflect.cal.predefined.BUTTON_NEW_EVENT_ID}"><span class="octicon icon-button octicon-plus"></span></div>
-    </div>
-    <div class="pane-center pane-center-nav">
-      <div id="time-period-label" class="time-period-label">
-        {$timePeriodLabel}
       </div>
-    </div>
+    </nav>
 
     {default}
 

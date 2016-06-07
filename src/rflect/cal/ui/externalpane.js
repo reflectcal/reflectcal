@@ -13,7 +13,8 @@ goog.require('goog.array');
 goog.require('goog.dom.classes');
 goog.require('goog.ui.Button');
 goog.require('rflect.ui.BuildableComponent');
-goog.require('goog.ui.FlatButtonRenderer');
+goog.require('goog.ui.NativeButtonRenderer');
+goog.require('goog.ui.ButtonRenderer');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.PaneShowBehavior');
@@ -71,17 +72,17 @@ rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
   this.transport = aTransport;
 
   this.addChild(this.buttonBack1 = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonPrimary1 = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonBack2 = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonPrimary2 = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
 
   if (this.isButtonDeleteEnabled()) {
     this.addChild(this.buttonDelete = new goog.ui.Button(null,
-        goog.ui.FlatButtonRenderer.getInstance()));
+        goog.ui.ButtonRenderer.getInstance()));
   }
 
   if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
@@ -170,8 +171,23 @@ rflect.cal.ui.ExternalPane.prototype.buildControlPane = function(
     showButtonDelete: this.isButtonDeleteEnabled() && aShowButtonDelete,
     showButtonNew: aShowButtonNew,
     showButtonSave: aShowButtonSave,
-    upper: aUpper
+    upper: aUpper,
+    controlPaneIsInDialogAndFirstByIndex:
+        this.controlPaneIsInDialogAndFirstByIndex()
   });
+}
+
+
+/**
+ * @return {boolean} Whether navbar belongs to the first page and is in
+ * dialog.
+ * */
+rflect.cal.ui.ExternalPane.prototype.controlPaneIsInDialogAndFirstByIndex =
+    function() {
+  return !!(this.getParent() && this.getParent().getParent() &&
+      this.getParent().getParent() instanceof
+      rflect.cal.ui.ScreenManagerPopup &&
+      this.getParent().indexOfChild(this) == 0);
 }
 
 
@@ -181,15 +197,15 @@ rflect.cal.ui.ExternalPane.prototype.buildControlPane = function(
 rflect.cal.ui.ExternalPane.prototype.enterDocument = function() {
 
   var controlPane1 = this.getElement().querySelector(
-      '.control-pane-external');
+      '.navbar');
 
   this.buttonBack1.decorate(controlPane1.querySelector(
-      '.pane-left > .goog-flat-button'));
+      '.left > a'));
   this.buttonPrimary1.decorate(controlPane1.querySelector(
-      '.pane-right > .goog-flat-button'));
+      '.right > button'));
   if (this.isButtonDeleteEnabled()) {
     this.buttonDelete.decorate(this.getElement().querySelector(
-        '.pane-sticky-bottom > .goog-flat-button'));
+        '.button-danger'));
   }
 
   this.getHandler().listen(this.containerSizeMonitor,
@@ -253,6 +269,44 @@ rflect.cal.ui.ExternalPane.prototype.resetMomentumScroller = function() {
   this.addMomentumScroller();
   this.momentumScroller.animateWithinBounds(0);
 };
+
+
+/**
+ * @param {boolean} aShow
+ */
+rflect.cal.ui.ExternalPane.prototype.showButtonDelete = function(aShow) {
+  if (this.isButtonDeleteEnabled()) {
+    this.buttonDelete.setVisible(aShow);
+    goog.style.showElement(this.buttonDelete.getElement().parentElement.
+        parentElement.parentElement, aShow);
+  }
+}
+
+
+/**@override*/
+rflect.cal.ui.ExternalPane.prototype.getId = function() {
+  return rflect.cal.ui.ExternalPane.superClass_.getId.call(this) + '-';
+}
+
+
+/**
+ * @return {boolean} Whether this pane is visible.
+ */
+rflect.cal.ui.ExternalPane.prototype.isVisible = function() {
+  const parent = this.getParent();
+  if (parent && parent instanceof rflect.cal.ui.ScreenManager &&
+      parent.isVisible(this)) {
+    const grandParent = parent.getParent();
+    if (grandParent && grandParent instanceof
+        rflect.cal.ui.ScreenManagerPopup) {
+      return grandParent.isVisible();
+    } else {
+      return true;
+    }
+  } else {
+    return false;
+  }
+}
 
 
 /**

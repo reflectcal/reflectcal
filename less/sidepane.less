@@ -37,7 +37,6 @@
   height: @spacerHeight;
   border-bottom: 1px solid #e5e5e5;
   margin-bottom: -1px;
-  background-color: rgb(246,246,246);
 }
 
 .side-pane-spacer-colored {
@@ -83,12 +82,12 @@
 
 .side-pane-scrollable {
   margin-top: 20px;
-  height: ~"calc(100% - 355px)";
+  height: ~"calc(100% - 336px)";
   transition: height .3s;
 }
 
 .side-pane-scrollable-no-spacer {
-  height: %(~"calc(100% - 355px + %d)", @spacerHeight);
+  height: %(~"calc(100% - 356px + %d)", @spacerHeight);
 }
 
 .side-pane-scrollable-native-scroll {
@@ -147,7 +146,6 @@
   border: none;
   .border-radius(0);
   background: none;
-  box-shadow: none;
   font-weight: normal;
 }
 

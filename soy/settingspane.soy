@@ -3,76 +3,115 @@
 /**
  * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
+ * @param controlPaneIsInDialogAndFirstByIndex Whether navbar belongs to
+ * the first page and is in dialog.
  */
 {template .settingsPane autoescape="false"}
   {if $includeOuterHTML}
-  <div id="{$id}" class="settings-pane">
+  <div id="{$id}" class="view settings-pane">
   {/if}
     {call rflect.cal.ui.soy.externalpane.controlPane}
       {param backButtonLabel: rflect.cal.i18n.Symbols.TO_CALENDAR /}
-      {param showDeleteButton: false /}
       {param showBackButton: true /}
       {param showNewButton: false /}
       {param showSaveButton: true /}
-      {param upper: true /}
       {param header: rflect.cal.i18n.Symbols.SETTINGS /}
+      {param controlPaneIsInDialogAndFirstByIndex: $controlPaneIsInDialogAndFirstByIndex /}
     {/call}
 
-    <div class="settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">
-      <div class="settings-body">
-        <div class="settings-body-inner">
-          <div class="event-pane-cont">
-            <label class="goog-inline-block event-pane-label label-fluid event-pane-calendars-label"
-                for="settings-languages">
-              {rflect.cal.i18n.Symbols.LANGUAGES}
-            </label>
-            <div class="button dropdown settings-pane-select">
-              <select id="settings-languages">
-                {foreach $language in LANGUAGE_NAMES}
-                <option value="{$language[0]}" class="" id="lang-{$language[0]}">{$language[1]}</option>
-                {/foreach}
-              </select>
-            </div>
-          </div>
-          <div class="event-pane-cont">
-            <div id="button-to-calendars" class="goog-inline-block goog-flat-button button-next-pane button-minimal">
-              {rflect.cal.i18n.Symbols.CALENDARS_LABEL}
-              <i class="octicon icon-button octicon-chevron-right icon-next-pane"></i>
-            </div>
+    <div class="pages settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">
+
+      <div class="page settings-body">
+
+        <div class="page-content settings-body-inner">
+          <div class="list-block">
+            <ul>
+              <li>
+                <div class="item-content">
+                  <div class="item-inner">
+                    <label class="item-title label" for="settings-languages">
+                      {rflect.cal.i18n.Symbols.LANGUAGES}
+                    </label>
+                    <div class="item-input">
+                      <select id="{$id}settings-languages">
+                        {foreach $language in LANGUAGE_NAMES}
+                        <option value="{$language[0]}" class="" id="{$id}lang-{$language[0]}">
+                          {$language[1]}
+                        </option>
+                        {/foreach}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
           </div>
 
-          <div class="event-pane-cont" id="settings-debug-mode">
-            <span id="settings-debug-mode-sub-cont">
-              <label class="goog-inline-block event-pane-label"
-              for="settings-debug-mode">{rflect.cal.i18n.Symbols.DEBUG_MODE}</label>
-            </span>
+          <div class="list-block">
+            <ul>
+              <li>
+                <a /*href="/calendars"*/ class="item-link" id="{$id}button-to-calendars">
+                  <div class="item-content">
+                    <div class="item-inner">
+                      <div class="item-title">{rflect.cal.i18n.Symbols.CALENDARS_LABEL}</div>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            </ul>
           </div>
 
-          <div class="event-pane-cont">
-            <label class="goog-inline-block event-pane-label label-fluid event-pane-calendars-label"
-                for="settings-themes">
-              {rflect.cal.i18n.Symbols.VISUAL_THEME}
-            </label>
-            <div class="button dropdown settings-pane-select">
-              <select id="settings-themes">
-                {foreach $themeName in rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES}
-                <option value="{$themeName[0]}" class="" id="theme-{$themeName[0]}">{$themeName[1]}</option>
-                {/foreach}
-              </select>
-            </div>
+          <div class="list-block">
+            <ul>
+              <li>
+                <div class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title label">{rflect.cal.i18n.Symbols.DEBUG_MODE}</div>
+                    <div class="item-input">
+                      <label class="label-switch">
+                        <input type="checkbox" id="{$id}settings-debug-mode">
+                        <div class="checkbox"></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
           </div>
 
-          <div class="event-pane-cont event-pane-cont-last">
-            <label class="goog-inline-block event-pane-label label-fluid event-pane-calendars-label logged-label"
-                for="settings-logout">
-              {rflect.cal.i18n.Symbols.LOGGED_IN_AS}{sp}
-              <b>{if USER.guest}{rflect.cal.i18n.Symbols.GUEST}{else}{USER.username}{/if}</b>
-            </label>
-            <a class="goog-inline-block goog-flat-button cal-menu-button settings-pane-control"
-                href="/logout" id="settings-logout">
-              {rflect.cal.i18n.Symbols.LOGOUT}
-            </a>
+          <div class="list-block">
+            <ul>
+              <li>
+                <div class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title label">
+                      {rflect.cal.i18n.Symbols.VISUAL_THEME}
+                    </div>
+                    <div class="item-input">
+                      <select id="{$id}settings-themes">
+                        {foreach $themeName in rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES}
+                        <option value="{$themeName[0]}" class="" id="{$id}theme-{$themeName[0]}">{$themeName[1]}</option>
+                        {/foreach}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
           </div>
+
+          <div class="content-block-title">
+            {rflect.cal.i18n.Symbols.LOGGED_IN_AS}{sp}
+            <b>{if USER.guest}{rflect.cal.i18n.Symbols.GUEST}{else}{USER.username}{/if}</b>
+          </div>
+          <div class="list-block">
+            <ul>
+              <a class="item-link button-danger" href="/logout" id="{$id}settings-logout">
+                {rflect.cal.i18n.Symbols.LOGOUT}
+              </a>
+            </ul>
+          </div>
+
         </div>
       </div>
     </div>

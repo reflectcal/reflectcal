@@ -38,11 +38,12 @@ class UpdatableComponent extends rflect.ui.BuildableComponent {
   createDom() {
     var tempElement = this.getDomHelper().createElement('temp');
 
+    this.updateBeforeRedraw();
+
     tempElement.innerHTML = this.buildHTML(true);
 
     this.setElementInternal(this.getDomHelper().
         getFirstElementChild(tempElement));
-    this.updateBeforeRedraw();
   };
 
 

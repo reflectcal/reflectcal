@@ -62,6 +62,8 @@ rflect.cal.ui.DatePicker = function(aViewManager) {
    */
   this.moRegistry_ = new rflect.ui.MouseOverRegistry();
 
+  this.basis_ = new goog.date.Date();
+
 };
 goog.inherits(rflect.cal.ui.DatePicker, rflect.ui.UpdatableComponent);
 

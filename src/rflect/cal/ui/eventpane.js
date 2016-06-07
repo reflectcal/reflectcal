@@ -26,7 +26,7 @@ goog.require('rflect.cal.ui.CalendarsSelect');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.ExternalPane');
 goog.require('rflect.cal.ui.InputDatePicker');
-goog.require('rflect.cal.ui.PageRequestEvent');
+goog.require('rflect.cal.ui.ScreenManager.PageRequestEvent');
 goog.require('rflect.cal.ui.soy.eventpane');
 goog.require('rflect.cal.ui.ScreenManager.EventTypes');
 goog.require('rflect.date.util');
@@ -52,9 +52,6 @@ rflect.cal.ui.EventPane = function(aViewManager, aTimeManager, aEventManager,
     aContainerSizeMonitor, aTransport, aNavigator) {
   rflect.cal.ui.ExternalPane.call(this, aViewManager, aTimeManager,
       aEventManager, aContainerSizeMonitor, aTransport);
-
-  this.addChild(this.checkboxAllDay_ = new rflect.ui.Checkbox());
-
 
   /**
    * Link to navigator.
@@ -142,6 +139,13 @@ rflect.cal.ui.EventPane.markInput = function(aValid, aInputEl) {
   else
     goog.dom.classes.remove(aInputEl, goog.getCssName('input-invalid'));
 }
+
+
+/**
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.checkboxAllDay_;
 
 
 /**
@@ -256,6 +260,46 @@ rflect.cal.ui.EventPane.prototype.labelEnd_;
 
 
 /**
+ * Label for start date.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.labelStartDate_;
+
+
+/**
+ * Label for start time.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.labelStartTime_;
+
+
+/**
+ * Label for end date.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.labelEndDate_;
+
+
+/**
+ * Label for end time.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.labelEndTime_;
+
+
+/**
+ * Label for end.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.labelEnd_;
+
+
+/**
  * Calendars select.
  * @type {rflect.cal.ui.CalendarsSelect}
  * @private
@@ -272,14 +316,6 @@ rflect.cal.ui.EventPane.prototype.isButtonDeleteEnabled = function() {
 
 
 /**
- * @return {boolean} Whether the component is visible.
- */
-rflect.cal.ui.EventPane.prototype.isVisible = function() {
-  return this.visible_;
-};
-
-
-/**
  * @override
  */
 rflect.cal.ui.EventPane.prototype.buildHTML = function(opt_outerHTML) {
@@ -288,7 +324,8 @@ rflect.cal.ui.EventPane.prototype.buildHTML = function(opt_outerHTML) {
     includeOuterHTML: opt_outerHTML,
     calendarsSelectHTML: this.calendarsSelect_.buildHTML(true),
     isNativeTimeInput: this.navigator_.isNativeTimeInput(),
-    calendarsSelectId: this.calendarsSelect_.getSelectId()
+    controlPaneIsInDialogAndFirstByIndex:
+        this.controlPaneIsInDialogAndFirstByIndex()
   });
 };
 
@@ -303,16 +340,17 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
 
   rflect.cal.ui.EventPane.superClass_.enterDocument.call(this);
 
-  this.inputName_ = this.getDomHelper().getElement('ep-event-name-input');
+  this.inputName_ = this.getDomHelper().getElement(`${this.getId()}ep-event-name-input`);
 
-  var allDaySubCont = this.getDomHelper().getElement('all-day-label-sub-cont');
-  this.checkboxAllDay_.render(allDaySubCont);
-  this.checkboxAllDay_.setLabel(allDaySubCont);
-  this.checkboxAllDay_.getElement().className += ' aligned-checkbox';
+  this.checkboxAllDay_ = this.getDomHelper().getElement(`${this.getId()}event-all-day`);
 
   if (isNativeTimeInput) {
     [this.inputStartDate_, this.inputStartDateTime_, this.inputEndDate_,
         this.inputEndDateTime_] = this.getTimeInputsNative_();
+
+    this.labelStart_ = this.getDomHelper().getElement(`${this.getId()}label-start`);
+    this.labelEnd_ = this.getDomHelper().getElement(`${this.getId()}label-end`);
+
   } else {
     [this.inputStartDate_, this.inputStartTime_, this.inputEndDate_,
         this.inputEndTime_] = this.getTimeInputsCustom_();
@@ -320,14 +358,19 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
     [this.startTimeAC_, this.endTimeAC_] = this.createTimeAutoCompletes_(
         this.inputStartTime_, this.inputEndTime_);
 
-    this.inputDatePicker_.addInput(this.inputStartDate_);
-    this.inputDatePicker_.addInput(this.inputEndDate_);
+    const dateContainers = this.getElement().querySelectorAll('.date-cont');
+    this.inputDatePicker_.addInput(this.inputStartDate_, dateContainers[0]);
+    this.inputDatePicker_.addInput(this.inputEndDate_, dateContainers[1]);
+
+    this.labelStartDate_ = this.getDomHelper().getElement(`${this.getId()}label-start-date`);
+    this.labelStartTime_ = this.getDomHelper().getElement(`${this.getId()}label-start-time`);
+    this.labelEndDate_ = this.getDomHelper().getElement(`${this.getId()}label-end-date`);
+    this.labelEndTime_ = this.getDomHelper().getElement(`${this.getId()}label-end-time`);
+
   }
 
-  this.labelStart_ = this.getDomHelper().getElement('label-start');
-  this.labelEnd_ = this.getDomHelper().getElement('label-end');
 
-  this.textAreaDesc_ = this.getDomHelper().getElement('event-description');
+  this.textAreaDesc_ = this.getDomHelper().getElement(`${this.getId()}event-description`);
 
   // Menu commands.
   this.getHandler().listen(this.buttonBack1,
@@ -338,7 +381,7 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
       .listen(this.buttonDelete,
       goog.ui.Component.EventType.ACTION, this.onDelete_, false, this)
       .listen(this.checkboxAllDay_,
-      goog.ui.Component.EventType.CHANGE, this.onCheck_, false, this)
+      goog.events.EventType.CHANGE, this.onCheck_, false, this)
 
       .listen(this.inputStartDate_,
       goog.events.EventType.FOCUS, this.onInputFocus_, false, this)
@@ -368,10 +411,10 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
   }
 
   //Show/hide actions.
-  this.getHandler().listen(this.viewManager,
+  this.getHandler().listen(this.getParent(),
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this)
-      .listen(this.viewManager,
+      .listen(this.getParent(),
       rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE, this.onPageChange_,
       false, this);
 };
@@ -382,10 +425,10 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
  * @private
  */
 rflect.cal.ui.EventPane.prototype.getTimeInputsNative_ = function() {
-  return [this.getDomHelper().getElement('event-start-date'),
-      this.getDomHelper().getElement('event-start-datetime'),
-      this.getDomHelper().getElement('event-end-date'),
-      this.getDomHelper().getElement('event-end-datetime')];
+  return [this.getDomHelper().getElement(`${this.getId()}event-start-date`),
+      this.getDomHelper().getElement(`${this.getId()}event-start-datetime`),
+      this.getDomHelper().getElement(`${this.getId()}event-end-date`),
+      this.getDomHelper().getElement(`${this.getId()}event-end-datetime`)];
 }
 
 
@@ -394,10 +437,10 @@ rflect.cal.ui.EventPane.prototype.getTimeInputsNative_ = function() {
  * @private
  */
 rflect.cal.ui.EventPane.prototype.getTimeInputsCustom_ = function() {
-  return [this.getDomHelper().getElement('event-start-date'),
-      this.getDomHelper().getElement('event-start-time'),
-      this.getDomHelper().getElement('event-end-date'),
-      this.getDomHelper().getElement('event-end-time')];
+  return [this.getDomHelper().getElement(`${this.getId()}event-start-date`),
+      this.getDomHelper().getElement(`${this.getId()}event-start-time`),
+      this.getDomHelper().getElement(`${this.getId()}event-end-date`),
+      this.getDomHelper().getElement(`${this.getId()}event-end-time`)];
 }
 
 
@@ -410,11 +453,17 @@ rflect.cal.ui.EventPane.prototype.getTimeInputsCustom_ = function() {
 rflect.cal.ui.EventPane.prototype.createTimeAutoCompletes_ = function(
     aInputStartTime, aInputEndTime) {
   var timeLabels = rflect.date.util.getTimeLabels();
+  const timeContainers = this.getElement().querySelectorAll(
+      '.time-cont');
   var startTimeAC = rflect.cal.ui.ac.createTimeAutoComplete(
-      timeLabels, aInputStartTime, false);
+      timeLabels, aInputStartTime,
+      timeContainers[0],
+      false);
 
   var endTimeAC = rflect.cal.ui.ac.createTimeAutoComplete(
-      timeLabels, aInputEndTime, false);
+      timeLabels, aInputEndTime,
+      timeContainers[1],
+      false);
 
   //Adding custom class name to renderer.
   startTimeAC.getRenderer().className += ' ' +
@@ -435,9 +484,6 @@ rflect.cal.ui.EventPane.prototype.updateLabels_ = function(aAllDay){
         'event-start-datetime';
     this.labelEnd_.htmlFor = aAllDay ? 'event-end-date' :
         'event-end-datetime';
-  } else {
-    this.labelStart_.htmlFor = 'event-start-date';
-    this.labelEnd_.htmlFor = 'event-end-date';
   }
 }
 
@@ -482,15 +528,23 @@ rflect.cal.ui.EventPane.prototype.setTouchHoldMode = function(
 
 
 /**
+ * @return {boolean} Whether we're creating event by touch
+ * hold gesture.
+ */
+rflect.cal.ui.EventPane.prototype.getTouchHoldMode = function() {
+  return !!this.touchHoldMode_;
+}
+
+
+/**
  * Component key listener.
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
 rflect.cal.ui.EventPane.prototype.onKeyDown_ = function(aEvent) {
-
-  if (this.viewManager.isVisible(this) &&
-      !this.startTimeAC_.getRenderer().isVisible() &&
-      !this.endTimeAC_.getRenderer().isVisible()) {
+  if (this.isVisible() &&
+      (this.startTimeAC_ ? !this.startTimeAC_.getRenderer().isVisible() : true) &&
+      (this.endTimeAC_ ? !this.endTimeAC_.getRenderer().isVisible() : true)) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 
@@ -560,16 +614,23 @@ rflect.cal.ui.EventPane.prototype.updateAC_ = function(aAC) {
 }
 
 
+rflect.cal.ui.EventPane.prototype.cancelEventCreation = function () {
+  if (this.touchHoldMode_ &&
+      //Only fire delete if event pane is first by index.
+      this.getParent().indexOfChild(this) === 0) {
+    this.eventManager.eventHolder.endWithDelete();
+    this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.DELETE);
+  }
+};
+
+
 /**
  * Cancel action listener.
  * Default action is to hide pane.
  */
 rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
-  if (this.touchHoldMode_) {
-    this.eventManager.eventHolder.endWithDelete();
-    this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.DELETE);
-  }
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+  this.cancelEventCreation();
+  this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
 }
 
 
@@ -577,13 +638,15 @@ rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
  * Save action listener.
  */
 rflect.cal.ui.EventPane.prototype.onSave_ = function() {
+  if (goog.DEBUG)
+    console.log('onSave_: ');
   if (this.scanValues()) {
     this.eventManager.setLastUsedCalendarId(
         this.eventManager.eventHolder.getCurrentEvent().calendarId);
 
     this.transport.saveEventAsync(this.eventManager.eventHolder.endWithEdit());
     this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.SAVE);
-    this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+    this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
   }
 }
 
@@ -597,7 +660,7 @@ rflect.cal.ui.EventPane.prototype.onDelete_ = function(aEvent) {
       this.eventManager.eventHolder.endWithDelete());
 
   this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.DELETE);
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+  this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
 }
 
 
@@ -609,7 +672,7 @@ rflect.cal.ui.EventPane.prototype.onCheck_ = function(aEvent) {
   var eh = this.eventManager.eventHolder;
   var checked;
   if (aEvent.target == this.checkboxAllDay_) {
-    checked = this.checkboxAllDay_.isChecked();
+    checked = this.checkboxAllDay_.checked;
     this.showTimeInputs_(!checked);
     eh.setAllDay(checked);
 
@@ -630,8 +693,14 @@ rflect.cal.ui.EventPane.prototype.showTimeInputs_ = function(aShow) {
     goog.style.showElement(this.inputStartDate_, !aShow);
     goog.style.showElement(this.inputEndDate_, !aShow);
   } else {
-    goog.style.showElement(this.inputStartTime_, aShow);
-    goog.style.showElement(this.inputEndTime_, aShow);
+    this.removeMomentumScroller();
+
+    goog.style.showElement(this.inputStartTime_.
+      parentElement.parentElement.parentElement.parentElement, aShow);
+    goog.style.showElement(this.inputEndTime_.
+      parentElement.parentElement.parentElement.parentElement, aShow);
+
+    this.addMomentumScroller();
   }
 }
 
@@ -656,23 +725,23 @@ rflect.cal.ui.EventPane.prototype.onBeforePageChange_ = function(aEvent) {
 rflect.cal.ui.EventPane.prototype.displayValues = function() {
   var eh = this.eventManager.eventHolder;
 
-  this.buttonDelete.setVisible(!this.newEventMode_);
-  goog.style.showElement(this.buttonDelete.getElement().parentElement,
-      !this.newEventMode_);
+  if (eh.isInProgress()) {
+    this.showButtonDelete(!this.newEventMode_);
 
-  this.displayDates_();
+    this.displayDates_();
 
-  this.inputName_.value = eh.getSummary();
+    this.inputName_.value = eh.getSummary();
 
-  this.textAreaDesc_.value = eh.getDescription();
+    this.textAreaDesc_.value = eh.getDescription();
 
-  this.checkboxAllDay_.setChecked(eh.getAllDay());
+    this.checkboxAllDay_.checked = eh.getAllDay();
 
-  this.calendarsSelect_.update();
-  this.calendarsSelect_.setCalendarId(eh.getCalendarId());
+    this.calendarsSelect_.update();
+    this.calendarsSelect_.setCalendarId(eh.getCalendarId());
 
-  this.showTimeInputs_(!eh.getAllDay());
-  this.updateLabels_(eh.getAllDay());
+    this.showTimeInputs_(!eh.getAllDay());
+    this.updateLabels_(eh.getAllDay());
+  }
 };
 
 
@@ -773,6 +842,8 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
   var valid = false;
 
   var eh = this.eventManager.eventHolder;
+  if (goog.DEBUG)
+      console.log('eh: ', eh);
 
   eh.setSummary(this.inputName_.value);
 
@@ -921,6 +992,7 @@ rflect.cal.ui.EventPane.prototype.disposeInternal = function() {
   this.inputEndTime_ = null;
   this.inputStartDateTime_ = null;
   this.inputEndDateTime_ = null;
+  this.checkboxAllDay_ = null;
 
   this.labelStart_ = null;
   this.labelEnd_ = null;

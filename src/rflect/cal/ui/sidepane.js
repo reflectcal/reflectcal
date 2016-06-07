@@ -312,7 +312,7 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
       listen(this.showBehavior,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
       this.onSlideBreak_, false, this).
-      listen(this.viewManager_,
+      listen(this.getParent().getParent(),
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this);
 };
@@ -402,7 +402,7 @@ rflect.cal.ui.SidePane.prototype.getGlassElement_ = function() {
 
 /***/
 rflect.cal.ui.SidePane.prototype.addGlassPane = function() {
-  this.getDomHelper().getElement('screen-manager')
+  this.getDomHelper().getElement(this.getParent().getParent().getElement())
       .appendChild(this.getGlassElement_());
   if (rflect.cal.i18n.Symbols.isLightTheme(
       this.viewManager_.user['settings']['visualTheme'])) {

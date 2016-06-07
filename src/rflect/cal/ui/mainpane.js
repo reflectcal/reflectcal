@@ -262,13 +262,15 @@ goog.inherits(rflect.cal.ui.MainPane.EditDialogShowEvent, goog.events.Event);
 /**
  * Event that is fired when edit component (dialog or pane) should be shown.
  * @param {rflect.cal.events.Event} aCalendarEvent
- * @param {boolean} aShowPane
+ * @param {boolean} aEditing
  * @param {boolean} aByTouchHold
+ * @param {Element} aTargetElement
+ * @param {goog.math.Coordinate} aTargetCoordinate
  * @constructor
  * @extends {goog.events.Event}
  */
 rflect.cal.ui.MainPane.EditComponentShowEvent = function(aCalendarEvent,
-    aShowPane, aByTouchHold) {
+    aEditing, aByTouchHold, aTargetElement, aTargetCoordinate) {
   goog.events.Event.call(this, rflect.cal.ui.MainPane.EventTypes.
       EDIT_COMPONENT_SHOW);
 
@@ -280,12 +282,23 @@ rflect.cal.ui.MainPane.EditComponentShowEvent = function(aCalendarEvent,
   /**
    * @type {boolean}
    */
-  this.showPane = aShowPane;
+  this.editing = aEditing;
 
   /**
    * @type {boolean}
    */
   this.byTouchHold = aByTouchHold;
+
+  /**
+   * @type {Element}
+   */
+  this.targetElement = aTargetElement;
+
+  /**
+   * @type {goog.math.Coordinate}
+   */
+  this.targetCoordinate = aTargetCoordinate;
+   
 }
 goog.inherits(rflect.cal.ui.MainPane.EditComponentShowEvent, goog.events.Event);
 
@@ -644,6 +657,8 @@ rflect.cal.ui.MainPane.prototype.updateAfterRedraw = function({
 } = {
   doNotAddMomentumScroller: false
 }) {
+  if (goog.DEBUG)
+        console.log('doNotAddMomentumScroller: ', doNotAddMomentumScroller);
   this.updateScrollableSizesAndDom();
 
   // We add scroll listeners on freshly built content.
@@ -726,6 +741,9 @@ rflect.cal.ui.MainPane.prototype.removeScrollListeners_ = function() {
  * Removes scroll listeners on each update.
  */
 rflect.cal.ui.MainPane.prototype.removeMomentumScroller = function() {
+  if (goog.DEBUG)
+        console.log('removeMomentumScroller: ');
+
   var elementWk = this.getDomHelper().getElement(
       rflect.cal.predefined.MainPane.ELEMENT_ID.GRID_TABLE_CONT);
   var elementMn = this.getDomHelper().getElement('grid-table-wrapper-outer');
@@ -1243,7 +1261,7 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
   this.getHandler()
       .listen(this.transport_, rflect.cal.Transport.EventTypes.SAVE_EVENT,
       this.onSaveEvent_, false, this)
-      .listen(this.viewManager_,
+      .listen(this.getParent().getParent(),
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this);
 
@@ -1381,8 +1399,7 @@ rflect.cal.ui.MainPane.prototype.onClick_ = function(aEvent) {
       !this.selectionMask_.wasDragged() &&
       !this.touchHoldHelper_.getTouchHoldWasFired()) {
 
-    this.showEventEditComponent_(target, className,
-        rflect.TOUCH_INTERFACE_ENABLED);
+    this.showEventEditComponent_(aEvent, className, true);
 
   }
 };
@@ -1418,7 +1435,7 @@ rflect.cal.ui.MainPane.prototype.onTouchEndInternal_ = function(aEvent) {
   if ((this.isChipOrChild_(className) || this.isGrip_(className)) &&
       !this.selectionMask_.wasDragged() && !this.touchWasMoved(aEvent)) {
 
-    this.showEventEditComponent_(target, className, true);
+    this.showEventEditComponent_(aEvent, className, true);
 
   }
 }
@@ -1442,7 +1459,9 @@ rflect.cal.ui.MainPane.prototype.onTouchHold_ = function(aEvent) {
  */
 rflect.cal.ui.MainPane.prototype.onTouchHoldEnd_ = function(aEvent) {
   this.dispatchEvent(new rflect.cal.ui.MainPane.EditComponentShowEvent(null,
-      true, true));
+      false, true, /**@type {Element}*/ (aEvent.target),
+      new goog.math.Coordinate(aEvent.clientX, aEvent.clientY)));
+  this.addMomentumScroller();
 }
 
 
@@ -1457,7 +1476,7 @@ rflect.cal.ui.MainPane.prototype.onDoubleClick_ = function(aEvent) {
   var className = target.className;
 
   if (this.isChipOrChild_(className) || this.isGrip_(className)) {
-    this.showEventEditComponent_(target, className, true);
+    this.showEventEditComponent_(aEvent, className, true);
   }
 
   aEvent.preventDefault();
@@ -1494,18 +1513,20 @@ rflect.cal.ui.MainPane.prototype.getChipElement_ = function(aTarget) {
 
 
 /**
- * @param {Element} aTarget Element that was clicked to invoke dialog.
+ * @param {goog.events.Event} aEvent Event that was fired when element was 
+ * clicked to invoke dialog.
  * @param {string} aChipClassName Class name of chip.
  * @param {boolean=} aShowPane Whether to show event edit pane.
  */
-rflect.cal.ui.MainPane.prototype.showEventEditComponent_ = function(aTarget,
+rflect.cal.ui.MainPane.prototype.showEventEditComponent_ = function(aEvent,
                                                          aChipClassName,
                                                          aShowPane) {
+  const target = /** @type {Element}*/ (aEvent.target);
+  var calendarEvent = this.getEventByTarget_(target);
 
-  var event = this.getEventByTarget_(aTarget);
-
-  this.dispatchEvent(new rflect.cal.ui.MainPane.EditComponentShowEvent(event,
-      !!aShowPane, false));
+  this.dispatchEvent(new rflect.cal.ui.MainPane.EditComponentShowEvent(
+      calendarEvent, true, false, target,
+      new goog.math.Coordinate(aEvent.clientX, aEvent.clientY)));
 }
 
 
@@ -2168,10 +2189,11 @@ rflect.cal.ui.MainPane.prototype.onMouseUp_ = function (aEvent) {
         this.endChipDrag_();
       }
     } else {
-      if (this.dispatchEvent(new rflect.cal.ui.MainPane.
-          SaveDialogShowEvent())) {
-        this.beginEventCreation();      
-      }
+      this.beginEventCreation();
+      this.dispatchEvent(new rflect.cal.ui.MainPane.EditComponentShowEvent(
+        this.eventManager_.eventHolder.getCurrentEvent(), false, false,
+        /**@type {Element}*/ (aEvent.target),
+        new goog.math.Coordinate(aEvent.clientX, aEvent.clientY)));
     }
 
     this.selectionMask_.close();

@@ -24,7 +24,7 @@ goog.require('rflect.cal.ui.EventPane.EventTypes');
 goog.require('rflect.cal.ui.MainBodyAdaptiveSizeHelper');
 goog.require('rflect.cal.ui.MainPane');
 goog.require('rflect.cal.ui.MiniCal');
-goog.require('rflect.cal.ui.PageRequestEvent');
+goog.require('rflect.cal.ui.ScreenManager.PageRequestEvent');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.cal.ui.PaneShowBehavior.SlideEvent');
 goog.require('rflect.cal.ui.ScreenManager.EventTypes');
@@ -351,9 +351,7 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
       .listen(this.sidePane_.showBehavior,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
       this.onSidePaneSlide_, false, this)
-      .listen(this.viewManager_,
-      rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
-      this.onBeforePageChange_, false, this)
+   
       .listen(this.getElement(),
       rflect.browser.transitionend.VENDOR_TRANSITION_END_NAMES,
       this.onMainBodyTransitionEnd, false, this);
