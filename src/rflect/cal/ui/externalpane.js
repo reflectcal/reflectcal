@@ -14,6 +14,7 @@ goog.require('goog.dom.classes');
 goog.require('goog.ui.Button');
 goog.require('rflect.ui.BuildableComponent');
 goog.require('goog.ui.NativeButtonRenderer');
+goog.require('goog.ui.ButtonRenderer');
 goog.require('rflect.cal.i18n.Symbols');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.PaneShowBehavior');
@@ -71,11 +72,11 @@ rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
   this.transport = aTransport;
 
   this.addChild(this.buttonBack1 = new goog.ui.Button(null,
-      goog.ui.NativeButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonPrimary1 = new goog.ui.Button(null,
       goog.ui.NativeButtonRenderer.getInstance()));
   this.addChild(this.buttonBack2 = new goog.ui.Button(null,
-      goog.ui.NativeButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonPrimary2 = new goog.ui.Button(null,
       goog.ui.NativeButtonRenderer.getInstance()));
 
@@ -184,7 +185,7 @@ rflect.cal.ui.ExternalPane.prototype.enterDocument = function() {
       '.navbar');
 
   this.buttonBack1.decorate(controlPane1.querySelector(
-      '.left > button'));
+      '.left > a'));
   this.buttonPrimary1.decorate(controlPane1.querySelector(
       '.right > button'));
   if (this.isButtonDeleteEnabled()) {

@@ -122,7 +122,7 @@ rflect.cal.ui.CalendarsSelect.prototype.updateBeforeRedraw = function() {
  * @override
  */
 rflect.cal.ui.CalendarsSelect.prototype.updateAfterRedraw = function() {
-  this.select_ = this.getElement().querySelector('.event-calendars');
+  this.select_ = this.getElement().querySelector('select');
   this.recallSelectedOption_();
 }
 
@@ -131,7 +131,7 @@ rflect.cal.ui.CalendarsSelect.prototype.updateAfterRedraw = function() {
  * @override
  */
 rflect.cal.ui.CalendarsSelect.prototype.enterDocument = function() {
-  this.select_ = this.getElement().querySelector('.event-calendars');
+  this.select_ = this.getElement().querySelector('select');
 }
 
 

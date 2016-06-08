@@ -256,6 +256,46 @@ rflect.cal.ui.EventPane.prototype.labelEnd_;
 
 
 /**
+ * Label for start date.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.labelStartDate_;
+
+
+/**
+ * Label for start time.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.labelStartTime_;
+
+
+/**
+ * Label for end date.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.labelEndDate_;
+
+
+/**
+ * Label for end time.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.labelEndTime_;
+
+
+/**
+ * Label for end.
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.EventPane.prototype.labelEnd_;
+
+
+/**
  * Calendars select.
  * @type {rflect.cal.ui.CalendarsSelect}
  * @private
@@ -312,6 +352,10 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
   if (isNativeTimeInput) {
     [this.inputStartDate_, this.inputStartDateTime_, this.inputEndDate_,
         this.inputEndDateTime_] = this.getTimeInputsNative_();
+
+    this.labelStart_ = this.getDomHelper().getElement('label-start');
+    this.labelEnd_ = this.getDomHelper().getElement('label-end');
+
   } else {
     [this.inputStartDate_, this.inputStartTime_, this.inputEndDate_,
         this.inputEndTime_] = this.getTimeInputsCustom_();
@@ -321,10 +365,14 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
 
     this.inputDatePicker_.addInput(this.inputStartDate_);
     this.inputDatePicker_.addInput(this.inputEndDate_);
+
+    this.labelStartDate_ = this.getDomHelper().getElement('label-start-date');
+    this.labelStartTime_ = this.getDomHelper().getElement('label-start-time');
+    this.labelEndDate_ = this.getDomHelper().getElement('label-end-date');
+    this.labelEndTime_ = this.getDomHelper().getElement('label-end-time');
+
   }
 
-  this.labelStart_ = this.getDomHelper().getElement('label-start');
-  this.labelEnd_ = this.getDomHelper().getElement('label-end');
 
   this.textAreaDesc_ = this.getDomHelper().getElement('event-description');
 
@@ -434,9 +482,6 @@ rflect.cal.ui.EventPane.prototype.updateLabels_ = function(aAllDay){
         'event-start-datetime';
     this.labelEnd_.htmlFor = aAllDay ? 'event-end-date' :
         'event-end-datetime';
-  } else {
-    this.labelStart_.htmlFor = 'event-start-date';
-    this.labelEnd_.htmlFor = 'event-end-date';
   }
 }
 
@@ -656,7 +701,8 @@ rflect.cal.ui.EventPane.prototype.displayValues = function() {
   var eh = this.eventManager.eventHolder;
 
   this.buttonDelete.setVisible(!this.newEventMode_);
-  goog.style.showElement(this.buttonDelete.getElement().parentElement,
+  goog.style.showElement(this.buttonDelete.getElement().parentElement.
+      parentElement.parentElement,
       !this.newEventMode_);
 
   this.displayDates_();

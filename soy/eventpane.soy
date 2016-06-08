@@ -8,13 +8,13 @@
  */
 {template .eventPane autoescape="false"}
   {if $includeOuterHTML}
-  <div id="{$id}" class="view view-main">
+  <div id="{$id}" class="view settings-pane">
   {/if}
 
     <div class="navbar">
       <div class="navbar-inner navbar-on-center">
         <div class="left">
-          <button class="back link"> <i class="icon icon-back"></i><span>{rflect.cal.i18n.Symbols.TO_CALENDAR}</span></button>
+          <a class="back link"> <i class="icon icon-back"></i><span>{rflect.cal.i18n.Symbols.TO_CALENDAR}</span></a>
         </div>
         <div style="left: -7px; transform: translate3d(0px, 0px, 0px);" class="center sliding">{rflect.cal.i18n.Symbols.EVENT}</div>
         <div class="right">
@@ -23,12 +23,11 @@
       </div>
     </div>
 
-    <div class="pages navbar-through toolbar-through">
+    <div class="pages settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">
 
-      <div data-page="form" class="page page-on-center">
+      <div class="page settings-body">
 
-        <div class="page-content">
-          <div class="content-block-title">Form Example</div>
+        <div class="page-content settings-body-inner">
           <div class="list-block">
             <ul>
 
@@ -45,6 +44,11 @@
                 </div>
               </li>
 
+            </ul>
+          </div>
+          <div class="list-block">
+            <ul>
+
               <li>
                 <div class="item-content">
                   <div class="item-inner">
@@ -59,20 +63,21 @@
                 </div>
               </li>
 
-              <div class="description-cont event-pane-cont" id="all-day-label">
-                <span id="all-day-label-sub-cont">
-                  <label class="goog-inline-block event-pane-label all-day-label"
-                  for="event-all-day">{rflect.cal.i18n.Symbols.ALL_DAY_EVENT}</label>
-                </span>
-              </div>
-
               {call .dateInputs}
                 {param isNativeTimeInput: $isNativeTimeInput /}
               {/call}
 
+            </ul>
+          </div>
+          <div class="list-block">
+            <ul>
+
               {$calendarsSelectHTML}
 
-              </div>
+            </ul>
+          </div>
+          <div class="list-block">
+            <ul>
 
               <li class="align-top">
                 <div class="item-content">
@@ -84,6 +89,11 @@
                   </div>
                 </div>
               </li>
+
+            </ul>
+          </div>
+          <div class="list-block">
+            <ul>
 
               <li>
                 <button class="item-link">
@@ -97,6 +107,17 @@
 
             </ul>
           </div>
+
+          <div class="list-block">
+            <ul>
+              <li>
+                <button class="item-link button-form-delete">
+                  {rflect.cal.i18n.Symbols.DELETE}
+                </button>
+              </li>
+            </ul>
+          </div>
+
         </div>
       </div>
     </div>
@@ -116,11 +137,12 @@
   <li>
     <div class="item-content">
       <div class="item-inner">
-        <div class="item-title label">
+        <div id="label-start" class="item-title label">
           {rflect.cal.i18n.Symbols.START}
         </div>
         <div class="item-input">
           <input id="event-start-datetime" type="datetime-local">
+          <input id="event-start-date" type="date">
         </div>
       </div>
     </div>
@@ -129,11 +151,12 @@
   <li>
     <div class="item-content">
       <div class="item-inner">
-        <div class="item-title label">
+        <div id="label-end" class="item-title label">
           {rflect.cal.i18n.Symbols.END}
         </div>
         <div class="item-input">
           <input id="event-end-datetime" type="datetime-local">
+          <input id="event-end-date" type="date">
         </div>
       </div>
     </div>
@@ -144,8 +167,8 @@
   <li>
     <div class="item-content">
       <div class="item-inner">
-        <div class="item-title label">
-          {rflect.cal.i18n.Symbols.START}
+        <div id="label-start-date" class="item-title label">
+          {rflect.cal.i18n.Symbols.START_DATE}
         </div>
         <div class="item-input">
           <input id="event-start-date" type="text">
@@ -157,8 +180,8 @@
   <li>
     <div class="item-content">
       <div class="item-inner">
-        <div class="item-title label">
-          {rflect.cal.i18n.Symbols.START}
+        <div id="label-start-time" class="item-title label">
+          {rflect.cal.i18n.Symbols.START_TIME}
         </div>
         <div class="item-input">
           <input id="event-start-time" type="text">
@@ -170,8 +193,8 @@
   <li>
     <div class="item-content">
       <div class="item-inner">
-        <div class="item-title label">
-          {rflect.cal.i18n.Symbols.END}
+        <div id="label-end-date" class="item-title label">
+          {rflect.cal.i18n.Symbols.END_DATE}
         </div>
         <div class="item-input">
           <input id="event-end-date" type="text">
@@ -183,8 +206,8 @@
   <li>
     <div class="item-content">
       <div class="item-inner">
-        <div class="item-title label">
-          {rflect.cal.i18n.Symbols.END}
+        <div id="label-end-time" class="item-title label">
+          {rflect.cal.i18n.Symbols.END_TIME}
         </div>
         <div class="item-input">
           <input id="event-end-time" type="text">
