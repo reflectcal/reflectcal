@@ -6,17 +6,130 @@
  */
 {template .settingsPane autoescape="false"}
   {if $includeOuterHTML}
-  <div id="{$id}" class="settings-pane">
+  <div id="{$id}" class="view settings-pane">
   {/if}
     {call rflect.cal.ui.soy.externalpane.controlPane}
       {param backButtonLabel: rflect.cal.i18n.Symbols.TO_CALENDAR /}
-      {param showDeleteButton: false /}
       {param showBackButton: true /}
       {param showNewButton: false /}
       {param showSaveButton: true /}
-      {param upper: true /}
       {param header: rflect.cal.i18n.Symbols.SETTINGS /}
     {/call}
+
+    <div class="pages settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">
+
+      <div class="page settings-body">
+
+        <div class="page-content settings-body-inner">
+          <div class="list-block">
+            <ul>
+
+              <li>
+
+                <div class="item-content">
+                  <div class="item-inner">
+                    <label class="item-title label" for="settings-languages">
+                      {rflect.cal.i18n.Symbols.LANGUAGES}
+                    </label>
+                    <div class="item-input">
+                      <select id="settings-languages">
+                        {foreach $language in LANGUAGE_NAMES}
+                        <option value="{$language[0]}" class="" id="lang-{$language[0]}">
+                          {$language[1]}
+                        </option>
+                        {/foreach}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="event-pane-cont">
+                            <label class="goog-inline-block event-pane-label label-fluid event-pane-calendars-label"
+                                for="settings-languages">
+                            </label>
+                            <div class="button dropdown settings-pane-select">
+                              <select id="settings-languages">
+                                {foreach $language in LANGUAGE_NAMES}
+                                <option value="{$language[0]}" class="" id="lang-{$language[0]}">{$language[1]}</option>
+                                {/foreach}
+                              </select>
+                            </div>
+                          </div>
+
+                <div class="item-content">
+                  <div class="item-inner">
+                    <label class="item-title label" for="ep-event-name-input">
+                      {rflect.cal.i18n.Symbols.EVENT_NAME}
+                    </label>
+                    <div class="item-input">
+                      <input id="ep-event-name-input" type="text" placeholder="{rflect.cal.i18n.Symbols.EVENT_NAME}">
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+            </ul>
+          </div>
+          <div class="list-block">
+            <ul>
+
+              <li>
+                <div class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title label">{rflect.cal.i18n.Symbols.ALL_DAY_EVENT}</div>
+                    <div class="item-input">
+                      <label class="label-switch">
+                        <input type="checkbox" id="event-all-day">
+                        <div class="checkbox"></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              {call .dateInputs}
+                {param isNativeTimeInput: $isNativeTimeInput /}
+              {/call}
+
+            </ul>
+          </div>
+          <div class="list-block">
+            <ul>
+
+              {$calendarsSelectHTML}
+
+            </ul>
+          </div>
+          <div class="list-block">
+            <ul>
+
+              <li class="align-top">
+                <div class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title label">{rflect.cal.i18n.Symbols.DESCRIPTION}</div>
+                    <div class="item-input">
+                      <textarea id="event-description"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+            </ul>
+          </div>
+          <div class="list-block">
+            <ul>
+
+              <li>
+                <button class="item-link button-form-delete">
+                  {rflect.cal.i18n.Symbols.DELETE}</div>
+                </button>
+              </li>
+
+            </ul>
+          </div>
+
+        </div>
+      </div>
 
     <div class="settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">
       <div class="settings-body">
