@@ -74,15 +74,15 @@ rflect.cal.ui.ExternalPane = function(aViewManager, aTimeManager, aEventManager,
   this.addChild(this.buttonBack1 = new goog.ui.Button(null,
       goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonPrimary1 = new goog.ui.Button(null,
-      goog.ui.NativeButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonBack2 = new goog.ui.Button(null,
       goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonPrimary2 = new goog.ui.Button(null,
-      goog.ui.NativeButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
 
   if (this.isButtonDeleteEnabled()) {
     this.addChild(this.buttonDelete = new goog.ui.Button(null,
-        goog.ui.NativeButtonRenderer.getInstance()));
+        goog.ui.ButtonRenderer.getInstance()));
   }
 
   if (rflect.ARTIFICIAL_SCROLLER_ENABLED) {
@@ -190,7 +190,7 @@ rflect.cal.ui.ExternalPane.prototype.enterDocument = function() {
       '.right > button'));
   if (this.isButtonDeleteEnabled()) {
     this.buttonDelete.decorate(this.getElement().querySelector(
-        'button.item-link'));
+        '.button-form-delete'));
   }
 
   this.getHandler().listen(this.containerSizeMonitor,

@@ -11,17 +11,13 @@
   <div id="{$id}" class="view settings-pane">
   {/if}
 
-    <div class="navbar">
-      <div class="navbar-inner navbar-on-center">
-        <div class="left">
-          <a class="back link"> <i class="icon icon-back"></i><span>{rflect.cal.i18n.Symbols.TO_CALENDAR}</span></a>
-        </div>
-        <div style="left: -7px; transform: translate3d(0px, 0px, 0px);" class="center sliding">{rflect.cal.i18n.Symbols.EVENT}</div>
-        <div class="right">
-          <button class="link icon-only open-panel"><strong>{rflect.cal.i18n.Symbols.SAVE}</strong></button>
-        </div>
-      </div>
-    </div>
+    {call rflect.cal.ui.soy.externalpane.controlPane}
+      {param backButtonLabel: rflect.cal.i18n.Symbols.TO_CALENDAR /}
+      {param showBackButton: true /}
+      {param showNewButton: false /}
+      {param showSaveButton: true /}
+      {param header: rflect.cal.i18n.Symbols.EVENT /}
+    {/call}
 
     <div class="pages settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">
 
@@ -34,9 +30,9 @@
               <li>
                 <div class="item-content">
                   <div class="item-inner">
-                    <div class="item-title label">
+                    <label class="item-title label" for="ep-event-name-input">
                       {rflect.cal.i18n.Symbols.EVENT_NAME}
-                    </div>
+                    </label>
                     <div class="item-input">
                       <input id="ep-event-name-input" type="text" placeholder="{rflect.cal.i18n.Symbols.EVENT_NAME}">
                     </div>
@@ -96,25 +92,11 @@
             <ul>
 
               <li>
-                <button class="item-link">
-                  <div class="item-content">
-                    <div class="item-inner">
-                      <div class="item-title">Delete</div>
-                    </div>
-                  </div>
-                </button>
-              </li>
-
-            </ul>
-          </div>
-
-          <div class="list-block">
-            <ul>
-              <li>
                 <button class="item-link button-form-delete">
-                  {rflect.cal.i18n.Symbols.DELETE}
+                  {rflect.cal.i18n.Symbols.DELETE}</div>
                 </button>
               </li>
+
             </ul>
           </div>
 
