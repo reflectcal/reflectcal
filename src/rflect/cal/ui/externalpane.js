@@ -190,7 +190,7 @@ rflect.cal.ui.ExternalPane.prototype.enterDocument = function() {
       '.right > button'));
   if (this.isButtonDeleteEnabled()) {
     this.buttonDelete.decorate(this.getElement().querySelector(
-        '.button-form-delete'));
+        '.button-danger'));
   }
 
   this.getHandler().listen(this.containerSizeMonitor,

@@ -7,57 +7,73 @@
  */
 {template .calendarEditPane autoescape="false"}
   {if $includeOuterHTML}
-  <div id="{$id}" class="settings-pane">
+  <div id="{$id}" class="settings-pane view">
   {/if}
     {call rflect.cal.ui.soy.externalpane.controlPane}
       {param backButtonLabel: rflect.cal.i18n.Symbols.TO_CALENDARS /}
-      {param showDeleteButton: false /}
       {param showBackButton: true /}
       {param showNewButton: false /}
       {param showSaveButton: true /}
-      {param upper: true /}
       {param header: rflect.cal.i18n.Symbols.CALENDAR /}
     {/call}
 
-    <div class="settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">
-      <div class="settings-body">
-        <div class="settings-body-inner">
-          <div class="event-name-input-cont event-pane-cont">
-            <label class="goog-inline-block event-pane-label label-fluid"
-              for="sp-calendar-name-input">
-              {rflect.cal.i18n.Symbols.CALENDAR_NAME}
-            </label>
+    <div class="pages settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">
+      <div class="page settings-body">
+        <div class="page-content settings-body-inner">
 
-            <div class="control-wrapper">
-              <input placeholder="" class="ep-event-name-input"
-                  id="sp-calendar-name-input" type="text"/>
-            </div>
+          <div class="list-block">
+            <ul>
+
+              <li>
+                <div class="item-content">
+                  <div class="item-inner">
+                    <label class="item-title label" for="sp-calendar-name-input">
+                      {rflect.cal.i18n.Symbols.CALENDAR_NAME}
+                    </label>
+                    <div class="item-input">
+                      <input id="sp-calendar-name-input" type="text" placeholder="{rflect.cal.i18n.Symbols.CALENDAR_NAME}">
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+            </ul>
           </div>
 
-          <div class="event-name-input-cont event-pane-cont event-pane-cont-last">
-            <label class="goog-inline-block event-pane-label label-fluid calendar-colors-label"
-                for="calendar-colors">
-              {rflect.cal.i18n.Symbols.CALENDAR_COLORS}
-            </label>
-            <table id="calendar-colors" class="calendar-colors-table goog-inline-block">
-              <tbody>
+          <div class="content-block-title">
+            {rflect.cal.i18n.Symbols.CALENDAR_COLORS}
+          </div>
+          <div class="list-block">
+            <ul>
               {foreach $colorRow in $colorRows}
-                <tr>
-                  {foreach $colorCell in $colorRow}
-                  <td>
-                    <button class="calitem-color-cont calendar-color{sp}{$colorCell.eventClass}"
-                        id="calendar-color{index($colorRow) * rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER + index($colorCell)}"></button>
-                  </td>
-                  {/foreach}
-                </tr>
+              <li>
+                <label class="label-radio item-content">
+                  <input name="colors" value="calendar-color{index($colorRow)}"
+                      type="radio" id="calendar-color{index($colorRow)}">
+                  <div class="item-inner">
+                    <span>{$colorRow.name}</span>
+                    <div class="item-title calitem-color-cont calendar-color{sp}{$colorRow.eventClass}">
+                    </div>
+                  </div>
+                </label>
+              </li>
               {/foreach}
-              </tbody>
-            </table>
+            </ul>
           </div>
+
+          <div class="list-block">
+            <ul>
+
+              <li>
+                <button class="item-link button-danger">
+                  {rflect.cal.i18n.Symbols.DELETE}
+                </button>
+              </li>
+
+            </ul>
+          </div>
+
         </div>
-        {call rflect.cal.ui.soy.externalpane.stickyBottomPane}
-          {param showDeleteButton: true /}
-        {/call}
       </div>
     </div>
 

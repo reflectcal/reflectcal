@@ -116,31 +116,12 @@ rflect.cal.ui.CalendarEditPane.PageIndexes = {
 
 
 /**
- * @return {Array.<Array.<rflect.cal.events.ColorCode>>} Decorated calendars
+ * @return {Array.<rflect.cal.events.ColorCode>} Decorated calendars
  * table td.
  */
 rflect.cal.ui.CalendarEditPane.getCalendarColorRows = function() {
 
-  var colorRows = [];
-
-  var paletteRowsNumber = Math.ceil(
-      rflect.cal.i18n.PREDEFINED_COLOR_CODES.length /
-      rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER);
-  for( var rowIndex = 0; rowIndex < paletteRowsNumber; rowIndex++) {
-    for( var colIndex = 0; colIndex <
-        rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER; colIndex++) {
-      var colorCodeIndex = rowIndex *
-          rflect.cal.ui.CalendarEditPane.PALETTE_COLS_NUMBER + colIndex;
-      var colorCode = rflect.cal.i18n.PREDEFINED_COLOR_CODES[colorCodeIndex];
-
-      if (!colorRows[rowIndex]) {
-        colorRows[rowIndex] = [];
-      }
-      if (goog.isDef(colorCode)) {
-        colorRows[rowIndex].push(colorCode);
-      }
-    }
-  }
+  var colorRows = rflect.cal.i18n.PREDEFINED_COLOR_CODES.slice();
 
   return colorRows;
 }
@@ -317,16 +298,14 @@ rflect.cal.ui.CalendarEditPane.prototype.onPageChange_ = function(aEvent) {
  */
 rflect.cal.ui.CalendarEditPane.prototype.onCalendarsColorLinkClick_ =
     function(aEvent) {
-  var target = /**@type {Element}*/ (aEvent.target);
+  const target = /**@type {Element}*/ (aEvent.target);
+  const label = /**@type {Element}*/ (goog.dom.getAncestor(target, aNode =>
+        aNode.tagName == 'LABEL', true, 2));
+  const input = label && label.firstChild;
 
-  if (!target.tagName || target.tagName.toLowerCase() != 'button')
-    return;
-
-  if (goog.dom.classes.has(target, 'calitem-color-cont')) {
-    var id = target.id;
-    aEvent.preventDefault();
-
-    var index = +/\d/.exec(id);
+  if (input) {
+    const id = input.id;
+    const index = +/\d/.exec(id);
 
     this.currentCalendar_.colorCode =
         rflect.cal.i18n.PREDEFINED_COLOR_CODES[index];
@@ -482,13 +461,9 @@ rflect.cal.ui.CalendarEditPane.prototype.scanValues = function() {
  */
 rflect.cal.ui.CalendarEditPane.prototype.displayCalendarColor_ =
     function(aIndex) {
-  goog.array.forEach(this.getElement()
-      .getElementsByClassName(goog.getCssName('calendar-color')),
-      function(el, elIndex){
-    if (elIndex == aIndex)
-      goog.dom.classes.add(el, goog.getCssName('calendar-color-selected'));
-    else
-      goog.dom.classes.remove(el, goog.getCssName('calendar-color-selected'));
+  goog.array.forEach(this.getElement().querySelectorAll('input[name="colors"]'),
+      (el, elIndex) => {
+    el.checked = elIndex == aIndex;
   });
 
   this.inputCalendarName_.placeholder =

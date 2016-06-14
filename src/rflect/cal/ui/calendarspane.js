@@ -383,9 +383,8 @@ rflect.cal.ui.CalendarsPane.prototype.onCalendarUpdate_ =
  * @return {Element} Tr element or null.
  */
 rflect.cal.ui.CalendarsPane.getCalendarRow = function(aTarget) {
-  return /**@type {Element}*/ (goog.dom.getAncestor(aTarget, function(aNode) {
-    return aNode.className == 'calendar-row';
-  }, true, 2));
+  return /**@type {Element}*/ (goog.dom.getAncestor(aTarget, aNode =>
+      aNode.tagName == 'A', true, 3));
 }
 
 
@@ -396,10 +395,11 @@ rflect.cal.ui.CalendarsPane.getCalendarRow = function(aTarget) {
  */
 rflect.cal.ui.CalendarsPane.prototype.onCalendarLinkClick_ = function(aEvent) {
   var target = /**@type {Element}*/ (aEvent.target);
-  var tr = rflect.cal.ui.CalendarsPane.getCalendarRow(target);
+  var link = rflect.cal.ui.CalendarsPane.getCalendarRow(target);
+  if (goog.DEBUG)
+    console.log('link: ', link);
 
-  if (tr) {
-    var link = tr.firstChild.firstChild;
+  if (link) {
     var id = link.id;
 
     aEvent.preventDefault();

@@ -70,8 +70,7 @@ rflect.cal.ui.SettingsPane = function(aViewManager, aTimeManager, aEventManager,
   this.viewsElements_ = [];
 
   this.addChild(this.buttonCalendars_ = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
-  this.addChild(this.checkboxDebug_ = new rflect.ui.Checkbox());
+      goog.ui.ButtonRenderer.getInstance()));
 
   //Enabling touch-only interface.
   this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
@@ -141,6 +140,13 @@ rflect.cal.ui.SettingsPane.PageIndexes = {
 rflect.cal.ui.SettingsPane.prototype.isButtonDeleteEnabled = function() {
   return false;
 };
+
+
+/**
+ * @type {Element}
+ * @private
+ */
+rflect.cal.ui.SettingsPane.prototype.checkboxDebug_;
 
 
 /**
@@ -434,30 +440,6 @@ rflect.cal.ui.SettingsPane.createCalendarsTd_ =
 
 
 /**
- * @param {goog.dom.DomHelper} aDom Dom helper.
- * @return {Element} Debug container.
- * @private
- */
-rflect.cal.ui.SettingsPane.prototype.createDebugCont_ = function(aDom) {
-  var labelDebug = aDom.createDom('label', {
-    'for': 'settings-debug-mode',
-    className: 'goog-inline-block event-pane-label'
-  }, 'Debug mode');
-  var debugSubCont = aDom.createDom('span', null, labelDebug,
-      this.checkboxDebug_.getElement());
-  this.checkboxDebug_.setLabel(debugSubCont);
-  this.checkboxDebug_.getElement().className += ' aligned-checkbox';
-  var debugCont = aDom.createDom('div', {
-    id: 'settings-debug-mode',
-    className: 'event-pane-cont'
-  }, debugSubCont);
-
-
-  return debugCont;
-}
-
-
-/**
  * @override
  */
 rflect.cal.ui.SettingsPane.prototype.buildHTML = function(opt_outerHTML) {
@@ -477,11 +459,7 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
   this.selectLanguages_ = this.getDomHelper().getElement('settings-languages');
   this.selectThemes_ = this.getDomHelper().getElement('settings-themes');
 
-  var checkboxDebugSubCont = this.getDomHelper().getElement('settings-debug-mode-sub-cont');
-  this.checkboxDebug_.render(checkboxDebugSubCont);
-  this.checkboxDebug_.setLabel(checkboxDebugSubCont);
-  this.checkboxDebug_.getElement().className += ' aligned-checkbox';
-
+  this.checkboxDebug_ = this.getDomHelper().getElement('settings-debug-mode');
   rflect.cal.ui.SettingsPane.superClass_.enterDocument.call(this);
 
   // Menu commands.
@@ -561,6 +539,7 @@ rflect.cal.ui.SettingsPane.prototype.onShowCalendarsAction_ =
 
   aEvent.target.setFocused(false);
 
+  aEvent.preventDefault();
 }
 
 
@@ -622,7 +601,7 @@ rflect.cal.ui.SettingsPane.prototype.onSaveUser_ = function() {
 rflect.cal.ui.SettingsPane.prototype.displayValues = function() {
   this.selectLanguages_.value = this.getUser()['settings']['language'] ||
       goog.LOCALE;
-  this.checkboxDebug_.setChecked(this.getUser()['settings']['debug']);
+  this.checkboxDebug_.checked = !!this.getUser()['settings']['debug'];
   this.selectThemes_.value = this.getUser()['settings']['visualTheme'] ||
       rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES[1][0];
 };
@@ -638,7 +617,7 @@ rflect.cal.ui.SettingsPane.prototype.scanValues = function() {
   var changedUser = goog.object.unsafeClone(this.getUser());
   if (valid) {
     changedUser['settings']['language'] = this.selectLanguages_.value;
-    changedUser['settings']['debug'] = this.checkboxDebug_.isChecked();
+    changedUser['settings']['debug'] = this.checkboxDebug_.checked;
     changedUser['settings']['visualTheme'] = this.selectThemes_.value;
 
     reloadIsNeeded = this.getUser()['settings']['language'] !=
@@ -662,6 +641,8 @@ rflect.cal.ui.SettingsPane.prototype.scanValues = function() {
  * @protected
  */
 rflect.cal.ui.SettingsPane.prototype.disposeInternal = function() {
+  this.checkboxDebug_ = null;
+
   rflect.cal.ui.SettingsPane.superClass_.disposeInternal.call(this);
 };
 
