@@ -31,10 +31,15 @@
       <div class="right">
         {if $showSaveButton or $showNewButton}
           {if $showSaveButton}
-        <button class="link icon-only open-panel"><strong>{rflect.cal.i18n.Symbols.SAVE}</strong></button>
-          {/if}
-          {if $showNewButton}
-        <button class="link icon-only open-panel"><strong>{rflect.cal.i18n.Symbols.SAVE}</strong></button>
+        <button class="link icon-only open-panel">
+          <strong>{rflect.cal.i18n.Symbols.SAVE}</strong>
+        </button>
+          {else}
+            {if $showNewButton}
+        <button class="link icon-only open-panel button-new-left">
+          <i class="icon icon-new icon-new-left"></i>
+        </button>
+            {/if}
           {/if}
         {/if}
       </div>

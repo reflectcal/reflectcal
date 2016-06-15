@@ -16,7 +16,7 @@ goog.require('goog.i18n.DateTimePatterns');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Component.State');
-goog.require('goog.ui.FlatButtonRenderer');
+goog.require('goog.ui.ButtonRenderer');
 goog.require('goog.ui.ToggleButton');
 goog.require('rflect.ui.UpdatableComponent');
 goog.require('rflect.cal.EventType');
@@ -82,23 +82,23 @@ rflect.cal.ui.ControlPane = function(aViewManager, aTimeManager,
   // Add buttons. No need for captions or content here, because we'll decorate
   // them.
   this.addChild(this.buttonMenu_ = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonNow_ = new goog.ui.ToggleButton(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonPrev_ = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonNext_ = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonNewEvent_ = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonDay_ = new goog.ui.ToggleButton(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonWeek_ = new goog.ui.ToggleButton(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonMonth_ = new goog.ui.ToggleButton(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
   this.addChild(this.buttonOptions_ = new goog.ui.Button(null,
-      goog.ui.FlatButtonRenderer.getInstance()));
+      goog.ui.ButtonRenderer.getInstance()));
       
   this.buttonOptions_.setId(rflect.cal.predefined.BUTTON_SETTINGS_ID);
   this.buttonDay_.setId(rflect.cal.predefined.BUTTON_DAY_ID);

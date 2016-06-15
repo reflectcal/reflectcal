@@ -20,7 +20,7 @@ i.icon {
     &.icon-bars {
         width: 21px;
         height: 14px;
-        .encoded-svg-background("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 21 14'><path fill='@{themeColor}' d='M0,0h2v2H0V0z M4,0h17v1H4V0z M0,6h2v2H0V6z M4,6h17v1H4V6z M0,12h2v2H0V12z M4,12h17v1H4V12z'/></svg>");
+        .encoded-svg-background("<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' viewBox='0 0 100 100' enable-background='new 0 0 100 100' xml:space='preserve'><g><path d='M16.534,5.696C10.174,5.696,5,10.87,5,17.23c0,6.36,5.174,11.534,11.534,11.534S28.068,23.59,28.068,17.23   C28.068,10.87,22.894,5.696,16.534,5.696z M16.534,27.922c-5.896,0-10.693-4.797-10.693-10.693c0-5.896,4.797-10.693,10.693-10.693   c5.896,0,10.693,4.797,10.693,10.693C27.227,23.126,22.43,27.922,16.534,27.922z'></path><path d='M16.534,38.466C10.174,38.466,5,43.64,5,50c0,6.36,5.174,11.534,11.534,11.534S28.068,56.36,28.068,50   C28.068,43.64,22.894,38.466,16.534,38.466z M16.534,60.693c-5.896,0-10.693-4.797-10.693-10.693   c0-5.896,4.797-10.693,10.693-10.693c5.896,0,10.693,4.797,10.693,10.693C27.227,55.896,22.43,60.693,16.534,60.693z'></path><path d='M16.534,71.236C10.174,71.236,5,76.41,5,82.77c0,6.36,5.174,11.534,11.534,11.534S28.068,89.13,28.068,82.77   C28.068,76.41,22.894,71.236,16.534,71.236z M16.534,93.463c-5.896,0-10.693-4.797-10.693-10.693   c0-5.896,4.797-10.693,10.693-10.693c5.896,0,10.693,4.797,10.693,10.693C27.227,88.666,22.43,93.463,16.534,93.463z'></path><rect x='33.367' y='17.185' width='61.633' height='0.841'></rect><rect x='33.367' y='49.79' width='61.633' height='0.841'></rect><rect x='33.367' y='82.394' width='61.633' height='0.841'></rect></g></svg>");
         @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2ddpx) {
             .encoded-svg-background("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 42 26'><path fill='@{themeColor}' d='M0,0h4v4H0V0z M8,1h34v2H8V1z M0,11h4v4H0V11z M8,12h34v2H8V12z M0,22h4v4H0V22z M8,23h34v2H8V23z'/></svg>");
             height: 13px;
@@ -48,5 +48,16 @@ i.icon {
         line-height: 20px;
         text-align: center;
         font-weight: 100;
+    }
+    &.icon-new {
+        width: 50px;
+        height: 44px;
+        .encoded-svg-background("<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' viewBox='0 0 100 100' enable-background='new 0 0 100 100' xml:space='preserve'><line fill='none' stroke='@{themeColor}' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' x1='49.5' y1='32' x2='49.5' y2='69'></line><line fill='none' stroke='@{themeColor}' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' x1='68' y1='50.5' x2='31' y2='50.5'></line></svg>");
+    }
+    &.icon-new-left {
+      background-position-x: 10px;
+    }
+    &.icon-new-right {
+      background-position-x: -10px;
     }
 }
