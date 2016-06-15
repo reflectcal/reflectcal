@@ -461,7 +461,8 @@ rflect.cal.ui.CalendarEditPane.prototype.scanValues = function() {
  */
 rflect.cal.ui.CalendarEditPane.prototype.displayCalendarColor_ =
     function(aIndex) {
-  goog.array.forEach(this.getElement().querySelectorAll('input[name="colors"]'),
+  goog.array.forEach(this.getElement().querySelectorAll(`input[name="${
+      rflect.cal.predefined.CalendarEditPane.COLORS_RADIO_GROUP_NAME}"]`),
       (el, elIndex) => {
     el.checked = elIndex == aIndex;
   });

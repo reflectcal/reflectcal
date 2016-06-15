@@ -15,6 +15,7 @@ goog.require('goog.math.Size');
 goog.provide('rflect.cal.predefined');
 goog.provide('rflect.cal.predefined.chips');
 goog.provide('rflect.cal.predefined.MainPane.ELEMENT_ID');
+goog.provide('rflect.cal.predefined.CalendarEditPane');
 
 
 //TODO(alexk): much of this file will go to cfg
@@ -862,3 +863,9 @@ rflect.cal.predefined.MainPane.ELEMENT_ID = {
   ALL_DAY_EVENTS_GRID_WRAPPER: 'alldayevents-grid-wrapper',
   TOUCH_HOLD_WRAPPER_AD: 'touch-hold-wrapper-ad'
 }
+
+
+/**
+ * @type {string}
+ */
+rflect.cal.predefined.CalendarEditPane.COLORS_RADIO_GROUP_NAME = 'colors';

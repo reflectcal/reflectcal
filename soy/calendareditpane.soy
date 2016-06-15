@@ -48,7 +48,8 @@
               {foreach $colorRow in $colorRows}
               <li>
                 <label class="label-radio item-content">
-                  <input name="colors" value="calendar-color{index($colorRow)}"
+                  <input name="{rflect.cal.predefined.CalendarEditPane.COLORS_RADIO_GROUP_NAME}"
+                      value="calendar-color{index($colorRow)}"
                       type="radio" id="calendar-color{index($colorRow)}">
                   <div class="item-inner">
                     <span>{$colorRow.name}</span>
