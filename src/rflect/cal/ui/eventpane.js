@@ -709,10 +709,7 @@ rflect.cal.ui.EventPane.prototype.onBeforePageChange_ = function(aEvent) {
 rflect.cal.ui.EventPane.prototype.displayValues = function() {
   var eh = this.eventManager.eventHolder;
 
-  this.buttonDelete.setVisible(!this.newEventMode_);
-  goog.style.showElement(this.buttonDelete.getElement().parentElement.
-      parentElement.parentElement,
-      !this.newEventMode_);
+  this.showButtonDelete(!this.newEventMode_);
 
   this.displayDates_();
 

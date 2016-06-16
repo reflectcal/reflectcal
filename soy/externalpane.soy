@@ -9,7 +9,7 @@
  */
 {template .controlPane autoescape="false"}
 
-  <nav class="navbar">
+  <nav class="navbar navbar-external-pane">
     <div class="navbar-inner navbar-on-center">
       <div class="left">
         {if $showBackButton}
@@ -25,19 +25,21 @@
         </a>
         {/if}
       </div>
-      <div style="left: -7px; transform: translate3d(0px, 0px, 0px);" class="center sliding">
-        {$header}
+      <div class="center">
+        <strong>
+          {$header}
+        </strong>
       </div>
       <div class="right">
         {if $showSaveButton or $showNewButton}
           {if $showSaveButton}
-        <button class="link icon-only open-panel">
+        <button class="link icon-only open-panel button-menu-edge-right">
           <strong>{rflect.cal.i18n.Symbols.SAVE}</strong>
         </button>
           {else}
             {if $showNewButton}
-        <button class="link icon-only open-panel button-new-left">
-          <i class="icon icon-new icon-new-left"></i>
+        <button class="link icon-only open-panel button-menu-edge-right">
+          <i class="icon icon-new icon-new-right"></i>
         </button>
             {/if}
           {/if}

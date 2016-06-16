@@ -257,6 +257,18 @@ rflect.cal.ui.ExternalPane.prototype.resetMomentumScroller = function() {
 
 
 /**
+ * @param {boolean} aShow
+ */
+rflect.cal.ui.ExternalPane.prototype.showButtonDelete = function(aShow) {
+  if (this.isButtonDeleteEnabled()) {
+    this.buttonDelete.setVisible(aShow);
+    goog.style.showElement(this.buttonDelete.getElement().parentElement.
+        parentElement.parentElement, aShow);
+  }
+}
+
+
+/**
  * Disposes of the event pane.
  * @override
  * @protected

@@ -421,9 +421,7 @@ rflect.cal.ui.CalendarEditPane.prototype.onDeleteCalendarResponse_ =
  * Displays calendar properties in form.
  */
 rflect.cal.ui.CalendarEditPane.prototype.displayValues = function() {
-  this.buttonDelete.setVisible(!this.newCalendarMode_);
-  goog.style.showElement(this.buttonDelete.getElement().parentElement,
-      !this.newCalendarMode_);
+  this.showButtonDelete(!this.newCalendarMode_);
 
   this.inputCalendarName_.value = this.currentCalendar_.name;
   this.inputCalendarName_.placeholder = this.currentCalendar_.colorCode
