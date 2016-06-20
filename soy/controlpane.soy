@@ -14,7 +14,7 @@
     //The same as $isPhoneScreen.
     {case rflect.cal.Navigator.SIZE_CATEGORY.IPHONE5_PORTRAIT,
         rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_PORTRAIT}
-    <nav class="navbar navbar-upper">
+    <nav class="navbar navbar-upper navbar-{$sizeCategory}">
       <div class="navbar-inner navbar-on-center">
         <div class="left">
           <button class="link icon-only open-panel button-menu-edge-left" id="{rflect.cal.predefined.BUTTON_MENU_ID}">
@@ -48,7 +48,7 @@
     {case rflect.cal.Navigator.SIZE_CATEGORY.IPHONE6_LANDSCAPE,
         rflect.cal.Navigator.SIZE_CATEGORY.IPAD_PORTRAIT}
 
-    <nav class="navbar navbar-upper">
+    <nav class="navbar navbar-{$sizeCategory}">
       <div class="navbar-inner navbar-on-center">
         <div class="left">
           <button class="link icon-only open-panel button-menu-edge-left" id="{rflect.cal.predefined.BUTTON_MENU_ID}">
@@ -81,7 +81,7 @@
         rflect.cal.Navigator.SIZE_CATEGORY.WIDE,
         rflect.cal.Navigator.SIZE_CATEGORY.VERY_WIDE}
 
-    <nav class="navbar navbar-upper navbar-main-body-full">
+    <nav class="navbar navbar-{$sizeCategory}">
       <div class="navbar-inner navbar-on-center">
         <div class="left">
           {if rflect.SIDE_PANE_MOVABLE}

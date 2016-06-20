@@ -57,3 +57,12 @@ label.label-radio {
     opacity:0;
   }
 }
+
+//Buttons
+.button {
+  transition: background-color .2s;
+  &.active, &.goog-button-checked {
+    background: @themeColor;
+    color: #fff;
+  }
+}

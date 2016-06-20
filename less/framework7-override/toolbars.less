@@ -1,55 +1,78 @@
 .navbar, .toolbar, .subnavbar {
-    background: @toolbarBg;
-    button.link {
-        line-height: @toolbarSize;
-        height: @toolbarSize;
-        text-decoration: none;
-        position: relative;
-        .flexbox();
-        .justify-content(flex-start);
-        .align-items(center);
-        .transition(300ms);
-        .transform(translateZ(0px));
-        html:not(.watch-active-state) &:active, &.active-state {
-            opacity: 0.3;
-            .transition(0ms);
-        }
-        i+span, i+i, span+i, span+span {
-            margin-left: 7px;
-        }
-        background: none;
-        border: none;
-        color: #007aff;
-        font-size: 17px;
+  background: @toolbarBg;
+  button.link {
+    line-height: @toolbarSize;
+    height: @toolbarSize;
+    text-decoration: none;
+    position: relative;
+    .flexbox();
+    .justify-content(flex-start);
+    .align-items(center);
+    .transition(300ms);
+    .transform(translateZ(0px));
+    html:not(.watch-active-state) &:active, &.active-state {
+        opacity: 0.3;
+        .transition(0ms);
     }
-    button.icon-only {
-        min-width: @toolbarSize;
-        .flexbox();
-        .justify-content(center);
-        .align-items(center);
-        margin: 0;
+    i+span, i+i, span+i, span+span {
+        margin-left: 7px;
     }
-    i.icon {
-        display: block;
-    }
+    background: none;
+    border: none;
+    color: #007aff;
+    font-size: 17px;
+  }
+  button.icon-only {
+    min-width: @toolbarSize;
+    .flexbox();
+    .justify-content(center);
+    .align-items(center);
+    margin: 0;
+  }
+  i.icon {
+      display: block;
+  }
 }
 .navbar.navbar-external-pane {
-    .left, .right {
-        width: 120px;
-    }
-    .left {
-      justify-content: flex-start;
-    }
-    .right {
-      justify-content: flex-end;
-    }
+  .left, .right {
+      width: 120px;
+  }
+  .left {
+    justify-content: flex-start;
+  }
+  .right {
+    justify-content: flex-end;
+  }
 }
+/*
+  UNDEFINED: '0-undefined',
+  IPHONE5_PORTRAIT: '1-iphone5-portrait',
+  IPHONE6_PORTRAIT: '2-iphone6-portrait',
+  IPHONE6_LANDSCAPE: '3-iphone6-landscape',
+  IPAD_PORTRAIT: '4-ipad-portrait',
+  IPAD_LANDSCAPE: '5-ipad-landscape',
+  WIDE: '6-wide',
+  VERY_WIDE: '7-very-wide'
+*/
 .navbar.navbar-upper {
   .left, .right {
     width: 70px;
   }
 }
-.navbar.navbar-main-body-full {
+.navbar.navbar-3, .navbar.navbar-4 {
+  .left {
+    width: 70px;
+  }
+  .right {
+    width: 300px;
+  }
+}
+.navbar.navbar-5 {
+  .left, .right {
+    width: 300px;
+  }
+}
+.navbar.navbar-6, .navbar.navbar-7 {
   .left, .right {
     width: 400px;
   }

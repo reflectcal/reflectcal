@@ -18,9 +18,9 @@
   height: 20px;
   line-height: 20px;
 
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid transparent;
   margin-bottom: -1px;
-  background-color: rgb(246, 246, 246);
+  background-color: #fff;
   padding-right: 19px; /*to compensate 17px scrollbar + 2px from borders of upper table*/
 }
 
@@ -31,6 +31,11 @@
 .main-pane-cont-expanded .main-pane-header-wk-daynames,
 .main-pane-header-wk-daynames-small-screen {
   padding-left: 81px - @mainPaneLeftMargin;
+}
+
+.main-pane-header-wk-daynames-small-screen {
+  border-bottom: 1px solid #e5e5e5;
+  background-color: rgb(246, 246, 246);
 }
 
 .main-pane-header-mn-daynames {
