@@ -416,7 +416,7 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
   }
 
   //Show/hide actions.
-  this.getHandler().listen(this.viewManager,
+  this.getHandler().listen(this.getParent(),
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this)
       .listen(this.viewManager,

@@ -249,7 +249,7 @@ rflect.cal.ui.CalendarEditPane.prototype.enterDocument = function() {
       goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
 
       //Show/hide actions.
-      .listen(this.viewManager,
+      .listen(this.getParent(),
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this)
       .listen(this.viewManager,

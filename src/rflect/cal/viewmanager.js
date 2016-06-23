@@ -10,8 +10,8 @@
 goog.provide('rflect.cal.ViewManager');
 
 goog.require('goog.dom');
-goog.require('rflect.cal.ui.ScreenManager');
 goog.require('goog.events.EventType');
+goog.require('rflect.cal.ui.ScreenManager');
 goog.require('rflect.cal.blocks.BlockManager');
 goog.require('rflect.cal.ContainerSizeMonitor');
 goog.require('rflect.cal.events.EventManager');
@@ -19,6 +19,7 @@ goog.require('rflect.cal.EventType');
 goog.require('rflect.cal.Navigator');
 goog.require('rflect.cal.NotificationManager');
 goog.require('rflect.cal.predefined');
+goog.require('rflect.cal.predefined.ScreenManager.PAGE_ID');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
 goog.require('rflect.cal.Transport');
@@ -27,6 +28,7 @@ goog.require('rflect.cal.ui.MainBody');
 goog.require('rflect.cal.ui.MainPane.EventTypes');
 goog.require('rflect.cal.ui.SaveDialog');
 goog.require('rflect.cal.ui.ScreenManager');
+goog.require('rflect.cal.ui.ScreenManagerPopup');
 goog.require('rflect.cal.ui.ScreenManager.EventTypes');
 goog.require('rflect.cal.ViewType');
 
@@ -109,34 +111,45 @@ rflect.cal.ViewManager = function(aMainInstance, opt_domHelper) {
   this.addChild(this.mainBody_);
 
   /**
-   * Popup save dialog.
-   *
-   * We're not adding dialog as a child because of problems with re-decorating
-   * after update.
-   *
-   * @type {rflect.cal.ui.SaveDialog}
+   * @type {rflect.cal.ui.ScreenManagerPopup}
    * @private
    */
-  this.saveDialog_ = new rflect.cal.ui.SaveDialog(undefined, undefined,
-      undefined, this.eventManager_);
-  this.addChild(this.saveDialog_);
+  this.eventDialog_ = new rflect.cal.ui.ScreenManagerPopup();
+  this.addChild(this.eventPopup_);
   if (goog.DEBUG)
     _inspect('saveDialog_', this.saveDialog_);
 
   /**
    * Popup edit dialog.
-   * @type {rflect.cal.ui.EditDialog}
+   * @type {rflect.cal.ui.ScreenManagerPopup}
    * @private
    */
-  this.editDialog_ = new rflect.cal.ui.EditDialog();
-  this.addChild(this.editDialog_);
+  this.settingsDialog_ = new rflect.cal.ui.ScreenManagerPopup();
+  this.addChild(this.settingsDialog_);
+
   if (goog.DEBUG)
     _inspect('editDialog_', this.editDialog_);
-
 
   /**
    * Pager.
    */
+  this.eventPane_ = new rflect.cal.ui.EventPane(this, this.timeManager,
+      this.eventManager_, this.containerSizeMonitor_, this.transport_,
+      this.navigator_);
+  this.settingsPane_ = new rflect.cal.ui.SettingsPane(this, this.timeManager,
+      this.eventManager_, this.containerSizeMonitor_, this.transport_);
+  this.calendarsPane_ = new rflect.cal.ui.CalendarsPane(this.viewManager,
+      this.timeManager, this.eventManager, this.containerSizeMonitor,
+      this.transport);
+  this.calendarEditPane_ = new rflect.cal.ui.CalendarEditPane(this.viewManager,
+      this.timeManager, this.eventManager, this.containerSizeMonitor,
+      this.transport);
+
+  this.addChild(this.eventPane_);
+  this.addChild(this.settingsPane_);
+  this.addChild(this.calendarsPane_);
+  this.addChild(this.calendarEditPane_);
+
   this.setSlidingIsEnabled(rflect.TOUCH_INTERFACE_ENABLED);
 
    /**
@@ -213,6 +226,64 @@ rflect.cal.ViewManager.prototype.settingsPane_;
 
 
 /**
+ * @type {rflect.cal.ui.CalendarsPane}
+ * @private
+ */
+rflect.cal.ViewManager.prototype.calendarsPane_;
+
+
+/**
+ * @type {rflect.cal.ui.CalendarEditPane}
+ * @private
+ */
+rflect.cal.ViewManager.prototype.calendarEditPane_;
+
+
+/**
+ * @return {rflect.cal.ui.EventPane}
+ */
+rflect.cal.ViewManager.prototype.getEventPane = function() {
+  return this.eventPane_;
+};
+
+
+/**
+ * @return {rflect.cal.ui.SettingsPane}
+ */
+rflect.cal.ViewManager.prototype.getSettingsPane = function() {
+  return settingsPane_;
+}
+
+
+/**
+ * @return {rflect.cal.ui.CalendarsPane}
+ */
+rflect.cal.ViewManager.prototype.getCalendarsPane = function() {
+  return calendarsPane_;
+}
+
+
+/**
+ * @return {rflect.cal.ui.CalendarEditPane}
+ */
+rflect.cal.ViewManager.prototype.getCalendarEditPane = function() {
+  return calendarEditPane_;
+}
+
+
+/**
+ * @type {rflectl.cal.ui.ScreenManagerPopup}
+ */
+rflect.cal.ViewManager.prototype.eventDialog_;
+
+
+/**
+ * @type {rflectl.cal.ui.ScreenManagerPopup}
+ */
+rflect.cal.ViewManager.prototype.settingsDialog_;
+
+
+/**
  * @return {goog.ui.Component}
  */
 rflect.cal.ViewManager.prototype.getSettingsPane = function() {
@@ -283,6 +354,18 @@ rflect.cal.ViewManager.prototype.enterDocument = function() {
       this.onEventEdit_, false, this).
       listen(this.editDialog_, rflect.ui.Dialog.EventType.SELECT,
       this.onEditDialogButtonSelect_, false, this);
+
+  // Event pane.
+  this.getHandler().listen(this.eventPane_,
+      rflect.cal.ui.EventPane.EventTypes.SAVE, this.onEventPaneSave_,
+      false, this).listen(this.eventPane_,
+      rflect.cal.ui.EventPane.EventTypes.DELETE, this.onEventPaneDelete_,
+      false, this);
+
+  // Settings pane.
+  this.getHandler().listen(this.settingsPane_,
+      rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
+      this.onSettingsPaneCalendarUpdate_, false, this);
 };
 
 
@@ -349,24 +432,28 @@ rflect.cal.ViewManager.prototype.onEditDialogButtonSelect_ = function(aEvent) {
  */
 rflect.cal.ViewManager.prototype.showEventPane = function(aShow,
     opt_creatingNewEvent, opt_creatingByTouchHold) {
-  if (!this.eventPane_) {
-    this.eventPane_ = new rflect.cal.ui.EventPane(this,
-        this.timeManager, this.eventManager_,
-        this.containerSizeMonitor_, this.transport_,
-        this.navigator_);
-    this.addChild(this.eventPane_);
+  const isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
 
-    this.getHandler().listen(this.eventPane_,
-        rflect.cal.ui.EventPane.EventTypes.SAVE, this.onEventPaneSave_,
-        false, this).listen(this.eventPane_,
-        rflect.cal.ui.EventPane.EventTypes.DELETE, this.onEventPaneDelete_,
-        false, this);
+  if (isSmallScreen) {
+    if (!this.eventDialog_) {
+      this.eventDialog_ = new rflect.cal.ui.EventDialog();
+      this.addChild(this.eventDialog_);
+    
+      // Event pane.
+      this.getHandler().listen(this.eventDialog_,
+          rflect.cal.ui.EventPane.EventTypes.SAVE, this.onEventPaneSave_,
+          false, this).listen(this.eventDialog_,
+          rflect.cal.ui.EventPane.EventTypes.DELETE, this.onEventPaneDelete_,
+          false, this);
+    }
+    this.eventDialog_.setVisible(aShow, opt_creatingNewEvent, 
+        opt_creatingByTouchHold);
+  } else {
+    this.eventPane_.setNewEventMode(opt_creatingNewEvent);
+    this.eventPane_.setTouchHoldMode(opt_creatingByTouchHold);
+
+    this.showScreen(this.eventPane_, aShow);
   }
-
-  this.eventPane_.setNewEventMode(opt_creatingNewEvent);
-  this.eventPane_.setTouchHoldMode(opt_creatingByTouchHold);
-
-  this.showScreen(this.eventPane_, aShow);
 }
 
 
@@ -376,23 +463,23 @@ rflect.cal.ViewManager.prototype.showEventPane = function(aShow,
  * @param {boolean} aShow Whether to show settings pane.
  */
 rflect.cal.ViewManager.prototype.showSettingsPane = function(aShow) {
-  if (!this.settingsPane_) {
-    this.settingsPane_ = new rflect.cal.ui.SettingsPane(this,
-        this.timeManager, this.eventManager_,
-        this.containerSizeMonitor_, this.transport_);
-    this.addChild(this.settingsPane_);
+  const isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
 
-    // Save settings handler is in view manager.
-    this.getHandler().listen(this.settingsPane_,
-        rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
-        this.onSettingsPaneCalendarUpdate_, false, this);
-
-    if (goog.DEBUG) {
-      _inspect('settingsPane_', this.settingsPane_);
+  if (isSmallScreen) {
+    if (!this.settingsDialog_) {
+      this.settingsDialog_ = new rflect.cal.ui.SettingsDialog();
+      this.addChild(this.settingsDialog_);
+    
+      // Settings pane.
+      this.getHandler().listen(this.settingsDialog_,
+          rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
+          this.onSettingsPaneCalendarUpdate_, false, this);
     }
+    this.settingsDialog_.setVisible(aShow, opt_creatingNewEvent, 
+        opt_creatingByTouchHold);
+  } else {
+    this.showScreen(this.settingsPane_, aShow);
   }
-
-  this.showScreen(this.settingsPane_, aShow);
 }
 
 

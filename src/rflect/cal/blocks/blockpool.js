@@ -284,7 +284,9 @@ rflect.cal.blocks.BlockPool.prototype.updateExpandedBlocks =
   if (this.isHorizontal_) {
     nominalSize = this.gridContainerSize.width / this.blocksNumber_;
   } else {
-    nominalSize = this.gridContainerSize.height / this.blocksNumber_;
+    nominalSize = //Math.floor(
+      this.gridContainerSize.height / this.blocksNumber_
+    //);
   }
 
   for (var counter = 0; counter < this.blocksNumber_;

@@ -1243,7 +1243,7 @@ rflect.cal.ui.MainPane.prototype.enterDocument = function() {
   this.getHandler()
       .listen(this.transport_, rflect.cal.Transport.EventTypes.SAVE_EVENT,
       this.onSaveEvent_, false, this)
-      .listen(this.viewManager_,
+      .listen(this.getParent().getParent(),
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this);
 

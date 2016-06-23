@@ -478,7 +478,7 @@ rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
       .listen(document,
       goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
 
-      .listen(this.viewManager,
+      .listen(this.getParent(),
           rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
           this.onBeforePageChange_, false, this)
 }
@@ -504,15 +504,8 @@ rflect.cal.ui.SettingsPane.prototype.onBeforePageChange_ = function(aEvent) {
  * @param {boolean} aShow Whether to show settings pane.
  */
 rflect.cal.ui.SettingsPane.prototype.showCalendarsPane = function(aShow) {
-  if (!this.calendarsPane_) {
-    this.calendarsPane_ = new rflect.cal.ui.CalendarsPane(this.viewManager,
-        this.timeManager, this.eventManager, this.containerSizeMonitor,
-        this.transport);
-    this.addChild(this.calendarsPane_);
-  }
-
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this.calendarsPane_,
-      aShow));
+  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this.getParent().
+      getCalendarsPane(), aShow));
 }
 
 

@@ -312,7 +312,7 @@ rflect.cal.ui.SidePane.prototype.enterDocument = function() {
       listen(this.showBehavior,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
       this.onSlideBreak_, false, this).
-      listen(this.viewManager_,
+      listen(this.getParent().getParent(),
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this);
 };

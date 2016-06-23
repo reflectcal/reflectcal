@@ -16,6 +16,7 @@ goog.provide('rflect.cal.predefined');
 goog.provide('rflect.cal.predefined.chips');
 goog.provide('rflect.cal.predefined.MainPane.ELEMENT_ID');
 goog.provide('rflect.cal.predefined.CalendarEditPane');
+goog.provide('rflect.cal.predefined.ScreenManager');
 
 
 //TODO(alexk): much of this file will go to cfg
@@ -869,3 +870,14 @@ rflect.cal.predefined.MainPane.ELEMENT_ID = {
  * @type {string}
  */
 rflect.cal.predefined.CalendarEditPane.COLORS_RADIO_GROUP_NAME = 'colors';
+
+
+/**
+ * @enum {string}
+ */
+rflect.cal.predefined.ScreenManager.PAGE_ID = {
+  EVENT_PANE: 'EVENT_PANE',
+  SETTINGS_PANE: 'SETTINGS_PANE',
+  CALENDARS_PANE: 'CALENDARS_PANE',
+  CALENDAR_EDIT_PANE: 'CALENDAR_EDIT_PANE'
+}
