@@ -339,17 +339,17 @@ rflect.cal.ui.CalendarsPane.prototype.onBeforePageChange_ =
  * Shows calendars pane and lazily instantiates it at the first
  * time.
  * @param {boolean} aShow Whether to show settings pane.
- * @param {rflect.cal.events.Calendar=} opt_calendar Calendar with which to
+ * @param {rflect.cal.events.Calendar} aCalendar Calendar with which to
  * initialize calendars pane.
- * @param {boolean=} opt_newCalendarMode Whether to delete button in calendars
+ * @param {boolean} aNewCalendarMode Whether to delete button in calendars
  * pane, i.e. whether calendar is existing or new.
  */
 rflect.cal.ui.CalendarsPane.prototype.showCalendarEditPane = function(aShow,
-    opt_calendar, opt_newCalendarMode) {
+    aCalendar, aNewCalendarMode) {
   if (aShow) {
-    this.viewManager.getCalendarEditPane().setCurrentCalendar(opt_calendar);
+    this.viewManager.getCalendarEditPane().setCurrentCalendar(aCalendar);
     this.viewManager.getCalendarEditPane().setNewCalendarMode(
-        opt_newCalendarMode);
+        aNewCalendarMode);
   }
   this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(
       this.viewManager.getCalendarEditPane(), aShow));

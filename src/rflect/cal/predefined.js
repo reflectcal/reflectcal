@@ -871,13 +871,3 @@ rflect.cal.predefined.MainPane.ELEMENT_ID = {
  */
 rflect.cal.predefined.CalendarEditPane.COLORS_RADIO_GROUP_NAME = 'colors';
 
-
-/**
- * @enum {string}
- */
-rflect.cal.predefined.ScreenManager.PAGE_ID = {
-  EVENT_PANE: 'EVENT_PANE',
-  SETTINGS_PANE: 'SETTINGS_PANE',
-  CALENDARS_PANE: 'CALENDARS_PANE',
-  CALENDAR_EDIT_PANE: 'CALENDAR_EDIT_PANE'
-}

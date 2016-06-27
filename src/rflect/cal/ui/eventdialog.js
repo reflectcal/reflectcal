@@ -33,33 +33,35 @@ class EventDialog extends rflect.cal.ui.ScreenManagerPopup {
    *     goog.ui.Component} for semantics.
    */
   constructor(aViewManager, aTimeManager, aEventManager, aContainerSizeMonitor,
-      aTransport, opt_useIframeMask, opt_domHelper) {
-    super(this, opt_useIframeMask, opt_domHelper);
+      aTransport, aNavigator, opt_useIframeMask, opt_domHelper) {
+    super(opt_useIframeMask, opt_domHelper);
 
     /**
      * Pager.
      */
-    this.eventPane_ = new rflect.cal.ui.EventPane(this, aTimeManager,
+    this.eventPane_ = new rflect.cal.ui.EventPane(aViewManager, aTimeManager,
         aEventManager, aContainerSizeMonitor, aTransport, aNavigator);
 
     this.screenManager.addChild(this.eventPane_);
-
-    this.setSlidingIsEnabled(rflect.TOUCH_INTERFACE_ENABLED);
   };
 
   /**
    * @param {boolean} aShow
+   * @param {Element=} opt_anchorElement
+   * @param {goog.math.Coordinate=} opt_anchorCoordinate
    * @param {boolean=} opt_creatingNewEvent
    * @param {boolean=} opt_creatingByTouchHold
    * @override
    */
-  setVisible(aShow, opt_creatingNewEvent, opt_creatingByTouchHold) {
+  setVisible(aShow, opt_anchorElement, opt_anchorCoordinate,
+      opt_creatingNewEvent, opt_creatingByTouchHold) {
     if (aShow) {
       this.eventPane_.setNewEventMode(opt_creatingNewEvent);
       this.eventPane_.setTouchHoldMode(opt_creatingByTouchHold);
     }
 
-    super.setVisible(aShow);
+    EventDialog.superClass_.setVisible.call(this, aShow, opt_anchorElement,
+        opt_anchorCoordinate);
   }
 
   /**
@@ -72,6 +74,6 @@ class EventDialog extends rflect.cal.ui.ScreenManagerPopup {
 
 
 /**
- * @typedef {ScreenManagerPopup}
+ * @typedef {EventDialog}
  */
 rflect.cal.ui.EventDialog = EventDialog;
