@@ -410,14 +410,14 @@ rflect.cal.ViewManager.prototype.onEditDialogButtonSelect_ = function(aEvent) {
  * Shows event pane when possible and lazily instantiates it at the first time.
  * @param {boolean} aShow Whether to show event pane.
  * @param {Element} aAnchorElement Element near which to show event dialog.
- * @param {goog.math.Coordinate=} opt_anchorCoordinate Coordinate near which to
- * show event dialog.
+ * @param {boolean} aCreatingByNewButton Whether creating event by 'New'
+ * button.
  * @param {boolean=} opt_creatingNewEvent Whether we're creating new event.
  * @param {boolean=} opt_creatingByTouchHold Whether we're creating event by
  * touch hold.
  */
 rflect.cal.ViewManager.prototype.showEventPane = function(aShow, aAnchorElement,
-    opt_anchorCoordinate, opt_creatingNewEvent, opt_creatingByTouchHold) {
+    aCreatingByNewButton, opt_creatingNewEvent, opt_creatingByTouchHold) {
   const isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
 
   if (!isSmallScreen) {
@@ -434,7 +434,7 @@ rflect.cal.ViewManager.prototype.showEventPane = function(aShow, aAnchorElement,
           rflect.cal.ui.EventPane.EventTypes.DELETE, this.onEventPaneDelete_,
           false, this);
     }
-    this.eventDialog_.setVisible(aShow, aAnchorElement, opt_anchorCoordinate,
+    this.eventDialog_.show(aShow, aCreatingByNewButton, aAnchorElement,
         opt_creatingNewEvent, opt_creatingByTouchHold);
   } else {
     this.eventPane_.setNewEventMode(opt_creatingNewEvent);
@@ -455,7 +455,9 @@ rflect.cal.ViewManager.prototype.showSettingsPane = function(aShow) {
 
   if (!isSmallScreen) {
     if (!this.settingsDialog_) {
-      this.settingsDialog_ = new rflect.cal.ui.SettingsDialog();
+      this.settingsDialog_ = new rflect.cal.ui.SettingsDialog(this,
+          this.timeManager, this.eventManager_, this.containerSizeMonitor_,
+          this.transport_);
       this.addChild(this.settingsDialog_);
     
       // Settings pane.
@@ -463,7 +465,7 @@ rflect.cal.ViewManager.prototype.showSettingsPane = function(aShow) {
           rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
           this.onSettingsPaneCalendarUpdate_, false, this);
     }
-    this.settingsDialog_.setVisible(aShow, this.getDomHelper().getElement(
+    this.settingsDialog_.show(aShow, this.getDomHelper().getElement(
         rflect.cal.predefined.BUTTON_SIDE_PANE_SETTINGS_ID));
   } else {
     this.showScreen(this.settingsPane_, aShow);
@@ -654,13 +656,13 @@ rflect.cal.ViewManager.prototype.onEditComponentShow_ = function(aEvent) {
 
   if (byTouchHold) {
     if (this.eventManager_.eventHolder.isInProgress()) {
-      this.showEventPane(true, targetElement, targetCoordinate, true, true);
+      this.showEventPane(true, targetElement, false, true, true);
     }
   } else if (!this.eventManager_.eventIsInProgress(calendarEvent.id)) {
     this.eventManager_.eventHolder.openSession(calendarEvent);
     if (calendarEvent) {
       if (showPane) {
-        this.showEventPane(true, targetElement, targetCoordinate);
+        this.showEventPane(true, targetElement, false);
       }
     }
   }
@@ -720,7 +722,7 @@ rflect.cal.ViewManager.prototype.onMenuCommandNext_ = function() {
 rflect.cal.ViewManager.prototype.onMenuCommandNewEvent_ = function() {
   this.eventManager_.startEventCreationSession();
   this.showEventPane(true, this.getDomHelper().
-      getElement(rflect.cal.predefined.BUTTON_NEW_EVENT_ID), undefined, true);
+      getElement(rflect.cal.predefined.BUTTON_NEW_EVENT_ID), true, true);
 };
 
 

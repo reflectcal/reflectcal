@@ -51,6 +51,31 @@ class SettingsDialog extends rflect.cal.ui.ScreenManagerPopup {
   };
 
   /**
+   * @param {boolean} aShow
+   * @param {Element} aAnchorElement
+   */
+  show(aShow, aAnchorElement) {
+    if (aShow) {
+      /*this.setPinnedCorner(goog.positioning.Corner.BOTTOM_LEFT);
+      this.setMargin(new goog.math.Box(0, 0, 5, 10));
+      this.setPosition(new goog.positioning.AnchoredViewportPosition(
+          aAnchorElement, goog.positioning.Corner.BOTTOM_RIGHT));
+      this.setVisible(aShow);
+      this.positionArrow(
+          rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.LEFT,
+          aAnchorElement);*/
+      this.setPinnedCorner(goog.positioning.Corner.BOTTOM_LEFT);
+      this.setMargin(new goog.math.Box(0, 0, 5, 10));
+      this.setPosition(new goog.positioning.AnchoredViewportPosition(
+          aAnchorElement, goog.positioning.Corner.TOP_LEFT));
+      this.setVisible(aShow);
+      this.positionArrow(
+          rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.BOTTOM,
+          aAnchorElement);
+    }
+  }
+
+  /**
    * @override
    */
   disposeInternal() {

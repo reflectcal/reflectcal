@@ -47,21 +47,42 @@ class EventDialog extends rflect.cal.ui.ScreenManagerPopup {
 
   /**
    * @param {boolean} aShow
-   * @param {Element=} opt_anchorElement
-   * @param {goog.math.Coordinate=} opt_anchorCoordinate
+   * @param {boolean} aCreatingByNewButton
+   * @param {Element} aAnchorElement
    * @param {boolean=} opt_creatingNewEvent
    * @param {boolean=} opt_creatingByTouchHold
-   * @override
    */
-  setVisible(aShow, opt_anchorElement, opt_anchorCoordinate,
-      opt_creatingNewEvent, opt_creatingByTouchHold) {
+  show(aShow, aCreatingByNewButton, aAnchorElement, opt_creatingNewEvent,
+      opt_creatingByTouchHold) {
     if (aShow) {
       this.eventPane_.setNewEventMode(opt_creatingNewEvent);
       this.eventPane_.setTouchHoldMode(opt_creatingByTouchHold);
     }
 
-    EventDialog.superClass_.setVisible.call(this, aShow, opt_anchorElement,
-        opt_anchorCoordinate);
+    /*if (aCreatingByNewButton) {
+      this.setPinnedCorner(goog.positioning.Corner.TOP_RIGHT);
+      this.setMargin(new goog.math.Box(10, 0, 0, 0));
+      this.setPosition(new goog.positioning.AnchoredViewportPosition(
+          aAnchorElement, goog.positioning.Corner.BOTTOM_RIGHT));
+      this.setVisible(aShow);
+      this.positionArrow(
+          rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.TOP,
+          aAnchorElement);
+    } else {
+
+    }*/
+    if (aCreatingByNewButton) {
+      this.setPinnedCorner(goog.positioning.Corner.TOP_RIGHT);
+      this.setMargin(new goog.math.Box(10, 0, 0, 0));
+      this.setPosition(new goog.positioning.AnchoredViewportPosition(
+          aAnchorElement, goog.positioning.Corner.TOP_LEFT));
+      this.setVisible(aShow);
+      this.positionArrow(
+          rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.RIGHT,
+          aAnchorElement);
+    } else {
+
+    }
   }
 
   /**
@@ -77,3 +98,13 @@ class EventDialog extends rflect.cal.ui.ScreenManagerPopup {
  * @typedef {EventDialog}
  */
 rflect.cal.ui.EventDialog = EventDialog;
+
+
+/**
+ * @enum {number}
+ */
+rflect.cal.ui.EventDialog.CONFIGURATION = {
+  NEW_EVENT: 1,
+  FIELD_RIGHT: 2,
+  FIELD_LEFT: 3
+}
