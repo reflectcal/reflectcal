@@ -60,17 +60,21 @@ class EventDialog extends rflect.cal.ui.ScreenManagerPopup {
     }
 
     if (aCreatingByNewButton) {
-      this.setPinnedCorner(goog.positioning.Corner.TOP_RIGHT);
-      this.setMargin(new goog.math.Box(10, 0, 0, 0));
-      this.setPosition(new goog.positioning.AnchoredViewportPosition(
-          aAnchorElement, goog.positioning.Corner.BOTTOM_RIGHT));
-      this.setVisible(aShow);
-      this.positionArrow(
-          rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.TOP,
-          aAnchorElement);
+      this.showForNewButtonCase(aAnchorElement, aShow);
     } else {
 
     }
+  }
+
+  showForNewButtonCase(aAnchorElement, aShow){
+    this.setPinnedCorner(goog.positioning.Corner.TOP_RIGHT);
+    this.setMargin(new goog.math.Box(10, 0, 0, 0));
+    this.setPosition(new goog.positioning.AnchoredViewportPosition(
+        aAnchorElement, goog.positioning.Corner.BOTTOM_RIGHT));
+    this.setVisible(aShow);
+    this.positionArrow(
+        rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.TOP,
+        aAnchorElement);
   }
 
   /**
