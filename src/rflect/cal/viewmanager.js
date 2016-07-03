@@ -412,12 +412,15 @@ rflect.cal.ViewManager.prototype.onEditDialogButtonSelect_ = function(aEvent) {
  * @param {Element} aAnchorElement Element near which to show event dialog.
  * @param {boolean} aCreatingByNewButton Whether creating event by 'New'
  * button.
+ * @param {goog.math.Coordinate=} opt_anchorCoordinate Coordinate of mouse click
+ * prior to calendar event creation.
  * @param {boolean=} opt_creatingNewEvent Whether we're creating new event.
  * @param {boolean=} opt_creatingByTouchHold Whether we're creating event by
  * touch hold.
  */
 rflect.cal.ViewManager.prototype.showEventPane = function(aShow, aAnchorElement,
-    aCreatingByNewButton, opt_creatingNewEvent, opt_creatingByTouchHold) {
+    aCreatingByNewButton, opt_anchorCoordinate, opt_creatingNewEvent,
+    opt_creatingByTouchHold) {
   const isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
 
   if (!isSmallScreen) {
@@ -434,8 +437,8 @@ rflect.cal.ViewManager.prototype.showEventPane = function(aShow, aAnchorElement,
           rflect.cal.ui.EventPane.EventTypes.DELETE, this.onEventPaneDelete_,
           false, this);
     }
-    this.eventDialog_.show(aShow, aCreatingByNewButton, aAnchorElement,
-        opt_creatingNewEvent, opt_creatingByTouchHold);
+    this.eventDialog_.show(aShow, aCreatingByNewButton, aAnchorElement, 
+        opt_anchorCoordinate, opt_creatingNewEvent, opt_creatingByTouchHold);
   } else {
     this.eventPane_.setNewEventMode(opt_creatingNewEvent);
     this.eventPane_.setTouchHoldMode(opt_creatingByTouchHold);
@@ -656,13 +659,13 @@ rflect.cal.ViewManager.prototype.onEditComponentShow_ = function(aEvent) {
 
   if (byTouchHold) {
     if (this.eventManager_.eventHolder.isInProgress()) {
-      this.showEventPane(true, targetElement, false, true, true);
+      this.showEventPane(true, targetElement, false, targetCoordinate, true, true);
     }
   } else if (!this.eventManager_.eventIsInProgress(calendarEvent.id)) {
     this.eventManager_.eventHolder.openSession(calendarEvent);
     if (calendarEvent) {
       if (showPane) {
-        this.showEventPane(true, targetElement, false);
+        this.showEventPane(true, targetElement, false, targetCoordinate);
       }
     }
   }
@@ -722,7 +725,8 @@ rflect.cal.ViewManager.prototype.onMenuCommandNext_ = function() {
 rflect.cal.ViewManager.prototype.onMenuCommandNewEvent_ = function() {
   this.eventManager_.startEventCreationSession();
   this.showEventPane(true, this.getDomHelper().
-      getElement(rflect.cal.predefined.BUTTON_NEW_EVENT_ID), true, true);
+      getElement(rflect.cal.predefined.BUTTON_NEW_EVENT_ID), true, undefined,
+      true);
 };
 
 
