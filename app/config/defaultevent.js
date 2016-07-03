@@ -62,13 +62,6 @@ exports.DEFAULT_EVENTS = [
     name : 'Test and launch Reflect calendar',
     start : 86400000 + 0 * 60 * 60 * 1000,
     end : 86400000 + 24 * 60 * 60 * 1000
-  },{
-    calendarId : 2,
-    allDay : false,
-    description : '',
-    name : 'Expecting call from Carl Sagan',
-    start : -86400000 + 17 * 60 * 60 * 1000,
-    end : -86400000 + 21 * 60 * 60 * 1000
   }
 ];
 
