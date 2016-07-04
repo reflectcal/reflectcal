@@ -180,63 +180,63 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
 
     switch (aConfig) {
       case rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.TOP: {
-        const centerOfAnchorX = leftOfAnchor + widthOfAnchor / 2;
-        const leftOfArrow = Math.abs(leftOfAnchor - leftOfPopup);
-        goog.style.setPosition(this.getArrow(), leftOfArrow,
-          -rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE + 1);
+        this.positionArrowTop(leftOfAnchor, widthOfAnchor, leftOfPopup);
       };break;
       case rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.BOTTOM: {
-        const leftOfArrow = Math.abs(leftOfAnchor - leftOfPopup);
-        const topOfArrow = Math.abs(heightOfPopup - 1);
-        goog.style.setPosition(this.getArrow(), leftOfArrow, topOfArrow);
+        this.positionArrowBottom(leftOfAnchor, leftOfPopup, heightOfPopup);
       };break;
       case rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.LEFT: {
-
         if (leftOfAnchor <= leftOfPopup) {
-
-          const centerOfAnchorY = topOfAnchor + heightOfAnchor / 2;
-          const topOfArrow = Math.abs(topOfAnchor - topOfPopup -
-              rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE / 2);
-
-          goog.style.setPosition(this.getArrow(),
-              -rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE + 1, topOfArrow);
-
+          this.positionArrowLeft(topOfAnchor, heightOfAnchor, topOfPopup);
         } else {
           this.manipulateArrowClasses(rflect.cal.ui.ScreenManagerPopup.
               ARROW_CONFIGURATION.RIGHT);
-
-          const leftOfArrow = Math.abs(widthOfPopup - 1);
-          const topOfArrow = Math.abs(topOfAnchor - topOfPopup -
-              rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE / 2);
-          goog.style.setPosition(this.getArrow(), leftOfArrow, topOfArrow);
-
+          this.positionArrowRight(widthOfPopup, topOfAnchor, topOfPopup);
         }
-
       };break;
       case rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.RIGHT: {
-
         if (leftOfAnchor >= leftOfPopup) {
-
-          const leftOfArrow = Math.abs(widthOfPopup - 1);
-          const topOfArrow = Math.abs(topOfAnchor - topOfPopup);
-          goog.style.setPosition(this.getArrow(), leftOfArrow, topOfArrow);
-
+          this.positionArrowRight(widthOfPopup, topOfAnchor, topOfPopup);
         } else {
           this.manipulateArrowClasses(rflect.cal.ui.ScreenManagerPopup.
               ARROW_CONFIGURATION.LEFT);
-
-          const centerOfAnchorY = topOfAnchor + heightOfAnchor / 2;
-          const topOfArrow = Math.abs(topOfAnchor - topOfPopup -
-              rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE / 2);
-
-          goog.style.setPosition(this.getArrow(),
-              -rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE + 1, topOfArrow);
-
+          this.positionArrowLeft(topOfAnchor, heightOfAnchor, topOfPopup);
         }
-        
       };break;
       default:break;
     }
+  }
+
+  positionArrowBottom(leftOfAnchor, leftOfPopup, heightOfPopup) {
+    const leftOfArrow = Math.abs(leftOfAnchor - leftOfPopup);
+    const topOfArrow = Math.abs(heightOfPopup - 1);
+
+    goog.style.setPosition(this.getArrow(), leftOfArrow, topOfArrow);
+  }
+
+  positionArrowTop(leftOfAnchor, widthOfAnchor, leftOfPopup) {
+    const centerOfAnchorX = leftOfAnchor + widthOfAnchor / 2;
+    const leftOfArrow = Math.abs(leftOfAnchor - leftOfPopup);
+
+    goog.style.setPosition(this.getArrow(), leftOfArrow,
+        -rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE + 1);
+  }
+
+  positionArrowRight(widthOfPopup, topOfAnchor, topOfPopup) {
+    const leftOfArrow = Math.abs(widthOfPopup - 1);
+    const topOfArrow = Math.abs(topOfAnchor - topOfPopup -
+        rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE / 2);
+
+    goog.style.setPosition(this.getArrow(), leftOfArrow, topOfArrow);
+  }
+
+  positionArrowLeft(topOfAnchor, heightOfAnchor, topOfPopup) {
+    const centerOfAnchorY = topOfAnchor + heightOfAnchor / 2;
+    const topOfArrow = Math.abs(topOfAnchor - topOfPopup -
+        rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE / 2);
+
+    goog.style.setPosition(this.getArrow(),
+        -rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE + 1, topOfArrow);
   }
 
   /**
