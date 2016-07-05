@@ -63,14 +63,16 @@ class EventDialog extends rflect.cal.ui.ScreenManagerPopup {
     if (aCreatingByNewButton) {
       this.showForNewButtonCase(aAnchorElement, aShow);
     } else {
-      this.showForGridCase(aShow, this.moreSpaceToTheRight(),
+      this.showForGridCase(aShow,
+          true,
+          this.moreSpaceToTheRight(),
           opt_anchorCoordinate);
     }
   }
 
   /**
    * @param {goog.math.Coordinate=} aAnchorCoordinate
-   * @return {number} Margin top for centering modal box.
+   * @return {number} Margin top for centering modal box vertically.
    */
   getMarginTop(aAnchorCoordinate) {
 
@@ -103,17 +105,56 @@ class EventDialog extends rflect.cal.ui.ScreenManagerPopup {
 
   /**
    * @param {goog.math.Coordinate=} aAnchorCoordinate
-   * @param {boolean} aShow
-   * @param {boolean} aRight
+   * @return {number} Margin left for centering modal box horizontally.
    */
-  showForGridCase(aShow, aRight,
+  getMarginLeft(aAnchorCoordinate) {
+
+    const {
+        top: topOfPopup,
+        right: rightOfPopup,
+        bottom: bottomOfPopup,
+        left: leftOfPopup
+    } = this.getElement().getBoundingClientRect();
+    const widthOfPopup = rightOfPopup - leftOfPopup;
+
+    const defaultMarginLeftAbs = widthOfPopup / 2;
+
+    const doc = this.getDomHelper().getDocument();
+    const win = goog.dom.getWindow(doc) || window;
+    const viewSize = goog.dom.getViewportSize(win);
+
+    const howMuchOfPopupIsOut = viewSize.width - aAnchorCoordinate.x -
+        defaultMarginLeftAbs;
+
+    var marginLeftAbs = defaultMarginLeftAbs;
+    if (defaultMarginLeftAbs > aAnchorCoordinate.x) {
+      marginLeftAbs = aAnchorCoordinate.x;
+    } else if (howMuchOfPopupIsOut < 0) {
+      marginLeftAbs = defaultMarginLeftAbs - howMuchOfPopupIsOut;
+    }
+
+    return -marginLeftAbs;
+  }
+
+  /**
+   * @param {boolean} aShow
+   * @param {boolean} aAlignmentIsHorizontal
+   * @param {boolean} aTopOrRight
+   * @param {goog.math.Coordinate=} aAnchorCoordinate
+   */
+  showForGridCase(aShow, aAlignmentIsHorizontal, aTopOrRight,
                   aAnchorCoordinate = new goog.math.Coordinate(0, 0)) {
     const anchorElement = this.getMarkerElement(aAnchorCoordinate);
     this.getDomHelper().getDocument().body.appendChild(anchorElement);
 
     this.setVisible(aShow);
 
-    this.setPinnedCorner(goog.positioning.Corner.TOP_LEFT);
+    if (aAlignmentIsHorizontal) {
+      this.setPinnedCorner(goog.positioning.Corner.BOTTOM_LEFT);
+    } else {
+      this.setPinnedCorner(goog.positioning.Corner.TOP_LEFT);
+    }
+
     const {
       top: topOfPopup,
       right: rightOfPopup,
@@ -121,19 +162,31 @@ class EventDialog extends rflect.cal.ui.ScreenManagerPopup {
       left: leftOfPopup
     } = this.getElement().getBoundingClientRect();
     const heightOfPopup = bottomOfPopup - topOfPopup;
-
     const widthOfPopup = rightOfPopup - leftOfPopup;
-    
-    this.setMargin(new goog.math.Box(this.getMarginTop(aAnchorCoordinate), 20,
-        0, 20));
-    this.setPosition(new goog.positioning.AnchoredViewportPosition(
-        anchorElement, aRight ?
-            goog.positioning.Corner.TOP_LEFT :
-            goog.positioning.Corner.TOP_RIGHT));
-    this.positionArrow(aRight ?
-        rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.LEFT :
-        rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.RIGHT,
-        anchorElement);
+
+    if (aAlignmentIsHorizontal) {
+      this.setMargin(new goog.math.Box(20, 0, 20,
+          this.getMarginLeft(aAnchorCoordinate)));
+      this.setPosition(new goog.positioning.AnchoredViewportPosition(
+          anchorElement, aTopOrRight ?
+              goog.positioning.Corner.TOP_LEFT:
+              goog.positioning.Corner.BOTTOM_LEFT ));
+      this.positionArrow(aTopOrRight ?
+              rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.BOTTOM :
+              rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.TOP,
+          anchorElement);
+    } else {
+      this.setMargin(new goog.math.Box(this.getMarginTop(aAnchorCoordinate), 20,
+          0, 20));
+      this.setPosition(new goog.positioning.AnchoredViewportPosition(
+          anchorElement, aTopOrRight ?
+              goog.positioning.Corner.TOP_LEFT :
+              goog.positioning.Corner.TOP_RIGHT));
+      this.positionArrow(aTopOrRight ?
+          rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.LEFT :
+          rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.RIGHT,
+          anchorElement);
+    }
 
     goog.dom.removeNode(anchorElement);
   }
@@ -153,7 +206,7 @@ class EventDialog extends rflect.cal.ui.ScreenManagerPopup {
    * @return {boolean}
    */
   moreSpaceToTheRight() {
-    return true;
+    return false;
   }
 
   showForNewButtonCase(aAnchorElement, aShow){
@@ -185,8 +238,7 @@ rflect.cal.ui.EventDialog = EventDialog;
 /**
  * @enum {number}
  */
-rflect.cal.ui.EventDialog.CONFIGURATION = {
-  NEW_EVENT: 1,
-  FIELD_RIGHT: 2,
-  FIELD_LEFT: 3
+rflect.cal.ui.EventDialog.ALIGN = {
+  HORIZONTALLY: 1,
+  VERTICALLY: 2
 }

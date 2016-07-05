@@ -154,7 +154,7 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
   positionArrow(aConfig,
                 aAnchorElement) {
 
-    this.manipulateArrowClasses(aConfig);
+    this.removeArrowClasses(aConfig);
 
     const {
       top: topOfAnchor,
@@ -174,32 +174,40 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
     const heightOfPopup = bottomOfPopup - topOfPopup;
     const widthOfPopup = rightOfPopup - leftOfPopup;
 
-    const doc = this.getDomHelper().getDocument();
-    const win = goog.dom.getWindow(doc) || window;
-    const viewSize = goog.dom.getViewportSize(win);
+    this.positionArrowByConfig(aConfig, topOfAnchor, topOfPopup, leftOfAnchor,
+        widthOfAnchor, leftOfPopup, heightOfPopup, heightOfAnchor,
+        widthOfPopup);
+  }
 
+  positionArrowByConfig(aConfig, topOfAnchor, topOfPopup, leftOfAnchor,
+                        widthOfAnchor, leftOfPopup, heightOfPopup,
+                        heightOfAnchor, widthOfPopup) {
     switch (aConfig) {
       case rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.TOP: {
-        this.positionArrowTop(leftOfAnchor, widthOfAnchor, leftOfPopup);
+        if (topOfAnchor <= topOfPopup) {
+          this.positionArrowTop(leftOfAnchor, widthOfAnchor, leftOfPopup);
+        } else {
+          this.positionArrowBottom(leftOfAnchor, leftOfPopup, heightOfPopup);
+        }
       };break;
       case rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.BOTTOM: {
-        this.positionArrowBottom(leftOfAnchor, leftOfPopup, heightOfPopup);
+        if (topOfAnchor > topOfPopup) {
+          this.positionArrowBottom(leftOfAnchor, leftOfPopup, heightOfPopup);
+        } else {
+          this.positionArrowTop(leftOfAnchor, widthOfAnchor, leftOfPopup);
+        }
       };break;
       case rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.LEFT: {
         if (leftOfAnchor <= leftOfPopup) {
           this.positionArrowLeft(topOfAnchor, heightOfAnchor, topOfPopup);
         } else {
-          this.manipulateArrowClasses(rflect.cal.ui.ScreenManagerPopup.
-              ARROW_CONFIGURATION.RIGHT);
           this.positionArrowRight(widthOfPopup, topOfAnchor, topOfPopup);
         }
       };break;
       case rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.RIGHT: {
-        if (leftOfAnchor >= leftOfPopup) {
+        if (leftOfAnchor > leftOfPopup) {
           this.positionArrowRight(widthOfPopup, topOfAnchor, topOfPopup);
         } else {
-          this.manipulateArrowClasses(rflect.cal.ui.ScreenManagerPopup.
-              ARROW_CONFIGURATION.LEFT);
           this.positionArrowLeft(topOfAnchor, heightOfAnchor, topOfPopup);
         }
       };break;
@@ -211,14 +219,20 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
     const leftOfArrow = Math.abs(leftOfAnchor - leftOfPopup);
     const topOfArrow = Math.abs(heightOfPopup - 1);
 
-    goog.style.setPosition(this.getArrow(), leftOfArrow, topOfArrow);
+    this.addArrowClass(rflect.cal.ui.ScreenManagerPopup.
+        ARROW_CONFIGURATION.BOTTOM);
+    goog.style.setPosition(this.getArrow(), leftOfArrow -
+        rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE / 2, topOfArrow);
   }
 
   positionArrowTop(leftOfAnchor, widthOfAnchor, leftOfPopup) {
     const centerOfAnchorX = leftOfAnchor + widthOfAnchor / 2;
     const leftOfArrow = Math.abs(leftOfAnchor - leftOfPopup);
 
-    goog.style.setPosition(this.getArrow(), leftOfArrow,
+    this.addArrowClass(rflect.cal.ui.ScreenManagerPopup.
+        ARROW_CONFIGURATION.TOP);
+    goog.style.setPosition(this.getArrow(), leftOfArrow -
+        rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE / 2,
         -rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE + 1);
   }
 
@@ -227,6 +241,8 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
     const topOfArrow = Math.abs(topOfAnchor - topOfPopup -
         rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE / 2);
 
+    this.addArrowClass(rflect.cal.ui.ScreenManagerPopup.
+        ARROW_CONFIGURATION.RIGHT);
     goog.style.setPosition(this.getArrow(), leftOfArrow, topOfArrow);
   }
 
@@ -235,6 +251,8 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
     const topOfArrow = Math.abs(topOfAnchor - topOfPopup -
         rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE / 2);
 
+    this.addArrowClass(rflect.cal.ui.ScreenManagerPopup.
+        ARROW_CONFIGURATION.LEFT);
     goog.style.setPosition(this.getArrow(),
         -rflect.cal.ui.ScreenManagerPopup.ARROW_SIZE + 1, topOfArrow);
   }
@@ -242,13 +260,18 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
   /**
    * @param {rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION} aConfig
    */
-  manipulateArrowClasses(aConfig){
+  removeArrowClasses(aConfig){
     goog.dom.classes.remove(this.getArrow(),
         rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.TOP.toString(),
         rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.BOTTOM.toString(),
         rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.LEFT.toString(),
         rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.RIGHT.toString());
+  }
 
+  /**
+   * @param {rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION} aConfig
+   */
+  addArrowClass(aConfig){
     goog.dom.classes.add(this.getArrow(), aConfig.toString());
   }
 
