@@ -252,7 +252,7 @@ rflect.cal.ui.CalendarEditPane.prototype.enterDocument = function() {
       .listen(this.getParent(),
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this)
-      .listen(this.viewManager,
+      .listen(this.getParent(),
       rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE, this.onPageChange_,
       false, this);
 };

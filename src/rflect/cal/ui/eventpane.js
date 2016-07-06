@@ -346,16 +346,16 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
 
   rflect.cal.ui.EventPane.superClass_.enterDocument.call(this);
 
-  this.inputName_ = this.getDomHelper().getElement('ep-event-name-input');
+  this.inputName_ = this.getDomHelper().getElement(`${this.getId()}ep-event-name-input`);
 
-  this.checkboxAllDay_ = this.getDomHelper().getElement('event-all-day');
+  this.checkboxAllDay_ = this.getDomHelper().getElement(`${this.getId()}event-all-day`);
 
   if (isNativeTimeInput) {
     [this.inputStartDate_, this.inputStartDateTime_, this.inputEndDate_,
         this.inputEndDateTime_] = this.getTimeInputsNative_();
 
-    this.labelStart_ = this.getDomHelper().getElement('label-start');
-    this.labelEnd_ = this.getDomHelper().getElement('label-end');
+    this.labelStart_ = this.getDomHelper().getElement(`${this.getId()}label-start`);
+    this.labelEnd_ = this.getDomHelper().getElement(`${this.getId()}label-end`);
 
   } else {
     [this.inputStartDate_, this.inputStartTime_, this.inputEndDate_,
@@ -367,15 +367,15 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
     this.inputDatePicker_.addInput(this.inputStartDate_);
     this.inputDatePicker_.addInput(this.inputEndDate_);
 
-    this.labelStartDate_ = this.getDomHelper().getElement('label-start-date');
-    this.labelStartTime_ = this.getDomHelper().getElement('label-start-time');
-    this.labelEndDate_ = this.getDomHelper().getElement('label-end-date');
-    this.labelEndTime_ = this.getDomHelper().getElement('label-end-time');
+    this.labelStartDate_ = this.getDomHelper().getElement(`${this.getId()}label-start-date`);
+    this.labelStartTime_ = this.getDomHelper().getElement(`${this.getId()}label-start-time`);
+    this.labelEndDate_ = this.getDomHelper().getElement(`${this.getId()}label-end-date`);
+    this.labelEndTime_ = this.getDomHelper().getElement(`${this.getId()}label-end-time`);
 
   }
 
 
-  this.textAreaDesc_ = this.getDomHelper().getElement('event-description');
+  this.textAreaDesc_ = this.getDomHelper().getElement(`${this.getId()}event-description`);
 
   // Menu commands.
   this.getHandler().listen(this.buttonBack1,
@@ -419,7 +419,7 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
   this.getHandler().listen(this.getParent(),
       rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
       this.onBeforePageChange_, false, this)
-      .listen(this.viewManager,
+      .listen(this.getParent(),
       rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE, this.onPageChange_,
       false, this);
 };
@@ -430,10 +430,10 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
  * @private
  */
 rflect.cal.ui.EventPane.prototype.getTimeInputsNative_ = function() {
-  return [this.getDomHelper().getElement('event-start-date'),
-      this.getDomHelper().getElement('event-start-datetime'),
-      this.getDomHelper().getElement('event-end-date'),
-      this.getDomHelper().getElement('event-end-datetime')];
+  return [this.getDomHelper().getElement(`${this.getId()}event-start-date`),
+      this.getDomHelper().getElement(`${this.getId()}event-start-datetime`),
+      this.getDomHelper().getElement(`${this.getId()}event-end-date`),
+      this.getDomHelper().getElement(`${this.getId()}event-end-datetime`)];
 }
 
 
@@ -442,10 +442,10 @@ rflect.cal.ui.EventPane.prototype.getTimeInputsNative_ = function() {
  * @private
  */
 rflect.cal.ui.EventPane.prototype.getTimeInputsCustom_ = function() {
-  return [this.getDomHelper().getElement('event-start-date'),
-      this.getDomHelper().getElement('event-start-time'),
-      this.getDomHelper().getElement('event-end-date'),
-      this.getDomHelper().getElement('event-end-time')];
+  return [this.getDomHelper().getElement(`${this.getId()}event-start-date`),
+      this.getDomHelper().getElement(`${this.getId()}event-start-time`),
+      this.getDomHelper().getElement(`${this.getId()}event-end-date`),
+      this.getDomHelper().getElement(`${this.getId()}event-end-time`)];
 }
 
 

@@ -47,166 +47,19 @@ class EventDialog extends rflect.cal.ui.ScreenManagerPopup {
 
   /**
    * @param {boolean} aShow
-   * @param {boolean} aCreatingByNewButton
    * @param {Element} aAnchorElement
    * @param {goog.math.Coordinate=} opt_anchorCoordinate
    * @param {boolean=} opt_creatingNewEvent
    * @param {boolean=} opt_creatingByTouchHold
    */
-  show(aShow, aCreatingByNewButton, aAnchorElement, opt_anchorCoordinate,
+  show(aShow, aAnchorElement, opt_anchorCoordinate,
       opt_creatingNewEvent, opt_creatingByTouchHold) {
     if (aShow) {
       this.eventPane_.setNewEventMode(opt_creatingNewEvent);
       this.eventPane_.setTouchHoldMode(opt_creatingByTouchHold);
     }
 
-    if (aCreatingByNewButton) {
-      this.showForNewButtonCase(aAnchorElement, aShow);
-    } else {
-      this.showForGridCase(aShow,
-          true,
-          this.moreSpaceToTheRight(),
-          opt_anchorCoordinate);
-    }
-  }
-
-  /**
-   * @param {goog.math.Coordinate=} aAnchorCoordinate
-   * @return {number} Margin top for centering modal box vertically.
-   */
-  getMarginTop(aAnchorCoordinate) {
-
-    const {
-        top: topOfPopup,
-        right: rightOfPopup,
-        bottom: bottomOfPopup,
-        left: leftOfPopup
-    } = this.getElement().getBoundingClientRect();
-    const heightOfPopup = bottomOfPopup - topOfPopup;
-
-    const defaultMarginTopAbs = heightOfPopup / 2;
-
-    const doc = this.getDomHelper().getDocument();
-    const win = goog.dom.getWindow(doc) || window;
-    const viewSize = goog.dom.getViewportSize(win);
-
-    const howMuchOfPopupIsOut = viewSize.height - aAnchorCoordinate.y -
-        defaultMarginTopAbs;
-
-    var marginTopAbs = defaultMarginTopAbs;
-    if (defaultMarginTopAbs > aAnchorCoordinate.y) {
-      marginTopAbs = aAnchorCoordinate.y;
-    } else if (howMuchOfPopupIsOut < 0) {
-      marginTopAbs = defaultMarginTopAbs - howMuchOfPopupIsOut;
-    }
-
-    return -marginTopAbs;
-  }
-
-  /**
-   * @param {goog.math.Coordinate=} aAnchorCoordinate
-   * @return {number} Margin left for centering modal box horizontally.
-   */
-  getMarginLeft(aAnchorCoordinate) {
-
-    const {
-        top: topOfPopup,
-        right: rightOfPopup,
-        bottom: bottomOfPopup,
-        left: leftOfPopup
-    } = this.getElement().getBoundingClientRect();
-    const widthOfPopup = rightOfPopup - leftOfPopup;
-
-    const defaultMarginLeftAbs = widthOfPopup / 2;
-
-    const doc = this.getDomHelper().getDocument();
-    const win = goog.dom.getWindow(doc) || window;
-    const viewSize = goog.dom.getViewportSize(win);
-
-    const howMuchOfPopupIsOut = viewSize.width - aAnchorCoordinate.x -
-        defaultMarginLeftAbs;
-
-    var marginLeftAbs = defaultMarginLeftAbs;
-    if (defaultMarginLeftAbs > aAnchorCoordinate.x) {
-      marginLeftAbs = aAnchorCoordinate.x;
-    } else if (howMuchOfPopupIsOut < 0) {
-      marginLeftAbs = defaultMarginLeftAbs - howMuchOfPopupIsOut;
-    }
-
-    return -marginLeftAbs;
-  }
-
-  /**
-   * @param {boolean} aShow
-   * @param {boolean} aAlignmentIsHorizontal
-   * @param {boolean} aTopOrRight
-   * @param {goog.math.Coordinate=} aAnchorCoordinate
-   */
-  showForGridCase(aShow, aAlignmentIsHorizontal, aTopOrRight,
-                  aAnchorCoordinate = new goog.math.Coordinate(0, 0)) {
-    const anchorElement = this.getMarkerElement(aAnchorCoordinate);
-    this.getDomHelper().getDocument().body.appendChild(anchorElement);
-
-    this.setVisible(aShow);
-
-    if (aAlignmentIsHorizontal) {
-      this.setPinnedCorner(goog.positioning.Corner.BOTTOM_LEFT);
-    } else {
-      this.setPinnedCorner(goog.positioning.Corner.TOP_LEFT);
-    }
-
-    const {
-      top: topOfPopup,
-      right: rightOfPopup,
-      bottom: bottomOfPopup,
-      left: leftOfPopup
-    } = this.getElement().getBoundingClientRect();
-    const heightOfPopup = bottomOfPopup - topOfPopup;
-    const widthOfPopup = rightOfPopup - leftOfPopup;
-
-    if (aAlignmentIsHorizontal) {
-      this.setMargin(new goog.math.Box(20, 0, 20,
-          this.getMarginLeft(aAnchorCoordinate)));
-      this.setPosition(new goog.positioning.AnchoredViewportPosition(
-          anchorElement, aTopOrRight ?
-              goog.positioning.Corner.TOP_LEFT:
-              goog.positioning.Corner.BOTTOM_LEFT ));
-      this.positionArrow(aTopOrRight ?
-              rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.BOTTOM :
-              rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.TOP,
-          anchorElement);
-    } else {
-      this.setMargin(new goog.math.Box(this.getMarginTop(aAnchorCoordinate), 20,
-          0, 20));
-      this.setPosition(new goog.positioning.AnchoredViewportPosition(
-          anchorElement, aTopOrRight ?
-              goog.positioning.Corner.TOP_LEFT :
-              goog.positioning.Corner.TOP_RIGHT));
-      this.positionArrow(aTopOrRight ?
-          rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.LEFT :
-          rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.RIGHT,
-          anchorElement);
-    }
-
-    goog.dom.removeNode(anchorElement);
-  }
-
-  /**
-   * @param {goog.math.Coordinate=} aAnchorCoordinate
-   * @return {Element}
-   */
-  getMarkerElement(aAnchorCoordinate){
-    return this.getDomHelper().createDom('div', {
-      style: `position:absolute;width:1px;height:1px;opacity:0;z-index:-1;top:${
-          aAnchorCoordinate.y}px;left:${aAnchorCoordinate.x}px`
-        });
-  }
-
-  /**
-   * @return {boolean}
-   */
-  moreSpaceToTheRight() {
-    return false;
+    this.showForNewButtonCase(aAnchorElement, aShow);
   }
 
   showForNewButtonCase(aAnchorElement, aShow){
@@ -233,12 +86,3 @@ class EventDialog extends rflect.cal.ui.ScreenManagerPopup {
  * @typedef {EventDialog}
  */
 rflect.cal.ui.EventDialog = EventDialog;
-
-
-/**
- * @enum {number}
- */
-rflect.cal.ui.EventDialog.ALIGN = {
-  HORIZONTALLY: 1,
-  VERTICALLY: 2
-}

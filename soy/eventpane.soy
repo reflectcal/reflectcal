@@ -30,11 +30,11 @@
               <li>
                 <div class="item-content">
                   <div class="item-inner">
-                    <label class="item-title label" for="ep-event-name-input">
+                    <label class="item-title label" for="{$id}ep-event-name-input">
                       {rflect.cal.i18n.Symbols.EVENT_NAME}
                     </label>
                     <div class="item-input">
-                      <input id="ep-event-name-input" type="text" placeholder="{rflect.cal.i18n.Symbols.NO_NAME_EVENT}">
+                      <input id="{$id}ep-event-name-input" type="text" placeholder="{rflect.cal.i18n.Symbols.NO_NAME_EVENT}">
                     </div>
                   </div>
                 </div>
@@ -51,7 +51,7 @@
                     <div class="item-title label">{rflect.cal.i18n.Symbols.ALL_DAY_EVENT}</div>
                     <div class="item-input">
                       <label class="label-switch">
-                        <input type="checkbox" id="event-all-day">
+                        <input type="checkbox" id="{$id}event-all-day">
                         <div class="checkbox"></div>
                       </label>
                     </div>
@@ -61,6 +61,7 @@
 
               {call .dateInputs}
                 {param isNativeTimeInput: $isNativeTimeInput /}
+                {param id: $id /}
               {/call}
 
             </ul>
@@ -80,7 +81,7 @@
                   <div class="item-inner">
                     <div class="item-title label">{rflect.cal.i18n.Symbols.DESCRIPTION}</div>
                     <div class="item-input">
-                      <textarea id="event-description"></textarea>
+                      <textarea id="{$id}event-description"></textarea>
                     </div>
                   </div>
                 </div>
@@ -112,6 +113,7 @@
 
 /**
  * @param isNativeTimeInput
+ * @param id Unique id.
  */
 {template .dateInputs autoescape="false"}
   {if $isNativeTimeInput}
@@ -119,12 +121,12 @@
   <li>
     <div class="item-content">
       <div class="item-inner">
-        <div id="label-start" class="item-title label">
+        <div id="{$id}label-start" class="item-title label">
           {rflect.cal.i18n.Symbols.START}
         </div>
         <div class="item-input">
-          <input id="event-start-datetime" type="datetime-local">
-          <input id="event-start-date" type="date">
+          <input id="{$id}event-start-datetime" type="datetime-local">
+          <input id="{$id}event-start-date" type="date">
         </div>
       </div>
     </div>
@@ -133,12 +135,12 @@
   <li>
     <div class="item-content">
       <div class="item-inner">
-        <div id="label-end" class="item-title label">
+        <div id="{$id}label-end" class="item-title label">
           {rflect.cal.i18n.Symbols.END}
         </div>
         <div class="item-input">
-          <input id="event-end-datetime" type="datetime-local">
-          <input id="event-end-date" type="date">
+          <input id="{$id}event-end-datetime" type="datetime-local">
+          <input id="{$id}event-end-date" type="date">
         </div>
       </div>
     </div>
@@ -149,11 +151,11 @@
   <li>
     <div class="item-content">
       <div class="item-inner">
-        <div id="label-start-date" class="item-title label">
+        <div id="{$id}label-start-date" class="item-title label">
           {rflect.cal.i18n.Symbols.START_DATE}
         </div>
         <div class="item-input">
-          <input id="event-start-date" type="text">
+          <input id="{$id}event-start-date" type="text">
         </div>
       </div>
     </div>
@@ -162,11 +164,11 @@
   <li>
     <div class="item-content">
       <div class="item-inner">
-        <div id="label-start-time" class="item-title label">
+        <div id="{$id}label-start-time" class="item-title label">
           {rflect.cal.i18n.Symbols.START_TIME}
         </div>
         <div class="item-input">
-          <input id="event-start-time" type="text">
+          <input id="{$id}event-start-time" type="text">
         </div>
       </div>
     </div>
@@ -175,11 +177,11 @@
   <li>
     <div class="item-content">
       <div class="item-inner">
-        <div id="label-end-date" class="item-title label">
+        <div id="{$id}label-end-date" class="item-title label">
           {rflect.cal.i18n.Symbols.END_DATE}
         </div>
         <div class="item-input">
-          <input id="event-end-date" type="text">
+          <input id="{$id}event-end-date" type="text">
         </div>
       </div>
     </div>
@@ -188,11 +190,11 @@
   <li>
     <div class="item-content">
       <div class="item-inner">
-        <div id="label-end-time" class="item-title label">
+        <div id="{$id}label-end-time" class="item-title label">
           {rflect.cal.i18n.Symbols.END_TIME}
         </div>
         <div class="item-input">
-          <input id="event-end-time" type="text">
+          <input id="{$id}event-end-time" type="text">
         </div>
       </div>
     </div>

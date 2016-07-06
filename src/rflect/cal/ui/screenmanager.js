@@ -226,11 +226,21 @@ rflect.cal.ui.ScreenManager.prototype.popFromStack = function(){
 
 
 /**
+ * @return {string} Unique id.
+ * @override
+ */
+rflect.cal.ui.ScreenManager.prototype.getId = function() {
+  return 'screen-manager' + rflect.cal.ui.ScreenManager.superClass_.getId.call(
+          this);
+}
+
+
+/**
  * @override
  */
 rflect.cal.ui.ScreenManager.prototype.createDom = function() {
   var element = document.createElement('div');
-  element.id = 'screen-manager';
+  element.id = this.getId();
   element.className = 'screen-manager-base';
 
   this.setElementInternal(element);
@@ -243,7 +253,7 @@ rflect.cal.ui.ScreenManager.prototype.createDom = function() {
 rflect.cal.ui.ScreenManager.prototype.decorateInternal = function(aElement) {
   this.setElementInternal(aElement);
 
-  this.getElement().id = 'screen-manager';
+  this.getElement().id = this.getId();
   this.getElement().className = 'screen-manager-base';
 }
 

@@ -402,7 +402,7 @@ rflect.cal.ui.SidePane.prototype.getGlassElement_ = function() {
 
 /***/
 rflect.cal.ui.SidePane.prototype.addGlassPane = function() {
-  this.getDomHelper().getElement('screen-manager')
+  this.getDomHelper().getElement(this.getParent().getParent().getElement())
       .appendChild(this.getGlassElement_());
   if (rflect.cal.i18n.Symbols.isLightTheme(
       this.viewManager_.user['settings']['visualTheme'])) {

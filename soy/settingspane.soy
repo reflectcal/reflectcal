@@ -30,9 +30,9 @@
                       {rflect.cal.i18n.Symbols.LANGUAGES}
                     </label>
                     <div class="item-input">
-                      <select id="settings-languages">
+                      <select id="{$id}settings-languages">
                         {foreach $language in LANGUAGE_NAMES}
-                        <option value="{$language[0]}" class="" id="lang-{$language[0]}">
+                        <option value="{$language[0]}" class="" id="{$id}lang-{$language[0]}">
                           {$language[1]}
                         </option>
                         {/foreach}
@@ -47,7 +47,7 @@
           <div class="list-block">
             <ul>
               <li>
-                <a /*href="/calendars"*/ class="item-link" id="button-to-calendars">
+                <a /*href="/calendars"*/ class="item-link" id="{$id}button-to-calendars">
                   <div class="item-content">
                     <div class="item-inner">
                       <div class="item-title">{rflect.cal.i18n.Symbols.CALENDARS_LABEL}</div>
@@ -66,7 +66,7 @@
                     <div class="item-title label">{rflect.cal.i18n.Symbols.DEBUG_MODE}</div>
                     <div class="item-input">
                       <label class="label-switch">
-                        <input type="checkbox" id="settings-debug-mode">
+                        <input type="checkbox" id="{$id}settings-debug-mode">
                         <div class="checkbox"></div>
                       </label>
                     </div>
@@ -85,9 +85,9 @@
                       {rflect.cal.i18n.Symbols.VISUAL_THEME}
                     </div>
                     <div class="item-input">
-                      <select id="settings-themes">
+                      <select id="{$id}settings-themes">
                         {foreach $themeName in rflect.cal.i18n.Symbols.VISUAL_THEME_NAMES}
-                        <option value="{$themeName[0]}" class="" id="theme-{$themeName[0]}">{$themeName[1]}</option>
+                        <option value="{$themeName[0]}" class="" id="{$id}theme-{$themeName[0]}">{$themeName[1]}</option>
                         {/foreach}
                       </select>
                     </div>
@@ -103,7 +103,7 @@
           </div>
           <div class="list-block">
             <ul>
-              <a class="item-link button-danger" href="/logout" id="settings-logout">
+              <a class="item-link button-danger" href="/logout" id="{$id}settings-logout">
                 {rflect.cal.i18n.Symbols.LOGOUT}
               </a>
             </ul>

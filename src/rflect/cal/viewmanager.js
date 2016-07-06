@@ -22,6 +22,7 @@ goog.require('rflect.cal.predefined');
 goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
 goog.require('rflect.cal.Transport');
+goog.require('rflect.cal.ui.GridEventDialog');
 goog.require('rflect.cal.ui.EditDialog');
 goog.require('rflect.cal.ui.EventDialog');
 goog.require('rflect.cal.ui.MainBody');
@@ -284,6 +285,12 @@ rflect.cal.ViewManager.prototype.eventDialog_;
 
 
 /**
+ * @type {rflect.cal.ui.GridEventDialog}
+ */
+rflect.cal.ViewManager.prototype.gridEventDialog_;
+
+
+/**
  * @type {rflect.cal.ui.SettingsDialog}
  */
 rflect.cal.ViewManager.prototype.settingsDialog_;
@@ -406,6 +413,56 @@ rflect.cal.ViewManager.prototype.onEditDialogButtonSelect_ = function(aEvent) {
 }
 
 
+rflect.cal.ViewManager.prototype.showGridEventDialog = function (aShow, 
+    aAnchorElement,
+    opt_anchorCoordinate, opt_creatingNewEvent, opt_creatingByTouchHold) {
+  //Creating by grid.
+  if (!this.gridEventDialog_) {
+    this.gridEventDialog_ = new rflect.cal.ui.GridEventDialog(this,
+        this.timeManager, this.eventManager_, this.containerSizeMonitor_,
+        this.transport_, this.navigator_);
+    this.addChild(this.gridEventDialog_);
+
+    // Event pane.
+    this.getHandler().listen(this.gridEventDialog_,
+        rflect.cal.ui.EventPane.EventTypes.SAVE, this.onEventPaneSave_,
+        false, this).listen(this.gridEventDialog_,
+        rflect.cal.ui.EventPane.EventTypes.DELETE, this.onEventPaneDelete_,
+        false, this);
+  }
+  this.gridEventDialog_.show(aShow, aAnchorElement,
+      opt_anchorCoordinate, opt_creatingNewEvent, opt_creatingByTouchHold);
+};
+
+
+rflect.cal.ViewManager.prototype.showNewEventDialog = function (aShow, aAnchorElement, opt_anchorCoordinate, opt_creatingNewEvent, opt_creatingByTouchHold) {
+//Creating by 'new event' button.
+  if (!this.eventDialog_) {
+    this.eventDialog_ = new rflect.cal.ui.EventDialog(this, this.timeManager,
+        this.eventManager_, this.containerSizeMonitor_, this.transport_,
+        this.navigator_);
+    this.addChild(this.eventDialog_);
+
+    // Event pane.
+    this.getHandler().listen(this.eventDialog_,
+        rflect.cal.ui.EventPane.EventTypes.SAVE, this.onEventPaneSave_,
+        false, this).listen(this.eventDialog_,
+        rflect.cal.ui.EventPane.EventTypes.DELETE, this.onEventPaneDelete_,
+        false, this);
+  }
+  this.eventDialog_.show(aShow, aAnchorElement,
+      opt_anchorCoordinate, opt_creatingNewEvent, opt_creatingByTouchHold);
+};
+
+
+rflect.cal.ViewManager.prototype.showNewEventPane = function (opt_creatingNewEvent, opt_creatingByTouchHold, aShow) {
+  this.eventPane_.setNewEventMode(opt_creatingNewEvent);
+  this.eventPane_.setTouchHoldMode(opt_creatingByTouchHold);
+
+  this.showScreen(this.eventPane_, aShow);
+};
+
+
 /**
  * Shows event pane when possible and lazily instantiates it at the first time.
  * @param {boolean} aShow Whether to show event pane.
@@ -424,26 +481,15 @@ rflect.cal.ViewManager.prototype.showEventPane = function(aShow, aAnchorElement,
   const isSmallScreen = this.containerSizeMonitor_.isSmallScreen();
 
   if (!isSmallScreen) {
-    if (!this.eventDialog_) {
-      this.eventDialog_ = new rflect.cal.ui.EventDialog(this, this.timeManager,
-          this.eventManager_, this.containerSizeMonitor_, this.transport_,
-          this.navigator_);
-      this.addChild(this.eventDialog_);
-    
-      // Event pane.
-      this.getHandler().listen(this.eventDialog_,
-          rflect.cal.ui.EventPane.EventTypes.SAVE, this.onEventPaneSave_,
-          false, this).listen(this.eventDialog_,
-          rflect.cal.ui.EventPane.EventTypes.DELETE, this.onEventPaneDelete_,
-          false, this);
+    if (aCreatingByNewButton) {
+      this.showNewEventDialog(aShow, aAnchorElement, opt_anchorCoordinate, 
+          opt_creatingNewEvent, opt_creatingByTouchHold);
+    } else {
+      this.showGridEventDialog(aShow, aAnchorElement, opt_anchorCoordinate, 
+          opt_creatingNewEvent, opt_creatingByTouchHold);
     }
-    this.eventDialog_.show(aShow, aCreatingByNewButton, aAnchorElement, 
-        opt_anchorCoordinate, opt_creatingNewEvent, opt_creatingByTouchHold);
   } else {
-    this.eventPane_.setNewEventMode(opt_creatingNewEvent);
-    this.eventPane_.setTouchHoldMode(opt_creatingByTouchHold);
-
-    this.showScreen(this.eventPane_, aShow);
+    this.showNewEventPane(opt_creatingNewEvent, opt_creatingByTouchHold, aShow);
   }
 }
 

@@ -268,6 +268,12 @@ rflect.cal.ui.ExternalPane.prototype.showButtonDelete = function(aShow) {
 }
 
 
+/**@override*/
+rflect.cal.ui.ExternalPane.prototype.getId = function() {
+  return rflect.cal.ui.ExternalPane.superClass_.getId.call(this) + '-';
+}
+
+
 /**
  * Disposes of the event pane.
  * @override

@@ -454,12 +454,12 @@ rflect.cal.ui.SettingsPane.prototype.buildHTML = function(opt_outerHTML) {
  * @override
  */
 rflect.cal.ui.SettingsPane.prototype.enterDocument = function() {
-  this.buttonCalendars_.decorate(this.getDomHelper().getElement('button-to-calendars'));
+  this.buttonCalendars_.decorate(this.getDomHelper().getElement(`${this.getId()}button-to-calendars`));
 
-  this.selectLanguages_ = this.getDomHelper().getElement('settings-languages');
-  this.selectThemes_ = this.getDomHelper().getElement('settings-themes');
+  this.selectLanguages_ = this.getDomHelper().getElement(`${this.getId()}settings-languages`);
+  this.selectThemes_ = this.getDomHelper().getElement(`${this.getId()}settings-themes`);
 
-  this.checkboxDebug_ = this.getDomHelper().getElement('settings-debug-mode');
+  this.checkboxDebug_ = this.getDomHelper().getElement(`${this.getId()}settings-debug-mode`);
   rflect.cal.ui.SettingsPane.superClass_.enterDocument.call(this);
 
   // Menu commands.

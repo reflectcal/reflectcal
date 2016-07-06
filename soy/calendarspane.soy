@@ -38,6 +38,7 @@
 
 /**
  * @param calendarCollection
+ * @param id Unique id.
  */
 {template .calendarsPaneEntry autoescape="false"}
   {if length($calendarCollection.calendars) != 0}
@@ -49,7 +50,7 @@
     <ul>
       {foreach $calendar in $calendarCollection.calendars}
       <li>
-        <a /*href="/calendars-{$calendar.id}"*/ class="item-link{sp}{if $calendar.isInProgress}cal-link-in-progress{/if}" id="{rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX}{$calendar.id}">
+        <a /*href="/calendars-{$calendar.id}"*/ class="item-link{sp}{if $calendar.isInProgress}cal-link-in-progress{/if}" id="{$id}{rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX}{$calendar.id}">
           <div class="item-content">
             <div class="item-inner">
               <div class="item-title">{$calendar.name}</div>
@@ -68,13 +69,16 @@
 
 /**
  * @param calendarCollections
+ * @param id Unique id.
  */
 {template .calendarsPaneBody autoescape="false"}
   {call .calendarsPaneEntry}
     {param calendarCollection: $calendarCollections[0] /}
+    {param id: $id /}
   {/call}
   {call .calendarsPaneEntry}
     {param calendarCollection: $calendarCollections[1] /}
+    {param id: $id /}
   {/call}
 {/template}
 
