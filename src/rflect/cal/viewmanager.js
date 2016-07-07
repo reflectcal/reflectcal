@@ -25,12 +25,14 @@ goog.require('rflect.cal.Transport');
 goog.require('rflect.cal.ui.GridEventDialog');
 goog.require('rflect.cal.ui.EditDialog');
 goog.require('rflect.cal.ui.EventDialog');
+goog.require('rflect.cal.ui.EventDialogScreenManager');
 goog.require('rflect.cal.ui.MainBody');
 goog.require('rflect.cal.ui.MainPane.EventTypes');
 goog.require('rflect.cal.ui.SaveDialog');
 goog.require('rflect.cal.ui.ScreenManager');
 goog.require('rflect.cal.ui.ScreenManagerPopup');
 goog.require('rflect.cal.ui.SettingsDialog');
+goog.require('rflect.cal.ui.SettingsDialogScreenManager');
 goog.require('rflect.cal.ui.ScreenManager.EventTypes');
 goog.require('rflect.cal.ViewType');
 
@@ -312,9 +314,7 @@ rflect.cal.ViewManager.prototype.enterDocument = function() {
   // Page change events.
   this.getHandler().
       listen(this, rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE,
-      this.onPageChange_, false, this).
-      listen(this, rflect.cal.ui.PAGE_REQUEST_EVENT,
-      this.onPageRequest_, false, this);
+      this.onPageChange_, false, this);
 
   // Container resize listener.
   this.getHandler().
@@ -421,6 +421,10 @@ rflect.cal.ViewManager.prototype.showGridEventDialog = function (aShow,
     this.gridEventDialog_ = new rflect.cal.ui.GridEventDialog(this,
         this.timeManager, this.eventManager_, this.containerSizeMonitor_,
         this.transport_, this.navigator_);
+    this.gridEventDialog_.addScreenManager(
+        new rflect.cal.ui.EventDialogScreenManager(
+        this, this.timeManager, this.eventManager_, this.containerSizeMonitor_,
+        this.transport_, this.navigator_));
     this.addChild(this.gridEventDialog_);
 
     // Event pane.
@@ -441,6 +445,10 @@ rflect.cal.ViewManager.prototype.showNewEventDialog = function (aShow, aAnchorEl
     this.eventDialog_ = new rflect.cal.ui.EventDialog(this, this.timeManager,
         this.eventManager_, this.containerSizeMonitor_, this.transport_,
         this.navigator_);
+    this.eventDialog_.addScreenManager(
+        new rflect.cal.ui.EventDialogScreenManager(this,
+        this.timeManager, this.eventManager_, this.containerSizeMonitor_,
+        this.transport_, this.navigator_));
     this.addChild(this.eventDialog_);
 
     // Event pane.
@@ -507,6 +515,10 @@ rflect.cal.ViewManager.prototype.showSettingsPane = function(aShow) {
       this.settingsDialog_ = new rflect.cal.ui.SettingsDialog(this,
           this.timeManager, this.eventManager_, this.containerSizeMonitor_,
           this.transport_);
+      this.settingsDialog_.addScreenManager(
+          new rflect.cal.ui.SettingsDialogScreenManager(this,
+              this.timeManager, this.eventManager_, this.containerSizeMonitor_,
+              this.transport_, this.navigator_));
       this.addChild(this.settingsDialog_);
     
       // Settings pane.
@@ -724,16 +736,6 @@ rflect.cal.ViewManager.prototype.onEditComponentShow_ = function(aEvent) {
  * @private
  */
 rflect.cal.ViewManager.prototype.onPageChange_ = function(aEvent) {
-}
-
-
-/**
- * Page request handler.
- * @param {rflect.cal.ui.PageRequestEvent} aEvent Event object.
- * @private
- */
-rflect.cal.ViewManager.prototype.onPageRequest_ = function(aEvent) {
-  this.showScreen(aEvent.component, aEvent.show);
 }
 
 

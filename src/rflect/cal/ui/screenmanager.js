@@ -10,6 +10,7 @@ goog.provide('rflect.cal.ui.ScreenManager');
 goog.provide('rflect.cal.ui.ScreenManager.EventTypes');
 goog.provide('rflect.cal.ui.ScreenManager.PageChangeEvent');
 goog.provide('rflect.cal.ui.ScreenManager.BeforePageChangeEvent');
+goog.provide('rflect.cal.ui.ScreenManager.PageRequestEvent');
 
 
 goog.require('goog.array');
@@ -53,7 +54,8 @@ goog.inherits(rflect.cal.ui.ScreenManager, goog.ui.Component);
  */
 rflect.cal.ui.ScreenManager.EventTypes = {
   PAGE_CHANGE: 'pageChange',
-  BEFORE_PAGE_CHANGE: 'beforePageChange'
+  BEFORE_PAGE_CHANGE: 'beforePageChange',
+  PAGE_REQUEST: 'pageRequest'
 };
 
 
@@ -133,6 +135,33 @@ rflect.cal.ui.ScreenManager.BeforePageChangeEvent = function(aPageNumber,
   this.previousScreens = aPreviousScreens;
 }
 goog.inherits(rflect.cal.ui.ScreenManager.BeforePageChangeEvent,
+    goog.events.Event);
+
+
+/**
+ * Event that is fired to let know {@link rflect.cal.ui.ScreenManager} know that page
+ * should be turned visible/invisible.
+ * @param {goog.ui.Component} aComponent Component to show.
+ * @param {boolean} aShow Whether to show component.
+ * @extends {goog.events.Event}
+ * @constructor
+ */
+rflect.cal.ui.ScreenManager.PageRequestEvent = function(aComponent, aShow) {
+  goog.events.Event.call(this, rflect.cal.ui.ScreenManager.EventTypes.PAGE_REQUEST);
+
+  /**
+   * Component associated with page.
+   * @type {goog.ui.Component}
+   */
+  this.component = aComponent;
+
+  /**
+   * Whether show this page.
+   * @type {boolean}
+   */
+  this.show = aShow;
+}
+goog.inherits(rflect.cal.ui.ScreenManager.PageRequestEvent,
     goog.events.Event);
 
 
@@ -226,6 +255,20 @@ rflect.cal.ui.ScreenManager.prototype.popFromStack = function(){
 
 
 /**
+ * Clears stack.
+ */
+rflect.cal.ui.ScreenManager.prototype.hideAll = function(){
+  this.forEachChild((screen, index) => {
+    if (index > 0) {
+      goog.style.showElement(screen.getElement(), false);
+    }
+  });
+  this.pageStack_.length = 1;
+  this.componentsToHide_.length = 0;
+}
+
+
+/**
  * @return {string} Unique id.
  * @override
  */
@@ -269,6 +312,18 @@ rflect.cal.ui.ScreenManager.prototype.decorateInternal = function(aElement) {
  */
 rflect.cal.ui.ScreenManager.prototype.showScreen = function(aComponent, aShow,
     opt_irreversible){
+  if (goog.DEBUG)
+        console.log('screenmanager: ', this.getElement());
+
+  if (goog.DEBUG)
+        console.log(`showScreen(${aShow}): `, aComponent.getElement(), ` or ${aComponent.getId()}`);
+
+  if (goog.DEBUG)
+        console.log('this.pageStack_: ', this.pageStack_);
+
+  if (goog.DEBUG)
+        console.log(`this.pageIsInStack(aComponent): `, this.pageIsInStack(aComponent));
+
 
   if (aShow == this.pageIsInStack(aComponent)) {
     return;
@@ -288,7 +343,7 @@ rflect.cal.ui.ScreenManager.prototype.showScreen = function(aComponent, aShow,
     } else {
       goog.style.showElement(aComponent.getElement(), true);
     }
-    if (rflect.TOUCH_INTERFACE_ENABLED)
+    if (true)
       this.assignPosition(aComponent, position);
   } else {
     this.componentsToHide_.push(this.popFromStack());
@@ -298,7 +353,7 @@ rflect.cal.ui.ScreenManager.prototype.showScreen = function(aComponent, aShow,
         (goog.array.peek(this.pageStack_)).getElement(), true);
   }
 
-  if (rflect.TOUCH_INTERFACE_ENABLED)
+  if (true)
     this.slideToPosition(position);
   else
     this.changeScreen();
@@ -382,11 +437,30 @@ rflect.cal.ui.ScreenManager.prototype.setSlidingIsEnabled =
 rflect.cal.ui.ScreenManager.prototype.enterDocument = function() {
   rflect.cal.ui.ScreenManager.superClass_.enterDocument.call(this);
 
+  this.getHandler().listen(this,
+      rflect.cal.ui.ScreenManager.EventTypes.PAGE_REQUEST,
+      this.onPageRequest_, false, this);
+  
   if (this.slidingIsEnabled_ && !this.transitionEndKey_){
     this.transitionEndKey_ = goog.events.listen(
         this.getElement(),
         rflect.browser.transitionend.VENDOR_TRANSITION_END_NAMES,
         this.onSlideEnd_, false, this);
+  }
+}
+
+
+/**
+ * Page request handler.
+ * @param {rflect.cal.ui.ScreenManager.PageRequestEvent} aEvent Event object.
+ * @private
+ */
+rflect.cal.ui.ScreenManager.prototype.onPageRequest_ = function(aEvent) {
+  if (goog.DEBUG)
+        console.log('page request Event: ', aEvent);
+  //Only process own children, not from the deep nested structures.
+  if (this.indexOfChild(aEvent.component) >= 0) {
+    this.showScreen(aEvent.component, aEvent.show);
   }
 }
 

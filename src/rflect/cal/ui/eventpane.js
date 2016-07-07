@@ -26,7 +26,7 @@ goog.require('rflect.cal.ui.CalendarsSelect');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.ExternalPane');
 goog.require('rflect.cal.ui.InputDatePicker');
-goog.require('rflect.cal.ui.PageRequestEvent');
+goog.require('rflect.cal.ui.ScreenManager.PageRequestEvent');
 goog.require('rflect.cal.ui.soy.eventpane');
 goog.require('rflect.cal.ui.ScreenManager.EventTypes');
 goog.require('rflect.date.util');
@@ -533,7 +533,7 @@ rflect.cal.ui.EventPane.prototype.setTouchHoldMode = function(
  */
 rflect.cal.ui.EventPane.prototype.onKeyDown_ = function(aEvent) {
 
-  if (this.viewManager.isVisible(this) &&
+  if (this.getParent().isVisible(this) &&
       !this.startTimeAC_.getRenderer().isVisible() &&
       !this.endTimeAC_.getRenderer().isVisible()) {
     // ESC key.
@@ -614,7 +614,7 @@ rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
     this.eventManager.eventHolder.endWithDelete();
     this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.DELETE);
   }
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+  this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
 }
 
 
@@ -630,7 +630,7 @@ rflect.cal.ui.EventPane.prototype.onSave_ = function() {
 
     this.transport.saveEventAsync(this.eventManager.eventHolder.endWithEdit());
     this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.SAVE);
-    this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+    this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
   }
 }
 
@@ -644,7 +644,7 @@ rflect.cal.ui.EventPane.prototype.onDelete_ = function(aEvent) {
       this.eventManager.eventHolder.endWithDelete());
 
   this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.DELETE);
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+  this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
 }
 
 

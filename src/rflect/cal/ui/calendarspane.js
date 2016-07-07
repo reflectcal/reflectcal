@@ -34,7 +34,7 @@ goog.require('rflect.cal.ui.CalendarEditPane.EventTypes');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.ExternalPane');
-goog.require('rflect.cal.ui.PageRequestEvent');
+goog.require('rflect.cal.ui.ScreenManager.PageRequestEvent');
 goog.require('rflect.cal.ui.soy.calendarspane');
 goog.require('rflect.dom');
 goog.require('rflect.string');
@@ -315,7 +315,7 @@ rflect.cal.ui.CalendarsPane.prototype.enterDocument = function() {
 
       // Save settings handler is in view manager.
       this.getHandler()
-          .listen(this.viewManager.getCalendarEditPane(),
+          .listen(this.getParent().getCalendarEditPane(),
           rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
           this.onCalendarUpdate_, false, this);
 };
@@ -347,12 +347,12 @@ rflect.cal.ui.CalendarsPane.prototype.onBeforePageChange_ =
 rflect.cal.ui.CalendarsPane.prototype.showCalendarEditPane = function(aShow,
     aCalendar, aNewCalendarMode) {
   if (aShow) {
-    this.viewManager.getCalendarEditPane().setCurrentCalendar(aCalendar);
-    this.viewManager.getCalendarEditPane().setNewCalendarMode(
+    this.getParent().getCalendarEditPane().setCurrentCalendar(aCalendar);
+    this.getParent().getCalendarEditPane().setNewCalendarMode(
         aNewCalendarMode);
   }
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(
-      this.viewManager.getCalendarEditPane(), aShow));
+  this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(
+      this.getParent().getCalendarEditPane(), aShow));
 }
 
 
@@ -437,7 +437,7 @@ rflect.cal.ui.CalendarsPane.prototype.onNewCalendarAction_ =
  * @private
  */
 rflect.cal.ui.CalendarsPane.prototype.onKeyDown_ = function(aEvent) {
-  if (this.viewManager.isVisible(this)) {
+  if (this.getParent().isVisible(this)) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 
@@ -460,7 +460,7 @@ rflect.cal.ui.CalendarsPane.prototype.onKeyDown_ = function(aEvent) {
  * Default action is to hide pane.
  */
 rflect.cal.ui.CalendarsPane.prototype.onCancel_ = function() {
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+  this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
 }
 
 

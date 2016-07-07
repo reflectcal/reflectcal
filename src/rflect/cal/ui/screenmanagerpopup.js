@@ -36,10 +36,7 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
      * View manager instance.
      * @type {rflect.cal.ui.ScreenManager}
      */
-    this.screenManager = new rflect.cal.ui.ScreenManager(opt_domHelper);
-    this.screenManager.setSlidingIsEnabled(rflect.TOUCH_INTERFACE_ENABLED);
-
-    this.addChild(this.screenManager);
+    this.screenManager;
 
     /**
      * @type {Element}
@@ -74,6 +71,24 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
     this.lastUsedArrowPositionConfiguration_ =
         rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.TOP;
   };
+
+
+  /**
+   * @param {rflect.cal.ui.ScreenManager} aScreenManager
+   */
+  addScreenManager(aScreenManager) {
+    this.screenManager = aScreenManager;
+    this.screenManager.setSlidingIsEnabled(rflect.TOUCH_INTERFACE_ENABLED);
+    this.addChild(this.screenManager);
+  }
+
+  /**
+   * @param {boolean=} opt_unrender If true, calls {@code exitDocument} on the
+   * removed child component, and detaches its DOM from the document.
+   */
+  removeScreenManager(opt_unrender) {
+    this.removeChild(this.screenManager, opt_unrender);
+  }
 
   /**@return {Element}*/
   getArrow() {
@@ -115,6 +130,9 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
    * @override
    */
   setVisible(aShow) {
+    goog.asserts.assert(!!this.screenManager, 
+        'Screen manager must not be null.');
+    
     if (!this.isInDocument()) {
       this.render(this.getDomHelper().getDocument().body);
       this.screenManager.render(this.getBody());
@@ -124,6 +142,8 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
 
     if (this.hasChildren() && aShow) {
       this.screenManager.showScreen(this.screenManager.getChildAt(0), true);
+    } else {
+      this.screenManager.hideAll();
     }
 
     if (this.bgEl_) {

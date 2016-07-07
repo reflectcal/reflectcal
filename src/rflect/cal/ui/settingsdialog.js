@@ -34,42 +34,7 @@ class SettingsDialog extends rflect.cal.ui.ScreenManagerPopup {
   constructor(aViewManager, aTimeManager, aEventManager, aContainerSizeMonitor,
       aTransport, opt_useIframeMask, opt_domHelper) {
     super(opt_useIframeMask, opt_domHelper);
-
-    /**
-     * Pager.
-     */
-    this.settingsPane_ = new rflect.cal.ui.SettingsPane(aViewManager,
-        aTimeManager, aEventManager, aContainerSizeMonitor, aTransport);
-    this.calendarsPane_ = new rflect.cal.ui.CalendarsPane(aViewManager,
-        aTimeManager, aEventManager, aContainerSizeMonitor, aTransport);
-    this.calendarEditPane_ = new rflect.cal.ui.CalendarEditPane(aViewManager,
-        aTimeManager, aEventManager, aContainerSizeMonitor, aTransport);
-
-    this.screenManager.addChild(this.settingsPane_);
-    this.screenManager.addChild(this.calendarsPane_);
-    this.screenManager.addChild(this.calendarEditPane_);
   };
-
-  /**
-   * @return {rflect.cal.ui.SettingsPane}
-   */
-  getSettingsPane() {
-    return this.settingsPane_;
-  }
-
-  /**
-   * @return {rflect.cal.ui.CalendarsPane}
-   */
-  getCalendarsPane() {
-    return this.calendarsPane_;
-  }
-
-  /**
-   * @return {rflect.cal.ui.CalendarEditPane}
-   */
-  getCalendarEditPane() {
-    return this.calendarEditPane_;
-  }
 
   /**
    * @param {boolean} aShow

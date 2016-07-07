@@ -25,7 +25,7 @@ goog.require('rflect.cal.Transport.EventTypes');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.ExternalPane');
-goog.require('rflect.cal.ui.PageRequestEvent');
+goog.require('rflect.cal.ui.ScreenManager.PageRequestEvent');
 goog.require('rflect.cal.ui.soy.calendareditpane');
 goog.require('rflect.cal.ui.ScreenManager.EventTypes');
 goog.require('rflect.dom');
@@ -64,6 +64,9 @@ rflect.cal.ui.CalendarEditPane = function(aViewManager, aTimeManager, aEventMana
   //Enabling touch-only interface.
   this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
   this.enableMouseInterface(!rflect.TOUCH_INTERFACE_ENABLED, true);
+  
+  if (goog.DEBUG)
+        _inspect('calendarEditPane_', this);
 };
 goog.inherits(rflect.cal.ui.CalendarEditPane, rflect.cal.ui.ExternalPane);
 
@@ -319,7 +322,7 @@ rflect.cal.ui.CalendarEditPane.prototype.onCalendarsColorLinkClick_ =
  * @private
  */
 rflect.cal.ui.CalendarEditPane.prototype.onKeyDown_ = function(aEvent) {
-  if (this.viewManager.isVisible(this)) {
+  if (this.getParent().isVisible(this)) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 
@@ -343,7 +346,7 @@ rflect.cal.ui.CalendarEditPane.prototype.onKeyDown_ = function(aEvent) {
  */
 rflect.cal.ui.CalendarEditPane.prototype.onCancel_ = function() {
   this.setCurrentCalendar(null);
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+  this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
 }
 
 
@@ -362,7 +365,7 @@ rflect.cal.ui.CalendarEditPane.prototype.onSaveCalendar_ = function() {
     this.dispatchEvent(rflect.cal.ui.CalendarEditPane.EventTypes.CALENDAR_UPDATE);
 
     this.setCurrentCalendar(null);
-    this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+    this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
   }
 };
 
@@ -399,7 +402,7 @@ rflect.cal.ui.CalendarEditPane.prototype.onDeleteCalendarAction_ =
   this.dispatchEvent(rflect.cal.ui.CalendarEditPane.EventTypes.CALENDAR_UPDATE);
 
   this.setCurrentCalendar(null);
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+  this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
 }
 
 

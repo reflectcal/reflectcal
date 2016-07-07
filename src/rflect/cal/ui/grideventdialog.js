@@ -36,15 +36,7 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
   constructor(aViewManager, aTimeManager, aEventManager, aContainerSizeMonitor,
               aTransport, aNavigator, opt_useIframeMask, opt_domHelper) {
     super(opt_useIframeMask, opt_domHelper);
-
-    this.eventPane_ = new rflect.cal.ui.EventPane(aViewManager, aTimeManager,
-        aEventManager, aContainerSizeMonitor, aTransport, aNavigator);
-
-    /**
-     * Pager.
-     */
-    this.screenManager.addChild(this.eventPane_);
-
+    
     /**
      * "Mouse miss to cancel" behavior for this dialog.
      * @type {rflect.ui.MouseMissBehavior}
@@ -64,8 +56,13 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
   show(aShow, aAnchorElement, opt_anchorCoordinate,
        opt_creatingNewEvent, opt_creatingByTouchHold) {
     if (aShow) {
-      this.eventPane_.setNewEventMode(opt_creatingNewEvent);
-      this.eventPane_.setTouchHoldMode(opt_creatingByTouchHold);
+      goog.asserts.assert(!!this.screenManager,
+          'Screen manager must not be null.');
+
+      (/**@type {rflect.cal.ui.EventDialogScreenManager}*/(this.screenManager)).
+      getEventPane().setNewEventMode(opt_creatingNewEvent);
+      (/**@type {rflect.cal.ui.EventDialogScreenManager}*/(this.screenManager)).
+      getEventPane().setTouchHoldMode(opt_creatingByTouchHold);
     }
 
     this.showForGridCase(aShow,

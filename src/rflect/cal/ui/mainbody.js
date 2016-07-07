@@ -24,7 +24,7 @@ goog.require('rflect.cal.ui.EventPane.EventTypes');
 goog.require('rflect.cal.ui.MainBodyAdaptiveSizeHelper');
 goog.require('rflect.cal.ui.MainPane');
 goog.require('rflect.cal.ui.MiniCal');
-goog.require('rflect.cal.ui.PageRequestEvent');
+goog.require('rflect.cal.ui.ScreenManager.PageRequestEvent');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.cal.ui.PaneShowBehavior.SlideEvent');
 goog.require('rflect.cal.ui.ScreenManager.EventTypes');

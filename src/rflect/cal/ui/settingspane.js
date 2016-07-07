@@ -34,7 +34,7 @@ goog.require('rflect.cal.ui.CalendarsPane.EventTypes');
 goog.require('rflect.cal.ui.common');
 goog.require('rflect.cal.ui.EditDialog.ButtonCaptions');
 goog.require('rflect.cal.ui.ExternalPane');
-goog.require('rflect.cal.ui.PageRequestEvent');
+goog.require('rflect.cal.ui.ScreenManager.PageRequestEvent');
 goog.require('rflect.cal.ui.PaneShowBehavior');
 goog.require('rflect.cal.ui.PaneShowBehavior.EventTypes');
 goog.require('rflect.cal.ui.soy.settingspane');
@@ -504,8 +504,9 @@ rflect.cal.ui.SettingsPane.prototype.onBeforePageChange_ = function(aEvent) {
  * @param {boolean} aShow Whether to show settings pane.
  */
 rflect.cal.ui.SettingsPane.prototype.showCalendarsPane = function(aShow) {
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this.getParent().
-      getCalendarsPane(), aShow));
+  this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(
+      (/**@type {rflect.cal.ui.SettingsDialogScreenManager}*/(
+          this.getParent())).getCalendarsPane(), aShow));
 }
 
 
@@ -542,7 +543,7 @@ rflect.cal.ui.SettingsPane.prototype.onShowCalendarsAction_ =
  * @private
  */
 rflect.cal.ui.SettingsPane.prototype.onKeyDown_ = function(aEvent) {
-  if (this.viewManager.isVisible(this)) {
+  if (this.getParent().isVisible(this)) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 
@@ -565,7 +566,7 @@ rflect.cal.ui.SettingsPane.prototype.onKeyDown_ = function(aEvent) {
  * Default action is to hide pane.
  */
 rflect.cal.ui.SettingsPane.prototype.onCancel_ = function() {
-  this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+  this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
 }
 
 
@@ -583,7 +584,7 @@ rflect.cal.ui.SettingsPane.prototype.onSaveUser_ = function() {
     this.transport.saveUserAsync(changedUser, reloadIsNeeded);
     this.dispatchEvent(new rflect.cal.ui.SettingsPane.SaveUserEvent(
         originalUser, changedUser));
-    this.dispatchEvent(new rflect.cal.ui.PageRequestEvent(this, false));
+    this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
   }
 }
 
