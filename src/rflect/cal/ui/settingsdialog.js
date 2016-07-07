@@ -51,6 +51,27 @@ class SettingsDialog extends rflect.cal.ui.ScreenManagerPopup {
   };
 
   /**
+   * @return {rflect.cal.ui.SettingsPane}
+   */
+  getSettingsPane() {
+    return this.settingsPane_;
+  }
+
+  /**
+   * @return {rflect.cal.ui.CalendarsPane}
+   */
+  getCalendarsPane() {
+    return this.calendarsPane_;
+  }
+
+  /**
+   * @return {rflect.cal.ui.CalendarEditPane}
+   */
+  getCalendarEditPane() {
+    return this.calendarEditPane_;
+  }
+
+  /**
    * @param {boolean} aShow
    * @param {Element} aAnchorElement
    */

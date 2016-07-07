@@ -22,9 +22,11 @@
         <div class="page-content settings-body-inner">
         {call .calendarsPaneEntry}
           {param calendarCollection: $calendarCollections[0] /}
+          {param id: $id /}
         {/call}
         {call .calendarsPaneEntry}
           {param calendarCollection: $calendarCollections[1] /}
+          {param id: $id /}
         {/call}
         </div>
       </div>
@@ -50,7 +52,10 @@
     <ul>
       {foreach $calendar in $calendarCollection.calendars}
       <li>
-        <a /*href="/calendars-{$calendar.id}"*/ class="item-link{sp}{if $calendar.isInProgress}cal-link-in-progress{/if}" id="{$id}{rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX}{$calendar.id}">
+        <a /*href="/calendars-{$calendar.id}"*/
+            class="item-link{sp}{if $calendar.isInProgress}cal-link-in-progress{/if}"
+            id="{$id}{rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX}{$calendar.id}"
+            data-calendar-id={$calendar.id}>
           <div class="item-content">
             <div class="item-inner">
               <div class="item-title">{$calendar.name}</div>

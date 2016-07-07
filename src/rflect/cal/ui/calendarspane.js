@@ -394,13 +394,12 @@ rflect.cal.ui.CalendarsPane.prototype.onCalendarLinkClick_ = function(aEvent) {
     console.log('link: ', link);
 
   if (link) {
-    var id = link.id;
+    var id = link.getAttribute('data-calendar-id');
 
     aEvent.preventDefault();
 
     if (id) {
-      var calendarId = rflect.string.getIdWithoutPrefix(id,
-          rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX);
+      var calendarId = id;
 
       if (!(calendarId in this.eventManager.calendars) ||
           this.eventManager.calendarIsInProgress(calendarId))

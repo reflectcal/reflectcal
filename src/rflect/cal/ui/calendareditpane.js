@@ -219,7 +219,7 @@ rflect.cal.ui.CalendarEditPane.prototype.buildHTML = function(opt_outerHTML) {
  */
 rflect.cal.ui.CalendarEditPane.prototype.enterDocument = function() {
   this.inputCalendarName_ = this.getDomHelper().
-      getElement('sp-calendar-name-input');
+      getElement(`${this.getId()}sp-calendar-name-input`);
 
   rflect.cal.ui.CalendarEditPane.superClass_.enterDocument.call(this);
 
@@ -304,8 +304,7 @@ rflect.cal.ui.CalendarEditPane.prototype.onCalendarsColorLinkClick_ =
   const input = label && label.firstChild;
 
   if (input) {
-    const id = input.id;
-    const index = +/\d/.exec(id);
+    const index = +input.getAttribute('data-calendar-color-index');
 
     this.currentCalendar_.colorCode =
         rflect.cal.i18n.PREDEFINED_COLOR_CODES[index];
