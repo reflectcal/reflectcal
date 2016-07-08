@@ -38,6 +38,13 @@ class EventDialog extends rflect.cal.ui.ScreenManagerPopup {
   };
 
   /**
+   * @override
+   */
+  getCharacteristicClass() {
+    return 'event-dialog';
+  }
+  
+  /**
    * @param {boolean} aShow
    * @param {Element} aAnchorElement
    * @param {goog.math.Coordinate=} opt_anchorCoordinate

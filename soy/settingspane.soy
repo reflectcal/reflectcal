@@ -3,6 +3,8 @@
 /**
  * @param id Unique id.
  * @param? includeOuterHTML Whether to include outer html of element.
+ * @param controlPaneIsInDialogAndFirstByIndex Whether navbar belongs to
+ * the first page and is in dialog.
  */
 {template .settingsPane autoescape="false"}
   {if $includeOuterHTML}
@@ -14,6 +16,7 @@
       {param showNewButton: false /}
       {param showSaveButton: true /}
       {param header: rflect.cal.i18n.Symbols.SETTINGS /}
+      {param controlPaneIsInDialogAndFirstByIndex: $controlPaneIsInDialogAndFirstByIndex /}
     {/call}
 
     <div class="pages settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">

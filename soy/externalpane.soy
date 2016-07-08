@@ -5,6 +5,8 @@
  * @param backButtonLabel Label for back button.
  * @param showNewButton Whether to show new button.
  * @param showSaveButton Whether to show save button.
+ * @param controlPaneIsInDialogAndFirstByIndex Whether navbar belongs to
+ * the first page and is in dialog.
  * @param? header Header text.
  */
 {template .controlPane autoescape="false"}
@@ -14,12 +16,18 @@
       <div class="left">
         {if $showBackButton}
         <a class="back link">
+          {if not $controlPaneIsInDialogAndFirstByIndex}
           <i class="icon icon-back"></i>
+          {/if}
           <span>
-          {if $backButtonLabel}
-            {$backButtonLabel}
+          {if $controlPaneIsInDialogAndFirstByIndex}
+            {rflect.cal.i18n.Symbols.CANCEL}
           {else}
+            {if $backButtonLabel}
+            {$backButtonLabel}
+            {else}
             {rflect.cal.i18n.Symbols.BACK}
+            {/if}
           {/if}
           </span>
         </a>

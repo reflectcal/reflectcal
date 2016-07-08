@@ -171,8 +171,23 @@ rflect.cal.ui.ExternalPane.prototype.buildControlPane = function(
     showButtonDelete: this.isButtonDeleteEnabled() && aShowButtonDelete,
     showButtonNew: aShowButtonNew,
     showButtonSave: aShowButtonSave,
-    upper: aUpper
+    upper: aUpper,
+    controlPaneIsInDialogAndFirstByIndex:
+        this.controlPaneIsInDialogAndFirstByIndex()
   });
+}
+
+
+/**
+ * @return {boolean} Whether navbar belongs to the first page and is in
+ * dialog.
+ * */
+rflect.cal.ui.ExternalPane.prototype.controlPaneIsInDialogAndFirstByIndex =
+    function() {
+  return !!(this.getParent() && this.getParent().getParent() &&
+      this.getParent().getParent() instanceof
+      rflect.cal.ui.ScreenManagerPopup &&
+      this.getParent().indexOfChild(this) == 0);
 }
 
 

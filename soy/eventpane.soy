@@ -5,6 +5,8 @@
  * @param? includeOuterHTML Whether to include outer html of element.
  * @param isNativeTimeInput Whether to include outer html of element.
  * @param calendarsSelectHTML Calendars select HTML.
+ * @param controlPaneIsInDialogAndFirstByIndex Whether navbar belongs to
+ * the first page and is in dialog.
  */
 {template .eventPane autoescape="false"}
   {if $includeOuterHTML}
@@ -17,6 +19,7 @@
       {param showNewButton: false /}
       {param showSaveButton: true /}
       {param header: rflect.cal.i18n.Symbols.EVENT /}
+      {param controlPaneIsInDialogAndFirstByIndex: $controlPaneIsInDialogAndFirstByIndex /}
     {/call}
 
     <div class="pages settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">

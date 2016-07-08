@@ -103,21 +103,27 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
     return this.body_ ? this.body_ : (this.body_ =
         this.getDomHelper().createDom('div', this.getCssClass() + '-body'));
   }
-
-
+  
+  /**@return {string}*/
+  getCharacteristicClass() {
+    return '';
+  }
+  
   /**@override*/
   createDom() {
     ScreenManagerPopup.superClass_.createDom.call(this);
 
     this.createElements_(this.getElement());
+    goog.dom.classes.add(this.getElement(), this.getCharacteristicClass());
   }
-
+  
   /** @override */
   decorateInternal(element) {
     ScreenManagerPopup.superClass_.decorateInternal.call(this, element);
 
     this.getDomHelper().removeChildren(element);
     this.createElements_(element);
+    goog.dom.classes.add(element, this.getCharacteristicClass());
   };
 
   createElements_(aElement) {
@@ -163,8 +169,22 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
   enterDocument() {
     ScreenManagerPopup.superClass_.enterDocument.call(this);
 
-    this.getHandler().listen(this.bgEl_, goog.events.EventType.CLICK,
-      this.setVisible.bind(this, false));
+    this.getHandler().
+        listen(this.bgEl_, goog.events.EventType.CLICK,
+        this.setVisible.bind(this, false)).
+        listen(this, rflect.cal.ui.ScreenManager.EventTypes.PAGE_REQUEST,
+        this.onPageRequest_);
+  }
+
+  /**
+   * @param {rflect.cal.ui.ScreenManager.PageRequestEvent} aEvent
+   */
+  onPageRequest_(aEvent) {
+    //If page request is coming from "back" ("cancel") button of first screen -
+    //hide popup.
+    if (!aEvent.show && aEvent.component == this.screenManager.getChildAt(0)) {
+      this.setVisible(false);
+    }
   }
 
   /**

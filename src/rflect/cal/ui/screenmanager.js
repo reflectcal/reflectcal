@@ -259,10 +259,13 @@ rflect.cal.ui.ScreenManager.prototype.popFromStack = function(){
  */
 rflect.cal.ui.ScreenManager.prototype.hideAll = function(){
   this.forEachChild((screen, index) => {
-    if (index > 0) {
+    if (index > 0 && screen.isInDocument()) {
       goog.style.showElement(screen.getElement(), false);
     }
   });
+  if (rflect.TOUCH_INTERFACE_ENABLED) {
+    this.slideToPosition(1);
+  }
   this.pageStack_.length = 1;
   this.componentsToHide_.length = 0;
 }
@@ -343,7 +346,7 @@ rflect.cal.ui.ScreenManager.prototype.showScreen = function(aComponent, aShow,
     } else {
       goog.style.showElement(aComponent.getElement(), true);
     }
-    if (true)
+    if (rflect.TOUCH_INTERFACE_ENABLED)
       this.assignPosition(aComponent, position);
   } else {
     this.componentsToHide_.push(this.popFromStack());
@@ -353,7 +356,7 @@ rflect.cal.ui.ScreenManager.prototype.showScreen = function(aComponent, aShow,
         (goog.array.peek(this.pageStack_)).getElement(), true);
   }
 
-  if (true)
+  if (rflect.TOUCH_INTERFACE_ENABLED)
     this.slideToPosition(position);
   else
     this.changeScreen();

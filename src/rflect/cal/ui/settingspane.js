@@ -445,7 +445,9 @@ rflect.cal.ui.SettingsPane.createCalendarsTd_ =
 rflect.cal.ui.SettingsPane.prototype.buildHTML = function(opt_outerHTML) {
   return rflect.cal.ui.soy.settingspane.settingsPane({
     id: this.getId(),
-    includeOuterHTML: opt_outerHTML
+    includeOuterHTML: opt_outerHTML,
+    controlPaneIsInDialogAndFirstByIndex:
+        this.controlPaneIsInDialogAndFirstByIndex()
   });
 };
 

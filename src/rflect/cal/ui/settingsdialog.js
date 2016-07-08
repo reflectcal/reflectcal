@@ -37,6 +37,13 @@ class SettingsDialog extends rflect.cal.ui.ScreenManagerPopup {
   };
 
   /**
+   * @override
+   */
+  getCharacteristicClass() {
+    return 'settings-dialog';
+  }
+
+  /**
    * @param {boolean} aShow
    * @param {Element} aAnchorElement
    */

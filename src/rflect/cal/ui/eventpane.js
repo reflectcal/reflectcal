@@ -331,7 +331,9 @@ rflect.cal.ui.EventPane.prototype.buildHTML = function(opt_outerHTML) {
     id: this.getId(),
     includeOuterHTML: opt_outerHTML,
     calendarsSelectHTML: this.calendarsSelect_.buildHTML(true),
-    isNativeTimeInput: this.navigator_.isNativeTimeInput()
+    isNativeTimeInput: this.navigator_.isNativeTimeInput(),
+    controlPaneIsInDialogAndFirstByIndex:
+        this.controlPaneIsInDialogAndFirstByIndex()
   });
 };
 
