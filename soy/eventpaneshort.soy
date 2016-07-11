@@ -1,0 +1,168 @@
+{namespace rflect.cal.ui.soy.eventpaneshort}
+
+/**
+ * @param id Unique id.
+ * @param? includeOuterHTML Whether to include outer html of element.
+ * @param calendarsSelectHTML Calendars select HTML.
+ * @param controlPaneIsInDialogAndFirstByIndex Whether navbar belongs to
+ * the first page and is in dialog.
+ */
+{template .eventPane autoescape="false"}
+  {if $includeOuterHTML}
+  <div id="{$id}" class="view settings-pane">
+  {/if}
+
+    {call rflect.cal.ui.soy.externalpane.controlPane}
+      {param backButtonLabel: rflect.cal.i18n.Symbols.TO_CALENDAR /}
+      {param showBackButton: true /}
+      {param showNewButton: false /}
+      {param showSaveButton: true /}
+      {param header: rflect.cal.i18n.Symbols.EVENT /}
+      {param controlPaneIsInDialogAndFirstByIndex: $controlPaneIsInDialogAndFirstByIndex /}
+    {/call}
+
+    <div class="pages settings-body-outer{sp}{if rflect.ARTIFICIAL_SCROLLER_ENABLED}settings-body-outer-artificial-scroll{else}settings-body-outer-native-scroll{/if}">
+
+      <div class="page settings-body">
+
+        <div class="page-content settings-body-inner">
+          <div class="list-block">
+            <ul>
+
+              <li>
+                <div class="item-content">
+                  <div class="item-inner">
+                    <label class="item-title label" for="{$id}ep-event-name-input">
+                      {rflect.cal.i18n.Symbols.EVENT_NAME}
+                    </label>
+                    <div class="item-input">
+                      <input id="{$id}ep-event-name-input" type="text" placeholder="{rflect.cal.i18n.Symbols.NO_NAME_EVENT}">
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              {$calendarsSelectHTML}
+
+              <a /*href="/calendars"*/ class="item-link" id="{$id}button-event-details">
+                <div class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title">{rflect.cal.i18n.Symbols.EVENT_DETAILS}</div>
+                  </div>
+                </div>
+              </a>
+
+            </ul>
+          </div>
+          <div class="list-block">
+            <ul>
+
+              <li>
+                <button type="button" class="item-link button-danger">
+                  {rflect.cal.i18n.Symbols.DELETE}
+                </button>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {if $includeOuterHTML}
+  </div>
+  {/if}
+{/template}
+
+
+/**
+ * @param isNativeTimeInput
+ * @param id Unique id.
+ */
+{template .dateInputs autoescape="false"}
+  {if $isNativeTimeInput}
+
+  <li>
+    <div class="item-content">
+      <div class="item-inner">
+        <div id="{$id}label-start" class="item-title label">
+          {rflect.cal.i18n.Symbols.START}
+        </div>
+        <div class="item-input">
+          <input id="{$id}event-start-datetime" type="datetime-local">
+          <input id="{$id}event-start-date" type="date">
+        </div>
+      </div>
+    </div>
+  </li>
+
+  <li>
+    <div class="item-content">
+      <div class="item-inner">
+        <div id="{$id}label-end" class="item-title label">
+          {rflect.cal.i18n.Symbols.END}
+        </div>
+        <div class="item-input">
+          <input id="{$id}event-end-datetime" type="datetime-local">
+          <input id="{$id}event-end-date" type="date">
+        </div>
+      </div>
+    </div>
+  </li>
+
+  {else}
+
+  <li>
+    <div class="item-content">
+      <div class="item-inner">
+        <div id="{$id}label-start-date" class="item-title label">
+          {rflect.cal.i18n.Symbols.START_DATE}
+        </div>
+        <div class="item-input">
+          <input id="{$id}event-start-date" type="text">
+        </div>
+      </div>
+    </div>
+  </li>
+  
+  <li>
+    <div class="item-content">
+      <div class="item-inner">
+        <div id="{$id}label-start-time" class="item-title label">
+          {rflect.cal.i18n.Symbols.START_TIME}
+        </div>
+        <div class="item-input">
+          <input id="{$id}event-start-time" type="text">
+        </div>
+      </div>
+    </div>
+  </li>
+  
+  <li>
+    <div class="item-content">
+      <div class="item-inner">
+        <div id="{$id}label-end-date" class="item-title label">
+          {rflect.cal.i18n.Symbols.END_DATE}
+        </div>
+        <div class="item-input">
+          <input id="{$id}event-end-date" type="text">
+        </div>
+      </div>
+    </div>
+  </li>
+  
+  <li>
+    <div class="item-content">
+      <div class="item-inner">
+        <div id="{$id}label-end-time" class="item-title label">
+          {rflect.cal.i18n.Symbols.END_TIME}
+        </div>
+        <div class="item-input">
+          <input id="{$id}event-end-time" type="text">
+        </div>
+      </div>
+    </div>
+  </li>
+
+  {/if}
+{/template}
