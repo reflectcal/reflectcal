@@ -23,6 +23,7 @@ goog.require('rflect.cal.TimeManager');
 goog.require('rflect.cal.TimeManager.Direction');
 goog.require('rflect.cal.Transport');
 goog.require('rflect.cal.ui.GridEventDialog');
+goog.require('rflect.cal.ui.GridEventDialogScreenManager');
 goog.require('rflect.cal.ui.EditDialog');
 goog.require('rflect.cal.ui.EventDialog');
 goog.require('rflect.cal.ui.EventDialogScreenManager');
@@ -422,7 +423,7 @@ rflect.cal.ViewManager.prototype.showGridEventDialog = function (aShow,
         this.timeManager, this.eventManager_, this.containerSizeMonitor_,
         this.transport_, this.navigator_);
     this.gridEventDialog_.addScreenManager(
-        new rflect.cal.ui.EventDialogScreenManager(
+        new rflect.cal.ui.GridEventDialogScreenManager(
         this, this.timeManager, this.eventManager_, this.containerSizeMonitor_,
         this.transport_, this.navigator_));
     this.addChild(this.gridEventDialog_);

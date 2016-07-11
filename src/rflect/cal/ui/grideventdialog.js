@@ -43,7 +43,7 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
      * @private
      */
     this.mmBehavior_ = new rflect.ui.MouseMissBehavior(this);
-    this.mmBehavior_.enable(true);
+    this.mmBehavior_.enable(!rflect.TOUCH_INTERFACE_ENABLED);
   };
 
   /**
@@ -72,6 +72,7 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
       getEventPane().setTouchHoldMode(opt_creatingByTouchHold);
     }
 
+    this.lastUsedAnchorCoordinate = opt_anchorCoordinate;
     this.showForGridCase(aShow,
         true,
         this.moreSpaceToTheRight(),
@@ -223,12 +224,46 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
   enterDocument() {
     GridEventDialog.superClass_.enterDocument.call(this);
     this.mmBehavior_.enterDocument();
+
+    this.getHandler().
+        listen(this, rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE,
+        this.onPageChange_).
+        listen(this.screenManager.getChildAt(1),
+        [rflect.cal.ui.EventPaneShort.EventTypes.DELETE,
+        rflect.cal.ui.EventPaneShort.EventTypes.SAVE],
+        this.setVisible.bind(this, false));
+  }
+
+  /**
+   * @param {rflect.cal.ui.ScreenManager.PageChangeEvent} aEvent
+   */
+  onPageChange_(aEvent) {
+    if (aEvent.currentScreen == this.screenManager.getChildAt(1)) {
+      goog.dom.classes.remove(this.getElement(), 'event-dialog-grid');
+      goog.dom.classes.add(this.getElement(), 'event-dialog-grid-expanded');
+
+      this.showForGridCase(true,
+          false,
+          this.moreSpaceToTheRight(),
+          this.lastUsedAnchorCoordinate);
+    } else {
+      goog.dom.classes.remove(this.getElement(), 'event-dialog-grid-expanded');
+      goog.dom.classes.add(this.getElement(), 'event-dialog-grid');
+
+      this.showForGridCase(true,
+          true,
+          this.moreSpaceToTheRight(),
+          this.lastUsedAnchorCoordinate);
+    }
   }
 
   /**
    * @override
    */
   renderBackground_() {
+    if (rflect.TOUCH_INTERFACE_ENABLED) {
+      GridEventDialog.superClass_.renderBackground_.call(this);
+    }
   }
 
   /**

@@ -105,10 +105,12 @@ rflect.ui.MouseMissBehavior.prototype.isEnabled = function() {
 rflect.ui.MouseMissBehavior.prototype.attachMouseMissListeners_ = function() {
   if (!goog.isDefAndNotNull(this.mouseMissKey_))
     this.mouseMissKey_ = goog.events.listen(this.component.getElement(),
-        goog.events.EventType.MOUSEDOWN, this.onMouseDown_, false, this);
+        [goog.events.EventType.MOUSEDOWN, goog.events.EventType.TOUCHSTART],
+        this.onMouseDown_, false, this);
   if (!goog.isDefAndNotNull(rflect.ui.MouseMissBehavior.globalMouseDownKey_))
     rflect.ui.MouseMissBehavior.globalMouseDownKey_ = goog.events.listen(
-        document, goog.events.EventType.MOUSEDOWN,
+        document, [goog.events.EventType.MOUSEDOWN,
+          goog.events.EventType.TOUCHSTART],
         rflect.ui.MouseMissBehavior.onMouseDownGlobal_, false, this);
 }
 

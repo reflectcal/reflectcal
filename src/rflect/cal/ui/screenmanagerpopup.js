@@ -139,6 +139,10 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
     goog.asserts.assert(!!this.screenManager, 
         'Screen manager must not be null.');
     
+    if (this.isVisible() == aShow) {
+      return;
+    }
+
     if (!this.isInDocument()) {
       this.render(this.getDomHelper().getDocument().body);
       this.screenManager.render(this.getBody());
