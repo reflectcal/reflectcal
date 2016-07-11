@@ -262,7 +262,7 @@ goog.inherits(rflect.cal.ui.MainPane.EditDialogShowEvent, goog.events.Event);
 /**
  * Event that is fired when edit component (dialog or pane) should be shown.
  * @param {rflect.cal.events.Event} aCalendarEvent
- * @param {boolean} aShowPane
+ * @param {boolean} aEditing
  * @param {boolean} aByTouchHold
  * @param {Element} aTargetElement
  * @param {goog.math.Coordinate} aTargetCoordinate
@@ -270,7 +270,7 @@ goog.inherits(rflect.cal.ui.MainPane.EditDialogShowEvent, goog.events.Event);
  * @extends {goog.events.Event}
  */
 rflect.cal.ui.MainPane.EditComponentShowEvent = function(aCalendarEvent,
-    aShowPane, aByTouchHold, aTargetElement, aTargetCoordinate) {
+    aEditing, aByTouchHold, aTargetElement, aTargetCoordinate) {
   goog.events.Event.call(this, rflect.cal.ui.MainPane.EventTypes.
       EDIT_COMPONENT_SHOW);
 
@@ -282,7 +282,7 @@ rflect.cal.ui.MainPane.EditComponentShowEvent = function(aCalendarEvent,
   /**
    * @type {boolean}
    */
-  this.showPane = aShowPane;
+  this.editing = aEditing;
 
   /**
    * @type {boolean}
@@ -1454,7 +1454,7 @@ rflect.cal.ui.MainPane.prototype.onTouchHold_ = function(aEvent) {
  */
 rflect.cal.ui.MainPane.prototype.onTouchHoldEnd_ = function(aEvent) {
   this.dispatchEvent(new rflect.cal.ui.MainPane.EditComponentShowEvent(null,
-      true, true, /**@type {Element}*/ (aEvent.target),
+      false, true, /**@type {Element}*/ (aEvent.target),
       new goog.math.Coordinate(aEvent.clientX, aEvent.clientY)));
 }
 
@@ -1519,7 +1519,7 @@ rflect.cal.ui.MainPane.prototype.showEventEditComponent_ = function(aEvent,
   var calendarEvent = this.getEventByTarget_(target);
 
   this.dispatchEvent(new rflect.cal.ui.MainPane.EditComponentShowEvent(
-      calendarEvent, !!aShowPane, false, target,
+      calendarEvent, true, false, target,
       new goog.math.Coordinate(aEvent.clientX, aEvent.clientY)));
 }
 
@@ -2185,7 +2185,7 @@ rflect.cal.ui.MainPane.prototype.onMouseUp_ = function (aEvent) {
     } else {
       this.beginEventCreation();
       this.dispatchEvent(new rflect.cal.ui.MainPane.EditComponentShowEvent(
-        this.eventManager_.eventHolder.getCurrentEvent(), true, false,
+        this.eventManager_.eventHolder.getCurrentEvent(), false, false,
         /**@type {Element}*/ (aEvent.target),
         new goog.math.Coordinate(aEvent.clientX, aEvent.clientY)));
     }

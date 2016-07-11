@@ -66,9 +66,13 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
       goog.asserts.assert(!!this.screenManager,
           'Screen manager must not be null.');
 
-      (/**@type {rflect.cal.ui.EventDialogScreenManager}*/(this.screenManager)).
+      (/**@type {rflect.cal.ui.GridEventDialogScreenManager}*/(this.screenManager)).
+      getEventPaneShort().setNewEventMode(opt_creatingNewEvent);
+      (/**@type {rflect.cal.ui.GridEventDialogScreenManager}*/(this.screenManager)).
+      getEventPaneShort().setTouchHoldMode(opt_creatingByTouchHold);
+      (/**@type {rflect.cal.ui.GridEventDialogScreenManager}*/(this.screenManager)).
       getEventPane().setNewEventMode(opt_creatingNewEvent);
-      (/**@type {rflect.cal.ui.EventDialogScreenManager}*/(this.screenManager)).
+      (/**@type {rflect.cal.ui.GridEventDialogScreenManager}*/(this.screenManager)).
       getEventPane().setTouchHoldMode(opt_creatingByTouchHold);
     }
 

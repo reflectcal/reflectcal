@@ -10,6 +10,9 @@
 
 goog.provide('rflect.cal.ui.ScreenManagerPopup');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.positioning.ClientPosition');
 goog.require('goog.positioning.Corner');
 goog.require('goog.positioning.AnchoredViewportPosition');
@@ -65,11 +68,11 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
     this.margin_;
 
     /**
-     * @type {rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION}
+     * The dialog's preferred ARIA role.
+     * @type {goog.a11y.aria.Role}
      * @private
      */
-    this.lastUsedArrowPositionConfiguration_ =
-        rflect.cal.ui.ScreenManagerPopup.ARROW_CONFIGURATION.TOP;
+    this.preferredAriaRole_ = goog.a11y.aria.Role.DIALOG;
   };
 
 
@@ -432,7 +435,26 @@ class ScreenManagerPopup extends goog.ui.ModalPopup {
       this.reposition();
     }
   };
+  
+  /**
+   * Returns the dialog's preferred ARIA role. This can be used to override the
+   * default dialog role, e.g. with an ARIA role of ALERTDIALOG for a simple
+   * warning or confirmation dialog.
+   * @return {goog.a11y.aria.Role} This dialog's preferred ARIA role.
+   */
+  getPreferredAriaRole() {
+    return this.preferredAriaRole_;
+  };
 
+  /**
+   * Sets the dialog's preferred ARIA role. This can be used to override the
+   * default dialog role, e.g. with an ARIA role of ALERTDIALOG for a simple
+   * warning or confirmation dialog.
+   * @param {goog.a11y.aria.Role} role This dialog's preferred ARIA role.
+   */
+  setPreferredAriaRole(role) {
+    this.preferredAriaRole_ = role;
+  };
 
   /**
    * Repositions the popup according to the current state.

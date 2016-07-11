@@ -710,7 +710,7 @@ rflect.cal.ViewManager.prototype.onEditDialogShow_ = function(aEvent) {
 rflect.cal.ViewManager.prototype.onEditComponentShow_ = function(aEvent) {
   const {
     calendarEvent,
-    showPane,
+    editing,
     byTouchHold,
     targetElement,
     targetCoordinate
@@ -723,9 +723,7 @@ rflect.cal.ViewManager.prototype.onEditComponentShow_ = function(aEvent) {
   } else if (!this.eventManager_.eventIsInProgress(calendarEvent.id)) {
     this.eventManager_.eventHolder.openSession(calendarEvent);
     if (calendarEvent) {
-      if (showPane) {
-        this.showEventPane(true, targetElement, false, targetCoordinate);
-      }
+      this.showEventPane(true, targetElement, false, targetCoordinate, !editing);
     }
   }
 }
