@@ -571,10 +571,7 @@ rflect.cal.ViewManager.prototype.onSettingsPaneCalendarUpdate_ =
   this.mainBody_.getSidePane().update({
     updateCalendarsOnly: true
   });
-  //Do not attach momentum scroller, we will do it on page change.
-  this.mainBody_.getMainPane().update({
-    doNotAddMomentumScroller: true
-  });
+  this.mainBody_.getMainPane().update();
 }
 
 
@@ -585,9 +582,7 @@ rflect.cal.ViewManager.prototype.updateMainPane_ = function() {
   this.eventManager_.run();
 
   //Do not attach momentum scroller, we will do it on page change.
-  this.mainBody_.getMainPane().update({
-    doNotAddMomentumScroller: true
-  });
+  this.mainBody_.getMainPane().update();
 }
 
 

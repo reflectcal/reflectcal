@@ -612,7 +612,9 @@ rflect.cal.ui.EventPane.prototype.updateAC_ = function(aAC) {
  * Default action is to hide pane.
  */
 rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
-  if (this.touchHoldMode_) {
+  if (this.touchHoldMode_ &&
+      //Only fire delete if event pane is first by index.
+      this.getParent().indexOfChild(this) === 0) {
     this.eventManager.eventHolder.endWithDelete();
     this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.DELETE);
   }
@@ -711,21 +713,23 @@ rflect.cal.ui.EventPane.prototype.onBeforePageChange_ = function(aEvent) {
 rflect.cal.ui.EventPane.prototype.displayValues = function() {
   var eh = this.eventManager.eventHolder;
 
-  this.showButtonDelete(!this.newEventMode_);
+  if (eh.isInProgress()) {
+    this.showButtonDelete(!this.newEventMode_);
 
-  this.displayDates_();
+    this.displayDates_();
 
-  this.inputName_.value = eh.getSummary();
+    this.inputName_.value = eh.getSummary();
 
-  this.textAreaDesc_.value = eh.getDescription();
+    this.textAreaDesc_.value = eh.getDescription();
 
-  this.checkboxAllDay_.checked = eh.getAllDay();
+    this.checkboxAllDay_.checked = eh.getAllDay();
 
-  this.calendarsSelect_.update();
-  this.calendarsSelect_.setCalendarId(eh.getCalendarId());
+    this.calendarsSelect_.update();
+    this.calendarsSelect_.setCalendarId(eh.getCalendarId());
 
-  this.showTimeInputs_(!eh.getAllDay());
-  this.updateLabels_(eh.getAllDay());
+    this.showTimeInputs_(!eh.getAllDay());
+    this.updateLabels_(eh.getAllDay());
+  }
 };
 
 

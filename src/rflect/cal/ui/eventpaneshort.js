@@ -481,8 +481,6 @@ rflect.cal.ui.EventPaneShort.prototype.onCancel_ = function() {
  * Save action listener.
  */
 rflect.cal.ui.EventPaneShort.prototype.onSave_ = function() {
-  if (goog.DEBUG)
-    console.log('onSave_: ');
   if (this.scanValues()) {
     this.eventManager.setLastUsedCalendarId(
         this.eventManager.eventHolder.getCurrentEvent().calendarId);
@@ -527,12 +525,14 @@ rflect.cal.ui.EventPaneShort.prototype.onBeforePageChange_ = function(aEvent) {
 rflect.cal.ui.EventPaneShort.prototype.displayValues = function() {
   var eh = this.eventManager.eventHolder;
 
-  this.showButtonDelete(!this.newEventMode_);
+  if (eh.isInProgress()) {
+    this.showButtonDelete(!this.newEventMode_);
 
-  this.inputName_.value = eh.getSummary();
+    this.inputName_.value = eh.getSummary();
 
-  this.calendarsSelect_.update();
-  this.calendarsSelect_.setCalendarId(eh.getCalendarId());
+    this.calendarsSelect_.update();
+    this.calendarsSelect_.setCalendarId(eh.getCalendarId());
+  }
 };
 
 

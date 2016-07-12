@@ -44,6 +44,9 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
      */
     this.mmBehavior_ = new rflect.ui.MouseMissBehavior(this);
     this.mmBehavior_.enable(!rflect.TOUCH_INTERFACE_ENABLED);
+
+    /**@type {goog.math.Coordinate}*/
+    this.lastUsedAnchorCoordinate;
   };
 
   /**
@@ -233,9 +236,34 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
         listen(this, rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE,
         this.onPageChange_).
         listen(this.screenManager.getChildAt(1),
-        [rflect.cal.ui.EventPaneShort.EventTypes.DELETE,
-        rflect.cal.ui.EventPaneShort.EventTypes.SAVE],
-        this.setVisible.bind(this, false));
+        rflect.cal.ui.EventPaneShort.EventTypes.SAVE,
+        this.onSaveEvent_).
+        listen(this.screenManager.getChildAt(1),
+        rflect.cal.ui.EventPaneShort.EventTypes.DELETE,
+        this.onDeleteEvent_);
+  }
+
+  /**
+   * @param {goog.events.Event} aEvent
+   */
+  onSaveEvent_(aEvent) {
+    this.setVisible(false);
+  }
+
+  /**
+   * @param {goog.events.Event} aEvent
+   */
+  onDeleteEvent_(aEvent) {
+    this.setVisible(false);
+  }
+
+  /**@override*/
+  setVisible(aVisible) {
+    GridEventDialog.superClass_.setVisible.call(this, aVisible);
+
+    if (!aVisible) {
+      this.expand(false)
+    }
   }
 
   /**
@@ -243,21 +271,31 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
    */
   onPageChange_(aEvent) {
     if (aEvent.currentScreen == this.screenManager.getChildAt(1)) {
-      goog.dom.classes.remove(this.getElement(), 'event-dialog-grid');
-      goog.dom.classes.add(this.getElement(), 'event-dialog-grid-expanded');
+      this.expand(true);
 
       this.showForGridCase(true,
           false,
           this.moreSpaceToTheRight(),
           this.lastUsedAnchorCoordinate);
     } else {
-      goog.dom.classes.remove(this.getElement(), 'event-dialog-grid-expanded');
-      goog.dom.classes.add(this.getElement(), 'event-dialog-grid');
+      this.expand(false);
 
       this.showForGridCase(true,
           true,
           this.moreSpaceToTheRight(),
           this.lastUsedAnchorCoordinate);
+    }
+
+    aEvent.currentScreen.resetMomentumScroller();
+  }
+
+  expand(aExpand) {
+    if (aExpand) {
+      goog.dom.classes.remove(this.getElement(), 'event-dialog-grid');
+      goog.dom.classes.add(this.getElement(), 'event-dialog-grid-expanded');
+    } else {
+      goog.dom.classes.add(this.getElement(), 'event-dialog-grid');
+      goog.dom.classes.remove(this.getElement(), 'event-dialog-grid-expanded');
     }
   }
 

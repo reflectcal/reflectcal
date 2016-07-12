@@ -657,6 +657,8 @@ rflect.cal.ui.MainPane.prototype.updateAfterRedraw = function({
 } = {
   doNotAddMomentumScroller: false
 }) {
+  if (goog.DEBUG)
+        console.log('doNotAddMomentumScroller: ', doNotAddMomentumScroller);
   this.updateScrollableSizesAndDom();
 
   // We add scroll listeners on freshly built content.
@@ -739,6 +741,9 @@ rflect.cal.ui.MainPane.prototype.removeScrollListeners_ = function() {
  * Removes scroll listeners on each update.
  */
 rflect.cal.ui.MainPane.prototype.removeMomentumScroller = function() {
+  if (goog.DEBUG)
+        console.log('removeMomentumScroller: ');
+
   var elementWk = this.getDomHelper().getElement(
       rflect.cal.predefined.MainPane.ELEMENT_ID.GRID_TABLE_CONT);
   var elementMn = this.getDomHelper().getElement('grid-table-wrapper-outer');
@@ -1456,6 +1461,7 @@ rflect.cal.ui.MainPane.prototype.onTouchHoldEnd_ = function(aEvent) {
   this.dispatchEvent(new rflect.cal.ui.MainPane.EditComponentShowEvent(null,
       false, true, /**@type {Element}*/ (aEvent.target),
       new goog.math.Coordinate(aEvent.clientX, aEvent.clientY)));
+  this.addMomentumScroller();
 }
 
 

@@ -459,8 +459,6 @@ rflect.cal.ui.ScreenManager.prototype.enterDocument = function() {
  * @private
  */
 rflect.cal.ui.ScreenManager.prototype.onPageRequest_ = function(aEvent) {
-  if (goog.DEBUG)
-        console.log('page request Event: ', aEvent);
   //Only process own children, not from the deep nested structures.
   if (this.indexOfChild(aEvent.component) >= 0) {
     this.showScreen(aEvent.component, aEvent.show);

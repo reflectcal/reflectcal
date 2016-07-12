@@ -351,9 +351,7 @@ rflect.cal.ui.MainBody.prototype.enterDocument = function() {
       .listen(this.sidePane_.showBehavior,
       rflect.cal.ui.PaneShowBehavior.EventTypes.SLIDE_BREAK,
       this.onSidePaneSlide_, false, this)
-      .listen(this.getParent(),
-      rflect.cal.ui.ScreenManager.EventTypes.BEFORE_PAGE_CHANGE,
-      this.onBeforePageChange_, false, this)
+   
       .listen(this.getElement(),
       rflect.browser.transitionend.VENDOR_TRANSITION_END_NAMES,
       this.onMainBodyTransitionEnd, false, this);
