@@ -11,7 +11,7 @@ goog.provide('rflect.cal.ui.GridEventDialogScreenManager');
 
 goog.require('rflect.cal.ui.ScreenManager');
 goog.require('rflect.cal.ui.EventPane');
-goog.require('rflect.cal.ui.EventPaneShort');
+goog.require('rflect.cal.ui.EventPaneSimple');
 
 
 
@@ -37,7 +37,7 @@ rflect.cal.ui.GridEventDialogScreenManager = function(aViewManager,
                                                   opt_domHelper) {
   rflect.cal.ui.ScreenManager.call(this, opt_domHelper);
 
-  this.eventPaneShort_ = new rflect.cal.ui.EventPaneShort(aViewManager, aTimeManager,
+  this.eventPaneShort_ = new rflect.cal.ui.EventPaneSimple(aViewManager, aTimeManager,
       aEventManager, aContainerSizeMonitor, aTransport, aNavigator);
   this.eventPane_ = new rflect.cal.ui.EventPane(aViewManager, aTimeManager,
       aEventManager, aContainerSizeMonitor, aTransport, aNavigator);
@@ -58,7 +58,7 @@ rflect.cal.ui.GridEventDialogScreenManager.prototype.getEventPane = function() {
 
 
 /**
- * @return {rflect.cal.ui.EventPaneShort}
+ * @return {rflect.cal.ui.EventPaneSimple}
  */
 rflect.cal.ui.GridEventDialogScreenManager.prototype.getEventPaneShort = 
     function() {

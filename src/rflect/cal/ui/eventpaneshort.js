@@ -8,8 +8,8 @@
  * @author alexeykofficial@gmail.com (Alex K.)
  */
 
-goog.provide('rflect.cal.ui.EventPaneShort');
-goog.provide('rflect.cal.ui.EventPaneShort.EventTypes');
+goog.provide('rflect.cal.ui.EventPaneSimple');
+goog.provide('rflect.cal.ui.EventPaneSimple.EventTypes');
 
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventType');
@@ -48,7 +48,7 @@ goog.require('rflect.ui.Checkbox');
  * @constructor
  * @extends {rflect.cal.ui.ExternalPane}
  */
-rflect.cal.ui.EventPaneShort = function(aViewManager, aTimeManager, aEventManager,
+rflect.cal.ui.EventPaneSimple = function(aViewManager, aTimeManager, aEventManager,
     aContainerSizeMonitor, aTransport, aNavigator) {
   rflect.cal.ui.ExternalPane.call(this, aViewManager, aTimeManager,
       aEventManager, aContainerSizeMonitor, aTransport);
@@ -62,7 +62,7 @@ rflect.cal.ui.EventPaneShort = function(aViewManager, aTimeManager, aEventManage
 
   if (!this.navigator_.isNativeTimeInput()){
     this.inputDatePicker_ = new rflect.cal.ui.InputDatePicker(this.viewManager,
-        rflect.cal.ui.EventPaneShort.getDateFormatString());
+        rflect.cal.ui.EventPaneSimple.getDateFormatString());
   }
 
   this.addChild(this.calendarsSelect_ = new rflect.cal.ui.CalendarsSelect(
@@ -75,13 +75,13 @@ rflect.cal.ui.EventPaneShort = function(aViewManager, aTimeManager, aEventManage
   this.enableMouseInterface(!rflect.TOUCH_INTERFACE_ENABLED, true);
 
 };
-goog.inherits(rflect.cal.ui.EventPaneShort, rflect.cal.ui.ExternalPane);
+goog.inherits(rflect.cal.ui.EventPaneSimple, rflect.cal.ui.ExternalPane);
 
 
 /**
  * @enum {string}
  */
-rflect.cal.ui.EventPaneShort.EventTypes = {
+rflect.cal.ui.EventPaneSimple.EventTypes = {
   CANCEL: 'cancel',
   SAVE: 'save',
   DELETE: 'delete'
@@ -93,7 +93,7 @@ rflect.cal.ui.EventPaneShort.EventTypes = {
  * @type {string}
  * @const
  */
-rflect.cal.ui.EventPaneShort.NATIVE_TIME_INPUT_FORMAT = 'HH:mm';
+rflect.cal.ui.EventPaneSimple.NATIVE_TIME_INPUT_FORMAT = 'HH:mm';
 
 
 /**
@@ -101,7 +101,7 @@ rflect.cal.ui.EventPaneShort.NATIVE_TIME_INPUT_FORMAT = 'HH:mm';
  * @type {string}
  * @const
  */
-rflect.cal.ui.EventPaneShort.NATIVE_DATE_INPUT_FORMAT = 'yyyy-MM-dd';
+rflect.cal.ui.EventPaneSimple.NATIVE_DATE_INPUT_FORMAT = 'yyyy-MM-dd';
 
 
 /**
@@ -109,23 +109,23 @@ rflect.cal.ui.EventPaneShort.NATIVE_DATE_INPUT_FORMAT = 'yyyy-MM-dd';
  * @type {string}
  * @const
  */
-rflect.cal.ui.EventPaneShort.NATIVE_DATETIME_INPUT_FORMAT =
-    rflect.cal.ui.EventPaneShort.NATIVE_DATE_INPUT_FORMAT + 'T' +
-    rflect.cal.ui.EventPaneShort.NATIVE_TIME_INPUT_FORMAT;
+rflect.cal.ui.EventPaneSimple.NATIVE_DATETIME_INPUT_FORMAT =
+    rflect.cal.ui.EventPaneSimple.NATIVE_DATE_INPUT_FORMAT + 'T' +
+    rflect.cal.ui.EventPaneSimple.NATIVE_TIME_INPUT_FORMAT;
     
     
 /**
  * @type {string}
  * @const
  */
-rflect.cal.ui.EventPaneShort.LABEL_CLASS_NAME = 'label-fluid event-pane-label';
+rflect.cal.ui.EventPaneSimple.LABEL_CLASS_NAME = 'label-fluid event-pane-label';
 
 
 /**
  * Displays dates in form.
  * @return {string} Date format with 4 digit year.
  */
-rflect.cal.ui.EventPaneShort.getDateFormatString = function() {
+rflect.cal.ui.EventPaneSimple.getDateFormatString = function() {
   return goog.i18n.DateTimeSymbols.DATEFORMATS[3].replace(/y+/, 'yyyy');
 }
 
@@ -135,7 +135,7 @@ rflect.cal.ui.EventPaneShort.getDateFormatString = function() {
  * @param {boolean} aValid Whether input is valid.
  * @param {Element} aInputEl Input element.
  */
-rflect.cal.ui.EventPaneShort.markInput = function(aValid, aInputEl) {
+rflect.cal.ui.EventPaneSimple.markInput = function(aValid, aInputEl) {
   if (!aValid)
     goog.dom.classes.add(aInputEl, goog.getCssName('input-invalid'));
   else
@@ -147,14 +147,14 @@ rflect.cal.ui.EventPaneShort.markInput = function(aValid, aInputEl) {
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.checkboxAllDay_;
+rflect.cal.ui.EventPaneSimple.prototype.checkboxAllDay_;
 
 
 /**
  * @type {rflect.cal.ui.InputDatePicker}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.inputDatePicker_;
+rflect.cal.ui.EventPaneSimple.prototype.inputDatePicker_;
 
 
 /**
@@ -162,7 +162,7 @@ rflect.cal.ui.EventPaneShort.prototype.inputDatePicker_;
  * @type {boolean}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.visible_ = false;
+rflect.cal.ui.EventPaneSimple.prototype.visible_ = false;
 
 
 /**
@@ -170,7 +170,7 @@ rflect.cal.ui.EventPaneShort.prototype.visible_ = false;
  * @type {boolean}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.newEventMode_ = false;
+rflect.cal.ui.EventPaneSimple.prototype.newEventMode_ = false;
 
 
 /**
@@ -178,7 +178,7 @@ rflect.cal.ui.EventPaneShort.prototype.newEventMode_ = false;
  * @type {boolean}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.touchHoldMode_ = false;
+rflect.cal.ui.EventPaneSimple.prototype.touchHoldMode_ = false;
 
 
 /**
@@ -186,7 +186,7 @@ rflect.cal.ui.EventPaneShort.prototype.touchHoldMode_ = false;
  * @type {rflect.cal.ui.ac.TimeAutoComplete}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.startTimeAC_;
+rflect.cal.ui.EventPaneSimple.prototype.startTimeAC_;
 
 
 /**
@@ -194,7 +194,7 @@ rflect.cal.ui.EventPaneShort.prototype.startTimeAC_;
  * @type {rflect.cal.ui.ac.TimeAutoComplete}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.endTimeAC_;
+rflect.cal.ui.EventPaneSimple.prototype.endTimeAC_;
 
 
 /**
@@ -202,7 +202,7 @@ rflect.cal.ui.EventPaneShort.prototype.endTimeAC_;
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.inputStartDate_;
+rflect.cal.ui.EventPaneSimple.prototype.inputStartDate_;
 
 
 /**
@@ -210,7 +210,7 @@ rflect.cal.ui.EventPaneShort.prototype.inputStartDate_;
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.inputEndDate_;
+rflect.cal.ui.EventPaneSimple.prototype.inputEndDate_;
 
 
 /**
@@ -218,7 +218,7 @@ rflect.cal.ui.EventPaneShort.prototype.inputEndDate_;
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.inputStartTime_;
+rflect.cal.ui.EventPaneSimple.prototype.inputStartTime_;
 
 
 /**
@@ -226,7 +226,7 @@ rflect.cal.ui.EventPaneShort.prototype.inputStartTime_;
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.inputEndTime_;
+rflect.cal.ui.EventPaneSimple.prototype.inputEndTime_;
 
 
 /**
@@ -234,7 +234,7 @@ rflect.cal.ui.EventPaneShort.prototype.inputEndTime_;
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.inputStartDateTime_;
+rflect.cal.ui.EventPaneSimple.prototype.inputStartDateTime_;
 
 
 /**
@@ -242,7 +242,7 @@ rflect.cal.ui.EventPaneShort.prototype.inputStartDateTime_;
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.inputEndDateTime_;
+rflect.cal.ui.EventPaneSimple.prototype.inputEndDateTime_;
 
 
 /**
@@ -250,7 +250,7 @@ rflect.cal.ui.EventPaneShort.prototype.inputEndDateTime_;
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.labelStart_;
+rflect.cal.ui.EventPaneSimple.prototype.labelStart_;
 
 
 /**
@@ -258,7 +258,7 @@ rflect.cal.ui.EventPaneShort.prototype.labelStart_;
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.labelEnd_;
+rflect.cal.ui.EventPaneSimple.prototype.labelEnd_;
 
 
 /**
@@ -266,7 +266,7 @@ rflect.cal.ui.EventPaneShort.prototype.labelEnd_;
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.labelStartDate_;
+rflect.cal.ui.EventPaneSimple.prototype.labelStartDate_;
 
 
 /**
@@ -274,7 +274,7 @@ rflect.cal.ui.EventPaneShort.prototype.labelStartDate_;
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.labelStartTime_;
+rflect.cal.ui.EventPaneSimple.prototype.labelStartTime_;
 
 
 /**
@@ -282,7 +282,7 @@ rflect.cal.ui.EventPaneShort.prototype.labelStartTime_;
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.labelEndDate_;
+rflect.cal.ui.EventPaneSimple.prototype.labelEndDate_;
 
 
 /**
@@ -290,7 +290,7 @@ rflect.cal.ui.EventPaneShort.prototype.labelEndDate_;
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.labelEndTime_;
+rflect.cal.ui.EventPaneSimple.prototype.labelEndTime_;
 
 
 /**
@@ -298,7 +298,7 @@ rflect.cal.ui.EventPaneShort.prototype.labelEndTime_;
  * @type {Element}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.labelEnd_;
+rflect.cal.ui.EventPaneSimple.prototype.labelEnd_;
 
 
 /**
@@ -306,13 +306,13 @@ rflect.cal.ui.EventPaneShort.prototype.labelEnd_;
  * @type {rflect.cal.ui.CalendarsSelect}
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.calendarsSelect_;
+rflect.cal.ui.EventPaneSimple.prototype.calendarsSelect_;
 
 
 /**
  * @override
  */
-rflect.cal.ui.EventPaneShort.prototype.isButtonDeleteEnabled = function() {
+rflect.cal.ui.EventPaneSimple.prototype.isButtonDeleteEnabled = function() {
   return true;
 };
 
@@ -320,7 +320,7 @@ rflect.cal.ui.EventPaneShort.prototype.isButtonDeleteEnabled = function() {
 /**
  * @return {boolean} Whether the component is visible.
  */
-rflect.cal.ui.EventPaneShort.prototype.isVisible = function() {
+rflect.cal.ui.EventPaneSimple.prototype.isVisible = function() {
   return this.visible_;
 };
 
@@ -328,7 +328,7 @@ rflect.cal.ui.EventPaneShort.prototype.isVisible = function() {
 /**
  * @override
  */
-rflect.cal.ui.EventPaneShort.prototype.buildHTML = function(opt_outerHTML) {
+rflect.cal.ui.EventPaneSimple.prototype.buildHTML = function(opt_outerHTML) {
   return rflect.cal.ui.soy.eventpaneshort.eventPaneShort({
     id: this.getId(),
     includeOuterHTML: opt_outerHTML,
@@ -342,11 +342,11 @@ rflect.cal.ui.EventPaneShort.prototype.buildHTML = function(opt_outerHTML) {
 /**
  * @override
  */
-rflect.cal.ui.EventPaneShort.prototype.enterDocument = function() {
+rflect.cal.ui.EventPaneSimple.prototype.enterDocument = function() {
   this.buttonDetails_.decorate(this.getDomHelper().getElement(`${this.getId()}button-event-details`));
   this.calendarsSelect_.setElementById(this.calendarsSelect_.getId());
 
-  rflect.cal.ui.EventPaneShort.superClass_.enterDocument.call(this);
+  rflect.cal.ui.EventPaneSimple.superClass_.enterDocument.call(this);
 
   this.inputName_ = this.getDomHelper().getElement(`${this.getId()}ep-event-name-input`);
 
@@ -379,7 +379,7 @@ rflect.cal.ui.EventPaneShort.prototype.enterDocument = function() {
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.onDetailsAction_ =
+rflect.cal.ui.EventPaneSimple.prototype.onDetailsAction_ =
     function(aEvent) {
 
   this.showEventPane(true);
@@ -393,7 +393,7 @@ rflect.cal.ui.EventPaneShort.prototype.onDetailsAction_ =
 /**
  * @param {boolean} aShow Whether to show settings pane.
  */
-rflect.cal.ui.EventPaneShort.prototype.showEventPane = function(aShow) {
+rflect.cal.ui.EventPaneSimple.prototype.showEventPane = function(aShow) {
   this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(
       (/**@type {rflect.cal.ui.GridEventDialogScreenManager}*/(
           this.getParent())).getEventPane(), aShow));
@@ -405,7 +405,7 @@ rflect.cal.ui.EventPaneShort.prototype.showEventPane = function(aShow) {
  * @param {rflect.cal.ui.ScreenManager.PageChangeEvent} aEvent Event object.
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.onPageChange_ = function(aEvent) {
+rflect.cal.ui.EventPaneSimple.prototype.onPageChange_ = function(aEvent) {
   if (!rflect.TOUCH_INTERFACE_ENABLED){
     /** @preserveTry */
     try {
@@ -423,7 +423,7 @@ rflect.cal.ui.EventPaneShort.prototype.onPageChange_ = function(aEvent) {
  * @param {boolean=} opt_creatingNewEvent Whether event pane is in new
  * event mode.
  */
-rflect.cal.ui.EventPaneShort.prototype.setNewEventMode = function(
+rflect.cal.ui.EventPaneSimple.prototype.setNewEventMode = function(
     opt_creatingNewEvent) {
   this.newEventMode_ = opt_creatingNewEvent || false;
 }
@@ -433,9 +433,18 @@ rflect.cal.ui.EventPaneShort.prototype.setNewEventMode = function(
  * @param {boolean=} opt_touchHoldMode Whether we're creating event by touch
  * hold gesture.
  */
-rflect.cal.ui.EventPaneShort.prototype.setTouchHoldMode = function(
+rflect.cal.ui.EventPaneSimple.prototype.setTouchHoldMode = function(
     opt_touchHoldMode) {
   this.touchHoldMode_ = !!opt_touchHoldMode;
+}
+
+
+/**
+ * @return {boolean} Whether we're creating event by touch
+ * hold gesture.
+ */
+rflect.cal.ui.EventPaneSimple.prototype.getTouchHoldMode = function() {
+  return !!this.touchHoldMode_;
 }
 
 
@@ -444,7 +453,7 @@ rflect.cal.ui.EventPaneShort.prototype.setTouchHoldMode = function(
  * @param {goog.events.Event} aEvent Event object.
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.onKeyDown_ = function(aEvent) {
+rflect.cal.ui.EventPaneSimple.prototype.onKeyDown_ = function(aEvent) {
 
   if (this.getParent().isVisible(this)) {
     // ESC key.
@@ -464,15 +473,22 @@ rflect.cal.ui.EventPaneShort.prototype.onKeyDown_ = function(aEvent) {
 }
 
 
+rflect.cal.ui.EventPaneSimple.prototype.cancelEventCreation = function () {
+  if (this.touchHoldMode_ &&
+      //Only fire delete if event pane is first by index.
+      this.getParent().indexOfChild(this) === 0) {
+    this.eventManager.eventHolder.endWithDelete();
+    this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.DELETE);
+  }
+};
+
+
 /**
  * Cancel action listener.
  * Default action is to hide pane.
  */
-rflect.cal.ui.EventPaneShort.prototype.onCancel_ = function() {
-  if (this.touchHoldMode_) {
-    this.eventManager.eventHolder.endWithDelete();
-    this.dispatchEvent(rflect.cal.ui.EventPaneShort.EventTypes.DELETE);
-  }
+rflect.cal.ui.EventPaneSimple.prototype.onCancel_ = function() {
+  this.cancelEventCreation();
   this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
 }
 
@@ -480,13 +496,13 @@ rflect.cal.ui.EventPaneShort.prototype.onCancel_ = function() {
 /**
  * Save action listener.
  */
-rflect.cal.ui.EventPaneShort.prototype.onSave_ = function() {
+rflect.cal.ui.EventPaneSimple.prototype.onSave_ = function() {
   if (this.scanValues()) {
     this.eventManager.setLastUsedCalendarId(
         this.eventManager.eventHolder.getCurrentEvent().calendarId);
 
     this.transport.saveEventAsync(this.eventManager.eventHolder.endWithEdit());
-    this.dispatchEvent(rflect.cal.ui.EventPaneShort.EventTypes.SAVE);
+    this.dispatchEvent(rflect.cal.ui.EventPaneSimple.EventTypes.SAVE);
     this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
   }
 }
@@ -496,11 +512,11 @@ rflect.cal.ui.EventPaneShort.prototype.onSave_ = function() {
  * Delete action listener.
  * @param {goog.events.Event} aEvent Event object.
  */
-rflect.cal.ui.EventPaneShort.prototype.onDelete_ = function(aEvent) {
+rflect.cal.ui.EventPaneSimple.prototype.onDelete_ = function(aEvent) {
   this.transport.deleteEventAsync(
       this.eventManager.eventHolder.endWithDelete());
 
-  this.dispatchEvent(rflect.cal.ui.EventPaneShort.EventTypes.DELETE);
+  this.dispatchEvent(rflect.cal.ui.EventPaneSimple.EventTypes.DELETE);
   this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
 }
 
@@ -511,7 +527,7 @@ rflect.cal.ui.EventPaneShort.prototype.onDelete_ = function(aEvent) {
  * object.
  * @private
  */
-rflect.cal.ui.EventPaneShort.prototype.onBeforePageChange_ = function(aEvent) {
+rflect.cal.ui.EventPaneSimple.prototype.onBeforePageChange_ = function(aEvent) {
   if (aEvent.currentScreen == this){
     this.displayValues();
     this.resetMomentumScroller();
@@ -522,7 +538,7 @@ rflect.cal.ui.EventPaneShort.prototype.onBeforePageChange_ = function(aEvent) {
 /**
  * Displays event properties in form.
  */
-rflect.cal.ui.EventPaneShort.prototype.displayValues = function() {
+rflect.cal.ui.EventPaneSimple.prototype.displayValues = function() {
   var eh = this.eventManager.eventHolder;
 
   if (eh.isInProgress()) {
@@ -540,7 +556,7 @@ rflect.cal.ui.EventPaneShort.prototype.displayValues = function() {
  * Scans values from form.
  * @return {boolean} Whether input is valid.
  */
-rflect.cal.ui.EventPaneShort.prototype.scanValues = function() {
+rflect.cal.ui.EventPaneSimple.prototype.scanValues = function() {
   var valid = true;
 
   var eh = this.eventManager.eventHolder;
@@ -558,8 +574,8 @@ rflect.cal.ui.EventPaneShort.prototype.scanValues = function() {
  * @override
  * @protected  
  */
-rflect.cal.ui.EventPaneShort.prototype.disposeInternal = function() {
+rflect.cal.ui.EventPaneSimple.prototype.disposeInternal = function() {
   this.inputName_ = null;
 
-  rflect.cal.ui.EventPaneShort.superClass_.disposeInternal.call(this);
+  rflect.cal.ui.EventPaneSimple.superClass_.disposeInternal.call(this);
 };

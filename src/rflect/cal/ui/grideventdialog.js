@@ -47,6 +47,12 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
 
     /**@type {goog.math.Coordinate}*/
     this.lastUsedAnchorCoordinate;
+
+    /**@type {boolean}*/
+    this.editMode;
+
+    /**@type {rflect.cal.ContainerSizeMonitor}*/
+    this.containerSizeMonitor_ = aContainerSizeMonitor;
   };
 
   /**
@@ -80,9 +86,11 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
     }
 
     this.lastUsedAnchorCoordinate = opt_anchorCoordinate;
+    this.editMode = !opt_creatingNewEvent;
     this.showForGridCase(aShow,
         true,
         this.moreSpaceToTheRight(),
+        this.editMode,
         opt_anchorCoordinate);
   }
 
@@ -102,9 +110,7 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
 
     const defaultMarginTopAbs = heightOfPopup / 2;
 
-    const doc = this.getDomHelper().getDocument();
-    const win = goog.dom.getWindow(doc) || window;
-    const viewSize = goog.dom.getViewportSize(win);
+    const viewSize = this.containerSizeMonitor_.getSize();
 
     const howMuchOfPopupIsOut = viewSize.height - aAnchorCoordinate.y -
         defaultMarginTopAbs;
@@ -135,9 +141,7 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
 
     const defaultMarginLeftAbs = widthOfPopup / 2;
 
-    const doc = this.getDomHelper().getDocument();
-    const win = goog.dom.getWindow(doc) || window;
-    const viewSize = goog.dom.getViewportSize(win);
+    const viewSize = this.containerSizeMonitor_.getSize();
 
     const howMuchOfPopupIsOut = viewSize.width - aAnchorCoordinate.x -
         defaultMarginLeftAbs;
@@ -156,14 +160,16 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
    * @param {boolean} aShow
    * @param {boolean} aAlignmentIsHorizontal
    * @param {boolean} aTopOrRight
+   * @param {boolean} aEditMode
    * @param {goog.math.Coordinate=} aAnchorCoordinate
    */
-  showForGridCase(aShow, aAlignmentIsHorizontal, aTopOrRight,
+  showForGridCase(aShow, aAlignmentIsHorizontal, aTopOrRight, aEditMode,
                   aAnchorCoordinate = new goog.math.Coordinate(0, 0)) {
     const anchorElement = this.getMarkerElement(aAnchorCoordinate);
     this.getDomHelper().getDocument().body.appendChild(anchorElement);
 
     this.setVisible(aShow);
+    this.addClassForEditMode(aEditMode);
 
     if (aAlignmentIsHorizontal) {
       this.setPinnedCorner(goog.positioning.Corner.BOTTOM_LEFT);
@@ -236,10 +242,10 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
         listen(this, rflect.cal.ui.ScreenManager.EventTypes.PAGE_CHANGE,
         this.onPageChange_).
         listen(this.screenManager.getChildAt(1),
-        rflect.cal.ui.EventPaneShort.EventTypes.SAVE,
+        rflect.cal.ui.EventPaneSimple.EventTypes.SAVE,
         this.onSaveEvent_).
         listen(this.screenManager.getChildAt(1),
-        rflect.cal.ui.EventPaneShort.EventTypes.DELETE,
+        rflect.cal.ui.EventPaneSimple.EventTypes.DELETE,
         this.onDeleteEvent_);
   }
 
@@ -262,20 +268,34 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
     GridEventDialog.superClass_.setVisible.call(this, aVisible);
 
     if (!aVisible) {
-      this.expand(false)
+      this.expand(false);
+      this.cancelEventCreation();
     }
+  }
+
+  cancelEventCreation() {
+    const screenManager =
+        /**@type {rflect.cal.ui.GridEventDialogScreenManager}*/(
+        this.screenManager);
+    screenManager.getEventPane().cancelEventCreation();
+    screenManager.getEventPaneShort().cancelEventCreation();
   }
 
   /**
    * @param {rflect.cal.ui.ScreenManager.PageChangeEvent} aEvent
    */
   onPageChange_(aEvent) {
-    if (aEvent.currentScreen == this.screenManager.getChildAt(1)) {
+    const screenManager =
+        /**@type {rflect.cal.ui.GridEventDialogScreenManager}*/(
+        this.screenManager);
+
+    if (aEvent.currentScreen == screenManager.getEventPane()) {
       this.expand(true);
 
       this.showForGridCase(true,
           false,
           this.moreSpaceToTheRight(),
+          this.editMode,
           this.lastUsedAnchorCoordinate);
     } else {
       this.expand(false);
@@ -283,19 +303,32 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
       this.showForGridCase(true,
           true,
           this.moreSpaceToTheRight(),
+          this.editMode,
           this.lastUsedAnchorCoordinate);
     }
 
     aEvent.currentScreen.resetMomentumScroller();
   }
 
+  /**
+   * @param {boolean} aAdd
+   */
+  addClassForEditMode(aAdd) {
+    if (aAdd) {
+      goog.dom.classes.add(this.getElement(), 'edit-mode');
+    } else {
+      goog.dom.classes.remove(this.getElement(), 'edit-mode');
+    }
+  }
+
+  /**
+   * @param {boolean} aExpand
+   */
   expand(aExpand) {
     if (aExpand) {
-      goog.dom.classes.remove(this.getElement(), 'event-dialog-grid');
-      goog.dom.classes.add(this.getElement(), 'event-dialog-grid-expanded');
+      goog.dom.classes.add(this.getElement(), 'expanded');
     } else {
-      goog.dom.classes.add(this.getElement(), 'event-dialog-grid');
-      goog.dom.classes.remove(this.getElement(), 'event-dialog-grid-expanded');
+      goog.dom.classes.remove(this.getElement(), 'expanded');
     }
   }
 

@@ -529,6 +529,15 @@ rflect.cal.ui.EventPane.prototype.setTouchHoldMode = function(
 
 
 /**
+ * @return {boolean} Whether we're creating event by touch
+ * hold gesture.
+ */
+rflect.cal.ui.EventPane.prototype.getTouchHoldMode = function() {
+  return !!this.touchHoldMode_;
+}
+
+
+/**
  * Component key listener.
  * @param {goog.events.Event} aEvent Event object.
  * @private
@@ -607,17 +616,22 @@ rflect.cal.ui.EventPane.prototype.updateAC_ = function(aAC) {
 }
 
 
-/**
- * Cancel action listener.
- * Default action is to hide pane.
- */
-rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
+rflect.cal.ui.EventPane.prototype.cancelEventCreation = function () {
   if (this.touchHoldMode_ &&
       //Only fire delete if event pane is first by index.
       this.getParent().indexOfChild(this) === 0) {
     this.eventManager.eventHolder.endWithDelete();
     this.dispatchEvent(rflect.cal.ui.EventPane.EventTypes.DELETE);
   }
+};
+
+
+/**
+ * Cancel action listener.
+ * Default action is to hide pane.
+ */
+rflect.cal.ui.EventPane.prototype.onCancel_ = function() {
+  this.cancelEventCreation();
   this.dispatchEvent(new rflect.cal.ui.ScreenManager.PageRequestEvent(this, false));
 }
 
