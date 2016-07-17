@@ -143,7 +143,11 @@
   padding: 8px;
 }
 
-.calendar-color {
+.list-block .item-title.calendar-color {
+  position: absolute;
+}
+
+.calendar-color() {
   border-radius: 0;
   transition: opacity @transitionTime;
   border-width: 1px;
@@ -151,6 +155,19 @@
   .transition(-webkit-transform .3s);
   .transition(transform .3s);
   outline: none;
+
+  position: absolute;
+  right: 40px;
+}
+
+.calendar-color when (@UI_TYPE = '') {
+  .calendar-color();
+  top: calc((44px - (@colorContHeightSmall + 2px)) / 2);
+}
+
+.calendar-color when (@UI_TYPE = 'MOBILE') {
+  .calendar-color();
+  top: calc((44px - (@colorContHeightBig + 2px)) / 2);
 }
 
 .calendar-color:hover {

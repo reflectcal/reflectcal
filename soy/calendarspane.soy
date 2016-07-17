@@ -56,7 +56,8 @@
         <a /*href="/calendars-{$calendar.id}"*/
             class="item-link{sp}{if $calendar.isInProgress}cal-link-in-progress{/if}"
             id="{$id}{rflect.cal.predefined.CALENDAR_SETTINGS_LIST_PREFIX}{$calendar.id}"
-            data-calendar-id={$calendar.id}>
+            data-calendar-id="{$calendar.id}"
+            tabindex="0">
           <div class="item-content">
             <div class="item-inner">
               <div class="item-title">{$calendar.name}</div>

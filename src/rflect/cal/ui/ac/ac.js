@@ -32,15 +32,18 @@ goog.require('rflect.cal.ui.ac.RendererScrollSupport');
  * For time input.
  * @param {Array} data Data array.
  * @param {Element} input Input element or text area.
+ * @param {Element=} opt_parentNode optional reference to the parent element
+ * that will hold the autocomplete elements. goog.dom.getDocument().body
+ * will be used if this is null.
  * @param {boolean=} opt_multi Whether to allow multiple entries separated with
  *     semi-colons or commas.
  * @param {boolean=} opt_useSimilar use similar matches. e.g. "gost" => "ghost".
  * @return {!rflect.cal.ui.ac.TimeAutoComplete} A new autocomplete object.
  */
 rflect.cal.ui.ac.createTimeAutoComplete =
-    function(data, input, opt_multi, opt_useSimilar) {
+    function(data, input, opt_parentNode, opt_multi, opt_useSimilar) {
   var matcher = new rflect.cal.ui.ac.NoFilterMatcher(data, !opt_useSimilar);
-  var renderer = new rflect.cal.ui.ac.RendererScrollSupport();
+  var renderer = new rflect.cal.ui.ac.RendererScrollSupport(opt_parentNode);
   var inputHandler = new rflect.ui.ac.InputHandler(null, null, !!opt_multi);
 
   var autoComplete = new rflect.cal.ui.ac.TimeAutoComplete(

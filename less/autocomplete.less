@@ -19,15 +19,14 @@
 .ac-renderer {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Fira Sans", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Open Sans", "Helvetica Neue", arial, sans-serif;
   font-size: 13px;
-  position: absolute;
   background: #fff;
-  border: 1px solid #d5d5d5;
   width: 300px;
 }
 
 .ac-row {
   cursor: pointer;
   padding: .4em;
+  font-size: 17px;
 }
 
 .ac-highlighted {
@@ -39,8 +38,14 @@
 }
 
 .ac-renderer-time {
-  width: 150px;
-  height: 250px;
+  position: absolute;
+  width: 100%;
+  height: 200px;
   overflow-y: scroll;
-  z-index: 11;/*To be on top of .settings-pane.*/
+  z-index: 511;
+  text-align: left;
+  margin-left: ~"calc(25px + 35%)";
+  border-style: solid;
+  border-color: #e5e5e5;
+  border-width: 0 0 1px 1px;
 }

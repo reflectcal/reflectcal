@@ -316,14 +316,6 @@ rflect.cal.ui.EventPane.prototype.isButtonDeleteEnabled = function() {
 
 
 /**
- * @return {boolean} Whether the component is visible.
- */
-rflect.cal.ui.EventPane.prototype.isVisible = function() {
-  return this.visible_;
-};
-
-
-/**
  * @override
  */
 rflect.cal.ui.EventPane.prototype.buildHTML = function(opt_outerHTML) {
@@ -366,8 +358,9 @@ rflect.cal.ui.EventPane.prototype.enterDocument = function() {
     [this.startTimeAC_, this.endTimeAC_] = this.createTimeAutoCompletes_(
         this.inputStartTime_, this.inputEndTime_);
 
-    this.inputDatePicker_.addInput(this.inputStartDate_);
-    this.inputDatePicker_.addInput(this.inputEndDate_);
+    const dateContainers = this.getElement().querySelectorAll('.date-cont');
+    this.inputDatePicker_.addInput(this.inputStartDate_, dateContainers[0]);
+    this.inputDatePicker_.addInput(this.inputEndDate_, dateContainers[1]);
 
     this.labelStartDate_ = this.getDomHelper().getElement(`${this.getId()}label-start-date`);
     this.labelStartTime_ = this.getDomHelper().getElement(`${this.getId()}label-start-time`);
@@ -460,11 +453,17 @@ rflect.cal.ui.EventPane.prototype.getTimeInputsCustom_ = function() {
 rflect.cal.ui.EventPane.prototype.createTimeAutoCompletes_ = function(
     aInputStartTime, aInputEndTime) {
   var timeLabels = rflect.date.util.getTimeLabels();
+  const timeContainers = this.getElement().querySelectorAll(
+      '.time-cont');
   var startTimeAC = rflect.cal.ui.ac.createTimeAutoComplete(
-      timeLabels, aInputStartTime, false);
+      timeLabels, aInputStartTime,
+      timeContainers[0],
+      false);
 
   var endTimeAC = rflect.cal.ui.ac.createTimeAutoComplete(
-      timeLabels, aInputEndTime, false);
+      timeLabels, aInputEndTime,
+      timeContainers[1],
+      false);
 
   //Adding custom class name to renderer.
   startTimeAC.getRenderer().className += ' ' +
@@ -543,10 +542,9 @@ rflect.cal.ui.EventPane.prototype.getTouchHoldMode = function() {
  * @private
  */
 rflect.cal.ui.EventPane.prototype.onKeyDown_ = function(aEvent) {
-
-  if (this.getParent().isVisible(this) &&
-      !this.startTimeAC_.getRenderer().isVisible() &&
-      !this.endTimeAC_.getRenderer().isVisible()) {
+  if (this.isVisible() &&
+      (this.startTimeAC_ ? !this.startTimeAC_.getRenderer().isVisible() : true) &&
+      (this.endTimeAC_ ? !this.endTimeAC_.getRenderer().isVisible() : true)) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 
@@ -844,6 +842,8 @@ rflect.cal.ui.EventPane.prototype.scanValues = function() {
   var valid = false;
 
   var eh = this.eventManager.eventHolder;
+  if (goog.DEBUG)
+      console.log('eh: ', eh);
 
   eh.setSummary(this.inputName_.value);
 

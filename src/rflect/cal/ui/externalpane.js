@@ -290,6 +290,26 @@ rflect.cal.ui.ExternalPane.prototype.getId = function() {
 
 
 /**
+ * @return {boolean} Whether this pane is visible.
+ */
+rflect.cal.ui.ExternalPane.prototype.isVisible = function() {
+  const parent = this.getParent();
+  if (parent && parent instanceof rflect.cal.ui.ScreenManager &&
+      parent.isVisible(this)) {
+    const grandParent = parent.getParent();
+    if (grandParent && grandParent instanceof
+        rflect.cal.ui.ScreenManagerPopup) {
+      return grandParent.isVisible();
+    } else {
+      return true;
+    }
+  } else {
+    return false;
+  }
+}
+
+
+/**
  * Disposes of the event pane.
  * @override
  * @protected

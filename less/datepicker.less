@@ -250,7 +250,11 @@ td.goog-date-picker-selected, td.goog-date-picker-selected-pre{
 
 .rflect-input-datepicker {
   position: absolute;
+  right: 0;
   width: @inputDatePickerWidth;
   height: @inputDatePickerHeight;
-  z-index: 11;/*To be on top of .settings-pane.*/
+  z-index: 511;/*To be on top of .settings-pane.*/
+  border-style: solid;
+  border-color: #e5e5e5;
+  border-width: 0 0 1px 1px;
 }

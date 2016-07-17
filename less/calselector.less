@@ -7,6 +7,9 @@
 /* Styles for calendar selector. */
 
 @listLabelContHeight: 46px;
+@colorContHeightSmall: 16px;
+@colorContHeightBig: 30px;
+
 
 .list-selector {
   .box-sizing();
@@ -54,12 +57,12 @@
 
 .listitem-cont when (@UI_TYPE = '') {
   .listitem-cont();
-  height: 16px;
+  height: @colorContHeightSmall;
 }
 
 .listitem-cont when (@UI_TYPE = 'MOBILE') {
   .listitem-cont();
-  height: 30px;
+  height: @colorContHeightBig;
 }
 
 .listitem-cont-focused {
@@ -97,14 +100,14 @@
 
 .calitem-color-cont when (@UI_TYPE = '') {
   .calitem-color-cont();
-  width: 16px; /*considering that visible edge of element is the border of contained element*/
-  height: 16px;
+  width: @colorContHeightSmall; /*considering that visible edge of element is the border of contained element*/
+  height: @colorContHeightSmall;
 }
 
 .calitem-color-cont when (@UI_TYPE = 'MOBILE') {
   .calitem-color-cont();
-  width: 30px;
-  height: 30px;
+  width: @colorContHeightBig;
+  height: @colorContHeightBig;
 }
 
 .goog-checkbox-hover.calitem-color-cont {

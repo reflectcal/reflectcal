@@ -318,14 +318,6 @@ rflect.cal.ui.EventPaneSimple.prototype.isButtonDeleteEnabled = function() {
 
 
 /**
- * @return {boolean} Whether the component is visible.
- */
-rflect.cal.ui.EventPaneSimple.prototype.isVisible = function() {
-  return this.visible_;
-};
-
-
-/**
  * @override
  */
 rflect.cal.ui.EventPaneSimple.prototype.buildHTML = function(opt_outerHTML) {
@@ -455,7 +447,7 @@ rflect.cal.ui.EventPaneSimple.prototype.getTouchHoldMode = function() {
  */
 rflect.cal.ui.EventPaneSimple.prototype.onKeyDown_ = function(aEvent) {
 
-  if (this.getParent().isVisible(this)) {
+  if (this.isVisible()) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 

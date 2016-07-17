@@ -63,6 +63,11 @@ rflect.cal.ui.CalendarsPane = function(aViewManager, aTimeManager, aEventManager
   //Enabling touch-only interface.
   this.enableTouchInterface(rflect.TOUCH_INTERFACE_ENABLED, true);
   this.enableMouseInterface(!rflect.TOUCH_INTERFACE_ENABLED, true);
+
+  /**
+   * @type {Array.<goog.ui.Button>}
+   */
+  this.calendarButtons_ = [];
 };
 goog.inherits(rflect.cal.ui.CalendarsPane, rflect.cal.ui.ExternalPane);
 
@@ -131,6 +136,12 @@ rflect.cal.ui.CalendarsPane.PageIndexes = {
   CALENDARS: 1,
   ADVANCED: 2
 };
+
+
+/**
+ * @type {Array.<goog.ui.Button>}
+ */
+rflect.cal.ui.CalendarsPane.prototype.calendarButtons_;
 
 
 /**
@@ -292,6 +303,8 @@ rflect.cal.ui.CalendarsPane.prototype.buildHTML = function(opt_outerHTML) {
 rflect.cal.ui.CalendarsPane.prototype.enterDocument = function() {
   rflect.cal.ui.CalendarsPane.superClass_.enterDocument.call(this);
 
+  this.addButtons_();
+
   // Menu commands.
   this.getHandler().listen(this.buttonBack1,
       goog.ui.Component.EventType.ACTION, this.onCancel_, false, this)
@@ -305,8 +318,8 @@ rflect.cal.ui.CalendarsPane.prototype.enterDocument = function() {
       this)
       .listen(document,
       goog.events.EventType.KEYDOWN, this.onKeyDown_, false, this)
-      .listen(this.getElement(),
-      goog.events.EventType.CLICK, this.onCalendarLinkClick_, false, this)
+      .listen(this, goog.ui.Component.EventType.ACTION,
+          this.onCalendarLinkClick_, false, this)
 
       //Show/hide actions.
       .listen(this.getParent(),
@@ -363,11 +376,36 @@ rflect.cal.ui.CalendarsPane.prototype.showCalendarEditPane = function(aShow,
  */
 rflect.cal.ui.CalendarsPane.prototype.onCalendarUpdate_ =
     function(aEvent) {
+  this.disposeButtons_();
+
   this.getElement().querySelector('.settings-body-inner').innerHTML =
       rflect.cal.ui.soy.calendarspane.calendarsPaneBody({
     calendarCollections: this.getCalendarCollections()
   });
+
+  this.addButtons_();
   this.resetMomentumScroller();
+}
+
+
+rflect.cal.ui.CalendarsPane.prototype.disposeButtons_ = function() {
+  this.calendarButtons_.forEach(button => {
+    button.dispose();
+    this.removeChild(button);
+  });
+  this.calendarButtons_.length = 0;
+}
+
+
+rflect.cal.ui.CalendarsPane.prototype.addButtons_ = function() {
+  Array.prototype.forEach.call(this.getElement().querySelectorAll('.item-link'),
+      el => {
+    const button = new goog.ui.Button(null,
+        goog.ui.ButtonRenderer.getInstance());
+    this.addChild(button);
+    this.calendarButtons_.push(button);
+    button.decorate(el);
+  })
 }
 
 
@@ -388,25 +426,27 @@ rflect.cal.ui.CalendarsPane.getCalendarRow = function(aTarget) {
  * @private
  */
 rflect.cal.ui.CalendarsPane.prototype.onCalendarLinkClick_ = function(aEvent) {
-  var target = /**@type {Element}*/ (aEvent.target);
-  var link = rflect.cal.ui.CalendarsPane.getCalendarRow(target);
-  if (goog.DEBUG)
-    console.log('link: ', link);
+  if (goog.array.contains(this.calendarButtons_, aEvent.target)) {
+    const target = aEvent.target.getElement();
+    const link = rflect.cal.ui.CalendarsPane.getCalendarRow(target);
+    if (goog.DEBUG)
+      console.log('link: ', link);
 
-  if (link) {
-    var id = link.getAttribute('data-calendar-id');
+    if (link) {
+      const id = link.getAttribute('data-calendar-id');
 
-    aEvent.preventDefault();
+      aEvent.preventDefault();
 
-    if (id) {
-      var calendarId = id;
+      if (id) {
+        const calendarId = id;
 
-      if (!(calendarId in this.eventManager.calendars) ||
-          this.eventManager.calendarIsInProgress(calendarId))
-        return;
+        if (!(calendarId in this.eventManager.calendars) ||
+            this.eventManager.calendarIsInProgress(calendarId))
+          return;
 
-      this.showCalendarEditPane(true,
-          this.eventManager.calendars[calendarId].clone(), false);
+        this.showCalendarEditPane(true,
+            this.eventManager.calendars[calendarId].clone(), false);
+      }
     }
   }
 }
@@ -437,7 +477,7 @@ rflect.cal.ui.CalendarsPane.prototype.onNewCalendarAction_ =
  * @private
  */
 rflect.cal.ui.CalendarsPane.prototype.onKeyDown_ = function(aEvent) {
-  if (this.getParent().isVisible(this)) {
+  if (this.isVisible()) {
     // ESC key.
     if (aEvent.keyCode == goog.events.KeyCodes.ESC) {
 
@@ -469,6 +509,8 @@ rflect.cal.ui.CalendarsPane.prototype.onCancel_ = function() {
  * @protected
  */
 rflect.cal.ui.CalendarsPane.prototype.disposeInternal = function() {
+  this.disposeButtons_();
+
   rflect.cal.ui.CalendarsPane.superClass_.disposeInternal.call(this);
 };
 
