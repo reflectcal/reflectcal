@@ -1,5 +1,9 @@
 .navbar, .toolbar, .subnavbar {
   background: @toolbarBg;
+  a.link {
+    transition: color 200ms, background-color 200ms;
+    -webkit-transition: color 200ms, background-color 200ms;
+  }
   button.link {
     line-height: @toolbarSize;
     height: @toolbarSize;
@@ -8,7 +12,8 @@
     .flexbox();
     .justify-content(flex-start);
     .align-items(center);
-    .transition(300ms);
+    transition: color 200ms, background-color 200ms;
+    -webkit-transition: color 200ms, background-color 200ms;
     .transform(translateZ(0px));
     html:not(.watch-active-state) &:active, &.active-state {
         opacity: 0.3;

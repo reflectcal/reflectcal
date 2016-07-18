@@ -116,31 +116,6 @@ rflect.cal.ViewManager = function(aMainInstance, opt_domHelper) {
   this.addChild(this.mainBody_);
 
   /**
-   * Popup save dialog.
-   *
-   * We're not adding dialog as a child because of problems with re-decorating
-   * after update.
-   *
-   * @type {rflect.cal.ui.SaveDialog}
-   * @private
-   */
-  this.saveDialog_ = new rflect.cal.ui.SaveDialog(undefined, undefined,
-      undefined, this.eventManager_);
-  this.addChild(this.saveDialog_);
-  if (goog.DEBUG)
-    _inspect('saveDialog_', this.saveDialog_);
-
-  /**
-   * Popup edit dialog.
-   * @type {rflect.cal.ui.EditDialog}
-   * @private
-   */
-  this.editDialog_ = new rflect.cal.ui.EditDialog();
-  this.addChild(this.editDialog_);
-  if (goog.DEBUG)
-    _inspect('editDialog_', this.editDialog_);
-
-  /**
    * Pager.
    */
   this.eventPane_ = new rflect.cal.ui.EventPane(this, this.timeManager,
@@ -346,20 +321,8 @@ rflect.cal.ViewManager.prototype.enterDocument = function() {
 
   // Dialog events.
   this.getHandler().
-      listen(this, rflect.cal.ui.MainPane.EventTypes.SAVE_DIALOG_SHOW,
-      this.onSaveDialogShow_, false, this).
-      listen(this, rflect.cal.ui.MainPane.EventTypes.EDIT_DIALOG_SHOW,
-      this.onEditDialogShow_, false, this).
       listen(this, rflect.cal.ui.MainPane.EventTypes.EDIT_COMPONENT_SHOW,
-      this.onEditComponentShow_, false, this).
-      listen(this.saveDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
-      this.onEventEdit_, false, this).
-      listen(this.saveDialog_, rflect.ui.Dialog.EventType.SELECT,
-      this.onSaveDialogButtonSelect_, false, this).
-      listen(this.editDialog_, rflect.cal.ui.SaveDialog.EVENT_EDIT,
-      this.onEventEdit_, false, this).
-      listen(this.editDialog_, rflect.ui.Dialog.EventType.SELECT,
-      this.onEditDialogButtonSelect_, false, this);
+      this.onEditComponentShow_, false, this);
 
   // Event pane.
   this.getHandler().listen(this.eventPane_,
@@ -373,45 +336,6 @@ rflect.cal.ViewManager.prototype.enterDocument = function() {
       rflect.cal.ui.CalendarsPane.EventTypes.CALENDAR_UPDATE,
       this.onSettingsPaneCalendarUpdate_, false, this);
 };
-
-
-/**
- * Event edit listener. Called when edit link is clicked from save or edit
- * dialog.
- * @param {Event} aEvent Event object.
- */
-rflect.cal.ViewManager.prototype.onEventEdit_ = function(aEvent) {
-}
-
-
-/**
- * Save dialog button listener.
- * @param {rflect.ui.Dialog.Event} aEvent Event object.
- */
-rflect.cal.ViewManager.prototype.onSaveDialogButtonSelect_ = function(aEvent) {
-}
-
-
-/**
- * Edit dialog button listener.
- * @param {{type: string}} aEvent Event object.
- */
-rflect.cal.ViewManager.prototype.onEditDialogButtonSelect_ = function(aEvent) {
-
-  if (aEvent.key == this.editDialog_.getButtonSet().getDefault()) {
-
-    this.editDialog_.dispatchEvent({type:
-        rflect.cal.ui.SaveDialog.EVENT_EDIT});
-
-  } else if (aEvent.key != this.editDialog_.getButtonSet().getCancel()) {
-    // The only spare button - delete.
-
-    let deletedEvent = this.eventManager_.eventHolder.endWithDelete();
-    this.transport_.deleteEventAsync(deletedEvent);
-
-    this.mainBody_.getMainPane().updateAfterDelete(deletedEvent);
-  }
-}
 
 
 rflect.cal.ViewManager.prototype.showGridEventDialog = function (aShow, 
@@ -677,24 +601,6 @@ rflect.cal.ViewManager.prototype.onMainBodyAction_ = function(aEvent){
     }
     default: break;
   }
-}
-
-
-/**
- * @param {rflect.cal.ui.MainPane.SaveDialogShowEvent} aEvent Event object.
- * @private
- */
-rflect.cal.ViewManager.prototype.onSaveDialogShow_ = function(aEvent) {
-  this.saveDialog_.setVisible(true);
-  this.mainBody_.getMainPane().beginEventCreation();
-}
-
-
-/**
- * @param {rflect.cal.ui.MainPane.EditDialogShowEvent} aEvent Event object.
- * @private
- */
-rflect.cal.ViewManager.prototype.onEditDialogShow_ = function(aEvent) {
 }
 
 

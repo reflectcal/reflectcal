@@ -69,8 +69,9 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
    * @param {boolean=} opt_creatingNewEvent
    * @param {boolean=} opt_creatingByTouchHold
    */
-  show(aShow, aAnchorElement, opt_anchorCoordinate,
-       opt_creatingNewEvent, opt_creatingByTouchHold) {
+  show(aShow, aAnchorElement, opt_anchorCoordinate =
+      new goog.math.Coordinate(0, 0),
+      opt_creatingNewEvent, opt_creatingByTouchHold) {
     if (aShow) {
       goog.asserts.assert(!!this.screenManager,
           'Screen manager must not be null.');
@@ -161,10 +162,10 @@ class GridEventDialog extends rflect.cal.ui.ScreenManagerPopup {
    * @param {boolean} aAlignmentIsHorizontal
    * @param {boolean} aTopOrRight
    * @param {boolean} aEditMode
-   * @param {goog.math.Coordinate=} aAnchorCoordinate
+   * @param {goog.math.Coordinate} aAnchorCoordinate
    */
   showForGridCase(aShow, aAlignmentIsHorizontal, aTopOrRight, aEditMode,
-                  aAnchorCoordinate = new goog.math.Coordinate(0, 0)) {
+                  aAnchorCoordinate) {
     const anchorElement = this.getMarkerElement(aAnchorCoordinate);
     this.getDomHelper().getDocument().body.appendChild(anchorElement);
 
