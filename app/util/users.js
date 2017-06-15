@@ -44,7 +44,7 @@ exports.getUserNameFromRequest = function(req) {
 
 
 exports.registerUser = function(req, res, next) {
-  var userName = req.user[0].username;
+  var userName = req.user.username;
   globalSidToUserName.set(extractSidFromRequest(req), userName);
   globalUserNames.add(userName);
   return next();
@@ -52,7 +52,7 @@ exports.registerUser = function(req, res, next) {
 
 
 exports.unregisterUser = function(req, res, next) {
-  var userName = req.user[0].username;
+  var userName = req.user.username;
   globalSidToUserName.delete(extractSidFromRequest(req));
   globalUserNames.delete(userName);
   return next();

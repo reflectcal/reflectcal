@@ -24,7 +24,7 @@ var STATIC_DIR = require('../util/pagehelper').STATIC_DIR;
  */
 exports.render = function(req, res) {
   if (req.user) {
-    var user = req.user[0];
+    var user = req.user;
     var userName = user.username;
     
     var onCalendarsLoad = function(aCalendars) {

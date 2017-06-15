@@ -85,7 +85,8 @@ exports.serializeUser = function(aUser, aDone) {
 
 exports.deserializeUser = function(aId, aDone) {
   userDAO.getUserById(aId, function(aError, aUser) {
-    aDone(aError, aUser);
+    const foundUser = aUser[0];
+    aDone(aError, foundUser);
   });
 };
 
