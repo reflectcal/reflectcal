@@ -23,7 +23,7 @@ var DEFAULT_USER = require('../config/defaultuser').DEFAULT_USER;
  * @return {string} One of named constants for user agent, or null.
  */
 exports.getCompiledTargetAsync = function(aRequest, aOnGetCompiledTarget){
-  var user = aRequest.user ? aRequest.user[0] : DEFAULT_USER;
+  var user = aRequest.user || DEFAULT_USER;
 
   log.info('user', user);
 
