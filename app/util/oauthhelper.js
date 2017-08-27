@@ -18,25 +18,12 @@ var log = appConfig.log;
 /**
  * @return {Object} Credentials object.
  */
-exports.getCredentialsObject = function() {
-  var rootPath = path.resolve(__dirname + '/' + '../../');
-  log.info('path: ', rootPath);
-  var jsonFiles = fs.readdirSync(rootPath).filter(function(aName){
-    log.info('aName: ', aName);
-    var regexp = new RegExp('^client_secret_.*json$');
-    return regexp.test(aName);
-  });
-  
-  if (jsonFiles.length) {
-    try {
-      var jsonObject = JSON.parse(fs.readFileSync(jsonFiles[0], {
-        encoding: 'utf-8'
-      }));
-      return jsonObject;
-    }
-    catch (e) {
-      return DEFAULT_CLIENT_SECRET;
-    }
+exports.getCredentialsObject = function () {
+  try {
+    var jsonObject = JSON.parse(process.env.CREDS_OBJECT);
+    return jsonObject;
   }
-  return DEFAULT_CLIENT_SECRET;
+  catch (e) {
+    return DEFAULT_CLIENT_SECRET;
+  }
 }
