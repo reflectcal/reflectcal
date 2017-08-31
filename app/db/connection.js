@@ -13,4 +13,4 @@ var monk = require('monk');
 var appConfig = require('./../config/appconfig');
 
 
-exports.db = monk('localhost:27017/' + appConfig.DB_NAME);
+exports.db = monk(process.env.DB_URL + '/' + appConfig.DB_NAME);
