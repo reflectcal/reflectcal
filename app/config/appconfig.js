@@ -53,7 +53,7 @@ exports.USE_LOCAL_AUTH = false;
  * App HTTP port.
  * @type {number}
  */
-exports.APP_PORT = exports.BUILT ? 80 : 3000;
+exports.APP_PORT = 3000;
 
 
 /**
