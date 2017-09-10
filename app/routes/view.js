@@ -15,7 +15,7 @@ var appConfig = require('../config/appconfig');
 var log = appConfig.log;
 var ua = require('../util/useragent');
 var getJsFileNames = require('../util/pagehelper').getJsFileNames;
-var getCssFileNames = require('../util/pagehelper').getCssFileNames;
+var getMainAppCssFileNames = require('../util/pagehelper').getMainAppCssFileNames;
 var STATIC_DIR = require('../util/pagehelper').STATIC_DIR;
 
 
@@ -32,11 +32,11 @@ exports.render = function(req, res) {
         viewAdapter.getCompiledTargetAsync(req, function(aTarget) {
           renderMain(res, appConfig.COMPILED || appConfig.BUILT, STATIC_DIR,
               aCalendars, getJsFileNames(aTarget),
-              getCssFileNames(aTarget), appConfig.LANGUAGE_NAMES, user);
+              getMainAppCssFileNames(aTarget), appConfig.LANGUAGE_NAMES, user);
         });
       } else {
         renderMain(res, appConfig.COMPILED || appConfig.BUILT, STATIC_DIR,
-            aCalendars, getJsFileNames(), getCssFileNames(),
+            aCalendars, getJsFileNames(), getMainAppCssFileNames(),
             appConfig.LANGUAGE_NAMES, user);
       }
     }

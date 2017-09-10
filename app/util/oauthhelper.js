@@ -19,11 +19,6 @@ var log = appConfig.log;
  * @return {Object} Credentials object.
  */
 exports.getCredentialsObject = function () {
-  try {
-    var jsonObject = JSON.parse(process.env.CREDS_OBJECT);
-    return jsonObject;
-  }
-  catch (e) {
-    return DEFAULT_CLIENT_SECRET;
-  }
+  var jsonObject = JSON.parse(process.env.CREDS_OBJECT);
+  return jsonObject;
 }

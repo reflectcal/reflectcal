@@ -91,7 +91,6 @@ module.exports = function(grunt) {
     global.TARGETS.forEach(targetToJsFileMapper);
 
     global.TARGETS.forEach(targetToCssFileMapper);
-    makeCompileLessForLoginTask();
   }
 
   function makeCompileLessForLoginTask() {
@@ -198,7 +197,7 @@ module.exports = function(grunt) {
       // must place them all explicitly by name, to not interfere with other exec
       // tasks.
       /*exec:lessForTarget-1*/
-      getCompileLessForLoginTask().concat(global.lessTaskNames));
+      global.lessTaskNames);
   }
 
 
@@ -441,16 +440,18 @@ module.exports = function(grunt) {
   })();
 
 
-  function makeLessCompCommand(aKey, aTarget, aSourceMapName) {
+  function makeLessCompCommand(aKey, aTarget, aSourceMapName, aIsLoginFile) {
     var outputFileName = 'css/' + '_temp.' + aKey + '.outputcompiled' +
         (aTarget.uiType ? '-' + aTarget.uiType : '')  +
-        '.css'
+        (aIsLoginFile ? '-login' : '')  +
+        '.css';
 
     var command = ['lessc', '--verbose']
         /*.concat(global.DEV_BUILD || global.DEV_COMPILATION ?
         ['--source-map=' + aSourceMapName] : [])*/
         .concat(global.DEV_COMPILATION ? [] : ['--compress'])
-        .concat(LESS_FILE_NAMES).concat(['>', outputFileName])
+        .concat(aIsLoginFile ? LESS_LOGIN_FILE_NAME : LESS_FILE_NAMES)
+        .concat(['>', outputFileName])
         .concat(aTarget.lessDefines.map(function(aDefine){
       return '--modify-var="' + aDefine + '"';
     })).join(' ')
@@ -459,6 +460,7 @@ module.exports = function(grunt) {
 
   function targetToCssFileMapper(aTarget, aIndex){
     var targetOptions = deepClone(execTaskTemplate);
+    var targetOptionsLogin = deepClone(execTaskTemplate);
     var sourceMapName;
 
     //TODO(alexk): for now, css are only defined by ui type.
@@ -472,10 +474,14 @@ module.exports = function(grunt) {
             aIndex + '.map'
       }
 
-      targetOptions.command = makeLessCompCommand(key, aTarget, sourceMapName);
+      targetOptions.command = makeLessCompCommand(key, aTarget, sourceMapName, false);
+      targetOptionsLogin.command = makeLessCompCommand(key, aTarget, sourceMapName, true);
       var lessTaskName = 'lessForTarget-' + key;
+      var lessTaskNameLogin = 'loginLessForTarget-' + key;
       execTask[lessTaskName] = targetOptions;
+      execTask[lessTaskNameLogin] = targetOptionsLogin;
       global.lessTaskNames.push('exec:' + lessTaskName);
+      global.lessTaskNames.push('exec:' + lessTaskNameLogin);
     }
 
     global.cssKeysToTargetIndexes[key].push(aIndex);
@@ -509,11 +515,20 @@ module.exports = function(grunt) {
     grunt.log.writeln('global.cssKeysToTargetIndexes ', global.cssKeysToTargetIndexes);
 
     global.TARGETS.forEach(function(aTarget, aIndex){
-      if (!aTarget.cssFileNames)
+      if (!aTarget.cssFileNames) {
         aTarget.cssFileNames = [];
+      }
+      if (!aTarget.loginCssFileNames) {
+        aTarget.loginCssFileNames = [];
+      }
       if (global.cssKeysToTargetIndexes[fileKey] &&
-          global.cssKeysToTargetIndexes[fileKey].indexOf(aIndex) > -1)
-        aTarget.cssFileNames.push(newFileName);
+          global.cssKeysToTargetIndexes[fileKey].indexOf(aIndex) > -1) {
+        if (/login/.test(fileName)) {
+          aTarget.loginCssFileNames.push(newFileName);
+        } else {
+          aTarget.cssFileNames.push(newFileName);
+        }
+      }
     });
 
     grunt.log.writeln('\nFile ', src, ' was renamed to ', dest +

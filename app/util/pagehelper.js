@@ -40,8 +40,17 @@ exports.getJsFileNames = function(opt_target) {
  * @param {Object=} opt_target Compiled target.
  * @return {Array.<string>} File names of compiled css.
  */
-exports.getCssFileNames = function(opt_target) {
-  return opt_target ? opt_target.cssFileNames: getCompiledCssNamesFromFs();
+exports.getMainAppCssFileNames = function(opt_target) {
+  return opt_target ? opt_target.cssFileNames: getMainAppCompiledCssNamesFromFs();
+}
+
+
+/**
+ * @param {Object=} opt_target Compiled target.
+ * @return {Array.<string>} File names of compiled css.
+ */
+exports.getLoginCssFileNames = function(opt_target) {
+  return opt_target ? opt_target.loginCssFileNames: getLoginNamesFromFs('css');
 }
 
 
@@ -62,6 +71,16 @@ function getCompiledCssNamesFromFs() {
 
 
 /**
+ * @return {Array.<string>} Js file names on filesystem.
+ */
+function getMainAppCompiledCssNamesFromFs() {
+  return getCompiledAssetNamesFromFs('css').filter(function(aName){
+    return !/.*login.*/.test(aName);
+  });
+}
+
+
+/**
  * @param {string} aType Type of asset (js, css).
  * @return {Array.<string>} File names on filesystem.
  */
@@ -71,6 +90,21 @@ function getCompiledAssetNamesFromFs(aType) {
   return fs.readdirSync(pathToDir).sort().filter(function(aName){
     log.info('aName: ', aName);
     var regexp = new RegExp('.*outputcompiled.*' + aType + '$');
+    log.info('regexp: ', regexp);
+    log.info('regexp.test(aName): ', regexp.test(aName));
+    return regexp.test(aName);
+  });
+}
+
+
+/**
+ * @param {string} aType Type of asset (js, css).
+ * @return {Array.<string>} File names on filesystem.
+ */
+function getLoginNamesFromFs(aType) {
+  return getCompiledCssNamesFromFs().filter(function(aName){
+    log.info('aName: ', aName);
+    var regexp = new RegExp('login.*' + aType + '$');
     log.info('regexp: ', regexp);
     log.info('regexp.test(aName): ', regexp.test(aName));
     return regexp.test(aName);
