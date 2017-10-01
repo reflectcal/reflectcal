@@ -85,7 +85,10 @@ exports.serializeUser = function(aUser, aDone) {
 
 exports.deserializeUser = function(aId, aDone) {
   userDAO.getUserById(aId, function(aError, aUser) {
-    const foundUser = aUser[0];
+    const foundUser = aUser[0] ||
+        //Return false specifically to force logout instead of 500 error,
+        //as described here https://github.com/jaredhanson/passport/issues/6.
+        false;
     aDone(aError, foundUser);
   });
 };
