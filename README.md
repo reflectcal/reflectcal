@@ -1,7 +1,9 @@
 Reflectcal
 ==========
 
-Reflect calendar is web calendar, aimed to be fast, minimalistic and functional.
+Reflect calendar is web calendar, aimed to be fast, minimalistic and functional. 
+
+Demo [https://www.reflectcal.com/](https://www.reflectcal.com/).
 
 Installation and run
 --------------------
