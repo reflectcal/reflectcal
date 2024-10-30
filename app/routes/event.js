@@ -19,8 +19,10 @@ exports.eventsLoad = function(req, res) {
 
   var onEventsLoad = function(aEvents) {
     log.info('Events loaded successfully', { eventCount: aEvents.length });
+
+    res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(aEvents));
-    log.info('Response for loading events sent to client');
+    log.info('Response successfully sent for events load', { responseData: aEvents });
   };
 
   eventDAO.getEventsAsync(req.body, onEventsLoad);
@@ -34,8 +36,10 @@ exports.eventSave = function(req, res) {
 
   var onEventSave = function(aEventId) {
     log.info('Event saved successfully', { eventId: aEventId });
+
+    res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(aEventId));
-    log.info('Response for saving event sent to client');
+    log.info('Response successfully sent for event save', { responseData: aEventId });
   };
 
   eventDAO.saveEventAsync(req.body, onEventSave);
@@ -53,8 +57,10 @@ exports.eventDelete = function(req, res) {
     } else {
       log.warn('Event not found for deletion', { eventId: req.params.id });
     }
+
+    res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(aResult));
-    log.info('Response for deleting event sent to client');
+    log.info('Response successfully sent for event deletion', { responseData: aResult });
   };
 
   eventDAO.deleteEventAsync(req.params.id, onEventDelete);
