@@ -88,6 +88,15 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
   app.locals.pretty = true;
 }
+app.use((req, res, next) => {
+  res.on('finish', () => {
+    log.info('Response successfully sent', { statusCode: res.statusCode, route: req.originalUrl });
+  });
+  res.on('error', (err) => {
+    log.error('Response error', { route: req.originalUrl, error: err.message });
+  });
+  next();
+});
 
 if (appConfig.USE_LOCAL_AUTH) {
   //Local strategy form post.
