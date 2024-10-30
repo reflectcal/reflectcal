@@ -41,8 +41,7 @@ app.set('view engine', 'jade');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(connect.urlencoded());
-app.use(connect.json());
-app.use(connect.compress());
+app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser(
     'rflectevents_sdfjwioy2379ugd8syg38wyio-asdfh728t9284fdsfjs'));
