@@ -1,7 +1,7 @@
 Reflectcal
 ==========
 
-Reflect calendar is web calendar, aimed to be fast, minimalistic and functional. 
+Reflect calendar is web calendar, aimed to be fast, minimalist and functional. 
 
 Demo [https://www.reflectcal.com/](https://www.reflectcal.com/).
 
@@ -43,31 +43,28 @@ an instance.
   npm install
   ```
 
-6. Go to [Google developers console][devconsole] and:
+6. Go to [Google developers console][devconsole] and:  
+    a. Create project for this particular app instance. Name it like something that reflects both app and particular machine from where app is launched, like "Reflect calendar on Alex's iMac".  
+    b. Under API and auth/Credentials menu, create new Client ID with Web application bullet point.  
+    c. In field "Authorized JavaScript origins" put [http://localhost:3000/](http://localhost:3000/).  
+    d. In field "Authorized redirect URIs" put [http://localhost:3000/auth/google/callback](http://localhost:3000/auth/google/callback ). Note that you may insert your own part instead of http://localhost:3000.  
+    e. Download JSON file and put it in your application root, near app.js.  
+    f. For production deployment, origins should have `https` protocol, for example `https://mydomain.com`.
+        
 
-  a. Create project for this particular app instance. Name it like something that reflects both app and particular machine from where app is launched, like "Reflect calendar on Alex's iMac".
-  
-  b. Under API and auth/Credentials menu, create new Client ID with Web application bullet point.
-  
-  c. In field "Authorized JavaScript origins" put [http://localhost:3000/](http://localhost:3000/).
-  
-  d. In field "Authorized redirect URIs" put [http://localhost:3000/auth/google/callback](http://localhost:3000/auth/google/callback ). Note that you may insert your own part instead of http://localhost:3000.
-  
-  e. Dowload JSON file and put it in your application root, near app.js.
-
-6. Compile from sources.
+7. Compile from sources.
 
   ```
   grunt compile-all
   ```
 
-7. Launch an application.
+8. Launch an application.
 
   ```
-  node --harmony app
+  node app
   ```
 
-8. Go to [http://localhost:3000/](http://localhost:3000/)
+9. Go to [http://localhost:3000/](http://localhost:3000/)
 
 [jdk]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [python]: https://www.python.org/download/releases/2.7/
@@ -77,4 +74,4 @@ an instance.
 [grunt]: https://github.com/gruntjs/grunt
 [less]: https://github.com/less/less
 [bunyan]: https://github.com/trentm/node-bunyan
-[devconsole]: https://console.developers.google.com/project?authuser=1 
+[devconsole]: https://console.cloud.google.com/apis/credentials/oauthclient
