@@ -11,7 +11,7 @@ echo "Installing dependencies..."
 npm install
 
 echo "Building frontend..."
-if node build.js --dev; then
+if node build.js --zip; then
     echo "Frontend build complete!"
     echo "Output available in: build/"
 else
